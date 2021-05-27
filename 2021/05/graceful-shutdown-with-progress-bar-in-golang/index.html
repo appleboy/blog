@@ -1,0 +1,790 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
+由於專案需求，需要開發一套 CLI 工具，讓 User 可以透過 CLI 上傳大檔案來進行 Model Training，請參考上面的流程圖。首先第一步驟會先跟 API Server 驗證使用者，驗證完畢就開始上傳資料到 AWS S3 或其他 Storage 空間，除了上傳過程需要在 CLI 顯示目前進度，另外也需要將目前上傳的進度 (速度, 進度及剩餘時間) 都上傳到 API Server，最後在 Web UI 介面透過 GraphQL Subscription 讓使用者可以即時看到上傳進度數據。
+而 CLI 上傳進度部分，我們選用了一套開源套件 cheggaaa/pb，相信有在寫 Go 語言都並不會陌生。而此套件雖然可以幫助在 Terminal 顯示進度條，但是有些接口是沒有提供的，像是即時速度，上傳進度及剩餘時間。本篇教大家如何實作這些數據，及分享過程會遇到相關問題。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"http:\/\/example.org\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"http:\/\/example.org\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"http:\/\/example.org\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"http:\/\/example.org\/2021\/05\/graceful-shutdown-with-progress-bar-in-golang\/","name":"如何取得上傳進度條 progress bar 相關數據及實作 graceful shutdown"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown","description":"由於專案需求，需要開發一套 CLI 工具，讓 User 可以透過 CLI 上傳大檔案來進行 Model Training，請參考上面的流程圖。首先第一步驟會先跟 API Server 驗證使用者，驗證完畢就開始上傳資料到 AWS S3 或其他 Storage 空間，除了上傳過程需要在 CLI 顯示目前進度，另外也需要將目前上傳的進度 (速度, 進度及剩餘時間) 都上傳到 API Server，最後在 Web UI 介面透過 GraphQL Subscription 讓使用者可以即時看到上傳進度數據。\n而 CLI 上傳進度部分，我們選用了一套開源套件 cheggaaa\/pb，相信有在寫 Go 語言都並不會陌生。而此套件雖然可以幫助在 Terminal 顯示進度條，但是有些接口是沒有提供的，像是即時速度，上傳進度及剩餘時間。本篇教大家如何實作這些數據，及分享過程會遇到相關問題。\n","inLanguage":"en","wordCount":1546,"datePublished":"2021-05-21T04:52:17","dateModified":"2021-05-21T04:52:17","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["channel, golang, graceful shutdown, reader"],"mainEntityOfPage":"http:\/\/example.org\/2021\/05\/graceful-shutdown-with-progress-bar-in-golang\/","publisher":{"@type":"Organization","name":"http:\/\/example.org\/","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown"><meta property="og:description" content="
+由於專案需求，需要開發一套 CLI 工具，讓 User 可以透過 CLI 上傳大檔案來進行 Model Training，請參考上面的流程圖。首先第一步驟會先跟 API Server 驗證使用者，驗證完畢就開始上傳資料到 AWS S3 或其他 Storage 空間，除了上傳過程需要在 CLI 顯示目前進度，另外也需要將目前上傳的進度 (速度, 進度及剩餘時間) 都上傳到 API Server，最後在 Web UI 介面透過 GraphQL Subscription 讓使用者可以即時看到上傳進度數據。
+而 CLI 上傳進度部分，我們選用了一套開源套件 cheggaaa/pb，相信有在寫 Go 語言都並不會陌生。而此套件雖然可以幫助在 Terminal 顯示進度條，但是有些接口是沒有提供的，像是即時速度，上傳進度及剩餘時間。本篇教大家如何實作這些數據，及分享過程會遇到相關問題。"><meta property="og:image" content="https://lh3.googleusercontent.com/ASkclquxfpPTlJ_QWnhZjB5katrz18NyK4zt2w47UM8gS71MCjWodDoGp50nHRyeQx8MfbJJbwWjfIWCoKbZYLkec7a-FqMEw-r9Lh3U8XGAuwEqWa3DVMB2lkhdgMQUI1IMiKWL5Ss=w1920-h1080"><meta property="og:url" content="http://example.org/2021/05/graceful-shutdown-with-progress-bar-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown"><meta name=twitter:description content="
+由於專案需求，需要開發一套 CLI 工具，讓 User 可以透過 CLI 上傳大檔案來進行 Model Training，請參考上面的流程圖。首先第一步驟會先跟 API Server 驗證使用者，驗證完畢就開始上傳資料到 AWS S3 或其他 Storage 空間，除了上傳過程需要在 CLI 顯示目前進度，另外也需要將目前上傳的進度 (速度, 進度及剩餘時間) 都上傳到 API Server，最 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/ASkclquxfpPTlJ_QWnhZjB5katrz18NyK4zt2w47UM8gS71MCjWodDoGp50nHRyeQx8MfbJJbwWjfIWCoKbZYLkec7a-FqMEw-r9Lh3U8XGAuwEqWa3DVMB2lkhdgMQUI1IMiKWL5Ss=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css integrity=sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=http://example.org/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=http://example.org/css/syntax.css><link rel=stylesheet href=http://example.org/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
+<a class=navbar-brand href=http://example.org/>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-devops/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a title=文章標籤 href=/tags/><i class="fas fa-tags fa-lg"></i> 文章標籤</a></li><li><a title=文章分類 href=/categories/><i class="fas fa-sitemap fa-lg"></i> 文章分類</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY" href=http://example.org/><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 21, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;8&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1546&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#讀取上傳進度顯示>讀取上傳進度顯示</a></li><li><a href=#計算上傳進度及剩餘時間>計算上傳進度及剩餘時間</a></li><li><a href=#使用-channel-結束上傳>使用 Channel 結束上傳</a></li><li><a href=#整合--graceful-shutdown>整合 Graceful Shutdown</a></li><li><a href=#iocopy-支援-context-中斷>io.Copy 支援 context 中斷</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src="https://lh3.googleusercontent.com/ASkclquxfpPTlJ_QWnhZjB5katrz18NyK4zt2w47UM8gS71MCjWodDoGp50nHRyeQx8MfbJJbwWjfIWCoKbZYLkec7a-FqMEw-r9Lh3U8XGAuwEqWa3DVMB2lkhdgMQUI1IMiKWL5Ss=w1920-h1080" alt></p><p>由於專案需求，需要開發一套 CLI 工具，讓 User 可以透過 CLI 上傳大檔案來進行 Model Training，請參考上面的流程圖。首先第一步驟會先跟 API Server 驗證使用者，驗證完畢就開始上傳資料到 <a href=https://aws.amazon.com/tw/s3/>AWS S3</a> 或其他 Storage 空間，除了上傳過程需要在 CLI 顯示目前進度，另外也需要將目前上傳的進度 (速度, 進度及剩餘時間) 都上傳到 API Server，最後在 Web UI 介面透過 <a href=https://www.apollographql.com/docs/react/data/subscriptions/>GraphQL Subscription</a> 讓使用者可以即時看到上傳進度數據。</p><p>而 CLI 上傳進度部分，我們選用了一套開源套件 <a href=https://github.com/cheggaaa/pb>cheggaaa/pb</a>，相信有在寫 <a href=https://golang.org>Go 語言</a>都並不會陌生。而此套件雖然可以幫助在 Terminal 顯示進度條，但是有些接口是沒有提供的，像是即時速度，上傳進度及剩餘時間。本篇教大家如何實作這些數據，及分享過程會遇到相關問題。</p><h2 id=讀取上傳進度顯示>讀取上傳進度顯示</h2><p>透過 <a href=https://github.com/cheggaaa/pb>cheggaaa/pb</a> 提供的範例如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+	<span style=color:#cd5555>&#34;crypto/rand&#34;</span>
+	<span style=color:#cd5555>&#34;io&#34;</span>
+	<span style=color:#cd5555>&#34;io/ioutil&#34;</span>
+	<span style=color:#cd5555>&#34;log&#34;</span>
+
+	<span style=color:#cd5555>&#34;github.com/cheggaaa/pb/v3&#34;</span>
+)
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+
+	<span style=color:#8b008b;font-weight:700>var</span> limit <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>10000</span>
+	<span style=color:#228b22>// we will copy 10 Gb from /dev/rand to /dev/null
+</span><span style=color:#228b22></span>	reader := io.<span style=color:#008b45>LimitReader</span>(rand.Reader, limit)
+	writer := ioutil.Discard
+
+	<span style=color:#228b22>// start new bar
+</span><span style=color:#228b22></span>	bar := pb.Full.<span style=color:#008b45>Start64</span>(limit)
+	<span style=color:#228b22>// create proxy reader
+</span><span style=color:#228b22></span>	barReader := bar.<span style=color:#008b45>NewProxyReader</span>(reader)
+	<span style=color:#228b22>// copy from proxy reader
+</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>if</span> _, err := io.<span style=color:#008b45>Copy</span>(writer, barReader); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+		log.<span style=color:#008b45>Fatal</span>(err)
+	}
+	<span style=color:#228b22>// finish bar
+</span><span style=color:#228b22></span>	bar.<span style=color:#008b45>Finish</span>()
+}
+</code></pre></td></tr></table></div></div><p>很清楚可以看到透過 <code>io.Copy</code> 方式開始上傳模擬進度。接著需要透過 <code>goroutine</code> 方式讀取目前進度並上傳到 API Server。</p><h2 id=計算上傳進度及剩餘時間>計算上傳進度及剩餘時間</h2><p>使用 pb v3 版本只有開放幾個 public 資訊，像是起始進度時間，及目前上傳了多少 bits 資料，透過這兩個資料，可以即時算出剩餘時間，目前速度及進度。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+	<span style=color:#cd5555>&#34;crypto/rand&#34;</span>
+	<span style=color:#cd5555>&#34;fmt&#34;</span>
+	<span style=color:#cd5555>&#34;io&#34;</span>
+	<span style=color:#cd5555>&#34;io/ioutil&#34;</span>
+	<span style=color:#cd5555>&#34;log&#34;</span>
+	<span style=color:#cd5555>&#34;time&#34;</span>
+
+	<span style=color:#cd5555>&#34;github.com/cheggaaa/pb/v3&#34;</span>
+)
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+	<span style=color:#8b008b;font-weight:700>var</span> limit <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>10000</span>
+	<span style=color:#228b22>// we will copy 10 Gb from /dev/rand to /dev/null
+</span><span style=color:#228b22></span>	reader := io.<span style=color:#008b45>LimitReader</span>(rand.Reader, limit)
+	writer := ioutil.Discard
+
+	<span style=color:#228b22>// start new bar
+</span><span style=color:#228b22></span>	bar := pb.Full.<span style=color:#008b45>Start64</span>(limit)
+	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(bar *pb.ProgressBar) {
+		d := time.<span style=color:#008b45>NewTicker</span>(<span style=color:#b452cd>2</span> * time.Second)
+		startTime := bar.<span style=color:#008b45>StartTime</span>()
+		<span style=color:#228b22>// Using for loop
+</span><span style=color:#228b22></span>		<span style=color:#8b008b;font-weight:700>for</span> {
+			<span style=color:#228b22>// Select statement
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>select</span> {
+			<span style=color:#228b22>// Case to print current time
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>case</span> &lt;-d.C:
+				<span style=color:#8b008b;font-weight:700>if</span> !bar.<span style=color:#008b45>IsStarted</span>() {
+					<span style=color:#8b008b;font-weight:700>continue</span>
+				}
+				currentTime := time.<span style=color:#008b45>Now</span>()
+				dur := currentTime.<span style=color:#008b45>Sub</span>(startTime)
+				lastSpeed := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Current</span>()) / dur.<span style=color:#008b45>Seconds</span>()
+				remain := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Total</span>() - bar.<span style=color:#008b45>Current</span>())
+				remainDur := time.<span style=color:#008b45>Duration</span>(remain/lastSpeed) * time.Second
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Progress:&#34;</span>, <span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Current</span>())/<span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Total</span>())*<span style=color:#b452cd>100</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;last speed:&#34;</span>, lastSpeed/<span style=color:#b452cd>1024</span>/<span style=color:#b452cd>1024</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;remain duration:&#34;</span>, remainDur)
+
+				<span style=color:#228b22>// TODO: upload progress and remain duration to api server
+</span><span style=color:#228b22></span>			}
+		}
+	}(bar)
+	<span style=color:#228b22>// create proxy reader
+</span><span style=color:#228b22></span>	barReader := bar.<span style=color:#008b45>NewProxyReader</span>(reader)
+	<span style=color:#228b22>// copy from proxy reader
+</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>if</span> _, err := io.<span style=color:#008b45>Copy</span>(writer, barReader); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+		log.<span style=color:#008b45>Fatal</span>(err)
+	}
+	<span style=color:#228b22>// finish bar
+</span><span style=color:#228b22></span>	bar.<span style=color:#008b45>Finish</span>()
+}
+</code></pre></td></tr></table></div></div><p>使用 <code>time.NewTicker</code> 固定每兩秒計算目前進度資料，並且上傳到 API Server，從上傳資料及使用的時間，可以算出目前 Speed 大概多少，當然這不是很準，原因是從上傳開始到現在時間計算 (總已上傳資料/目前花費時間)。</p><h2 id=使用-channel-結束上傳>使用 Channel 結束上傳</h2><p>做完上述這些功能，不難的發現有個問題，這個 goroutine 不會停止，還是會每兩秒去計算進度，這時候需要透過一個 Channel 通知 goroutine 結束。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+	<span style=color:#cd5555>&#34;crypto/rand&#34;</span>
+	<span style=color:#cd5555>&#34;fmt&#34;</span>
+	<span style=color:#cd5555>&#34;io&#34;</span>
+	<span style=color:#cd5555>&#34;io/ioutil&#34;</span>
+	<span style=color:#cd5555>&#34;log&#34;</span>
+	<span style=color:#cd5555>&#34;time&#34;</span>
+
+	<span style=color:#cd5555>&#34;github.com/cheggaaa/pb/v3&#34;</span>
+)
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+	<span style=color:#8b008b;font-weight:700>var</span> limit <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>10000</span>
+	<span style=color:#228b22>// we will copy 10 Gb from /dev/rand to /dev/null
+</span><span style=color:#228b22></span>	reader := io.<span style=color:#008b45>LimitReader</span>(rand.Reader, limit)
+	writer := ioutil.Discard
+
+	<span style=color:#228b22>// start new bar
+</span><span style=color:#228b22></span>	bar := pb.Full.<span style=color:#008b45>Start64</span>(limit)
+	finishCh := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{})
+	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(bar *pb.ProgressBar) {
+		d := time.<span style=color:#008b45>NewTicker</span>(<span style=color:#b452cd>2</span> * time.Second)
+		startTime := bar.<span style=color:#008b45>StartTime</span>()
+		<span style=color:#228b22>// Using for loop
+</span><span style=color:#228b22></span>		<span style=color:#8b008b;font-weight:700>for</span> {
+			<span style=color:#228b22>// Select statement
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>select</span> {
+			<span style=color:#8b008b;font-weight:700>case</span> &lt;-finishCh:
+				d.<span style=color:#008b45>Stop</span>()
+				log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;finished&#34;</span>)
+				<span style=color:#8b008b;font-weight:700>return</span>
+			<span style=color:#228b22>// Case to print current time
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>case</span> &lt;-d.C:
+				<span style=color:#8b008b;font-weight:700>if</span> !bar.<span style=color:#008b45>IsStarted</span>() {
+					<span style=color:#8b008b;font-weight:700>continue</span>
+				}
+				currentTime := time.<span style=color:#008b45>Now</span>()
+				dur := currentTime.<span style=color:#008b45>Sub</span>(startTime)
+				lastSpeed := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Current</span>()) / dur.<span style=color:#008b45>Seconds</span>()
+				remain := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Total</span>() - bar.<span style=color:#008b45>Current</span>())
+				remainDur := time.<span style=color:#008b45>Duration</span>(remain/lastSpeed) * time.Second
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Progress:&#34;</span>, <span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Current</span>())/<span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Total</span>())*<span style=color:#b452cd>100</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;last speed:&#34;</span>, lastSpeed/<span style=color:#b452cd>1024</span>/<span style=color:#b452cd>1024</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;remain suration:&#34;</span>, remainDur)
+			}
+		}
+	}(bar)
+	<span style=color:#228b22>// create proxy reader
+</span><span style=color:#228b22></span>	barReader := bar.<span style=color:#008b45>NewProxyReader</span>(reader)
+	<span style=color:#228b22>// copy from proxy reader
+</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>if</span> _, err := io.<span style=color:#008b45>Copy</span>(writer, barReader); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+		log.<span style=color:#008b45>Fatal</span>(err)
+	}
+	<span style=color:#228b22>// finish bar
+</span><span style=color:#228b22></span>	bar.<span style=color:#008b45>Finish</span>()
+	<span style=color:#658b00>close</span>(finishCh)
+}
+</code></pre></td></tr></table></div></div><p>先宣告一個 <code>finishCh := make(chan struct{})</code>，用來通知 goroutine 跳出迴圈，大家注意看一下，最後是用的是關閉 Channel，如果是用底下方法:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>finishCh &lt;- strunct{}{}
+</code></pre></td></tr></table></div></div><p>這時候看看 switch case 有機率是同時到達，造成無法跳脫迴圈，而直接關閉 channel，可以確保 <code>case &lt;-finishCh</code> 一直拿到空的資料，進而達成跳出迴圈的需求。</p><h2 id=整合--graceful-shutdown>整合 Graceful Shutdown</h2><p>最後來看看如何整合 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>Graceful Shutdown</a>。當使用者按下 <code>ctrl + c</code> 需要停止上傳，並將狀態改成 <code>stopped</code>。底下來看看加上 Graceful Shutdown 的方式:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64>64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65>65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66>66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67>67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68>68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69>69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70>70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71>71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72>72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73>73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74>74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75>75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76>76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77>77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78>78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79>79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80>80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81>81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82>82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83>83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84>84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85>85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86>86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87>87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88>88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89>89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90>90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91>91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92>92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93>93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94>94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95>95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96>96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97>97</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+	<span style=color:#cd5555>&#34;context&#34;</span>
+	<span style=color:#cd5555>&#34;crypto/rand&#34;</span>
+	<span style=color:#cd5555>&#34;fmt&#34;</span>
+	<span style=color:#cd5555>&#34;io&#34;</span>
+	<span style=color:#cd5555>&#34;io/ioutil&#34;</span>
+	<span style=color:#cd5555>&#34;log&#34;</span>
+	<span style=color:#cd5555>&#34;os&#34;</span>
+	<span style=color:#cd5555>&#34;os/signal&#34;</span>
+	<span style=color:#cd5555>&#34;syscall&#34;</span>
+	<span style=color:#cd5555>&#34;time&#34;</span>
+
+	<span style=color:#cd5555>&#34;github.com/cheggaaa/pb/v3&#34;</span>
+)
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>withContextFunc</span>(ctx context.Context, f <span style=color:#8b008b;font-weight:700>func</span>()) context.Context {
+	ctx, cancel := context.<span style=color:#008b45>WithCancel</span>(ctx)
+	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+		c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal, <span style=color:#b452cd>1</span>)
+		signal.<span style=color:#008b45>Notify</span>(c, syscall.SIGINT, syscall.SIGTERM)
+		<span style=color:#8b008b;font-weight:700>defer</span> signal.<span style=color:#008b45>Stop</span>(c)
+
+		<span style=color:#8b008b;font-weight:700>select</span> {
+		<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+		<span style=color:#8b008b;font-weight:700>case</span> &lt;-c:
+			<span style=color:#008b45>f</span>()
+			<span style=color:#008b45>cancel</span>()
+		}
+	}()
+
+	<span style=color:#8b008b;font-weight:700>return</span> ctx
+}
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+
+	ctx := <span style=color:#008b45>withContextFunc</span>(
+		context.<span style=color:#008b45>Background</span>(),
+		<span style=color:#8b008b;font-weight:700>func</span>() {
+			<span style=color:#228b22>// clear machine field
+</span><span style=color:#228b22></span>			log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;interrupt received, terminating process&#34;</span>)
+		},
+	)
+
+	<span style=color:#8b008b;font-weight:700>var</span> limit <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>10000</span>
+	<span style=color:#228b22>// we will copy 10 Gb from /dev/rand to /dev/null
+</span><span style=color:#228b22></span>	reader := io.<span style=color:#008b45>LimitReader</span>(rand.Reader, limit)
+	writer := ioutil.Discard
+
+	<span style=color:#228b22>// start new bar
+</span><span style=color:#228b22></span>	bar := pb.Full.<span style=color:#008b45>Start64</span>(limit)
+	finishCh := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{})
+	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(ctx context.Context, bar *pb.ProgressBar) {
+		d := time.<span style=color:#008b45>NewTicker</span>(<span style=color:#b452cd>2</span> * time.Second)
+		startTime := bar.<span style=color:#008b45>StartTime</span>()
+		<span style=color:#228b22>// Using for loop
+</span><span style=color:#228b22></span>		<span style=color:#8b008b;font-weight:700>for</span> {
+			<span style=color:#228b22>// Select statement
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>select</span> {
+			<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+				d.<span style=color:#008b45>Stop</span>()
+				log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;interrupt received&#34;</span>)
+				<span style=color:#8b008b;font-weight:700>return</span>
+			<span style=color:#8b008b;font-weight:700>case</span> &lt;-finishCh:
+				d.<span style=color:#008b45>Stop</span>()
+				log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;finished&#34;</span>)
+				<span style=color:#8b008b;font-weight:700>return</span>
+			<span style=color:#228b22>// Case to print current time
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>case</span> &lt;-d.C:
+				<span style=color:#8b008b;font-weight:700>if</span> ctx.<span style=color:#008b45>Err</span>() != <span style=color:#8b008b;font-weight:700>nil</span> {
+					<span style=color:#8b008b;font-weight:700>return</span>
+				}
+				<span style=color:#8b008b;font-weight:700>if</span> !bar.<span style=color:#008b45>IsStarted</span>() {
+					<span style=color:#8b008b;font-weight:700>continue</span>
+				}
+				currentTime := time.<span style=color:#008b45>Now</span>()
+				dur := currentTime.<span style=color:#008b45>Sub</span>(startTime)
+				lastSpeed := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Current</span>()) / dur.<span style=color:#008b45>Seconds</span>()
+				remain := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Total</span>() - bar.<span style=color:#008b45>Current</span>())
+				remainDur := time.<span style=color:#008b45>Duration</span>(remain/lastSpeed) * time.Second
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Progress:&#34;</span>, <span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Current</span>())/<span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Total</span>())*<span style=color:#b452cd>100</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;last speed:&#34;</span>, lastSpeed/<span style=color:#b452cd>1024</span>/<span style=color:#b452cd>1024</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;remain suration:&#34;</span>, remainDur)
+			}
+		}
+	}(ctx, bar)
+	<span style=color:#228b22>// create proxy reader
+</span><span style=color:#228b22></span>	barReader := bar.<span style=color:#008b45>NewProxyReader</span>(reader)
+	<span style=color:#228b22>// copy from proxy reader
+</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>if</span> _, err := io.<span style=color:#008b45>Copy</span>(writer, barReader); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+		log.<span style=color:#008b45>Fatal</span>(err)
+	}
+	<span style=color:#228b22>// finish bar
+</span><span style=color:#228b22></span>	bar.<span style=color:#008b45>Finish</span>()
+	<span style=color:#658b00>close</span>(finishCh)
+}
+</code></pre></td></tr></table></div></div><p>透過 Go 語言的 context 跟 signal.Notify 可以偵測是否有系統訊號關閉 CLI 程式，這時候就可以做後續相對應的事情，在程式碼就需要多接受 <code>ctx.Done()</code> Channel，由於在 Select 多個 Channel 通道，故也是有可能同時發生，所以需要在另外的 switch case 內判斷 conetxt 的 Err 錯誤訊息，如果不等於 nil 那就是收到訊號，進而 return，必免 goroutine 在背景持續進行。大家執行上述程式後，按下 ctrl + c 可以正常看到底下訊息:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>^C
+2021/05/21 12:29:25 interrupt received, terminating process
+2021/05/21 12:29:25 interrupt received
+^C
+signal: interrupt
+</code></pre></td></tr></table></div></div><p>可以看到要在按下一次 ctrl + c 才能結束程式，這邊的原因就是 io.Reader 還是正在上傳，並沒有停止，而系統第一次中斷訊號已經被程式用掉了，這時候解決方式就是要修改底下程式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>	barReader := bar.<span style=color:#008b45>NewProxyReader</span>(reader)
+	<span style=color:#228b22>// copy from proxy reader
+</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>if</span> _, err := io.<span style=color:#008b45>Copy</span>(writer, barReader); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+		log.<span style=color:#008b45>Fatal</span>(err)
+	}
+</code></pre></td></tr></table></div></div><h2 id=iocopy-支援-context-中斷>io.Copy 支援 context 中斷</h2><p><code>io.Copy</code> 需要支援 context 中斷程式，但是我們只能從 reader 下手，，先看看原本 Reader 的 interface:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>type</span> Reader <span style=color:#8b008b;font-weight:700>interface</span> {
+	<span style=color:#008b45>Read</span>(p []<span style=color:#00688b;font-weight:700>byte</span>) (n <span style=color:#00688b;font-weight:700>int</span>, err <span style=color:#00688b;font-weight:700>error</span>)
+}
+</code></pre></td></tr></table></div></div><p>現在來自己寫一份 func 來支援 context 功能:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>type</span> readerFunc <span style=color:#8b008b;font-weight:700>func</span>(p []<span style=color:#00688b;font-weight:700>byte</span>) (n <span style=color:#00688b;font-weight:700>int</span>, err <span style=color:#00688b;font-weight:700>error</span>)
+
+<span style=color:#8b008b;font-weight:700>func</span> (r readerFunc) <span style=color:#008b45>Read</span>(p []<span style=color:#00688b;font-weight:700>byte</span>) (n <span style=color:#00688b;font-weight:700>int</span>, err <span style=color:#00688b;font-weight:700>error</span>) { <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#008b45>rf</span>(p) }
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#658b00>copy</span>(ctx context.Context, dst io.Writer, src io.Reader) <span style=color:#00688b;font-weight:700>error</span> {
+	_, err := io.<span style=color:#008b45>Copy</span>(dst, <span style=color:#008b45>readerFunc</span>(<span style=color:#8b008b;font-weight:700>func</span>(p []<span style=color:#00688b;font-weight:700>byte</span>) (<span style=color:#00688b;font-weight:700>int</span>, <span style=color:#00688b;font-weight:700>error</span>) {
+		<span style=color:#8b008b;font-weight:700>select</span> {
+		<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+			<span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>0</span>, ctx.<span style=color:#008b45>Err</span>()
+		<span style=color:#8b008b;font-weight:700>default</span>:
+			<span style=color:#8b008b;font-weight:700>return</span> src.<span style=color:#008b45>Read</span>(p)
+		}
+	}))
+	<span style=color:#8b008b;font-weight:700>return</span> err
+}
+</code></pre></td></tr></table></div></div><p>由於 io.Reader 會把整個檔案分成多個 chunk 分別上傳，避免 Memory 直接讀取太大的檔案而爆掉，那在每個 chunk 上傳前確保沒有收到 context 中斷的訊息，這樣就可以解決無法停止上傳的行為。整體程式碼如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>  1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>  2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>  3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>  4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>  5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>  6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>  7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>  8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>  9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10> 10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11> 11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12> 12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13> 13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14> 14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15> 15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16> 16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17> 17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18> 18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19> 19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20> 20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21> 21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22> 22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23> 23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24> 24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25> 25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26> 26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27> 27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28> 28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29> 29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30> 30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31> 31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32> 32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33> 33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34> 34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35> 35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36> 36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37> 37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38> 38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39> 39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40> 40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41> 41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42> 42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43> 43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44> 44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45> 45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46> 46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47> 47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48> 48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49> 49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50> 50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51> 51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52> 52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53> 53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54> 54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55> 55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56> 56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57> 57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58> 58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59> 59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60> 60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61> 61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62> 62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63> 63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64> 64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65> 65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66> 66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67> 67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68> 68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69> 69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70> 70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71> 71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72> 72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73> 73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74> 74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75> 75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76> 76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77> 77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78> 78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79> 79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80> 80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81> 81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82> 82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83> 83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84> 84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85> 85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86> 86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87> 87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88> 88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89> 89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90> 90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91> 91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92> 92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93> 93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94> 94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95> 95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96> 96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97> 97</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98><a style=outline:none;text-decoration:none;color:inherit href=#98> 98</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99><a style=outline:none;text-decoration:none;color:inherit href=#99> 99</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100><a style=outline:none;text-decoration:none;color:inherit href=#100>100</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=101><a style=outline:none;text-decoration:none;color:inherit href=#101>101</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=102><a style=outline:none;text-decoration:none;color:inherit href=#102>102</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=103><a style=outline:none;text-decoration:none;color:inherit href=#103>103</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=104><a style=outline:none;text-decoration:none;color:inherit href=#104>104</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=105><a style=outline:none;text-decoration:none;color:inherit href=#105>105</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=106><a style=outline:none;text-decoration:none;color:inherit href=#106>106</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=107><a style=outline:none;text-decoration:none;color:inherit href=#107>107</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=108><a style=outline:none;text-decoration:none;color:inherit href=#108>108</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=109><a style=outline:none;text-decoration:none;color:inherit href=#109>109</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=110><a style=outline:none;text-decoration:none;color:inherit href=#110>110</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+	<span style=color:#cd5555>&#34;context&#34;</span>
+	<span style=color:#cd5555>&#34;crypto/rand&#34;</span>
+	<span style=color:#cd5555>&#34;fmt&#34;</span>
+	<span style=color:#cd5555>&#34;io&#34;</span>
+	<span style=color:#cd5555>&#34;io/ioutil&#34;</span>
+	<span style=color:#cd5555>&#34;log&#34;</span>
+	<span style=color:#cd5555>&#34;os&#34;</span>
+	<span style=color:#cd5555>&#34;os/signal&#34;</span>
+	<span style=color:#cd5555>&#34;syscall&#34;</span>
+	<span style=color:#cd5555>&#34;time&#34;</span>
+
+	<span style=color:#cd5555>&#34;github.com/cheggaaa/pb/v3&#34;</span>
+)
+
+<span style=color:#8b008b;font-weight:700>type</span> readerFunc <span style=color:#8b008b;font-weight:700>func</span>(p []<span style=color:#00688b;font-weight:700>byte</span>) (n <span style=color:#00688b;font-weight:700>int</span>, err <span style=color:#00688b;font-weight:700>error</span>)
+
+<span style=color:#8b008b;font-weight:700>func</span> (rf readerFunc) <span style=color:#008b45>Read</span>(p []<span style=color:#00688b;font-weight:700>byte</span>) (n <span style=color:#00688b;font-weight:700>int</span>, err <span style=color:#00688b;font-weight:700>error</span>) { <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#008b45>rf</span>(p) }
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#658b00>copy</span>(ctx context.Context, dst io.Writer, src io.Reader) <span style=color:#00688b;font-weight:700>error</span> {
+	_, err := io.<span style=color:#008b45>Copy</span>(dst, <span style=color:#008b45>readerFunc</span>(<span style=color:#8b008b;font-weight:700>func</span>(p []<span style=color:#00688b;font-weight:700>byte</span>) (<span style=color:#00688b;font-weight:700>int</span>, <span style=color:#00688b;font-weight:700>error</span>) {
+		<span style=color:#8b008b;font-weight:700>select</span> {
+		<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+			<span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>0</span>, ctx.<span style=color:#008b45>Err</span>()
+		<span style=color:#8b008b;font-weight:700>default</span>:
+			<span style=color:#8b008b;font-weight:700>return</span> src.<span style=color:#008b45>Read</span>(p)
+		}
+	}))
+	<span style=color:#8b008b;font-weight:700>return</span> err
+}
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>withContextFunc</span>(ctx context.Context, f <span style=color:#8b008b;font-weight:700>func</span>()) context.Context {
+	ctx, cancel := context.<span style=color:#008b45>WithCancel</span>(ctx)
+	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+		c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal, <span style=color:#b452cd>1</span>)
+		signal.<span style=color:#008b45>Notify</span>(c, syscall.SIGINT, syscall.SIGTERM)
+		<span style=color:#8b008b;font-weight:700>defer</span> signal.<span style=color:#008b45>Stop</span>(c)
+
+		<span style=color:#8b008b;font-weight:700>select</span> {
+		<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+		<span style=color:#8b008b;font-weight:700>case</span> &lt;-c:
+			<span style=color:#008b45>f</span>()
+			<span style=color:#008b45>cancel</span>()
+		}
+	}()
+
+	<span style=color:#8b008b;font-weight:700>return</span> ctx
+}
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+
+	ctx := <span style=color:#008b45>withContextFunc</span>(
+		context.<span style=color:#008b45>Background</span>(),
+		<span style=color:#8b008b;font-weight:700>func</span>() {
+			<span style=color:#228b22>// clear machine field
+</span><span style=color:#228b22></span>			log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;interrupt received, terminating process&#34;</span>)
+		},
+	)
+
+	<span style=color:#8b008b;font-weight:700>var</span> limit <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>1024</span> * <span style=color:#b452cd>10000</span>
+	<span style=color:#228b22>// we will copy 10 Gb from /dev/rand to /dev/null
+</span><span style=color:#228b22></span>	reader := io.<span style=color:#008b45>LimitReader</span>(rand.Reader, limit)
+	writer := ioutil.Discard
+
+	<span style=color:#228b22>// start new bar
+</span><span style=color:#228b22></span>	bar := pb.Full.<span style=color:#008b45>Start64</span>(limit)
+	finishCh := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{})
+	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(bar *pb.ProgressBar) {
+		d := time.<span style=color:#008b45>NewTicker</span>(<span style=color:#b452cd>2</span> * time.Second)
+		startTime := bar.<span style=color:#008b45>StartTime</span>()
+		<span style=color:#228b22>// Using for loop
+</span><span style=color:#228b22></span>		<span style=color:#8b008b;font-weight:700>for</span> {
+			<span style=color:#228b22>// Select statement
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>select</span> {
+			<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+				log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;stop to get current process&#34;</span>)
+				<span style=color:#8b008b;font-weight:700>return</span>
+			<span style=color:#8b008b;font-weight:700>case</span> &lt;-finishCh:
+				d.<span style=color:#008b45>Stop</span>()
+				log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;finished&#34;</span>)
+				<span style=color:#8b008b;font-weight:700>return</span>
+			<span style=color:#228b22>// Case to print current time
+</span><span style=color:#228b22></span>			<span style=color:#8b008b;font-weight:700>case</span> &lt;-d.C:
+				<span style=color:#8b008b;font-weight:700>if</span> !bar.<span style=color:#008b45>IsStarted</span>() {
+					<span style=color:#8b008b;font-weight:700>continue</span>
+				}
+				currentTime := time.<span style=color:#008b45>Now</span>()
+				dur := currentTime.<span style=color:#008b45>Sub</span>(startTime)
+				lastSpeed := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Current</span>()) / dur.<span style=color:#008b45>Seconds</span>()
+				remain := <span style=color:#658b00>float64</span>(bar.<span style=color:#008b45>Total</span>() - bar.<span style=color:#008b45>Current</span>())
+				remainDur := time.<span style=color:#008b45>Duration</span>(remain/lastSpeed) * time.Second
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Progress:&#34;</span>, <span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Current</span>())/<span style=color:#658b00>float32</span>(bar.<span style=color:#008b45>Total</span>())*<span style=color:#b452cd>100</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;last speed:&#34;</span>, lastSpeed/<span style=color:#b452cd>1024</span>/<span style=color:#b452cd>1024</span>)
+				fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;remain suration:&#34;</span>, remainDur)
+			}
+		}
+	}(bar)
+	<span style=color:#228b22>// create proxy reader
+</span><span style=color:#228b22></span>	barReader := bar.<span style=color:#008b45>NewProxyReader</span>(reader)
+	<span style=color:#228b22>// copy from proxy reader
+</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>if</span> err := <span style=color:#658b00>copy</span>(ctx, writer, barReader); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+		log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;cancel upload data:&#34;</span>, err.<span style=color:#008b45>Error</span>())
+	}
+	<span style=color:#228b22>// finish bar
+</span><span style=color:#228b22></span>	bar.<span style=color:#008b45>Finish</span>()
+	<span style=color:#658b00>close</span>(finishCh)
+	time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
+}
+</code></pre></td></tr></table></div></div><div class=blog-tags><a href=http://example.org//tags/channel/>channel</a>&nbsp;
+<a href=http://example.org//tags/golang/>golang</a>&nbsp;
+<a href=http://example.org//tags/graceful-shutdown/>graceful shutdown</a>&nbsp;
+<a href=http://example.org//tags/reader/>reader</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=http%3a%2f%2fexample.org%2f2021%2f05%2fgraceful-shutdown-with-progress-bar-in-golang%2f&text=%e5%a6%82%e4%bd%95%e5%8f%96%e5%be%97%e4%b8%8a%e5%82%b3%e9%80%b2%e5%ba%a6%e6%a2%9d%20progress%20bar%20%e7%9b%b8%e9%97%9c%e6%95%b8%e6%93%9a%e5%8f%8a%e5%af%a6%e4%bd%9c%20Graceful%20Shutdown&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2f2021%2f05%2fgraceful-shutdown-with-progress-bar-in-golang%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=http%3a%2f%2fexample.org%2f2021%2f05%2fgraceful-shutdown-with-progress-bar-in-golang%2f&title=%e5%a6%82%e4%bd%95%e5%8f%96%e5%be%97%e4%b8%8a%e5%82%b3%e9%80%b2%e5%ba%a6%e6%a2%9d%20progress%20bar%20%e7%9b%b8%e9%97%9c%e6%95%b8%e6%93%9a%e5%8f%8a%e5%af%a6%e4%bd%9c%20Graceful%20Shutdown" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fexample.org%2f2021%2f05%2fgraceful-shutdown-with-progress-bar-in-golang%2f&title=%e5%a6%82%e4%bd%95%e5%8f%96%e5%be%97%e4%b8%8a%e5%82%b3%e9%80%b2%e5%ba%a6%e6%a2%9d%20progress%20bar%20%e7%9b%b8%e9%97%9c%e6%95%b8%e6%93%9a%e5%8f%8a%e5%af%a6%e4%bd%9c%20Graceful%20Shutdown" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fexample.org%2f2021%2f05%2fgraceful-shutdown-with-progress-bar-in-golang%2f&title=%e5%a6%82%e4%bd%95%e5%8f%96%e5%be%97%e4%b8%8a%e5%82%b3%e9%80%b2%e5%ba%a6%e6%a2%9d%20progress%20bar%20%e7%9b%b8%e9%97%9c%e6%95%b8%e6%93%9a%e5%8f%8a%e5%af%a6%e4%bd%9c%20Graceful%20Shutdown" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=http%3a%2f%2fexample.org%2f2021%2f05%2fgraceful-shutdown-with-progress-bar-in-golang%2f&description=%e5%a6%82%e4%bd%95%e5%8f%96%e5%be%97%e4%b8%8a%e5%82%b3%e9%80%b2%e5%ba%a6%e6%a2%9d%20progress%20bar%20%e7%9b%b8%e9%97%9c%e6%95%b8%e6%93%9a%e5%8f%8a%e5%af%a6%e4%bd%9c%20Graceful%20Shutdown" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=http://example.org/2021/05/mongodb-performance-tunning/ data-toggle=tooltip data-placement=top title="MongoDB 效能調校紀錄">&larr; Previous Post</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=http://example.org/2021/05/graceful-shutdown-with-progress-bar-in-golang>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='http://example.org/2021/05/graceful-shutdown-with-progress-bar-in-golang'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2021
+&nbsp;&bull;&nbsp;
+<a href=http://example.org/>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.83.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js integrity=sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js integrity=sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe crossorigin=anonymous></script><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=http://example.org/js/main.js></script><script>renderMathInElement(document.body)</script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js integrity=sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js integrity=sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q crossorigin=anonymous></script><script src=http://example.org/js/load-photoswipe.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

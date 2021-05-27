@@ -1,0 +1,366 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>使用 RESTful API 串接 Open Policy Agent - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
+上一篇『初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管』介紹了如何透過 Go 語言直接嵌入 Open Policy Agent (簡稱 OPA)設定檔，並透過 Go 套件直接查詢使用者權限。由於目前 OPA 只有支援三種模式串接各種不同的 Application，一種是透過 Go 語言直接整合，詳細請看上一篇教學，另一種是透過 RESTful API，也就是本篇的教學，最後一種是透過 WebAssembly 讓其他 application 可以直接讀取。之後有機會再來寫 WebAssembly 教學。而本篇將帶您了解如何透過 RESTful API 方式來完成 RBAC 權限控管，其實我比較期待支援 gRPC 模式，但是看到這篇 issue 提到，OPA 現在已經支援 Plugin 模式，大家想擴充的，可以自行處理。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"http:\/\/example.org\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"http:\/\/example.org\/"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"http:\/\/example.org\/","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"http:\/\/example.org\/2021\/05\/comunicate-with-open-policy-agent-using-resful-api\/","name":"使用 restful API 串接 open policy agent"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 RESTful API 串接 Open Policy Agent","description":"\n上一篇『初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管』介紹了如何透過 Go 語言直接嵌入 Open Policy Agent (簡稱 OPA)設定檔，並透過 Go 套件直接查詢使用者權限。由於目前 OPA 只有支援三種模式串接各種不同的 Application，一種是透過 Go 語言直接整合，詳細請看上一篇教學，另一種是透過 RESTful API，也就是本篇的教學，最後一種是透過 WebAssembly 讓其他 application 可以直接讀取。之後有機會再來寫 WebAssembly 教學。而本篇將帶您了解如何透過 RESTful API 方式來完成 RBAC 權限控管，其實我比較期待支援 gRPC 模式，但是看到這篇 issue 提到，OPA 現在已經支援 Plugin 模式，大家想擴充的，可以自行處理。\n","inLanguage":"en","wordCount":756,"datePublished":"2021-05-04T02:14:12","dateModified":"2021-05-04T02:14:12","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, open policy agent"],"mainEntityOfPage":"http:\/\/example.org\/2021\/05\/comunicate-with-open-policy-agent-using-resful-api\/","publisher":{"@type":"Organization","name":"http:\/\/example.org\/","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="使用 RESTful API 串接 Open Policy Agent"><meta property="og:description" content="
+上一篇『初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管』介紹了如何透過 Go 語言直接嵌入 Open Policy Agent (簡稱 OPA)設定檔，並透過 Go 套件直接查詢使用者權限。由於目前 OPA 只有支援三種模式串接各種不同的 Application，一種是透過 Go 語言直接整合，詳細請看上一篇教學，另一種是透過 RESTful API，也就是本篇的教學，最後一種是透過 WebAssembly 讓其他 application 可以直接讀取。之後有機會再來寫 WebAssembly 教學。而本篇將帶您了解如何透過 RESTful API 方式來完成 RBAC 權限控管，其實我比較期待支援 gRPC 模式，但是看到這篇 issue 提到，OPA 現在已經支援 Plugin 模式，大家想擴充的，可以自行處理。"><meta property="og:image" content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta property="og:url" content="http://example.org/2021/05/comunicate-with-open-policy-agent-using-resful-api/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="使用 RESTful API 串接 Open Policy Agent"><meta name=twitter:description content="
+上一篇『初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管』介紹了如何透過 Go 語言直接嵌入 Open Policy Agent (簡稱 OPA)設定檔，並透過 Go 套件直接查詢使用者權限。由於目前 OPA 只有支援三種模式串接各種不同的 Application，一種是透過 Go 語言直接整合，詳細請看上一篇教學，另一種 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css integrity=sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y crossorigin=anonymous><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=http://example.org/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=http://example.org/css/syntax.css><link rel=stylesheet href=http://example.org/css/codeblock.css><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css integrity=sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css integrity=sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R crossorigin=anonymous><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
+<a class=navbar-brand href=http://example.org/>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-devops/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a title=文章標籤 href=/tags/><i class="fas fa-tags fa-lg"></i> 文章標籤</a></li><li><a title=文章分類 href=/categories/><i class="fas fa-sitemap fa-lg"></i> 文章分類</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY" href=http://example.org/><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>使用 RESTful API 串接 Open Policy Agent</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 4, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;756&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#請求流程>請求流程</a></li><li><a href=#準備查詢資料>準備查詢資料</a></li><li><a href=#restful-api>RESTful API</a></li><li><a href=#結論>結論</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080" title="Open Policy Agent"><img src="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080" alt="Open Policy Agent" title="Open Policy Agent"></a></p><p>上一篇『<a href=https://blog.wu-boy.com/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a>』介紹了如何透過 <a href=https://golang.org>Go 語言</a>直接嵌入 Open Policy Agent (簡稱 OPA)設定檔，並透過 Go 套件直接查詢使用者權限。由於目前 OPA 只有支援三種模式串接各種不同的 Application，一種是透過 Go 語言直接整合，詳細請看上一篇教學，另一種是透過 RESTful API，也就是本篇的教學，最後一種是透過 <a href=https://webassembly.org/>WebAssembly</a> 讓其他 application 可以直接讀取。之後有機會再來寫 WebAssembly 教學。而本篇將帶您了解如何透過 RESTful API 方式來完成 <a href=https://en.wikipedia.org/wiki/Role-based_access_control>RBAC 權限控管</a>，其實我比較期待支援 <a href=https://grpc.io/>gRPC</a> 模式，但是看到這篇 <a href=https://github.com/open-policy-agent/opa/issues/841>issue 提到</a>，OPA 現在已經支援 Plugin 模式，大家想擴充的，可以自行處理。</p><h2 id=請求流程>請求流程</h2><p><a href="https://lh3.googleusercontent.com/Sjqfv-XLOfdlK2GmoZdmcEM0UYKzNsKSas3xh1GfBc4UIQLKjmqjbC_ULUgM_2Jf76yI6baveAn_uAfJ5DGPbo39zRhKgvf7pOGsWSi1B4wW4DvciTrCuL2O5J1n-YUF43F3DqFOPQM=w1920-h1080" title=blog_01><img src="https://lh3.googleusercontent.com/Sjqfv-XLOfdlK2GmoZdmcEM0UYKzNsKSas3xh1GfBc4UIQLKjmqjbC_ULUgM_2Jf76yI6baveAn_uAfJ5DGPbo39zRhKgvf7pOGsWSi1B4wW4DvciTrCuL2O5J1n-YUF43F3DqFOPQM=w1920-h1080" alt=blog_01 title=blog_01></a></p><p>可以看到上述圖片看到整個 OPA 系統流程，OPA 就是確保各種 API Request 的權限，首先第一步驟會帶著 Auuthorization Token 去跟單一個服務詢問，接著此服務就會將資料帶到 OPA 進行查詢此 請求是否有權限可以存取，最後 OPA 會回傳結果，接著再由服務端決定要回送哪些訊息。那本篇的重點會在下圖部分</p><p><a href="https://lh3.googleusercontent.com/yjVOXbiFYt6XZ577GOqJLCh5cY-kPxEyxuSIo_7TbkQBmhSn0zdW5RmxwmNLumP5QJBxfuKlUTZWQchqFzVKRVtyxefwzxmkZou5ck_06guA7eVXViEW_mtnfNG3YvKqwNsXrxcCLlE=w1920-h1080" title=blog_02><img src="https://lh3.googleusercontent.com/yjVOXbiFYt6XZ577GOqJLCh5cY-kPxEyxuSIo_7TbkQBmhSn0zdW5RmxwmNLumP5QJBxfuKlUTZWQchqFzVKRVtyxefwzxmkZou5ck_06guA7eVXViEW_mtnfNG3YvKqwNsXrxcCLlE=w1920-h1080" alt=blog_02 title=blog_02></a></p><h2 id=準備查詢資料>準備查詢資料</h2><p>底下是 OPA 的系統流程圖</p><p><a href="https://lh3.googleusercontent.com/wAdNLaVqbVK9JoP124HisUautnVurHNn8QTVvgdbfKsI_zv4OXVNzFrQLs4n5xtpbSPK_khXbV2AmXzc197GGfHFdsHbbM8O9Gj9O48LVJhF-fEInUHhdcGPfUjEHNSn4Ygvq50FqTY=w1920-h1080" title=blog_03><img src="https://lh3.googleusercontent.com/wAdNLaVqbVK9JoP124HisUautnVurHNn8QTVvgdbfKsI_zv4OXVNzFrQLs4n5xtpbSPK_khXbV2AmXzc197GGfHFdsHbbM8O9Gj9O48LVJhF-fEInUHhdcGPfUjEHNSn4Ygvq50FqTY=w1920-h1080" alt=blog_03 title=blog_03></a></p><p>我們可以很清楚知道，要拿到最後的 Query Result (JSON) 需要有三個 Input 的，分別是</p><ol><li>Query Input (JSON)</li><li>Data (JSON)</li><li>Policy (Rego)</li></ol><p>就以 RBAC 為範例，第一個 <strong>Query Input</strong> 的資料，就需要帶入像是使用者所在的群組 (user)，使用者現在要執行的動作 (action)，使用者要對什麼資源做事情 (object)。這三個資料轉成 JSON 格式如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json>{
+  <span style=color:#8b008b;font-weight:700>&#34;input&#34;</span>: {
+    <span style=color:#8b008b;font-weight:700>&#34;user&#34;</span>: [<span style=color:#cd5555>&#34;design_group_kpi_editor&#34;</span>, <span style=color:#cd5555>&#34;system_group_kpi_editor&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>,
+    <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>
+  }
+}
+</code></pre></td></tr></table></div></div><p>第二項就是準備系統內建的 Data 資料給 OPA，上述資料可以看到 user 所在的群組資訊，但是這些群組能做哪些事情，是 OPA 沒辦法知道的，所以需要將這些資料整理成 JSON 格式，並且上傳到 OPA 系統內</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64>64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65>65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66>66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67>67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68>68</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json>{
+  <span style=color:#8b008b;font-weight:700>&#34;group_roles&#34;</span>: {
+    <span style=color:#8b008b;font-weight:700>&#34;admin&#34;</span>: [<span style=color:#cd5555>&#34;admin&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;quality_head_design&#34;</span>: [<span style=color:#cd5555>&#34;quality_head_design&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;quality_head_system&#34;</span>: [<span style=color:#cd5555>&#34;quality_head_system&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;quality_head_manufacture&#34;</span>: [<span style=color:#cd5555>&#34;quality_head_manufacture&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;kpi_editor_design&#34;</span>: [<span style=color:#cd5555>&#34;kpi_editor_design&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;kpi_editor_system&#34;</span>: [<span style=color:#cd5555>&#34;kpi_editor_system&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;kpi_editor_manufacture&#34;</span>: [<span style=color:#cd5555>&#34;kpi_editor_manufacture&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;viewer&#34;</span>: [<span style=color:#cd5555>&#34;viewer&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;viewer_limit_ds&#34;</span>: [<span style=color:#cd5555>&#34;viewer_limit_ds&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;viewer_limit_m&#34;</span>: [<span style=color:#cd5555>&#34;viewer_limit_m&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;design_group_kpi_editor&#34;</span>: [<span style=color:#cd5555>&#34;kpi_editor_design&#34;</span>, <span style=color:#cd5555>&#34;viewer_limit_ds&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;system_group_kpi_editor&#34;</span>: [<span style=color:#cd5555>&#34;kpi_editor_system&#34;</span>, <span style=color:#cd5555>&#34;viewer_limit_ds&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;manufacture_group_kpi_editor&#34;</span>: [<span style=color:#cd5555>&#34;kpi_editor_manufacture&#34;</span>, <span style=color:#cd5555>&#34;viewer&#34;</span>],
+    <span style=color:#8b008b;font-weight:700>&#34;project_leader&#34;</span>: [<span style=color:#cd5555>&#34;viewer_limit_ds&#34;</span>, <span style=color:#cd5555>&#34;viewer_limit_m&#34;</span>]
+  },
+  <span style=color:#8b008b;font-weight:700>&#34;role_permissions&#34;</span>: {
+    <span style=color:#8b008b;font-weight:700>&#34;admin&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;quality_head_design&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;quality_head_system&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;quality_head_manufacture&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;kpi_editor_design&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;kpi_editor_system&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;kpi_editor_manufacture&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;edit&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;viewer&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;viewer_limit_ds&#34;</span>: [
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;design&#34;</span>},
+      {<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_all&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;system&#34;</span>}
+    ],
+    <span style=color:#8b008b;font-weight:700>&#34;viewer_limit_m&#34;</span>: [{<span style=color:#8b008b;font-weight:700>&#34;action&#34;</span>: <span style=color:#cd5555>&#34;view_l3_project&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;object&#34;</span>: <span style=color:#cd5555>&#34;manufacture&#34;</span>}]
+  }
+}
+</code></pre></td></tr></table></div></div><p>上述 Data 可以知道 Group 跟 Role 的對應關係，以及 Role 可以做得相對應事情。最後一項就是撰寫 OPA Policy，要透過 <a href=https://www.openpolicyagent.org/docs/latest/policy-language/>Rego 語言</a>來撰寫，其實沒有很難。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> rbac.authz
+
+<span style=color:#8b008b;font-weight:700>import</span> data.rbac.authz.acl
+<span style=color:#8b008b;font-weight:700>import</span> input
+
+<span style=color:#a61717;background-color:#e3d2d2>#</span> logic that implements RBAC.
+<span style=color:#8b008b;font-weight:700>default</span> allow = <span style=color:#8b008b;font-weight:700>false</span>
+
+allow {
+    <span style=color:#a61717;background-color:#e3d2d2>#</span> lookup the list of roles <span style=color:#8b008b;font-weight:700>for</span> the user
+    roles := acl.group_roles[input.user[_]]
+
+    <span style=color:#a61717;background-color:#e3d2d2>#</span> <span style=color:#8b008b;font-weight:700>for</span> each role in that list
+    r := roles[_]
+
+    <span style=color:#a61717;background-color:#e3d2d2>#</span> lookup the permissions list <span style=color:#8b008b;font-weight:700>for</span> role r
+    permissions := acl.role_permissions[r]
+
+    <span style=color:#a61717;background-color:#e3d2d2>#</span> <span style=color:#8b008b;font-weight:700>for</span> each permission
+    p := permissions[_]
+
+    <span style=color:#a61717;background-color:#e3d2d2>#</span> check <span style=color:#8b008b;font-weight:700>if</span> the permission granted to r matches the user<span style=color:#a61717;background-color:#e3d2d2>&#39;</span>s request
+    p == {<span style=color:#cd5555>&#34;action&#34;</span>: input.action, <span style=color:#cd5555>&#34;object&#34;</span>: input.object}
+}
+</code></pre></td></tr></table></div></div><p>上面就是先把 User 對應的 Group Role 找到之後，再將全部的 Role 權限拿出來進行最後的比對產生結果，回傳值就會是 <code>allow</code> 布林值。</p><h2 id=restful-api>RESTful API</h2><p>上述步驟將檔案整理成底下三個</p><ol><li>input.json</li><li>data.json</li><li>rbac.authz.rego</li></ol><p>透過底下指令依序將資料上傳到 OPA Server 內，第一個先上傳 data</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>curl -X PUT http://localhost:8181/v1/data/rbac/authz/acl <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  --data-binary @data.json
+</code></pre></td></tr></table></div></div><p>接著上傳 Policy</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>curl -X PUT http://localhost:8181/v1/policies/rbac.authz <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  --data-binary @rbac.authz.rego
+</code></pre></td></tr></table></div></div><p>最後驗證 input 資料</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>curl -X POST http://localhost:8181/v1/data/rbac/authz/allow <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  --data-binary @input.json
+</code></pre></td></tr></table></div></div><p>用 <a href=https://github.com/astaxie/bat>bat tool</a> 驗證</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ bat POST http://localhost:8181/v1/data/rbac/authz/allow &lt; input.json
+POST /v1/data/rbac/authz/allow HTTP/1.1
+Host: localhost:8181
+Accept: application/json
+Accept-Encoding: gzip, deflate
+Content-Type: application/json
+User-Agent: bat/0.1.0
+
+{<span style=color:#cd5555>&#34;input&#34;</span>:{<span style=color:#cd5555>&#34;action&#34;</span>:<span style=color:#cd5555>&#34;edit&#34;</span>,<span style=color:#cd5555>&#34;object&#34;</span>:<span style=color:#cd5555>&#34;design&#34;</span>,<span style=color:#cd5555>&#34;user&#34;</span>:[<span style=color:#cd5555>&#34;design_group_kpi_editor&#34;</span>,<span style=color:#cd5555>&#34;system_group_kpi_editor&#34;</span>]}}
+
+HTTP/1.1 <span style=color:#b452cd>200</span> OK
+Content-Type: application/json
+Date: Sat, <span style=color:#b452cd>01</span> May <span style=color:#b452cd>2021</span> 08:43:30 GMT
+Content-Length: <span style=color:#b452cd>15</span>
+
+{
+  <span style=color:#cd5555>&#34;result&#34;</span>: <span style=color:#658b00>true</span>
+}
+</code></pre></td></tr></table></div></div><p>或者可以透過簡單的 Go 語言來驗證，用 Go 1.16 新的 embed package 來驗證。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;bytes&#34;</span>
+    _ <span style=color:#cd5555>&#34;embed&#34;</span>
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;io/ioutil&#34;</span>
+    <span style=color:#cd5555>&#34;net/http&#34;</span>
+    <span style=color:#cd5555>&#34;time&#34;</span>
+)
+
+<span style=color:#228b22>//go:embed input.json
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>var</span> input []<span style=color:#00688b;font-weight:700>byte</span>
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    url := <span style=color:#cd5555>&#34;http://localhost:8181/v1/data/rbac/authz/allow&#34;</span>
+    method := <span style=color:#cd5555>&#34;POST&#34;</span>
+
+    payload := bytes.<span style=color:#008b45>NewReader</span>(input)
+
+    client := &amp;http.Client{
+        Timeout: <span style=color:#b452cd>5</span> * time.Second,
+    }
+    req, err := http.<span style=color:#008b45>NewRequest</span>(method, url, payload)
+
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        fmt.<span style=color:#008b45>Println</span>(err)
+        <span style=color:#8b008b;font-weight:700>return</span>
+    }
+    req.Header.<span style=color:#008b45>Add</span>(<span style=color:#cd5555>&#34;Content-Type&#34;</span>, <span style=color:#cd5555>&#34;application/json&#34;</span>)
+
+    res, err := client.<span style=color:#008b45>Do</span>(req)
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        fmt.<span style=color:#008b45>Println</span>(err)
+        <span style=color:#8b008b;font-weight:700>return</span>
+    }
+    <span style=color:#8b008b;font-weight:700>defer</span> res.Body.<span style=color:#008b45>Close</span>()
+
+    body, err := ioutil.<span style=color:#008b45>ReadAll</span>(res.Body)
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        fmt.<span style=color:#008b45>Println</span>(err)
+        <span style=color:#8b008b;font-weight:700>return</span>
+    }
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#658b00>string</span>(body))
+}
+</code></pre></td></tr></table></div></div><h2 id=結論>結論</h2><p>本篇透過 RESTful 方式來更新 Data 及 Policy，此方式相對於前篇直接坎入在 Go 語言內，效率上來說會比較差些，因為會牽扯到你把 OPA 部署在哪個環境內，中間肯定會有一些 Latency，不過這就要看團隊怎麼使用 OPA 了，各有優缺點，團隊如果不是在寫 Go 語言的，肯定只能用 RESTful 方式來更新及查詢。程式碼可以在<a href=https://github.com/go-training/opa-restful>這邊找到</a>。</p><div class=blog-tags><a href=http://example.org//tags/golang/>golang</a>&nbsp;
+<a href=http://example.org//tags/open-policy-agent/>open policy agent</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=http%3a%2f%2fexample.org%2f2021%2f05%2fcomunicate-with-open-policy-agent-using-resful-api%2f&text=%e4%bd%bf%e7%94%a8%20RESTful%20API%20%e4%b8%b2%e6%8e%a5%20Open%20Policy%20Agent&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fexample.org%2f2021%2f05%2fcomunicate-with-open-policy-agent-using-resful-api%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=http%3a%2f%2fexample.org%2f2021%2f05%2fcomunicate-with-open-policy-agent-using-resful-api%2f&title=%e4%bd%bf%e7%94%a8%20RESTful%20API%20%e4%b8%b2%e6%8e%a5%20Open%20Policy%20Agent" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=http%3a%2f%2fexample.org%2f2021%2f05%2fcomunicate-with-open-policy-agent-using-resful-api%2f&title=%e4%bd%bf%e7%94%a8%20RESTful%20API%20%e4%b8%b2%e6%8e%a5%20Open%20Policy%20Agent" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=http%3a%2f%2fexample.org%2f2021%2f05%2fcomunicate-with-open-policy-agent-using-resful-api%2f&title=%e4%bd%bf%e7%94%a8%20RESTful%20API%20%e4%b8%b2%e6%8e%a5%20Open%20Policy%20Agent" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=http%3a%2f%2fexample.org%2f2021%2f05%2fcomunicate-with-open-policy-agent-using-resful-api%2f&description=%e4%bd%bf%e7%94%a8%20RESTful%20API%20%e4%b8%b2%e6%8e%a5%20Open%20Policy%20Agent" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=http://example.org/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/ data-toggle=tooltip data-placement=top title="初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管">&larr; Previous Post</a></li><li class=next><a href=http://example.org/2021/05/mongodb-performance-tunning/ data-toggle=tooltip data-placement=top title="MongoDB 效能調校紀錄">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=http://example.org/2021/05/comunicate-with-open-policy-agent-using-resful-api>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='http://example.org/2021/05/comunicate-with-open-policy-agent-using-resful-api'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2021
+&nbsp;&bull;&nbsp;
+<a href=http://example.org/>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.83.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js integrity=sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js integrity=sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe crossorigin=anonymous></script><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=http://example.org/js/main.js></script><script>renderMathInElement(document.body)</script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js integrity=sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy crossorigin=anonymous></script><script src=https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js integrity=sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q crossorigin=anonymous></script><script src=http://example.org/js/load-photoswipe.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
