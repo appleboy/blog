@@ -15,6 +15,9 @@ jobs:
           submodules: true  # Fetch Hugo themes (true OR recursive)
           fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
 
+      - name: Create cname file
+        run: echo "demo.gh.wu-boy.com" > static/CNAME
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
