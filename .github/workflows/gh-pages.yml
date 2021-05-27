@@ -18,6 +18,9 @@ jobs:
       - name: Create cname file
         run: echo "demo.gh.wu-boy.com" > static/CNAME
 
+      - name: Replace domain name
+        run: sed -i.bak -e 's|example.com|demo.gh.wu-boy.com|g'
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
