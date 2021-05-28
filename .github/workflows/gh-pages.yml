@@ -18,9 +18,6 @@ jobs:
       - name: Create cname file
         run: echo "demo.gh.wu-boy.com" > static/CNAME
 
-      - name: Replace domain name
-        run: sed -i.bak -e 's|http://example.com|https://demo.gh.wu-boy.com|g' config.toml
-
       - name: Update robot.txt
         run: |
           echo -e "User-agent: *\nDisallow: /" > static/robots.txt
@@ -33,7 +30,7 @@ jobs:
           # extended: true
 
       - name: Build
-        run: hugo --minify
+        run: hugo --minify -b https://demo.gh.wu-boy.com
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
