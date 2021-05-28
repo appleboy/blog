@@ -22,7 +22,7 @@ jobs:
         run: sed -i.bak -e 's|http://example.com|https://demo.gh.wu-boy.com|g' config.toml
 
       - name: Update robot.txt
-        run: "echo \"User-agent: *\nDisallow: /\" > static/robots.txt"
+        run: "echo -e \"User-agent: *\nDisallow: /\" > static/robots.txt"
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
