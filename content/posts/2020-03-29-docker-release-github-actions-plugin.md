@@ -35,7 +35,7 @@ tags:
 
 如果需要搭配購買請直接透過 [FB 聯絡我][12]，直接匯款（價格再減 **100**）
 
-## 如何使用 GitHub Action 上傳 Image
+## 使用 GitHub Action 上傳 Image
 
 首先準備用 Go 語言服務來當作範例，底下是 Dockerfile 設定，本篇的程式碼的都可以在[這邊找到][13]。
 
@@ -124,8 +124,7 @@ GitHub Actions 的版本跟 Drone 的 Plugin 共通點都是用 CLI 完成全部
  [6]: https://www.docker.com/blog/first-docker-github-action-is-here/
  [7]: https://drone.io/
  [8]: http://plugins.drone.io/drone-plugins/drone-docker/
- [9]: https://www.udemy.com/course/golang-fight/?coupon
-Code=202003
+ [9]: https://www.udemy.com/course/golang-fight/?couponCode=202003
  [10]: https://www.udemy.com/course/devops-oneday/?couponCode=202003
  [11]: https://www.udemy.com/course/docker-practice/?couponCode=202003
  [12]: http://facebook.com/appleboy46

@@ -248,9 +248,7 @@ docker build --progress=plain -t appleboy/docker-buildkit -f Dockerfile.buildkit
 
 ## 心得
 
-現在 CI/CD 的工具不確定都有支持 docker buildKit，可能要自己做實驗試試看，像是現在 GitHub Action 官方也[不支援 docker buildkit][12]。如果是全部自己架設的話，基本上可以完全使用 docker buildKit + docker cache-from 兩者一起用，相信會省下不少時間啊。
-
-# [程式碼範例請看這邊][2]
+現在 CI/CD 的工具不確定都有支持 docker buildKit，可能要自己做實驗試試看，像是現在 GitHub Action 官方也[不支援 docker buildkit][12]。如果是全部自己架設的話，基本上可以完全使用 docker buildKit + docker cache-from 兩者一起用，相信會省下不少時間啊。[程式碼範例請看這邊][2]
 
  [1]: https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080 "docker buildkit"
  [2]: https://github.com/go-training/docker-buildkit-demo
