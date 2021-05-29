@@ -1,0 +1,29 @@
+
+server.modules              = (
+"mod_rewrite",
+"mod_redirect",
+"mod_alias",
+"mod_access",
+"mod_auth",
+"mod_fastcgi",
+"mod_userdir",
+"mod_cgi",
+"mod_accesslog" )
+
+fastcgi.server             = ( ".php" =>
+( "localhost" =>
+(
+"socket" => "/tmp/php-fastcgi.socket",
+"bin-path" => "/usr/local/bin/php-cgi",
+"bin-environment" => (
+"PHP_FCGI_CHILDREN" => "16",
+"PHP_FCGI_MAX_REQUESTS" => "10000" ),
+"bin-copy-environment" => (
+"PATH", "SHELL", "USER" ),
+"broken-scriptfilename" => "enable"
+
+)
+)
+)
+
+

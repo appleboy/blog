@@ -1,0 +1,32 @@
+#!/bin/bash
+date=`date +%Y-%m-%d`
+RETENTION_PERIOD="7"
+HEADER="Backup data"
+remove_oldfiles(){
+        echo "Removing directory $1 files older than $RETENTION_PERIOD days"
+| wall
+        find $1 -type f -mtime +$2 -exec rm '{}' \;
+}
+
+BACKUPDIR="/home/appleboy /var/www/html"
+back_www_dir="/backup01/www_data"
+
+#
+# 開始備份
+#
+
+cd $back_www_dir
+
+for TARGET in $BACKUPDIR
+do
+        echo "System backup on $TARGET" | wall
+        BASENAME=`basename $TARGET`
+
+        tar -zcvf ${BASENAME}-${date}.tar.gz $TARGET 1>/dev/null
+        sleep 2
+done
+
+#
+# 刪除7天前的資料
+#
+remove_oldfiles $back_www_dir $RETENTION_PERIOD

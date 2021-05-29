@@ -1,0 +1,254 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[Python] OSSF::自由軟體鑄造場 Python network programming -進階 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="今天跑來聽 OSSF::自由軟體鑄造場 舉辦的 Python network programming -進階 課程，紀錄上課的心得，以及講師提到的一堆重點整理，分享給大家，收穫實在是太多了，本身在南部能聽到的課程就很少，一看到有開課程，就非常開心報名參加，講師對於上課準備的講義也很用心，學習到平常看書學不到的經驗跟實作。 1. 字串處理函式
+# 字串轉換小寫
+string.lower
+# 字串轉換大寫
+string.upper
+# 切割字串
+string.split
+# 合併字串
+string.join
+# 找尋字串
+string.find"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2009\/05\/python-ossf%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94%E9%91%84%E9%80%A0%E5%A0%B4-python-network-programming-%E9%80%B2%E9%9A%8E\/","name":"[ python] ossf 自由軟體鑄造場 python network programming 進階"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Python] OSSF::自由軟體鑄造場 Python network programming -進階","description":"今天跑來聽 OSSF::自由軟體鑄造場 舉辦的 Python network programming -進階 課程，紀錄上課的心得，以及講師提到的一堆重點整理，分享給大家，收穫實在是太多了，本身在南部能聽到的課程就很少，一看到有開課程，就非常開心報名參加，講師對於上課準備的講義也很用心，學習到平常看書學不到的經驗跟實作。 1. 字串處理函式\n# 字串轉換小寫\rstring.lower\r# 字串轉換大寫\rstring.upper\r# 切割字串\rstring.split\r# 合併字串\rstring.join\r# 找尋字串\rstring.find","inLanguage":"en","wordCount":777,"datePublished":"2009-05-04T13:58:49","dateModified":"2009-05-04T13:58:49","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["OSSF, Python"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2009\/05\/python-ossf%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94%E9%91%84%E9%80%A0%E5%A0%B4-python-network-programming-%E9%80%B2%E9%9A%8E\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Python] OSSF::自由軟體鑄造場 Python network programming -進階"><meta property="og:description" content="今天跑來聽 OSSF::自由軟體鑄造場 舉辦的 Python network programming -進階 課程，紀錄上課的心得，以及講師提到的一堆重點整理，分享給大家，收穫實在是太多了，本身在南部能聽到的課程就很少，一看到有開課程，就非常開心報名參加，講師對於上課準備的講義也很用心，學習到平常看書學不到的經驗跟實作。 1. 字串處理函式
+# 字串轉換小寫
+string.lower
+# 字串轉換大寫
+string.upper
+# 切割字串
+string.split
+# 合併字串
+string.join
+# 找尋字串
+string.find"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2009/05/python-ossf%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94%E9%91%84%E9%80%A0%E5%A0%B4-python-network-programming-%E9%80%B2%E9%9A%8E/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="[Python] OSSF::自由軟體鑄造場 Python network programming -進階"><meta name=twitter:description content="今天跑來聽 OSSF::自由軟體鑄造場 舉辦的 Python network programming -進階 課程，紀錄上課的心得，以及講師提到的一堆重點整理，分享給大家，收穫實在是太多了，本身在南部能聽到的課程就很少，一看到有開課程，就非常開心報名參加，講師對於上課準備的講義也很用心，學習到平常看書學不到的經驗跟實作。 1. 字串處理函式
+# 字串轉換小寫
+string.lower
+# 字串 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
+<a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-devops/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a title=文章標籤 href=/tags/><i class="fas fa-tags fa-lg"></i> 文章標籤</a></li><li><a title=文章分類 href=/categories/><i class="fas fa-sitemap fa-lg"></i> 文章分類</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY" href=https://demo.gh.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[Python] OSSF::自由軟體鑄造場 Python network programming -進階</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 4, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;777&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>今天跑來聽 <a href=http://www.openfoundry.org/>OSSF::自由軟體鑄造場</a> 舉辦的 <a href=http://whoswho.openfoundry.org/workshop/details/22.html>Python network programming -進階</a> 課程，紀錄上課的心得，以及講師提到的一堆重點整理，分享給大家，收穫實在是太多了，本身在南部能聽到的課程就很少，一看到有開課程，就非常開心報名參加，講師對於上課準備的講義也很用心，學習到平常看書學不到的經驗跟實作。 <strong>1. 字串處理函式</strong></p><pre class="brush: python; title: ; notranslate" title># 字串轉換小寫
+string.lower
+# 字串轉換大寫
+string.upper
+# 切割字串
+string.split
+# 合併字串
+string.join
+# 找尋字串
+string.find</pre><p>底下來一個範例：</p><pre class="brush: python; title: ; notranslate" title>import string
+# 切割字串
+print str.split(str.lower(str.upper("hi appleboy")))
+# 合併 array
+print str.join("",str.split("hi appleboy"))
+# 找尋字串
+print str.find("hi appleboy", "apple")
+#
+# 字串替換 template
+s = string.Template("$who likes $what")
+print s.substitute(who='appleboy', what='eat apple')
+</pre><p><strong>2. 日期處理</strong></p><pre class="brush: python; title: ; notranslate" title>import time
+from datetime import date
+from datetime import datetime
+# 時間
+d = date(2005, 7, 14)
+print d.isoformat()
+print date.today().isoformat()
+print d - date.today()</pre>這裡講師有提到說，在 import module 的時候，希望有用到的 module 在 import 進來就可以了，這樣可以增進效能，也可以避免不需要的 load，在很多 MVC 裡面，大部分很多套件都會預先載入，可是我們在寫程式真的有用到嗎，講師提到 java，當我們想要 System.output 輸出，載入的 module 就很多，造成系統讀取速度降低阿。<p><strong>3. Random 亂數處理</strong> 可以參考官方網站文件：<a href=http://docs.python.org/library/random.html>http://docs.python.org/library/random.html</a> <strong>4. bsddb — Interface to Berkeley DB library</strong> <a href=http://docs.python.org/library/bsddb.html>教學網站</a> bsddb module 提供一個 interface 介面來連接 Berkeley DB，使用者可以隨意新增 ash、btree 或 record，可以利用 <a href=http://docs.python.org/library/marshal.html#marshal.dumps>pickle.dumps()</a> 或者 <a href=http://docs.python.org/library/pickle.html#pickle.dumps>marshal.dumps()</a> 儲存。 python 預設沒有安裝這個 module，底下可以利用 FreeBSD ports 安裝</p><pre class="brush: bash; title: ; notranslate" title># Python bindings to the Berkeley DB library
+cd /usr/ports/databases/py-bsddb; make install clean</pre>給一個範例：<pre class="brush: python; title: ; notranslate" title>import bsddb
+db = bsddb.btopen('/tmp/spam.db', 'c')
+for i in range(10): 
+    db['%d'%i] = '%d'% (i*i)
+# 印出第四筆資料
+print db['3']
+# 印出所有 key 值
+print db.keys()
+# 輸出 ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+# for 迴圈把 key & value 列出來
+for k, v in db.iteritems():
+    print k, v</pre><p><strong>5. Regular Expression</strong> 直接舉例，分別取出 IP Address 四個欄位數字</p><pre class="brush: python; title: ; notranslate" title>import re
+phonePattern = re.compile(r'^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$')
+a = phonePattern.search('140.123.107.249').groups()
+for v in a:
+    print v</pre>投影片資料：<pre class="brush: bash; title: ; notranslate" title>* ^ matches the beginning of a string.
+    * $ matches the end of a string.
+    * \b matches a word boundary.
+    * \d matches any numeric digit.
+    * \D matches any non-numeric character.
+    * x? matches an optional x character 
+      (in other words, it matches an x zero or one times).
+    * x* matches x zero or more times.
+    * x+ matches x one or more times.
+    * x{n,m} matches an x character at least n times, 
+       but not more than m times.
+    * (a|b|c) matches either a or b or c.
+    * (x) in general is a remembered group. 
+       You can get the value of what matched by using the 
+       groups() method of the object returned by re.search.</pre>如果您在單一程式大量重複利用 regular expression，那可以用 re.compile(pattern[, flags]) object 來讓程式更有效率，學習 Regular Expression 好處很多，可以幫助您解決字串處理，擷取您想要的字串，底下推薦一些網站給大家：<ul><li><a href=http://phi.sinica.edu.tw/aspac/reports/94/94019/ch2.html>組成 Regular Expression 的元素</a></li><li><a href=http://www.gskinner.com/RegExr/>RegExr: Online Regular Expression Testing Tool</a> 6.</li></ul><p><strong>zlib(gzip) & bz2</strong> 基本的壓縮介紹，<a href="http://docs.python.org/library/gzip.html?highlight=gzip#module-gzip">gzip</a> 速度優於 <a href="http://docs.python.org/library/bz2.html?highlight=bz2#one-shot-de-compression">bz2</a>，適合用於壓縮檔案在網路傳輸方面，那 bz2 適合用在系統備份部份，可以把檔案壓縮更小，其實用的地方不太一樣，各有優缺點，那 apache2 就有提供 <a href=http://httpd.apache.org/docs/2.2/mod/mod_deflate.html>mod_deflate</a> 增進傳輸效能，大量的 request 如果經過 mod_deflate 壓縮，可以大大減少網路傳輸流量。 最後當然就是介紹 python 怎麼寫抓取網頁 tag 部份，以及 Unicode 中文編碼的一些介紹，相當不錯，老師給的範例，等於是提供一隻小型的程式，可以當作指令來用，也有寫 help 用法：</p><pre class="brush: python; title: ; notranslate" title>def help():
+	print ("Usage: %s [Option] [Location]") % os.path.basename(sys.argv[0])
+	print ("Option: ")
+	print ("\t%2s, %-25s %s" % ("-h","--help","show this usage message."))
+	print ("\t%2s, %-25s %s" % ("-v","--version","print version number."))
+	print ("\t%2s, %-25s %s" % ("-c","--csv","print result in csv."))
+	print ("Location: ")
+	for x in allpart.keys():
+		print ("\t%-12s"%x)</pre>這隻程式包含了整個 python 寫程式的基本功能，看完這個 code 可以大上把老師這次上課跟上一堂課程整合在一起，包含 thread、class…等，那底下是老師寫的範例，抓取各地溫度，輸出成 csv 檔案，以及 unicode 的處理：<pre class="brush: python; title: ; notranslate" title>#!/usr/bin/env python
+#
+#	Copyleft, No Right Reserved.
+#
+#				kevinwatt 2006/04/25
+#
+import urllib
+import os,sys,re,string
+import time
+import threading
+version="cwb.py version 0426"
+TIMEOUT=1.0*10 # timeout for the operation in seconds
+MAX_THREADS=4 # max thread.
+
+Taipei=['Keelung','Taipei','Yangmingshan','Taoyuan','Sinwu','Hsinchu','Guanwu','Sanyi','Jhunan']
+Tainan=['Tainan','Kaohsiung','Jiasian','Sandimen','Hengchun']
+Yilan=['Yilan','Su-ao','Taipingshan','Hualien','Yuli','Chenggong','Taitung','Dawu','Lanyu']
+Taichung=['Taichung','Wuci','Lishan','Yuanlin','Lugang','Sun-Moon-Lake','Lushan','Hehuan-Mountain','Huwei','Caoling','Chiayi','Alishan','Yushan']
+Penghu=['Penghu','Kinmen','Matsu']
+allpart={'Taipei': Taipei, 'Taichung':Taichung, 'Tainan':Tainan, 'Yilan':Yilan, 'Penghu':Penghu}
+listtitle=['zone','datetime','rep','temp','direct','ane','max_ane','km','humidity','hPa','Rmm','uvi']
+
+class cwb(threading.Thread):
+    "Get weather information from www.cwb.gov.tw"
+    def __init__(self,zonename):
+        threading.Thread.__init__(self)
+        self.zonename=zonename
+        self.reg=re.compile('&lt;([^>]|\n)*>|<br>|<br>|&nbsp;|&nbsp')
+        self.retab=re.compile('tabletype1-2')
+        self.reconvspace=re.compile('&nbsp;|&nbsp')
+
+    def run(self):
+        self.contents = self.getinfo()
+
+    def urlcontent(self):
+        try:
+            b = urllib.urlopen("http://www.cwb.gov.tw/pda/observe/"+self.zonename+".htm",proxies={}).read()
+        except:
+		    b = "Connection false"
+		    sys.exit(0)
+        return b
+
+    def getinfo(self):
+    	b=unicode(self.urlcontent(), "cp950")
+    	list=[]
+    	firsttarget="tabletype1-1"
+    	b=b[b.find(firsttarget)+len(firsttarget)+2:]
+    	b=b[:b.find('&lt;/table>')]
+    	b=re.sub("\n+", "\n", self.reconvspace.sub(" ",self.reg.sub("",self.retab.sub("\>--",b))))
+        conlist=string.split(b,"\n")
+    	info=0
+    	for x in conlist:
+    		if x[0:2]=='--' and info&lt;2:
+    			info+=1 # list[1] is data time.
+    			list.append(x[4:])
+    		elif x[0:2]=='--':
+    			list.append(re.sub('\s+','', x[4:]))
+    	return list
+
+def help():
+	print ("Usage: %s [Option] [Location]") % os.path.basename(sys.argv[0])
+	print ("Option: ")
+	print ("\t%2s, %-25s %s" % ("-h","--help","show this usage message."))
+	print ("\t%2s, %-25s %s" % ("-v","--version","print version number."))
+	print ("\t%2s, %-25s %s" % ("-c","--csv","print result in csv."))
+	print ("Location: ")
+	for x in allpart.keys():
+		print ("\t%-12s"%x)
+
+def count_active(tail):
+    """ returns the number of Getter threads that are alive """
+    num_active = 0
+    for g in tail:
+        if g.isAlive():
+            num_active += 1
+    return num_active
+
+def listprint(list,style):
+	if style=="c":
+		i=1
+		for x in list:
+			if len(list)==i and i==12:
+				print ('"%s"' % x)
+			elif len(list)==i and i&lt;12:
+				print ('"%s",""' % x)
+			else:
+				print ('"%s",' % x),
+			i+=1
+	else:
+		for x in list:
+			print ("%-8s" % x),
+		print
+
+if len(sys.argv) == 1:
+	help()
+	sys.exit(2) # common exit code for syntax error
+else:
+	if sys.argv[1:]:
+		arglist=sys.argv[1:]
+		getargv=arglist[0]
+		if allpart.has_key(getargv):
+			location=allpart[getargv]
+		elif allpart.has_key(arglist[len(arglist)-1]):
+			location=allpart[arglist[len(arglist)-1]]
+
+		if arglist[0:] in (['--help'], ['-h'], ['--usage'], ['-?']):
+			help()
+			sys.exit(0)
+
+		if arglist[0:] in (['-v'],['--version']):
+			print version
+			sys.exit(0)
+
+		if arglist[0] in ('-c','--csv') and len(arglist)>1:
+			style="c"
+		else:
+			style="nor"
+
+		tail=[]
+		try:    # get location
+			len(location)
+		except:
+			print "Error: Could not find location"
+			help()
+			sys.exit(2)
+
+		for zone in location:
+			while count_active(tail) >= MAX_THREADS:
+				#print "too many active, others wait here."
+				time.sleep(1)
+			g=cwb(zone)
+			tail.append(g)
+			g.start() # execute cwb.run()
+		#print "there are",threading.activeCount()-1,"connecton thread started"	
+
+		listprint(listtitle,style)
+		for waterlist in tail:
+			waterlist.join(TIMEOUT)
+			# print waterlist.getName()+":",
+			listprint(waterlist.contents,style)</pre><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/ossf/>OSSF</a>&nbsp;
+<a href=https://demo.gh.wu-boy.com/tags/python/>Python</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f05%2fpython-ossf%25E8%2587%25AA%25E7%2594%25B1%25E8%25BB%259F%25E9%25AB%2594%25E9%2591%2584%25E9%2580%25A0%25E5%25A0%25B4-python-network-programming-%25E9%2580%25B2%25E9%259A%258E%2f&text=%5bPython%5d%20OSSF%3a%3a%e8%87%aa%e7%94%b1%e8%bb%9f%e9%ab%94%e9%91%84%e9%80%a0%e5%a0%b4%20Python%20network%20programming%20-%e9%80%b2%e9%9a%8e&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f05%2fpython-ossf%25E8%2587%25AA%25E7%2594%25B1%25E8%25BB%259F%25E9%25AB%2594%25E9%2591%2584%25E9%2580%25A0%25E5%25A0%25B4-python-network-programming-%25E9%2580%25B2%25E9%259A%258E%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f05%2fpython-ossf%25E8%2587%25AA%25E7%2594%25B1%25E8%25BB%259F%25E9%25AB%2594%25E9%2591%2584%25E9%2580%25A0%25E5%25A0%25B4-python-network-programming-%25E9%2580%25B2%25E9%259A%258E%2f&title=%5bPython%5d%20OSSF%3a%3a%e8%87%aa%e7%94%b1%e8%bb%9f%e9%ab%94%e9%91%84%e9%80%a0%e5%a0%b4%20Python%20network%20programming%20-%e9%80%b2%e9%9a%8e" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f05%2fpython-ossf%25E8%2587%25AA%25E7%2594%25B1%25E8%25BB%259F%25E9%25AB%2594%25E9%2591%2584%25E9%2580%25A0%25E5%25A0%25B4-python-network-programming-%25E9%2580%25B2%25E9%259A%258E%2f&title=%5bPython%5d%20OSSF%3a%3a%e8%87%aa%e7%94%b1%e8%bb%9f%e9%ab%94%e9%91%84%e9%80%a0%e5%a0%b4%20Python%20network%20programming%20-%e9%80%b2%e9%9a%8e" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f05%2fpython-ossf%25E8%2587%25AA%25E7%2594%25B1%25E8%25BB%259F%25E9%25AB%2594%25E9%2591%2584%25E9%2580%25A0%25E5%25A0%25B4-python-network-programming-%25E9%2580%25B2%25E9%259A%258E%2f&title=%5bPython%5d%20OSSF%3a%3a%e8%87%aa%e7%94%b1%e8%bb%9f%e9%ab%94%e9%91%84%e9%80%a0%e5%a0%b4%20Python%20network%20programming%20-%e9%80%b2%e9%9a%8e" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f05%2fpython-ossf%25E8%2587%25AA%25E7%2594%25B1%25E8%25BB%259F%25E9%25AB%2594%25E9%2591%2584%25E9%2580%25A0%25E5%25A0%25B4-python-network-programming-%25E9%2580%25B2%25E9%259A%258E%2f&description=%5bPython%5d%20OSSF%3a%3a%e8%87%aa%e7%94%b1%e8%bb%9f%e9%ab%94%e9%91%84%e9%80%a0%e5%a0%b4%20Python%20network%20programming%20-%e9%80%b2%e9%9a%8e" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2017/04/5-reasons-why-we-switched-from-python-to-go/>五大理由從 Python 轉到 Go 語言</a></li><li><a href=/2013/04/fabric-ssh-for-deploy-or-systems-administration/>Fabric 管理多台 Linux 機器的 command tool</a></li><li><a href=/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/>2011 OSDC Day 1 筆記</a></li><li><a href=/2009/04/django-web-framework-django-%E5%88%9D%E9%9A%8E%E5%AD%B8%E7%BF%92%E5%BF%83%E5%BE%97/>[Django] Web Framework- Django -初階學習心得</a></li><li><a href=/2009/04/%E9%AB%98%E9%9B%84-python-%E5%85%A5%E9%96%80-python-tutorial/>[高雄] Python 入門 – Python tutorial</a></li><li><a href=/2009/03/google-app-engine-sdk%EF%BC%9Apython-%E5%9F%BA%E6%9C%AC%E6%95%99%E5%AD%B8%E5%AE%89%E8%A3%9D/>Google App Engine SDK：python 基本教學安裝</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2009/04/codeigniter-web-framework-%E9%9D%9E%E5%AE%98%E6%96%B9%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E8%A8%8E%E8%AB%96%E5%8D%80%E6%88%90%E7%AB%8B/ data-toggle=tooltip data-placement=top title="[CodeIgniter] Web Framework 非官方繁體中文討論區成立">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2009/05/yasnippet-is-a-template-system-for-emacs/ data-toggle=tooltip data-placement=top title="YASnippet is a template system for emacs">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2009/05/python-ossf%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94%E9%91%84%E9%80%A0%E5%A0%B4-python-network-programming-%E9%80%B2%E9%9A%8E>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2009/05/python-ossf%E8%87%AA%E7%94%B1%E8%BB%9F%E9%AB%94%E9%91%84%E9%80%A0%E5%A0%B4-python-network-programming-%E9%80%B2%E9%9A%8E'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2021
+&nbsp;&bull;&nbsp;
+<a href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.83.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://demo.gh.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

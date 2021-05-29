@@ -1,0 +1,48 @@
+我先列出3個表格的欄位跟一些值
+
+table1
+class_id, class_title
+1         name1
+2         name2
+
+table2
+class_id, series_name
+1         000001
+1         000002
+1         000003
+2         001001
+2         001002
+2         001003
+
+table3
+group_id, group_name
+1         000001
+1         000002
+1         000003
+1         000004
+2         001001
+2         001002
+2         001003
+
+如果想要  table1 跟 table2 結合 只要下
+
+sql語法一
+Select * From table1 as t1, table2 as t2 where t1.class_id = t2.class_id &&
+SUBSRTING(`series_name`,1,3) = '000'
+
+如果想要  table1 跟 table3 結合 只要下
+
+sql語法二
+Select * From table1 as t1, table3 as t2 where t1.class_id = t3.group_id &&
+SUBSRTING(`group_name`,1,3) = '000'
+
+但是我想要用一句sql語法把上面2個sql語法取出來的資料，也就是
+sql語法一取出3筆
+sql語法二取出4筆
+然後我想用一個sql語法可以取出上面7筆資料，我是這樣寫sql
+
+Select * From table1 as t1, table2 as t2, table3 as t3
+where (t1.class_id = t2.class_id && SUBSRTING(`series_name`,1,3) = '000') ||
+      (t1.class_id = t3.group_id && SUBSRTING(`group_name`,1,3) = '000')
+
+但是這樣取出來的不是我想要的，請問要怎麼下sql會比較好

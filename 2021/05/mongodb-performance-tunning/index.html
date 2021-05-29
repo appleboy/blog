@@ -1,31 +1,11 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>MongoDB 效能調校紀錄 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
 最近剛好在實作 Prometheus + Grafana 的時候，對 MongoDB 做了容器 CPU 使用率 (container_cpu_usage_seconds_total) 的監控，Metrics 寫法如下:
-
-
-1
-2
-3
-
-
 sum(
     rate(container_cpu_usage_seconds_total{name!~&#34;(^$|^0_.*)&#34;}[1m]))
 by (name)
-
-
 從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？
 
 接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 Loki，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki
-
-
-1
-2
-3
-4
-5
-6
-7
-
-
     logging:
       driver: loki
       options:
@@ -33,39 +13,17 @@ by (name)
         loki-retries: &#34;5&#34;
         loki-batch-size: &#34;400&#34;
         loki-external-labels: &#34;environment=production,project=mongo&#34;
-
-
 
 先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了
 
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/05\/mongodb-performance-tunning\/","name":"Mongo db 效能調校紀錄"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"MongoDB 效能調校紀錄","description":"\n最近剛好在實作 Prometheus \u002b Grafana 的時候，對 MongoDB 做了容器 CPU 使用率 (container_cpu_usage_seconds_total) 的監控，Metrics 寫法如下:\n1 2 3  sum( rate(container_cpu_usage_seconds_total{name!~\u0026#34;(^$|^0_.*)\u0026#34;}[1m])) by (name)   從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？\n接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 Loki，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki\n1 2 3 4 5 6 7  logging:driver:lokioptions:loki-url:\u0026#34;http:\/\/xxxxxxx\/loki\/api\/v1\/push\u0026#34;loki-retries:\u0026#34;5\u0026#34;loki-batch-size:\u0026#34;400\u0026#34;loki-external-labels:\u0026#34;environment=production,project=mongo\u0026#34;  先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了\n","inLanguage":"en","wordCount":1038,"datePublished":"2021-05-16T00:57:45","dateModified":"2021-05-16T00:57:45","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["database, grafana, mongodb, prometheus"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/05\/mongodb-performance-tunning\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="MongoDB 效能調校紀錄"><meta property="og:description" content="
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/05\/mongodb-performance-tunning\/","name":"Mongo db 效能調校紀錄"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"MongoDB 效能調校紀錄","description":"\n最近剛好在實作 Prometheus \u002b Grafana 的時候，對 MongoDB 做了容器 CPU 使用率 (container_cpu_usage_seconds_total) 的監控，Metrics 寫法如下:\nsum( rate(container_cpu_usage_seconds_total{name!~\u0022(^$|^0_.*)\u0022}[1m])) by (name) 從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？\n接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 Loki，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki\nlogging: driver: loki options: loki-url: \u0022http:\/\/xxxxxxx\/loki\/api\/v1\/push\u0022 loki-retries: \u00225\u0022 loki-batch-size: \u0022400\u0022 loki-external-labels: \u0022environment=production,project=mongo\u0022 先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了\n","inLanguage":"en","wordCount":812,"datePublished":"2021-05-16T00:57:45","dateModified":"2021-05-16T00:57:45","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["database, grafana, mongodb, prometheus"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/05\/mongodb-performance-tunning\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="MongoDB 效能調校紀錄"><meta property="og:description" content="
 最近剛好在實作 Prometheus + Grafana 的時候，對 MongoDB 做了容器 CPU 使用率 (container_cpu_usage_seconds_total) 的監控，Metrics 寫法如下:
-
-
-1
-2
-3
-
-
 sum(
     rate(container_cpu_usage_seconds_total{name!~&#34;(^$|^0_.*)&#34;}[1m]))
 by (name)
-
-
 從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？
 
 接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 Loki，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki
-
-
-1
-2
-3
-4
-5
-6
-7
-
-
     logging:
       driver: loki
       options:
@@ -73,22 +31,14 @@ by (name)
         loki-retries: &#34;5&#34;
         loki-batch-size: &#34;400&#34;
         loki-external-labels: &#34;environment=production,project=mongo&#34;
-
-
 
 先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了
 
 "><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2021/05/mongodb-performance-tunning/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="MongoDB 效能調校紀錄"><meta name=twitter:description content="
 最近剛好在實作 Prometheus + Grafana 的時候，對 MongoDB 做了容器 CPU 使用率 (container_cpu_usage_seconds_total) 的監控，Metrics 寫法如下:
-
-
-1
-2
-3
-
-
 sum(
-    rate(container_cpu_usage_seconds_total{name!~&#34;(^$|^0_.*)&#34; …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+    rate(container_cpu_usage_seconds_total{name!~&#34;(^$|^0_.*)&#34;}[1m]))
+by (name) …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
 <a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
@@ -98,482 +48,234 @@ sum(
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>MongoDB 效能調校紀錄</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 16, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1038&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#啟動資料庫-profiler>啟動資料庫 Profiler</a></li><li><a href=#用-profiler-分析效能>用 Profiler 分析效能</a></li><li><a href=#了解-slow-query>了解 Slow Query</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" title=mongodb><img src="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" alt=mongodb title=mongodb></a></p><p>最近剛好在實作 <a href=https://prometheus.io/>Prometheus</a> + <a href=https://grafana.com/>Grafana</a> 的時候，對 MongoDB 做了容器 CPU 使用率 (<code>container_cpu_usage_seconds_total</code>) 的監控，Metrics 寫法如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>sum(
-    rate(container_cpu_usage_seconds_total{name!~<span style=color:#cd5555>&#34;(^</span>$<span style=color:#cd5555>|^0_.*)&#34;</span>}[1m]))
-by (name)
-</code></pre></td></tr></table></div></div><p>從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？</p><p><img src="https://lh3.googleusercontent.com/FbcbJ75SVSEmNb94X6z9JsjkhKmuzjEGUesnTVxwcP2SGYWJpblQaD5ks02brR9kP9HYqP7KpbQAaoa7RUuBWi8EnXdN2eTCzekyGVmKAY4ltnmEnNrWerAzZkHIp9gGKieO71WUhJk=w1920-h1080" alt></p><p>接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 <a href=https://grafana.com/oss/loki/>Loki</a>，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>logging</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>driver</span>:<span style=color:#bbb> </span>loki<span style=color:#bbb>
-</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>options</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>loki-url</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;http://xxxxxxx/loki/api/v1/push&#34;</span><span style=color:#bbb>
-</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>loki-retries</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;5&#34;</span><span style=color:#bbb>
-</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>loki-batch-size</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;400&#34;</span><span style=color:#bbb>
-</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>loki-external-labels</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;environment=production,project=mongo&#34;</span><span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><p><img src="https://lh3.googleusercontent.com/TooE3Q49jzI_FpbjXm4b3A_9aho8J4Qws64XmhVzDVbe6NPMCmgYmuw5bMRwnMgmk_lXxNHDU1n6RXwFGvoZvPxLuM6clRJ_ZGRC9S47rvFbm3k9v6v8qaHhC6vqsFkXENQYlRAqKn0=w1920-h1080" alt></p><p>先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了</p><p><img src="https://lh3.googleusercontent.com/WgyOX8OOff6KGKlOvSvoNxzDsPGyiXBwPa_PX3O7L9AYSBfQ9VoNAP5s_HkbmMa7rokTnF--ZLnJ4p6oLqoTCV2Gyq7B696SEbTIrGIi1kDVtijVpZlYTklq3qbLFtpKGAQHeXxHE-Q=w1920-h1080" alt></p><p><img src="https://lh3.googleusercontent.com/nzKkL7J5x_LmoqTFYav5kKA8Jkp4E4s8OCOekd-fz2HAeU2ySC3DopumqMIevqelMN_bvw7Ug7BB2f6ZJeubCQzz4w1Uby709NqsqTEkQcJK7IwVkcHt_ZkArRjSlKfZvyWBE6ZBLnY=w1920-h1080" alt></p><h2 id=啟動資料庫-profiler>啟動資料庫 Profiler</h2><p>MongoDB 預設 Profiler 是關閉的，遇到效能問題，就需要打開，來收集所有的操作記錄 (CRUD)，透過底下指令可以知道目前 MongoDB 的 <a href=https://docs.mongodb.com/manual/reference/command/profile/>Profiler 狀態</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>&gt; db.getProfilingStatus()
-{ <span style=color:#cd5555>&#34;was&#34;</span> : 0, <span style=color:#cd5555>&#34;slowms&#34;</span> : 100, <span style=color:#cd5555>&#34;sampleRate&#34;</span> : <span style=color:#b452cd>1</span> }
-</code></pre></td></tr></table></div></div><p>可以看到 <code>was</code> 為 0 代表沒有啟動</p><table><thead><tr><th>Level</th><th>Description</th></tr></thead><tbody><tr><td></td><td>The profiler is off and does not collect any data. This is the default profiler level.</td></tr><tr><td>1</td><td>The profiler collects data for operations that take longer than the value of slowms.</td></tr><tr><td>2</td><td>The profiler collects data for all operations.</td></tr></tbody></table><p>這邊先將 Level 設定為 2，或者是只需要看 slow query，那就設定為 1</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>&gt; db.setProfilingLevel(2)
-{ <span style=color:#cd5555>&#34;was&#34;</span> : 0, <span style=color:#cd5555>&#34;slowms&#34;</span> : 100, <span style=color:#cd5555>&#34;sampleRate&#34;</span> : 1, <span style=color:#cd5555>&#34;ok&#34;</span> : <span style=color:#b452cd>1</span> }
-</code></pre></td></tr></table></div></div><p>如果使用完畢，請將 Profiler 關閉。</p><h2 id=用-profiler-分析效能>用 Profiler 分析效能</h2><p>上一個步驟，Profile 打開後，就可以看到 Mongo 收集一堆 Slow Query Log 了</p><p><img src="https://lh3.googleusercontent.com/TooE3Q49jzI_FpbjXm4b3A_9aho8J4Qws64XmhVzDVbe6NPMCmgYmuw5bMRwnMgmk_lXxNHDU1n6RXwFGvoZvPxLuM6clRJ_ZGRC9S47rvFbm3k9v6v8qaHhC6vqsFkXENQYlRAqKn0=w1920-h1080" alt></p><p>最後驗證結果就很簡單，只要 Log 量減少及 CPU 使用率下降，就代表成功了，底下介紹幾個好用的分析效能語法。第一直接找目前系統 command 類別內執行時間最久的狀況 (millis: -1 反向排序)</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>db.system.profile.
-  find({ op: { <span style=color:#00688b>$eq</span>: <span style=color:#cd5555>&#34;command&#34;</span> }}).
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;812&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#啟動資料庫-profiler>啟動資料庫 Profiler</a></li><li><a href=#用-profiler-分析效能>用 Profiler 分析效能</a></li><li><a href=#了解-slow-query>了解 Slow Query</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" title=mongodb><img src="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" alt=mongodb title=mongodb></a></p><p>最近剛好在實作 <a href=https://prometheus.io/>Prometheus</a> + <a href=https://grafana.com/>Grafana</a> 的時候，對 MongoDB 做了容器 CPU 使用率 (<code>container_cpu_usage_seconds_total</code>) 的監控，Metrics 寫法如下:</p><pre><code class=language-bash>sum(
+    rate(container_cpu_usage_seconds_total{name!~"(^$|^0_.*)"}[1m]))
+by (name)</code></pre><p>從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？</p><p><img src="https://lh3.googleusercontent.com/FbcbJ75SVSEmNb94X6z9JsjkhKmuzjEGUesnTVxwcP2SGYWJpblQaD5ks02brR9kP9HYqP7KpbQAaoa7RUuBWi8EnXdN2eTCzekyGVmKAY4ltnmEnNrWerAzZkHIp9gGKieO71WUhJk=w1920-h1080" alt></p><p>接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 <a href=https://grafana.com/oss/loki/>Loki</a>，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki</p><pre><code class="language-yaml=">    logging:
+      driver: loki
+      options:
+        loki-url: "http://xxxxxxx/loki/api/v1/push"
+        loki-retries: "5"
+        loki-batch-size: "400"
+        loki-external-labels: "environment=production,project=mongo"</code></pre><p><img src="https://lh3.googleusercontent.com/TooE3Q49jzI_FpbjXm4b3A_9aho8J4Qws64XmhVzDVbe6NPMCmgYmuw5bMRwnMgmk_lXxNHDU1n6RXwFGvoZvPxLuM6clRJ_ZGRC9S47rvFbm3k9v6v8qaHhC6vqsFkXENQYlRAqKn0=w1920-h1080" alt></p><p>先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了</p><p><img src="https://lh3.googleusercontent.com/WgyOX8OOff6KGKlOvSvoNxzDsPGyiXBwPa_PX3O7L9AYSBfQ9VoNAP5s_HkbmMa7rokTnF--ZLnJ4p6oLqoTCV2Gyq7B696SEbTIrGIi1kDVtijVpZlYTklq3qbLFtpKGAQHeXxHE-Q=w1920-h1080" alt></p><p><img src="https://lh3.googleusercontent.com/nzKkL7J5x_LmoqTFYav5kKA8Jkp4E4s8OCOekd-fz2HAeU2ySC3DopumqMIevqelMN_bvw7Ug7BB2f6ZJeubCQzz4w1Uby709NqsqTEkQcJK7IwVkcHt_ZkArRjSlKfZvyWBE6ZBLnY=w1920-h1080" alt></p><h2 id=啟動資料庫-profiler>啟動資料庫 Profiler</h2><p>MongoDB 預設 Profiler 是關閉的，遇到效能問題，就需要打開，來收集所有的操作記錄 (CRUD)，透過底下指令可以知道目前 MongoDB 的 <a href=https://docs.mongodb.com/manual/reference/command/profile/>Profiler 狀態</a></p><pre><code class="language-bash=">> db.getProfilingStatus()
+{ "was" : 0, "slowms" : 100, "sampleRate" : 1 }</code></pre><p>可以看到 <code>was</code> 為 0 代表沒有啟動</p><table><thead><tr><th>Level</th><th>Description</th></tr></thead><tbody><tr><td></td><td>The profiler is off and does not collect any data. This is the default profiler level.</td></tr><tr><td>1</td><td>The profiler collects data for operations that take longer than the value of slowms.</td></tr><tr><td>2</td><td>The profiler collects data for all operations.</td></tr></tbody></table><p>這邊先將 Level 設定為 2，或者是只需要看 slow query，那就設定為 1</p><pre><code class="language-bash=">> db.setProfilingLevel(2)
+{ "was" : 0, "slowms" : 100, "sampleRate" : 1, "ok" : 1 }</code></pre><p>如果使用完畢，請將 Profiler 關閉。</p><h2 id=用-profiler-分析效能>用 Profiler 分析效能</h2><p>上一個步驟，Profile 打開後，就可以看到 Mongo 收集一堆 Slow Query Log 了</p><p><img src="https://lh3.googleusercontent.com/TooE3Q49jzI_FpbjXm4b3A_9aho8J4Qws64XmhVzDVbe6NPMCmgYmuw5bMRwnMgmk_lXxNHDU1n6RXwFGvoZvPxLuM6clRJ_ZGRC9S47rvFbm3k9v6v8qaHhC6vqsFkXENQYlRAqKn0=w1920-h1080" alt></p><p>最後驗證結果就很簡單，只要 Log 量減少及 CPU 使用率下降，就代表成功了，底下介紹幾個好用的分析效能語法。第一直接找目前系統 command 類別內執行時間最久的狀況 (millis: -1 反向排序)</p><pre><code class=language-bash>db.system.profile.
+  find({ op: { $eq: "command" }}).
   sort({ millis: -1 }).
   limit(2).
-  pretty();
-</code></pre></td></tr></table></div></div><p>第二可以找執行時間超過 100 ms 的指令。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>db.system.profile.
-  find({ millis: { <span style=color:#00688b>$gt</span>: <span style=color:#b452cd>100</span> }}).
-  pretty();
-</code></pre></td></tr></table></div></div><p>最後透過 <code>planSummary</code> 語法可以找出 query command 掃描 (<code>COLSCAN</code>) 整個資料表，代表語法沒有被優化，資料表越大，查詢速度越慢</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>db.system.profile.
-  find({ <span style=color:#cd5555>&#34;planSummary&#34;</span>: { <span style=color:#00688b>$eq</span>: <span style=color:#cd5555>&#34;COLLSCAN&#34;</span> }, <span style=color:#cd5555>&#34;op&#34;</span>: { <span style=color:#00688b>$eq</span>: <span style=color:#cd5555>&#34;query&#34;</span> }}).
+  pretty();</code></pre><p>第二可以找執行時間超過 100 ms 的指令。</p><pre><code class=language-bash>db.system.profile.
+  find({ millis: { $gt: 100 }}).
+  pretty();</code></pre><p>最後透過 <code>planSummary</code> 語法可以找出 query command 掃描 (<code>COLSCAN</code>) 整個資料表，代表語法沒有被優化，資料表越大，查詢速度越慢</p><pre><code class="language-bash=">db.system.profile.
+  find({ "planSummary": { $eq: "COLLSCAN" }, "op": { $eq: "query" }}).
   sort({ millis: -1 }).
-  pretty();
-</code></pre></td></tr></table></div></div><p>或者可以透過 <a href=https://docs.mongodb.com/manual/reference/command/profile/#mongodb-dbcommand-dbcmd.profile>db.currentOp</a> 觀察現在正在執行中的 Command，底下語法可以針對 <code>db1</code> 資料庫查詢執行超過 3 秒鐘的指令</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>db.currentOp(
+  pretty();</code></pre><p>或者可以透過 <a href=https://docs.mongodb.com/manual/reference/command/profile/#mongodb-dbcommand-dbcmd.profile>db.currentOp</a> 觀察現在正在執行中的 Command，底下語法可以針對 <code>db1</code> 資料庫查詢執行超過 3 秒鐘的指令</p><pre><code class="language-bash=">db.currentOp(
    {
-     <span style=color:#cd5555>&#34;active&#34;</span> : true,
-     <span style=color:#cd5555>&#34;secs_running&#34;</span> : { <span style=color:#cd5555>&#34;</span><span style=color:#00688b>$gt</span><span style=color:#cd5555>&#34;</span> : <span style=color:#b452cd>3</span> },
-     <span style=color:#cd5555>&#34;ns&#34;</span> : /^db1<span style=color:#cd5555>\.</span>/
+     "active" : true,
+     "secs_running" : { "$gt" : 3 },
+     "ns" : /^db1\./
    }
-)
-</code></pre></td></tr></table></div></div><h2 id=了解-slow-query>了解 Slow Query</h2><p>從上面的 Profiler 效能分析指令，可以查詢到哪些 SQL 指令造成系統效能不穩定，這些 SQL 可以透過 <code>EXPLAIN</code> 方式找尋到執行效能瓶頸。底下直接透過 explain 方式會產生出 JSON 格式輸出：</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-shell data-lang=shell>db.orders.explain(<span style=color:#cd5555>&#34;executionStats&#34;</span>).find({maID:<span style=color:#cd5555>&#34;bfce30cab12311eba55d09972&#34;</span>,maOrderID:<span style=color:#cd5555>&#34;2222318209&#34;</span>,deleted:false})
-</code></pre></td></tr></table></div></div><p>透過 <a href=https://docs.mongodb.com/manual/reference/command/profile/#mongodb-dbcommand-dbcmd.profile>db.collection.explain</a> 可以知道此 Query 在 Mongodb 內是怎麼有效率的執行，底下來看看 <a href=https://docs.mongodb.com/manual/reference/explain-results/>explain</a> 回傳的結果:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64>64</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65>65</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66>66</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67>67</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68>68</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69>69</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70>70</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71>71</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72>72</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73>73</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74>74</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75>75</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76>76</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77>77</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78>78</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79>79</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80>80</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81>81</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82>82</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83>83</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84>84</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85>85</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86>86</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87>87</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88>88</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89>89</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90>90</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91>91</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92>92</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93>93</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94>94</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95>95</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96>96</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97>97</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json>{
-  <span style=color:#8b008b;font-weight:700>&#34;queryPlanner&#34;</span> : {
-    <span style=color:#8b008b;font-weight:700>&#34;plannerVersion&#34;</span> : <span style=color:#b452cd>1</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;namespace&#34;</span> : <span style=color:#cd5555>&#34;fullinn.orders&#34;</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;indexFilterSet&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;parsedQuery&#34;</span> : {
-      <span style=color:#8b008b;font-weight:700>&#34;$and&#34;</span> : [
+)</code></pre><h2 id=了解-slow-query>了解 Slow Query</h2><p>從上面的 Profiler 效能分析指令，可以查詢到哪些 SQL 指令造成系統效能不穩定，這些 SQL 可以透過 <code>EXPLAIN</code> 方式找尋到執行效能瓶頸。底下直接透過 explain 方式會產生出 JSON 格式輸出：</p><pre><code class="language-shell=">db.orders.explain("executionStats").find({maID:"bfce30cab12311eba55d09972",maOrderID:"2222318209",deleted:false})</code></pre><p>透過 <a href=https://docs.mongodb.com/manual/reference/command/profile/#mongodb-dbcommand-dbcmd.profile>db.collection.explain</a> 可以知道此 Query 在 Mongodb 內是怎麼有效率的執行，底下來看看 <a href=https://docs.mongodb.com/manual/reference/explain-results/>explain</a> 回傳的結果:</p><pre><code class="language-json=">{
+  "queryPlanner" : {
+    "plannerVersion" : 1,
+    "namespace" : "fullinn.orders",
+    "indexFilterSet" : false,
+    "parsedQuery" : {
+      "$and" : [
         {
-          <span style=color:#8b008b;font-weight:700>&#34;deleted&#34;</span> : {
-            <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>
+          "deleted" : {
+            "$eq" : false
           }
         },
         {
-          <span style=color:#8b008b;font-weight:700>&#34;maID&#34;</span> : {
-            <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;bfce30cab12311eba55d09972&#34;</span>
+          "maID" : {
+            "$eq" : "bfce30cab12311eba55d09972"
           }
         },
         {
-          <span style=color:#8b008b;font-weight:700>&#34;maOrderID&#34;</span> : {
-            <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;2222318209&#34;</span>
+          "maOrderID" : {
+            "$eq" : "2222318209"
           }
         }
       ]
     },
-    <span style=color:#8b008b;font-weight:700>&#34;winningPlan&#34;</span> : {
-      <span style=color:#8b008b;font-weight:700>&#34;stage&#34;</span> : <span style=color:#cd5555>&#34;COLLSCAN&#34;</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;filter&#34;</span> : {
-        <span style=color:#8b008b;font-weight:700>&#34;$and&#34;</span> : [
+    "winningPlan" : {
+      "stage" : "COLLSCAN",
+      "filter" : {
+        "$and" : [
           {
-            <span style=color:#8b008b;font-weight:700>&#34;deleted&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>
+            "deleted" : {
+              "$eq" : false
             }
           },
           {
-            <span style=color:#8b008b;font-weight:700>&#34;maID&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;bfce30cab12311eba55d09972&#34;</span>
+            "maID" : {
+              "$eq" : "bfce30cab12311eba55d09972"
             }
           },
           {
-            <span style=color:#8b008b;font-weight:700>&#34;maOrderID&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;2222318209&#34;</span>
+            "maOrderID" : {
+              "$eq" : "2222318209"
             }
           }
         ]
       },
-      <span style=color:#8b008b;font-weight:700>&#34;direction&#34;</span> : <span style=color:#cd5555>&#34;forward&#34;</span>
+      "direction" : "forward"
     },
-    <span style=color:#8b008b;font-weight:700>&#34;rejectedPlans&#34;</span> : [ ]
+    "rejectedPlans" : [ ]
   },
-  <span style=color:#8b008b;font-weight:700>&#34;executionStats&#34;</span> : {
-    <span style=color:#8b008b;font-weight:700>&#34;executionSuccess&#34;</span> : <span style=color:#8b008b;font-weight:700>true</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;nReturned&#34;</span> : <span style=color:#b452cd>0</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;executionTimeMillis&#34;</span> : <span style=color:#b452cd>237</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;totalKeysExamined&#34;</span> : <span style=color:#b452cd>0</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;totalDocsExamined&#34;</span> : <span style=color:#b452cd>192421</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;executionStages&#34;</span> : {
-      <span style=color:#8b008b;font-weight:700>&#34;stage&#34;</span> : <span style=color:#cd5555>&#34;COLLSCAN&#34;</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;filter&#34;</span> : {
-        <span style=color:#8b008b;font-weight:700>&#34;$and&#34;</span> : [
+  "executionStats" : {
+    "executionSuccess" : true,
+    "nReturned" : 0,
+    "executionTimeMillis" : 237,
+    "totalKeysExamined" : 0,
+    "totalDocsExamined" : 192421,
+    "executionStages" : {
+      "stage" : "COLLSCAN",
+      "filter" : {
+        "$and" : [
           {
-            <span style=color:#8b008b;font-weight:700>&#34;deleted&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>
+            "deleted" : {
+              "$eq" : false
             }
           },
           {
-            <span style=color:#8b008b;font-weight:700>&#34;maID&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;bfce30cab12311eba55d09972&#34;</span>
+            "maID" : {
+              "$eq" : "bfce30cab12311eba55d09972"
             }
           },
           {
-            <span style=color:#8b008b;font-weight:700>&#34;maOrderID&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;2222318209&#34;</span>
+            "maOrderID" : {
+              "$eq" : "2222318209"
             }
           }
         ]
       },
-      <span style=color:#8b008b;font-weight:700>&#34;nReturned&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;executionTimeMillisEstimate&#34;</span> : <span style=color:#b452cd>30</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;works&#34;</span> : <span style=color:#b452cd>192423</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;advanced&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;needTime&#34;</span> : <span style=color:#b452cd>192422</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;needYield&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;saveState&#34;</span> : <span style=color:#b452cd>192</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;restoreState&#34;</span> : <span style=color:#b452cd>192</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;isEOF&#34;</span> : <span style=color:#b452cd>1</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;direction&#34;</span> : <span style=color:#cd5555>&#34;forward&#34;</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;docsExamined&#34;</span> : <span style=color:#b452cd>192421</span>
+      "nReturned" : 0,
+      "executionTimeMillisEstimate" : 30,
+      "works" : 192423,
+      "advanced" : 0,
+      "needTime" : 192422,
+      "needYield" : 0,
+      "saveState" : 192,
+      "restoreState" : 192,
+      "isEOF" : 1,
+      "direction" : "forward",
+      "docsExamined" : 192421
     }
   },
-  <span style=color:#8b008b;font-weight:700>&#34;serverInfo&#34;</span> : {
-    <span style=color:#8b008b;font-weight:700>&#34;host&#34;</span> : <span style=color:#cd5555>&#34;60b424d18015&#34;</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;port&#34;</span> : <span style=color:#b452cd>27017</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;version&#34;</span> : <span style=color:#cd5555>&#34;4.4.4&#34;</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;gitVersion&#34;</span> : <span style=color:#cd5555>&#34;8db30a63db1a9d84bdcad0c83369623f708e0397&#34;</span>
+  "serverInfo" : {
+    "host" : "60b424d18015",
+    "port" : 27017,
+    "version" : "4.4.4",
+    "gitVersion" : "8db30a63db1a9d84bdcad0c83369623f708e0397"
   },
-  <span style=color:#8b008b;font-weight:700>&#34;ok&#34;</span> : <span style=color:#b452cd>1</span>
-}
-</code></pre></td></tr></table></div></div><p>直接注意到幾個數據，看到 <code>executionTimeMillis</code> 執行時間，<code>totalDocsExamined</code> 是在執行過程會掃過多少資料 (越低越好)，由上面可以知道此 Query 執行時間是 <code>237 ms</code>，並且需要掃過 <code>192421</code> 筆資料，另外一個重要指標就是 <code>executionStages</code> 內的 <code>stage</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json>    <span style=color:#cd5555>&#34;executionStages&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>:</span> {
-      <span style=color:#8b008b;font-weight:700>&#34;stage&#34;</span> : <span style=color:#cd5555>&#34;COLLSCAN&#34;</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;filter&#34;</span> : {
-        <span style=color:#8b008b;font-weight:700>&#34;$and&#34;</span> : [
+  "ok" : 1
+}</code></pre><p>直接注意到幾個數據，看到 <code>executionTimeMillis</code> 執行時間，<code>totalDocsExamined</code> 是在執行過程會掃過多少資料 (越低越好)，由上面可以知道此 Query 執行時間是 <code>237 ms</code>，並且需要掃過 <code>192421</code> 筆資料，另外一個重要指標就是 <code>executionStages</code> 內的 <code>stage</code></p><pre><code class="language-json=">    "executionStages" : {
+      "stage" : "COLLSCAN",
+      "filter" : {
+        "$and" : [
           {
-            <span style=color:#8b008b;font-weight:700>&#34;deleted&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>
+            "deleted" : {
+              "$eq" : false
             }
           },
           {
-            <span style=color:#8b008b;font-weight:700>&#34;maID&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;bfce30cab12311eba55d09972&#34;</span>
+            "maID" : {
+              "$eq" : "bfce30cab12311eba55d09972"
             }
           },
           {
-            <span style=color:#8b008b;font-weight:700>&#34;maOrderID&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;2222318209&#34;</span>
+            "maOrderID" : {
+              "$eq" : "2222318209"
             }
           }
         ]
       },
-      <span style=color:#8b008b;font-weight:700>&#34;nReturned&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;executionTimeMillisEstimate&#34;</span> : <span style=color:#b452cd>30</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;works&#34;</span> : <span style=color:#b452cd>192423</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;advanced&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;needTime&#34;</span> : <span style=color:#b452cd>192422</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;needYield&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;saveState&#34;</span> : <span style=color:#b452cd>192</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;restoreState&#34;</span> : <span style=color:#b452cd>192</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;isEOF&#34;</span> : <span style=color:#b452cd>1</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;direction&#34;</span> : <span style=color:#cd5555>&#34;forward&#34;</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;docsExamined&#34;</span> : <span style=color:#b452cd>192421</span>
+      "nReturned" : 0,
+      "executionTimeMillisEstimate" : 30,
+      "works" : 192423,
+      "advanced" : 0,
+      "needTime" : 192422,
+      "needYield" : 0,
+      "saveState" : 192,
+      "restoreState" : 192,
+      "isEOF" : 1,
+      "direction" : "forward",
+      "docsExamined" : 192421
     }
-  <span style=color:#a61717;background-color:#e3d2d2>},</span>
-</code></pre></td></tr></table></div></div><p>Stage 狀態分成底下幾種</p><ul><li><strong>COLLSCAN</strong>: for a collection scan</li><li><strong>IXSCAN</strong>: for scanning index keys</li><li><strong>FETCH</strong>: for retrieving documents</li><li><strong>SHARD_MERGE</strong>: for merging results from shards</li><li><strong>SHARDING_FILTER</strong>: for filtering out orphan documents from shards</li></ul><p>這次我們遇到的就是第一種 <code>COLLSCAN</code>，資料表全掃，所以造成效能非常低，這時就要檢查看看是否哪邊增加 Index 可以解決效能問題。底下增加一個 index key 看看結果如何？</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-shell data-lang=shell>db.orders.createIndex({maID: 1})
-</code></pre></td></tr></table></div></div><p>接著再執行一次，可以看到底下結果:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64>64</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65>65</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66>66</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67>67</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68>68</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69>69</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json>  <span style=color:#cd5555>&#34;executionStats&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>:</span> {
-    <span style=color:#8b008b;font-weight:700>&#34;executionSuccess&#34;</span> : <span style=color:#8b008b;font-weight:700>true</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;nReturned&#34;</span> : <span style=color:#b452cd>0</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;executionTimeMillis&#34;</span> : <span style=color:#b452cd>2</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;totalKeysExamined&#34;</span> : <span style=color:#b452cd>1</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;totalDocsExamined&#34;</span> : <span style=color:#b452cd>1</span>,
-    <span style=color:#8b008b;font-weight:700>&#34;executionStages&#34;</span> : {
-      <span style=color:#8b008b;font-weight:700>&#34;stage&#34;</span> : <span style=color:#cd5555>&#34;FETCH&#34;</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;filter&#34;</span> : {
-        <span style=color:#8b008b;font-weight:700>&#34;$and&#34;</span> : [
+  },</code></pre><p>Stage 狀態分成底下幾種</p><ul><li><strong>COLLSCAN</strong>: for a collection scan</li><li><strong>IXSCAN</strong>: for scanning index keys</li><li><strong>FETCH</strong>: for retrieving documents</li><li><strong>SHARD_MERGE</strong>: for merging results from shards</li><li><strong>SHARDING_FILTER</strong>: for filtering out orphan documents from shards</li></ul><p>這次我們遇到的就是第一種 <code>COLLSCAN</code>，資料表全掃，所以造成效能非常低，這時就要檢查看看是否哪邊增加 Index 可以解決效能問題。底下增加一個 index key 看看結果如何？</p><pre><code class="language-shell=">db.orders.createIndex({maID: 1})</code></pre><p>接著再執行一次，可以看到底下結果:</p><pre><code class="language-json=">  "executionStats" : {
+    "executionSuccess" : true,
+    "nReturned" : 0,
+    "executionTimeMillis" : 2,
+    "totalKeysExamined" : 1,
+    "totalDocsExamined" : 1,
+    "executionStages" : {
+      "stage" : "FETCH",
+      "filter" : {
+        "$and" : [
           {
-            <span style=color:#8b008b;font-weight:700>&#34;deleted&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>
+            "deleted" : {
+              "$eq" : false
             }
           },
           {
-            <span style=color:#8b008b;font-weight:700>&#34;maOrderID&#34;</span> : {
-              <span style=color:#8b008b;font-weight:700>&#34;$eq&#34;</span> : <span style=color:#cd5555>&#34;2222318209&#34;</span>
+            "maOrderID" : {
+              "$eq" : "2222318209"
             }
           }
         ]
       },
-      <span style=color:#8b008b;font-weight:700>&#34;nReturned&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;executionTimeMillisEstimate&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;works&#34;</span> : <span style=color:#b452cd>3</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;advanced&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;needTime&#34;</span> : <span style=color:#b452cd>1</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;needYield&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;saveState&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;restoreState&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;isEOF&#34;</span> : <span style=color:#b452cd>1</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;docsExamined&#34;</span> : <span style=color:#b452cd>1</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;alreadyHasObj&#34;</span> : <span style=color:#b452cd>0</span>,
-      <span style=color:#8b008b;font-weight:700>&#34;inputStage&#34;</span> : {
-        <span style=color:#8b008b;font-weight:700>&#34;stage&#34;</span> : <span style=color:#cd5555>&#34;IXSCAN&#34;</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;nReturned&#34;</span> : <span style=color:#b452cd>1</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;executionTimeMillisEstimate&#34;</span> : <span style=color:#b452cd>0</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;works&#34;</span> : <span style=color:#b452cd>2</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;advanced&#34;</span> : <span style=color:#b452cd>1</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;needTime&#34;</span> : <span style=color:#b452cd>0</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;needYield&#34;</span> : <span style=color:#b452cd>0</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;saveState&#34;</span> : <span style=color:#b452cd>0</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;restoreState&#34;</span> : <span style=color:#b452cd>0</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;isEOF&#34;</span> : <span style=color:#b452cd>1</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;keyPattern&#34;</span> : {
-          <span style=color:#8b008b;font-weight:700>&#34;maID&#34;</span> : <span style=color:#b452cd>1</span>
+      "nReturned" : 0,
+      "executionTimeMillisEstimate" : 0,
+      "works" : 3,
+      "advanced" : 0,
+      "needTime" : 1,
+      "needYield" : 0,
+      "saveState" : 0,
+      "restoreState" : 0,
+      "isEOF" : 1,
+      "docsExamined" : 1,
+      "alreadyHasObj" : 0,
+      "inputStage" : {
+        "stage" : "IXSCAN",
+        "nReturned" : 1,
+        "executionTimeMillisEstimate" : 0,
+        "works" : 2,
+        "advanced" : 1,
+        "needTime" : 0,
+        "needYield" : 0,
+        "saveState" : 0,
+        "restoreState" : 0,
+        "isEOF" : 1,
+        "keyPattern" : {
+          "maID" : 1
         },
-        <span style=color:#8b008b;font-weight:700>&#34;indexName&#34;</span> : <span style=color:#cd5555>&#34;maID_1&#34;</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;isMultiKey&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;multiKeyPaths&#34;</span> : {
-          <span style=color:#8b008b;font-weight:700>&#34;maID&#34;</span> : [ ]
+        "indexName" : "maID_1",
+        "isMultiKey" : false,
+        "multiKeyPaths" : {
+          "maID" : [ ]
         },
-        <span style=color:#8b008b;font-weight:700>&#34;isUnique&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;isSparse&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;isPartial&#34;</span> : <span style=color:#8b008b;font-weight:700>false</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;indexVersion&#34;</span> : <span style=color:#b452cd>2</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;direction&#34;</span> : <span style=color:#cd5555>&#34;forward&#34;</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;indexBounds&#34;</span> : {
-          <span style=color:#8b008b;font-weight:700>&#34;maID&#34;</span> : [
-            <span style=color:#cd5555>&#34;[\&#34;bfce30cab12311eba55d09972\&#34;, \&#34;bfce30cab12311eba55d09972\&#34;]&#34;</span>
+        "isUnique" : false,
+        "isSparse" : false,
+        "isPartial" : false,
+        "indexVersion" : 2,
+        "direction" : "forward",
+        "indexBounds" : {
+          "maID" : [
+            "[\"bfce30cab12311eba55d09972\", \"bfce30cab12311eba55d09972\"]"
           ]
         },
-        <span style=color:#8b008b;font-weight:700>&#34;keysExamined&#34;</span> : <span style=color:#b452cd>1</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;seeks&#34;</span> : <span style=color:#b452cd>1</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;dupsTested&#34;</span> : <span style=color:#b452cd>0</span>,
-        <span style=color:#8b008b;font-weight:700>&#34;dupsDropped&#34;</span> : <span style=color:#b452cd>0</span>
+        "keysExamined" : 1,
+        "seeks" : 1,
+        "dupsTested" : 0,
+        "dupsDropped" : 0
       }
     }
-  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
-</code></pre></td></tr></table></div></div><p>可以看到 <code>executionTimeMillis</code> 降低到 2，<code>totalDocsExamined</code> 變成 1，用 index 去找就是特別快。inputStage.stage 用的就是 <code>IXSCAN</code>。針對上述找尋方式把相對的 index key 補上，並且優化商業邏輯，就可以達到底下結果</p><p><img src="https://lh3.googleusercontent.com/nzKkL7J5x_LmoqTFYav5kKA8Jkp4E4s8OCOekd-fz2HAeU2ySC3DopumqMIevqelMN_bvw7Ug7BB2f6ZJeubCQzz4w1Uby709NqsqTEkQcJK7IwVkcHt_ZkArRjSlKfZvyWBE6ZBLnY=w1920-h1080" alt></p><p>相關參考文件:</p><ul><li><a href=https://docs.mongodb.com/manual/core/index-single/>Single Field Indexes</a></li><li><a href=https://docs.mongodb.com/manual/reference/database-profiler/>Database Profiler Output</a></li><li><a href=https://docs.mongodb.com/manual/tutorial/manage-the-database-profiler/>Database Profiler</a></li></ul><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/database/>database</a>&nbsp;
+  },</code></pre><p>可以看到 <code>executionTimeMillis</code> 降低到 2，<code>totalDocsExamined</code> 變成 1，用 index 去找就是特別快。inputStage.stage 用的就是 <code>IXSCAN</code>。針對上述找尋方式把相對的 index key 補上，並且優化商業邏輯，就可以達到底下結果</p><p><img src="https://lh3.googleusercontent.com/nzKkL7J5x_LmoqTFYav5kKA8Jkp4E4s8OCOekd-fz2HAeU2ySC3DopumqMIevqelMN_bvw7Ug7BB2f6ZJeubCQzz4w1Uby709NqsqTEkQcJK7IwVkcHt_ZkArRjSlKfZvyWBE6ZBLnY=w1920-h1080" alt></p><p>相關參考文件:</p><ul><li><a href=https://docs.mongodb.com/manual/core/index-single/>Single Field Indexes</a></li><li><a href=https://docs.mongodb.com/manual/reference/database-profiler/>Database Profiler Output</a></li><li><a href=https://docs.mongodb.com/manual/tutorial/manage-the-database-profiler/>Database Profiler</a></li></ul><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/database/>database</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/grafana/>grafana</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/mongodb/>mongodb</a>&nbsp;
-<a href=https://demo.gh.wu-boy.com/tags/prometheus/>prometheus</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&text=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&title=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&title=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&title=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&description=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2021/05/comunicate-with-open-policy-agent-using-resful-api/ data-toggle=tooltip data-placement=top title="使用 RESTful API 串接 Open Policy Agent">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2021/05/graceful-shutdown-with-progress-bar-in-golang/ data-toggle=tooltip data-placement=top title="如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2021/05/mongodb-performance-tunning>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2021/05/mongodb-performance-tunning'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<a href=https://demo.gh.wu-boy.com/tags/prometheus/>prometheus</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&text=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&title=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&title=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&title=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f05%2fmongodb-performance-tunning%2f&description=MongoDB%20%e6%95%88%e8%83%bd%e8%aa%bf%e6%a0%a1%e7%b4%80%e9%8c%84" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a></li><li><a href=/2020/06/convert-postgres-data-to-csv-file/>將 Postgres 資料轉換到 CSV 格式</a></li><li><a href=/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres/>在 PostgreSQL 時區轉換及計算時間</a></li><li><a href=/2018/03/simple-queue-with-optimistic-concurrency-in-go/>用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2021/05/comunicate-with-open-policy-agent-using-resful-api/ data-toggle=tooltip data-placement=top title="使用 RESTful API 串接 Open Policy Agent">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2021/05/graceful-shutdown-with-progress-bar-in-golang/ data-toggle=tooltip data-placement=top title="如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2021/05/mongodb-performance-tunning>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2021/05/mongodb-performance-tunning'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

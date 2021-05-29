@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>FCKeditor on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/fckeditor/</link><description>Recent content in FCKeditor on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Tue, 30 Mar 2010 12:21:52 +0000</lastBuildDate><atom:link href="https://demo.gh.wu-boy.com/tags/fckeditor/index.xml" rel="self" type="application/rss+xml"/><item><title>[編輯器] CKeditor 更換 background-color and font-size</title><link>https://demo.gh.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/</link><pubDate>Tue, 30 Mar 2010 12:21:52 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/</guid><description>相信大家在製作 Web 過程，一定會用到編輯器，然而 CKeditor 前身 FCKeditor 非常有名，FCKeditor 運行了六年之久，在去年2009年的時候，轉換成了 CKeditor，目前開發團隊也專注於此版本，現在已經推出到 CKEditor 3.2 released!，可以參考 CKEditor 3.x - Developer&amp;rsquo;s Guide，裡面也整合了 jQuery，替很多開發者想到更多管道去整合網站，然而今天設計網站，需要改變編輯器的背景顏色，預設是白色背景，但是並非所有網站都是白色呈現，所以才需要動到背景顏色，這樣好讓使用者可以融入整個背景，在 Plurk 發表了這問題，也找了官方論壇，都沒有發現正確解答，官方論壇有篇類似問題：Change the background color of the CKEditor text area，這篇自己試過是沒有用的，正確解法可以參考 CKeditor 的 API:contentsCss。 1. 首先在 CKeditor 根目錄建立新檔案：mysitestyles.css
+body
+{
+/* Font */
+font-family: Arial, Verdana, sans-serif;
+font-size: 12px;
+/* Text color */
+color: #f0f0f0;
+/* Remove the background color to make it transparent */
+background-color: #353c42;
+}
+html
+{
+/* #3658: [IE6] Editor document has horizontal scrollbar on long lines
+To prevent this misbehavior, we show the scrollbar always */
+_overflow-y: scroll
+}
+img:-moz-broken
+{
+-moz-force-broken-image-icon : 1;
+width : 24px;
+height : 24px;
+}
+img, input, textarea
+{
+cursor: default;
+} 2.</description></item><item><title>[PHP]好用的FCKeditor</title><link>https://demo.gh.wu-boy.com/2008/10/php%E5%A5%BD%E7%94%A8%E7%9A%84fckeditor/</link><pubDate>Fri, 17 Oct 2008 05:09:51 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/10/php%E5%A5%BD%E7%94%A8%E7%9A%84fckeditor/</guid><description>最近在玩這一套 FCKeditor 線上 HTML 編輯系統，這目前很多 opensource 都有利用這一套編輯系統來搭配，我覺得還蠻方便的，所以很多後台或者是前台都會使用，我想這已經是現在的趨勢了，然而要安裝這個也相當容易，官方網站都寫的很清楚，可以先使用他們線上的 demo，如果要加入到自己的系統，他們也有提供一些文件讓大家參考：線上文件，其實他們支援各大語法：asp，php，Python… 一堆，安裝方法也很容易，底下寫一下安裝方法： 1. 首先先下載 FCKeditor 這一套軟體： 點我下載 目前是這個版本：FCKeditor_2.6.3.zip 2. 裡面有一些 sample 可以使用 fckeditor/_samples/default.html 3. 如果你要使用在自己的系統裡面起加入底下語法：
+$root_path = './';
+include($root_path . "fckeditor/fckeditor.php");
+$sBasePath = "fckeditor/";
+//實體化 FCKeditor 並指定欄位名稱
+$oFCKeditor = new FCKeditor('file_data');
+$oFCKeditor-BasePath = $sBasePath;
+//預設的語言，zh表繁體中文
+$oFCKeditor-Config['DefaultLanguage'] = 'zh';
+//預設填入的內容
+$oFCKeditor-Value = ' This is some sample text. You are using FCKeditor. ' ;
+//直接輸出FCKeditor表單
+$oFCKeditor-Create(); 基本上這樣大致上就完成了喔。很容易吧</description></item></channel></rss>

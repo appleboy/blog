@@ -1,0 +1,633 @@
+# Note that all IP addresses in this file are false, to prevent some
+# machine falling under a deadly DOS storm because all users keep
+# the same addresses in their config.
+
+*** General ***
+
+owner    = John Doe
+contact  = johndoe@ntcu.net
+mailhost = localhost
+sendmail = /usr/sbin/sendmail
+imgcache = /usr/local/smokeping/htdocs/img
+imgurl   = /smokeping/img
+datadir  = /usr/local/var/smokeping
+piddir  = /usr/local/var/smokeping
+cgiurl   = http://people.ee.ethz.ch/~oetiker/smokeping/smokeping.cgi
+smokemail = /usr/local/etc/smokeping/smokemail
+tmail = /usr/local/etc/smokeping/tmail
+# specify this to get syslog logging
+syslogfacility = local0
+# each probe is now run in its own process
+# disable this to revert to the old behaviour
+# concurrentprobes = no
+
+*** Alerts ***
+to = root@netflow.ntcu.net
+from = smokealert@netflow.ntcu.net
+
++bigloss
+type = loss
+# in percent
+pattern = ==0%,==0%,==0%,==0%,>0%,>0%,>0%
+comment = suddenly there is packet loss
+
++someloss
+type = loss
+# in percent
+pattern = >0%,*12*,>0%,*12*,>0%
+comment = loss 3 times  in a row
+
++startloss
+type = loss
+# in percent
+pattern = ==S,>0%,>0%,>0%
+comment = loss at startup
+
++rttdetect
+type = rtt
+# in milli seconds
+pattern = <10,<10,<10,<10,<10,<100,>100,>100,>100
+comment = routing mesed up again ?
+
+*** Database ***
+
+step     = 300
+pings    = 20
+
+# consfn mrhb steps total
+
+AVERAGE  0.5   1  1008
+AVERAGE  0.5  12  4320
+    MIN  0.5  12  4320
+    MAX  0.5  12  4320
+AVERAGE  0.5 144   720
+    MAX  0.5 144   720
+    MIN  0.5 144   720
+
+*** Presentation ***
+
+template = /usr/local/etc/smokeping/basepage.html
+
++ overview 
+
+width = 600
+height = 50
+range = 10h
+
++ detail
+
+width = 600
+height = 200
+unison_tolerance = 2
+
+"Last 3 Hours"    3h
+"Last 30 Hours"   30h
+"Last 10 Days"    10d
+"Last 400 Days"   400d
+
+*** Probes ***
+
++ FPing
+
+binary = /usr/local/sbin/fping
+
+*** Targets ***
+
+probe = FPing
+
+menu = Top
+title = Network Latency Grapher
+remark = Welcome to the SmokePing website of netflow.ntcu.net. \
+         Here you will learn all about the latency of our network.
+
++ Album
+
+menu = Album
+title = Album
+
+++ Absee
+
+menu = Absee
+title = absee.com.tw
+host = absee.com.tw
+
+++ Flickr
+
+menu = Flickr
+title = www.flickr.com
+host = www.flickr.com
+
+++ Giga
+
+menu = Giga
+title = photo.giga.net.tw
+host = photo.giga.net.tw
+
+++ PBase
+
+menu = PBase
+title = www.pbase.com
+host = www.pbase.com
+
+++ PChome
+
+menu = PChome
+title = photo.pchome.com.tw
+host = photo.pchome.com.tw
+
+++ Photolink
+
+menu = Photlink
+title = www.photolink.com.tw
+host = www.photolink.com.tw
+
+++ Pixnet
+
+menu = Pixnet
+title = www.pixnet.net
+host = www.pixnet.net
+
+++ Wretch
+
+menu = Wretch
+title = www.wretch.cc
+host = www.wretch.cc
+
+++ Xuite
+
+menu = Xuite
+title = photo.xuite.net
+host = photo.xuite.net
+
+++ Youthwant
+
+menu = Youthwant
+title = photo.youthwant.com.tw
+host = photo.youthwant.com.tw
+
+++ Zooomr
+
+menu = Zooomr
+title = www.zooomr.com
+host = www.zooomr.com
+
++ BBS
+
+menu = BBS
+title = BBS
+
+++ Bahamut
+
+menu = Bahamut
+title = bbs.gamer.com.tw
+host = bbs.gamer.com.tw
+
+++ KKcity
+
+menu = KKcity
+title = bbs.kkcity.com.tw
+host = bbs.kkcity.com.tw
+
+++ Ptt
+
+menu = Ptt
+title = ptt.cc
+host = ptt.cc
+
+++ Ptt2
+
+menu = Ptt2
+title = ptt2.cc
+host = ptt2.cc
+
+++ Ptt3
+
+menu = Ptt3
+title = ptt3.cc
+host = ptt3.cc
+
+++ Wretch
+
+menu = Wretch
+title = bbs.wretch.cc
+host = bbs.wretch.cc
+
+++ Zoo
+
+menu = Zoo
+title = bbs.badcow.com.tw
+host = bbs.badcow.com.tw
+
++ BLOG
+
+menu = BLOG Service Provider
+title = BLOG Service Provider
+
+++ Blogger
+
+menu = Blogger
+title = www.blogger.com
+host = www.blogger.com
+
+++ LiveJournal
+
+menu = LiveJournal
+title = www.livejournal.com
+host = www.livejournal.com
+
+++ Pixnet
+
+menu = Pixnet
+title = blog.pixnet.net
+host = blog.pixnet.net
+
+++ Typepad
+
+menu = Typepad
+title = www.typepad.com
+host = www.typepad.com
+
+++ Webstv
+
+menu = Webs-TV
+title = blog.webs-tv.net
+host = blog.webs-tv.net
+
+++ WordPress
+
+menu = WordPress
+title = wordpress.com
+host = wordpress.com
+
+++ Wretch
+
+menu = Wretch
+title = www.wretch.cc
+host = www.wretch.cc
+
+++ Xuite
+
+menu = Xuite
+title = blog.xuite.net
+host = blog.xuite.net
+
+++ Yam
+
+menu = Yam
+title = blog.yam.com
+host = blog.yam.com
+
++ School
+
+menu = School
+title = School
+
+++ Berkeley
+
+menu = Berkeley
+title = www.berkeley.edu
+host = www.berkeley.edu
+
+++ Cambridge
+
+menu = Cambridge
+title = www.cam.ac.uk
+host = www.cam.ac.uk
+
+++ CMU
+
+menu = CMU
+title = www.cmu.edu
+host = www.cmu.edu
+
+++ CUHK
+
+menu = CUHK
+title = www.cuhk.edu.hk
+host = www.cuhk.edu.hk
+
+++ Harvard
+
+menu = Harvard
+title = www.harvard.edu
+host = www.harvard.edu
+
+++ Kyoto
+
+menu = Kyoto University
+title = www.kyoto-u.ac.jp
+host = www.kyoto-u.ac.jp
+
+++ MIT
+
+menu = MIT
+title = www.mit.edu
+host = www.mit.edu
+
+++ NCKU
+
+menu = NCKU
+title = www.ncku.edu.tw
+host = www.ncku.edu.tw
+
+++ NCTU
+
+menu = NCTU
+title = www.nctu.edu.tw
+host = www.nctu.edu.tw
+
+++ NCU
+
+menu = NCU
+title = www.ncu.edu.tw
+host = www.ncu.edu.tw
+
+++ NSYSU
+
+menu = NSYSU
+title = www.nsysu.edu.tw
+host = www.nsysu.edu.tw
+
+++ NTHU
+
+menu = NTHU
+title = www.nthu.edu.tw
+host = www.nthu.edu.tw
+
+++ NTU
+
+menu = NTU
+title = www.ntu.edu.tw
+host = www.ntu.edu.tw
+
+++ NYU
+
+menu = NYU
+title = www.nyu.edu
+host = www.nyu.edu
+
+++ Oxford
+
+menu = Oxford
+title = www.ox.ac.uk
+host = www.ox.ac.uk
+
+++ PKU
+
+menu = PKU
+title = www.pku.edu.cn
+host = www.pku.edu.cn
+
+++ Seoul
+
+menu = Seoul National University
+title = www.snu.ac.kr
+host = www.snu.ac.kr
+
+++ Stanford
+
+menu = Stanford
+title = www.stanford.edu
+host = www.stanford.edu
+
+++ Tokyo
+
+menu = University of Tokyo
+title = www.u-tokyo.ac.jp
+host = www.u-tokyo.ac.jp
+
+++ Vigrinia
+
+menu = University of Virginia
+title = www.virginia.edu
+host = www.virginia.edu
+
+++ YM
+
+menu = YM
+title = www.ym.edu.tw
+host = www.ym.edu.tw
+
++ SearchEngine
+
+menu = Search Engine
+title = Search Engine
+
+++ AlltheWeb
+
+menu = AlltheWeb
+title = www.alltheweb.com
+host = www.alltheweb.com
+
+++ AltaVista
+
+menu = AltaVista
+title = www.altavista.com
+host = www.altavista.com
+
+++ Ask
+
+menu = Ask Jeeves
+title = www.ask.com
+host = www.ask.com
+
+++ Baidu
+
+menu = Baidu
+title = www.baidu.com
+host = www.baidu.com
+
+++ Google
+
+menu = Google
+title = www.google.com
+host = www.google.com
+
+++ Live
+
+menu = Live
+title = www.live.com
+host = www.live.com
+
+++ Openfind
+
+menu = Openfind
+title = www.openfind.com
+host = www.openfind.com
+
+++ Sohu
+
+menu = Sohu
+title = www.sohu.com
+host = www.sohu.com
+
+++ Yahoo
+
+menu = Yahoo
+title = www.yahoo.com
+host = www.yahoo.com
+
++ ISP
+
+menu = ISP
+title = ISP
+
+++ AOL
+
+menu = AOL
+title = www.aol.com
+host = www.aol.com
+
+++ ATT
+
+menu = AT&T
+title = www.att.com
+host = www.att.com
+
+++ Cogent
+
+menu = Cogent
+title = www.cogentco.com
+host = www.cogentco.com
+
+++ CompuServe
+
+menu = CompuServe
+title = www.compuserve.com
+host = www.compuserve.com
+
+++ Earthlink
+
+menu = Earthlink
+title = www.earthlink.net
+host = www.earthlink.net
+
+++ UUNET
+
+menu = UUNET
+title = www.uu.net
+host = www.uu.net
+
+++ Verio
+
+menu = Verio
+title = www.verio.com
+host = www.verio.com
+
+++ Verizon
+
+menu = Verizon
+title = www.verizon.com
+host = www.verizon.com
+
++ Others
+
+menu = Others
+title = Others
+
+++ eBay
+
+menu = eBay
+title = www.ebay.com
+host = www.ebay.com
+
+++ Hi5
+
+menu = Hi5
+title = www.hi5.com
+host = www.hi5.com
+
+++ Megaupload
+
+menu = Megaupload
+title = www.megaupload.com
+host = www.megaupload.com
+
+++ Microsoft
+
+menu = Microsoft
+title = www.microsoft.com
+host = www.microsoft.com
+
+++ Myspace
+
+menu = Myspace
+title = www.myspace.com
+host = www.myspace.com
+
+++ Orkut
+
+menu = Orkut
+title = www.orkut.com
+host = www.orkut.com
+
+++ QQ
+
+menu = QQ
+title = www.qq.com
+host = www.qq.com
+
+++ Rapidshare
+
+menu = Rapidshare
+title = www.rapidshare.com
+host = www.rapidshare.com
+
+++ Wikipedia
+
+menu = Wikipedia
+title = www.wikipedia.org
+host = www.wikipedia.org
+
+++ YouTube
+
+menu = YouTube
+title = www.youtube.com
+host = www.youtube.com
+
++ TaiwanISP
+
+menu = Taiwan ISP
+title = Taiwan ISP
+
+++ APOL
+
+menu = APOL
+title = www.apol.com.tw
+host = www.apol.com.tw
+
+++ EBT
+
+menu = EBT
+title = www.cable-modem.com.tw
+host = www.cable-modem.com.tw
+
+++ Giga
+
+menu = Giga
+title = www.giga.net.tw
+host = www.giga.net.tw
+
+++ HiNet
+
+menu = HiNet
+title = www.hinet.net
+host = www.hinet.net
+
+++ SEEDNet
+
+menu = SEEDNet
+title = www.seed.net.tw
+host = www.seed.net.tw
+
+++ SONet
+
+menu = SO-Net
+title = www.so-net.net.tw
+host = www.so-net.net.tw
+
+++ TTN
+
+menu = TTN
+title = www.ttn.net.tw
+host = www.ttn.net.tw

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>proftpd on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/proftpd/</link><description>Recent content in proftpd on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Wed, 07 Jul 2010 08:07:13 +0000</lastBuildDate><atom:link href="https://demo.gh.wu-boy.com/tags/proftpd/index.xml" rel="self" type="application/rss+xml"/><item><title>ProFTPD UseEncoding 繁體中文亂碼解決 Localization</title><link>https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/</link><pubDate>Wed, 07 Jul 2010 08:07:13 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/</guid><description>ProFTPD 一直都是我最喜歡使用的 FTP 伺服器，設定方式簡單淺顯易懂，最近在用 PSPad 寫程式，發現使用內建 FTP 功能時候，連不上 FreeBSD 架設的 ProFTPD，連線過程出現許多亂碼，所以造成 PSPad 斷線出現錯誤，解決方式就是利用 mod_lang 模組，設定 UseEncoding 讓系統可以顯示 Big5 中文編碼，FreeBSD Ports 請勾選
+[X] NLSUOTA Use nls (builds mod_lang) 自行編譯請按照底下步驟 ./configure --enable-nls
+make
+make install UseEncoding 設定 Syntax: UseEncoding on|off|local-charset client-charset
+Default: None
+Context: "server config", &amp;lt;VirtualHost, &amp;lt;Global
+Module: mod_lang
+Compatibility: 1.3.2rc1 在 1.3.2rc1 版本之後才有支援，請複製底下設定，貼到 proftpd.conf # 简体中文環境
+UseEncoding UTF-8 GBK
+# 繁体中文環境
+UseEncoding UTF-8 Big5 Reference: ProFTPD module mod_lang centos上解決proftp中文亂碼問題</description></item><item><title>[FreeBSD &amp; Linux Ubuntu] Proftpd 支援 UTF-8 + MYSQL 虛擬帳號 + Quota 限制</title><link>https://demo.gh.wu-boy.com/2008/04/freebsd-linux-ubuntu-proftpd-%E6%94%AF%E6%8F%B4-utf-8-mysql-%E8%99%9B%E6%93%AC%E5%B8%B3%E8%99%9F-quota-%E9%99%90%E5%88%B6/</link><pubDate>Fri, 25 Apr 2008 15:26:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/04/freebsd-linux-ubuntu-proftpd-%E6%94%AF%E6%8F%B4-utf-8-mysql-%E8%99%9B%E6%93%AC%E5%B8%B3%E8%99%9F-quota-%E9%99%90%E5%88%B6/</guid><description>&lt;p>今天突然想到要玩一下 &lt;a href="http://www.proftpd.org/">Proftpd&lt;/a> 的 MYSQL 虛擬帳號認證部份，我是用 FreeBSD 7.0 Release 下去安裝的，剛剛去看了一下官方網站，從 1.3.1rc1 版開始，支援 UTF-8 傳送跟接收了，請看 &lt;a href="http://www.proftpd.org/docs/RELEASE_NOTES-1.3.1rc1">RELEASE_NOTES-1.3.1rc1&lt;/a>，所以1.2.10版本之前的都不支援 UTF-8 不過台灣有人 patch 出來可以支援 Big5，現在都不用了，裡面有一段簡介&lt;/p>
+&lt;blockquote>
+&lt;p>UseUTF8 Disables use of UTF8 encoding for file paths. If the –enable-nls configure option is used, then UTF8 encoding support will be enabled by default. 如果你的 server 是用此版本，或者是更高，請在編譯的時候加入 –enable-nls&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>–enable-nls This configure option enables handling of translated message catalogs for response messages, and also enables handling of UTF8 paths in client commands.&lt;/p>
+&lt;/blockquote></description></item><item><title>[Proftpd] 如何讓 /bin/false 跟 /sbin/nologin 連上 Proftpd</title><link>https://demo.gh.wu-boy.com/2008/01/proftpd-%E5%A6%82%E4%BD%95%E8%AE%93-binfalse-%E8%B7%9F-sbinnologin-%E9%80%A3%E4%B8%8A-proftpd/</link><pubDate>Sat, 12 Jan 2008 03:54:28 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/01/proftpd-%E5%A6%82%E4%BD%95%E8%AE%93-binfalse-%E8%B7%9F-sbinnologin-%E9%80%A3%E4%B8%8A-proftpd/</guid><description>昨天遇到這個問題，不過其實之前就有解決過這問題，只是忘記怎麼解決，之前是利用 MySQL 的方式建立帳號，因為相當方便，請參考這篇 [Linux] Ubuntu 6.06 Proftpd + Mysql 安裝方式，支援 /bin/false 跟 /sbin/nologin 也相當簡單 只要在 proftpd.conf 加上
+RequireValidShell on
+官網寫的 config_ref_RequireValidShell 然後在編輯 /etc/shells 加上
+/sbin/nologin</description></item><item><title>[Linux] Ubuntu 6.06 Proftpd + Mysql 安裝方式</title><link>https://demo.gh.wu-boy.com/2006/10/linux-ubuntu-606-proftpd-mysql-%E5%AE%89%E8%A3%9D%E6%96%B9%E5%BC%8F/</link><pubDate>Sat, 21 Oct 2006 16:17:51 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2006/10/linux-ubuntu-606-proftpd-mysql-%E5%AE%89%E8%A3%9D%E6%96%B9%E5%BC%8F/</guid><description>ProFTPD Version 1.2.10 Mysql Version 4.1.0 支援 UTF8 請確定你的proftpd有支援sql module
+proftpd -l | grep mysql
+proftpd -l | grep sql
+mod_sql.c
+mod_sql_mysql.c
+mod_quotatab_sql.c 確定有支援之後 再來就是建立mysql資料庫 * 建立 proftp 資料庫 CREATE DATABASE `ftp` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; * 建立使用者資料表 CREATE TABLE `ftp` (
+`username` varchar( 60 ) default NULL ,
+`uid` int( 11 ) NOT NULL ,
+`gid` int( 11 ) default NULL ,
+`password` varchar( 30 ) default NULL ,
+`homedir` varchar( 60 ) default NULL ,
+`shell` varchar( 11 ) default ‘/bin/false’,
+PRIMARY KEY ( `uid` ) ,
+UNIQUE KEY ( `username` )
+) TYPE = MYISAM; 此資料表是在紀錄使用者的基本資訊，uid是使用者系統uid，gid是使用者group的id，passwd使用者的密碼 homedir為使用者登入的家目錄， shell可以為該使用者指定相應的shell * 建立使用者群組資料表 CREATE TABLE `groups` (
+`groupname` varchar( 30 ) NOT NULL default ‘’,
+`gid` int( 11 ) NOT NULL default ‘0′,
+`members` text default NULL
+) TYPE = MYISAM; 其中grpname是組的名稱，gid是系統組的ID，members是組的成員。注意：多成員，他們之間要用逗號隔開，不能使用空格 例如 3個使用者 test1 test2 test3 ，members就要寫 (test1,test2,test3) #設置MySQL認證： SQLConnectInfo 資料庫 資料庫帳號 資料庫密碼 #設置user資料表資訊『對應你的設定的資料表』 SQLUserInfo ftp username password uid gid homedir shell #設置group資料表資訊『對應你的設定的資料表』 SQLGroupInfo groups groupname gid members #設定使用者密碼編碼方式 ex：Plaintext 純文字 SQLAuthTypes Plaintext #設定mysql log檔 SQLLogFile /var/log/sql.</description></item><item><title>[FreeBSD] Proftpd + SSL 虛擬帳號設定安裝</title><link>https://demo.gh.wu-boy.com/2006/09/freebsd-proftpd-ssl-%E8%99%9B%E6%93%AC%E5%B8%B3%E8%99%9F%E8%A8%AD%E5%AE%9A%E5%AE%89%E8%A3%9D/</link><pubDate>Fri, 22 Sep 2006 08:41:53 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2006/09/freebsd-proftpd-ssl-%E8%99%9B%E6%93%AC%E5%B8%B3%E8%99%9F%E8%A8%AD%E5%AE%9A%E5%AE%89%E8%A3%9D/</guid><description>系統 ubuntu 6.06 + proftpd 1.2.10
+TLSEngine on
+TLSLog /var/log/proftpd-tls.log
+TLSProtocol TLSv1
+TLSRequired on
+TLSRSACertificateFile /etc/proftpd/HostCA.crt
+TLSRSACertificateKeyFile /etc/proftpd/HostCA.key
+TLSCACertificateFile /etc/proftpd/RootCA.crt
+TLSVerifyClient off 虛擬帳號實做 AuthUserFile /etc/proftpd/proftpd.passwd
+AuthGroupFile /etc/proftpd/proftpd.group
+SystemLog /etc/proftpd/proftpd.syslog TransferLog /var/log/xferlog
+LogFormat awstats "%t %h %u %m %f %s %b"
+ExtendedLog /var/log/xferlog read,write awstats 在linux底下如何新增帳號： ftpasswd --passwd --file=/etc/proftpd/proftpd.passwd --name=test --uid=2000 --gid=1001 --home=/home/ftp --shell=/bin/false</description></item></channel></rss>

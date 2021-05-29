@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Laravel Presenter on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/laravel-presenter/</link><description>Recent content in Laravel Presenter on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Fri, 04 Sep 2015 01:28:48 +0000</lastBuildDate><atom:link href="https://demo.gh.wu-boy.com/tags/laravel-presenter/index.xml" rel="self" type="application/rss+xml"/><item><title>Laravel Presenter 在 Controller 的使用</title><link>https://demo.gh.wu-boy.com/2015/09/how-to-use-laravel-presenter-in-controller/</link><pubDate>Fri, 04 Sep 2015 01:28:48 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2015/09/how-to-use-laravel-presenter-in-controller/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+&lt;a href="https://www.flickr.com/photos/appleboy/6248708214/" title="Laravel PHP Framework by appleboy46, on Flickr">&lt;img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&amp;#038;ssl=1" alt="Laravel PHP Framework" data-recalc-dims="1" />&lt;/a>
+&lt;/div>
+&lt;p>&lt;a href="https://github.com/laravel-auto-presenter/laravel-auto-presenter">Laravel Auto Presenter&lt;/a> 是一套用在 view 裡的 decorates objects，搭配資料庫時，如果有需要組合或整合欄位來顯示相關資訊，這套就非常適合使用在 &lt;a href="http://laravel.com/">Laravel&lt;/a> View 裡，如果不是透過 Laravel Auto Presenter，開發者也可以利用 &lt;a href="http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators">Laravel Accessors &amp;amp; Mutators&lt;/a> 來實現這方法，只是這要寫在 Model 層，寫法如下，此做法寫起來蠻亂的，而且也並不是每個地方都需要擴充這些欄位。&lt;/p>
+&lt;div>
+&lt;pre class="brush: php; title: ; notranslate" title="">/**
+* The accessors to append to the model's array form.
+*
+* @var array
+*/
+protected $appends = [
+'is_twitter',
+];
+&lt;p>/**&lt;/p>
+&lt;ul>
+&lt;li>Get the user&amp;rsquo;s is_twitter flag.&lt;/li>
+&lt;li>&lt;/li>
+&lt;li>@param string $value&lt;/li>
+&lt;li>@return string
+*/
+public function getIsTwitterAttribute()
+{
+return (bool) ($this-&amp;gt;attributes[&amp;lsquo;options&amp;rsquo;] &amp;amp; self::$OPTIONS[&amp;lsquo;is_twitter&amp;rsquo;]);
+}&lt;/pre>&lt;/li>
+&lt;/ul>
+&lt;/div></description></item></channel></rss>

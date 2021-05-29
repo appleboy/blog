@@ -8,7 +8,7 @@
 設定 Pulumi Stack 環境變數 (教學二)
 建立第二個 Pulumi Stack 環境 (教學二)
 刪除 Pulumi Stack 環境 (教學二)
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","name":"初探 pulumi 上傳靜態網站到 aws s3 (一)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 Pulumi 上傳靜態網站到 AWS S3 (一)","description":"\n上一篇作者提到了兩套 Infrastructure as Code 工具，分別是 Terraform 跟 Pulumi，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 GitHub 上面瀏覽及下載。教學會拆成七個章節:\n 建立 Pulumi 新專案 設定 AWS 環境 初始化 Pulumi 架構 (建立 S3 Bucket) 更新 AWS 架構 (S3 Hosting) 設定 Pulumi Stack 環境變數 (教學二) 建立第二個 Pulumi Stack 環境 (教學二) 刪除 Pulumi Stack 環境 (教學二) ","inLanguage":"en","wordCount":1840,"datePublished":"2021-02-11T07:29:56","dateModified":"2021-02-11T07:29:56","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, pulumi"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="初探 Pulumi 上傳靜態網站到 AWS S3 (一)"><meta property="og:description" content="
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","name":"初探 pulumi 上傳靜態網站到 aws s3 (一)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 Pulumi 上傳靜態網站到 AWS S3 (一)","description":"\n上一篇作者提到了兩套 Infrastructure as Code 工具，分別是 Terraform 跟 Pulumi，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 GitHub 上面瀏覽及下載。教學會拆成七個章節:\n 建立 Pulumi 新專案 設定 AWS 環境 初始化 Pulumi 架構 (建立 S3 Bucket) 更新 AWS 架構 (S3 Hosting) 設定 Pulumi Stack 環境變數 (教學二) 建立第二個 Pulumi Stack 環境 (教學二) 刪除 Pulumi Stack 環境 (教學二) ","inLanguage":"en","wordCount":1467,"datePublished":"2021-02-11T07:29:56","dateModified":"2021-02-11T07:29:56","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, pulumi"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="初探 Pulumi 上傳靜態網站到 AWS S3 (一)"><meta property="og:description" content="
 上一篇作者提到了兩套 Infrastructure as Code 工具，分別是 Terraform 跟 Pulumi，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 GitHub 上面瀏覽及下載。教學會拆成七個章節:
 
 建立 Pulumi 新專案
@@ -32,89 +32,38 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;9&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1840&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#用-pulumi-建立新專案>用 Pulumi 建立新專案</a><ul><li><a href=#步驟一-安裝-pulumi-cli-工具>步驟一: 安裝 Pulumi CLI 工具</a></li><li><a href=#步驟二-初始化專案>步驟二: 初始化專案</a></li><li><a href=#步驟三-檢查專案目錄結構>步驟三: 檢查專案目錄結構</a></li></ul></li><li><a href=#設定-aws-環境>設定 AWS 環境</a><ul><li><a href=#前置作業>前置作業</a></li><li><a href=#步驟一-設定-aws-region>步驟一: 設定 AWS Region</a></li><li><a href=#步驟二-設定-aws-profile>步驟二: 設定 AWS Profile</a></li></ul></li><li><a href=#初始化-pulumi-架構-建立-s3-bucket>初始化 Pulumi 架構 (建立 S3 Bucket)</a><ul><li><a href=#步驟一-建立新的-s3-bucket>步驟一: 建立新的 S3 Bucket</a></li><li><a href=#步驟二-執行-pulumi-cli-預覽>步驟二: 執行 Pulumi CLI 預覽</a></li><li><a href=#步驟三-執行部署>步驟三: 執行部署</a></li><li><a href=#步驟四-顯示更多-bucket-詳細資訊>步驟四: 顯示更多 Bucket 詳細資訊</a></li><li><a href=#步驟五-更新-bucket-名稱>步驟五: 更新 Bucket 名稱</a></li></ul></li><li><a href=#更新-aws-架構-s3-hosting>更新 AWS 架構 (S3 Hosting)</a><ul><li><a href=#步驟一-建立-indexhtml-放入-s3-內>步驟一: 建立 index.html 放入 S3 內</a></li><li><a href=#步驟二-設定-s3-為-web-hosting>步驟二: 設定 S3 為 Web Hosting</a></li><li><a href=#步驟三-測試-url>步驟三: 測試 URL</a></li></ul></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" title=cover><img src="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" alt=cover title=cover></a></p><p>上一篇作者提到了兩套 <a href=https://www.pulumi.com/docs/get-started/install/>Infrastructure as Code</a> 工具，分別是 <a href=https://www.terraform.io/>Terraform</a> 跟 <a href=https://www.pulumi.com/>Pulumi</a>，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 <a href=https://github.com/go-training/infrastructure-as-code-workshop/tree/main/pulumi/labs/lab01-modern-infrastructure-as-code>GitHub 上面瀏覽及下載</a>。教學會拆成七個章節:</p><ol><li>建立 Pulumi 新專案</li><li>設定 AWS 環境</li><li>初始化 Pulumi 架構 (建立 S3 Bucket)</li><li>更新 AWS 架構 (S3 Hosting)</li><li>設定 Pulumi Stack 環境變數 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>建立第二個 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>刪除 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li></ol><h2 id=教學影片>教學影片</h2><ul><li>00:00​ Pulumi 應用實作簡介</li><li>01:30​ 章節一: 用 Pulumi 建立新專案</li><li>02:39​ 用 Pulumi CLI 初始化專案</li><li>04:47​ 介紹 Pulumi 產生的 AWS Go 目錄結構內容</li><li>06:10​ 章節二: 設定 AWS 環境</li><li>08:36​ 章節三: 建立 AWS S3 Bucket</li><li>13:44​ 指定 S3 Bucket 名稱</li><li>16:09​ 章節四: 將 S3 Bucket 變成 Web Host</li><li>16:25​ 上傳 index.html 到 S3 Bucket 內</li><li>18:22​ 設定 S3 Bucket 為 Web Host 讀取 index.html</li><li>19:17​ 取得 AWS S3 的 Web URL</li><li>20:55​ 修改 S3 Object 的 Permission (ACL)</li><li>22:45​ 心得感想</li></ul><h2 id=用-pulumi-建立新專案>用 Pulumi 建立新專案</h2><h3 id=步驟一-安裝-pulumi-cli-工具>步驟一: 安裝 Pulumi CLI 工具</h3><p>首先你要在自己電腦安裝上 Pulumi CLI 工具，請參考<a href=https://www.pulumi.com/docs/get-started/install/>官方網站</a>，根據您的作業環境有不同的安裝方式，底下以 Mac 環境為主</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>brew install pulumi
-</code></pre></td></tr></table></div></div><p>透過 brew 即可安裝成功，那升級工具透過底下即可</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>brew upgrade pulumi
-</code></pre></td></tr></table></div></div><p>或者您沒有使用 brew，也可以透過 curl 安裝</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>curl -fsSL https://get.pulumi.com | sh
-</code></pre></td></tr></table></div></div><p>測試 CLI 指令</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ pulumi version
-v2.20.0
-</code></pre></td></tr></table></div></div><p>有看到版本資訊就是安裝成功了</p><h3 id=步驟二-初始化專案>步驟二: 初始化專案</h3><p>透過 <code>pulumi new -h</code> 可以看到說明</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>Usage:
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;7&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1467&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#用-pulumi-建立新專案>用 Pulumi 建立新專案</a><ul><li><a href=#步驟一-安裝-pulumi-cli-工具>步驟一: 安裝 Pulumi CLI 工具</a></li><li><a href=#步驟二-初始化專案>步驟二: 初始化專案</a></li><li><a href=#步驟三-檢查專案目錄結構>步驟三: 檢查專案目錄結構</a></li></ul></li><li><a href=#設定-aws-環境>設定 AWS 環境</a><ul><li><a href=#前置作業>前置作業</a></li><li><a href=#步驟一-設定-aws-region>步驟一: 設定 AWS Region</a></li><li><a href=#步驟二-設定-aws-profile>步驟二: 設定 AWS Profile</a></li></ul></li><li><a href=#初始化-pulumi-架構-建立-s3-bucket>初始化 Pulumi 架構 (建立 S3 Bucket)</a><ul><li><a href=#步驟一-建立新的-s3-bucket>步驟一: 建立新的 S3 Bucket</a></li><li><a href=#步驟二-執行-pulumi-cli-預覽>步驟二: 執行 Pulumi CLI 預覽</a></li><li><a href=#步驟三-執行部署>步驟三: 執行部署</a></li><li><a href=#步驟四-顯示更多-bucket-詳細資訊>步驟四: 顯示更多 Bucket 詳細資訊</a></li><li><a href=#步驟五-更新-bucket-名稱>步驟五: 更新 Bucket 名稱</a></li></ul></li><li><a href=#更新-aws-架構-s3-hosting>更新 AWS 架構 (S3 Hosting)</a><ul><li><a href=#步驟一-建立-indexhtml-放入-s3-內>步驟一: 建立 index.html 放入 S3 內</a></li><li><a href=#步驟二-設定-s3-為-web-hosting>步驟二: 設定 S3 為 Web Hosting</a></li><li><a href=#步驟三-測試-url>步驟三: 測試 URL</a></li></ul></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" title=cover><img src="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" alt=cover title=cover></a></p><p>上一篇作者提到了兩套 <a href=https://www.pulumi.com/docs/get-started/install/>Infrastructure as Code</a> 工具，分別是 <a href=https://www.terraform.io/>Terraform</a> 跟 <a href=https://www.pulumi.com/>Pulumi</a>，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 <a href=https://github.com/go-training/infrastructure-as-code-workshop/tree/main/pulumi/labs/lab01-modern-infrastructure-as-code>GitHub 上面瀏覽及下載</a>。教學會拆成七個章節:</p><ol><li>建立 Pulumi 新專案</li><li>設定 AWS 環境</li><li>初始化 Pulumi 架構 (建立 S3 Bucket)</li><li>更新 AWS 架構 (S3 Hosting)</li><li>設定 Pulumi Stack 環境變數 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>建立第二個 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>刪除 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li></ol><h2 id=教學影片>教學影片</h2><ul><li>00:00​ Pulumi 應用實作簡介</li><li>01:30​ 章節一: 用 Pulumi 建立新專案</li><li>02:39​ 用 Pulumi CLI 初始化專案</li><li>04:47​ 介紹 Pulumi 產生的 AWS Go 目錄結構內容</li><li>06:10​ 章節二: 設定 AWS 環境</li><li>08:36​ 章節三: 建立 AWS S3 Bucket</li><li>13:44​ 指定 S3 Bucket 名稱</li><li>16:09​ 章節四: 將 S3 Bucket 變成 Web Host</li><li>16:25​ 上傳 index.html 到 S3 Bucket 內</li><li>18:22​ 設定 S3 Bucket 為 Web Host 讀取 index.html</li><li>19:17​ 取得 AWS S3 的 Web URL</li><li>20:55​ 修改 S3 Object 的 Permission (ACL)</li><li>22:45​ 心得感想</li></ul><h2 id=用-pulumi-建立新專案>用 Pulumi 建立新專案</h2><h3 id=步驟一-安裝-pulumi-cli-工具>步驟一: 安裝 Pulumi CLI 工具</h3><p>首先你要在自己電腦安裝上 Pulumi CLI 工具，請參考<a href=https://www.pulumi.com/docs/get-started/install/>官方網站</a>，根據您的作業環境有不同的安裝方式，底下以 Mac 環境為主</p><pre><code class=language-sh>brew install pulumi</code></pre><p>透過 brew 即可安裝成功，那升級工具透過底下即可</p><pre><code class=language-sh>brew upgrade pulumi</code></pre><p>或者您沒有使用 brew，也可以透過 curl 安裝</p><pre><code class=language-sh>curl -fsSL https://get.pulumi.com | sh</code></pre><p>測試 CLI 指令</p><pre><code class=language-sh>$ pulumi version
+v2.20.0</code></pre><p>有看到版本資訊就是安裝成功了</p><h3 id=步驟二-初始化專案>步驟二: 初始化專案</h3><p>透過 <code>pulumi new -h</code> 可以看到說明</p><pre><code class=language-sh>Usage:
   pulumi new [template|url] [flags]
 
 Flags:
   -c, --config stringArray        Config to save
-      --config-path               Config keys contain a path to a property in a map or list to <span style=color:#658b00>set</span>
-  -d, --description string        The project description; <span style=color:#8b008b;font-weight:700>if</span> not specified, a prompt will request it
-      --dir string                The location to place the generated project; <span style=color:#8b008b;font-weight:700>if</span> not specified, the current directory is used
-  -f, --force                     Forces content to be generated even <span style=color:#8b008b;font-weight:700>if</span> it would change existing files
-  -g, --generate-only             Generate the project only; <span style=color:#8b008b;font-weight:700>do</span> not create a stack, save config, or install dependencies
-  -h, --help                      <span style=color:#658b00>help</span> <span style=color:#8b008b;font-weight:700>for</span> new
-  -n, --name string               The project name; <span style=color:#8b008b;font-weight:700>if</span> not specified, a prompt will request it
+      --config-path               Config keys contain a path to a property in a map or list to set
+  -d, --description string        The project description; if not specified, a prompt will request it
+      --dir string                The location to place the generated project; if not specified, the current directory is used
+  -f, --force                     Forces content to be generated even if it would change existing files
+  -g, --generate-only             Generate the project only; do not create a stack, save config, or install dependencies
+  -h, --help                      help for new
+  -n, --name string               The project name; if not specified, a prompt will request it
   -o, --offline                   Use locally cached templates without making any network requests
-      --secrets-provider string   The <span style=color:#658b00>type</span> of the provider that should be used to encrypt and decrypt secrets (possible choices: default, passphrase, awskms, azurekeyvault, gcpkms, hashivault) (default <span style=color:#cd5555>&#34;default&#34;</span>)
-  -s, --stack string              The stack name; either an existing stack or stack to create; <span style=color:#8b008b;font-weight:700>if</span> not specified, a prompt will request it
-  -y, --yes                       Skip prompts and proceed with default values
-</code></pre></td></tr></table></div></div><p>可以選擇的 Template 超多，那我們這次用 AWS 搭配 Go 語言的 Temaplate 當作範例</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ pulumi new aws-go --dir demo
-This <span style=color:#658b00>command</span> will walk you through creating a new Pulumi project.
+      --secrets-provider string   The type of the provider that should be used to encrypt and decrypt secrets (possible choices: default, passphrase, awskms, azurekeyvault, gcpkms, hashivault) (default "default")
+  -s, --stack string              The stack name; either an existing stack or stack to create; if not specified, a prompt will request it
+  -y, --yes                       Skip prompts and proceed with default values</code></pre><p>可以選擇的 Template 超多，那我們這次用 AWS 搭配 Go 語言的 Temaplate 當作範例</p><pre><code class=language-sh>$ pulumi new aws-go --dir demo
+This command will walk you through creating a new Pulumi project.
 
 Enter a value or leave blank to accept the (default), and press &lt;ENTER&gt;.
-Press ^C at any <span style=color:#658b00>time</span> to quit.
+Press ^C at any time to quit.
 
 project name: (demo)
 project description: (A minimal AWS Go Pulumi program)
-Created project <span style=color:#cd5555>&#39;demo&#39;</span>
+Created project &#039;demo&#039;
 
 Please enter your desired stack name.
-To create a stack in an organization, use the format &lt;org-name&gt;/&lt;stack-name&gt; (e.g. <span style=color:#cd5555>`</span>acmecorp/dev<span style=color:#cd5555>`</span>).
+To create a stack in an organization, use the format &lt;org-name&gt;/&lt;stack-name&gt; (e.g. `acmecorp/dev`).
 stack name: (dev)
-Created stack <span style=color:#cd5555>&#39;dev&#39;</span>
+Created stack &#039;dev&#039;
 
 aws:region: The AWS region to deploy into: (us-east-1) ap-northeast-1
 Saved config
@@ -125,91 +74,34 @@ Finished installing dependencies
 
 Your new project is ready to go! ✨
 
-To perform an initial deployment, run <span style=color:#cd5555>&#39;cd demo&#39;</span>, <span style=color:#8b008b;font-weight:700>then</span>, run <span style=color:#cd5555>&#39;pulumi up&#39;</span>
-</code></pre></td></tr></table></div></div><h3 id=步驟三-檢查專案目錄結構>步驟三: 檢查專案目錄結構</h3><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>└── demo
+To perform an initial deployment, run &#039;cd demo&#039;, then, run &#039;pulumi up&#039;</code></pre><h3 id=步驟三-檢查專案目錄結構>步驟三: 檢查專案目錄結構</h3><pre><code class=language-sh>└── demo
     ├── Pulumi.dev.yaml
     ├── Pulumi.yaml
     ├── go.mod
     ├── go.sum
-    └── main.go
-</code></pre></td></tr></table></div></div><p>其中 <code>main.go</code> 就是主程式檔案</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+    └── main.go</code></pre><p>其中 <code>main.go</code> 就是主程式檔案</p><pre><code class=language-go>package main
 
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;github.com/pulumi/pulumi-aws/sdk/v3/go/aws/s3&#34;</span>
-    <span style=color:#cd5555>&#34;github.com/pulumi/pulumi/sdk/v2/go/pulumi&#34;</span>
+import (
+    "github.com/pulumi/pulumi-aws/sdk/v3/go/aws/s3"
+    "github.com/pulumi/pulumi/sdk/v2/go/pulumi"
 )
 
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    pulumi.<span style=color:#008b45>Run</span>(<span style=color:#8b008b;font-weight:700>func</span>(ctx *pulumi.Context) <span style=color:#00688b;font-weight:700>error</span> {
-        <span style=color:#228b22>// Create an AWS resource (S3 Bucket)
-</span><span style=color:#228b22></span>        bucket, err := s3.<span style=color:#008b45>NewBucket</span>(ctx, <span style=color:#cd5555>&#34;my-bucket&#34;</span>, <span style=color:#8b008b;font-weight:700>nil</span>)
-        <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-            <span style=color:#8b008b;font-weight:700>return</span> err
+func main() {
+    pulumi.Run(func(ctx *pulumi.Context) error {
+        // Create an AWS resource (S3 Bucket)
+        bucket, err := s3.NewBucket(ctx, "my-bucket", nil)
+        if err != nil {
+            return err
         }
 
-        <span style=color:#228b22>// Export the name of the bucket
-</span><span style=color:#228b22></span>        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketName&#34;</span>, bucket.<span style=color:#008b45>ID</span>())
-        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
+        // Export the name of the bucket
+        ctx.Export("bucketName", bucket.ID())
+        return nil
     })
-}
-</code></pre></td></tr></table></div></div><h2 id=設定-aws-環境>設定 AWS 環境</h2><p>在使用 Pulumi 之前要先把 AWS 環境建立好</p><h3 id=前置作業>前置作業</h3><p>請先將 AWS 環境設定完畢，請用 <code>aws configure</code> 完成 profile 設定</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>aws configure --profile demo
-</code></pre></td></tr></table></div></div><h3 id=步驟一-設定-aws-region>步驟一: 設定 AWS Region</h3><p>可以參考 <a href=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions>AWS 官方的 Available Regions</a>，並且透過 Pulumi CLI 做調整</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=color:#658b00>cd</span> demo &amp;&amp; pulumi config <span style=color:#658b00>set</span> aws:region ap-northeast-1
-</code></pre></td></tr></table></div></div><p>切換到 demo 目錄，並執行 <code>pulumi config</code></p><h3 id=步驟二-設定-aws-profile>步驟二: 設定 AWS Profile</h3><p>如果你有很多環境需要設定，請使用 AWS Profile 作切換，不要用 default profile。其中 <code>demo</code> 為 profile 名稱</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>pulumi config <span style=color:#658b00>set</span> aws:profile demo
-</code></pre></td></tr></table></div></div><h2 id=初始化-pulumi-架構-建立-s3-bucket>初始化 Pulumi 架構 (建立 S3 Bucket)</h2><h3 id=步驟一-建立新的-s3-bucket>步驟一: 建立新的 S3 Bucket</h3><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>        bucket, err := s3.<span style=color:#008b45>NewBucket</span>(ctx, <span style=color:#cd5555>&#34;my-bucket&#34;</span>, <span style=color:#8b008b;font-weight:700>nil</span>)
-        <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-            <span style=color:#8b008b;font-weight:700>return</span> err
-        }
-</code></pre></td></tr></table></div></div><h3 id=步驟二-執行-pulumi-cli-預覽>步驟二: 執行 Pulumi CLI 預覽</h3><p>透過底下指令可以直接預覽每個操作步驟所做的改變:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>pulumi up
-</code></pre></td></tr></table></div></div><p>可以看到底下預覽:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>Previewing update (dev)
+}</code></pre><h2 id=設定-aws-環境>設定 AWS 環境</h2><p>在使用 Pulumi 之前要先把 AWS 環境建立好</p><h3 id=前置作業>前置作業</h3><p>請先將 AWS 環境設定完畢，請用 <code>aws configure</code> 完成 profile 設定</p><pre><code class=language-sh>aws configure --profile demo</code></pre><h3 id=步驟一-設定-aws-region>步驟一: 設定 AWS Region</h3><p>可以參考 <a href=https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions>AWS 官方的 Available Regions</a>，並且透過 Pulumi CLI 做調整</p><pre><code class=language-sh>cd demo && pulumi config set aws:region ap-northeast-1</code></pre><p>切換到 demo 目錄，並執行 <code>pulumi config</code></p><h3 id=步驟二-設定-aws-profile>步驟二: 設定 AWS Profile</h3><p>如果你有很多環境需要設定，請使用 AWS Profile 作切換，不要用 default profile。其中 <code>demo</code> 為 profile 名稱</p><pre><code class=language-sh>pulumi config set aws:profile demo</code></pre><h2 id=初始化-pulumi-架構-建立-s3-bucket>初始化 Pulumi 架構 (建立 S3 Bucket)</h2><h3 id=步驟一-建立新的-s3-bucket>步驟一: 建立新的 S3 Bucket</h3><pre><code class=language-go>        bucket, err := s3.NewBucket(ctx, "my-bucket", nil)
+        if err != nil {
+            return err
+        }</code></pre><h3 id=步驟二-執行-pulumi-cli-預覽>步驟二: 執行 Pulumi CLI 預覽</h3><p>透過底下指令可以直接預覽每個操作步驟所做的改變:</p><pre><code class=language-sh>pulumi up</code></pre><p>可以看到底下預覽:</p><pre><code class=language-sh>Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/db6a9e4e-f391-4cc4-b50c-408319b3d8e2
 
@@ -218,45 +110,19 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/previews/db6a9e4e-f391-4cc4-
  +   └─ aws:s3:Bucket     my-bucket  create
 
 Resources:
-    + <span style=color:#b452cd>2</span> to create
+    + 2 to create
 
-Do you want to perform this update?  [Use arrows to move, enter to <span style=color:#8b008b;font-weight:700>select</span>, <span style=color:#658b00>type</span> to filter]
+Do you want to perform this update?  [Use arrows to move, enter to select, type to filter]
   yes
-&gt; no
-  details
-</code></pre></td></tr></table></div></div><p>選擇最後的 details:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>Do you want to perform this update? details
+> no
+  details</code></pre><p>選擇最後的 details:</p><pre><code class=language-sh>Do you want to perform this update? details
 + pulumi:pulumi:Stack: (create)
-    [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
+    [urn=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
     + aws:s3/bucket:Bucket: (create)
-        [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
-        acl         : <span style=color:#cd5555>&#34;private&#34;</span>
-        bucket      : <span style=color:#cd5555>&#34;my-bucket-e3d8115&#34;</span>
-        forceDestroy: <span style=color:#658b00>false</span>
-</code></pre></td></tr></table></div></div><p>可以看到更詳細的建立步驟及權限，在此步驟可以詳細知道 Pulumi 會怎麼設定 AWS 架構，透過此預覽方式避免人為操作失誤。</p><h3 id=步驟三-執行部署>步驟三: 執行部署</h3><p>看完上面的預覽，我們最後就直接執行:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>Do you want to perform this update? yes
+        [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
+        acl         : "private"
+        bucket      : "my-bucket-e3d8115"
+        forceDestroy: false</code></pre><p>可以看到更詳細的建立步驟及權限，在此步驟可以詳細知道 Pulumi 會怎麼設定 AWS 架構，透過此預覽方式避免人為操作失誤。</p><h3 id=步驟三-執行部署>步驟三: 執行部署</h3><p>看完上面的預覽，我們最後就直接執行:</p><pre><code class=language-sh>Do you want to perform this update? yes
 Updating (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/updates/3
@@ -266,114 +132,43 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/updates/3
  +   └─ aws:s3:Bucket     my-bucket  created
 
 Outputs:
-    bucketName: <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span>
+    bucketName: "my-bucket-9dd3052"
 
 Resources:
-    + <span style=color:#b452cd>2</span> created
+    + 2 created
 
-Duration: 17s
-</code></pre></td></tr></table></div></div><p>透過上述 UI 也可以看到蠻多詳細的資訊</p><p><img src="https://i2.wp.com/i.imgur.com/MkY5BZC.png?w=840&ssl=1" alt data-recalc-dims=1><img src="https://i2.wp.com/i.imgur.com/jpVpjmm.png?w=840&ssl=1" alt data-recalc-dims=1></p><h3 id=步驟四-顯示更多-bucket-詳細資訊>步驟四: 顯示更多 Bucket 詳細資訊</h3><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>        <span style=color:#228b22>// Export the name of the bucket
-</span><span style=color:#228b22></span>        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketID&#34;</span>, bucket.<span style=color:#008b45>ID</span>())
-        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketName&#34;</span>, bucket.Bucket)
-</code></pre></td></tr></table></div></div><p>執行 <code>pulumi up</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#008b45>Updating</span> (dev)
+Duration: 17s</code></pre><p>透過上述 UI 也可以看到蠻多詳細的資訊</p><p><img src="https://i2.wp.com/i.imgur.com/MkY5BZC.png?w=840&ssl=1" alt data-recalc-dims=1><img src="https://i2.wp.com/i.imgur.com/jpVpjmm.png?w=840&ssl=1" alt data-recalc-dims=1></p><h3 id=步驟四-顯示更多-bucket-詳細資訊>步驟四: 顯示更多 Bucket 詳細資訊</h3><pre><code class=language-go>        // Export the name of the bucket
+        ctx.Export("bucketID", bucket.ID())
+        ctx.Export("bucketName", bucket.Bucket)</code></pre><p>執行 <code>pulumi up</code></p><pre><code class=language-go>Updating (dev)
 
-View Live: https:<span style=color:#228b22>//app.pulumi.com/appleboy/demo/dev/updates/4
-</span><span style=color:#228b22></span>
+View Live: https://app.pulumi.com/appleboy/demo/dev/updates/4
+
      Type                 Name      Status
      pulumi:pulumi:Stack  demo-dev
 
 Outputs:
-  + bucketID  : <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span>
-    bucketName: <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span>
+  + bucketID  : "my-bucket-9dd3052"
+    bucketName: "my-bucket-9dd3052"
 
 Resources:
-    <span style=color:#b452cd>2</span> unchanged
+    2 unchanged
 
-Duration: <span style=color:#b452cd>7</span>s
-</code></pre></td></tr></table></div></div><h3 id=步驟五-更新-bucket-名稱>步驟五: 更新 Bucket 名稱</h3><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    pulumi.<span style=color:#008b45>Run</span>(<span style=color:#8b008b;font-weight:700>func</span>(ctx *pulumi.Context) <span style=color:#00688b;font-weight:700>error</span> {
-        <span style=color:#228b22>// Create an AWS resource (S3 Bucket)
-</span><span style=color:#228b22></span>        bucket, err := s3.<span style=color:#008b45>NewBucket</span>(ctx, <span style=color:#cd5555>&#34;my-bucket&#34;</span>, &amp;s3.BucketArgs{
-            Bucket: pulumi.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;foobar-1234&#34;</span>),
+Duration: 7s</code></pre><h3 id=步驟五-更新-bucket-名稱>步驟五: 更新 Bucket 名稱</h3><pre><code class=language-go>func main() {
+    pulumi.Run(func(ctx *pulumi.Context) error {
+        // Create an AWS resource (S3 Bucket)
+        bucket, err := s3.NewBucket(ctx, "my-bucket", &s3.BucketArgs{
+            Bucket: pulumi.String("foobar-1234"),
         })
-        <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-            <span style=color:#8b008b;font-weight:700>return</span> err
+        if err != nil {
+            return err
         }
 
-        <span style=color:#228b22>// Export the name of the bucket
-</span><span style=color:#228b22></span>        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketID&#34;</span>, bucket.<span style=color:#008b45>ID</span>())
-        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketName&#34;</span>, bucket.Bucket)
-        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
+        // Export the name of the bucket
+        ctx.Export("bucketID", bucket.ID())
+        ctx.Export("bucketName", bucket.Bucket)
+        return nil
     })
-}
-</code></pre></td></tr></table></div></div><p>透過 <code>pulumi up</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>Previewing update (dev)
+}</code></pre><p>透過 <code>pulumi up</code></p><pre><code class=language-sh>Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/7180c121-235c-40cc-9ae2-d0f68455296f
 
@@ -382,98 +177,49 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/previews/7180c121-235c-40cc-
  +-  └─ aws:s3:Bucket     my-bucket  replace     [diff: ~bucket]
 
 Outputs:
-  ~ bucketID  : <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span> =&gt; output&lt;string&gt;
-  ~ bucketName: <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span> =&gt; <span style=color:#cd5555>&#34;foobar-1234&#34;</span>
+  ~ bucketID  : "my-bucket-9dd3052" =&gt; output&lt;string&gt;
+  ~ bucketName: "my-bucket-9dd3052" =&gt; "foobar-1234"
 
 Resources:
     +-1 to replace
-    <span style=color:#b452cd>1</span> unchanged
+    1 unchanged
 
 Do you want to perform this update? details
   pulumi:pulumi:Stack: (same)
-    [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
+    [urn=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
     --aws:s3/bucket:Bucket: (delete-replaced)
-        [<span style=color:#00688b>id</span>=my-bucket-9dd3052]
-        [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
+        [id=my-bucket-9dd3052]
+        [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
     +-aws:s3/bucket:Bucket: (replace)
-        [<span style=color:#00688b>id</span>=my-bucket-9dd3052]
-        [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
-      ~ bucket: <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span> =&gt; <span style=color:#cd5555>&#34;foobar-1234&#34;</span>
+        [id=my-bucket-9dd3052]
+        [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
+      ~ bucket: "my-bucket-9dd3052" =&gt; "foobar-1234"
     ++aws:s3/bucket:Bucket: (create-replacement)
-        [<span style=color:#00688b>id</span>=my-bucket-9dd3052]
-        [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
-      ~ bucket: <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span> =&gt; <span style=color:#cd5555>&#34;foobar-1234&#34;</span>
+        [id=my-bucket-9dd3052]
+        [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
+      ~ bucket: "my-bucket-9dd3052" =&gt; "foobar-1234"
     --outputs:--
-  ~ bucketID  : <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span> =&gt; output&lt;string&gt;
-  ~ bucketName: <span style=color:#cd5555>&#34;my-bucket-9dd3052&#34;</span> =&gt; <span style=color:#cd5555>&#34;foobar-1234&#34;</span>
-</code></pre></td></tr></table></div></div><p>可以看到系統會砍掉舊的，在建立一個新的 bucket</p><h2 id=更新-aws-架構-s3-hosting>更新 AWS 架構 (S3 Hosting)</h2><p>上個步驟教大家如何建立 Infra 架構，那這單元教大家如何將使用 S3 當一個簡單的 Web Hosting。</p><ol><li>將 index.html 放入 S3 內</li><li>設定 S3 當作 Web Hosting</li><li>測試 S3 Hosting</li></ol><h3 id=步驟一-建立-indexhtml-放入-s3-內>步驟一: 建立 index.html 放入 S3 內</h3><p>建立 <code>content/index.html</code> 檔案，內容如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-html data-lang=html>&lt;<span style=color:#8b008b;font-weight:700>html</span>&gt;
-  &lt;<span style=color:#8b008b;font-weight:700>body</span>&gt;
-    &lt;<span style=color:#8b008b;font-weight:700>h1</span>&gt;Hello Pulumi S3 Bucket&lt;/<span style=color:#8b008b;font-weight:700>h1</span>&gt;
-  &lt;/<span style=color:#8b008b;font-weight:700>body</span>&gt;
-&lt;/<span style=color:#8b008b;font-weight:700>html</span>&gt;
-</code></pre></td></tr></table></div></div><p>修改 <code>main.go</code>，將 <code>index.html</code> 加入到 S3 bucket 內</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>        index := path.<span style=color:#008b45>Join</span>(<span style=color:#cd5555>&#34;content&#34;</span>, <span style=color:#cd5555>&#34;index.html&#34;</span>)
-        _, err = s3.<span style=color:#008b45>NewBucketObject</span>(ctx, <span style=color:#cd5555>&#34;index.html&#34;</span>, &amp;s3.BucketObjectArgs{
+  ~ bucketID  : "my-bucket-9dd3052" =&gt; output&lt;string&gt;
+  ~ bucketName: "my-bucket-9dd3052" =&gt; "foobar-1234"</code></pre><p>可以看到系統會砍掉舊的，在建立一個新的 bucket</p><h2 id=更新-aws-架構-s3-hosting>更新 AWS 架構 (S3 Hosting)</h2><p>上個步驟教大家如何建立 Infra 架構，那這單元教大家如何將使用 S3 當一個簡單的 Web Hosting。</p><ol><li>將 index.html 放入 S3 內</li><li>設定 S3 當作 Web Hosting</li><li>測試 S3 Hosting</li></ol><h3 id=步驟一-建立-indexhtml-放入-s3-內>步驟一: 建立 index.html 放入 S3 內</h3><p>建立 <code>content/index.html</code> 檔案，內容如下</p><pre><code class=language-html>&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hello Pulumi S3 Bucket&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre><p>修改 <code>main.go</code>，將 <code>index.html</code> 加入到 S3 bucket 內</p><pre><code class=language-go>        index := path.Join("content", "index.html")
+        _, err = s3.NewBucketObject(ctx, "index.html", &s3.BucketObjectArgs{
             Bucket: bucket.Bucket,
-            Source: pulumi.<span style=color:#008b45>NewFileAsset</span>(index),
+            Source: pulumi.NewFileAsset(index),
         })
 
-        <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-            <span style=color:#8b008b;font-weight:700>return</span> err
-        }
-</code></pre></td></tr></table></div></div><p>其中目錄結構如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>├── demo
+        if err != nil {
+            return err
+        }</code></pre><p>其中目錄結構如下</p><pre><code class=language-sh>├── demo
 │   ├── Pulumi.dev.yaml
 │   ├── Pulumi.yaml
 │   ├── content
 │   │   └── index.html
 │   ├── go.mod
 │   ├── go.sum
-│   └── main.go
-</code></pre></td></tr></table></div></div><p>部署到 S3 Bucket 內</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ pulumi up
+│   └── main.go</code></pre><p>部署到 S3 Bucket 內</p><pre><code class=language-sh>$ pulumi up
 Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/a0ac1b69-06b9-4109-800d-20618b36e5c8
@@ -483,188 +229,74 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/previews/a0ac1b69-06b9-4109-
  +   └─ aws:s3:BucketObject  index.html  create
 
 Resources:
-    + <span style=color:#b452cd>1</span> to create
-    <span style=color:#b452cd>2</span> unchanged
+    + 1 to create
+    2 unchanged
 
 Do you want to perform this update? details
   pulumi:pulumi:Stack: (same)
-    [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
+    [urn=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
     + aws:s3/bucketObject:BucketObject: (create)
-        [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::aws:s3/bucketObject:BucketObject::index.html]
-        acl         : <span style=color:#cd5555>&#34;private&#34;</span>
-        bucket      : <span style=color:#cd5555>&#34;foobar-1234&#34;</span>
-        forceDestroy: <span style=color:#658b00>false</span>
-        key         : <span style=color:#cd5555>&#34;index.html&#34;</span>
-        <span style=color:#658b00>source</span>      : asset(file:77aab46) { content/index.html }
-</code></pre></td></tr></table></div></div><h3 id=步驟二-設定-s3-為-web-hosting>步驟二: 設定 S3 為 Web Hosting</h3><p>修改 main.go</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>        bucket, err := s3.<span style=color:#008b45>NewBucket</span>(ctx, <span style=color:#cd5555>&#34;my-bucket&#34;</span>, &amp;s3.BucketArgs{
-            Bucket: pulumi.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;foobar-1234&#34;</span>),
+        [urn=urn:pulumi:dev::demo::aws:s3/bucketObject:BucketObject::index.html]
+        acl         : "private"
+        bucket      : "foobar-1234"
+        forceDestroy: false
+        key         : "index.html"
+        source      : asset(file:77aab46) { content/index.html }</code></pre><h3 id=步驟二-設定-s3-為-web-hosting>步驟二: 設定 S3 為 Web Hosting</h3><p>修改 main.go</p><pre><code class=language-go>        bucket, err := s3.NewBucket(ctx, "my-bucket", &s3.BucketArgs{
+            Bucket: pulumi.String("foobar-1234"),
             Website: s3.BucketWebsiteArgs{
-                IndexDocument: pulumi.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;index.html&#34;</span>),
+                IndexDocument: pulumi.String("index.html"),
             },
         })
 
-        index := path.<span style=color:#008b45>Join</span>(<span style=color:#cd5555>&#34;content&#34;</span>, <span style=color:#cd5555>&#34;index.html&#34;</span>)
-        _, err = s3.<span style=color:#008b45>NewBucketObject</span>(ctx, <span style=color:#cd5555>&#34;index.html&#34;</span>, &amp;s3.BucketObjectArgs{
+        index := path.Join("content", "index.html")
+        _, err = s3.NewBucketObject(ctx, "index.html", &s3.BucketObjectArgs{
             Bucket:      bucket.Bucket,
-            Source:      pulumi.<span style=color:#008b45>NewFileAsset</span>(index),
-            Acl:         pulumi.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;public-read&#34;</span>),
-            ContentType: pulumi.<span style=color:#008b45>String</span>(mime.<span style=color:#008b45>TypeByExtension</span>(path.<span style=color:#008b45>Ext</span>(index))),
-        })
-</code></pre></td></tr></table></div></div><p>最後設定輸出 URL:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketEndpoint&#34;</span>, bucket.WebsiteEndpoint)
-</code></pre></td></tr></table></div></div><p>最後完整程式碼如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+            Source:      pulumi.NewFileAsset(index),
+            Acl:         pulumi.String("public-read"),
+            ContentType: pulumi.String(mime.TypeByExtension(path.Ext(index))),
+        })</code></pre><p>最後設定輸出 URL:</p><pre><code class=language-go>ctx.Export("bucketEndpoint", bucket.WebsiteEndpoint)</code></pre><p>最後完整程式碼如下:</p><pre><code class=language-go>package main
 
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;mime&#34;</span>
-    <span style=color:#cd5555>&#34;path&#34;</span>
+import (
+    "mime"
+    "path"
 
-    <span style=color:#cd5555>&#34;github.com/pulumi/pulumi-aws/sdk/v3/go/aws/s3&#34;</span>
-    <span style=color:#cd5555>&#34;github.com/pulumi/pulumi/sdk/v2/go/pulumi&#34;</span>
+    "github.com/pulumi/pulumi-aws/sdk/v3/go/aws/s3"
+    "github.com/pulumi/pulumi/sdk/v2/go/pulumi"
 )
 
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    pulumi.<span style=color:#008b45>Run</span>(<span style=color:#8b008b;font-weight:700>func</span>(ctx *pulumi.Context) <span style=color:#00688b;font-weight:700>error</span> {
-        <span style=color:#228b22>// Create an AWS resource (S3 Bucket)
-</span><span style=color:#228b22></span>        bucket, err := s3.<span style=color:#008b45>NewBucket</span>(ctx, <span style=color:#cd5555>&#34;my-bucket&#34;</span>, &amp;s3.BucketArgs{
-            Bucket: pulumi.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;foobar-1234&#34;</span>),
+func main() {
+    pulumi.Run(func(ctx *pulumi.Context) error {
+        // Create an AWS resource (S3 Bucket)
+        bucket, err := s3.NewBucket(ctx, "my-bucket", &s3.BucketArgs{
+            Bucket: pulumi.String("foobar-1234"),
             Website: s3.BucketWebsiteArgs{
-                IndexDocument: pulumi.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;index.html&#34;</span>),
+                IndexDocument: pulumi.String("index.html"),
             },
         })
-        <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-            <span style=color:#8b008b;font-weight:700>return</span> err
+        if err != nil {
+            return err
         }
 
-        index := path.<span style=color:#008b45>Join</span>(<span style=color:#cd5555>&#34;content&#34;</span>, <span style=color:#cd5555>&#34;index.html&#34;</span>)
-        _, err = s3.<span style=color:#008b45>NewBucketObject</span>(ctx, <span style=color:#cd5555>&#34;index.html&#34;</span>, &amp;s3.BucketObjectArgs{
+        index := path.Join("content", "index.html")
+        _, err = s3.NewBucketObject(ctx, "index.html", &s3.BucketObjectArgs{
             Bucket:      bucket.Bucket,
-            Source:      pulumi.<span style=color:#008b45>NewFileAsset</span>(index),
-            Acl:         pulumi.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;public-read&#34;</span>),
-            ContentType: pulumi.<span style=color:#008b45>String</span>(mime.<span style=color:#008b45>TypeByExtension</span>(path.<span style=color:#008b45>Ext</span>(index))),
+            Source:      pulumi.NewFileAsset(index),
+            Acl:         pulumi.String("public-read"),
+            ContentType: pulumi.String(mime.TypeByExtension(path.Ext(index))),
         })
 
-        <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-            <span style=color:#8b008b;font-weight:700>return</span> err
+        if err != nil {
+            return err
         }
 
-        <span style=color:#228b22>// Export the name of the bucket
-</span><span style=color:#228b22></span>        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketID&#34;</span>, bucket.<span style=color:#008b45>ID</span>())
-        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketName&#34;</span>, bucket.Bucket)
-        ctx.<span style=color:#008b45>Export</span>(<span style=color:#cd5555>&#34;bucketEndpoint&#34;</span>, bucket.WebsiteEndpoint)
+        // Export the name of the bucket
+        ctx.Export("bucketID", bucket.ID())
+        ctx.Export("bucketName", bucket.Bucket)
+        ctx.Export("bucketEndpoint", bucket.WebsiteEndpoint)
 
-        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
+        return nil
     })
-}
-</code></pre></td></tr></table></div></div><p>執行 pulumi up</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>Previewing update (dev)
+}</code></pre><p>執行 pulumi up</p><pre><code class=language-sh>Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/edbaefca-f723-4ac5-aabd-7cb638636612
 
@@ -677,25 +309,25 @@ Outputs:
   + bucketEndpoint: output&lt;string&gt;
 
 Resources:
-    ~ <span style=color:#b452cd>2</span> to update
-    <span style=color:#b452cd>1</span> unchanged
+    ~ 2 to update
+    1 unchanged
 
 Do you want to perform this update? details
   pulumi:pulumi:Stack: (same)
-    [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
+    [urn=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
     ~ aws:s3/bucket:Bucket: (update)
-        [<span style=color:#00688b>id</span>=foobar-1234]
-        [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
+        [id=foobar-1234]
+        [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
       + website: {
-          + indexDocument: <span style=color:#cd5555>&#34;index.html&#34;</span>
+          + indexDocument: "index.html"
         }
     --outputs:--
   + bucketEndpoint: output&lt;string&gt;
     ~ aws:s3/bucketObject:BucketObject: (update)
-        [<span style=color:#00688b>id</span>=index.html]
-        [<span style=color:#00688b>urn</span>=urn:pulumi:dev::demo::aws:s3/bucketObject:BucketObject::index.html]
-      ~ acl        : <span style=color:#cd5555>&#34;private&#34;</span> =&gt; <span style=color:#cd5555>&#34;public-read&#34;</span>
-      ~ contentType: <span style=color:#cd5555>&#34;binary/octet-stream&#34;</span> =&gt; <span style=color:#cd5555>&#34;text/html; charset=utf-8&#34;</span>
+        [id=index.html]
+        [urn=urn:pulumi:dev::demo::aws:s3/bucketObject:BucketObject::index.html]
+      ~ acl        : "private" =&gt; "public-read"
+      ~ contentType: "binary/octet-stream" =&gt; "text/html; charset=utf-8"
 Do you want to perform this update? yes
 Updating (dev)
 
@@ -707,59 +339,31 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/updates/7
  ~   └─ aws:s3:BucketObject  index.html  updated     [diff: ~acl,contentType]
 
 Outputs:
-  + bucketEndpoint: <span style=color:#cd5555>&#34;foobar-1234.s3-website-ap-northeast-1.amazonaws.com&#34;</span>
-    bucketID      : <span style=color:#cd5555>&#34;foobar-1234&#34;</span>
-    bucketName    : <span style=color:#cd5555>&#34;foobar-1234&#34;</span>
+  + bucketEndpoint: "foobar-1234.s3-website-ap-northeast-1.amazonaws.com"
+    bucketID      : "foobar-1234"
+    bucketName    : "foobar-1234"
 
 Resources:
-    ~ <span style=color:#b452cd>2</span> updated
-    <span style=color:#b452cd>1</span> unchanged
+    ~ 2 updated
+    1 unchanged
 
-Duration: 13s
-</code></pre></td></tr></table></div></div><h3 id=步驟三-測試-url>步驟三: 測試 URL</h3><p>透過底下指令可以拿到 S3 的 URL:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>pulumi stack output bucketEndpoint
-</code></pre></td></tr></table></div></div><p>透過 CURL 指令測試看看</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ curl -v <span style=color:#8b008b;font-weight:700>$(</span>pulumi stack output bucketEndpoint<span style=color:#8b008b;font-weight:700>)</span>
+Duration: 13s</code></pre><h3 id=步驟三-測試-url>步驟三: 測試 URL</h3><p>透過底下指令可以拿到 S3 的 URL:</p><pre><code class=language-sh>pulumi stack output bucketEndpoint</code></pre><p>透過 CURL 指令測試看看</p><pre><code class=language-sh>$ curl -v $(pulumi stack output bucketEndpoint)
 *   Trying 52.219.16.96...
-* TCP_NODELAY <span style=color:#658b00>set</span>
-* Connected to foobar-1234.s3-website-ap-northeast-1.amazonaws.com (52.219.16.96) port <span style=color:#b452cd>80</span> (<span style=color:#228b22>#0)</span>
-&gt; GET / HTTP/1.1
-&gt; Host: foobar-1234.s3-website-ap-northeast-1.amazonaws.com
-&gt; User-Agent: curl/7.64.1
-&gt; Accept: */*
-&gt;
-&lt; HTTP/1.1 <span style=color:#b452cd>200</span> OK
+* TCP_NODELAY set
+* Connected to foobar-1234.s3-website-ap-northeast-1.amazonaws.com (52.219.16.96) port 80 (#0)
+> GET / HTTP/1.1
+> Host: foobar-1234.s3-website-ap-northeast-1.amazonaws.com
+> User-Agent: curl/7.64.1
+> Accept: */*
+>
+&lt; HTTP/1.1 200 OK
 &lt; x-amz-id-2: 0NrZfFxZNOs+toz0/86FiASG+MyQE6f+KbKNi4wzcDtmn5mTnQoxupVybR464X8Oi6HDMjSU+i8=
 &lt; x-amz-request-id: A55BD2534EDC94A9
-&lt; Date: Thu, <span style=color:#b452cd>11</span> Feb <span style=color:#b452cd>2021</span> 03:30:42 GMT
-&lt; Last-Modified: Thu, <span style=color:#b452cd>11</span> Feb <span style=color:#b452cd>2021</span> 03:29:14 GMT
-&lt; ETag: <span style=color:#cd5555>&#34;46e94ba24774d0c4a768f9461e6b9806&#34;</span>
-&lt; Content-Type: text/html; <span style=color:#00688b>charset</span>=utf-8
-&lt; Content-Length: <span style=color:#b452cd>70</span>
+&lt; Date: Thu, 11 Feb 2021 03:30:42 GMT
+&lt; Last-Modified: Thu, 11 Feb 2021 03:29:14 GMT
+&lt; ETag: "46e94ba24774d0c4a768f9461e6b9806"
+&lt; Content-Type: text/html; charset=utf-8
+&lt; Content-Length: 70
 &lt; Server: AmazonS3
 &lt;
 &lt;html&gt;
@@ -767,9 +371,8 @@ Duration: 13s
     &lt;h1&gt;Hello Pulumi S3 Bucket&lt;/h1&gt;
   &lt;/body&gt;
 &lt;/html&gt;
-* Connection <span style=color:#228b22>#0 to host foobar-1234.s3-website-ap-northeast-1.amazonaws.com left intact</span>
-</code></pre></td></tr></table></div></div><h2 id=心得>心得</h2><p>上述已經可以將靜態網站放在 AWS S3 上面了，<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>下一篇</a>會教大家底下三個章節</p><ol><li>設定 Pulumi Stack 環境變數</li><li>建立第二個 Pulumi Stack 環境</li><li>刪除 Pulumi Stack 環境</li></ol><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://demo.gh.wu-boy.com/tags/pulumi/>pulumi</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&text=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&description=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/>初探 Infrastructure as Code 工具 Terraform vs Pulumi</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/ data-toggle=tooltip data-placement=top title="初探 Infrastructure as Code 工具 Terraform vs Pulumi">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/ data-toggle=tooltip data-placement=top title="初探 Pulumi 上傳靜態網站到 AWS S3 (二)">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+* Connection #0 to host foobar-1234.s3-website-ap-northeast-1.amazonaws.com left intact</code></pre><h2 id=心得>心得</h2><p>上述已經可以將靜態網站放在 AWS S3 上面了，<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>下一篇</a>會教大家底下三個章節</p><ol><li>設定 Pulumi Stack 環境變數</li><li>建立第二個 Pulumi Stack 環境</li><li>刪除 Pulumi Stack 環境</li></ol><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://demo.gh.wu-boy.com/tags/pulumi/>pulumi</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&text=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&description=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/>初探 Infrastructure as Code 工具 Terraform vs Pulumi</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/ data-toggle=tooltip data-placement=top title="初探 Infrastructure as Code 工具 Terraform vs Pulumi">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/ data-toggle=tooltip data-placement=top title="初探 Pulumi 上傳靜態網站到 AWS S3 (二)">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

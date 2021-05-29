@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>C/C++ on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/c/c++/</link><description>Recent content in C/C++ on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><atom:link href="https://demo.gh.wu-boy.com/tags/c/c++/index.xml" rel="self" type="application/rss+xml"/><item><title>[Linux Kernel] 讀取 /proc 底下資料最佳方法: seq_file interface</title><link>https://demo.gh.wu-boy.com/2011/03/linux-kernel-%E8%AE%80%E5%8F%96-proc-%E5%BA%95%E4%B8%8B%E8%B3%87%E6%96%99%E6%9C%80%E4%BD%B3%E6%96%B9%E6%B3%95-seq_file-interface/</link><pubDate>Mon, 14 Mar 2011 11:38:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/03/linux-kernel-%E8%AE%80%E5%8F%96-proc-%E5%BA%95%E4%B8%8B%E8%B3%87%E6%96%99%E6%9C%80%E4%BD%B3%E6%96%B9%E6%B3%95-seq_file-interface/</guid><description>&lt;h3 id="前言-最近在整合公司內部">前言 最近在整合公司內部&lt;/h3>
+&lt;p>&lt;a href="http://www.atheros.com/">Atheros&lt;/a>(被&lt;a href="http://www.qualcomm.com/">高通&lt;/a>買下) 晶片的 Router，從原本 2.6.15 升級到 2.6.34.7，升級過程遇到很多困難，其中一項升級 Wireless Driver 部份，發現在 Kernel Socket 與 User Space 溝通之間出了問題，利用 Ioctl 來取得目前在 AP 上面所有 Client 資料(包含 mac address, 處於 N or G mode&amp;hellip;等)，在 User Space 上會掉資料，後來利用 /proc 底下檔案來跟 User 之間溝通，才沒有發生任何問題，由於輸出的檔案比較多，就偏向用 2.6 Kernel 提供的 &lt;a href="http://lwn.net/Articles/22355/">seq_file 介面( interface )&lt;/a>建立虛擬檔案 (virtual file) 與 User Space 溝通(此方法為 Alexander Viro 所設計)，此功能其實在 2.4.15 已經實做了，只是在 2.6 版本才被大量使用。 程式設計師可以透過引入 &lt;span style="color:green">&lt;strong>&amp;lt;linux/seq_file.h&amp;gt;&lt;/strong>&lt;/span> 來實做 seq_file interface，seq_file 最大優勢就是讀取完全沒有4k boundry 的限制，也就是不用管會不會超出 output buffer。&lt;/p>
+&lt;h3 id="the-iterator-interface-為了能夠讓-iterator-正常運作我們必須實做-4-個-function-start-next-stop-show跑得過程為-start---show---next---show---next---stop為了方便講解參考">The iterator interface 為了能夠讓 iterator 正常運作，我們必須實做 4 個 function (start, next, stop, show)，跑得過程為 start -&amp;gt; show -&amp;gt; next -&amp;gt; show -&amp;gt; next -&amp;gt; stop，為了方便講解，參考&lt;/h3>
+&lt;p>&lt;a href="http://nano-chicken.blogspot.com/2009/12/linux-modulesiv-seqfile.html">Linux Kernel（4）- seq_file&lt;/a> 裡面範例如下：&lt;/p>
+&lt;pre class="brush: cpp; title: ; notranslate" title="">#include &amp;lt;linux/init.h>
+#include &amp;lt;linux/module.h>
+#include &amp;lt;linux/proc_fs.h> /* Necessary because we use proc fs */
+#include &amp;lt;linux/seq_file.h> /* for seq_file */
+#include &amp;lt;linux/uaccess.h>
+MODULE_LICENSE("GPL");
+#define MAX_LINE 1000
+static uint32_t *lines;
+/**
+* seq_start() takes a position as an argument and returns an iterator which
+* will start reading at that position.
+*/
+static void* seq_start(struct seq_file *s, loff_t *pos)
+{
+uint32_t *lines;
+if (*pos >= MAX_LINE) {
+return NULL; // no more data to read
+}
+lines = kzalloc(sizeof(uint32_t), GFP_KERNEL);
+if (!lines) {
+return NULL;
+}
+*lines = *pos + 1;
+return lines;
+}
+/**
+* move the iterator forward to the next position in the sequence
+*/
+static void* seq_next(struct seq_file *s, void *v, loff_t *pos)
+{
+uint32_t *lines = v;
+*pos = ++(*lines);
+if (*pos >= MAX_LINE) {
+return NULL; // no more data to read
+}
+return lines;
+}
+/**
+* stop() is called when iteration is complete (clean up)
+*/
+static void seq_stop(struct seq_file *s, void *v)
+{
+kfree(v);
+}
+/**
+* success return 0, otherwise return error code
+*/
+static int seq_show(struct seq_file *s, void *v)
+{
+seq_printf(s, "Line #%d: This is Brook's demo\n", *((uint32_t*)v));
+return 0;
+}
+static struct seq_operations seq_ops = {
+.start = seq_start,
+.next = seq_next,
+.stop = seq_stop,
+.show = seq_show
+};
+static int proc_open(struct inode *inode, struct file *file)
+{
+return seq_open(file, &amp;seq_ops);
+}
+static struct file_operations proc_ops = {
+.owner = THIS_MODULE, // system
+.open = proc_open,
+.read = seq_read, // system
+.llseek = seq_lseek, // system
+.release = seq_release // system
+};
+static int __init init_modules(void)
+{
+struct proc_dir_entry *ent;
+ent = create_proc_entry("brook", 0, NULL);
+if (ent) {
+ent->proc_fops = &amp;proc_ops;
+}
+return 0;
+}
+static void __exit exit_modules(void)
+{
+if (lines) {
+kfree(lines);
+}
+remove_proc_entry("brook", NULL);
+}
+module_init(init_modules);
+module_exit(exit_modules);&lt;/pre></description></item><item><title>[C/C++] 判斷檔案是否存在 file_exists</title><link>https://demo.gh.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/</link><pubDate>Wed, 08 Dec 2010 04:36:48 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/</guid><description>在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:
+&amp;lt;?php if(file_exists("files/appleboy.c")) { echo "File found!"; } ?&amp;gt; 在 C 裡面該如何實做？有兩種方式如下:
+1. 直接開檔 bool file_exists(const char * filename) { if (FILE * file = fopen(filename, "r")) { fclose(file); return true; } return false; } C++ 寫法
+std::fstream foo; foo.open("bar"); if(foo.is_open() == true) std::cout &amp;lt;&amp;lt; "Exist"; else std::cout &amp;lt;&amp;lt; "Doesn&amp;#039;t Exist"; 2. 讀取檔案狀態 #include&amp;lt;sys/stat.h&amp;gt; int file_exists (char * fileName) { struct stat buf; int i = stat ( fileName, &amp;buf ); /* File found */ if ( i == 0 ) { return 1; } return 0; }</description></item><item><title>[C/C++] 將字串轉成 16 進位</title><link>https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/</link><pubDate>Mon, 13 Sep 2010 03:11:22 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/</guid><description>最近在碰嵌入式系統遇到一個還蠻常見的問題，我要將16進位的字串(例如 AAC2) test 轉成16進位的 unsigned int，讓我可以進行 &amp;amp; | not 一些二進位運算，底下是轉換程式，大家參考看看
+int power(int x,int n) { int i; int num = 1; for(i=1;i&amp;lt;=n;i++) num*=x; return num; } int transfer_string_to_hex(unsigned char *str_name) { char string[]="0123456789ABCDEF"; int number[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}; int i = 0; int j = 0; int str_number = 0; for(i=0; i&amp;lt;sizeof(str_name); i++) { for(j=0; j&amp;lt;sizeof(string); j++) { if(toupper(str_name&amp;lt;em&amp;lt;/em) == string[j]) { str_number += power(16, (sizeof(str_name)-1-i))* number[j]; break; } } } return str_number; } 由於嵌入式並沒有 pow 這個函式可以使用，所以自己寫了 power 來取代，我用在偵測網路線是否有插上：</description></item><item><title>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp</title><link>https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/</link><pubDate>Wed, 04 Aug 2010 07:29:46 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/</guid><description>串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
+/* strcat example */ #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;string.h&amp;gt; int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
+these strings are concatenated. 看一下 strcat 原始碼：
+char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。</description></item><item><title>[C/C++] cstring (string.h) 搜尋函式：strstr, strchr</title><link>https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/</link><pubDate>Tue, 03 Aug 2010 08:24:23 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/</guid><description>這次介紹 C 語言常用 string 函式：strstr，主要是針對兩個輸入參數做比對，Parameters 1 是輸入字串，Parameters 2 是找尋字串，strstr 會先將頭一次比對成功的 pointer 回傳，也就是如果要找尋 appleboyappleboy 字串中的 boy，函式會回傳第一次比對成功的 boy pointer，而並非回傳最後一個比對到的，底下是一個參考範例：
+strstr /* strstr example */ #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;string.h&amp;gt; int main () { char str[] ="This is a simple string"; char * pch; /* 找尋 simple 字串 */ pch = strstr (str,"simple"); /* 將 simple 換成 sample */ strncpy (pch,"sample",6); puts (str); return 0; } 看一下 Kernel 原始檔案，strstr 函式：
+/* * Find the first occurrence of find in s.</description></item><item><title>[網站] 好站連結 (七) Android, javascript, Css, PHP, Perl, FreeBSD, Linux</title><link>https://demo.gh.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/</link><pubDate>Fri, 30 Jul 2010 14:53:46 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/</guid><description>Windows C#
+C# 比較字串 MSDN 比較字串 Request.Form Collection Request Query String / Form Parametrs ASP.NET QueryString Usage Using include files with ASP.NET html
+[將所有 的內容包到一個
+中][7] apache
+Fixing mod_rewrite and .htaccess on GoDaddy Hosting javascript
+jQuery Week Calendar Javascript: reference the parent window from a popup How to get and set form element values with jQuery How to check and uncheck a checkbox with jQuery Loop through parameters passed to a Javascript function perl-completion.</description></item><item><title>[C/C++] count 1 bits of input value by shifting.</title><link>https://demo.gh.wu-boy.com/2010/05/cc-count-1-bits-of-input-value-by-shifting/</link><pubDate>Tue, 18 May 2010 14:37:40 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/05/cc-count-1-bits-of-input-value-by-shifting/</guid><description>之前寫了一篇：『[C/C++] 計算二進位任意數含有多少個位元為1?』，裡面用 n &amp;amp;= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; int count_1_bit_count(unsigned int); int main(){ int count = 0, a; a = 1023; count = count_1_bit_count(a); printf("%d有%d個位元為1\n\n", a, count); system("pause"); return 0; } int count_1_bit_count(unsigned int n) { int count = 0; for(count = 0; n != 0; n &amp;gt;&amp;gt;= 1L) { if(n &amp; 0x01) count++; } return count; } 關鍵就是在 n &amp;raquo;= 1L，把該數字往右位移 1 bit，然後跟 0x01 去做 and，如果數字大於0，count 就加 1。</description></item><item><title>[C/C++] C語言切割字串函式 strsep，分析 URL GET 參數</title><link>https://demo.gh.wu-boy.com/2010/04/cc-c%E8%AA%9E%E8%A8%80%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E5%BC%8F-strsep%EF%BC%8C%E5%88%86%E6%9E%90-url-get-%E5%8F%83%E6%95%B8/</link><pubDate>Wed, 28 Apr 2010 03:25:44 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/04/cc-c%E8%AA%9E%E8%A8%80%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E5%BC%8F-strsep%EF%BC%8C%E5%88%86%E6%9E%90-url-get-%E5%8F%83%E6%95%B8/</guid><description>&lt;p>今天來簡介 UNIX 內建的 &lt;a href="http://linux.about.com/library/cmd/blcmdl3_strsep.htm">strsep&lt;/a> 函式，這在 Windows &lt;a href="http://www.bloodshed.net/dev/devcpp.html">Dev-C++&lt;/a> 是沒有支援的，在寫 UNIX 分析字串常常需要利用到此函式，大家可以 man strsep 來看如何使用 strsep，假設我們要分析 URL Get 字串：&lt;span style="color:green">user_command=appleboy&amp;amp;test=1&amp;amp;test2=2&lt;/span>，就可以利用兩次 strsep 函式，將字串全部分離，取的個別的 name, value。strsep(stringp, delim) 第一個參數傳入需要分析的字串，第二個參數傳入 delim 符號，假設 stringp 為 NULL 字串，則函式會回傳 NULL，換句話說，strsep 會找到 stringp 字串&lt;span style="color:red">&lt;strong>第一個出現 delim 符號&lt;/strong>&lt;/span>，並將其取代為 \0 符號，然後將 stringp &lt;span style="color:red">&lt;strong>更新&lt;/strong>&lt;/span>指向到 \0 符號的下一個字串，strsep() function 回傳原來的 stringp 指標。看上面文字敘述，好像不太瞭解，沒關係，底下是 UNIX strsep.c 的原始碼：&lt;/p>
+&lt;pre>&lt;code class="language-c">/*
+* Get next token from string *stringp, where tokens are possibly-empty
+* strings separated by characters from delim.
+*
+* Writes NULs into the string at *stringp to end tokens.
+* delim need not remain constant from call to call.
+* On return, *stringp points past the last NUL written (if there might
+* be further tokens), or is NULL (if there are definitely no more tokens).
+*
+* If *stringp is NULL, strsep returns NULL.
+*/
+char *
+strsep(stringp, delim)
+char **stringp;
+const char *delim;
+{
+char *s;
+const char *spanp;
+int c, sc;
+char *tok;
+if ((s = *stringp) == NULL)
+return (NULL);
+for (tok = s;;) {
+c = *s++;
+spanp = delim;
+do {
+if ((sc = *spanp++) == c) {
+if (c == 0)
+s = NULL;
+else
+s[-1] = 0;
+*stringp = s;
+return (tok);
+}
+} while (sc != 0);
+}
+/* NOTREACHED */
+}&lt;/code>&lt;/pre></description></item><item><title>[C/C++] strpbrk 在字串中找尋指定的符號或字母</title><link>https://demo.gh.wu-boy.com/2010/04/cc-strpbrk-%E5%9C%A8%E5%AD%97%E4%B8%B2%E4%B8%AD%E6%89%BE%E5%B0%8B%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AC%A6%E8%99%9F%E6%88%96%E5%AD%97%E6%AF%8D/</link><pubDate>Thu, 01 Apr 2010 15:19:04 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/04/cc-strpbrk-%E5%9C%A8%E5%AD%97%E4%B8%B2%E4%B8%AD%E6%89%BE%E5%B0%8B%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AC%A6%E8%99%9F%E6%88%96%E5%AD%97%E6%AF%8D/</guid><description>繼上一篇：『[C/C++] 切割字串函數：strtok, Network mac address 分割』，內容寫到 Microsoft 用到 strpbrk 來找尋字串中特定符號，並且回傳該符號的位址，用法如下：
+#include "string.h" #include "stdlib.h" #include "stdio.h" int main () { char str[] = "This is a sample string"; char key[] = "aeiou"; char * pch; printf ("Vowels in &amp;#039;%s&amp;#039;: ",str); pch = strpbrk (str, key); while (pch != NULL) { printf ("%c " , *pch); /* 也可以直接輸出字串 */ printf("\noutput=%s\n", pch); pch = strpbrk (pch+1,key); } printf ("\n"); system("pause"); return 0; } 輸出結果：</description></item><item><title>[C/C++] 切割字串函數：strtok, Network mac address 分割</title><link>https://demo.gh.wu-boy.com/2010/04/cc-%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E6%95%B8%EF%BC%9Astrtok-network-mac-address-%E5%88%86%E5%89%B2/</link><pubDate>Thu, 01 Apr 2010 14:16:57 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/04/cc-%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E6%95%B8%EF%BC%9Astrtok-network-mac-address-%E5%88%86%E5%89%B2/</guid><description>今天寫了 strtok 的範例：『如何分離網路 mac address』程式碼如下，大家一定會有疑問 strtok 第一次呼叫，第一參數輸入愈分離的字串，在 while 迴圈，則是輸入 NULL 呢？底下就來解析 strtok.c 的程式碼。
+/* * * Author : appleboy * Date : 2010.04.01 * Filename : strtok.c * */ #include "string.h" #include "stdlib.h" #include "stdio.h" int main() { char str[]="00:22:33:4B:55:5A"; char *delim = ":"; char * pch; printf ("Splitting string \"%s\" into tokens:\n",str); pch = strtok(str,delim); while (pch != NULL) { printf ("%s\n",pch); pch = strtok (NULL, delim); } system("pause"); return 0; } 執行結果如下圖：</description></item><item><title>[C/C++] 計算二進位任意數含有多少個位元為1?</title><link>https://demo.gh.wu-boy.com/2010/02/cc-%E8%A8%88%E7%AE%97%E4%BA%8C%E9%80%B2%E4%BD%8D%E4%BB%BB%E6%84%8F%E6%95%B8%E5%90%AB%E6%9C%89%E5%A4%9A%E5%B0%91%E5%80%8B%E4%BD%8D%E5%85%83%E7%82%BA1/</link><pubDate>Wed, 24 Feb 2010 15:17:17 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/02/cc-%E8%A8%88%E7%AE%97%E4%BA%8C%E9%80%B2%E4%BD%8D%E4%BB%BB%E6%84%8F%E6%95%B8%E5%90%AB%E6%9C%89%E5%A4%9A%E5%B0%91%E5%80%8B%E4%BD%8D%E5%85%83%E7%82%BA1/</guid><description>今天看到一個有趣的題目，就是計算二進位任意數值，其中包含了幾個1，這非常有趣，利用每個 bit 做&amp;amp;就可以解出這個問題了:
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; int bitcount(unsigned int); int main(){ int count = 0, a; a = 1023; count = bitcount(a); printf("%d有%d個位元為1\n\n", a, count); system("pause"); return 0; } int bitcount(unsigned int n) { int count = 0 ; while (n) { count++ ; n &amp;= (n - 1) ; //關鍵演算之處 } return count ; } 關鍵解法是在 n &amp;amp;= (n - 1) ; 這個地方，為什麼會是這樣寫呢，大家可以想看看，為什麼要 (n-1)，其實可以帶數字進去跑看看就知道程式為什麼會這樣寫，這個 case 可以分作兩種，數值可能會有兩種狀況，一種是奇數，另一種就是偶數，8 代表 1000，9 代表 1001，最右邊 bit 是 1 代表奇數，剩下的都是偶數，拿9當例子帶入 while 迴圈試試看，首先將 count + 1，接下來 1001 會跟 1000 做相乘動作，就會變成 1000，接下來跑另一次 while 會變成 1000 &amp;amp; 0111 就會變成 0 了，退出 while 迴圈，所以結論是 (n -1) 的用意是去掉一個 1 位元 bit，就像 [xxxx10 &amp;hellip; 0] -1 = [xxxx01 &amp;hellip; 1] &amp;hellip;.</description></item><item><title>[C/C++] 指標相加 = ？or 相減 = offset</title><link>https://demo.gh.wu-boy.com/2010/02/cc-%E6%8C%87%E6%A8%99%E7%9B%B8%E5%8A%A0-%EF%BC%9For-%E7%9B%B8%E6%B8%9B-offset/</link><pubDate>Mon, 08 Feb 2010 06:50:16 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/02/cc-%E6%8C%87%E6%A8%99%E7%9B%B8%E5%8A%A0-%EF%BC%9For-%E7%9B%B8%E6%B8%9B-offset/</guid><description>最近看到網路上討論 C/C++ 題目，某公司主管給新進人員面試的 C/C++ 考題，如下：
+int main(void) { int *a,*b; a=1; b=1; printf("%d\n",a+b); return 0; } 請問上面這個題目，哪裡有出問題，這是面試官問新進人員的題目之一，看也知道這程式丟到 Dev-C++ 是不會過的，a b 都是宣告為整數指標型態，可是在 a=1 或 b=1 在 Dev-C++ 裡面是編譯不過的，但是那寫法是沒有錯的，就像你設定 a=0 或者是 a=NULL 是一樣意思，不過最好是不要這樣寫，assignment 這樣寫不太好，可以改成 a = (int )1; b = (int )1; 這樣就可以順利編譯通過，再來 printf(&amp;quot;%d\n&amp;quot;,a+b); 這行錯很大，指標相加會爆炸吧，如果程式這樣寫，不把 OS 搞掛，那我還會覺得懷疑呢，正確寫法是指標加上 offset(位移)，這樣才是可以正確執行的，所以我們把程式改成下面：
+int main(void) { int *a,*b; a = (int *)1; b = (int *)1; printf("%d\n",a+(int)b); return 0; } 最後的執行結果是 5，(int) b 就相當於 sizeof(b) 也等於 sizeof(int ) 答案都是四，所以就是 1+4 =5，指標是不能相加的，只能透過 offset 方式來讓指標指向不同 base，但是如果是指標相減，那就是求 offset 的意思喔，看一下底下例子</description></item><item><title>[C/C++] 實做 C 語言 substr 功能，模擬計算機功能</title><link>https://demo.gh.wu-boy.com/2008/03/cc-%E5%AF%A6%E5%81%9A-c-%E8%AA%9E%E8%A8%80-substr-%E5%8A%9F%E8%83%BD%EF%BC%8C%E6%A8%A1%E6%93%AC%E8%A8%88%E7%AE%97%E6%A9%9F%E5%8A%9F%E8%83%BD/</link><pubDate>Mon, 17 Mar 2008 14:05:12 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/03/cc-%E5%AF%A6%E5%81%9A-c-%E8%AA%9E%E8%A8%80-substr-%E5%8A%9F%E8%83%BD%EF%BC%8C%E6%A8%A1%E6%93%AC%E8%A8%88%E7%AE%97%E6%A9%9F%E5%8A%9F%E8%83%BD/</guid><description>&lt;p>前天在幫學弟寫程式，寫一個計算機程式，題目如下：&lt;/p>
+&lt;blockquote>
+&lt;p>寫一程式模擬簡單的計算機 每個資料列含下列的運算子中的一個及其右運算元 假設左運算元存在累加器中(初值為0) 需要函式scan_data 有2個輸出參數回傳 從資料列讀入的運算子元和右運算元 亦需函式do_next_op 執行運算子的功能 此函式有2個輸入參數(運算子和運算元) 及一個輸入/輸出參數(累加器) 有效運算子有 + 加 – 減 * 乘 / 除 ^ 次方 q 結束 此計算器在每次運算後要顯示累加器之值 一個執行範例如下 +5.0 result so far is 5.0 ^2 result so far is 25.0 /2.0 result so far is 12.5 q0 final ressult is 12.5
+上面是我學弟的題目，不過他有傳一份他朋友的作業給我看，我本身不太喜歡用 scanf，我比較喜歡用 fgets，但是後來遇到要切割文字的問題，也就是 C 語言沒有 substr 取字串的函式，所以利用底下來實做：&lt;/p>
+&lt;/blockquote></description></item><item><title>[C/C++] 判斷字串是否為數字</title><link>https://demo.gh.wu-boy.com/2008/03/cc-%E5%88%A4%E6%96%B7%E5%AD%97%E4%B8%B2%E6%98%AF%E5%90%A6%E7%82%BA%E6%95%B8%E5%AD%97/</link><pubDate>Sat, 01 Mar 2008 08:39:09 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/03/cc-%E5%88%A4%E6%96%B7%E5%AD%97%E4%B8%B2%E6%98%AF%E5%90%A6%E7%82%BA%E6%95%B8%E5%AD%97/</guid><description>&lt;p>常常在寫 C 語言，有時候想判斷輸入的是否為數字，如果不是的話，要重新輸入，所以寫一下怎麼判斷的，ptt提供了下面很多函式&lt;/p>
+&lt;blockquote>
+&lt;p>isalnum ctype.h 測試某一整數值是否為’A’-‘Z’,’a’-‘z’,’0′-‘9’等文數字之一。 isalpha ctype.h 測試某一整數值是否為’A’-‘Z’,’a’-‘z’,等字母之一。 isascii ctype.h 如果ch的值判於0-127，則傳回非零整數(0x00-0x7F)。 iscntrl ctype.h 如果ch是一刪除字元或一般控制字元，則傳回非零整數(0x7F或0x00-0x1F)。 isdigit ctype.h 如果ch是一數字，則傳回非零整數。 isgraph ctype.h 如果ch是為可列印字元，則傳回非零整數。 islower ctype.h ch若為小寫字母，則傳回非零整數。 isprint ctype.h ch若為可列印字元，則傳回非零整數。其功能與isgraph相似。 ispunct ctype.h ch若為標點符號，則傳回非零整數。 isspace ctype.h ch若為空白字元或定位字元(Tab)，歸位字元(Enter鍵)，新列字元，垂直定位字元，換頁字元，則傳回非零整數。 isupper ctype.h ch若為大寫字母，則傳回非零整數。 isxdigit ctype.h ch若為一個十六進位數字，則傳回非零整數
+用程式去判斷會更快，因為上面的函式，都是要單一字元去檢查，非常不方便，所以就寫了底下的程式&lt;/p>
+&lt;/blockquote></description></item><item><title>[C/C++] 判斷年份是否閏年</title><link>https://demo.gh.wu-boy.com/2008/02/cc-%E5%88%A4%E6%96%B7%E5%B9%B4%E4%BB%BD%E6%98%AF%E5%90%A6%E9%96%8F%E5%B9%B4/</link><pubDate>Sat, 01 Mar 2008 05:57:04 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/02/cc-%E5%88%A4%E6%96%B7%E5%B9%B4%E4%BB%BD%E6%98%AF%E5%90%A6%E9%96%8F%E5%B9%B4/</guid><description>無聊幫同學寫作業，其實這還蠻簡單的，判斷閏年的方法如下
+1、可以被4整除但不可以被100整除。 2、可以被400整除。
+程式碼如下
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;string.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; int leap(int year); int leap(int year) { if((year%4)==0 &amp;&amp; (year%100)!=0 || (year%400) ==0) { printf ("%d是閏年\n",year); } else { printf ("%d不是閏年\n",year); } } int main(int argc,char *argv[]) { char *p; char year[20]; printf("請輸入您要查詢的年份『輸入exit離開』: "); while(fgets(year, sizeof(year), stdin)) { if ((p = strchr(year, &amp;#039;\n&amp;#039;)) != NULL) *p = &amp;#039;\0&amp;#039;; if(!strcmp("exit", year)) { break; } leap(atoi(year)); printf("請輸入您要查詢的年份『輸入exit離開』: "); } return 0; }</description></item><item><title>[C/C++] 如何計算陣列大小/個數</title><link>https://demo.gh.wu-boy.com/2008/02/cc-%E5%A6%82%E4%BD%95%E8%A8%88%E7%AE%97%E9%99%A3%E5%88%97%E5%A4%A7%E5%B0%8F%E5%80%8B%E6%95%B8/</link><pubDate>Mon, 04 Feb 2008 06:50:37 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/02/cc-%E5%A6%82%E4%BD%95%E8%A8%88%E7%AE%97%E9%99%A3%E5%88%97%E5%A4%A7%E5%B0%8F%E5%80%8B%E6%95%B8/</guid><description>最近在寫 BCB 的時候遇到的，不過忘記之前怎麼寫的，所以又上去找了一下，發現可以利用 sizeof 這個函式，來計算陣列的個數，我去查了一下 BCB 的 manual，裡面寫的還蠻詳細的，如下
+Example for sizeof operator
+/ USE THE sizeof OPERATOR TO GET SIZES OF DIFFERENT DATA TYPES. /
+#include &amp;lt;stdio.h&amp;gt; struct st { char *name; int age; double height; }; struct st St_Array[]= { /* AN ARRAY OF structs */ { "Jr.", 4, 34.20 }, /* St_Array[0] */ { "Suzie", 23, 69.75 }, /* St_Array[1] */ }; int main() { long double LD_Array[] = { 1.</description></item></channel></rss>

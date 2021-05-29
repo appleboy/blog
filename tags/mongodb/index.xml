@@ -1,41 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>mongodb on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/mongodb/</link><description>Recent content in mongodb on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Sun, 16 May 2021 00:57:45 +0000</lastBuildDate><atom:link href="https://demo.gh.wu-boy.com/tags/mongodb/index.xml" rel="self" type="application/rss+xml"/><item><title>MongoDB 效能調校紀錄</title><link>https://demo.gh.wu-boy.com/2021/05/mongodb-performance-tunning/</link><pubDate>Sun, 16 May 2021 00:57:45 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2021/05/mongodb-performance-tunning/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" title="mongodb">&lt;img src="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" alt="mongodb" title="mongodb">&lt;/a>&lt;/p>
 &lt;p>最近剛好在實作 &lt;a href="https://prometheus.io/">Prometheus&lt;/a> + &lt;a href="https://grafana.com/">Grafana&lt;/a> 的時候，對 MongoDB 做了容器 CPU 使用率 (&lt;code>container_cpu_usage_seconds_total&lt;/code>) 的監控，Metrics 寫法如下:&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">sum(
-rate(container_cpu_usage_seconds_total{name!~&lt;span style="color:#cd5555">&amp;#34;(^&lt;/span>$&lt;span style="color:#cd5555">|^0_.*)&amp;#34;&lt;/span>}[1m]))
-by (name)
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？&lt;/p>
+&lt;pre>&lt;code class="language-bash">sum(
+rate(container_cpu_usage_seconds_total{name!~"(^$|^0_.*)"}[1m]))
+by (name)&lt;/code>&lt;/pre>
+&lt;p>從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？&lt;/p>
 &lt;p>&lt;img src="https://lh3.googleusercontent.com/FbcbJ75SVSEmNb94X6z9JsjkhKmuzjEGUesnTVxwcP2SGYWJpblQaD5ks02brR9kP9HYqP7KpbQAaoa7RUuBWi8EnXdN2eTCzekyGVmKAY4ltnmEnNrWerAzZkHIp9gGKieO71WUhJk=w1920-h1080" alt="">&lt;/p>
 &lt;p>接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 &lt;a href="https://grafana.com/oss/loki/">Loki&lt;/a>，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5">5&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6">6&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7">7&lt;/a>
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">logging&lt;/span>:&lt;span style="color:#bbb">
-&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">driver&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>loki&lt;span style="color:#bbb">
-&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">options&lt;/span>:&lt;span style="color:#bbb">
-&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">loki-url&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#cd5555">&amp;#34;http://xxxxxxx/loki/api/v1/push&amp;#34;&lt;/span>&lt;span style="color:#bbb">
-&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">loki-retries&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#cd5555">&amp;#34;5&amp;#34;&lt;/span>&lt;span style="color:#bbb">
-&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">loki-batch-size&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#cd5555">&amp;#34;400&amp;#34;&lt;/span>&lt;span style="color:#bbb">
-&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">loki-external-labels&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#cd5555">&amp;#34;environment=production,project=mongo&amp;#34;&lt;/span>&lt;span style="color:#bbb">
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>&lt;p>&lt;img src="https://lh3.googleusercontent.com/TooE3Q49jzI_FpbjXm4b3A_9aho8J4Qws64XmhVzDVbe6NPMCmgYmuw5bMRwnMgmk_lXxNHDU1n6RXwFGvoZvPxLuM6clRJ_ZGRC9S47rvFbm3k9v6v8qaHhC6vqsFkXENQYlRAqKn0=w1920-h1080" alt="">&lt;/p>
+&lt;pre>&lt;code class="language-yaml="> logging:
+driver: loki
+options:
+loki-url: "http://xxxxxxx/loki/api/v1/push"
+loki-retries: "5"
+loki-batch-size: "400"
+loki-external-labels: "environment=production,project=mongo"&lt;/code>&lt;/pre>
+&lt;p>&lt;img src="https://lh3.googleusercontent.com/TooE3Q49jzI_FpbjXm4b3A_9aho8J4Qws64XmhVzDVbe6NPMCmgYmuw5bMRwnMgmk_lXxNHDU1n6RXwFGvoZvPxLuM6clRJ_ZGRC9S47rvFbm3k9v6v8qaHhC6vqsFkXENQYlRAqKn0=w1920-h1080" alt="">&lt;/p>
 &lt;p>先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了&lt;/p>
 &lt;p>&lt;img src="https://lh3.googleusercontent.com/WgyOX8OOff6KGKlOvSvoNxzDsPGyiXBwPa_PX3O7L9AYSBfQ9VoNAP5s_HkbmMa7rokTnF--ZLnJ4p6oLqoTCV2Gyq7B696SEbTIrGIi1kDVtijVpZlYTklq3qbLFtpKGAQHeXxHE-Q=w1920-h1080" alt="">&lt;/p>
-&lt;p>&lt;img src="https://lh3.googleusercontent.com/nzKkL7J5x_LmoqTFYav5kKA8Jkp4E4s8OCOekd-fz2HAeU2ySC3DopumqMIevqelMN_bvw7Ug7BB2f6ZJeubCQzz4w1Uby709NqsqTEkQcJK7IwVkcHt_ZkArRjSlKfZvyWBE6ZBLnY=w1920-h1080" alt="">&lt;/p></description></item></channel></rss>
+&lt;p>&lt;img src="https://lh3.googleusercontent.com/nzKkL7J5x_LmoqTFYav5kKA8Jkp4E4s8OCOekd-fz2HAeU2ySC3DopumqMIevqelMN_bvw7Ug7BB2f6ZJeubCQzz4w1Uby709NqsqTEkQcJK7IwVkcHt_ZkArRjSlKfZvyWBE6ZBLnY=w1920-h1080" alt="">&lt;/p></description></item><item><title>用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency</title><link>https://demo.gh.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go/</link><pubDate>Sat, 10 Mar 2018 08:26:38 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/25850362427/in/dateposted-public/" title="Screen Shot 2018-03-10 at 3.22.59 PM">&lt;img src="https://i2.wp.com/farm5.staticflickr.com/4781/25850362427_fb8199a5ee_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2018-03-10 at 3.22.59 PM" data-recalc-dims="1" />&lt;/a>&lt;/p>
+&lt;p>本篇教學會著重在如何使用 Go 語言的 &lt;a href="https://gobyexample.com/goroutines">goroutine&lt;/a> 及 &lt;a href="https://gobyexample.com/channels">channel&lt;/a>。&lt;a href="https://www.mongodb.com/">MongoDB&lt;/a> 是一套具有高效能讀寫的 NoSQL 資料庫，但是不像傳統關連式資料庫，有非常好用的 Transaction 交易模式，而在 MongoDB 也可以透過 &lt;a href="https://docs.mongodb.com/manual/tutorial/perform-two-phase-commits/">Two Phase Commits&lt;/a> 來達成交易功能，大家可以先打開文件看看，非常冗長，工程師需要花很多時間閱讀文件並且實現出來。而在 &lt;a href="https://golang.org">Go 語言&lt;/a>內，我們可以在 Single Thread 內同一時間點讀寫存取同一筆資料庫來解決此問題。此篇作法只適合運作在單一 application，如果是執行多個 application 則需要透過其他方式來解決，像是 &lt;a href="https://en.wikipedia.org/wiki/Optimistic_concurrency_control">Optimistic concurrency control&lt;/a>。&lt;/p></description></item></channel></rss>

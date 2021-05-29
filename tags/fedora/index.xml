@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Fedora on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/fedora/</link><description>Recent content in Fedora on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Mon, 28 May 2012 11:34:32 +0000</lastBuildDate><atom:link href="https://demo.gh.wu-boy.com/tags/fedora/index.xml" rel="self" type="application/rss+xml"/><item><title>在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI</title><link>https://demo.gh.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux/</link><pubDate>Mon, 28 May 2012 11:34:32 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+&lt;a href="https://www.flickr.com/photos/appleboy/7285947094/" title="799px-Amazon.com-Logo.svg by appleboy46, on Flickr">&lt;img src="https://i0.wp.com/farm8.staticflickr.com/7221/7285947094_9e34eeb903.jpg?resize=500%2C101&amp;#038;ssl=1" alt="799px-Amazon.com-Logo.svg" data-recalc-dims="1" />&lt;/a>
+&lt;/div> 上一篇介紹
+&lt;p>&lt;a href="http://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/" target="_blank">如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI&lt;/a>，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 &lt;a href="http://aws.amazon.com/amazon-linux-ami/" target="_blank">Amazon Linux AMI&lt;/a>，如果有在玩 &lt;a href="http://aws.amazon.com/ec2/" target="_blank">AWS EC2&lt;/a> 或是 &lt;a href="http://fedoraproject.org/" target="_blank">Fedora Linux&lt;/a> 的話，對這 OS 就不會很陌生了。&lt;/p></description></item><item><title>在 CentOS 上面安裝 Ruby 環境</title><link>https://demo.gh.wu-boy.com/2011/10/install-ruby-rubygems-compass-on-centos/</link><pubDate>Thu, 13 Oct 2011 08:20:11 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/10/install-ruby-rubygems-compass-on-centos/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+&lt;a href="https://www.flickr.com/photos/appleboy/6239698353/" title="centos by appleboy46, on Flickr">&lt;img src="https://i0.wp.com/farm7.static.flickr.com/6176/6239698353_3e6c99f692_o.png?resize=293%2C79&amp;#038;ssl=1" alt="centos" data-recalc-dims="1" />&lt;/a>
+&lt;/div> 目前開發網站都傾向於用
+&lt;p>&lt;a href="http://compass-style.org" target="_blank">Compass&lt;/a> 這套 CSS Framework 來 develop，開發之前必須把環境先弄好，就是要有 &lt;a href="http://www.ruby-lang.org/" target="_blank">Ruby&lt;/a> 套件才可以安裝 Compass，網路上的教學幾乎都在是 Ubuntu 底下用 apt-get 方式來安裝，其實相當方便，但是 &lt;a href="http://fedoraproject.org/" target="_blank">Fedora&lt;/a> 或 &lt;a href="http://www.centos.org/" target="_blank">CentOS&lt;/a> 就是要用 yum 方式來安裝，這次碰到 CentOS 竟然 yum search git 出來的結果是空的，所以決定全部都透過 tar 的方式來安裝全部套件了。由於 Fedora 幾乎都可以找到套件，但是碰到 &lt;a href="http://rubygems.org/" target="_blank">rubygems&lt;/a> 需要用到 ruby 1.8.7 以上版本，所以還是乖乖的用 tar 方式吧。 大家可以試試看透過底下 yum 方式安裝:&lt;/p>
+&lt;pre class="brush: bash; title: ; notranslate" title="">yum install -y ruby ruby-devel rubygems&lt;/pre> 雖然 Fedora 透過上面可以安裝成功，可是 ruby 跟 rubygems 的版本根本是...太舊了吧 ...</description></item><item><title>AWS 機器上 duplicated RPM 問題</title><link>https://demo.gh.wu-boy.com/2011/10/how-to-remove-duplicated-rpm-package/</link><pubDate>Fri, 07 Oct 2011 05:28:45 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/10/how-to-remove-duplicated-rpm-package/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+&lt;a href="https://www.flickr.com/photos/appleboy/6219253012/" title="AWS-logo by appleboy46, on Flickr">&lt;img src="https://i2.wp.com/farm7.static.flickr.com/6174/6219253012_f5f9a7ed0c.jpg?resize=270%2C110&amp;#038;ssl=1" alt="AWS-logo" data-recalc-dims="1" />&lt;/a>
+&lt;/div> 昨天幫忙升級全部
+&lt;p>&lt;a href="http://aws.amazon.com/" target="_blank">AWS&lt;/a> RPM 套件，升級過程本來很順利，不過不知道哪一個 RPM 造成 SSH 全面斷線，接著我直接到 &lt;a href="http://aws.amazon.com/console/" target="_blank">AWS Management Console&lt;/a> 把機器 restart，登入系統之後下 yum update，直接給我噴出底下錯誤訊息&lt;/p>
+&lt;pre class="brush: plain; title: ; notranslate" title="">---> Package zlib.i686 0:1.2.3-24.7.amzn1 will be updated
+---> Package zlib.i686 0:1.2.3-25.8.amzn1 will be an update
+--> Finished Dependency Resolution
+You could try using --skip-broken to work around the problem
+** Found 155 pre-existing rpmdb problem(s), 'yum check' output follows:
+audit-libs-2.1-5.15.amzn1.x86_64 is a duplicate with audit-libs-2.0.4-1.14.amzn1.x86_64
+authconfig-6.1.12-5.14.amzn1.x86_64 is a duplicate with authconfig-6.1.4-6.13.amzn1.x86_64
+basesystem-10.0-4.9.amzn1.noarch is a duplicate with basesystem-10.0-4.8.amzn1.noarch
+bash-4.1.2-8.14.amzn1.x86_64 is a duplicate with bash-4.1.2-3.13.amzn1.x86_64
+binutils-2.20.51.0.2-5.20.17.amzn1.x86_64 is a duplicate with binutils-2.20.51.0.2-5.12.15.amzn1.x86_64
+cloud-init-0.5.15-16.amzn1.noarch is a duplicate with cloud-init-0.5.15-8.amzn1.noarch
+coreutils-8.4-13.13.amzn1.x86_64 is a duplicate with coreutils-8.4-9.12.amzn1.x86_64
+coreutils-libs-8.4-13.13.amzn1.x86_64 is a duplicate with coreutils-libs-8.4-9.12.amzn1.x86_64
+cpp-4.4.5-6.35.amzn1.x86_64 is a duplicate with cpp-4.4.4-13.33.amzn1.x86_64
+&lt;/pre></description></item><item><title>How to change run levels and init.d scripts in Ubuntu &amp; Debian</title><link>https://demo.gh.wu-boy.com/2010/01/how-to-change-run-levels-and-init-d-scripts-in-ubuntu-debian/</link><pubDate>Thu, 28 Jan 2010 02:15:27 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/01/how-to-change-run-levels-and-init-d-scripts-in-ubuntu-debian/</guid><description>Ubuntu 6.10 (Edgy Eft) 之後使用 Upstart 代替原來的 sysinit，而 init 是用來管理 Upstart 的 Daemon，本來系統預設的 runlevel 可以在 /boot/menu.list 或者是 /etc/inittab，可是現在這檔案已經移除了，取而代之的就是 Upstart 管理，可以利用 telinit 來改變系統 runlevel，然而現在 runlevel 的定義跟以前不太一樣了，原先 Ubuntu 跟 Fedora 系列 runlevel 代表意義如下：
+0:系統關機 (to halt the system) 1:單一使用者模式 (single-user mode) 2:尚未使用（可由使用者定義） 3:多使用者模式 (文字介面登入) 4:尚未使用 (可由使用者定義) 5:多使用者模式 (含有一個X介面的登入畫面) 6:重新開機 (reboot the system) 轉換成 Upstart 的話，就會變成底下
+0:系統關機 (to halt the system) 1:單一使用者模式 (single-user mode) 2:多使用者模式 (含有一個X介面的登入畫面) 3:多使用者模式 (含有一個X介面的登入畫面) 4:多使用者模式 (含有一個X介面的登入畫面) 5:多使用者模式 (含有一個X介面的登入畫面) 6:重新開機(reboot the system) 上面資訊可以在 man telinit 裡面找到，寫得很詳細，現在 Ubuntu 9.</description></item><item><title>[Ubuntu＆Fedora] 開機 網路卡 MAC 變動亂跳 [解決方法]</title><link>https://demo.gh.wu-boy.com/2008/04/ubuntu%EF%BC%86fedora-%E9%96%8B%E6%A9%9F-%E7%B6%B2%E8%B7%AF%E5%8D%A1-mac-%E8%AE%8A%E5%8B%95%E4%BA%82%E8%B7%B3-%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/</link><pubDate>Wed, 09 Apr 2008 06:35:59 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2008/04/ubuntu%EF%BC%86fedora-%E9%96%8B%E6%A9%9F-%E7%B6%B2%E8%B7%AF%E5%8D%A1-mac-%E8%AE%8A%E5%8B%95%E4%BA%82%E8%B7%B3-%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/</guid><description>&lt;p>最近在幫 lab 同學處理他安裝好的 &lt;a href="http://www.ubuntu.org.tw/">ubuntu&lt;/a> linux，結果發現一個問題，就是只要重新開機，網路卡的 mac 就會改變，還真是奇怪，後來在 google 找到一篇文章：&lt;a href="http://www.karayou.com/redirect.php?tid=206006&amp;amp;goto=lastpost">Ubuntu的MAC一直亂跳嗎?&lt;/a> 或者是ubuntu官方論壇：&lt;a href="http://ubuntuforums.org/showthread.php?p=4156690#post4156690">解決方法&lt;/a>，才終於解決這個問題。 在主機板 GA-M56S-S3 這個系列板子都會有這種問題，至少我測試過兩張主機板都會這樣，所以看了那些解決方法，可以解決 ubuntu 的問題，但是不能解決 fedora core 的問題，我解決 fedora 的方法，其實很簡單，只要你會利用文字介面設定網路，就可以了 fedora 解法：前提是你不會讓機器開機亂跳動 ethx，所以你要按照上面的解法，解決前半部份 先在 root 底下新增一個檔案 ifcfg-eth0，然後寫入&lt;/p>
+&lt;pre class="brush: bash; title: ; notranslate" title=""># Broadcom Corporation NetXtreme BCM5721 Gigabit Ethernet PCI Express
+DEVICE=eth0
+BOOTPROTO=none
+BROADCAST=140.123.107.255
+HWADDR=00:15:F2:A7:37:42
+IPADDR=140.123.107.*
+IPV6_AUTOCONF=yes
+NETMASK=255.255.255.0
+NETWORK=140.123.107.0
+ONBOOT=yes
+GATEWAY=140.123.107.249
+TYPE=Ethernet
+&lt;/pre></description></item></channel></rss>

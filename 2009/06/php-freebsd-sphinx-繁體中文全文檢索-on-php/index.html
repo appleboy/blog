@@ -1,0 +1,127 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[PHP] FreeBSD Sphinx 繁體中文全文檢索 on PHP - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content=" 最近想說幫之前替代役單位來把全文檢索的中文部份搞定，所以找了一些全文檢索的 open source，挑了這套網路上評價還不錯的 Sphinx，目前 Sphinx 支援的作業系統如下：
+
+Linux 2.4.x, 2.6.x (various distributions)
+Windows 2000, XP
+FreeBSD 4.x, 5.x, 6.x
+NetBSD 1.6, 3.0
+Solaris 9, 11
+Mac OS X 雖然上面寫 FreeBSD 只支援到 6.X，但是我測試是在 FreeBSD 7.1-RELEASE-p6 的環境，所以相當 ok 的，底下是我安裝在 FreeBSD 的心得筆記，PHP 官網上面有支援
+
+Search Engine Extensions 的介紹，包含了 mnoGoSearch、Sphinx — Sphinx Client、Swish — Swish Indexing，可以利用 pecl 來安裝 Sphinx，目前版本：0.9.9-rc1。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2009\/06\/php-freebsd-sphinx-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E5%85%A8%E6%96%87%E6%AA%A2%E7%B4%A2-on-php\/","name":"[ php] free bsd sphinx 繁體中文全文檢索 on php"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[PHP] FreeBSD Sphinx 繁體中文全文檢索 on PHP","description":" 最近想說幫之前替代役單位來把全文檢索的中文部份搞定，所以找了一些全文檢索的 open source，挑了這套網路上評價還不錯的 Sphinx，目前 Sphinx 支援的作業系統如下：\n Linux 2.4.x, 2.6.x (various distributions) Windows 2000, XP FreeBSD 4.x, 5.x, 6.x NetBSD 1.6, 3.0 Solaris 9, 11 Mac OS X 雖然上面寫 FreeBSD 只支援到 6.X，但是我測試是在 FreeBSD 7.1-RELEASE-p6 的環境，所以相當 ok 的，底下是我安裝在 FreeBSD 的心得筆記，PHP 官網上面有支援  Search Engine Extensions 的介紹，包含了 mnoGoSearch、Sphinx — Sphinx Client、Swish — Swish Indexing，可以利用 pecl 來安裝 Sphinx，目前版本：0.9.9-rc1。\n","inLanguage":"en","wordCount":363,"datePublished":"2009-06-20T05:10:32","dateModified":"2009-06-20T05:10:32","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["FreeBSD, php, sphinx"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2009\/06\/php-freebsd-sphinx-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E5%85%A8%E6%96%87%E6%AA%A2%E7%B4%A2-on-php\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[PHP] FreeBSD Sphinx 繁體中文全文檢索 on PHP"><meta property="og:description" content=" 最近想說幫之前替代役單位來把全文檢索的中文部份搞定，所以找了一些全文檢索的 open source，挑了這套網路上評價還不錯的 Sphinx，目前 Sphinx 支援的作業系統如下：
+
+Linux 2.4.x, 2.6.x (various distributions)
+Windows 2000, XP
+FreeBSD 4.x, 5.x, 6.x
+NetBSD 1.6, 3.0
+Solaris 9, 11
+Mac OS X 雖然上面寫 FreeBSD 只支援到 6.X，但是我測試是在 FreeBSD 7.1-RELEASE-p6 的環境，所以相當 ok 的，底下是我安裝在 FreeBSD 的心得筆記，PHP 官網上面有支援
+
+Search Engine Extensions 的介紹，包含了 mnoGoSearch、Sphinx — Sphinx Client、Swish — Swish Indexing，可以利用 pecl 來安裝 Sphinx，目前版本：0.9.9-rc1。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2009/06/php-freebsd-sphinx-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E5%85%A8%E6%96%87%E6%AA%A2%E7%B4%A2-on-php/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="[PHP] FreeBSD Sphinx 繁體中文全文檢索 on PHP"><meta name=twitter:description content=" 最近想說幫之前替代役單位來把全文檢索的中文部份搞定，所以找了一些全文檢索的 open source，挑了這套網路上評價還不錯的 Sphinx，目前 Sphinx 支援的作業系統如下：
+
+Linux 2.4.x, 2.6.x (various distributions)
+Windows 2000, XP
+FreeBSD 4.x, 5.x, 6.x
+NetBSD 1.6, 3.0
+Solaris …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
+<a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-devops/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a title=文章標籤 href=/tags/><i class="fas fa-tags fa-lg"></i> 文章標籤</a></li><li><a title=文章分類 href=/categories/><i class="fas fa-sitemap fa-lg"></i> 文章分類</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY" href=https://demo.gh.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[PHP] FreeBSD Sphinx 繁體中文全文檢索 on PHP</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 20, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;363&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p><a href=http://sphinxsearch.com/><img class="alignleft size-full wp-image-1467" title=sphinx src="https://i0.wp.com/blog.wu-boy.com/wp-content/uploads/2009/06/sphinx.jpg?resize=200%2C51" alt=sphinx data-recalc-dims=1></a> 最近想說幫之前替代役單位來把全文檢索的中文部份搞定，所以找了一些全文檢索的 open source，挑了這套網路上評價還不錯的 <a href=http://sphinxsearch.com/>Sphinx</a>，目前 Sphinx 支援的作業系統如下：</p><ul><li>Linux 2.4.x, 2.6.x (various distributions)</li><li>Windows 2000, XP</li><li>FreeBSD 4.x, 5.x, 6.x</li><li>NetBSD 1.6, 3.0</li><li>Solaris 9, 11</li><li>Mac OS X 雖然上面寫 FreeBSD 只支援到 6.X，但是我測試是在 FreeBSD 7.1-RELEASE-p6 的環境，所以相當 ok 的，底下是我安裝在 FreeBSD 的心得筆記，PHP 官網上面有支援</li></ul><p><a href=http://tw.php.net/manual/en/refs.search.php>Search Engine Extensions</a> 的介紹，包含了 <a href=http://tw.php.net/manual/en/book.mnogosearch.php>mnoGoSearch</a>、<a href=http://tw.php.net/manual/en/book.sphinx.php>Sphinx</a> — Sphinx Client、<a href=http://tw.php.net/manual/en/book.swish.php>Swish</a> — Swish Indexing，可以利用 pecl 來安裝 Sphinx，目前版本：0.9.9-rc1。</p><ol><li>FreeBSD ports 安裝：</li></ol><pre class="brush: bash; title: ; notranslate" title>cd /usr/ports/textproc/sphinxsearch-devel; make install clean
+#
+# 把 MySQL 勾選起來</pre>2. 讓 php 支援 Sphinx 套件<pre class="brush: bash; title: ; notranslate" title>#
+# 先下載官方網站 Sphinx sphinx-0.9.8.1.tar.gz
+wget http://www.sphinxsearch.com/downloads/sphinx-0.9.8.1.tar.gz
+#
+# 解壓縮之後進入 sphinx/api/libsphinxclient/
+./buildconf.sh && ./configure && make install</pre>做上面步驟是確保 pecl 安裝 sphinxclient 所需要的 library sphinxclient.c 或者是 sphinxclient.h，必須放在 /usr/local/include 裡面，最後就可以用 pecl 指令安裝：<pre class="brush: bash; title: ; notranslate" title>pecl install sphinx</pre>3.接下來修改 php.ini 加入：<pre class="brush: bash; title: ; notranslate" title>extension=sphinx.so</pre>不過你也可以不用裝 sphinx client 的部份，因為官網友提供 php 的 sphinx Class 讓您使用，你打開了 sphinx.so 就會衝突重複定義。 4. 修改 /usr/local/etc/sphinx.conf 設定檔，那底下是我目前設定：<pre class="brush: bash; title: ; notranslate" title>source src1
+{
+	type					= mysql
+	sql_host				= localhost
+	sql_user				= root
+	sql_pass				= xxxxxxxxxxxxxxxxx
+	sql_db					= dar
+	sql_port				= 3306	# optional, default is 3306
+	sql_query_pre			= SET NAMES utf8
+	sql_query = \
+	    SELECT  rid, groupNum, itemNum, itemName, volName, collecNum \
+	    FROM th_series
+	
+	sql_ranged_throttle	= 0
+	sql_query_info		= SELECT * FROM  th_series WHERE rid=$id
+}
+source src1throttled : src1
+{
+	sql_ranged_throttle			= 100
+}
+index test1
+{
+	source			= src1
+	path			= /var/db/sphinxsearch/data/test1
+	docinfo			= extern 
+	mlock			= 0
+	morphology		= none
+	min_word_len		= 1
+	charset_type		= utf-8
+	min_infix_len		= 1
+	ngram_len				= 1
+	html_strip				= 0
+}
+index dist1
+{
+	type				= distributed
+	local				= test1
+	local				= test1stemmed
+	agent				= localhost:3313:remote1
+	agent				= localhost:3314:remote2,remote3
+	agent_connect_timeout	= 1000
+	agent_query_timeout		= 3000
+}
+indexer
+{
+	mem_limit			= 256M
+}
+searchd
+{
+	listen				= 0.0.0.0
+	listen				= 3312
+	log					= /var/log/searchd.log
+	query_log			= /var/log/sphinx-query.log
+	read_timeout		= 5
+	client_timeout		= 300
+	max_children		= 300
+	pid_file			= /var/run/sphinxsearch/searchd.pid
+	max_matches			= 10000
+}
+</pre>注意：charset\_type 必須改為 utf-8，然後必須加上 charset\_table 跟 ngram_chars 這樣中文檢索就沒有問題了，可以參考 ihower 這篇：<p><a href=http://ihower.idv.tw/blog/archives/1716>全文搜尋 Sphinx on Rails</a>，官方討論區有人問過：<a href="http://www.sphinxsearch.com/forum/view.html?id=587">full-text searching in Chinese document.</a> 此篇務必看過，對中文搜尋有很大的幫助。 5. 建立索引：</p><pre class="brush: bash; title: ; notranslate" title>#
+# 針對 test1 索引
+/usr/local/bin/indexer test1
+#
+# 全部索引
+/usr/local/bin/indexer --all</pre>6. 查詢：<pre class="brush: bash; title: ; notranslate" title>#
+# -i 針對 test1 索引搜尋，-l 1 顯示一筆資料
+search -i test1 -l 1 "臺灣"</pre><p><a href=https://www.flickr.com/photos/appleboy/3642442931/ title="sphinx_search (by appleboy46)"><img src="https://i0.wp.com/farm4.static.flickr.com/3380/3642442931_aac75b16af.jpg?resize=500%2C294&ssl=1" title="sphinx_search (by appleboy46)" alt="sphinx_search (by appleboy46)" data-recalc-dims=1></a> 7. 架設 sphinx 伺服器：</p><pre class="brush: bash; title: ; notranslate" title>#
+# 建立 4567 port 索引伺服器
+searchd --console --nodetach --port 4567 -i test1</pre>listen 0.0.0.0 跟 port 4567，提供 php 做查詢動作。 詳細更多設定可以參考<p><a href=http://sphinxsearch.com/docs/current.html>Sphinx 0.9.9 reference manual</a> 或者是中文：<a href=http://www.sphinxsearch.org/>sphinx search中文</a></p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://demo.gh.wu-boy.com/tags/sphinx/>sphinx</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f06%2fphp-freebsd-sphinx-%25E7%25B9%2581%25E9%25AB%2594%25E4%25B8%25AD%25E6%2596%2587%25E5%2585%25A8%25E6%2596%2587%25E6%25AA%25A2%25E7%25B4%25A2-on-php%2f&text=%5bPHP%5d%20FreeBSD%20Sphinx%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e5%85%a8%e6%96%87%e6%aa%a2%e7%b4%a2%20on%20PHP&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f06%2fphp-freebsd-sphinx-%25E7%25B9%2581%25E9%25AB%2594%25E4%25B8%25AD%25E6%2596%2587%25E5%2585%25A8%25E6%2596%2587%25E6%25AA%25A2%25E7%25B4%25A2-on-php%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f06%2fphp-freebsd-sphinx-%25E7%25B9%2581%25E9%25AB%2594%25E4%25B8%25AD%25E6%2596%2587%25E5%2585%25A8%25E6%2596%2587%25E6%25AA%25A2%25E7%25B4%25A2-on-php%2f&title=%5bPHP%5d%20FreeBSD%20Sphinx%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e5%85%a8%e6%96%87%e6%aa%a2%e7%b4%a2%20on%20PHP" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f06%2fphp-freebsd-sphinx-%25E7%25B9%2581%25E9%25AB%2594%25E4%25B8%25AD%25E6%2596%2587%25E5%2585%25A8%25E6%2596%2587%25E6%25AA%25A2%25E7%25B4%25A2-on-php%2f&title=%5bPHP%5d%20FreeBSD%20Sphinx%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e5%85%a8%e6%96%87%e6%aa%a2%e7%b4%a2%20on%20PHP" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f06%2fphp-freebsd-sphinx-%25E7%25B9%2581%25E9%25AB%2594%25E4%25B8%25AD%25E6%2596%2587%25E5%2585%25A8%25E6%2596%2587%25E6%25AA%25A2%25E7%25B4%25A2-on-php%2f&title=%5bPHP%5d%20FreeBSD%20Sphinx%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e5%85%a8%e6%96%87%e6%aa%a2%e7%b4%a2%20on%20PHP" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2009%2f06%2fphp-freebsd-sphinx-%25E7%25B9%2581%25E9%25AB%2594%25E4%25B8%25AD%25E6%2596%2587%25E5%2585%25A8%25E6%2596%2587%25E6%25AA%25A2%25E7%25B4%25A2-on-php%2f&description=%5bPHP%5d%20FreeBSD%20Sphinx%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e5%85%a8%e6%96%87%e6%aa%a2%e7%b4%a2%20on%20PHP" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li><li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li><li><a href=/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</a></li><li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li><li><a href=/2015/12/force-https-connection-on-wordpress/>將 wordpress 強制使用 SSL 連線</a></li><li><a href=/2015/12/the-definitive-php-7-final-version-hhvm-benchmark/>PHP 7 vs HHVM Benchmark 比較</a></li><li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li><li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li><li><a href=/2015/10/php-fig-new-website/>PHP-FIG 新網站</a></li><li><a href=/2015/10/laravel-homestead-support-php-7/>Laravel Homestead 支援 PHP 7</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/ data-toggle=tooltip data-placement=top title="[MySQL] 利用 perl 單行印出 my.cnf">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2009/06/php-gallery-30-beta-1-%E4%BD%BF%E7%94%A8-kohana-mvc-framework/ data-toggle=tooltip data-placement=top title="[PHP] Gallery 3.0 Beta 1 使用 Kohana MVC Framework">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2009/06/php-freebsd-sphinx-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E5%85%A8%E6%96%87%E6%AA%A2%E7%B4%A2-on-php>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2009/06/php-freebsd-sphinx-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E5%85%A8%E6%96%87%E6%AA%A2%E7%B4%A2-on-php'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2021
+&nbsp;&bull;&nbsp;
+<a href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.83.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://demo.gh.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

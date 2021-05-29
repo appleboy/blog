@@ -1,0 +1,138 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
+本篇教學會著重在如何使用 Go 語言的 goroutine 及 channel。MongoDB 是一套具有高效能讀寫的 NoSQL 資料庫，但是不像傳統關連式資料庫，有非常好用的 Transaction 交易模式，而在 MongoDB 也可以透過 Two Phase Commits 來達成交易功能，大家可以先打開文件看看，非常冗長，工程師需要花很多時間閱讀文件並且實現出來。而在 Go 語言內，我們可以在 Single Thread 內同一時間點讀寫存取同一筆資料庫來解決此問題。此篇作法只適合運作在單一 application，如果是執行多個 application 則需要透過其他方式來解決，像是 Optimistic concurrency control。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2018\/03\/simple-queue-with-optimistic-concurrency-in-go\/","name":"用 go 語言實現單一或多重 queue 搭配 optimistic concurrency"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency","description":"\n本篇教學會著重在如何使用 Go 語言的 goroutine 及 channel。MongoDB 是一套具有高效能讀寫的 NoSQL 資料庫，但是不像傳統關連式資料庫，有非常好用的 Transaction 交易模式，而在 MongoDB 也可以透過 Two Phase Commits 來達成交易功能，大家可以先打開文件看看，非常冗長，工程師需要花很多時間閱讀文件並且實現出來。而在 Go 語言內，我們可以在 Single Thread 內同一時間點讀寫存取同一筆資料庫來解決此問題。此篇作法只適合運作在單一 application\u0008，如果是執行多個 application 則需要透過其他方式來解決，像是 Optimistic concurrency control。\n","inLanguage":"en","wordCount":514,"datePublished":"2018-03-10T08:26:38","dateModified":"2018-03-10T08:26:38","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, mongodb, transaction"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2018\/03\/simple-queue-with-optimistic-concurrency-in-go\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency"><meta property="og:description" content="
+本篇教學會著重在如何使用 Go 語言的 goroutine 及 channel。MongoDB 是一套具有高效能讀寫的 NoSQL 資料庫，但是不像傳統關連式資料庫，有非常好用的 Transaction 交易模式，而在 MongoDB 也可以透過 Two Phase Commits 來達成交易功能，大家可以先打開文件看看，非常冗長，工程師需要花很多時間閱讀文件並且實現出來。而在 Go 語言內，我們可以在 Single Thread 內同一時間點讀寫存取同一筆資料庫來解決此問題。此篇作法只適合運作在單一 application，如果是執行多個 application 則需要透過其他方式來解決，像是 Optimistic concurrency control。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency"><meta name=twitter:description content="
+本篇教學會著重在如何使用 Go 語言的 goroutine 及 channel。MongoDB 是一套具有高效能讀寫的 NoSQL 資料庫，但是不像傳統關連式資料庫，有非常好用的 Transaction 交易模式，而在 MongoDB 也可以透過 Two Phase Commits 來達成交易功能，大家可以先打開文件看看，非常冗長，工程師需要花很多時間閱讀文件並且實現出來。而在 Go 語言內，我 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
+<a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-devops/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a title=文章標籤 href=/tags/><i class="fas fa-tags fa-lg"></i> 文章標籤</a></li><li><a title=文章分類 href=/categories/><i class="fas fa-sitemap fa-lg"></i> 文章分類</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY" href=https://demo.gh.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 10, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;514&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#問題描述>問題描述</a></li><li><a href=#解決方式>解決方式</a></li><li><a href=#optimistic-concurrency-control>Optimistic concurrency control</a></li><li><a href=#效能測試>效能測試</a></li><li><a href=#結論>結論</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href=https://www.flickr.com/photos/appleboy/25850362427/in/dateposted-public/ title="Screen Shot 2018-03-10 at 3.22.59 PM"><img src="https://i2.wp.com/farm5.staticflickr.com/4781/25850362427_fb8199a5ee_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-03-10 at 3.22.59 PM" data-recalc-dims=1></a></p><p>本篇教學會著重在如何使用 Go 語言的 <a href=https://gobyexample.com/goroutines>goroutine</a> 及 <a href=https://gobyexample.com/channels>channel</a>。<a href=https://www.mongodb.com/>MongoDB</a> 是一套具有高效能讀寫的 NoSQL 資料庫，但是不像傳統關連式資料庫，有非常好用的 Transaction 交易模式，而在 MongoDB 也可以透過 <a href=https://docs.mongodb.com/manual/tutorial/perform-two-phase-commits/>Two Phase Commits</a> 來達成交易功能，大家可以先打開文件看看，非常冗長，工程師需要花很多時間閱讀文件並且實現出來。而在 <a href=https://golang.org>Go 語言</a>內，我們可以在 Single Thread 內同一時間點讀寫存取同一筆資料庫來解決此問題。此篇作法只適合運作在單一 application，如果是執行多個 application 則需要透過其他方式來解決，像是 <a href=https://en.wikipedia.org/wiki/Optimistic_concurrency_control>Optimistic concurrency control</a>。</p><h2 id=問題描述>問題描述</h2><hr><p>底下步驟來產生資料</p><ol><li>建立使用者，並且初始化每人 $1000 USD</li><li>接到新的交易請求</li><li>讀取使用者帳戶剩餘存款</li><li>將該帳號增加 $50 USD</li></ol><p>根據上述的需求，我們可以知道，當有 100 個連線交易時，理論上該使用者的存款會變成 $1000 + $50*100 = $6000 USD。這是理想狀態，假設如果同時間打上來，大家可以知道最後存款肯定不到 $6000。底下程式碼可以複製出此問題</p><pre><code class=language-go>func main() {
+    session, _ := mgo.Dial("localhost:27017")
+    globalDB = session.DB("queue")
+    globalDB.C("bank").DropCollection()
+
+    user := currency{Account: account, Amount: 1000.00, Code: "USD"}
+    err := globalDB.C("bank").Insert(&user)
+
+    if err != nil {
+        panic("insert error")
+    }
+
+    log.Println("Listen server on 8000 port")
+    http.HandleFunc("/", pay)
+    http.ListenAndServe(":8000", nil)
+}</code></pre><p>上述是主程式，新增一個 Handle 為 pay，用來處理交易。</p><pre><code class=language-go>func pay(w http.ResponseWriter, r *http.Request) {
+    entry := currency{}
+    // step 1: get current amount
+    err := globalDB.C("bank").Find(bson.M{"account": account}).One(&entry)
+
+    if err != nil {
+        panic(err)
+    }
+
+    wait := Random(1, 100)
+    time.Sleep(time.Duration(wait) * time.Millisecond)
+
+    //step 3: subtract current balance and update back to database
+    entry.Amount = entry.Amount + 50.000
+    err = globalDB.C("bank").UpdateId(entry.ID, &entry)
+
+    if err != nil {
+        panic("update error")
+    }
+
+    fmt.Printf("%+v\n", entry)
+
+    io.WriteString(w, "ok")
+}</code></pre><h2 id=解決方式>解決方式</h2><p>這邊提供幾個解決方式，第一種就是透過 <code>sync.Mutex</code> 方式，直接將交易區段程式碼 lock 住，這樣可以避免同時寫入或讀出的問題。在 Handler 內直接新增底下程式碼就可以解決，詳細程式碼請參考 <a href=https://github.com/go-training/go-transaction-example/blob/master/safe/safe.go>safe.go</a></p><pre><code class=language-go>mu.Lock()
+defer mu.Unlock()</code></pre><p>第二種方式可以用 Go 語言內的優勢: <a href=https://gobyexample.com/goroutines>goroutine</a> + <a href=https://gobyexample.com/channels>channel</a>，在這邊我們只要建立兩個 Channle，第一個是使用者帳號 (string) 第二個是輸出 Result (struct)。<a href=https://github.com/go-training/go-transaction-example/blob/master/queue/single_queue.go>完整程式碼範例</a></p><pre><code class=language-go>in = make(chan string)
+out = make(chan Result)</code></pre><p>在 main func 內建立第一個 goroutine</p><pre><code class=language-go>go func(in *chan string) {
+  for {
+    select {
+    case account := &lt;-*in:
+      entry := currency{}
+      // step 1: get current amount
+      err := globalDB.C("bank").Find(bson.M{"account": account}).One(&entry)
+
+      if err != nil {
+        panic(err)
+      }
+
+      //step 3: subtract current balance and update back to database
+      entry.Amount = entry.Amount + 50.000
+      err = globalDB.C("bank").UpdateId(entry.ID, &entry)
+
+      if err != nil {
+        panic("update error")
+      }
+
+      out &lt;- Result{
+        Account: account,
+        Result:  entry.Amount,
+      }
+    }
+  }
+
+}(&in)</code></pre><p>上面可以很清楚看到使用到 <code>select</code> 來接受 input channel，並且透過 <code>go</code> 將 for loop 丟到背景執行。所以在每個交易時，將帳號丟到 <code>in</code> channel 內，就可以開始進行交易，同時間並不會有其他交易。在 handler 內，也是透過此方式來讀取使用者最後存款餘額</p><pre><code class=language-go>wg := sync.WaitGroup{}
+wg.Add(1)
+
+go func(wg *sync.WaitGroup) {
+  in &lt;- account
+  for {
+    select {
+    case result := &lt;-out:
+      fmt.Printf("%+v\n", result)
+      wg.Done()
+      return
+    }
+  }
+}(&wg)
+
+wg.Wait()</code></pre><p>不過上面這方法，可想而知，只有一個 Queue 幫忙處理交易資料，那假設有幾百萬個交易要同時進行呢，該如何消化更多的交易，就要將上面程式碼改成 Multiple Queue <a href=https://github.com/go-training/go-transaction-example/blob/master/multiple_queue/multiple_queue.go>完整程式碼範例</a>。假設我們有 100 個帳號，開 10 個 Queue 去處理，每一個 Queue 來處理 10 個帳號，也就是說 ID 為 23 號的分給第 3 (23 % 10) 個 Queue，ID 為 59 號則分給第 9 個 Queue。</p><pre><code class=language-go>for i := range in {
+  go func(in *chan string, i int) {
+    for {
+      select {
+      case account := &lt;-*in:
+        out&lt;em>&lt;/em> &lt;- Result{
+          Account: account,
+          Result:  entry.Amount,
+        }
+      }
+    }
+
+  }(&in&lt;em>&lt;/em>, i)
+}</code></pre><p>其中 channel 要宣告為底下: maxThread 為 10 (可以由開發者任意設定)</p><pre><code class=language-go>in = make([]chan string, maxThread)
+out = make([]chan Result, maxThread)</code></pre><h2 id=optimistic-concurrency-control>Optimistic concurrency control</h2><p>假設需要擴展服務，執行超過一個服務，就會遇到 <a href=https://en.wikipedia.org/wiki/Optimistic_concurrency_control>Optimistic concurrency control</a>，原因在上述方法只能保證在單一服務內不會同時存取同一筆資料，但是如果是多個服務則還是會發生同時存取或寫入單筆資料。這邊可以用簡單的機制來解決應用層的問題，直接在資料表加上 <code>Version</code>，初始值為 <code>1</code>，要執行更新時請透過底下語法來更新:</p><pre><code class=language-go>entry.Amount = entry.Amount + 50.000
+err = globalDB.C("bank").Update(bson.M{
+  "version": entry.Version,
+  "_id":     entry.ID,
+}, bson.M{"$set": map[string]interface{}{
+  "amount":  entry.Amount,
+  "version": (entry.Version + 1),
+}})
+
+if err != nil {
+  goto LOOP
+}</code></pre><p>如果資料不存在時，就無法寫入，這樣可以避免同時寫入問題。</p><h2 id=效能測試>效能測試</h2><p>上述提供了幾種解決方式，但是該選擇哪一種會比較好呢，底下是透過 [vegeta] http 效能檢測工具來實驗看看，底下先整理結果</p><ol><li>使用 sync.Mutex</li><li>使用 single queue</li><li>使用 multiple queue</li><li>使用 optimistic concurrency 解決方案</li><li>使用 single queue + optimistic concurrency 解決方案</li><li>使用 multiple queue + optimistic concurrency 解決方案</li></ol><p>直接給數據看看</p><table><thead><tr><th></th><th>max Latencies</th><th>mean Latencies</th><th>user account</th></tr></thead><tbody><tr><td>sync lock</td><td>26.250468944s</td><td>13.171447347s</td><td>1</td></tr><tr><td>optimistic lock</td><td>5.016707396s</td><td>1.903748023s</td><td>1</td></tr><tr><td>single queue</td><td>66.078117ms</td><td>763.662µs</td><td>1</td></tr><tr><td>multiple queue</td><td>49.270982ms</td><td>789.131µs</td><td>100</td></tr><tr><td>optimistic single queue</td><td>139.045488ms</td><td>1.297197ms</td><td>1</td></tr><tr><td>optimistic multiple queue</td><td>51.268963ms</td><td>924.951µs</td><td>100</td></tr></tbody></table><p>如果只需要執行單一服務，可以選擇 <code>multiple queue</code>，這不是最好的解法，要執行多個服務，請務必使用 <code>optimistic multiple queue</code></p><h2 id=結論>結論</h2><p>詳細的程式碼都有放在 <a href=https://github.com/go-training/go-transaction-example>go-transaction-example</a>，歡迎大家拿去測試看看。最後宣傳一下自己最近開的 <a href="https://www.udemy.com/golang-fight/?couponCode=GOLANG-INTRO">Go 語言課程</a>，限時特價 <strong>$1600</strong> 如果想趁這機會踏入 Go 語言，可以透過此線上課程學到基礎實戰，包含本片的的影音教學。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://demo.gh.wu-boy.com/tags/mongodb/>mongodb</a>&nbsp;
+<a href=https://demo.gh.wu-boy.com/tags/transaction/>transaction</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f03%2fsimple-queue-with-optimistic-concurrency-in-go%2f&text=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%96%ae%e4%b8%80%e6%88%96%e5%a4%9a%e9%87%8d%20Queue%20%e6%90%ad%e9%85%8d%20optimistic%20concurrency&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f03%2fsimple-queue-with-optimistic-concurrency-in-go%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f03%2fsimple-queue-with-optimistic-concurrency-in-go%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%96%ae%e4%b8%80%e6%88%96%e5%a4%9a%e9%87%8d%20Queue%20%e6%90%ad%e9%85%8d%20optimistic%20concurrency" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f03%2fsimple-queue-with-optimistic-concurrency-in-go%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%96%ae%e4%b8%80%e6%88%96%e5%a4%9a%e9%87%8d%20Queue%20%e6%90%ad%e9%85%8d%20optimistic%20concurrency" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f03%2fsimple-queue-with-optimistic-concurrency-in-go%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%96%ae%e4%b8%80%e6%88%96%e5%a4%9a%e9%87%8d%20Queue%20%e6%90%ad%e9%85%8d%20optimistic%20concurrency" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f03%2fsimple-queue-with-optimistic-concurrency-in-go%2f&description=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%96%ae%e4%b8%80%e6%88%96%e5%a4%9a%e9%87%8d%20Queue%20%e6%90%ad%e9%85%8d%20optimistic%20concurrency" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/mongodb-performance-tunning/>MongoDB 效能調校紀錄</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2018/02/simply-output-go-html-template-execution-to-strings/ data-toggle=tooltip data-placement=top title="將 Go Html Template 存入 String 變數">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2018/03/nginx-reverse-proxy-image-resizing/ data-toggle=tooltip data-placement=top title="用 Nginx 來架設線上即時縮圖機">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2021
+&nbsp;&bull;&nbsp;
+<a href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.83.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://demo.gh.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

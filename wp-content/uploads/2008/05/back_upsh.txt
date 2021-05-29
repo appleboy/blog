@@ -1,0 +1,181 @@
+#!/usr/local/bin/bash
+###############################################
+#
+# 日期：2008.05.22
+# 作者：appleboy ( appleboy.tw AT gmail.com)
+# 網站：http://blog.wu-boy.com
+#
+###############################################
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin
+
+################### 基本設定 - 開始 #######################
+#
+# 設定刪除幾天前資料
+#
+RETENTION_PERIOD="14"
+backup_home=`pwd`
+#
+# 設定檔案名稱
+#
+backup_system_file="www_database.txt"
+backup_mysql_file="mysql_database.txt"
+backup_pgsql_file="pgsql_database.txt"
+#
+# 是否啟動備份系統檔案：1：備份 0：略過
+#
+data_enable_backup="0"
+#
+# 設定mysql相關參數
+#
+mysql_db_user="backup"
+mysql_db_passwd="wwwadmin"
+#
+# 是否啟動備份 mysql：1：備份 0：略過
+#
+mysql_enable_backup="0"
+#
+# 設定pgsql相關參數
+#
+pgsql_db_user="appleboy"
+pgsql_db_passwd="1234"
+#
+# 是否啟動備份 pgsql：1：備份 0：略過
+#
+pgsql_enable_backup="0"
+#
+# 備份到遠端系統 rsync
+#
+rsync_enable="0"
+password_file="/usr/local/etc/rsyncd/wuboy.secret"
+rsync_backup_dir="${backup_home}/*"
+rsync_remote_dir="appleboy@vip.adwii.com::wuboy"
+#
+# 更新 FreeBSD port tree
+#
+port_tree_enable="0"
+
+#
+# 備份路徑
+#
+back_www_dir="${backup_home}/www_data"
+back_mysql_db_dir="${backup_home}/mysql_db"
+back_pgsql_db_dir="${backup_home}/pgsql_db"
+log_dir="${backup_home}/log"
+
+################### 基本設定 - 結束 #######################
+
+#
+# 設定需備份資料路徑
+#
+system_data_backup=($(cat ${backup_home}/${backup_system_file}))
+#
+# 設定要備份的資料庫
+#
+mysql_db_data=($(cat ${backup_home}/${backup_mysql_file}))
+pgsql_db_data=($(cat ${backup_home}/${backup_pgsql_file}))
+
+date=`date +%Y-%m-%d`
+
+remove_oldfiles(){
+	echo "Removing directory $1 files older than $RETENTION_PERIOD days" | wall
+	find $1 -type f -mtime +$2 -exec rm '{}' \;
+}
+
+
+#
+# 開始檢查是否建立資料夾
+#
+
+if [ "$back_www_dir" != "" ] || [ ! -d "$back_www_dir" ]; then
+	mkdir -p $back_www_dir
+fi
+
+if [ "$back_mysql_db_dir" != "" ] || [ ! -d "$back_mysql_db_dir" ]; then
+    mkdir -p $back_mysql_db_dir
+fi
+
+if [ "$back_pgsql_db_dir" != "" ] || [ ! -d "$back_pgsql_db_dir" ]; then
+    mkdir -p $back_pgsql_db_dir
+fi
+
+if [ "$log_dir" != "" ] || [ ! -d "$log_dir" ]; then
+    mkdir -p $log_dir
+fi
+
+
+#
+# 備份 MySQL 資料庫
+#
+if [ "$mysql_enable_backup" != "0" ]; then
+	cd $back_mysql_db_dir
+	
+	for(( i=0; i<=${#mysql_db_data[@]}; i++ )) 
+	do
+		if [ $((i%3)) == "0" ]; then
+			if [ "${mysql_db_data[${i}]}" != "" ] && [ "${mysql_db_data[$((i+1))]}" != "" ] && [ "${mysql_db_data[$((i+2))]}" != "" ]; then
+				echo "System backup Mysql Database ${mysql_db_data[$((i+1))]}" | wall
+				mysqldump --default-character-set=${mysql_db_data[$((i+2))]} -h ${mysql_db_data[${i}]} -u$mysql_db_user -p$mysql_db_passwd --opt ${mysql_db_data[$((i+1))]} > ${date}-${mysql_db_data[$((i+1))]}.sql 2>> ${log_dir}/mysql_log.${date}.log 
+			
+			fi
+		fi
+	done
+	remove_oldfiles $back_mysql_db_dir $RETENTION_PERIOD
+fi
+#
+# 備份 PgSQL 資料庫
+#
+if [ "$pgsql_enable_backup" != "0" ]; then
+    cd $back_pgsql_db_dir
+
+    for(( i=0; i<=${#pgsql_db_data[@]}; i++ ))
+    do
+        db=${pgsql_db_data[${i}]}
+        if  [ "$db" != "" ]; then
+            if [ ! -f "${db}.${date}.sql" ]; then
+				        echo "System backup PgSQL Database ${db}" | wall
+                echo "pg_dump $db > ${date}-${db}.sql -U $pgsql_db_user" | wall            
+                pg_dump -U ${pgsql_db_user} ${db} > ${date}-${db}.sql  2>> ${log_dir}/pgsql_log.${date}.log 
+            fi
+        fi
+    done
+    remove_oldfiles $back_pgsql_db_dir $RETENTION_PERIOD
+fi
+exit;
+#
+# 備份指定資料夾
+#
+
+if [ "$data_enable_backup" != "0" ]; then
+  cd $back_www_dir
+	for(( i=0; i<=${#system_data_backup[@]}; i++ )) 
+	do
+		if [ $((i%2)) == "0" ]; then
+			if [ "${system_data_backup[${i}]}" != "" ] && [ "${system_data_backup[$((i+1))]}" != "" ] ; then
+				echo "System backup data folder ${system_data_backup[${i}]}" | wall
+				tar -zcvf ${date}-${system_data_backup[$((i+1))]} ${system_data_backup[${i}]} 1>/dev/null 
+        sleep 2			
+			fi
+		fi
+	done
+  remove_oldfiles $back_www_dir $RETENTION_PERIOD  
+fi
+#
+# FreeBSD 更新 port tree
+#
+if [ "$port_tree_enable" != "0" ]; then
+  cd $log_dir
+  echo "System refresh Ports Tree " | wall
+  if [ ! -e ${log_dir}/ports_log.${date}.log ]; then
+  	cd /usr/ports; make update >> ${log_dir}/ports_log.${date}.log 
+  	remove_oldfiles $log_dir $RETENTION_PERIOD
+  fi
+fi
+
+#
+# rsync 遠端備份
+#
+if [ "$rsync_enable" != "0" ]; then
+  echo "System backup rsync to remote" | wall
+  rsync -av --progress --delete --password-file=${password_file} ${rsync_backup_dir} ${rsync_remote_dir} > ${log_dir}/rsync_log.${date}.log
+fi
