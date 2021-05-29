@@ -67,13 +67,35 @@ fmt.Println("Got signal:", s)
 &lt;p>在閱讀本文章之前，作者有寫過一篇『&lt;a href="https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/">graceful shutdown with multiple workers&lt;/a>』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 &lt;a href="https://docker.com">Docker&lt;/a>) 呢？底下是整個運作流程:&lt;/p>
 &lt;p>&lt;img src="https://lh3.googleusercontent.com/bsmMhN5bVzpyDy-741CsS8s_wTyPfRpbLeZvJ0u7hOmCkXhBmS0qmVwkky4zveLxtNqQgGTUufWeNi2OVvOyXwx6QrADvt5n_6tAJlSzmRJK27U9C1EgOhzziZmLqNp_FTyqf4NAits=w1920-h1080" alt="">&lt;/p></description></item><item><title>Go Modules 處理私有 GIT Repository 流程</title><link>https://demo.gh.wu-boy.com/2020/03/read-private-module-in-golang/</link><pubDate>Wed, 04 Mar 2020 14:41:21 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/03/read-private-module-in-golang/</guid><description>&lt;p>&lt;img src="https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080" alt="golang">&lt;/p>
 &lt;p>&lt;a href="https://golang.org/">Golang&lt;/a> 在 &lt;a href="https://golang.org/doc/go1.14#introduction">1.14&lt;/a> 正式說明可以將 &lt;a href="https://github.com/golang/go/wiki/Modules">Go Modules&lt;/a> 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移&lt;/p>
-&lt;pre>&lt;code class="language-shell=">go mod init project_path
-go mod tidy&lt;/code>&lt;/pre>
-&lt;p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 &lt;code>proxy.golang.org&lt;/code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:&lt;/p>
-&lt;pre>&lt;code class="language-shell=">go env -w GOPRIVATE=github.com/appleboy&lt;/code>&lt;/pre>
-&lt;p>上面代表告訴 go 指令，只要遇到 &lt;code>github.com/appleboy&lt;/code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>，接著設定 Git&lt;/p>
-&lt;pre>&lt;code class="language-shell=">git config --global url."https://$USERNAME:$ACCESS_TOKEN@github.com".insteadOf "https://github.com"&lt;/code>&lt;/pre>
-&lt;p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>。&lt;/p></description></item><item><title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</title><link>https://demo.gh.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</link><pubDate>Sat, 08 Feb 2020 14:50:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</guid><description>&lt;blockquote>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go mod init project_path
+go mod tidy
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 &lt;code>proxy.golang.org&lt;/code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go env -w &lt;span style="color:#00688b">GOPRIVATE&lt;/span>=github.com/appleboy
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>上面代表告訴 go 指令，只要遇到 &lt;code>github.com/appleboy&lt;/code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>，接著設定 Git&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">git config --global url.&lt;span style="color:#cd5555">&amp;#34;https://&lt;/span>&lt;span style="color:#00688b">$USERNAME&lt;/span>&lt;span style="color:#cd5555">:&lt;/span>&lt;span style="color:#00688b">$ACCESS_TOKEN&lt;/span>&lt;span style="color:#cd5555">@github.com&amp;#34;&lt;/span>.insteadOf &lt;span style="color:#cd5555">&amp;#34;https://github.com&amp;#34;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>。&lt;/p></description></item><item><title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</title><link>https://demo.gh.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</link><pubDate>Sat, 08 Feb 2020 14:50:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</guid><description>&lt;blockquote>
 &lt;p>線上課程:『&lt;a href="https://www.udemy.com/course/golang-fight/?couponCode=202002" title="Docker 容器實用實戰">Go 語言實戰&lt;/a>』目前特價 &lt;strong>$2100 TWD&lt;/strong>，優惠代碼『&lt;strong>202003&lt;/strong>』，也可以直接匯款（價格再減 &lt;strong>100&lt;/strong>），如果想搭配另外兩門課程合購可以透過 &lt;a href="http://facebook.com/appleboy46">FB 聯絡我&lt;/a>&lt;/p>
 &lt;/blockquote>
 &lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
