@@ -39,7 +39,7 @@ tags:
 建立 `main_test.go` 檔案
 
 <pre><code class="language-go">func BenchmarkPrintInt2String01(b *testing.B) {
-    for i := 0; i &lt; b.N; i++ {
+    for i := 0; i < b.N; i++ {
         printInt2String01(100)
     }
 }</code></pre>
@@ -78,19 +78,19 @@ func printInt2String03(num int) string {
 接著寫 benchmark，[線上程式碼][8]
 
 <pre><code class="language-go">func BenchmarkPrintInt2String01(b *testing.B) {
-    for i := 0; i &lt; b.N; i++ {
+    for i := 0; i < b.N; i++ {
         printInt2String01(100)
     }
 }
 
 func BenchmarkPrintInt2String02(b *testing.B) {
-    for i := 0; i &lt; b.N; i++ {
+    for i := 0; i < b.N; i++ {
         printInt2String02(int64(100))
     }
 }
 
 func BenchmarkPrintInt2String03(b *testing.B) {
-    for i := 0; i &lt; b.N; i++ {
+    for i := 0; i < b.N; i++ {
         printInt2String03(100)
     }
 }</code></pre>

@@ -30,12 +30,12 @@ tags:
 
 <div>
   <pre class="brush: jscript; title: ; notranslate" title="">class Person
-  constructor: (@firstName, @lastName) -&gt;
+  constructor: (@firstName, @lastName) ->
 
-  name: -&gt;
+  name: ->
     "#{@first_name} #{@last_name}"
 
-  setName: (name) -&gt;
+  setName: (name) ->
     names = name.split " "
 
     @firstName = names[0]
@@ -127,14 +127,14 @@ $("button").on("click", function() {
 CoffeeScript:
 
 <div>
-  <pre class="brush: jscript; title: ; notranslate" title="">$("button").on "click", =&gt;
+  <pre class="brush: jscript; title: ; notranslate" title="">$("button").on "click", =>
   # do something with this</pre>
 </div>
 
 ES6:
 
 <div>
-  <pre class="brush: jscript; title: ; notranslate" title="">$("button").on("click", () =&gt; {
+  <pre class="brush: jscript; title: ; notranslate" title="">$("button").on("click", () => {
   // do something with this
 });</pre>
 </div>
@@ -144,7 +144,7 @@ ES6:
 CoffeeScript 可以定義函式傳入預設值
 
 <div>
-  <pre class="brush: jscript; title: ; notranslate" title="">hello = (name = "guest") -&gt;
+  <pre class="brush: jscript; title: ; notranslate" title="">hello = (name = "guest") ->
   console.log(name)</pre>
 </div>
 
@@ -163,7 +163,7 @@ PHP 5.6 開始也支援了 [Variadic functions][14]，而 CoffeeScript 也有此
 PHP 5.6:
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php
+  <pre class="brush: php; title: ; notranslate" title=""><?php
 function sum(...$numbers) {
     $acc = 0;
     foreach ($numbers as $n) {
@@ -173,13 +173,13 @@ function sum(...$numbers) {
 }
 
 echo sum(1, 2, 3, 4);
-?&gt;</pre>
+?></pre>
 </div>
 
 CoffeeScript:
 
 <div>
-  <pre class="brush: jscript; title: ; notranslate" title="">awards = (first, second, others...) -&gt;
+  <pre class="brush: jscript; title: ; notranslate" title="">awards = (first, second, others...) ->
   gold = first
   silver = second
   honorable_mention = others

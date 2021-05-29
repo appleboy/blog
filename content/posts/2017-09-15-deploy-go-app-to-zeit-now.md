@@ -81,7 +81,7 @@ func main() {
 
 <pre><code class="language-bash">FROM golang:1.9-alpine3.6
 
-MAINTAINER Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;
+MAINTAINER Bo-Yi Wu <appleboy.tw@gmail.com>
 
 ADD . /go/src/github.com/appleboy/go-hello
 
@@ -101,7 +101,7 @@ CMD ["/go/bin/go-hello"]</code></pre>
  - using env:   export GIN_MODE=release
  - using code:  gin.SetMode(gin.ReleaseMode)
 
-[GIN-debug] GET    /                         --&gt; main.rootHandler (1 handlers)
+[GIN-debug] GET    /                         --> main.rootHandler (1 handlers)
 [GIN-debug] Listening and serving HTTP on :8000</code></pre>
 
 你可以發現成功執行了 app。

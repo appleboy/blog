@@ -118,11 +118,11 @@ endef</code></pre>
 
 啟動 gccgo
 
-<pre><code class="language-bash">-&gt; Advanced configuration options
--&gt; Toolchain options
--&gt; Select Build/Install gccgo
--&gt; C library implementation
--&gt; Use eglibc</code></pre>
+<pre><code class="language-bash">-> Advanced configuration options
+-> Toolchain options
+-> Select Build/Install gccgo
+-> C library implementation
+-> Use eglibc</code></pre>
 
 ### 撰寫 golang hello world
 
@@ -130,7 +130,7 @@ endef</code></pre>
 
 用 `alias` 設定 mips gccgo 路徑
 
-<pre><code class="language-bash">alias mips_gccgo=&#039;/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/bin/mipsel-openwrt-linux-gccgo -Wl,-R,/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib/gcc/mipsel-openwrt-linux-gnu/4.8.3 -L /root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib&#039;</code></pre>
+<pre><code class="language-bash">alias mips_gccgo='/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/bin/mipsel-openwrt-linux-gccgo -Wl,-R,/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib/gcc/mipsel-openwrt-linux-gnu/4.8.3 -L /root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib'</code></pre>
 
 hello world 程式
 

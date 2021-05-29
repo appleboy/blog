@@ -33,7 +33,7 @@ tissue,"xxxx"</pre> 然後在寫一個 shell 檔去把它讀進來，shell 檔�
 <pre class="brush: bash; title: ; notranslate" title="">#!/bin/sh
 lab_name=($(cut -d ',' -f1 passwd.txt))
 lab_number=${#lab_name[@]}
-for (( i=1; i&lt;=$lab_number; i=i+1 ))
+for (( i=1; i<=$lab_number; i=i+1 ))
 do
   if [ "${lab_name[$i]}" != "" ]; then
     if [ "${i}" -gt 10 ]; then
@@ -51,7 +51,7 @@ done
 lab_name=($(cut -d ',' -f1 passwd.txt))
 lab_number=${#lab_name[@]}
 lab_password=($(cut -d ',' -f2 passwd.txt))
-for (( i=1; i&lt;=$lab_number; i=i+1 ))
+for (( i=1; i<=$lab_number; i=i+1 ))
 do
   if [ "${lab_name[$i]}" != "" ]; then
     printf "/usr/bin/perl /root/change_passwd.pl ${lab_name[$i]} ${lab_password[$i]} \n"

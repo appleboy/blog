@@ -39,7 +39,7 @@ tags:
 
 [程式碼參考][6] 
 
-<pre class="brush: plain; title: ; notranslate" title="">version: &#039;2&#039;
+<pre class="brush: plain; title: ; notranslate" title="">version: '2'
 
 services:
   drone-server:

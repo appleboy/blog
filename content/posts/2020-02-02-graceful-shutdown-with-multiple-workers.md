@@ -33,8 +33,8 @@ tags:
 <pre><code class="language-go">func main() {
     ch := make(chan int, 2)
     go func() {
-        ch &lt;- 1
-        ch &lt;- 2
+        ch <- 1
+        ch <- 2
     }()
 
     for n := range ch {
@@ -51,8 +51,8 @@ tags:
 <pre><code class="language-go">func main() {
     ch := make(chan int, 2)
     go func() {
-        ch &lt;- 1
-        ch &lt;- 2
+        ch <- 1
+        ch <- 2
         close(ch)
     }()
 
@@ -66,8 +66,8 @@ tags:
 <pre><code class="language-go">func main() {
     ch := make(chan int, 2)
     go func() {
-        ch &lt;- 1
-        ch &lt;- 2
+        ch <- 1
+        ch <- 2
     }()
 
     go func() {
@@ -109,7 +109,7 @@ func main() {
 
 <pre><code class="language-go">func (c *Consumer) queue(input int) {
     select {
-    case c.inputChan &lt;- input:
+    case c.inputChan <- input:
         log.Println("already send input value:", input)
         return true
     default:
@@ -128,7 +128,7 @@ func (c *Consumer) worker(num int) {
     log.Println("start the worker", num)
     for {
         select {
-        case job := &lt;-c.jobsChan:
+        case job := <-c.jobsChan:
             c.process(num, job)
         }
     }
@@ -137,8 +137,8 @@ func (c *Consumer) worker(num int) {
 func (c Consumer) startConsumer(ctx context.Context) {
     for {
         select {
-        case job := &lt;-c.inputChan:
-            c.jobsChan &lt;- job
+        case job := <-c.inputChan:
+            c.jobsChan <- job
         }
     }
 }
@@ -152,7 +152,7 @@ func main() {
         jobsChan:  make(chan int, poolSize),
     }
 
-    for i := 0; i &lt; poolSize; i++ {
+    for i := 0; i < poolSize; i++ {
         go consumer.worker(i)
     }
 
@@ -183,8 +183,8 @@ func main() {
         defer signal.Stop(c)
 
         select {
-        case &lt;-ctx.Done():
-        case &lt;-c:
+        case <-ctx.Done():
+        case <-c:
             cancel()
             f()
         }
@@ -202,13 +202,13 @@ func main() {
 <pre><code class="language-go">func (c Consumer) startConsumer(ctx context.Context) {
     for {
         select {
-        case job := &lt;-c.inputChan:
+        case job := <-c.inputChan:
             if ctx.Err() != nil {
                 close(c.jobsChan)
                 return
             }
-            c.jobsChan &lt;- job
-        case &lt;-ctx.Done():
+            c.jobsChan <- job
+        case <-ctx.Done():
             close(c.jobsChan)
             return
         }
@@ -219,13 +219,13 @@ func (c *Consumer) worker(ctx context.Context, num int) {
     log.Println("start the worker", num)
     for {
         select {
-        case job := &lt;-c.jobsChan:
+        case job := <-c.jobsChan:
             if ctx.Err() != nil {
                 log.Println("get next job", job, "and close the worker", num)
                 return
             }
             c.process(num, job)
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             log.Println("close the worker", num)
             return
         }
@@ -242,7 +242,7 @@ func (c *Consumer) worker(ctx context.Context, num int) {
         close(finished)
     })
 
-    &lt;-finished
+    <-finished
 }</code></pre>
 
 上述完成後，按下 ctrl + c 後，就可以直接執行 close channel，整個主程式都停止，但是這不是我們預期得結果，預期的是需要等到全部的 worker 把正在處理的 Job 完成後，才進行停止才是。
@@ -270,13 +270,13 @@ func main() {
     log.Println("start the worker", num)
     for {
         select {
-        case job := &lt;-c.jobsChan:
+        case job := <-c.jobsChan:
             if ctx.Err() != nil {
                 log.Println("get next job", job, "and close the worker", num)
                 return
             }
             c.process(num, job)
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             log.Println("close the worker", num)
             return
         }
@@ -311,11 +311,11 @@ func main() {
         close(finished)
     })
 
-    for i := 0; i &lt; poolSize; i++ {
+    for i := 0; i < poolSize; i++ {
         go consumer.worker(ctx, i, wg)
     }
 
-    &lt;-finished
+    <-finished
     log.Println("Game over")
 }</code></pre>
 
@@ -353,8 +353,8 @@ func withContextFunc(ctx context.Context, f func()) context.Context {
         defer signal.Stop(c)
 
         select {
-        case &lt;-ctx.Done():
-        case &lt;-c:
+        case <-ctx.Done():
+        case <-c:
             cancel()
             f()
         }
@@ -365,7 +365,7 @@ func withContextFunc(ctx context.Context, f func()) context.Context {
 
 func (c *Consumer) queue(input int) bool {
     select {
-    case c.inputChan &lt;- input:
+    case c.inputChan <- input:
         log.Println("already send input value:", input)
         return true
     default:
@@ -376,13 +376,13 @@ func (c *Consumer) queue(input int) bool {
 func (c Consumer) startConsumer(ctx context.Context) {
     for {
         select {
-        case job := &lt;-c.inputChan:
+        case job := <-c.inputChan:
             if ctx.Err() != nil {
                 close(c.jobsChan)
                 return
             }
-            c.jobsChan &lt;- job
-        case &lt;-ctx.Done():
+            c.jobsChan <- job
+        case <-ctx.Done():
             close(c.jobsChan)
             return
         }
@@ -401,13 +401,13 @@ func (c *Consumer) worker(ctx context.Context, num int, wg *sync.WaitGroup) {
     log.Println("start the worker", num)
     for {
         select {
-        case job := &lt;-c.jobsChan:
+        case job := <-c.jobsChan:
             if ctx.Err() != nil {
                 log.Println("get next job", job, "and close the worker", num)
                 return
             }
             c.process(num, job)
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             log.Println("close the worker", num)
             return
         }
@@ -432,7 +432,7 @@ func main() {
         close(finished)
     })
 
-    for i := 0; i &lt; poolSize; i++ {
+    for i := 0; i < poolSize; i++ {
         go consumer.worker(ctx, i, wg)
     }
 
@@ -446,7 +446,7 @@ func main() {
         consumer.queue(5)
     }()
 
-    &lt;-finished
+    <-finished
     log.Println("Game over")
 }
 </code></pre>

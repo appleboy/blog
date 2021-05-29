@@ -27,11 +27,11 @@ tags:
 
 [Linux Kernel（4）- seq_file][4] 裡面範例如下： 
 
-<pre class="brush: cpp; title: ; notranslate" title="">#include &lt;linux/init.h>
-#include &lt;linux/module.h>
-#include &lt;linux/proc_fs.h> /* Necessary because we use proc fs */
-#include &lt;linux/seq_file.h> /* for seq_file */
-#include &lt;linux/uaccess.h>
+<pre class="brush: cpp; title: ; notranslate" title="">#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/proc_fs.h> /* Necessary because we use proc fs */
+#include <linux/seq_file.h> /* for seq_file */
+#include <linux/uaccess.h>
 
 MODULE_LICENSE("GPL");
 

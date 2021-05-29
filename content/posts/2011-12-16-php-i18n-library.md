@@ -40,7 +40,7 @@ $lang = new Language();
 [/code]
 <strong>
 
-<span style="color:green">language.php</span>&lt;/strong>
+<span style="color:green">language.php</span></strong>
 <?php
 class Language {
     public function __construct()
@@ -50,7 +50,7 @@ class Language {
 }[/code]
 上面是 language 的初始化，直接下指令 php index.php 就會看到 <strong>
 
-<span style="color:green">load language class</span>&lt;/strong> 畫面。接著必須規畫兩個 method，分別是載入 language 檔案，以及讀取資料，程式碼變成：
+<span style="color:green">load language class</span></strong> 畫面。接著必須規畫兩個 method，分別是載入 language 檔案，以及讀取資料，程式碼變成：
 
 <?php
 

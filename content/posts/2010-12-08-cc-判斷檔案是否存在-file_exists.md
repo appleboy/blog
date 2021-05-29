@@ -18,11 +18,11 @@ tags:
 ---
 在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:
 
-<pre><code class="language-php">&lt;?php
+<pre><code class="language-php"><?php
 if(file_exists("files/appleboy.c")) {
     echo "File found!";
 }
-?&gt;</code></pre>
+?></code></pre>
 
 在 C 裡面該如何實做？有兩種方式如下:
 
@@ -45,13 +45,13 @@ C++ 寫法
 foo.open("bar");
 
 if(foo.is_open() == true)
-     std::cout &lt;&lt; "Exist";
+     std::cout << "Exist";
 else 
-     std::cout &lt;&lt; "Doesn&#039;t Exist";</code></pre>
+     std::cout << "Doesn't Exist";</code></pre>
 
 ### 2. 讀取檔案狀態
 
-<pre><code class="language-C">#include&lt;sys/stat.h&gt;
+<pre><code class="language-C">#include<sys/stat.h>
 int file_exists (char * fileName)
 {
    struct stat buf;

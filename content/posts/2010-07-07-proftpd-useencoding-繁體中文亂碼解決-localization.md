@@ -30,7 +30,7 @@ make install </pre>
 
 <pre class="brush: bash; title: ; notranslate" title="">Syntax: UseEncoding on|off|local-charset client-charset
 Default: None
-Context: "server config", &lt;VirtualHost>, &lt;Global>
+Context: "server config", <VirtualHost>, <Global>
 Module: mod_lang
 Compatibility: 1.3.2rc1</pre> 在 1.3.2rc1 版本之後才有支援，請複製底下設定，貼到 proftpd.conf 
 

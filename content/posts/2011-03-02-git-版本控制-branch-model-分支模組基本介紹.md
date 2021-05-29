@@ -80,7 +80,7 @@ git commit -a -m "Add: test.php"</code></pre>
 合併分支:先切換到 develop
 
 <pre><code class="language-bash">$ git checkout develop
-Switched to branch &#039;develop&#039;</code></pre>
+Switched to branch 'develop'</code></pre>
 
 利用 --no-ff 合併分支(稍後說明為什麼使用 --no-ff)
 

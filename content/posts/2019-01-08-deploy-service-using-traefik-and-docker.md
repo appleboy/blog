@@ -100,7 +100,7 @@ func main() {
 
 <pre><code class="language-yaml">FROM alpine:3.8
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;" \
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.name="Drone Workshop" \
   org.label-schema.vendor="Bo-Yi Wu" \
   org.label-schema.schema-version="1.0"

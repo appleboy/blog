@@ -22,9 +22,9 @@ tags:
 [Laravel][1] 本來預設的 [Environment Configuration][2] 是透過 Domain Name 來區分，程式碼 `bootstrap/start.php` 如下
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php
-$env = $app-&gt;detectEnvironment(array(
-    'local' =&gt; array('your-machine-name'),
+  <pre class="brush: php; title: ; notranslate" title=""><?php
+$env = $app->detectEnvironment(array(
+    'local' => array('your-machine-name'),
 ));</pre>
 </div>
 
@@ -38,7 +38,7 @@ $env = $app-&gt;detectEnvironment(array(
 老實講用 Domain 來分類蠻不方便的，如果突然想要在同一個 Domain 使用不同的環境設定，又要改 Domain mapping。所以 Laravel 也不是強制要使用這方法，我們可以透過增加 `environment.php` 來決定目前專案跑哪一種環境設定，該程式碼只有一行
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php
+  <pre class="brush: php; title: ; notranslate" title=""><?php
 
 return "production";
 /* End of bootstrap/environment.php */</pre>
@@ -47,7 +47,7 @@ return "production";
 那當然我們也要將 `detectEnvironment` 改成
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">$env = $app-&gt;detectEnvironment(function() {
+  <pre class="brush: php; title: ; notranslate" title="">$env = $app->detectEnvironment(function() {
 
     // Defined in the server configuration
     if ( isset( $_SERVER['APP_ENVIRONMENT'] ) ) {

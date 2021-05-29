@@ -26,7 +26,7 @@ tags:
 目前自己只有三個服務，其中一項就是現在的 Blog 是用 WordPress 架出來的，先來看看原先 Nginx 設定
 
 <pre><code class="language-bash">server {
-  # don&#039;t forget to tell on which port this server listens
+  # don't forget to tell on which port this server listens
   listen 80;
 
   # listen on the www host

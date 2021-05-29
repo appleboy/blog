@@ -34,13 +34,13 @@ tags:
 
 [<img src="https://i0.wp.com/farm4.static.flickr.com/3441/3378705669_a8ba780edc.jpg?resize=159%2C243&#038;ssl=1" title="Zend_01 (by appleboy46)" alt="Zend_01 (by appleboy46)" data-recalc-dims="1" />][9] 上面這張圖就是 Zend 的目錄架構圖，我們只需要注意 application，htdocs 跟 library 就可以了，底下介紹3個資料夾的個別用途： application 資料夾：裡面包含 controllers (MVC之C)，models (MVC之M) 跟 views (MVC之V)，Views 底下存放是要顯示的元件。 htdocs 資料夾：裡面 images (存放影像檔案)，scripts (存放script檔) styles (存放CSS檔) .htaccess (配合url rewrite之檔案) index.php (bootstrap file)，這個資料夾是對應到 Document root 的設定： 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;VirtualHost *:80>
+<pre class="brush: bash; title: ; notranslate" title=""><VirtualHost *:80>
   ServerName zf-tutorial.localhost
   DocumentRoot /var/www/html/zf-tutorial/public
-  &lt;Directory "/www/cs">
+  <Directory "/www/cs">
     AllowOverride All
-  &lt;/Directory>
-&lt;/VirtualHost></pre> 這樣只要在網址列打入 zf-tutorial.localhost 就可以對應到 localhost，然後把網址對應IP寫入到 Linux：/etc/hosts 或者是 Windows：c:\\windows\system32\drivers\etc\hosts，library 裡面就單一個資料夾，裡面只有 Zend 這個套件，其實基本上也不用動它，升級的時厚紙需要換掉 Zend 這個資料夾即可。 接下來設定 .htaccess 跟 index.php 因為 Zend Framework 會幫忙設定簡短網址，所以我們必須要設定這兩個檔案來達到全部網址都轉向 index.php，這兩個檔案都必須放到 htdocs 資料夾裡面，底下就來說明這兩個檔案寫法。 
+  </Directory>
+</VirtualHost></pre> 這樣只要在網址列打入 zf-tutorial.localhost 就可以對應到 localhost，然後把網址對應IP寫入到 Linux：/etc/hosts 或者是 Windows：c:\\windows\system32\drivers\etc\hosts，library 裡面就單一個資料夾，裡面只有 Zend 這個套件，其實基本上也不用動它，升級的時厚紙需要換掉 Zend 這個資料夾即可。 接下來設定 .htaccess 跟 index.php 因為 Zend Framework 會幫忙設定簡短網址，所以我們必須要設定這兩個檔案來達到全部網址都轉向 index.php，這兩個檔案都必須放到 htdocs 資料夾裡面，底下就來說明這兩個檔案寫法。 
 
 **htdocs/.htaccess** 
 

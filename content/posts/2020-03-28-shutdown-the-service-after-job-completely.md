@@ -30,13 +30,13 @@ tags:
     log.Println("start the worker", num)
     for {
         select {
-        case job := &lt;-c.jobsChan:
+        case job := <-c.jobsChan:
             if ctx.Err() != nil {
                 log.Println("get next job", job, "and close the worker", num)
                 return
             }
             c.process(num, job)
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             log.Println("close the worker", num)
             return
         }
@@ -63,9 +63,9 @@ tags:
 <pre><code class="language-go">func (c Consumer) startConsumer(ctx context.Context) {
     for {
         select {
-        case job := &lt;-c.inputChan:
+        case job := <-c.inputChan:
             select {
-            case c.jobsChan &lt;- job:
+            case c.jobsChan <- job:
             default:
                 log.Println("job channel has been closed. num:", job)
             }
@@ -73,7 +73,7 @@ tags:
                 close(c.jobsChan)
                 return
             }
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             close(c.jobsChan)
             return
         }

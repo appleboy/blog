@@ -44,7 +44,7 @@ import React, { Component } from 'react';</pre>
     "test": "jest"
   },
   "jest": {
-    "scriptPreprocessor": "&lt;rootDir&gt;/node_modules/babel-jest",
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "testFileExtensions": ["es6", "js"],
     "moduleFileExtensions": ["js", "json", "es6"]
   }
@@ -73,10 +73,10 @@ module.exports = {
 
 <div>
   <pre class="brush: jscript; title: ; notranslate" title="">"jest": {
-  "scriptPreprocessor": "&lt;rootDir&gt;/jest-script-preprocessor",
+  "scriptPreprocessor": "<rootDir>/jest-script-preprocessor",
   "unmockedModulePathPatterns": [
-    "&lt;rootDir&gt;/node_modules/react",
-    "&lt;rootDir&gt;/node_modules/react-tools"
+    "<rootDir>/node_modules/react",
+    "<rootDir>/node_modules/react-tools"
   ],
   "testFileExtensions": [
     "js",
@@ -99,7 +99,7 @@ import React from 'react/addons';
 let TestUtils = React.addons.TestUtils;
 let About;
 
-describe('About Test', () =&gt; {
+describe('About Test', () => {
 
   beforeEach(function() {
     About = require('../index');
@@ -107,7 +107,7 @@ describe('About Test', () =&gt; {
 
   it('should exists', function() {
     // Render into document
-    let about = TestUtils.renderIntoDocument(&lt;About /&gt;);
+    let about = TestUtils.renderIntoDocument(<About />);
     expect(TestUtils.isCompositeComponent(about)).toBeTruthy();
   });
 });

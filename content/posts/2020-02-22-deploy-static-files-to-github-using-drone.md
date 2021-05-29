@@ -50,10 +50,10 @@ tags:
 
 ```js
 module.exports = {
-  assetsDir: &#039;assets&#039;,
-  publicPath: process.env.NODE_ENV === &#039;production&#039;
-  ? &#039;/vue-gh-pages-demo/&#039;
-  : &#039;/&#039;,
+  assetsDir: 'assets',
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/vue-gh-pages-demo/'
+  : '/',
 };
 ```
 

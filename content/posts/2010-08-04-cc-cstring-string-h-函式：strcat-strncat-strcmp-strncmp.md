@@ -21,8 +21,8 @@ tags:
 [strcat][1] 此函式用來連接兩字串合併成單一字串，直接看底下範例：
 
 <pre><code class="language-c">/* strcat example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
@@ -58,8 +58,8 @@ strcat(char * __restrict s, const char * __restrict append)
 [strcmp][2] 用來比較兩字串是否相同，相同回傳 0，不相同則回傳兩字串 ASCII 相減的值。底下範例：
 
 <pre><code class="language-c">/* strcmp example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
@@ -75,7 +75,7 @@ int main ()
 
 來看看 strcmp 原始碼
 
-<pre><code class="language-c">#include &lt;string.h&gt;
+<pre><code class="language-c">#include <string.h>
 
 /*
  * Compare strings.
@@ -97,8 +97,8 @@ strcmp(s1, s2)
 [strncat][3] 用來串接指定多少字元，底下範例：
 
 <pre><code class="language-c">/* strncat example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
@@ -113,7 +113,7 @@ int main ()
 
 strncat 原始碼
 
-<pre><code class="language-c">#include &lt;string.h&gt;
+<pre><code class="language-c">#include <string.h>
 
 /*
  * Concatenate src on the end of dst.  At most strlen(dst)+n+1 bytes
@@ -145,15 +145,15 @@ strncat(char * __restrict dst, const char * __restrict src, size_t n)
 直接看範例，比較字串前兩個字元是否相同，如果相同則印出
 
 <pre><code class="language-c">/* strncmp example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
   char str[][5] = { "R2D2" , "C3PO" , "R2A6" };
   int n;
   puts ("Looking for R2 astromech droids...");
-  for (n=0 ; n&lt;3 ; n++)
+  for (n=0 ; n<3 ; n++)
     if (strncmp (str[n],"R2xx",2) == 0)
     {
       printf ("found %s\n",str[n]);
@@ -163,7 +163,7 @@ int main ()
 
 [strncmp][4] 原始碼
 
-<pre><code class="language-c">#include &lt;string.h&gt;
+<pre><code class="language-c">#include <string.h>
 
 int
 strncmp(s1, s2, n)

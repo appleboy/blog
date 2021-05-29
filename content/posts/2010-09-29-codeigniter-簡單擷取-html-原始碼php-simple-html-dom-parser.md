@@ -188,7 +188,7 @@ $dom = $this->simple_html_dom->file_get_dom($box_url);
 $result = $dom->find('div#datenav');
 foreach($result as $v)
 {
-    preg_match_all("/&lt;option\s+value=\"([^>]+)\">/",$v->outertext, $team_game);
+    preg_match_all("/<option\s+value=\"([^>]+)\">/",$v->outertext, $team_game);
     print_r($team_game);
 }</pre>
 

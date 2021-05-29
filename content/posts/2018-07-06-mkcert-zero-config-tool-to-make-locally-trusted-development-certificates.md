@@ -99,7 +99,7 @@ func main() {
 *  subject: O=mkcert development certificate
 *  start date: Jul  5 02:06:09 2018 GMT
 *  expire date: Jul  6 02:06:09 2028 GMT
-*  subjectAltName: host "localhost" matched cert&#039;s "localhost"
+*  subjectAltName: host "localhost" matched cert's "localhost"
 *  issuer: O=mkcert development CA
 *  SSL certificate verify ok.
 * Using HTTP2, server supports multi-use
@@ -112,11 +112,11 @@ func main() {
 > Accept: */*
 >
 * Connection state changed (MAX_CONCURRENT_STREAMS updated)!
-&lt; HTTP/2 200
-&lt; content-type: text/plain
-&lt; content-length: 27
-&lt; date: Fri, 06 Jul 2018 02:30:54 GMT
-&lt;
+< HTTP/2 200
+< content-type: text/plain
+< content-length: 27
+< date: Fri, 06 Jul 2018 02:30:54 GMT
+<
 This is an example server.
 * Connection #0 to host localhost left intact</code></pre>
 

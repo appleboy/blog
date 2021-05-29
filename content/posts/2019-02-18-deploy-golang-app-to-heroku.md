@@ -31,8 +31,8 @@ tags:
 
 註冊網站後，可以直接在後台建立 App，此 App 名稱就是未來的網站 URL 前置名稱。進入 App 的後台，切換到 Deploy 的 Tab 可以看到 Heroku 提供了三種方式，本文只會講其中兩種，在開始之前請先安裝好 [Heroku CLI][12] 工具，底下所有操作都會以 CLI 介面為主。用 Git 來部署是最簡單的，開發者可以不用考慮任何情形，只要將程式碼部署到 Heroku 上面即可。在 Go 語言只要觸發 Push Event 系統會預設使用 go1.11.4 來編譯環境，產生的 Log 如下:
 
-<pre><code class="language-go">-----&gt; Go app detected
------&gt; Fetching jq... done
+<pre><code class="language-go">-----> Go app detected
+-----> Fetching jq... done
  !!    
  !!    Go modules are an experimental feature of go1.11
  !!    Any issues building code that uses Go modules should be
@@ -47,8 +47,8 @@ tags:
  !!    
  !!    For more details see: https://devcenter.heroku.com/articles/go-apps-with-modules#build-configuration
  !!    
------&gt; Installing go1.11.4
------&gt; Fetching go1.11.4.linux-amd64.tar.gz... done
+-----> Installing go1.11.4
+-----> Fetching go1.11.4.linux-amd64.tar.gz... done
  !!    Installing package '.' (default)
  !!    
  !!    To install a different package spec add a comment in the following form to your `go.mod` file:
@@ -56,7 +56,7 @@ tags:
  !!    
  !!    For more details see: https://devcenter.heroku.com/articles/go-apps-with-modules#build-configuration
  !!    
------&gt; Running: go install -v -tags heroku . </code></pre>
+-----> Running: go install -v -tags heroku . </code></pre>
 
 系統第一步會偵測該專案使用什麼語言，就會產生相對應得環境，所以用 Git 方式非常簡單，開發者不需要額外設定就可以看到網站已經部署完畢，底下是 Git 基本操作，首先是登入 Heroku 平台。這邊會打開瀏覽器登入視窗。
 
@@ -97,7 +97,7 @@ RUN go build -o /facebook-account-kit -tags netgo -ldflags '-w -extldflags "-sta
 
 ### Put the binary onto base image
 FROM plugins/base:linux-amd64
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 EXPOSE 8080
 COPY --from=server_builder /app/templates /templates
 COPY --from=server_builder /app/images /images

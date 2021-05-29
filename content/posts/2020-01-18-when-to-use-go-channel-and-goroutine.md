@@ -34,8 +34,8 @@ tags:
 
 Channel 分成讀跟寫，如果在實戰內用到非常多 Channel，請注意在程式碼任何地方對 Channel 進行讀寫都有可能造成不同的狀況，所以為了避免團隊內濫用 Channel，通常我都會限定在哪個情境只能寫，在哪個情境只能讀。如果混著用，最後會非常難除錯，也造成 Reviewer 非常難閱讀跟理解。
 
-<pre><code class="language-go">Write(chan&lt;- int)
-Read(&lt;-chan int)
+<pre><code class="language-go">Write(chan<- int)
+Read(<-chan int)
 ReadWrite(chan int)</code></pre>
 
 分辨讀寫非常容易，請看 <- 符號放在哪邊，chan<- 指向自己就是寫，<-chan 離開自己就是讀，相當好分辨，如果 func 內讀寫都需要使用，則不需要使用任何箭頭符號，但是我會建議把讀寫的邏輯都拆開不同的 func 處理，對於閱讀上非常有幫助。
@@ -56,7 +56,7 @@ func addByShareMemory(n int) []int {
     var wg sync.WaitGroup
 
     wg.Add(n)
-    for i := 0; i &lt; n; i++ {
+    for i := 0; i < n; i++ {
         go func(i int) {
             defer wg.Done()
             ints = append(ints, i)
@@ -98,7 +98,7 @@ func init() {
     var mux sync.Mutex
 
     wg.Add(n)
-    for i := 0; i &lt; n; i++ {
+    for i := 0; i < n; i++ {
         go func(i int) {
             defer wg.Done()
             mux.Lock()
@@ -121,9 +121,9 @@ func init() {
     var ints []int
     channel := make(chan int, n)
 
-    for i := 0; i &lt; n; i++ {
-        go func(channel chan&lt;- int, order int) {
-            channel &lt;- order
+    for i := 0; i < n; i++ {
+        go func(channel chan<- int, order int) {
+            channel <- order
         }(channel, i)
     }
 

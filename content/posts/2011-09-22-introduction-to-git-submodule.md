@@ -28,7 +28,7 @@ tags:
 
 在練習 git 指令之前請先註冊好 github 帳號，並且開一個測試 repository，建立 Submodule 非常容易，範例如下:
 
-<pre><code class="language-bash">git submodule add &lt;repository&gt; [&lt;path&gt;]</code></pre>
+<pre><code class="language-bash">git submodule add <repository> [<path>]</code></pre>
 
 實際指令範例:
 
@@ -46,7 +46,7 @@ Unpacking objects: 100% (32/32), done.</code></pre>
 
 <pre><code class="language-bash"># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file&gt;..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       new file:   .gitmodules
 #       new file:   user_guide
@@ -75,14 +75,14 @@ Unpacking objects: 100% (32/32), done.</code></pre>
 可是你有沒有發現 user_guide 這 sub module 是<span style="color:red"><strong>空目錄</strong></span>，這時候就是要透過 git submodule 來下載程式碼
 
 <pre><code class="language-bash">[freebsd][root][ /home/git/test2 ]# git submodule init
-Submodule &#039;user_guide&#039; (https://github.com/appleboy/CodeIgniter-TW-Language) registered for path &#039;user_guide&#039;
+Submodule 'user_guide' (https://github.com/appleboy/CodeIgniter-TW-Language) registered for path 'user_guide'
 [freebsd][root][ /home/git/test2 ]# git submodule update
 Cloning into user_guide...
 remote: Counting objects: 32, done.
 remote: Compressing objects: 100% (19/19), done.
 remote: Total 32 (delta 12), reused 32 (delta 12)
 Unpacking objects: 100% (32/32), done.
-Submodule path &#039;user_guide&#039;: checked out &#039;7efead6378993edfaa0c55927d4a4fdf629c4726&#039;</code></pre>
+Submodule path 'user_guide': checked out '7efead6378993edfaa0c55927d4a4fdf629c4726'</code></pre>
 
 注意上面，有沒有看到 git submodule init 來設定 **<span style="color:green">.git/config</span>**，在接著用 git submodule update 來更新檔案，可以打開 **<span style="color:green">.git/config</span>** 可以發現多了底下資料:
 
@@ -100,8 +100,8 @@ git pull origin master</code></pre>
 
 <pre><code class="language-bash"># On branch master
 # Changed but not updated:
-#   (use "git add &lt;file&gt;..." to update what will be committed)
-#   (use "git checkout -- &lt;file&gt;..." to discard changes in working directory)
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
 #
 #       modified:   user_guide (new commits)</code></pre>
 

@@ -72,11 +72,11 @@ import "fmt"
 func main() {
     ch := make(chan int, 1)
 
-    ch &lt;- 1
+    ch <- 1
     select {
-    case &lt;-ch:
+    case <-ch:
         fmt.Println("random 01")
-    case &lt;-ch:
+    case <-ch:
         fmt.Println("random 02")
     }
 }</code></pre>
@@ -87,9 +87,9 @@ func main() {
     ch := make(chan int, 1)
 
     select {
-    case &lt;-ch:
+    case <-ch:
         fmt.Println("random 01")
-    case &lt;-ch:
+    case <-ch:
         fmt.Println("random 02")
     }
 }</code></pre>
@@ -100,9 +100,9 @@ func main() {
     ch := make(chan int, 1)
 
     select {
-    case &lt;-ch:
+    case <-ch:
         fmt.Println("random 01")
-    case &lt;-ch:
+    case <-ch:
         fmt.Println("random 02")
     default:
         fmt.Println("exit")
@@ -126,12 +126,12 @@ func main() {
     timeout := make(chan bool, 1)
     go func() {
         time.Sleep(2 * time.Second)
-        timeout &lt;- true
+        timeout <- true
     }()
     ch := make(chan int)
     select {
-    case &lt;-ch:
-    case &lt;-timeout:
+    case <-ch:
+    case <-timeout:
         fmt.Println("timeout 01")
     }
 }</code></pre>
@@ -139,10 +139,10 @@ func main() {
 建立 timeout channel，讓其他地方可以透過 trigger timeout channel 達到讓 select 執行結束，也或者有另一個寫法是透握 `time.After` 機制
 
 <pre><code class="language-go">    select {
-    case &lt;-ch:
-    case &lt;-timeout:
+    case <-ch:
+    case <-timeout:
         fmt.Println("timeout 01")
-    case &lt;-time.After(time.Second * 1):
+    case <-time.After(time.Second * 1):
         fmt.Println("timeout 02")
     }</code></pre>
 
@@ -160,11 +160,11 @@ import (
 
 func main() {
     ch := make(chan int, 1)
-    ch &lt;- 1
+    ch <- 1
     select {
-    case ch &lt;- 2:
-        fmt.Println("channel value is", &lt;-ch)
-        fmt.Println("channel value is", &lt;-ch)
+    case ch <- 2:
+        fmt.Println("channel value is", <-ch)
+        fmt.Println("channel value is", <-ch)
     default:
         fmt.Println("channel blocking")
     }
@@ -174,11 +174,11 @@ func main() {
 
 <pre><code class="language-go">func main() {
     ch := make(chan int, 2)
-    ch &lt;- 1
+    ch <- 1
     select {
-    case ch &lt;- 2:
-        fmt.Println("channel value is", &lt;-ch)
-        fmt.Println("channel value is", &lt;-ch)
+    case ch <- 2:
+        fmt.Println("channel value is", <-ch)
+        fmt.Println("channel value is", <-ch)
     default:
         fmt.Println("channel blocking")
     }
@@ -212,7 +212,7 @@ func main() {
             i++
 
             select {
-            case m := &lt;-ch:
+            case m := <-ch:
                 println(m)
                 break LOOP
             default:
@@ -221,7 +221,7 @@ func main() {
     }()
 
     time.Sleep(time.Second * 4)
-    ch &lt;- "stop"
+    ch <- "stop"
 }</code></pre>
 
 上面例子可以發現執行後如下:
@@ -234,7 +234,7 @@ func main() {
 其實把 `default` 拿掉也可以達到目的
 
 <pre><code class="language-go">select {
-case m := &lt;-ch:
+case m := <-ch:
     println(m)
     break LOOP</code></pre>
 

@@ -25,21 +25,21 @@ tags:
 
 **<span style="color:green">text/x-mustache-template</span>** 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mime_module>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mime_module>
     AddType text/x-mustache-template .mustache
     AddOutputFilter INCLUDES .mustache
-&lt;/IfModule>
+</IfModule>
 </pre>
 
 <!--more--> 接著必須設定網站根目錄可以輸出 include file 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;Directory "C:/xampp/htdocs">
+<pre class="brush: bash; title: ; notranslate" title=""><Directory "C:/xampp/htdocs">
     Options All
     AllowOverride All
     SetOutputFilter INCLUDES
     Order allow,deny
     Allow from all
-&lt;/Directory></pre> 上面例子是 
+</Directory></pre> 上面例子是 
 
 <a href="http://www.apachefriends.org/zh_tw/index.html" target="_blank">xampp</a> httpd.conf 檔，設定完成後重新啟動 apache，大家就可以發現，原本的 js 就會變成 
 

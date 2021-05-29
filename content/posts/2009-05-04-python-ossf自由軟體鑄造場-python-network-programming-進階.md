@@ -140,7 +140,7 @@ class cwb(threading.Thread):
     def __init__(self,zonename):
         threading.Thread.__init__(self)
         self.zonename=zonename
-        self.reg=re.compile('&lt;([^>]|\n)*>|<br />|<BR />|&nbsp;|&nbsp')
+        self.reg=re.compile('<([^>]|\n)*>|<br />|<BR />|&nbsp;|&nbsp')
         self.retab=re.compile('tabletype1-2')
         self.reconvspace=re.compile('&nbsp;|&nbsp')
 
@@ -160,12 +160,12 @@ class cwb(threading.Thread):
     	list=[]
     	firsttarget="tabletype1-1"
     	b=b[b.find(firsttarget)+len(firsttarget)+2:]
-    	b=b[:b.find('&lt;/table>')]
+    	b=b[:b.find('</table>')]
     	b=re.sub("\n+", "\n", self.reconvspace.sub(" ",self.reg.sub("",self.retab.sub("\>--",b))))
         conlist=string.split(b,"\n")
     	info=0
     	for x in conlist:
-    		if x[0:2]=='--' and info&lt;2:
+    		if x[0:2]=='--' and info<2:
     			info+=1 # list[1] is data time.
     			list.append(x[4:])
     		elif x[0:2]=='--':
@@ -196,7 +196,7 @@ def listprint(list,style):
 		for x in list:
 			if len(list)==i and i==12:
 				print ('"%s"' % x)
-			elif len(list)==i and i&lt;12:
+			elif len(list)==i and i<12:
 				print ('"%s",""' % x)
 			else:
 				print ('"%s",' % x),

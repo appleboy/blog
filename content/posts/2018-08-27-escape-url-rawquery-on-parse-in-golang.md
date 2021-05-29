@@ -32,12 +32,12 @@ import (
 )
 
 func main() {
-    u, err := url.Parse("http://bing.com/search?k=v&id=main&id=omit&array[]=first&array[]=second&ids&lt;em>&lt;/em>=111&ids[j]=3.14")
+    u, err := url.Parse("http://bing.com/search?k=v&id=main&id=omit&array[]=first&array[]=second&ids<em></em>=111&ids[j]=3.14")
     if err != nil {
         log.Fatal(err)
     }
 
-    if u.RawQuery != "k=v&id=main&id=omit&array[]=first&array[]=second&ids&lt;em>&lt;/em>=111&ids[j]=3.14" {
+    if u.RawQuery != "k=v&id=main&id=omit&array[]=first&array[]=second&ids<em></em>=111&ids[j]=3.14" {
         log.Fatal("RawQuery error")
     }
 
@@ -67,18 +67,18 @@ import (
 )
 
 func main() {
-    u, err := url.Parse("http://bing.com/search?k=v&id=main&id=omit&array[]=first&array[]=second&ids&lt;em>&lt;/em>=111&ids[j]=3.14")
+    u, err := url.Parse("http://bing.com/search?k=v&id=main&id=omit&array[]=first&array[]=second&ids<em></em>=111&ids[j]=3.14")
     if err != nil {
         log.Fatal(err)
     }
 
-    if u.RawQuery != "k=v&id=main&id=omit&array[]=first&array[]=second&ids&lt;em>&lt;/em>=111&ids[j]=3.14" {
+    if u.RawQuery != "k=v&id=main&id=omit&array[]=first&array[]=second&ids<em></em>=111&ids[j]=3.14" {
         log.Fatal("RawQuery error")
     }
 
     log.Printf("%#v", u.Query())
 
-    query := resetQuery(map[string][]string{"k=v&id=main&id=omit&array[]=first&array[]=second&ids&lt;em>&lt;/em>=111&ids[j]=3.14": []string{""}})
+    query := resetQuery(map[string][]string{"k=v&id=main&id=omit&array[]=first&array[]=second&ids<em></em>=111&ids[j]=3.14": []string{""}})
     log.Printf("%#v", query)
 }
 
@@ -105,7 +105,7 @@ func resetQuery(m map[string][]string) map[string][]string {
 //     query       = *( pchar / "/" / "?" )
 //     pchar       = unreserved / pct-encoded / sub-delims / ":" / "@"
 //     unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
-//     sub-delims  = "!" / "$" / "&" / "&#039;" / "(" / ")"
+//     sub-delims  = "!" / "$" / "&" / "'" / "(" / ")"
 //                   / "*" / "+" / "," / ";" / "="</code></pre>
 
 ## 後記

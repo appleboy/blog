@@ -42,7 +42,7 @@ if($_POST['title'] != ''&& $_POST['startDate'] != ''&& $_POST['startTime'] != ''
 }
 else
 {
-  die("[&lt;a href=\"./\">back&lt;/a>]
+  die("[<a href=\"./\">back</a>]
 
 <hr />
 
@@ -78,7 +78,7 @@ else
     $startDate, $startTime, $endDate, $endTime, '+08' );</pre> 最後一個欄位是台灣時區 Offset 就必須 +08，這點是該注意的地方，那剩下的就是輸出資料了： 
 
 <pre class="brush: php; title: ; notranslate" title=""><?php
-echo "<h2>" . $createdEvent->title->text .  "&lt;/h2>\n";
+echo "<h2>" . $createdEvent->title->text .  "</h2>\n";
 echo "
 
 <ul>

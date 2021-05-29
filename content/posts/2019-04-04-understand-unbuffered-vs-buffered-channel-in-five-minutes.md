@@ -48,9 +48,9 @@ tags:
     c := make(chan bool)
     go func() {
         fmt.Println("GO GO GO")
-        c &lt;- true
+        c <- true
     }()
-    &lt;-c
+    <-c
 }</code></pre>
 
 可以看到上面我用了 make(chan bool) 來建立一個 channel，當在 main 函數最後用 <-c 代表需要等待讀出一個 channel 值，main 函數才會結束，這時候就達到了跟用 Sleep 一樣的效果，接著將程式碼改成如下:
@@ -59,9 +59,9 @@ tags:
     c := make(chan bool)
     go func() {
         fmt.Println("GO GO GO")
-        &lt;-c
+        <-c
     }()
-    c &lt;- true
+    c <- true
 }</code></pre>
 
 你會發現得到同樣的結果，為什麼呢？因為 unbufferd channel 的用途就是，今天在程式碼內丟了一個值進去 channel，這時候 main 函式就需要等到一個 channel 值被讀出來才會結束，所以不管你在 goroutine 內讀或寫，main 都需要等到一個寫一個讀完成後才會結束程式。這就是用 unbuffered channel 來達到同步的效果，也就是保證讀寫都需要執行完畢才可以結束主程式。
@@ -74,9 +74,9 @@ tags:
     c := make(chan bool, 1)
     go func() {
         fmt.Println("GO GO GO")
-        &lt;-c
+        <-c
     }()
-    c &lt;- true
+    c <- true
 }</code></pre>
 
 可以很清楚知道 buffered channel 是透過 make(chan bool, 1) 後面有帶容量值，開發者可以一次宣告此 channel 可以容納幾個值，大家可以執行看看上述程式碼，會發現完全沒有輸出東西，原因是什麼，buffered channel 就是只要容量有多少，你都可以一直塞值進去，但是不用讀出來沒關係，所以當丟了 c <- true 進去後，主程式不會等到讀出來才結束，造成使用者沒有看到 fmt.Println("GO GO GO")，這就是最大的差異。
@@ -85,9 +85,9 @@ tags:
     c := make(chan bool, 1)
     go func() {
         fmt.Println("GO GO GO")
-       c &lt;- true
+       c <- true
     }()
-    &lt;-c
+    <-c
 } </code></pre>
 
 ## 結論

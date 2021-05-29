@@ -33,7 +33,7 @@ fatal: index file corrupt</pre> 解決此問題非常簡單，要先刪除 index
 
 <pre class="brush: bash; title: ; notranslate" title=""># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       modified:   Makefile
 #       modified:   user/easy_setup/easysetup.h
@@ -47,12 +47,12 @@ fatal: index file corrupt</pre> 解決此問題非常簡單，要先刪除 index
 
 <pre class="brush: bash; title: ; notranslate" title=""># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       modified:   Makefile
 #
 # Changed but not updated:
-#   (use "git add &lt;file>..." to update what will be committed)
+#   (use "git add <file>..." to update what will be committed)
 #
 #       modified:   user/easy_setup/easysetup.h
 #</pre>
@@ -63,7 +63,7 @@ fatal: index file corrupt</pre> 解決此問題非常簡單，要先刪除 index
 
 <pre class="brush: bash; title: ; notranslate" title=""># On branch master
 # Changed but not updated:
-#   (use "git add &lt;file>..." to update what will be committed)
+#   (use "git add <file>..." to update what will be committed)
 #
 #       modified:   Makefile
 #</pre> 然後恢復檔案指令： 
@@ -79,7 +79,7 @@ nothing to commit (working directory clean)</pre> 可以看到，該檔案已經
 
 <pre class="brush: bash; title: ; notranslate" title=""># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       modified:   Makefile
 #       modified:   user/easy_setup/easysetup.h
@@ -91,7 +91,7 @@ nothing to commit (working directory clean)</pre> 可以看到，該檔案已經
 <pre class="brush: bash; title: ; notranslate" title="">git log --stat</pre>
 
 <pre class="brush: bash; title: ; notranslate" title="">commit c13eb41110a38ef7145bb8815560641697800659
-Author: appleboy &lt;appleboy.tw at gmail.com>
+Author: appleboy <appleboy.tw at gmail.com>
 Date:   Fri Aug 20 20:02:55 2010 +0800
 
     first commit

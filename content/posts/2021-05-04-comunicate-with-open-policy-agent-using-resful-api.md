@@ -143,7 +143,7 @@ allow {
     # for each permission
     p := permissions[_]
 
-    # check if the permission granted to r matches the user&#039;s request
+    # check if the permission granted to r matches the user's request
     p == {"action": input.action, "object": input.object}
 }</code></pre>
 
@@ -174,7 +174,7 @@ allow {
 
 用 [bat tool][12] 驗證
 
-<pre><code class="language-bash">$ bat POST http://localhost:8181/v1/data/rbac/authz/allow &lt; input.json
+<pre><code class="language-bash">$ bat POST http://localhost:8181/v1/data/rbac/authz/allow < input.json
 POST /v1/data/rbac/authz/allow HTTP/1.1
 Host: localhost:8181
 Accept: application/json

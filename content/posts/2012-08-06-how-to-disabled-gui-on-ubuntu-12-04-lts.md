@@ -29,7 +29,7 @@ tags:
 用您個人喜歡的編輯器打開 `/etc/default/grub` 並且找到底下字串
 
 <div>
-  <pre class="brush: bash; title: ; notranslate" title="">GRUB_CMDLINE_LINUX_DEFAULT="&lt;no matter what's you find here&gt;"</pre>
+  <pre class="brush: bash; title: ; notranslate" title="">GRUB_CMDLINE_LINUX_DEFAULT="<no matter what's you find here>"</pre>
 </div>
 
 改成

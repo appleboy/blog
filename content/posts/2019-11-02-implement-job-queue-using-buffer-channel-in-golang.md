@@ -32,7 +32,7 @@ tags:
 
 怎麼透過 buffered channel 來建立簡單的 Queue 機制。請看底下程式碼:
 
-<pre><code class="language-go">func worker(jobChan &lt;-chan Job) {
+<pre><code class="language-go">func worker(jobChan <-chan Job) {
     for job := range jobChan {
         process(job)
     }
@@ -45,7 +45,7 @@ jobChan := make(chan Job, 1024)
 go worker(jobChan)
 
 // enqueue a job
-jobChan &lt;- job</code></pre>
+jobChan <- job</code></pre>
 
 上面很清楚看到把 worker 丟到背景，接著將 Job 丟進 Channel 內，就可以在背景做一些比較複雜的工作。但是大家看到 **jobChan <- job** 是不是會想到一個問題，這邊會不會 blocking 啊？答案是會的，那你會說可以把 **1024** 調整大一點啊，這我不否認這是一種解法，但是你還是無法保證不會 blocking 啊。底下用一個簡單的例子來說明問題:
 
@@ -56,7 +56,7 @@ import (
     "time"
 )
 
-func worker(jobChan &lt;-chan int) {
+func worker(jobChan <-chan int) {
     for job := range jobChan {
         fmt.Println("current job:", job)
         time.Sleep(3 * time.Second)
@@ -73,11 +73,11 @@ func main() {
 
     // enqueue a job
     fmt.Println("enqueue the job 1")
-    jobChan &lt;- 1
+    jobChan <- 1
     fmt.Println("enqueue the job 2")
-    jobChan &lt;- 2
+    jobChan <- 2
     fmt.Println("enqueue the job 3")
-    jobChan &lt;- 3
+    jobChan <- 3
 
     fmt.Println("waiting the jobs")
     time.Sleep(10 * time.Second)
@@ -88,7 +88,7 @@ func main() {
 <pre><code class="language-sh">enqueue the job 1
 enqueue the job 2
 enqueue the job 3
-current job: 1 &lt;- 程式被 blocking
+current job: 1 <- 程式被 blocking
 finished job: 1
 waiting the jobs
 current job: 2
@@ -102,14 +102,14 @@ finished job: 3</code></pre>
 
 <pre><code class="language-go">    fmt.Println("enqueue the job 3")
     go func() {
-        jobChan &lt;- 3
+        jobChan <- 3
     }()</code></pre>
 
 另一種方式透過 select 來判斷 Channel 是否可以送資料進去
 
-<pre><code class="language-go">func enqueue(job int, jobChan chan&lt;- int) bool {
+<pre><code class="language-go">func enqueue(job int, jobChan chan<- int) bool {
     select {
-    case jobChan &lt;- job:
+    case jobChan <- job:
         return true
     default:
         return false

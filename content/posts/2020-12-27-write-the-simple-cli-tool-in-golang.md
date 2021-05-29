@@ -203,7 +203,7 @@ func NewEngine(cfg config.Config) (backup Backup, err error) {
         )
     }
 
-    return nil, errors.New("We don&#039;t support Databaser Dirver: " + cfg.Database.Driver)
+    return nil, errors.New("We don't support Databaser Dirver: " + cfg.Database.Driver)
 }</code></pre>
 
 ## 心得

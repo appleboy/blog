@@ -127,7 +127,7 @@ wsrep_sst_auth=cluster:1234</pre> 設定完成後，重新啟動 mysql
 | wsrep_connected            | ON                                                           |
 | wsrep_local_index          | 0                                                            |
 | wsrep_provider_name        | Galera                                                       |
-| wsrep_provider_vendor      | Codership Oy &lt;info@codership.com>                            |
+| wsrep_provider_vendor      | Codership Oy <info@codership.com>                            |
 | wsrep_provider_version     | 23.2.4(r147)                                                 |
 | wsrep_ready                | ON                                                           |
 +----------------------------+--------------------------------------------------------------+

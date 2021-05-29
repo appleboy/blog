@@ -50,5 +50,5 @@ appleboy@aaaa.com.tw  appleboy.aaaa
 postfix reload
 </pre> 然後看 log 檔案 
 
-<pre class="brush: bash; title: ; notranslate" title="">Jul 11 10:49:06 FreeBSD postfix/local[40760]: AF6A32840C: to=&lt;appleboy.aaaa@aaaa.com.tw>, orig_to=&lt;appleboy@aaaa.com.tw>, relay=local, delay=8, delays=0.25/0.01/0/7.8, dsn=2.0.0, status=sent (delivered to command: /usr/local/bin/procmail -a "$EXTENSION")
+<pre class="brush: bash; title: ; notranslate" title="">Jul 11 10:49:06 FreeBSD postfix/local[40760]: AF6A32840C: to=<appleboy.aaaa@aaaa.com.tw>, orig_to=<appleboy@aaaa.com.tw>, relay=local, delay=8, delays=0.25/0.01/0/7.8, dsn=2.0.0, status=sent (delivered to command: /usr/local/bin/procmail -a "$EXTENSION")
 </pre>

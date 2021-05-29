@@ -69,7 +69,7 @@ foreach ($eventEntry->where as $where) {
 <pre class="brush: xml; title: ; notranslate" title=""></pre> 必須將 event id 寫入 hidden 裡面，傳送到 edit.php 3. 顯示單一事件： 
 
 <pre class="brush: php; title: ; notranslate" title=""><?php
-echo "<h2>" . $eventEntry->title->text .  "&lt;/h2>\n";
+echo "<h2>" . $eventEntry->title->text .  "</h2>\n";
 echo "
 
 <ul>
@@ -172,7 +172,7 @@ foreach ($eventEntry->where as $where) {
 <hr />
 
 <?php
-echo "<h2>" . $eventEntry->title->text .  "&lt;/h2>\n";
+echo "<h2>" . $eventEntry->title->text .  "</h2>\n";
 echo "
 
 <ul>
@@ -224,7 +224,7 @@ $service = Zend_Gdata_Calendar::AUTH_SERVICE_NAME;
 $client = Zend_Gdata_ClientLogin::getHttpClient($googleAccount, $googlePassword, $service);
 
 updateEvent ($client, $eventId, $newTitle, $newWhere, $newContent);
-echo "觀看內容:<a href='event.php?id=".$eventId."'>".$newTitle."&lt;/a>";
+echo "觀看內容:<a href='event.php?id=".$eventId."'>".$newTitle."</a>";
 
 ?>
 </pre> 上一篇：

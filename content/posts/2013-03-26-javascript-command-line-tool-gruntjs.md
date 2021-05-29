@@ -64,11 +64,11 @@ tags:
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        banner: '/*! &lt;%= pkg.name %> &lt;%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: 'src/&lt;%= pkg.name %>.js',
-        dest: 'build/&lt;%= pkg.name %>.min.js'
+        src: 'src/<%= pkg.name %>.js',
+        dest: 'build/<%= pkg.name %>.min.js'
       }
     }
   });
@@ -92,11 +92,11 @@ grunt.initConfig({
   pkg: grunt.file.readJSON('package.json'),
   uglify: {
     options: {
-      banner: '/*! &lt;%= pkg.name %> &lt;%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
     },
     build: {
-      src: 'src/&lt;%= pkg.name %>.js',
-      dest: 'build/&lt;%= pkg.name %>.min.js'
+      src: 'src/<%= pkg.name %>.js',
+      dest: 'build/<%= pkg.name %>.min.js'
     }
   }
 });</pre> 所有的工作項目設定都會寫在 g
@@ -108,11 +108,11 @@ grunt.initConfig({
   pkg: grunt.file.readJSON('package.json'),
   uglify: {
     options: {
-      banner: '/*! &lt;%= pkg.name %> &lt;%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
     },
     build: {
-      src: 'src/&lt;%= pkg.name %>.js',
-      dest: 'build/&lt;%= pkg.name %>.min.js'
+      src: 'src/<%= pkg.name %>.js',
+      dest: 'build/<%= pkg.name %>.min.js'
     },
     my_target_1: {
       options: {

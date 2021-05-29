@@ -63,7 +63,7 @@ img, input, textarea
 
 <pre class="brush: xml; title: ; notranslate" title=""></pre> 使用 Ckeditor 方式如下： html: 
 
-<pre class="brush: xml; title: ; notranslate" title=""><textarea id="test" name="test" style="width: 400px; height: 200px" />&lt;/textarea></pre> javascript 
+<pre class="brush: xml; title: ; notranslate" title=""><textarea id="test" name="test" style="width: 400px; height: 200px" /></textarea></pre> javascript 
 
 <pre class="brush: jscript; title: ; notranslate" title="">$('#test').ckeditor({ contentCss: '/path/ckeditor/mysitestyles.css' });</pre> 就提供這兩種解法給大家參考。
 

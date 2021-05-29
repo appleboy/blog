@@ -105,7 +105,7 @@ databases:
 # add any commands you wish to this file and they will
 # be run after the Homestead machine is provisioned.
 
-mysql -uhomestead -psecret app &lt; /home/vagrant/codeigniter-app/sql/app.sql</pre>
+mysql -uhomestead -psecret app < /home/vagrant/codeigniter-app/sql/app.sql</pre>
 </div>
 
 ## 增加 host

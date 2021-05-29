@@ -59,19 +59,19 @@ remote: Compressing objects: 100% (46/46), done.
 remote: Total 79 (delta 38), reused 59 (delta 28)
 Unpacking objects: 100% (79/79), done.
 From https://github.com/appleboy/gulp-compass
- * [new branch]      refs/pull/1/head -&gt; refs/pull/origin/1
- * [new branch]      refs/pull/10/head -&gt; refs/pull/origin/10
- * [new branch]      refs/pull/12/head -&gt; refs/pull/origin/12
- * [new branch]      refs/pull/16/head -&gt; refs/pull/origin/16
- * [new branch]      refs/pull/21/head -&gt; refs/pull/origin/21
- * [new branch]      refs/pull/23/head -&gt; refs/pull/origin/23
- * [new branch]      refs/pull/26/head -&gt; refs/pull/origin/26
- * [new branch]      refs/pull/28/head -&gt; refs/pull/origin/28
- * [new branch]      refs/pull/5/head -&gt; refs/pull/origin/5
- * [new branch]      refs/pull/6/head -&gt; refs/pull/origin/6
- * [new branch]      refs/pull/7/head -&gt; refs/pull/origin/7
- * [new branch]      refs/pull/8/head -&gt; refs/pull/origin/8
- * [new branch]      refs/pull/9/head -&gt; refs/pull/origin/9</pre>
+ * [new branch]      refs/pull/1/head -> refs/pull/origin/1
+ * [new branch]      refs/pull/10/head -> refs/pull/origin/10
+ * [new branch]      refs/pull/12/head -> refs/pull/origin/12
+ * [new branch]      refs/pull/16/head -> refs/pull/origin/16
+ * [new branch]      refs/pull/21/head -> refs/pull/origin/21
+ * [new branch]      refs/pull/23/head -> refs/pull/origin/23
+ * [new branch]      refs/pull/26/head -> refs/pull/origin/26
+ * [new branch]      refs/pull/28/head -> refs/pull/origin/28
+ * [new branch]      refs/pull/5/head -> refs/pull/origin/5
+ * [new branch]      refs/pull/6/head -> refs/pull/origin/6
+ * [new branch]      refs/pull/7/head -> refs/pull/origin/7
+ * [new branch]      refs/pull/8/head -> refs/pull/origin/8
+ * [new branch]      refs/pull/9/head -> refs/pull/origin/9</pre>
 </div>
 
 請注意 `refs/pull/` 是唯讀狀態，你無法 commit 任何程式碼上去

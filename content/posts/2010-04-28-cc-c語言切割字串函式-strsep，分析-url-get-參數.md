@@ -89,14 +89,14 @@ int main()
         nel++;
     fprintf(stderr, "CGI[nel string] : %d\n", nel);
 
-    for (q = query; q &lt; (query + len);) {
+    for (q = query; q < (query + len);) {
         value = name = q;
 
         /* Skip to next assignment */
         fprintf(stderr, "CGI[string] : %s\n", q);
         fprintf(stderr, "CGI[string len] : %d\n", strlen(q));
         fprintf(stderr, "CGI[address] : %x\n", q);
-        for (q += strlen(q); q &lt; (query + len) && !*q; q++);
+        for (q += strlen(q); q < (query + len) && !*q; q++);
         /* Assign variable */
         name = strsep(&value, "=");
         fprintf(stderr, "CGI[name ] : %s\n", name);

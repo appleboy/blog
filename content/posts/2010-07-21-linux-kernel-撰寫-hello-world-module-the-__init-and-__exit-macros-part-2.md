@@ -19,13 +19,13 @@ tags:
 ---
 再看此篇之前，可以先閱讀作者先前寫的：『[[Linux Kernel Driver] 撰寫簡單 Hello, World module (part 1).][1]』，今天要介紹 Driver 的 init module 區別，在 Kernel 2.4 版本，您可以自行定義 init 跟 cleanup 函式，他們不再被個別稱為 <span style="color:green">init_module()</span> 和 <span style="color:green">cleanup_module()</span>，現在都使用 <span style="color:green"><strong>module_init()</strong></span> 和 <span style="color:green"><strong>module_exit()</strong></span> 兩大巨集，這兩函式被定義在 <span style="color:red">linux/init.h</span> 檔案裡面，所以在寫程式務必將其 include 喔，另外一個核心模組(MODULE_LICENSE)，用於讓核心知道此模組遵守自由授權條款，若沒這項宣告，核心會跟您抱怨的喔，底下為範例： 
 
-<pre class="brush: cpp; title: ; notranslate" title="">#include &lt;linux/kernel.h> /* pr_info所需 include 檔案*/
-#include &lt;linux/init.h>
-#include &lt;linux/module.h> /* 所有 module 需要檔案*/
-#include &lt;linux/version.h>
+<pre class="brush: cpp; title: ; notranslate" title="">#include <linux/kernel.h> /* pr_info所需 include 檔案*/
+#include <linux/init.h>
+#include <linux/module.h> /* 所有 module 需要檔案*/
+#include <linux/version.h>
 
 MODULE_DESCRIPTION("Hello World !!");
-MODULE_AUTHOR("Bo-Yi Wu &lt;appleboy.tw AT gmail.com>");
+MODULE_AUTHOR("Bo-Yi Wu <appleboy.tw AT gmail.com>");
 MODULE_LICENSE("GPL");
 
 static int __init hello_init(void)

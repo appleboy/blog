@@ -27,14 +27,14 @@ tags:
 
 <a href="http://nginx.com/" target="_blank">Nginx</a> 搭配 <a href="http://php-fpm.org/" target="_blank">PHP-FPM</a> 用起來效能還不錯，這次來筆記如何設定 Nginx 去除 PHP MVC Framework 討厭的 index.php 字串，不管是 <a href="http://laravel.com/" target="_blank">Laravel</a> 或 <a href="http://codeigniter.org.tw" target="_blank">CodeIgniter</a> 教學文件都是在 <a href="http://www.apache.org/" target="_blank">Apache</a> 設定 <a href="http://en.wikipedia.org/wiki/Htaccess" target="_blank">.htaccess</a> 來達成 Cleaner URL，Apache 最大好處支援 .htaccess，但是 Nginx 也有強大的效能，此篇紀錄如何設定 Nginx 達成 <a href="http://httpd.apache.org/docs/2.2/mod/mod_rewrite.html" target="_blank">mod_rewrite</a> 效果。 <!--more--> 首先來看看 apache .htaccess 是如何設定: 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_rewrite.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_rewrite.c>
      RewriteEngine on
 
      RewriteCond %{REQUEST_FILENAME} !-f
      RewriteCond %{REQUEST_FILENAME} !-d
 
      RewriteRule ^(.*)$ index.php/$1 [L]
-&lt;/IfModule></pre> 上面的意思就是代表如果該 URL 是不存在的檔案或者是目錄就全部導向 index.php，如果在 
+</IfModule></pre> 上面的意思就是代表如果該 URL 是不存在的檔案或者是目錄就全部導向 index.php，如果在 
 
 <a href="http://www.ubuntu.com/" target="_blank">Ubuntu</a> 底下可能會產生 Loop，請把 .htaccess 改成底下 
 

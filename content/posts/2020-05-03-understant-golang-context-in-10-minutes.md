@@ -77,7 +77,7 @@ func main() {
     go func() {
         for {
             select {
-            case &lt;-stop:
+            case <-stop:
                 fmt.Println("got the stop channel")
                 return
             default:
@@ -89,7 +89,7 @@ func main() {
 
     time.Sleep(5 * time.Second)
     fmt.Println("stop the gorutine")
-    stop &lt;- true
+    stop <- true
     time.Sleep(5 * time.Second)
 }</code></pre>
 
@@ -117,7 +117,7 @@ func main() {
     go func() {
         for {
             select {
-            case &lt;-ctx.Done():
+            case <-ctx.Done():
                 fmt.Println("got the stop channel")
                 return
             default:
@@ -163,7 +163,7 @@ func main() {
 func worker(ctx context.Context, name string) {
     for {
         select {
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             fmt.Println(name, "got the stop channel")
             return
         default:

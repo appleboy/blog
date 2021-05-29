@@ -84,7 +84,7 @@ $ fixmyjs app.js</pre>
 另外如果有使用 [Sublime Text][10] 編輯器可以直接找 [sublime-fixmyjs][11]，當然也可以透過 [gulp-fixmyjs][12] 來導入自動修復流程。[gulp][13] 可以參考底下
 
 <div>
-  <pre class="brush: jscript; title: ; notranslate" title="">gulp.task 'jshint', -&gt;
+  <pre class="brush: jscript; title: ; notranslate" title="">gulp.task 'jshint', ->
   gulp.src 'app/assets/js/**/*.js'
     .pipe $.fixmyjs
       legacy: true

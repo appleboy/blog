@@ -58,8 +58,8 @@ $ govendor fetch github.com/appleboy/com/random</code></pre>
 用 go module 解決兩個問題，第一專案內不必再使用 vendor 管理套件，第二開發者可以任意 clone 專案到任何地方，直接下 go build 就可以拿到執行檔了。底下是使用方式
 
 <pre><code class="language-shell">project
---&gt; main.go
---&gt; main_test.go</code></pre>
+--> main.go
+--> main_test.go</code></pre>
 
 初始化專案，先啟動 `GO111MODULE` 變數，在 go 1.11 預設是 `auto`
 

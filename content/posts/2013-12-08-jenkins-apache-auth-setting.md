@@ -44,10 +44,10 @@ $ a2enmod proxy_http</pre>
 <a href="http://httpd.apache.org/docs/current/vhosts/" target="_blank">Apache virtual host</a> 部份加入底下設定
 
 <pre class="brush: bash; title: ; notranslate" title="">ProxyRequests Off
-&lt;Proxy *>
+<Proxy *>
     Order deny,allow
     Allow from all
-&lt;/Proxy>
+</Proxy>
 ProxyPreserveHost On
 ProxyPass / http://127.0.0.1:8080
 </pre>
@@ -55,10 +55,10 @@ ProxyPass / http://127.0.0.1:8080
 設定到這邊，重新啟動 Apache 即可，如果你是使用 sub folder 的方式，有就是透過 www.example.com/jenkins 方式瀏覽，請換成底下設定
 
 <pre class="brush: bash; title: ; notranslate" title="">ProxyRequests Off
-&lt;Proxy *>
+<Proxy *>
     Order deny,allow
     Allow from all
-&lt;/Proxy>
+</Proxy>
 ProxyPreserveHost On
 ProxyPass /jenkins http://127.0.0.1:8080/jenkins</pre>
 
@@ -68,9 +68,9 @@ ProxyPass /jenkins http://127.0.0.1:8080/jenkins</pre>
 
 重新啟動 Jenkins 及 Apache 即可。最後透過 htpasswd 將 jenkins web 目錄鎖起來
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;Location /jenkins/>
+<pre class="brush: bash; title: ; notranslate" title=""><Location /jenkins/>
     AuthType basic
     AuthName "jenkins"
     AuthUserFile "/etc/apache2/conf/.htpasswd"
     Require valid-user
-&lt;/Location></pre>
+</Location></pre>

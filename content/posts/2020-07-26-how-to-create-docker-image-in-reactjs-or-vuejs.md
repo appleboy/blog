@@ -46,7 +46,7 @@ npm run build:staging</code></pre>
 
 <pre><code class="language-dockerfile=">FROM nginx:1.19
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;" \
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.name="web" \
   org.label-schema.vendor="Bo-Yi Wu" \
   org.label-schema.schema-version="1.0"

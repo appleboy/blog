@@ -49,7 +49,7 @@ import (
 func main() {
     wg := sync.WaitGroup{}
     wg.Add(100)
-    for i := 0; i &lt; 100; i++ {
+    for i := 0; i < 100; i++ {
         go func(val int, wg *sync.WaitGroup) {
             time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
             fmt.Println("finished job id:", val)
@@ -75,12 +75,12 @@ func main() {
 <pre><code class="language-go">Loop:
     for {
         select {
-        case val := &lt;-outChan:
+        case val := <-outChan:
             fmt.Println("finished:", val)
-        case err := &lt;-errChan:
+        case err := <-errChan:
             fmt.Println("error:", err)
             break Loop
-        case &lt;-finishChan:
+        case <-finishChan:
             break Loop
         }
     }</code></pre>
@@ -98,28 +98,28 @@ func main() {
 <pre><code class="language-go">Loop:
     for {
         select {
-        case val := &lt;-outChan:
+        case val := <-outChan:
             fmt.Println("finished:", val)
-        case err := &lt;-errChan:
+        case err := <-errChan:
             fmt.Println("error:", err)
             break Loop
-        case &lt;-finishChan:
+        case <-finishChan:
             break Loop
-        case &lt;-time.After(100000 * time.Millisecond):
+        case <-time.After(100000 * time.Millisecond):
             break Loop
         }
     }</code></pre>
 
 來看看 go func 內怎麼將值丟到 Channel
 
-<pre><code class="language-go">    for i := 0; i &lt; 20; i++ {
-        go func(outChan chan&lt;- int, errChan chan&lt;- error, val int, wg *sync.WaitGroup) {
+<pre><code class="language-go">    for i := 0; i < 20; i++ {
+        go func(outChan chan<- int, errChan chan<- error, val int, wg *sync.WaitGroup) {
             defer wg.Done()
             time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
             fmt.Println("finished job id:", val)
-            outChan &lt;- val
+            outChan <- val
             if val == 11 {
-                errChan &lt;- errors.New("error in 60")
+                errChan <- errors.New("error in 60")
             }
 
         }(outChan, errChan, i, &wg)
@@ -147,14 +147,14 @@ func main() {
     finishChan := make(chan struct{})
     wg := sync.WaitGroup{}
     wg.Add(100)
-    for i := 0; i &lt; 100; i++ {
-        go func(outChan chan&lt;- int, errChan chan&lt;- error, val int, wg *sync.WaitGroup) {
+    for i := 0; i < 100; i++ {
+        go func(outChan chan<- int, errChan chan<- error, val int, wg *sync.WaitGroup) {
             defer wg.Done()
             time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
             fmt.Println("finished job id:", val)
-            outChan &lt;- val
+            outChan <- val
             if val == 60 {
-                errChan &lt;- errors.New("error in 60")
+                errChan <- errors.New("error in 60")
             }
 
         }(outChan, errChan, i, &wg)
@@ -169,14 +169,14 @@ func main() {
 Loop:
     for {
         select {
-        case val := &lt;-outChan:
+        case val := <-outChan:
             fmt.Println("finished:", val)
-        case err := &lt;-errChan:
+        case err := <-errChan:
             fmt.Println("error:", err)
             break Loop
-        case &lt;-finishChan:
+        case <-finishChan:
             break Loop
-        case &lt;-time.After(100000 * time.Millisecond):
+        case <-time.After(100000 * time.Millisecond):
             break Loop
         }
     }

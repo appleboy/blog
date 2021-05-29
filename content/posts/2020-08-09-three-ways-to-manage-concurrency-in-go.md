@@ -81,17 +81,17 @@ func main() {
     go func() {
         for {
             select {
-            case &lt;-exit:
+            case <-exit:
                 fmt.Println("Exit")
                 return
-            case &lt;-time.After(2 * time.Second):
+            case <-time.After(2 * time.Second):
                 fmt.Println("Monitoring")
             }
         }
     }()
     time.Sleep(5 * time.Second)
     fmt.Println("Notify Exit")
-    exit &lt;- true //keep main goroutine alive
+    exit <- true //keep main goroutine alive
     time.Sleep(5 * time.Second)
 }</code></pre>
 
@@ -113,10 +113,10 @@ func foo(ctx context.Context, name string) {
     go bar(ctx, name) // A calls B
     for {
         select {
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             fmt.Println(name, "A Exit")
             return
-        case &lt;-time.After(1 * time.Second):
+        case <-time.After(1 * time.Second):
             fmt.Println(name, "A do something")
         }
     }
@@ -125,10 +125,10 @@ func foo(ctx context.Context, name string) {
 func bar(ctx context.Context, name string) {
     for {
         select {
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             fmt.Println(name, "B Exit")
             return
-        case &lt;-time.After(2 * time.Second):
+        case <-time.After(2 * time.Second):
             fmt.Println(name, "B do something")
         }
     }

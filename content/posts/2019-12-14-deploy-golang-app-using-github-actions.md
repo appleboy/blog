@@ -103,7 +103,7 @@ steps:
 
 <pre><code class="language-dockerfile">FROM plugins/base:linux-amd64
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;" \
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.name="helloworld" \
   org.label-schema.vendor="Bo-Yi Wu" \
   org.label-schema.schema-version="1.0"

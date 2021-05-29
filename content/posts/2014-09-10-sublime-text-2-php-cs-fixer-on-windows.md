@@ -131,7 +131,7 @@ tags:
     "phpcs_php_path": "",
 
     // What is the regex for the linter? Has to provide a named match for 'message' and 'line'
-    "phpcs_linter_regex": "(?P&lt;message&gt;.*) on line (?P&lt;line&gt;\\d+)",
+    "phpcs_linter_regex": "(?P<message>.*) on line (?P<line>\\d+)",
 
     // PHP Mess Detector settings
 

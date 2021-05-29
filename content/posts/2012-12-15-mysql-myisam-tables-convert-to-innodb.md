@@ -33,7 +33,7 @@ tags:
 
 <pre class="brush: bash; title: ; notranslate" title="">ENGINE=InnoDB ROW_FORMAT=COMPRESSED</pre> 存檔後，再透過底下指令將資料存回到指定資料庫 
 
-<pre class="brush: bash; title: ; notranslate" title="">$ mysql -u root -p database_name &lt; db_name.sql[/code]
+<pre class="brush: bash; title: ; notranslate" title="">$ mysql -u root -p database_name < db_name.sql[/code]
 
 完成後可以透過 <a href="http://www.phpmyadmin.net" target="_blank">phpMyAdmin</a> 檢查看看是不是全部的都已經轉換成 InnoDB。
 

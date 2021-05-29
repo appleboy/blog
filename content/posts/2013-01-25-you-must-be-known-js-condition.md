@@ -50,11 +50,11 @@ tags:
 
 <div>
   <pre class="brush: jscript; title: ; notranslate" title="">function howBig( num ) {
-  if ( num &lt; 10 ) {
+  if ( num < 10 ) {
     return 'small';
-  } else if ( num &gt;= 10 && num &lt; 100 ) {
+  } else if ( num >= 10 && num < 100 ) {
     return 'medium';
-  } else if ( num &gt;= 100 ) {
+  } else if ( num >= 100 ) {
     return 'big';
   }
 }</pre>
@@ -64,15 +64,15 @@ tags:
 
 <div>
   <pre class="brush: jscript; title: ; notranslate" title="">function howBig( num ) {
-  if ( num &lt; 10 ) {
+  if ( num < 10 ) {
     return 'small';
   }
 
-  if ( num &lt; 100 ) {
+  if ( num < 100 ) {
     return 'medium';
   }
 
-  if ( num &gt;= 100 ) {
+  if ( num >= 100 ) {
     return 'big';
   }
 }</pre>
@@ -82,11 +82,11 @@ tags:
 
 <div>
   <pre class="brush: jscript; title: ; notranslate" title="">function howBig( num ) {
-  if ( num &lt; 10 ) {
+  if ( num < 10 ) {
     return 'small';
   }
 
-  if ( num &lt; 100 ) {
+  if ( num < 100 ) {
     return 'medium';
   }
 

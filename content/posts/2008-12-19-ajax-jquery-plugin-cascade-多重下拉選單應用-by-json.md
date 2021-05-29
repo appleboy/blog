@@ -49,7 +49,7 @@ while($row = $db->sql_fetchrow($result)){
 <pre class="brush: jscript; title: ; notranslate" title=""></pre> 前端 html 部份： 
 
 <pre class="brush: php; title: ; notranslate" title=""><select name="user_college" id="user_college">
-&lt;option value="">請選擇&lt;/option>
+<option value="">請選擇</option>
 <?
 $sql = "SELECT * FROM " . USERS_COLLEGE_TABLE;
 if( !($result = $db->sql_query($sql)) )
@@ -58,14 +58,14 @@ if( !($result = $db->sql_query($sql)) )
 }
 while($row = $db->sql_fetchrow($result)){
    $selected = ($row['college_id'] == $profiledata['user_college']) ? "selected" : "";
-   echo '&lt;option value="'.$row["college_id"].'" '.$selected.'>'.$row["college_name"].'&lt;/option>';
+   echo '<option value="'.$row["college_id"].'" '.$selected.'>'.$row["college_name"].'</option>';
 }
 ?> 
 </select>
 
 
 <select name="user_department" id="user_department">
-&lt;option value="">請選擇&lt;/option>
+<option value="">請選擇</option>
 </select></pre> 這樣大致上就可以動了，那如果是要三層選單，那就自己再去加上 jQuery 的部份就可以了，舉一反三，我想大家都會，那底下介紹一下 ajax json 拿取得動態資料，這樣就不必先載入。 那首先修改 jQuery 寫法部份： 
 
 <pre class="brush: jscript; title: ; notranslate" title="">jQuery(document).ready(function()

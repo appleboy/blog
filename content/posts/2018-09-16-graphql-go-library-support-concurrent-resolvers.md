@@ -24,10 +24,10 @@ tags:
         // Concurrent work via Goroutines.
         go func() {
             // Async work to obtain pullRequests.
-            ch &lt;- pullRequests
+            ch <- pullRequests
         }()
         return func() interface{} {
-            return &lt;-ch
+            return <-ch
         }, nil
     },
 },</code></pre>
@@ -86,10 +86,10 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
                 go func() {
                     defer close(ch)
                     time.Sleep(1 * time.Second)
-                    foo := &Foo{Name: "Foo&#039;s name"}
-                    ch &lt;- &result{data: foo, err: nil}
+                    foo := &Foo{Name: "Foo's name"}
+                    ch <- &result{data: foo, err: nil}
                 }()
-                r := &lt;-ch
+                r := <-ch
                 return r.data, r.err
             },
         },
@@ -104,10 +104,10 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
                 go func() {
                     defer close(ch)
                     time.Sleep(1 * time.Second)
-                    bar := &Bar{Name: "Bar&#039;s name"}
-                    ch &lt;- &result{data: bar, err: nil}
+                    bar := &Bar{Name: "Bar's name"}
+                    ch <- &result{data: bar, err: nil}
                 }()
-                r := &lt;-ch
+                r := <-ch
                 return r.data, r.err
             },
         },
@@ -144,10 +144,10 @@ func main() {
         {
           "data": {
             "concurrentFieldBar": {
-              "name": "Bar&#039;s name"
+              "name": "Bar's name"
             },
             "concurrentFieldFoo": {
-              "name": "Foo&#039;s name"
+              "name": "Foo's name"
             }
           }
         }
@@ -160,10 +160,10 @@ func main() {
 {
   "data": {
     "concurrentFieldBar": {
-      "name": "Bar&#039;s name"
+      "name": "Bar's name"
     },
     "concurrentFieldFoo": {
-      "name": "Foo&#039;s name"
+      "name": "Foo's name"
     }
   }
 }
@@ -175,7 +175,7 @@ sys     0m0.925s</code></pre>
 總共花費了四秒，原因是每個 resolver 都是依序執行，所以都需要等每個 goroutines 執行完成才能進入到下一個 resolver，上面例子該如何改成 Concurrent 呢，很簡單，只要將 return 的部分換成
 
 <pre><code class="language-go">return func() (interface{}, error) {
-    r := &lt;-ch
+    r := <-ch
     return r.data, r.err
 }, nil</code></pre>
 
@@ -185,10 +185,10 @@ sys     0m0.925s</code></pre>
 {
   "data": {
     "concurrentFieldBar": {
-      "name": "Bar&#039;s name"
+      "name": "Bar's name"
     },
     "concurrentFieldFoo": {
-      "name": "Foo&#039;s name"
+      "name": "Foo's name"
     }
   }
 }

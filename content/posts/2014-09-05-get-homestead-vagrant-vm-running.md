@@ -120,10 +120,10 @@ sites:
 最後請在 Homestead 目錄下執行 `vagrant up` 啟動訊息可以發現底下 port mapping
 
 <div>
-  <pre class="brush: bash; title: ; notranslate" title="">default: 80 =&gt; 8088 (adapter 1)
-default: 3306 =&gt; 33060 (adapter 1)
-default: 5432 =&gt; 54320 (adapter 1)
-default: 22 =&gt; 2222 (adapter 1)</pre>
+  <pre class="brush: bash; title: ; notranslate" title="">default: 80 => 8088 (adapter 1)
+default: 3306 => 33060 (adapter 1)
+default: 5432 => 54320 (adapter 1)
+default: 22 => 2222 (adapter 1)</pre>
 </div>
 
 如果 port 已經被佔用，請修改 `scripts/homestead.rb`

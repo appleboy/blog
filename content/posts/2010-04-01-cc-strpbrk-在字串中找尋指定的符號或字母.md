@@ -27,7 +27,7 @@ int main ()
   char str[] = "This is a sample string";
   char key[] = "aeiou";
   char * pch;
-  printf ("Vowels in &#039;%s&#039;: ",str);
+  printf ("Vowels in '%s': ",str);
   pch = strpbrk (str, key);
   while (pch != NULL)
   {

@@ -28,7 +28,7 @@ tags:
     if (/^\s* \t/) {
         bad_line("indent SP followed by a TAB", $_);
     }
-    if (/^([&lt;>])\1{6} |^={7}$/) {
+    if (/^([<>])\1{6} |^={7}$/) {
         bad_line("unresolved merge conflict", $_);
     }
 }</pre> 改成： 
@@ -42,7 +42,7 @@ tags:
 #   if (/^\s* \t/) {
 #       bad_line("indent SP followed by a TAB", $_);
 #   }
-    if (/^([&lt;>])\1{6} |^={7}$/) {
+    if (/^([<>])\1{6} |^={7}$/) {
         bad_line("unresolved merge conflict", $_);
     }
 }</pre> 暫時停止 git 過濾字串，等 commit 完成之後，在將其 unmask 掉。 參考網站： 

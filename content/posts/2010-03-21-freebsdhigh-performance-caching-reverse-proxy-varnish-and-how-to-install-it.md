@@ -104,7 +104,7 @@ function validip($ip) {
     foreach ($reserved_ips as $r) {
       $min = ip2long($r[0]);
       $max = ip2long($r[1]);
-      if ((ip2long($ip) >= $min) && (ip2long($ip) &lt;= $max)) return false;
+      if ((ip2long($ip) >= $min) && (ip2long($ip) <= $max)) return false;
     }
     return true;
   } 

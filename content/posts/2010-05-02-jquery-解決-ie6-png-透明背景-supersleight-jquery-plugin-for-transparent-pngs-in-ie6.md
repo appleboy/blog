@@ -29,9 +29,9 @@ tags:
 
   2. 針對 IE6 瀏覽器寫入 html 
     
-    <pre class="brush: xml; title: ; notranslate" title="">&lt;!--[if lte IE 6]&gt;
-&lt;script type="text/javascript" src="supersleight-min.js"&gt;&lt;/script&gt;
-&lt;![endif]--&gt;
+    <pre class="brush: xml; title: ; notranslate" title=""><!--[if lte IE 6]>
+<script type="text/javascript" src="supersleight-min.js"></script>
+<![endif]-->
 </pre>
 
 來分析 supersleight.js 檔案，看它是如何運作，底下是完整程式碼：

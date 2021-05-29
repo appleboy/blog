@@ -229,12 +229,12 @@ func main() {
     for {
         ok, err := client.Check(context.Background())
         if !ok || err != nil {
-            log.Printf("can&#039;t connect grpc server: %v, code: %v\n", err, grpc.Code(err))
+            log.Printf("can't connect grpc server: %v, code: %v\n", err, grpc.Code(err))
         } else {
             log.Println("connect the grpc server successfully")
         }
 
-        &lt;-time.After(time.Second)
+        <-time.After(time.Second)
     }
 }
 </code></pre>

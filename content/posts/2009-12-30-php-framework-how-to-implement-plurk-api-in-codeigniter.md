@@ -173,7 +173,7 @@ class Welcome extends Controller {
 <h1>
   ----- get responses ----- 
 </h1>";
-        echo "set plurk id = 123&lt;/h1>";
+        echo "set plurk id = 123</h1>";
         print_r($plurk->get_responses(123));
         
         echo "
@@ -181,7 +181,7 @@ class Welcome extends Controller {
 <h1>
   ----- add response ----- 
 </h1>";
-        echo "set plurk id = 123&lt;/h1>";
+        echo "set plurk id = 123</h1>";
         print_r($plurk->add_response(123, 'test response', 'says'));
         
         echo "
@@ -189,7 +189,7 @@ class Welcome extends Controller {
 <h1>
   ----- delete response ----- 
 </h1>";
-        echo "set plurk id = 123, response id = 456&lt;/h1>";
+        echo "set plurk id = 123, response id = 456</h1>";
         $plurk->delete_response(123, 456);
         */
         
@@ -212,7 +212,7 @@ class Welcome extends Controller {
 <h1>
   ----- get user public profile ----- 
 </h1>";
-        echo "set user id = 123&lt;/h1>";
+        echo "set user id = 123</h1>";
         print_r($plurk->get_public_profile(123));
         
         echo "
@@ -354,7 +354,7 @@ class Welcome extends Controller {
 <h1>
   ----- set user following ----- 
 </h1>"; 
-        //echo "user id = 789&lt;/h1>";
+        //echo "user id = 789</h1>";
         //echo ($plurk->set_following(3440147, $follow = FALSE)) ? 'success' : 'disable';
         
         

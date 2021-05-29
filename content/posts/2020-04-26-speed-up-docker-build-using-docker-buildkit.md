@@ -44,27 +44,27 @@ tags:
 下完指令後，你會發現整個 output 結果不太一樣了，介面變得比較好看，也看到每個 Layer 編譯的時間
 
 <pre><code class="language-shell=">[+] Building 0.1s (15/15) FINISHED                                                                                     
- =&gt; [internal] load .dockerignore                                                                                 0.0s
- =&gt; =&gt; transferring context: 2B                                                                                   0.0s
- =&gt; [internal] load build definition from Dockerfile                                                              0.0s
- =&gt; =&gt; transferring dockerfile: 545B                                                                              0.0s
- =&gt; [internal] load metadata for docker.io/library/golang:1.14-alpine                                             0.0s
- =&gt; [1/10] FROM docker.io/library/golang:1.14-alpine                                                              0.0s
- =&gt; [internal] load build context                                                                                 0.0s
- =&gt; =&gt; transferring context: 184B                                                                                 0.0s
- =&gt; CACHED [2/10] RUN apk add bash ca-certificates git gcc g++ libc-dev                                           0.0s
- =&gt; CACHED [3/10] WORKDIR /app                                                                                    0.0s
- =&gt; CACHED [4/10] COPY go.mod .                                                                                   0.0s
- =&gt; CACHED [5/10] COPY go.sum .                                                                                   0.0s
- =&gt; CACHED [6/10] RUN go mod download                                                                             0.0s
- =&gt; CACHED [7/10] COPY main.go .                                                                                  0.0s
- =&gt; CACHED [8/10] COPY foo/foo.go foo/                                                                            0.0s
- =&gt; CACHED [9/10] COPY bar/bar.go bar/                                                                            0.0s
- =&gt; CACHED [10/10] RUN go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .                      0.0s
- =&gt; exporting to image                                                                                            0.0s
- =&gt; =&gt; exporting layers                                                                                           0.0s
- =&gt; =&gt; writing image sha256:6cc56539b3191d5efd87fb4d05181993d013411299b5cefb74047d2447b4d0c9                      0.0s
- =&gt; =&gt; naming to docker.io/appleboy/demo                                                                          0.0s</code></pre>
+ => [internal] load .dockerignore                                                                                 0.0s
+ => => transferring context: 2B                                                                                   0.0s
+ => [internal] load build definition from Dockerfile                                                              0.0s
+ => => transferring dockerfile: 545B                                                                              0.0s
+ => [internal] load metadata for docker.io/library/golang:1.14-alpine                                             0.0s
+ => [1/10] FROM docker.io/library/golang:1.14-alpine                                                              0.0s
+ => [internal] load build context                                                                                 0.0s
+ => => transferring context: 184B                                                                                 0.0s
+ => CACHED [2/10] RUN apk add bash ca-certificates git gcc g++ libc-dev                                           0.0s
+ => CACHED [3/10] WORKDIR /app                                                                                    0.0s
+ => CACHED [4/10] COPY go.mod .                                                                                   0.0s
+ => CACHED [5/10] COPY go.sum .                                                                                   0.0s
+ => CACHED [6/10] RUN go mod download                                                                             0.0s
+ => CACHED [7/10] COPY main.go .                                                                                  0.0s
+ => CACHED [8/10] COPY foo/foo.go foo/                                                                            0.0s
+ => CACHED [9/10] COPY bar/bar.go bar/                                                                            0.0s
+ => CACHED [10/10] RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .                      0.0s
+ => exporting to image                                                                                            0.0s
+ => => exporting layers                                                                                           0.0s
+ => => writing image sha256:6cc56539b3191d5efd87fb4d05181993d013411299b5cefb74047d2447b4d0c9                      0.0s
+ => => naming to docker.io/appleboy/demo                                                                          0.0s</code></pre>
 
 如果要詳細的編譯步驟，請加上 `--progress=plain`，就可以看到詳細的過程。其實我覺得重點在每個步驟都實際追加了時間，對於在開發上或者是 CI/CD 的流程上都相當有幫助。另外可以在 docker daemon 加上 config 就可以不用加上 `DOCKER_BUILDKIT` 環境變數
 
@@ -122,7 +122,7 @@ func main() {
 
 <pre><code class="language-dockerfile">FROM golang:1.14-alpine
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
 RUN apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
@@ -138,14 +138,14 @@ COPY bar/bar.go bar/
 
 ENV GOOS=linux
 ENV GOARCH=amd64
-RUN go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .
+RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
 
 CMD ["/app"]</code></pre>
 
 可以看到如果 go.mode 跟 go.sum 如果沒有任何變動，基本上 go module 檔案自然就可以透過 docker cache layer 處理。但是每次只要程式碼有任何異動，最後的 go build 會從無到有編譯，請看底下結果:
 
 <pre><code class="language-sh">docker build --progress=plain -t appleboy/docker-demo -f Dockerfile .
-#14 [10/10] RUN go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-s...
+#14 [10/10] RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-s...
 #14 0.391 gin/foo
 #14 0.403 gin/bar
 #14 0.412 github.com/go-playground/locales/currency
@@ -186,7 +186,7 @@ CMD ["/app"]</code></pre>
 <pre><code class="language-dockerfile"># syntax = docker/dockerfile:experimental
 FROM golang:1.14-alpine
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
 RUN --mount=type=cache,target=/var/cache/apk apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
@@ -203,7 +203,7 @@ COPY bar/bar.go bar/
 
 ENV GOOS=linux
 ENV GOARCH=amd64
-RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .
+RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
 
 CMD ["/app"]</code></pre>
 

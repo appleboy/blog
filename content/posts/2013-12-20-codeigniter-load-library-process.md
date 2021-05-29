@@ -21,7 +21,7 @@ tags:
 好久沒寫 <a href="http://www.codeigniter.org.tw/" target="_blank">CodeIgniter</a> 相關文章，這次看到在論壇有人發問 <a href="http://www.codeigniter.org.tw/forum/viewtopic.php?f=6&t=3885" target="_blank">application/libraries 優先權</a>，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">$this-&gt;load-&gt;library('email');</pre>
+  <pre class="brush: php; title: ; notranslate" title="">$this->load->library('email');</pre>
 </div>
 
 <!--more--> CI 會先將第一個字母大寫 Email 字串，接著小寫 email 字串開始進行搜尋檔案動作，搜尋的優先順序會先從你是否有擴充核心 Library，也就是 config.php 內定義 

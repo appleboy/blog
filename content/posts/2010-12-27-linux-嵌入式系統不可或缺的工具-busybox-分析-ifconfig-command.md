@@ -55,7 +55,7 @@ while (fgets(buf, sizeof buf, fh)) {
     s = get_name(name, buf);
     ife = add_interface(name);
     get_dev_fields(s, ife, procnetdev_vsn);
-    ife-&gt;statistics_valid = 1;
+    ife->statistics_valid = 1;
     if (target && !strcmp(target, name))
         break;
 }</code></pre>
@@ -64,28 +64,28 @@ get_name 直接濾掉每行冒號 : 後面的資料，並且將其加入 interfa
 
 <pre><code class="language-c">static char *get_name(char *name, char *p)
 {
-    /* Extract &lt;name&gt; from nul-terminated p where p matches
-     * &lt;name&gt;: after leading whitespace.
+    /* Extract <name> from nul-terminated p where p matches
+     * <name>: after leading whitespace.
      * If match is not made, set name empty and return unchanged p
      */
     char *nameend;
     char *namestart = skip_whitespace(p);
 
     nameend = namestart;
-    while (*nameend && *nameend != &#039;:&#039; && !isspace(*nameend))
+    while (*nameend && *nameend != ':' && !isspace(*nameend))
         nameend++;
-    if (*nameend == &#039;:&#039;) {
-        if ((nameend - namestart) &lt; IFNAMSIZ) {
+    if (*nameend == ':') {
+        if ((nameend - namestart) < IFNAMSIZ) {
             memcpy(name, namestart, nameend - namestart);
-            name[nameend - namestart] = &#039;\0&#039;;
+            name[nameend - namestart] = '\0';
             p = nameend;
         } else {
             /* Interface name too large */
-            name[0] = &#039;\0&#039;;
+            name[0] = '\0';
         }
     } else {
-        /* trailing &#039;:&#039; not found - return empty */
-        name[0] = &#039;\0&#039;;
+        /* trailing ':' not found - return empty */
+        name[0] = '\0';
     }
     return p + 1;
 }</code></pre>
@@ -96,22 +96,22 @@ add_interface 將 network interface 加入 link list
 {
     struct interface *ife, **nextp, *new;
 
-    for (ife = int_last; ife; ife = ife-&gt;prev) {
-        int n = /*n*/strcmp(ife-&gt;name, name);
+    for (ife = int_last; ife; ife = ife->prev) {
+        int n = /*n*/strcmp(ife->name, name);
 
         if (n == 0)
             return ife;
-        if (n &lt; 0)
+        if (n < 0)
             break;
     }
 
     new = xzalloc(sizeof(*new));
-    strncpy_IFNAMSIZ(new-&gt;name, name);
-    nextp = ife ? &ife-&gt;next : &int_list;
-    new-&gt;prev = ife;
-    new-&gt;next = *nextp;
-    if (new-&gt;next)
-        new-&gt;next-&gt;prev = new;
+    strncpy_IFNAMSIZ(new->name, name);
+    nextp = ife ? &ife->next : &int_list;
+    new->prev = ife;
+    new->next = *nextp;
+    if (new->next)
+        new->next->prev = new;
     else
         int_last = new;
     *nextp = new;
@@ -122,35 +122,35 @@ add_interface 將 network interface 加入 link list
 
 <pre><code class="language-c">static void get_dev_fields(char *bp, struct interface *ife, int procnetdev_vsn)
 {
-    memset(&ife-&gt;stats, 0, sizeof(struct user_net_device_stats));
+    memset(&ife->stats, 0, sizeof(struct user_net_device_stats));
 
     sscanf(bp, ss_fmt[procnetdev_vsn],
-           &ife-&gt;stats.rx_bytes, /* missing for 0 */
-           &ife-&gt;stats.rx_packets,
-           &ife-&gt;stats.rx_errors,
-           &ife-&gt;stats.rx_dropped,
-           &ife-&gt;stats.rx_fifo_errors,
-           &ife-&gt;stats.rx_frame_errors,
-           &ife-&gt;stats.rx_compressed, /* missing for &lt;= 1 */
-           &ife-&gt;stats.rx_multicast, /* missing for &lt;= 1 */
-           &ife-&gt;stats.tx_bytes, /* missing for 0 */
-           &ife-&gt;stats.tx_packets,
-           &ife-&gt;stats.tx_errors,
-           &ife-&gt;stats.tx_dropped,
-           &ife-&gt;stats.tx_fifo_errors,
-           &ife-&gt;stats.collisions,
-           &ife-&gt;stats.tx_carrier_errors,
-           &ife-&gt;stats.tx_compressed /* missing for &lt;= 1 */
+           &ife->stats.rx_bytes, /* missing for 0 */
+           &ife->stats.rx_packets,
+           &ife->stats.rx_errors,
+           &ife->stats.rx_dropped,
+           &ife->stats.rx_fifo_errors,
+           &ife->stats.rx_frame_errors,
+           &ife->stats.rx_compressed, /* missing for <= 1 */
+           &ife->stats.rx_multicast, /* missing for <= 1 */
+           &ife->stats.tx_bytes, /* missing for 0 */
+           &ife->stats.tx_packets,
+           &ife->stats.tx_errors,
+           &ife->stats.tx_dropped,
+           &ife->stats.tx_fifo_errors,
+           &ife->stats.collisions,
+           &ife->stats.tx_carrier_errors,
+           &ife->stats.tx_compressed /* missing for <= 1 */
            );
 
-    if (procnetdev_vsn &lt;= 1) {
+    if (procnetdev_vsn <= 1) {
         if (procnetdev_vsn == 0) {
-            ife-&gt;stats.rx_bytes = 0;
-            ife-&gt;stats.tx_bytes = 0;
+            ife->stats.rx_bytes = 0;
+            ife->stats.tx_bytes = 0;
         }
-        ife-&gt;stats.rx_multicast = 0;
-        ife-&gt;stats.rx_compressed = 0;
-        ife-&gt;stats.tx_compressed = 0;
+        ife->stats.rx_multicast = 0;
+        ife->stats.rx_compressed = 0;
+        ife->stats.tx_compressed = 0;
     }
 }</code></pre>
 
@@ -160,71 +160,71 @@ add_interface 將 network interface 加入 link list
 static int if_fetch(struct interface *ife)
 {
     struct ifreq ifr;
-    char *ifname = ife-&gt;name;
+    char *ifname = ife->name;
     int skfd;
 
     skfd = xsocket(AF_INET, SOCK_DGRAM, 0);
 
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    if (ioctl(skfd, SIOCGIFFLAGS, &ifr) &lt; 0) {
+    if (ioctl(skfd, SIOCGIFFLAGS, &ifr) < 0) {
         close(skfd);
         return -1;
     }
-    ife-&gt;flags = ifr.ifr_flags;
+    ife->flags = ifr.ifr_flags;
 
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    memset(ife-&gt;hwaddr, 0, 32);
-    if (ioctl(skfd, SIOCGIFHWADDR, &ifr) &gt;= 0)
-        memcpy(ife-&gt;hwaddr, ifr.ifr_hwaddr.sa_data, 8);
+    memset(ife->hwaddr, 0, 32);
+    if (ioctl(skfd, SIOCGIFHWADDR, &ifr) >= 0)
+        memcpy(ife->hwaddr, ifr.ifr_hwaddr.sa_data, 8);
 
-    ife-&gt;type = ifr.ifr_hwaddr.sa_family;
-
-    strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    ife-&gt;metric = 0;
-    if (ioctl(skfd, SIOCGIFMETRIC, &ifr) &gt;= 0)
-        ife-&gt;metric = ifr.ifr_metric;
+    ife->type = ifr.ifr_hwaddr.sa_family;
 
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    ife-&gt;mtu = 0;
-    if (ioctl(skfd, SIOCGIFMTU, &ifr) &gt;= 0)
-        ife-&gt;mtu = ifr.ifr_mtu;
+    ife->metric = 0;
+    if (ioctl(skfd, SIOCGIFMETRIC, &ifr) >= 0)
+        ife->metric = ifr.ifr_metric;
 
-    memset(&ife-&gt;map, 0, sizeof(struct ifmap));
+    strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
+    ife->mtu = 0;
+    if (ioctl(skfd, SIOCGIFMTU, &ifr) >= 0)
+        ife->mtu = ifr.ifr_mtu;
+
+    memset(&ife->map, 0, sizeof(struct ifmap));
 #ifdef SIOCGIFMAP
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
     if (ioctl(skfd, SIOCGIFMAP, &ifr) == 0)
-        ife-&gt;map = ifr.ifr_map;
+        ife->map = ifr.ifr_map;
 #endif
 
 #ifdef HAVE_TXQUEUELEN
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    ife-&gt;tx_queue_len = -1;  /* unknown value */
-    if (ioctl(skfd, SIOCGIFTXQLEN, &ifr) &gt;= 0)
-        ife-&gt;tx_queue_len = ifr.ifr_qlen;
+    ife->tx_queue_len = -1;  /* unknown value */
+    if (ioctl(skfd, SIOCGIFTXQLEN, &ifr) >= 0)
+        ife->tx_queue_len = ifr.ifr_qlen;
 #else
-    ife-&gt;tx_queue_len = -1;  /* unknown value */
+    ife->tx_queue_len = -1;  /* unknown value */
 #endif
 
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
     ifr.ifr_addr.sa_family = AF_INET;
-    memset(&ife-&gt;addr, 0, sizeof(struct sockaddr));
+    memset(&ife->addr, 0, sizeof(struct sockaddr));
     if (ioctl(skfd, SIOCGIFADDR, &ifr) == 0) {
-        ife-&gt;has_ip = 1;
-        ife-&gt;addr = ifr.ifr_addr;
+        ife->has_ip = 1;
+        ife->addr = ifr.ifr_addr;
         strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-        memset(&ife-&gt;dstaddr, 0, sizeof(struct sockaddr));
-        if (ioctl(skfd, SIOCGIFDSTADDR, &ifr) &gt;= 0)
-            ife-&gt;dstaddr = ifr.ifr_dstaddr;
+        memset(&ife->dstaddr, 0, sizeof(struct sockaddr));
+        if (ioctl(skfd, SIOCGIFDSTADDR, &ifr) >= 0)
+            ife->dstaddr = ifr.ifr_dstaddr;
 
         strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-        memset(&ife-&gt;broadaddr, 0, sizeof(struct sockaddr));
-        if (ioctl(skfd, SIOCGIFBRDADDR, &ifr) &gt;= 0)
-            ife-&gt;broadaddr = ifr.ifr_broadaddr;
+        memset(&ife->broadaddr, 0, sizeof(struct sockaddr));
+        if (ioctl(skfd, SIOCGIFBRDADDR, &ifr) >= 0)
+            ife->broadaddr = ifr.ifr_broadaddr;
 
         strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-        memset(&ife-&gt;netmask, 0, sizeof(struct sockaddr));
-        if (ioctl(skfd, SIOCGIFNETMASK, &ifr) &gt;= 0)
-            ife-&gt;netmask = ifr.ifr_netmask;
+        memset(&ife->netmask, 0, sizeof(struct sockaddr));
+        if (ioctl(skfd, SIOCGIFNETMASK, &ifr) >= 0)
+            ife->netmask = ifr.ifr_netmask;
     }
 
     close(skfd);

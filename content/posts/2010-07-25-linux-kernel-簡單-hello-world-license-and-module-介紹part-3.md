@@ -27,10 +27,10 @@ Warning: loading hello-3.o will taint the kernel: no license
 
 **<span style="color:green">MODULE_LICENSE()</span>** 巨集來宣告程式 License，同樣的，可以用 **<span style="color:green">MODULE_DESCRIPTION()</span>** 來描述此模組或者是 Driver 的功用跟簡介，以及用 **<span style="color:green">MODULE_AUTHOR()</span>** 來定義此模組作者，這些巨集都可以在 <span style="color:red">linux/module.h</span> 裡找到，但是這些並非用於 Kernel 本身，如果大家想看範例程式，可以到 <span style="color:red">drivers</span>/ 資料夾底下觀看每一個 Driver 程式，底下是簡單 hello world 範例： 
 
-<pre class="brush: cpp; title: ; notranslate" title="">#include &lt;linux/kernel.h> /* pr_info所需 include 檔案*/
-#include &lt;linux/init.h>
-#include &lt;linux/module.h> /* 所有 module 巨集需要檔案*/
-#include &lt;linux/version.h>
+<pre class="brush: cpp; title: ; notranslate" title="">#include <linux/kernel.h> /* pr_info所需 include 檔案*/
+#include <linux/init.h>
+#include <linux/module.h> /* 所有 module 巨集需要檔案*/
+#include <linux/version.h>
 
 static int __init hello_init(void)
 {
@@ -44,7 +44,7 @@ static void __exit hello_exit(void)
     printk(KERN_INFO "Goodbye\n");
 }
 MODULE_DESCRIPTION("Hello World !!");/* 此程式介紹與描述*/
-MODULE_AUTHOR("Bo-Yi Wu &lt;appleboy.tw AT gmail.com>");/* 此程式作者*/
+MODULE_AUTHOR("Bo-Yi Wu <appleboy.tw AT gmail.com>");/* 此程式作者*/
 MODULE_LICENSE("GPL");/* 程式 License*/
 module_init(hello_init);
 module_exit(hello_exit);</pre> 在 linux/module.h 裡頭，可以找到 MODULE_LICENSE 可定義的 License 
@@ -81,7 +81,7 @@ module_exit(hello_exit);</pre> 在 linux/module.h 裡頭，可以找到 MODULE_L
 <pre class="brush: cpp; title: ; notranslate" title="">#define MODULE_LICENSE(_license) MODULE_INFO(license, _license)
 
 /*
- * Author(s), use "Name &lt;email>" or just "Name", for multiple
+ * Author(s), use "Name <email>" or just "Name", for multiple
  * authors use multiple MODULE_AUTHOR() statements/lines.
  */
 #define MODULE_AUTHOR(_author) MODULE_INFO(author, _author)

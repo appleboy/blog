@@ -60,23 +60,23 @@ $ git clone https://github.com/laravel/laravel.git</pre> 下載好之後，目�
 
 <a href="http://codeigniter.org.tw" target="_blank">CodeIgniter</a> 文件寫的類似，您可以發現 public 目錄底下已經有了 .htaccess 檔案，底下的教學都是 apache 的方法，如果其他 Web Server 就不適用了。 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_rewrite.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_rewrite.c>
      RewriteEngine on
 
      RewriteCond %{REQUEST_FILENAME} !-f
      RewriteCond %{REQUEST_FILENAME} !-d
 
      RewriteRule ^(.*)$ index.php/$1 [L]
-&lt;/IfModule></pre> 不過如果您的 OS 是 Ubuntu，請改成底下: 
+</IfModule></pre> 不過如果您的 OS 是 Ubuntu，請改成底下: 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_rewrite.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_rewrite.c>
      RewriteEngine on
 
      RewriteCond %{REQUEST_FILENAME} !-f
      RewriteCond %{REQUEST_FILENAME} !-d
 
      RewriteRule ^(.*)$ index.php [L]
-&lt;/IfModule></pre> 最後請修改 
+</IfModule></pre> 最後請修改 
 
 **<span style="color:green">application/config/application.php</span>** 將 Application Index 填入空白: 
 

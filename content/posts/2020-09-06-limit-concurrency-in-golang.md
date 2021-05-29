@@ -74,10 +74,10 @@ func FindAll() []P {
     limitCh := make(chan struct{}, concurrencyProcesses)
 
     for _, pr := range pss {
-        limitCh &lt;- struct{}{}
+        limitCh <- struct{}{}
         pr := pr
         go func() {
-            defer func() { &lt;-limitCh }()
+            defer func() { <-limitCh }()
             defer wg.Done()
 
             path, version, agent, ok, err := isGo(pr)
@@ -87,7 +87,7 @@ func FindAll() []P {
             if !ok {
                 return
             }
-            found &lt;- P{
+            found <- P{
                 PID:          pr.Pid(),
                 PPID:         pr.PPid(),
                 Exec:         pr.Executable(),
@@ -128,17 +128,17 @@ func main() {
     found := make(chan int)
     limitCh := make(chan struct{}, concurrencyProcesses)
 
-    for i := 0; i &lt; jobCount; i++ {
-        limitCh &lt;- struct{}{}
+    for i := 0; i < jobCount; i++ {
+        limitCh <- struct{}{}
         go func(val int) {
             defer func() {
                 wg.Done()
-                &lt;-limitCh
+                <-limitCh
             }()
             waitTime := rand.Int31n(1000)
             fmt.Println("job:", val, "wait time:", waitTime, "millisecond")
             time.Sleep(time.Duration(waitTime) * time.Millisecond)
-            found &lt;- val
+            found <- val
         }(i)
     }
     go func() {
@@ -156,8 +156,8 @@ func main() {
 
 我把 `ps.Processes()` 的資料，換成 Job 數量來代表，來解釋為什麼麼這段程式碼造成了系統直接 hang 住不動。重點原因在 for 迴圈內的 `limitCh <- struct{}{}`，先看到前面有設定了背景一次只能跑 10 個 Concurrency Processes
 
-<pre><code class="language-go">    for i := 0; i &lt; jobCount; i++ {
-        limitCh &lt;- struct{}{}
+<pre><code class="language-go">    for i := 0; i < jobCount; i++ {
+        limitCh <- struct{}{}
         go func(val int) {
             ....
         }(i)
@@ -172,19 +172,19 @@ func main() {
 <pre><code class="language-go">    found := make(chan int)
     limitCh := make(chan struct{}, concurrencyProcesses)
 
-    for i := 0; i &lt; jobCount; i++ {
+    for i := 0; i < jobCount; i++ {
         go func() {
-            limitCh &lt;- struct{}{}
+            limitCh <- struct{}{}
         }()
         go func(val int) {
             defer func() {
-                &lt;-limitCh
+                <-limitCh
                 wg.Done()
             }()
             waitTime := rand.Int31n(1000)
             fmt.Println("job:", val, "wait time:", waitTime, "millisecond")
             time.Sleep(time.Duration(waitTime) * time.Millisecond)
-            found &lt;- val
+            found <- val
         }(i)
     }</code></pre>
 
@@ -197,23 +197,23 @@ func main() {
 <pre><code class="language-go">    found := make(chan int)
     queue := make(chan int)
 
-    go func(queue chan&lt;- int) {
-        for i := 0; i &lt; jobCount; i++ {
-            queue &lt;- i
+    go func(queue chan<- int) {
+        for i := 0; i < jobCount; i++ {
+            queue <- i
         }
         close(queue)
     }(queue)</code></pre>
 
 這邊一樣是透過 goroutine 方式丟到背景，避免 block 整個 main 程式。接著建立特定的 Worker 數量來消化全部的 Job
 
-<pre><code class="language-go">    for i := 0; i &lt; concurrencyProcesses; i++ {
-        go func(queue &lt;-chan int, found chan&lt;- int) {
+<pre><code class="language-go">    for i := 0; i < concurrencyProcesses; i++ {
+        go func(queue <-chan int, found chan<- int) {
             for val := range queue {
                 defer wg.Done()
                 waitTime := rand.Int31n(1000)
                 fmt.Println("job:", val, "wait time:", waitTime, "millisecond")
                 time.Sleep(time.Duration(waitTime) * time.Millisecond)
-                found &lt;- val
+                found <- val
             }
         }(queue, found)
     }</code></pre>

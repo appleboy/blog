@@ -126,20 +126,20 @@ steps:
 
 之前寫過一篇『[有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔][11]』，現在遇到相同的 YAML 設定都可以透過寫程式的方式來自動產生 YAML 設定了
 
-<pre><code class="language-shell">local pipeline = import &#039;pipeline.libsonnet&#039;;
-local name = &#039;drone-ssh&#039;;
+<pre><code class="language-shell">local pipeline = import 'pipeline.libsonnet';
+local name = 'drone-ssh';
 
 [
   pipeline.test,
-  pipeline.build(name, &#039;linux&#039;, &#039;amd64&#039;),
-  pipeline.build(name, &#039;linux&#039;, &#039;arm64&#039;),
-  pipeline.build(name, &#039;linux&#039;, &#039;arm&#039;),
+  pipeline.build(name, 'linux', 'amd64'),
+  pipeline.build(name, 'linux', 'arm64'),
+  pipeline.build(name, 'linux', 'arm'),
   pipeline.release,
   pipeline.notifications(depends_on=[
-    &#039;linux-amd64&#039;,
-    &#039;linux-arm64&#039;,
-    &#039;linux-arm&#039;,
-    &#039;release-binary&#039;,
+    'linux-amd64',
+    'linux-arm64',
+    'linux-arm',
+    'release-binary',
   ]),
 ]</code></pre>
 

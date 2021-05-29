@@ -56,7 +56,7 @@ $(this).parent().parent().remove();
 <pre class="brush: jscript; title: ; notranslate" title="">$(document).ready(function(){
 $("#add_plug").click(
   function(e){
-    $("#plug").append('&lt;input name="room_plug[]" type="text" value="'+$("#plug_name").attr("value")+'" /> <input type="button" value="delete" />');
+    $("#plug").append('<input name="room_plug[]" type="text" value="'+$("#plug_name").attr("value")+'" /> <input type="button" value="delete" />');
   });
 
 $(":input[value=delete]").click(

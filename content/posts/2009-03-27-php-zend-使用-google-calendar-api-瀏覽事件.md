@@ -59,7 +59,7 @@ $client = Zend_Gdata_ClientLogin::getHttpClient($googleAccount, $googlePassword,
     echo "
 
 <h2>
-  &lt;a href=\"event.php?id=".basename($event->id->text)."\">" . $event->title->text .  "&lt;/a>
+  <a href=\"event.php?id=".basename($event->id->text)."\">" . $event->title->text .  "</a>
 </h2>\n";
     echo "
 
@@ -91,8 +91,8 @@ $client = Zend_Gdata_ClientLogin::getHttpClient($googleAccount, $googlePassword,
       } 
       echo "\t\t
 </ul>\n";
-    echo "\t&lt;/li>\n";
-    echo "&lt;/ul>\n";
+    echo "\t</li>\n";
+    echo "</ul>\n";
   }
   
 }</pre> 這樣我們就可以整個輸出 index.php 檔案了喔，那原始檔案如下： 

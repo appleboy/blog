@@ -38,7 +38,7 @@ categories:
 
 <pre class="brush: bash; title: ; notranslate" title="">mysqlbinlog --start-date="2007-03-29 9:00:00"  --stop-date="2007-03-29 10:00:00" /var/lib/mysql/bin.000001 | mysql -u root -p</pre> 其實你也可以不要執行，先把sql語法輸出到 /tmp/restore.sql 
 
-<pre class="brush: bash; title: ; notranslate" title="">mysqlbinlog --start-date="2007-03-29 9:00:00"  --stop-date="2007-03-29 10:00:00" /var/lib/mysql/bin.000001 &gt; /tmp/restore.sql</pre> 當然 你也可以指定你要輸出的 database，免的檔案很大 
+<pre class="brush: bash; title: ; notranslate" title="">mysqlbinlog --start-date="2007-03-29 9:00:00"  --stop-date="2007-03-29 10:00:00" /var/lib/mysql/bin.000001 > /tmp/restore.sql</pre> 當然 你也可以指定你要輸出的 database，免的檔案很大 
 
 <pre class="brush: bash; title: ; notranslate" title="">--database=db_name，-d db_name
 --host=host_name，-h host_name</pre>

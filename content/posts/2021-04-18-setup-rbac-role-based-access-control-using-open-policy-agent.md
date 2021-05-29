@@ -136,7 +136,7 @@ allow {
   permissions := role_permissions[r]
   # for each permission
   p := permissions[_]
-  # check if the permission granted to r matches the user&#039;s request
+  # check if the permission granted to r matches the user's request
   p == {"action": input.action, "object": input.object}
 }</code></pre>
 

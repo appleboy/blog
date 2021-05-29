@@ -58,7 +58,7 @@ Laravel 作者將文件整個翻過一遍，讓開發者可以更清楚地閱讀
 <div>
   <pre class="brush: php; title: ; notranslate" title="">@extends('layouts.app')
 @inject('stats', 'StatisticsService')
-&lt;div&gt;{{ $stats-&gt;getCustomerCount() }}&lt;/div&gt;</pre>
+<div>{{ $stats->getCustomerCount() }}</div></pre>
 </div>
 
 ### Broadcasting Events 廣播事件
@@ -72,11 +72,11 @@ Laravel 已經支援強大的事件系統，現在更支援 Broadcasting Events�
 <div>
   <pre class="brush: php; title: ; notranslate" title="">public function testNewUserRegistration()
 {
-    $this-&gt;visit('/register')
-         -&gt;type('Taylor', 'name')
-         -&gt;check('terms')
-         -&gt;press('Register')
-         -&gt;seePageIs('/dashboard');
+    $this->visit('/register')
+         ->type('Taylor', 'name')
+         ->check('terms')
+         ->press('Register')
+         ->seePageIs('/dashboard');
 }</pre>
 </div>
 

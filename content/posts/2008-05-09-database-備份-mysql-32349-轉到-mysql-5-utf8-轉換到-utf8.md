@@ -54,7 +54,7 @@ vi backup_utf8.sql
 <pre class="brush: bash; title: ; notranslate" title="">#
 # 利用 mysql 這個指令就可以恢復了
 #
-mysql --default-character-set=utf8 -u root -p db_name &lt; backup.sql[/code]
+mysql --default-character-set=utf8 -u root -p db_name < backup.sql[/code]
 
 步驟五：在 php 前端程式加上
 [code lang="php"]

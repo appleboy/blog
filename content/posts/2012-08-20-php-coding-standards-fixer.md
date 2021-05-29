@@ -29,8 +29,8 @@ tags:
 本來
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php
-if ($a &gt; $b)
+  <pre class="brush: php; title: ; notranslate" title=""><?php
+if ($a > $b)
 {
     .....
 }</pre>
@@ -39,8 +39,8 @@ if ($a &gt; $b)
 轉換後變成
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php
-if ($a &gt; $b) {
+  <pre class="brush: php; title: ; notranslate" title=""><?php
+if ($a > $b) {
     .....
 }</pre>
 </div>

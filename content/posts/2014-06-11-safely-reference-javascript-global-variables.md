@@ -69,9 +69,9 @@ addToBlockList ("add 127.0.0.1");</pre>
 這樣可以避免渲染 window Global Variable。如果你是用 [CoffeeScript][2] 來寫，可以寫成底下
 
 <div>
-  <pre class="brush: jscript; title: ; notranslate" title="">(-&gt;
+  <pre class="brush: jscript; title: ; notranslate" title="">(->
   block_list = []
-  addToBlockList = (item) -&gt;
+  addToBlockList = (item) ->
     block_list.push item  if block_list
     return
 
@@ -82,9 +82,9 @@ addToBlockList ("add 127.0.0.1");</pre>
 但是我建議可以使用 `block_list?` 寫法
 
 <div>
-  <pre class="brush: jscript; title: ; notranslate" title="">(-&gt;
+  <pre class="brush: jscript; title: ; notranslate" title="">(->
   block_list = []
-  addToBlockList = (item) -&gt;
+  addToBlockList = (item) ->
     block_List?.push item
     return
 

@@ -21,9 +21,9 @@ tags:
 
 > busybox-1.01/networking/libiproute/libiproute.a(iptunnel.o):iptunnel.c:(.text+0x574): more undefined references to \`_\_cpu\_to_be16' follow 在 Google 大神指示下找到[一篇答案][3] 修改 networking/libiproute/iptunnel.c 
 
-<pre class="brush: bash; title: ; notranslate" title="">#include &lt;asm/types.h> 
+<pre class="brush: bash; title: ; notranslate" title="">#include <asm/types.h> 
 # 後面加上 
-#include &lt;asm/byteorder.h></pre>
+#include <asm/byteorder.h></pre>
 
  [1]: http://www.qca.qualcomm.com/
  [2]: http://www.busybox.net/

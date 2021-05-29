@@ -44,7 +44,7 @@ Google 提供了[好幾種方式][5]來登入 Docker Registry 服務，本篇使
   docker_login:
     registry: "https://asia.gcr.io"
     username: "_json_key"
-    password: "{{ lookup(&#039;template&#039;, &#039;gcr.json&#039;, convert_data=False) | string }}"
+    password: "{{ lookup('template', 'gcr.json', convert_data=False) | string }}"
     config_path: "{{ deploy_home_dir }}/.docker/config.json"
     reauthorize: yes</code></pre>
 
@@ -62,7 +62,7 @@ Google 提供了[好幾種方式][5]來登入 Docker Registry 服務，本篇使
   dependencies:
     - build
   script:
-    - echo "$GCP_SERVICE_KEY" &gt; gcloud-service-key.json
+    - echo "$GCP_SERVICE_KEY" > gcloud-service-key.json
     - gcloud auth activate-service-account --key-file gcloud-service-key.json
     - gcloud config set project $GCP_PROJECT_ID
     - gcloud builds submit . --config=cloudbuild.yaml --substitutions _IMAGE_NAME=$PROJECT_NAME,_VERSION=$VERSION

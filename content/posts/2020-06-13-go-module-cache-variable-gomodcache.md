@@ -49,8 +49,8 @@ tags:
   - make build
   environment:
     CGO_ENABLED: 0
-    GOMODCACHE: &#039;/drone/src/pkg.mod&#039;
-    GOCACHE: &#039;/drone/src/pkg.build&#039;
+    GOMODCACHE: '/drone/src/pkg.mod'
+    GOCACHE: '/drone/src/pkg.build'
   when:
     event:
       exclude:
@@ -76,7 +76,7 @@ tags:
   settings:
     debug: true
     restore: true
-    cache_key: &#039;{{ .Repo.Name }}_{{ checksum "go.mod" }}_{{ checksum "go.sum" }}_{{ arch }}_{{ os }}&#039;
+    cache_key: '{{ .Repo.Name }}_{{ checksum "go.mod" }}_{{ checksum "go.sum" }}_{{ arch }}_{{ os }}'
     bucket: drone-cache-demo
     region: ap-northeast-1
     local_root: /
@@ -100,7 +100,7 @@ tags:
       from_secret: aws_secret_access_key
   settings:
     rebuild: true
-    cache_key: &#039;{{ .Repo.Name }}_{{ checksum "go.mod" }}_{{ checksum "go.sum" }}_{{ arch }}_{{ os }}&#039;
+    cache_key: '{{ .Repo.Name }}_{{ checksum "go.mod" }}_{{ checksum "go.sum" }}_{{ arch }}_{{ os }}'
     bucket: drone-cache-demo
     region: ap-northeast-1
     archive_format: gzip

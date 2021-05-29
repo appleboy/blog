@@ -21,7 +21,7 @@ tags:
 
 `docker-compose.yml`，找到 Drone agent 的設定，加入底下變數: 
 
-<pre class="brush: plain; title: ; notranslate" title="">DRONE_FILTER="ram &lt;= 16 AND cpu &lt;= 8"
+<pre class="brush: plain; title: ; notranslate" title="">DRONE_FILTER="ram <= 16 AND cpu <= 8"
 </pre> 這邊的意思是，專案需要的記憶體
 
 `小於或等於 16`，CPU `小於或等於 8`。 

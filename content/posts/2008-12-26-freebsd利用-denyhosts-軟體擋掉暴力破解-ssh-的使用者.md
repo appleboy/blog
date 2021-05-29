@@ -112,7 +112,7 @@ ADMIN_EMAIL = xxxx@gmail.com
 SMTP_HOST = localhost
 SMTP_PORT = 25
 # 發信的 header
-SMTP_FROM = DenyHosts &lt;nobody@localhost>
+SMTP_FROM = DenyHosts <nobody@localhost>
 # 發信標題
 SMTP_SUBJECT = DenyHosts Report
 #

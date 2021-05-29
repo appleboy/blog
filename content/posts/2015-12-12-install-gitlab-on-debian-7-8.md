@@ -40,7 +40,7 @@ $ sudo apt-get install gitlab-ce</code></pre>
 <pre><code class="language-bash">## Url on which GitLab will be reachable.
 ## For more details on configuring external_url see:
 ## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
-external_url &#039;http://localhost:8088&#039;</code></pre>
+external_url 'http://localhost:8088'</code></pre>
 
 後面的 8088 port 就是 Gitlab 內建的 Nginx port，可以任意改成其他 port，不要設定為 80 就好，這樣會噴 port 已經被佔用的錯誤。到這邊打開 `<a href="https://localhost:8088">https://localhost:8088</a>` 就可以看到登入畫面了
 
@@ -58,16 +58,16 @@ external_url &#039;http://localhost:8088&#039;</code></pre>
 
 把上述資料填寫完成後，按下送出就可以拿到 Client ID 及 Client Secret 接著到 `/etc/gitlab/gitlab.rb` 把 Github 相關設定檔打開
 
-<pre><code class="language-bash">gitlab_rails[&#039;omniauth_enabled&#039;] = true
-gitlab_rails[&#039;omniauth_allow_single_sign_on&#039;] = false
-gitlab_rails[&#039;omniauth_block_auto_created_users&#039;] = true
-gitlab_rails[&#039;omniauth_providers&#039;] = [
+<pre><code class="language-bash">gitlab_rails['omniauth_enabled'] = true
+gitlab_rails['omniauth_allow_single_sign_on'] = false
+gitlab_rails['omniauth_block_auto_created_users'] = true
+gitlab_rails['omniauth_providers'] = [
     {
-      "name" =&gt; "github",
-      "app_id" =&gt; "xxxxxxxx",
-      "app_secret" =&gt; "xxxxxxxxxxx",
-      "url" =&gt; "https://github.com/",
-      "args" =&gt; { "scope" =&gt; "user:email" }
+      "name" => "github",
+      "app_id" => "xxxxxxxx",
+      "app_secret" => "xxxxxxxxxxx",
+      "url" => "https://github.com/",
+      "args" => { "scope" => "user:email" }
     }
 ]</code></pre>
 
@@ -83,12 +83,12 @@ GitLab 也支援多個 open source project 平台的匯入功能，像是可以�
 
 Gitlab 內建 Nginx 服務，但是通常都會用自己架設的 Nginx，尤其是我比較喜歡裝 Nginx mainline 的版本，這樣才可以用 [Http2][4]。一樣先打開 `/etc/gitlab/gitlab.rb`，修改底下設定
 
-<pre><code class="language-bash">nginx[&#039;enable&#039;] = false
-gitlab_workhorse[&#039;enable&#039;] = true
-gitlab_workhorse[&#039;listen_network&#039;] = "tcp"
-gitlab_workhorse[&#039;listen_addr&#039;] = "localhost:8181"
-unicorn[&#039;listen&#039;] = &#039;127.0.0.1&#039;
-unicorn[&#039;port&#039;] = 10080</code></pre>
+<pre><code class="language-bash">nginx['enable'] = false
+gitlab_workhorse['enable'] = true
+gitlab_workhorse['listen_network'] = "tcp"
+gitlab_workhorse['listen_addr'] = "localhost:8181"
+unicorn['listen'] = '127.0.0.1'
+unicorn['port'] = 10080</code></pre>
 
 注意將內建的 Nginx 關閉，在 8.2 版本的時候，官方已經將 `gitlab_git_http_server` 換成 `gitlab_workhorse`，所以網路上看到的教學文件記得要過濾，GitLab 必須要開啟 unicorn 及 workhorse 服務，才可以跟 Nginx 串接，底下是 Nginx 完整設定檔
 
@@ -223,7 +223,7 @@ server {
 
 <pre><code class="language-bash">Fetching changes...
 Checking out dbed0c03 as master...
-fatal: reference is not a tree: &lt;ssha hash&gt;</code></pre>
+fatal: reference is not a tree: <ssha hash></code></pre>
 
 ### Gitlab multiple runner
 

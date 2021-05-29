@@ -49,7 +49,7 @@ tags:
         return value
     }
 
-    if len(fallback) &gt; 0 {
+    if len(fallback) > 0 {
         return fallback[0]
     }
 
@@ -204,7 +204,7 @@ func getEnv(ctx *pulumi.Context, key string, fallback ...string) string {
         return value
     }
 
-    if len(fallback) &gt; 0 {
+    if len(fallback) > 0 {
         return fallback[0]
     }
 
@@ -226,7 +226,7 @@ dev*  1 minute ago  5               https://app.pulumi.com/appleboy/demo/dev</co
 建立 stack
 
 <pre><code class="language-sh">$ pulumi stack init prod
-Created stack &#039;prod&#039;
+Created stack 'prod'
 $ pulumi stack ls
 NAME   LAST UPDATE   RESOURCE COUNT  URL
 dev    1 minute ago  5               https://app.pulumi.com/appleboy/demo/dev
@@ -242,19 +242,19 @@ pulumi config set aws:region ap-northeast-1</code></pre>
 
 建立 `content/www` 目錄，一樣放上 index.htm + about.html
 
-<pre><code class="language-html">&lt;html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello Pulumi S3 Bucket From New Stack&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<pre><code class="language-html"><html>
+  <body>
+    <h1>Hello Pulumi S3 Bucket From New Stack</h1>
+  </body>
+</html></code></pre>
 
 about.html
 
-<pre><code class="language-html">&lt;html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;About us From New Stack&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<pre><code class="language-html"><html>
+  <body>
+    <h1>About us From New Stack</h1>
+  </body>
+</html></code></pre>
 
 ### 步驟三: 部署 New Stack
 
@@ -335,21 +335,21 @@ Duration: 18s</code></pre>
 > User-Agent: curl/7.64.1
 > Accept: */*
 >
-&lt; HTTP/1.1 200 OK
-&lt; x-amz-id-2: oGxc+rLPi3kLOZslMsOmJqPY/WGeMoxX9sXJDRj4wlJlGVq+7pMx3ers71jxnDiDkeM9JRrd+T8=
-&lt; x-amz-request-id: 528235DDFF40F365
-&lt; Date: Thu, 11 Feb 2021 04:49:21 GMT
-&lt; Last-Modified: Thu, 11 Feb 2021 04:48:41 GMT
-&lt; ETag: "ae41d1b3f0aeef6a490e1b2edc74d2b5"
-&lt; Content-Type: text/html; charset=utf-8
-&lt; Content-Length: 85
-&lt; Server: AmazonS3
-&lt;
-&lt;html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello Pulumi S3 Bucket From New Stack&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+< HTTP/1.1 200 OK
+< x-amz-id-2: oGxc+rLPi3kLOZslMsOmJqPY/WGeMoxX9sXJDRj4wlJlGVq+7pMx3ers71jxnDiDkeM9JRrd+T8=
+< x-amz-request-id: 528235DDFF40F365
+< Date: Thu, 11 Feb 2021 04:49:21 GMT
+< Last-Modified: Thu, 11 Feb 2021 04:48:41 GMT
+< ETag: "ae41d1b3f0aeef6a490e1b2edc74d2b5"
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 85
+< Server: AmazonS3
+<
+<html>
+  <body>
+    <h1>Hello Pulumi S3 Bucket From New Stack</h1>
+  </body>
+</html>
 * Connection #0 to host my-bucket-a7044ab.s3-website-ap-northeast-1.amazonaws.com left intact
 * Closing connection 0</code></pre>
 
@@ -464,8 +464,8 @@ Message: chore(pulumi): 設定 Pulumi Stack 環境變數
 最後的確認
 
 <pre><code class="language-sh">$ pulumi stack rm
-This will permanently remove the &#039;prod&#039; stack!
-Please confirm that this is what you&#039;d like to do by typing ("prod"):</code></pre>
+This will permanently remove the 'prod' stack!
+Please confirm that this is what you'd like to do by typing ("prod"):</code></pre>
 
 ### 移除其他的 Stack
 

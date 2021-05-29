@@ -104,14 +104,14 @@ secrets:
 
 <pre><code class="language-bash">$ kubectl -n demo get \
   secret/drone-deploy-token-2xzqw \
-  -o yaml | egrep &#039;ca.crt:|token:&#039;</code></pre>
+  -o yaml | egrep 'ca.crt:|token:'</code></pre>
 
 由於 token 是透過 `base64` encode 輸出的。那也是要用 base64 decode 解出
 
 <pre><code class="language-bash"># linux:
-$ echo token | base64 -d && echo&#039;&#039;
+$ echo token | base64 -d && echo''
 # macOS:
-$ echo token | base64 -D && echo&#039;&#039;</code></pre>
+$ echo token | base64 -D && echo''</code></pre>
 
 ### 建立 K8S Deployment
 
@@ -181,7 +181,7 @@ k8s-node-demo   100.67.24.253   a4fba848aadbc...   80:30664/TCP   11h</code></pr
       target: docker_username
     - source: demo_password
       target: docker_password
-  tags: [ &#039;${DRONE_TAG}&#039; ]
+  tags: [ '${DRONE_TAG}' ]
   when:
     event: tag</code></pre>
 

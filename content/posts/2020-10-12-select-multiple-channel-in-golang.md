@@ -55,19 +55,19 @@ func main() {
     ch := make(chan int, 1024)
     go func(ch chan int) {
         for {
-            if v, ok := &lt;-ch; ok {
+            if v, ok := <-ch; ok {
                 fmt.Printf("val:%d\n", v)
             }
         }
     }(ch)
 
     tick := time.NewTicker(1 * time.Second)
-    for i := 0; i &lt; 30; i++ {
+    for i := 0; i < 30; i++ {
         select {
         // how to make sure all number in ch channel?
-        case ch &lt;- i:
-        case &lt;-tick.C:
-            fmt.Printf("%d: case &lt;-tick.C\n", i)
+        case ch <- i:
+        case <-tick.C:
+            fmt.Printf("%d: case <-tick.C\n", i)
         }
 
         time.Sleep(200 * time.Millisecond)
@@ -82,12 +82,12 @@ func main() {
 
 是會隨機的方式選取一個，所以會發現有機率會少接收到 ch 值，所以底下有幾種方式可以解決此問題。也就是要確保 ch 可以接收到 0 ~ 29 數字。其中第一個做法就是將 ch <- i 加入到 tick.C 內
 
-<pre><code class="language-go">    for i := 0; i &lt; 30; i++ {
+<pre><code class="language-go">    for i := 0; i < 30; i++ {
         select {
-        case ch &lt;- i:
-        case &lt;-tick.C:
-            fmt.Printf("%d: case &lt;-tick.C\n", i)
-            ch &lt;- i
+        case ch <- i:
+        case <-tick.C:
+            fmt.Printf("%d: case <-tick.C\n", i)
+            ch <- i
         }
 
         time.Sleep(200 * time.Millisecond)
@@ -95,11 +95,11 @@ func main() {
 
 第二種作法就是透過 select default 方式不要讓程式 blocking
 
-<pre><code class="language-go">    for i := 0; i &lt; 30; i++ {
-        ch &lt;- i
+<pre><code class="language-go">    for i := 0; i < 30; i++ {
+        ch <- i
         select {
-        case &lt;-tick.C:
-            fmt.Printf("%d: case &lt;-tick.C\n", i)
+        case <-tick.C:
+            fmt.Printf("%d: case <-tick.C\n", i)
         default:
         }
 

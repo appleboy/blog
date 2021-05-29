@@ -49,7 +49,7 @@ DRONE_STASH_CONSUMER_KEY: "AppleBoy46"</code></pre>
 
 上面會建立一把 private key 存放到 `mykey.pem`，下一個指令則是產生 public certificate
 
-<pre><code class="language-bash">$ openssl rsa -in /etc/bitbucket/key.pem -pubout &gt;&gt; /etc/bitbucket/key.pub</code></pre>
+<pre><code class="language-bash">$ openssl rsa -in /etc/bitbucket/key.pem -pubout >> /etc/bitbucket/key.pub</code></pre>
 
 完成後，請打開 `/etc/bitbucket/key.pub`，將內容複製到上述表單內 `public key` 欄位。另外要將 `/etc/bitbucket/key.pem` 位置設定在 Drone config 內。
 

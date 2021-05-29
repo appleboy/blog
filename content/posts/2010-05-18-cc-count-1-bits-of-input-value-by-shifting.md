@@ -18,8 +18,8 @@ tags:
 ---
 之前寫了一篇：『[[C/C++] 計算二進位任意數含有多少個位元為1?][1]』，裡面用 n &= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：
 
-<pre><code class="language-C">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
+<pre><code class="language-C">#include <stdio.h>
+#include <stdlib.h>
 int count_1_bit_count(unsigned int);
 int main(){
     int count = 0, a;
@@ -32,7 +32,7 @@ int main(){
 int count_1_bit_count(unsigned int n)
 {
     int count = 0;
-    for(count = 0; n != 0; n &gt;&gt;= 1L)
+    for(count = 0; n != 0; n >>= 1L)
     {    
         if(n & 0x01)
             count++;

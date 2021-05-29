@@ -95,17 +95,17 @@ Flags:
 <pre><code class="language-sh">$ pulumi new aws-go --dir demo
 This command will walk you through creating a new Pulumi project.
 
-Enter a value or leave blank to accept the (default), and press &lt;ENTER&gt;.
+Enter a value or leave blank to accept the (default), and press <ENTER>.
 Press ^C at any time to quit.
 
 project name: (demo)
 project description: (A minimal AWS Go Pulumi program)
-Created project &#039;demo&#039;
+Created project 'demo'
 
 Please enter your desired stack name.
-To create a stack in an organization, use the format &lt;org-name&gt;/&lt;stack-name&gt; (e.g. `acmecorp/dev`).
+To create a stack in an organization, use the format <org-name>/<stack-name> (e.g. `acmecorp/dev`).
 stack name: (dev)
-Created stack &#039;dev&#039;
+Created stack 'dev'
 
 aws:region: The AWS region to deploy into: (us-east-1) ap-northeast-1
 Saved config
@@ -116,7 +116,7 @@ Finished installing dependencies
 
 Your new project is ready to go! ✨
 
-To perform an initial deployment, run &#039;cd demo&#039;, then, run &#039;pulumi up&#039;</code></pre>
+To perform an initial deployment, run 'cd demo', then, run 'pulumi up'</code></pre>
 
 ### 步驟三: 檢查專案目錄結構
 
@@ -299,8 +299,8 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/previews/7180c121-235c-40cc-
  +-  └─ aws:s3:Bucket     my-bucket  replace     [diff: ~bucket]
 
 Outputs:
-  ~ bucketID  : "my-bucket-9dd3052" =&gt; output&lt;string&gt;
-  ~ bucketName: "my-bucket-9dd3052" =&gt; "foobar-1234"
+  ~ bucketID  : "my-bucket-9dd3052" => output<string>
+  ~ bucketName: "my-bucket-9dd3052" => "foobar-1234"
 
 Resources:
     +-1 to replace
@@ -315,14 +315,14 @@ Do you want to perform this update? details
     +-aws:s3/bucket:Bucket: (replace)
         [id=my-bucket-9dd3052]
         [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
-      ~ bucket: "my-bucket-9dd3052" =&gt; "foobar-1234"
+      ~ bucket: "my-bucket-9dd3052" => "foobar-1234"
     ++aws:s3/bucket:Bucket: (create-replacement)
         [id=my-bucket-9dd3052]
         [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
-      ~ bucket: "my-bucket-9dd3052" =&gt; "foobar-1234"
+      ~ bucket: "my-bucket-9dd3052" => "foobar-1234"
     --outputs:--
-  ~ bucketID  : "my-bucket-9dd3052" =&gt; output&lt;string&gt;
-  ~ bucketName: "my-bucket-9dd3052" =&gt; "foobar-1234"</code></pre>
+  ~ bucketID  : "my-bucket-9dd3052" => output<string>
+  ~ bucketName: "my-bucket-9dd3052" => "foobar-1234"</code></pre>
 
 可以看到系統會砍掉舊的，在建立一個新的 bucket
 
@@ -338,11 +338,11 @@ Do you want to perform this update? details
 
 建立 `content/index.html` 檔案，內容如下
 
-<pre><code class="language-html">&lt;html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello Pulumi S3 Bucket&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<pre><code class="language-html"><html>
+  <body>
+    <h1>Hello Pulumi S3 Bucket</h1>
+  </body>
+</html></code></pre>
 
 修改 `main.go`，將 `index.html` 加入到 S3 bucket 內
 
@@ -474,7 +474,7 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/previews/edbaefca-f723-4ac5-
  ~   └─ aws:s3:BucketObject  index.html  update     [diff: ~acl,contentType]
 
 Outputs:
-  + bucketEndpoint: output&lt;string&gt;
+  + bucketEndpoint: output<string>
 
 Resources:
     ~ 2 to update
@@ -490,12 +490,12 @@ Do you want to perform this update? details
           + indexDocument: "index.html"
         }
     --outputs:--
-  + bucketEndpoint: output&lt;string&gt;
+  + bucketEndpoint: output<string>
     ~ aws:s3/bucketObject:BucketObject: (update)
         [id=index.html]
         [urn=urn:pulumi:dev::demo::aws:s3/bucketObject:BucketObject::index.html]
-      ~ acl        : "private" =&gt; "public-read"
-      ~ contentType: "binary/octet-stream" =&gt; "text/html; charset=utf-8"
+      ~ acl        : "private" => "public-read"
+      ~ contentType: "binary/octet-stream" => "text/html; charset=utf-8"
 Do you want to perform this update? yes
 Updating (dev)
 
@@ -534,21 +534,21 @@ Duration: 13s</code></pre>
 > User-Agent: curl/7.64.1
 > Accept: */*
 >
-&lt; HTTP/1.1 200 OK
-&lt; x-amz-id-2: 0NrZfFxZNOs+toz0/86FiASG+MyQE6f+KbKNi4wzcDtmn5mTnQoxupVybR464X8Oi6HDMjSU+i8=
-&lt; x-amz-request-id: A55BD2534EDC94A9
-&lt; Date: Thu, 11 Feb 2021 03:30:42 GMT
-&lt; Last-Modified: Thu, 11 Feb 2021 03:29:14 GMT
-&lt; ETag: "46e94ba24774d0c4a768f9461e6b9806"
-&lt; Content-Type: text/html; charset=utf-8
-&lt; Content-Length: 70
-&lt; Server: AmazonS3
-&lt;
-&lt;html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello Pulumi S3 Bucket&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+< HTTP/1.1 200 OK
+< x-amz-id-2: 0NrZfFxZNOs+toz0/86FiASG+MyQE6f+KbKNi4wzcDtmn5mTnQoxupVybR464X8Oi6HDMjSU+i8=
+< x-amz-request-id: A55BD2534EDC94A9
+< Date: Thu, 11 Feb 2021 03:30:42 GMT
+< Last-Modified: Thu, 11 Feb 2021 03:29:14 GMT
+< ETag: "46e94ba24774d0c4a768f9461e6b9806"
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 70
+< Server: AmazonS3
+<
+<html>
+  <body>
+    <h1>Hello Pulumi S3 Bucket</h1>
+  </body>
+</html>
 * Connection #0 to host foobar-1234.s3-website-ap-northeast-1.amazonaws.com left intact</code></pre>
 
 ## 心得

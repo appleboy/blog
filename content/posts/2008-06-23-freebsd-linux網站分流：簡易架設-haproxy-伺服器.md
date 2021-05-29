@@ -72,13 +72,13 @@ listen blog-balancer
 
 [網路大神 Gslin][5] 大大的 [wiki][6]，其實我自己還不太瞭解怎麼設定，所以要去參考官網寫的[設定教學][7] 第三步：要在後端主機設定 apache virtualhost 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;VirtualHost 10.1.2.3>
+<pre class="brush: bash; title: ; notranslate" title=""><VirtualHost 10.1.2.3>
 ServerAdmin webmaster@host.foo.com
 DocumentRoot /www/docs/host.foo.com
 ServerName host.foo.com
 ErrorLog logs/host.foo.com-error_log
 TransferLog logs/host.foo.com-access_log
-&lt;/VirtualHost> 
+</VirtualHost> 
 </pre> 後端三台都是要加上這些設定，這樣在轉過去的時候，才會出現正確網站，大致設定這樣就可以 work 參考網站： 
 
 <a href="http://haproxy.1wt.eu/" target="_blank">http://haproxy.1wt.eu/</a> [商業服務的Rails HTTP Cluster觀念及測試][8] [Load Balancing & QoS with HAProxy][9] <a href="http://www.ecase.com.cn/blog/?p=14" target="_blank">http://www.ecase.com.cn/blog/?p=14</a> <a href="http://wiki.gslin.org/haproxy" target="_blank">http://wiki.gslin.org/haproxy</a> [期刊/商業服務的Rails伺服器叢集觀念與實做(下)][10]

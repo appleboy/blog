@@ -70,7 +70,7 @@ Processing fbbot.wu-boy.com
 最後在設定一次 nginx
 
 <pre><code class="language-bash">server {
-  # don&#039;t forget to tell on which port this server listens
+  # don't forget to tell on which port this server listens
   listen 80;
 
   # listen on the www host
@@ -101,7 +101,7 @@ server {
 
 每天半夜可以自動 renew 一次，請參考 <https://letsencrypt.tw/> 最後章節
 
-<pre><code class="language-bash">0 0 * * * root sleep $(expr $(printf "\%d" "0x$(hostname | md5sum | cut -c 1-8)") \% 86400); ( /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com; /usr/sbin/service nginx reload ) &gt; /tmp/dehydrated-fbbot.wu-boy.com.log 2&gt;&1</code></pre>
+<pre><code class="language-bash">0 0 * * * root sleep $(expr $(printf "\%d" "0x$(hostname | md5sum | cut -c 1-8)") \% 86400); ( /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com; /usr/sbin/service nginx reload ) > /tmp/dehydrated-fbbot.wu-boy.com.log 2>&1</code></pre>
 
 ### 後記
 

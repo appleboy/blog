@@ -38,12 +38,12 @@ Drone 提供 CLI 工具，讓開發者可以快速跟 Drone 服務溝通，底�
 
 下面指令是透過 CLI 呼叫 Drone 執行指定的專案 Job Number。如果沒有提供 Number 編號，則是執行該專案最後一個 Build Number。
 
-<pre><code class="language-bash">$ drone build start --fork &lt;repository&gt; &lt;build&gt;</code></pre>
+<pre><code class="language-bash">$ drone build start --fork <repository> <build></code></pre>
 
 `--fork` 代表啟動**新的任務**，並非是重新啟動該編號任務。下面指令則是根據專案 Branch 名稱得到最後 Build Number。
 
 <pre><code class="language-bash">$ drone build last --format="{{ .Number }}" \
-  --branch=&lt;branch&gt; &lt;repository&gt;</code></pre>
+  --branch=<branch> <repository></code></pre>
 
 拿到最後一個 Number 後，就可以開始寫 Cron job 任務
 

@@ -127,7 +127,7 @@ server {
 
 這邊使用 [minio][11] 來當作 S3 儲存空間，再搭配 Nginx 1.3.9 版本來測試上面設定效能。底下是 [docker-compose][12] 一鍵啟動
 
-<pre><code class="language-yml">version: &#039;2&#039;
+<pre><code class="language-yml">version: '2'
 
 services:
   minio:

@@ -25,4 +25,4 @@ tags:
 
 官網目前提供 <a href="http://help.livereload.com/kb/general-use/browser-extensions" target="_blank">Safari, Chrome, Firefox 2.0.8 版本</a>，大家可以根據 Browser 種類去下載，或是插入一段程式碼到 html file body 之前即可 
 
-<pre class="brush: jscript; title: ; notranslate" title="">&lt;script&gt;document.write('&lt;script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"&gt;&lt;/' + 'script&gt;')&lt;/script&gt;</pre>
+<pre class="brush: jscript; title: ; notranslate" title=""><script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script></pre>

@@ -56,7 +56,7 @@ tags:
   # 儲存快取
   - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     mkdir -p $(dirname ${DOCKER_CACHE_FILE});
-    docker save $(docker history -q appleboy/drone-line:latest | grep -v &#039;&lt;missing&gt;&#039;) | gzip &gt; ${DOCKER_CACHE_FILE};
+    docker save $(docker history -q appleboy/drone-line:latest | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE};
     fi</code></pre>
 
 透過 [docker save][9] 指令將 Image 存起來，這樣下次再執行編譯 Image 時，就會先找看看是否有快取。上面設定只有 master branch 才會儲存快取，但是在任何一個 branch 都可以享受到快取的服務喔。

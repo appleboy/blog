@@ -91,7 +91,7 @@ $options = array('maxObjectDepth' => 10,
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 [/code]
 
-edit <span style="color:green">Fb.php file&lt;/span>
+edit <span style="color:green">Fb.php file</span>
 
 #
 # Find  
@@ -105,7 +105,7 @@ edit <span style="color:green">Fb.php file&lt;/span>
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 [/code]
 
-Edit <span style="color:green">config/autoload.php&lt;/span> file
+Edit <span style="color:green">config/autoload.php</span> file
 
 #
 # Find

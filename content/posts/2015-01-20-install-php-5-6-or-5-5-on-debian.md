@@ -26,8 +26,8 @@ tags:
 
 <div>
   <pre class="brush: bash; title: ; notranslate" title="">
-echo "deb http://packages.dotdeb.org wheezy-php56 all" &gt;&gt; /etc/apt/sources.list.d/dotdeb.list
-echo "deb-src http://packages.dotdeb.org wheezy-php56 all" &gt;&gt; /etc/apt/sources.list.d/dotdeb.list</pre>
+echo "deb http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list.d/dotdeb.list
+echo "deb-src http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list.d/dotdeb.list</pre>
 </div>
 
 完成後請加入 apt key，如果是要安裝 PHP 5.5 請將 `wheezy-php56` 改成 `wheezy-php55`

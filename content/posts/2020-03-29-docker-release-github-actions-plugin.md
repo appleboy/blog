@@ -41,7 +41,7 @@ tags:
 
 <pre><code class="language-dockerfile">FROM golang:1.14-alpine
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
 RUN apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
@@ -54,7 +54,7 @@ COPY main.go .
 
 ENV GOOS=linux
 ENV GOARCH=amd64
-RUN go build -o /app -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .
+RUN go build -o /app -tags netgo -ldflags '-w -extldflags "-static"' .
 
 CMD ["/app"]</code></pre>
 
@@ -80,7 +80,7 @@ Docker 詳細的設定方式可以參考[此文件][14]
     repository: appleboy/gin-docker-demo
     dockerfile: Dockerfile
     tag_with_ref: true
-    push: ${{ startsWith(github.ref, &#039;refs/tags/&#039;) }}</code></pre>
+    push: ${{ startsWith(github.ref, 'refs/tags/') }}</code></pre>
 
 其實設定不難，整個過程的 Log 可以看[這邊][15]。底下來介紹 Drone 的使用方式
 

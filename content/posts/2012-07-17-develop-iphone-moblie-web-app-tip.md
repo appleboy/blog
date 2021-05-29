@@ -29,7 +29,7 @@ tags:
 
 <a href="http://www.w3.org/TR/css3-mediaqueries/" target="_blank">Media Queries</a> 來區分，在加上 **<span style="color:blue">max-device-width</span>** 和 **<span style="color:blue">min-device-width</span>** 去偵測整個頁面大小 (screen size)。 舉例來說，偵測 iPhone and iPod touch 裝置，可以透過底下載入 CSS 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;link media="only screen and (max-device-width: 480px)" href="small-device.css" type= "text/css" rel="stylesheet"></pre> 另外如果是 Desktop 版本可以加入底下 
+<pre class="brush: bash; title: ; notranslate" title=""><link media="only screen and (max-device-width: 480px)" href="small-device.css" type= "text/css" rel="stylesheet"></pre> 另外如果是 Desktop 版本可以加入底下 
 
 <pre class="brush: xml; title: ; notranslate" title=""><link media="screen and (min-device-width: 481px)" href="not-small-device.css" type="text/css" rel="stylesheet" />
 </pre> 另外或者是直接在 CSS 裡面判斷: 

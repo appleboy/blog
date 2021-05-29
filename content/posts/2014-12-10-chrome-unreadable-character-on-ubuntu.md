@@ -27,27 +27,27 @@ tags:
 打開 `/etc/fonts/conf.d/49-sansserif.conf` 可以看到底下內容
 
 <div>
-  <pre class="brush: xml; title: ; notranslate" title="">&lt;?xml version="1.0"?&gt;
-&lt;!DOCTYPE fontconfig SYSTEM "fonts.dtd"&gt;
-&lt;fontconfig&gt;
-&lt;!--
+  <pre class="brush: xml; title: ; notranslate" title=""><?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+<!--
   If the font still has no generic name, add sans-serif
- --&gt;
-        &lt;match target="pattern"&gt;
-                &lt;test qual="all" name="family" compare="not_eq"&gt;
-                        &lt;string&gt;sans-serif&lt;/string&gt;
-                &lt;/test&gt;
-                &lt;test qual="all" name="family" compare="not_eq"&gt;
-                        &lt;string&gt;serif&lt;/string&gt;
-                &lt;/test&gt;
-                &lt;test qual="all" name="family" compare="not_eq"&gt;
-                        &lt;string&gt;monospace&lt;/string&gt;
-                &lt;/test&gt;
-                &lt;edit name="family" mode="append_last"&gt;
-                        &lt;string&gt;sans-serif&lt;/string&gt;
-                &lt;/edit&gt;
-        &lt;/match&gt;
-&lt;/fontconfig&gt;
+ -->
+        <match target="pattern">
+                <test qual="all" name="family" compare="not_eq">
+                        <string>sans-serif</string>
+                </test>
+                <test qual="all" name="family" compare="not_eq">
+                        <string>serif</string>
+                </test>
+                <test qual="all" name="family" compare="not_eq">
+                        <string>monospace</string>
+                </test>
+                <edit name="family" mode="append_last">
+                        <string>sans-serif</string>
+                </edit>
+        </match>
+</fontconfig>
 </pre>
 </div>
 

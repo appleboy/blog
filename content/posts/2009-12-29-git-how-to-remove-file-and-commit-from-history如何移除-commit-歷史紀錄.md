@@ -24,24 +24,24 @@ tags:
 > R--A--D'--E--HEAD 有兩種方式可以移除 B & C 
 
 <pre class="brush: bash; title: ; notranslate" title=""># detach head and move to D commit
-git checkout &lt;SHA1-for-D>
+git checkout <SHA1-for-D>
 
 # move HEAD to A, but leave the index and working tree as for D
-git reset --soft &lt;SHA1-for-A>
+git reset --soft <SHA1-for-A>
 
 # Redo the D commit re-using the commit message, but now on top of A
-git commit -C &lt;SHA1-for-D>
+git commit -C <SHA1-for-D>
 
 # Re-apply everything from the old D onwards onto this new place 
-git rebase --onto HEAD &lt;SHA1-for-D> master
+git rebase --onto HEAD <SHA1-for-D> master
 
 # push it
 git push --force
 </pre> 另一種方法是利用 cherry-pick 方式 
 
-<pre class="brush: bash; title: ; notranslate" title="">git rebase --hard &lt;SHA1 of A>
-git cherry-pick &lt;SHA1 of D>
-git cherry-pick &lt;SHA1 of E></pre> 這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： 
+<pre class="brush: bash; title: ; notranslate" title="">git rebase --hard <SHA1 of A>
+git cherry-pick <SHA1 of D>
+git cherry-pick <SHA1 of E></pre> 這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： 
 
 [Git: removing selected commits from repository][2] [Git: how to remove file and commit from history][3] [Re: ! [rejected] master -> master (non-fast forward)][4]
 

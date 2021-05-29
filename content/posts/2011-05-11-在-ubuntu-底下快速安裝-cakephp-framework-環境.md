@@ -26,12 +26,12 @@ tags:
 
 <pre class="brush: bash; title: ; notranslate" title="">ServerName  cakephp.localhost
     DocumentRoot /var/www/cakephp/app/webroot
-    &lt;Directory /var/www/cakephp/app/webroot>
+    <Directory /var/www/cakephp/app/webroot>
         Options All
         AllowOverride All
         Order allow,deny
         allow from all
-    &lt;/Directory></pre> 4. 啟動 apache virtual host 跟 mod_rewrite 模組 
+    </Directory></pre> 4. 啟動 apache virtual host 跟 mod_rewrite 模組 
 
 <pre class="brush: bash; title: ; notranslate" title="">a2enmod rewrite
 a2ensite cakephp

@@ -23,7 +23,7 @@ tags:
 建立表格來紀錄，其中 `test` 為 [Postgres][3] 的 [Schema][4]
 
 <pre><code class="language-sql">CREATE TABLE "test"."workshift" (
-    "id" int8 NOT NULL DEFAULT nextval(&#039;workshift_id_seq&#039;::regclass),
+    "id" int8 NOT NULL DEFAULT nextval('workshift_id_seq'::regclass),
     "company_id" int8,
     "employee_id" int8,
     "recorded_at" timestamp NOT NULL,
@@ -48,15 +48,15 @@ tags:
 <pre><code class="language-sql">SELECT
     employee_id,
     sum(
-        CASE WHEN to_char(recorded_at, &#039;hh24:mi&#039;) &gt;= &#039;07:00&#039;
-            AND to_char(recorded_at, &#039;hh24:mi&#039;) &lt; &#039;09:00&#039; THEN
+        CASE WHEN to_char(recorded_at, 'hh24:mi') >= '07:00'
+            AND to_char(recorded_at, 'hh24:mi') < '09:00' THEN
             1
         ELSE
             0
         END) AS breakfast_count,
     sum(
-        CASE WHEN to_char(recorded_at, &#039;hh24:mi&#039;) &gt;= &#039;18:00&#039;
-            AND to_char(recorded_at, &#039;hh24:mi&#039;) &lt; &#039;19:00&#039; THEN
+        CASE WHEN to_char(recorded_at, 'hh24:mi') >= '18:00'
+            AND to_char(recorded_at, 'hh24:mi') < '19:00' THEN
             1
         ELSE
             0
@@ -65,8 +65,8 @@ FROM
     "public"."workshift"
 WHERE
     workshift.company_id = 1
-    AND recorded_at BETWEEN &#039;2020-07-01T00:00:00Z&#039;
-    AND &#039;2020-07-30T00:00:00Z&#039;
+    AND recorded_at BETWEEN '2020-07-01T00:00:00Z'
+    AND '2020-07-30T00:00:00Z'
 GROUP BY
     employee_id
 ORDER BY
@@ -85,17 +85,17 @@ LIMIT 50</code></pre>
 SQL 語法如下
 
 <pre><code class="language-sql">SELECT
-    to_char(recorded_at, &#039;YYYY-MM-DD&#039;) AS day_of_month,
+    to_char(recorded_at, 'YYYY-MM-DD') AS day_of_month,
     sum(
-        CASE WHEN to_char(recorded_at, &#039;hh24:mi&#039;) &gt;= &#039;07:00&#039;
-            AND to_char(recorded_at, &#039;hh24:mi&#039;) &lt; &#039;09:00&#039; THEN
+        CASE WHEN to_char(recorded_at, 'hh24:mi') >= '07:00'
+            AND to_char(recorded_at, 'hh24:mi') < '09:00' THEN
             1
         ELSE
             0
         END) AS breakfast_count,
     sum(
-        CASE WHEN to_char(recorded_at, &#039;hh24:mi&#039;) &gt;= &#039;18:00&#039;
-            AND to_char(recorded_at, &#039;hh24:mi&#039;) &lt; &#039;19:00&#039; THEN
+        CASE WHEN to_char(recorded_at, 'hh24:mi') >= '18:00'
+            AND to_char(recorded_at, 'hh24:mi') < '19:00' THEN
             1
         ELSE
             0
@@ -104,8 +104,8 @@ FROM
     "public"."workshift"
 WHERE
     workshift.company_id = 1
-    AND recorded_at BETWEEN &#039;2020-07-01T00:00:00Z&#039;
-    AND &#039;2020-07-31T00:00:00Z&#039;
+    AND recorded_at BETWEEN '2020-07-01T00:00:00Z'
+    AND '2020-07-31T00:00:00Z'
 GROUP BY
     day_of_month
 ORDER BY

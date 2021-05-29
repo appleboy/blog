@@ -28,7 +28,7 @@ tags:
 *
 * 取得 select value 值
 */
-$(&#039;#selectList&#039;).val();</code></pre>
+$('#selectList').val();</code></pre>
 
 取得 text 值，可以利用 :selected 這個
 
@@ -36,29 +36,29 @@ $(&#039;#selectList&#039;).val();</code></pre>
 *
 * 取得 select text 值
 */
-$(&#039;#selectList :selected&#039;).text();</code></pre>
+$('#selectList :selected').text();</code></pre>
 
 <!--more-->
 
 底下是一個範例，實做選取 select options 加入到另一個 select，html 部份：
 
-<pre><code class="language-html">&lt;select id="test1" name="test1" /&gt;
-  &lt;option value="1"&gt;中正大學&lt;/option&gt;
-  &lt;option value="2"&gt;台灣大學&lt;/option&gt;
-  &lt;option value="3"&gt;交通大學&lt;/option&gt;
-&lt;/select&gt;
-&lt;select id="test2" /&gt;
-  &lt;option value="0"&gt;請選擇&lt;/option&gt;
-&lt;/select&gt;</code></pre>
+<pre><code class="language-html"><select id="test1" name="test1" />
+  <option value="1">中正大學</option>
+  <option value="2">台灣大學</option>
+  <option value="3">交通大學</option>
+</select>
+<select id="test2" />
+  <option value="0">請選擇</option>
+</select></code></pre>
 
 jQuery 部份：
 
 <pre><code class="language-js">$("#test1").change(function(){
   /*
   * $(this).val() : #test1 的 value 值
-  * $(&#039;#test1 :selected&#039;).text() : #test1 的 text 值     
+  * $('#test1 :selected').text() : #test1 的 text 值     
   */
-  $("#test2").addOption($(this).val(), $(&#039;#test1 :selected&#039;).text());
+  $("#test2").addOption($(this).val(), $('#test1 :selected').text());
 });</code></pre>
 
 ## 參考文章

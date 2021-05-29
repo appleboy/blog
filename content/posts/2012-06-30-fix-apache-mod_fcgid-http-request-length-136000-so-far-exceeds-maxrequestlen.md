@@ -23,22 +23,22 @@ tags:
 
 > mod_fcgid: HTTP request length 136000 (so far) exceeds MaxRequestLen (131072) 上網找了一下是 fcgid.conf 設定錯誤，解決方式非常簡單，只要打開 <span style="color:green"><strong>/etc/apache2/mods-available/fcgid.conf</strong></span>，將底下內容 <!--more-->
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_fcgid.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_fcgid.c>
   AddHandler    fcgid-script .fcgi
   FcgidConnectTimeout 20
-&lt;/IfModule></pre> 取代成 
+</IfModule></pre> 取代成 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_fcgid.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_fcgid.c>
   AddHandler    fcgid-script .fcgi
   FcgidConnectTimeout 20
   # to get around upload errors when uploading images increase the MaxRequestLen size to 15MB
   MaxRequestLen 15728640
-&lt;/IfModule></pre> 如果檔案上傳時間不夠，又會出現底下錯誤 
+</IfModule></pre> 如果檔案上傳時間不夠，又會出現底下錯誤 
 
 <pre class="brush: bash; title: ; notranslate" title="">mod_fcgid: read data timeout in 40 seconds
 Premature end of script headers: index.php</pre> 所以我們將設定檔再改成底下就可以了 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_fcgid.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_fcgid.c>
   AddHandler    fcgid-script .fcgi
 
   # fix for:   mod_fcgid: read data timeout in 40 seconds
@@ -49,9 +49,9 @@ Premature end of script headers: index.php</pre> 所以我們將設定檔再改�
 
   # to get around upload errors when uploading images increase the MaxRequestLen size to 15MB
   MaxRequestLen 15728640
-&lt;/IfModule></pre> 最後附上個人 fcgid.conf 設定檔給大家參考 
+</IfModule></pre> 最後附上個人 fcgid.conf 設定檔給大家參考 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_fcgid.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_fcgid.c>
   AddHandler    fcgid-script .fcgi .php
   FcgidConnectTimeout 20
   FcgidIPCDir /var/lib/apache2/fcgid/sock
@@ -65,6 +65,6 @@ Premature end of script headers: index.php</pre> 所以我們將設定檔再改�
   BusyTimeout 300
   FcgidWrapper /usr/bin/php5-cgi .php
   MaxRequestLen 15728640
-&lt;/IfModule></pre> 參考網站: 
+</IfModule></pre> 參考網站: 
 
 <a href="http://blog.philippklaus.de/2011/04/fix-mod_fcgid-http-request-length-xyz-so-far-exceeds-maxrequestlen-131072/" target="_blank">[fix] mod_fcgid: HTTP request length xyz (so far) exceeds MaxRequestLen (131072)</a>

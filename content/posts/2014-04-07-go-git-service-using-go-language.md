@@ -55,12 +55,12 @@ $ go build</code></pre>
 
 <pre><code class="language-bash">$ ./gogs web
 Server is running...
-2014/04/07 15:19:07 [conf.go:309] &lt;em>&lt;/em> Log Mode: Console(Trace)
-2014/04/07 15:19:07 [conf.go:310] &lt;em>&lt;/em> Cache Service Enabled
-2014/04/07 15:19:07 [conf.go:311] &lt;em>&lt;/em> Session Service Enabled
-2014/04/07 15:19:07 [install.go:53] &lt;em>&lt;/em> Run Mode: Development
-2014/04/07 15:19:07 [command.go:73] &lt;em>&lt;/em> Gogs: Go Git Service 0.2.0.0403 Alpha
-2014/04/07 15:19:07 [command.go:73] &lt;em>&lt;/em> Listen: :3001</code></pre>
+2014/04/07 15:19:07 [conf.go:309] <em></em> Log Mode: Console(Trace)
+2014/04/07 15:19:07 [conf.go:310] <em></em> Cache Service Enabled
+2014/04/07 15:19:07 [conf.go:311] <em></em> Session Service Enabled
+2014/04/07 15:19:07 [install.go:53] <em></em> Run Mode: Development
+2014/04/07 15:19:07 [command.go:73] <em></em> Gogs: Go Git Service 0.2.0.0403 Alpha
+2014/04/07 15:19:07 [command.go:73] <em></em> Listen: :3001</code></pre>
 
 打開 http://localhost:3001 就可以看到下面畫面，代表安裝成功
 

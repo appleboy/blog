@@ -30,11 +30,11 @@ BenchmarkCreateKeyString3-8   73403774    48.0 ns/op   8 B/op  1 allocs/op</code
 
 從上面數據可以看到效能結果，開發者可以根據這結果來調教程式碼，改善過後再透過一樣的指令來評估是否有改善成功。我個人通常開一個新的 performance 分支來進行效能調校，調教完成後，再執行上面指令輸出到存文字檔
 
-<pre><code class="language-bash">go test -bench=. -benchtime=3s ./lexer/ &gt; new.txt</code></pre>
+<pre><code class="language-bash">go test -bench=. -benchtime=3s ./lexer/ > new.txt</code></pre>
 
 接著切回去 master 分支，用同樣的指令
 
-<pre><code class="language-bash">go test -bench=. -benchtime=3s ./lexer/ &gt; old.txt</code></pre>
+<pre><code class="language-bash">go test -bench=. -benchtime=3s ./lexer/ > old.txt</code></pre>
 
 接著用 [benchstat][5] 來看看是否有改善，改善了多少？
 
@@ -88,7 +88,7 @@ Entering interactive mode (type "help" for commands, "o" for options)
 
 <pre><code class="language-bash">(pprof) top10
 Showing nodes accounting for 4850ms, 81.51% of 5950ms total
-Dropped 66 nodes (cum &lt;= 29.75ms)
+Dropped 66 nodes (cum <= 29.75ms)
 Showing top 10 nodes out of 81
       flat  flat%   sum%        cum   cum%
     1130ms 18.99% 18.99%     3600ms 60.50%  LibertyParser/lexer.(*Lexer).NextToken
@@ -113,8 +113,8 @@ ROUTINE ======================== LibertyParser/lexer.(*Lexer).readChar in /Users
          .          .     24:}
          .          .     25:
          .          .     26:func (l *Lexer) readChar() {
-     260ms      260ms     27:   if l.readPosition &gt;= len(l.Data) {
-         .          .     28:           // End of input (haven&#039;t read anything yet or EOF)
+     260ms      260ms     27:   if l.readPosition >= len(l.Data) {
+         .          .     28:           // End of input (haven't read anything yet or EOF)
          .          .     29:           // 0 is ASCII code for "NUL" character
          .          .     30:           l.char = 0
          .          .     31:   } else {

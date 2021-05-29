@@ -94,7 +94,7 @@ out = make(chan Result)</code></pre>
 <pre><code class="language-go">go func(in *chan string) {
   for {
     select {
-    case account := &lt;-*in:
+    case account := <-*in:
       entry := currency{}
       // step 1: get current amount
       err := globalDB.C("bank").Find(bson.M{"account": account}).One(&entry)
@@ -111,7 +111,7 @@ out = make(chan Result)</code></pre>
         panic("update error")
       }
 
-      out &lt;- Result{
+      out <- Result{
         Account: account,
         Result:  entry.Amount,
       }
@@ -126,10 +126,10 @@ out = make(chan Result)</code></pre>
 wg.Add(1)
 
 go func(wg *sync.WaitGroup) {
-  in &lt;- account
+  in <- account
   for {
     select {
-    case result := &lt;-out:
+    case result := <-out:
       fmt.Printf("%+v\n", result)
       wg.Done()
       return
@@ -145,15 +145,15 @@ wg.Wait()</code></pre>
   go func(in *chan string, i int) {
     for {
       select {
-      case account := &lt;-*in:
-        out&lt;em>&lt;/em> &lt;- Result{
+      case account := <-*in:
+        out<em></em> <- Result{
           Account: account,
           Result:  entry.Amount,
         }
       }
     }
 
-  }(&in&lt;em>&lt;/em>, i)
+  }(&in<em></em>, i)
 }</code></pre>
 
 其中 channel 要宣告為底下: maxThread 為 10 (可以由開發者任意設定)

@@ -107,7 +107,7 @@ tags:
 
 其中 `STORAGE_BUCKET` 是 AWS S3 的 bucket 名稱，還有需要設定 `STORAGE_PATH` 這樣待會可以設定 bucket lifecycle，可以設定幾天後刪除舊的資料，接著設定 Minio S3 的 bucket lifecycle:
 
-<pre><code class="language-sh">$ mc ilm import minio/test &lt;&lt;EOF
+<pre><code class="language-sh">$ mc ilm import minio/test <<EOF
 {
     "Rules": [
         {

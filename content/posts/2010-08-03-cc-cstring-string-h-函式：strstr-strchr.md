@@ -19,8 +19,8 @@ tags:
 ## strstr
 
 <pre><code class="language-c">/* strstr example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
@@ -66,19 +66,19 @@ strstr(s, find)
 這字串用來找尋<span style="color:red">第一次比對成功單一字母符號</span>，也是一樣回傳該指標，底下是範例：
 
 <pre><code class="language-c">/* strchr example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
   char str[] = "This is a sample string";
   char * pch;
-  printf ("Looking for the &#039;s&#039; character in \"%s\"...\n",str);
-  pch=strchr(str,&#039;s&#039;);
+  printf ("Looking for the 's' character in \"%s\"...\n",str);
+  pch=strchr(str,'s');
   while (pch!=NULL)
   {
     printf ("found at %d\n",pch-str+1);
-    pch=strchr(pch+1,&#039;s&#039;);
+    pch=strchr(pch+1,'s');
   }
   return 0;
 }</code></pre>
@@ -94,7 +94,7 @@ int main ()
     for (;; ++p) {
         if (*p == c)
             return ((char *)p);
-        if (*p == &#039;\0&#039;)
+        if (*p == '\0')
             return (NULL);
     }
     /* NOTREACHED */

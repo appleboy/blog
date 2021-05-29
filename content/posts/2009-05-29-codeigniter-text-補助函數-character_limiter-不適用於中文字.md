@@ -24,14 +24,14 @@ tags:
 {
 	function character_limiter($str, $n = 500, $end_char = '&#8230;')
 	{
-		if (strlen($str) &lt; $n)
+		if (strlen($str) < $n)
 		{
 			return $str;
 		}
 		
 		$str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
     
-		if (strlen($str) &lt;= $n)
+		if (strlen($str) <= $n)
 		{
 			return $str;
 		}
@@ -66,12 +66,12 @@ class System
       if (($count+1-$start)>$len) {
           $str  .= "...";
           break;
-      } elseif ((ord(substr($string,$i,1)) &lt;= 128) && ($count &lt; $start)) {
+      } elseif ((ord(substr($string,$i,1)) <= 128) && ($count < $start)) {
           $count++;
-      } elseif ((ord(substr($string,$i,1)) > 128) && ($count &lt; $start)) {
+      } elseif ((ord(substr($string,$i,1)) > 128) && ($count < $start)) {
           $count = $count+2;
           $i     = $i+$byte-1;
-      } elseif ((ord(substr($string,$i,1)) &lt;= 128) && ($count >= $start)) {
+      } elseif ((ord(substr($string,$i,1)) <= 128) && ($count >= $start)) {
           $str  .= substr($string,$i,1);
           $count++;
       } elseif ((ord(substr($string,$i,1)) > 128) && ($count >= $start)) {

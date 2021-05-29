@@ -22,7 +22,7 @@ tags:
 在底層 Linux Kernel 提供了時序(timing)機制，方便驅動程式設計者所使用，核心是依據硬體發出的『計時器中斷』來追蹤時間的流動狀況。我們可以依據 HZ 的值來設計 Delay 機制，讓驅動程式可以每隔固定一段時間啟動或者是發出訊號，也可以利用 Timer 來讓 LED 閃爍變化，在介紹 Timer API 之前，可以先參考 [Linux Kernel: 簡介HZ, tick and jiffies][1] 這篇文章，瞭解一些相關名詞，舉例：如果想知道一秒後的 jiffies 時間，可以寫成底下： 
 
 <pre class="brush: cpp; title: ; notranslate" title="">#ifdef CONFIG_BMA150_TIMER
-#include &lt;linux/timer.h>
+#include <linux/timer.h>
 #endif
 j = jiffies;
 /* 一秒之後 */
@@ -37,7 +37,7 @@ stamp_1 = j + 20*HZ;</pre>
 [Android][2] HAL([Hardware abstraction layer][3])，所以利用 Timer 的機制定時 report 給 Android。 首先宣告： 
 
 <pre class="brush: cpp; title: ; notranslate" title="">#ifdef CONFIG_BMA150_TIMER
-#include &lt;linux/timer.h>
+#include <linux/timer.h>
 #endif
 /* 定義 timer_list struct */
 #ifdef CONFIG_BMA150_TIMER

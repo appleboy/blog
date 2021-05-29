@@ -91,7 +91,7 @@ sys     0m2.253s
 最後如果不想用 `pnpm` 或 `ied` 而想用原生 npm 指令，可以直接透過 `--cache-min` 參數來完成。原本 npm 安裝套件後都會存放一份到 `~/.npm` 目錄內，假設目前的 node_modules 內沒有該套件，就會先從網路上下載，而並非從 `~/.npm` 內直接拉過來。如果要先從 `~/.npm` 目錄內找安裝包，必須要加上 `--cache-min` 參數，參考如下
 
 <div>
-  <pre class="brush: bash; title: ; notranslate" title="">$ npm install --cache-min 9999999 &lt;package-name&gt;</pre>
+  <pre class="brush: bash; title: ; notranslate" title="">$ npm install --cache-min 9999999 <package-name></pre>
 </div>
 
 ### 總結

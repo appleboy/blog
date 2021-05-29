@@ -39,7 +39,7 @@ tags:
 接著執行 `composer install`，系統會自動建立 vendor 目錄。在 `application/libraries` 建立 `lib_login.php` 檔案，並且寫入底下程式碼
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php  if (! defined('BASEPATH')) exit('No direct script access allowed');
+  <pre class="brush: php; title: ; notranslate" title=""><?php  if (! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
 * Name: Facebook Login Library
@@ -73,9 +73,9 @@ class Lib_login
      **/
     public function __construct()
     {
-        $this-&gt;ci =& get_instance();
-        $this-&gt;ci-&gt;load-&gt;library('session');
-        $this-&gt;ci-&gt;config-&gt;load('facebook');
+        $this->ci =& get_instance();
+        $this->ci->load->library('session');
+        $this->ci->config->load('facebook');
 
         if (! isset($_SESSION)) {
             session_start();
@@ -84,9 +84,9 @@ class Lib_login
 
     public function facebook()
     {
-        $facebook_default_scope = explode(',', $this-&gt;ci-&gt;config-&gt;item("facebook_default_scope"));
-        $facebook_app_id = $this-&gt;ci-&gt;config-&gt;item("facebook_app_id");
-        $facebook_api_secret = $this-&gt;ci-&gt;config-&gt;item("facebook_api_secret");
+        $facebook_default_scope = explode(',', $this->ci->config->item("facebook_default_scope"));
+        $facebook_app_id = $this->ci->config->item("facebook_app_id");
+        $facebook_api_secret = $this->ci->config->item("facebook_api_secret");
 
         // init app with app id and secret
         FacebookSession::setDefaultApplication($facebook_app_id, $facebook_api_secret);
@@ -100,7 +100,7 @@ class Lib_login
 
             // validate the access_token to make sure it's still valid
             try {
-                if (!$session-&gt;validate()) {
+                if (!$session->validate()) {
                     $session = null;
                 }
             } catch (Exception $e) {
@@ -113,7 +113,7 @@ class Lib_login
             // no session exists
 
             try {
-                $session = $helper-&gt;getSessionFromRedirect();
+                $session = $helper->getSessionFromRedirect();
             } catch(FacebookRequestException $ex) {
                 // When Facebook returns an error
                 // handle this better in production code
@@ -128,27 +128,27 @@ class Lib_login
         // see if we have a session
         if (isset($session)) {
             // save the session
-            $_SESSION['fb_token'] = $session-&gt;getToken();
+            $_SESSION['fb_token'] = $session->getToken();
             // create a session using saved token or the new one we generated at login
-            $session = new FacebookSession($session-&gt;getToken());
+            $session = new FacebookSession($session->getToken());
 
             // graph api request for user data
             $request = new FacebookRequest($session, 'GET', '/me');
-            $response = $request-&gt;execute();
+            $response = $request->execute();
             // get response
-            $graphObject = $response-&gt;getGraphObject()-&gt;asArray();
+            $graphObject = $response->getGraphObject()->asArray();
             $fb_data = array(
-                'me' =&gt; $graphObject,
-                'loginUrl' =&gt; $helper-&gt;getLoginUrl($facebook_default_scope)
+                'me' => $graphObject,
+                'loginUrl' => $helper->getLoginUrl($facebook_default_scope)
            );
-            $this-&gt;ci-&gt;session-&gt;set_userdata('fb_data', $fb_data);
+            $this->ci->session->set_userdata('fb_data', $fb_data);
 
         } else {
             $fb_data = array(
-                'me' =&gt; null,
-                'loginUrl' =&gt; $helper-&gt;getLoginUrl($facebook_default_scope)
+                'me' => null,
+                'loginUrl' => $helper->getLoginUrl($facebook_default_scope)
            );
-            $this-&gt;ci-&gt;session-&gt;set_userdata('fb_data', $fb_data);
+            $this->ci->session->set_userdata('fb_data', $fb_data);
         }
 
         return $fb_data;
@@ -160,14 +160,14 @@ class Lib_login
 最後寫簡單 controller
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+  <pre class="brush: php; title: ; notranslate" title=""><?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Login extends CI_Controller
 {
     public function __construct()
     {
         parent::__construct();
-        $this-&gt;load-&gt;library(array('session', 'lib_login'));
+        $this->load->library(array('session', 'lib_login'));
     }
 
     /**
@@ -178,13 +178,13 @@ class Login extends CI_Controller
      **/
     public function facebook()
     {
-        $fb_data = $this-&gt;lib_login-&gt;facebook();
+        $fb_data = $this->lib_login->facebook();
 
         // check login data
         if (isset($fb_data['me'])) {
             var_dump($fb_data);
         } else {
-            echo '&lt;a href="' . $fb_data['loginUrl'] . '"&gt;Login&lt;/a&gt;';
+            echo '<a href="' . $fb_data['loginUrl'] . '">Login</a>';
         }
     }
 }

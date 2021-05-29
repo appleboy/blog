@@ -113,9 +113,9 @@ func main() {
     quit := make(chan os.Signal, 1)
     // kill (no param) default send syscall.SIGTERM
     // kill -2 is syscall.SIGINT
-    // kill -9 is syscall.SIGKILL but can&#039;t be catch, so don&#039;t need add it
+    // kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
     signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-    &lt;-quit
+    <-quit
     log.Println("Shutdown Server ...")
 
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -129,7 +129,7 @@ func main() {
 
 首先可以看到將 `srv.ListenAndServe` 直接丟到背景執行，這樣才不會阻斷後續的流程，接著宣告一個 `os.Signal` 訊號的 Channel，並且接受系統 SIGINT 及 SIGTERM，也就是只要透過 kill 或者是 `docker rm` 就會收到訊號關閉 `quit` 通道
 
-<pre><code class="language-go">&lt;-quit</code></pre>
+<pre><code class="language-go"><-quit</code></pre>
 
 由上面可知，整個 main func 會被 block 在這地方，假設按下 ctrl + c 就會被系統訊號 (SIGINT 及 SIGTERM) 通知關閉 quit 通道，通道被關閉後，就會繼續往下執行
 

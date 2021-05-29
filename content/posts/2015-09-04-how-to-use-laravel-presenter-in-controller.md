@@ -42,7 +42,7 @@ protected $appends = [
  */
 public function getIsTwitterAttribute()
 {
-    return (bool) ($this-&gt;attributes['options'] & self::$OPTIONS['is_twitter']);
+    return (bool) ($this->attributes['options'] & self::$OPTIONS['is_twitter']);
 }</pre>
 </div>
 
@@ -51,7 +51,7 @@ public function getIsTwitterAttribute()
 如果是使用 Laravel Auto Presenter 則寫法如下
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php  namespace App\Models\Presenters;
+  <pre class="brush: php; title: ; notranslate" title=""><?php  namespace App\Models\Presenters;
 
 use App\Models\User;
 use Illuminate\Contracts\Support\Arrayable;
@@ -61,12 +61,12 @@ class UserPresenter extends BasePresenter implements Arrayable
 {
     public function __construct(User $resource)
     {
-        $this-&gt;wrappedObject = $resource;
+        $this->wrappedObject = $resource;
     }
 
     public function isTwitter()
     {
-        return (bool) ($this-&gt;wrappedObject-&gt;info-&gt;options & self::$OPTIONS['is_twitter']);
+        return (bool) ($this->wrappedObject->info->options & self::$OPTIONS['is_twitter']);
     }
 
     /**
@@ -77,9 +77,9 @@ class UserPresenter extends BasePresenter implements Arrayable
     public function toArray()
     {
         return [
-            'id'        =&gt; $this-&gt;wrappedObject-&gt;id,
-            'isTwitter' =&gt; $this-&gt;isTwitter(),
-            'avatarUrl' =&gt; $this-&gt;avatarUrl(),
+            'id'        => $this->wrappedObject->id,
+            'isTwitter' => $this->isTwitter(),
+            'avatarUrl' => $this->avatarUrl(),
         ];
     }
 }</pre>
@@ -88,7 +88,7 @@ class UserPresenter extends BasePresenter implements Arrayable
 但是使用在 Laravel View 裡面都可以正確拿到 `isTwitter` 欄位沒問題，如果要用在 RESTFul + 前端 [ReactJS][4] 的話，則要透過 Laravel Facades 來實現，加上 `AutoPresenter::decorate` 就可以在 Controller 內使用 AutoPresenter 了。
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">&lt;?php
+  <pre class="brush: php; title: ; notranslate" title=""><?php
 
 use McCool\LaravelAutoPresenter\Facades\AutoPresenter;
 
@@ -101,14 +101,14 @@ class MessageController extends Controller
 
     public function __construct(UserRepository $user)
     {
-        $this-&gt;user = $user;
+        $this->user = $user;
     }
 
     public function index(Request $request)
     {
-        $user = $this-&gt;user-&gt;with('info')-&gt;find(\Auth::id());
+        $user = $this->user->with('info')->find(\Auth::id());
         $state = collect([
-            'user' =&gt; AutoPresenter::decorate($user),
+            'user' => AutoPresenter::decorate($user),
         ]);
 
         return $state;

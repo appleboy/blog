@@ -75,9 +75,9 @@ Oracle is a registered trademark of Oracle Corporation and/or its
 affiliates. Other names may be trademarks of their respective
 owners.
 
-Type &#039;help;&#039; or &#039;\h&#039; for help. Type &#039;\c&#039; to clear the current input statement.
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
-mysql&gt; show databases;
+mysql> show databases;
 +--------------------+
 | Database           |
 +--------------------+
@@ -89,7 +89,7 @@ mysql&gt; show databases;
 +--------------------+
 5 rows in set (0.01 sec)
 
-mysql&gt;</code></pre>
+mysql></code></pre>
 
 大致上用 Docker 就取代了 Homestead，所以大家快點把 Docker 安裝到自己的電腦。
 

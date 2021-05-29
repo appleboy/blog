@@ -36,13 +36,13 @@ mkdir hello</pre>
 
 ### 建立 Makfile 以及 hello.c hello.c: 
 
-<pre class="brush: cpp; title: ; notranslate" title="">#include &lt;linux/kernel.h> /* pr_info 所需 include 檔案*/
-#include &lt;linux/init.h>
-#include &lt;linux/module.h> /* 所有 module 需要檔案*/
-#include &lt;linux/version.h>
+<pre class="brush: cpp; title: ; notranslate" title="">#include <linux/kernel.h> /* pr_info 所需 include 檔案*/
+#include <linux/init.h>
+#include <linux/module.h> /* 所有 module 需要檔案*/
+#include <linux/version.h>
 
 MODULE_DESCRIPTION("Hello World !!");
-MODULE_AUTHOR("Bo-Yi Wu &lt;appleboy.tw AT gmail.com>");
+MODULE_AUTHOR("Bo-Yi Wu <appleboy.tw AT gmail.com>");
 MODULE_LICENSE("GPL");
 
 static int __init hello_init(void)
@@ -61,7 +61,7 @@ module_init(hello_init);
 module_exit(hello_exit);</pre> Makefile: 
 
 <pre class="brush: bash; title: ; notranslate" title="">#
-# Makefile by appleboy &lt;appleboy.tw AT gmail.com>
+# Makefile by appleboy <appleboy.tw AT gmail.com>
 #
 obj-m       += hello.o
 KVERSION := $(shell uname -r)

@@ -33,7 +33,7 @@ import (
 
 func isEnable(enable bool) (bool, error) {
     if enable {
-        return false, errors.New("You can&#039;t enable this setting")
+        return false, errors.New("You can't enable this setting")
     }
 
     return true, nil
@@ -73,7 +73,7 @@ func (e *errorString) Error() string {
 
 <pre><code class="language-go">func isEnable(enable bool) (bool, error) {
     if enable {
-        return false, fmt.Errorf("You can&#039;t enable this setting")
+        return false, fmt.Errorf("You can't enable this setting")
     }
 
     return true, nil
@@ -104,7 +104,7 @@ func TestIsMyError(t *testing.T) {
         t.Fatal("should be false")
     }
 
-    if err.Error() != "You can&#039;t enable this setting" {
+    if err.Error() != "You can't enable this setting" {
         t.Fatal("message error")
     }
 }</code></pre>
@@ -123,7 +123,7 @@ func TestIsEnable(t *testing.T) {
     ok, err := isEnable(true)
     assert.False(t, ok)
     assert.NotNil(t, err)
-    assert.Equal(t, "You can&#039;t enable this setting", err.Error())
+    assert.Equal(t, "You can't enable this setting", err.Error())
 }</code></pre>
 
 ## Go 自訂錯誤訊息

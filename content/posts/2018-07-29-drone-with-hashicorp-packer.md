@@ -70,7 +70,7 @@ tags:
     {
       "type": "shell",
       "script": "{{template_dir}}/docker.sh",
-      "execute_command": "echo &#039;ubuntu&#039; | sudo -S sh -c &#039;{{ .Vars }} {{ .Path }}&#039;"
+      "execute_command": "echo 'ubuntu' | sudo -S sh -c '{{ .Vars }} {{ .Path }}'"
     }
   ]
 }
@@ -85,16 +85,16 @@ tags:
 <pre class="brush: plain; title: ; notranslate" title="">$ packer build -var-file=config/mcs.json mcs.json
 amazon-ebs output will be in this color.
 
-==&gt; amazon-ebs: Prevalidating AMI Name: ggz-docker-image-2018-07-29T06-11-12Z
+==> amazon-ebs: Prevalidating AMI Name: ggz-docker-image-2018-07-29T06-11-12Z
     amazon-ebs: Found Image ID: ami-1c6627f6
-==&gt; amazon-ebs: Creating temporary keypair: packer_5b5d5a80-c1e2-e266-e0b8-bc7c6e63dba3
-==&gt; amazon-ebs: Creating temporary security group for this instance: packer_5b5d5a82-5d1f-c702-18f4-992ac37e885a
-==&gt; amazon-ebs: Authorizing access to port 22 from 0.0.0.0/0 in the temporary security group...
-==&gt; amazon-ebs: Launching a source AWS instance...
-==&gt; amazon-ebs: Adding tags to source instance
+==> amazon-ebs: Creating temporary keypair: packer_5b5d5a80-c1e2-e266-e0b8-bc7c6e63dba3
+==> amazon-ebs: Creating temporary security group for this instance: packer_5b5d5a82-5d1f-c702-18f4-992ac37e885a
+==> amazon-ebs: Authorizing access to port 22 from 0.0.0.0/0 in the temporary security group...
+==> amazon-ebs: Launching a source AWS instance...
+==> amazon-ebs: Adding tags to source instance
     amazon-ebs: Adding tag: "Name": "Packer Builder"
     amazon-ebs: Instance ID: i-0d12e2a9e6f00a410
-==&gt; amazon-ebs: Waiting for instance (i-0d12e2a9e6f00a410) to become ready...
+==> amazon-ebs: Waiting for instance (i-0d12e2a9e6f00a410) to become ready...
 </pre> 透過 
 
 `-var-file` 將隱秘資訊寫到檔案內，像是 AWS Secret Key 等等。 

@@ -24,8 +24,8 @@ tags:
 
 <!--more-->
 
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+<pre><code class="language-c">#include <stdio.h>
+#include <string.h>
 
 int main() {
   char s[] = "Hello World";
@@ -56,10 +56,10 @@ dest為目標字串，src為來源字串，n為複製的字數。所以我們可
 
 寫成 function 方式來呼叫比較簡單，底下就是上面學弟作業的解答
 
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
-#include &lt;math.h&gt;
-#include &lt;stdlib.h&gt;
+<pre><code class="language-c">#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
 
 char *p, ans[10], op[10], t[10];
 double result = 0.0;
@@ -74,8 +74,8 @@ void scan_data()
 {
   printf("請輸入你想要計算的方法(輸入 exit 離開)：");
   fgets(ans, sizeof(ans), stdin);
-  if ((p = strchr(ans, &#039;\n&#039;)) != NULL)
-    *p = &#039;\0&#039;;      
+  if ((p = strchr(ans, '\n')) != NULL)
+    *p = '\0';      
   substr(op, ans, 0, 1);
   substr(t, ans, 1, (sizeof(ans)-1));
 }

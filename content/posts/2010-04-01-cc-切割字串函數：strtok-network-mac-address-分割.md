@@ -88,7 +88,7 @@ cont:
                 if (c == 0)
                     s = NULL;
                 else
-                    s[-1] = &#039;\0&#039;;
+                    s[-1] = '\0';
                 *last = s;
                 return (tok);
             }
@@ -103,7 +103,7 @@ cont:
 
 <pre><code class="language-c">/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
-#include &lt;string.h&gt;
+#include <string.h>
 
 /* ISO/IEC 9899 7.11.5.8 strtok. DEPRECATED.
  * Split string into tokens, and return one at a time while retaining state
@@ -134,7 +134,7 @@ char * __cdecl strtok(char *s1, const char *delimit)
     tmp = strpbrk(s1, delimit);
     if (tmp) {
         /* Found another delimiter, split string and save state. */
-        *tmp = &#039;\0&#039;;
+        *tmp = '\0';
         lastToken = tmp + 1;
     } else {
         /* Last segment, remember that. */

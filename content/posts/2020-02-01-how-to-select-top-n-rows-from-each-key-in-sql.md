@@ -136,7 +136,7 @@ select * from bar where foo_id=n order by timestamp desc limit 3</code></pre>
 <pre><code class="language-sql">select bar.* from 
 (SELECT bar.*, 
   rank() OVER (PARTITION BY foo_id ORDER BY "timestamp" DESC) as rank
-  FROM bar where "timestamp" &lt;= 102) bar
+  FROM bar where "timestamp" <= 102) bar
   where rank = 1</code></pre>
 
 資料如下:

@@ -56,7 +56,7 @@ Done.
 
 <pre class="brush: bash; title: ; notranslate" title="">$ fab -p xxxx -H localhost -- 'echo "Hello world!";'</pre> 上述指令會產生下面結果 
 
-<pre class="brush: bash; title: ; notranslate" title="">[localhost] Executing task '&lt;remainder>'
+<pre class="brush: bash; title: ; notranslate" title="">[localhost] Executing task '<remainder>'
 [localhost] run: echo "Hello world!";
 [localhost] out: Hello world!
 [localhost] out: 

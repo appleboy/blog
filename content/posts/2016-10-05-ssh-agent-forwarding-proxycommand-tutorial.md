@@ -50,7 +50,7 @@ tags:
 
 最後執行底下指令就可以直接跳到您要的 EC2 Server
 
-<pre><code class="language-bash">$ ssh -t aws &#039;ssh example.inc&#039;</code></pre>
+<pre><code class="language-bash">$ ssh -t aws 'ssh example.inc'</code></pre>
 
 **方法二**: 也是設定 `~/.ssh/config`，但是透過 `ProxyCommand` 而不是 `ForwardAgent yes` (**建議使用此方法**)
 

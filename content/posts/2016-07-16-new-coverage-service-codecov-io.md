@@ -51,7 +51,7 @@ Coveralls 會先給一把 Token，你要將 Token 加密到 [Travis][4] 設定�
 <pre><code class="language-bash">script:
   - make test
   - go test -v -covermode=count -coverprofile=coverage.out
-  - $(go env GOPATH | awk &#039;BEGIN{FS=":"} {print $1}&#039;)/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN</code></pre>
+  - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN</code></pre>
 
 ### Codecov.io
 
@@ -65,7 +65,7 @@ Coveralls 會先給一把 Token，你要將 Token 加密到 [Travis][4] 設定�
   - go test -v -covermode=count -coverprofile=coverage.out
 
 after_success:
-  - bash &lt;(curl -s https://codecov.io/bash)</code></pre>
+  - bash <(curl -s https://codecov.io/bash)</code></pre>
 
 只要你是 open source 專案，根本不需要 token，Codecov 會自動分析 golang 編譯出來的 report。在 Dashboard 你會發現這句話
 

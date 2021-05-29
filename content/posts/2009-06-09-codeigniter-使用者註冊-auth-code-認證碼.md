@@ -99,7 +99,7 @@ class Vcode extends Controller {
 
       // 驗證碼
       $v_code = "";
-      for($i = 0; $i &lt; $this-> v_num; $i++){  
+      for($i = 0; $i < $this-> v_num; $i++){  
           $randnum = mt_rand(0, $cmax);
           $this_char = $list[$randnum];
           $v_code .= $this_char;
@@ -120,7 +120,7 @@ class Vcode extends Controller {
       //imagettftext ($im, 24, mt_rand(-6, 6), 10, $this -> img_h * 0.6, $color, $font, $v_code);
       imagettftext ($im, 24, 0, 10, $this -> img_h * 0.6, $color, $font, $v_code);
       // 干擾線條
-      for($i = 0; $i &lt; $this -> int_line_num; $i++){
+      for($i = 0; $i < $this -> int_line_num; $i++){
           $rand_color_line = $color;
           imageline($im, mt_rand(2,intval($this -> img_w/3)), mt_rand(10,$this -> img_h - 10), mt_rand(intval($this -> img_w - ($this -> img_w/3) + 50),$this -> img_w), mt_rand(0,$this -> img_h), $rand_color_line);
       }
@@ -129,15 +129,15 @@ class Vcode extends Controller {
       $dis_range = mt_rand(8, 12);
       $distortion_im = imagecreatetruecolor ($this -> img_w * 1.5 ,$this -> img_h);        
       imagefill($distortion_im, 0, 0, imagecolorallocate($distortion_im, 255, 255, 255));
-      for ($i = 0; $i &lt; $this -> img_w + 50; $i++) {
-          for ($j = 0; $j &lt; $this -> img_h; $j++) {
+      for ($i = 0; $i < $this -> img_w + 50; $i++) {
+          for ($j = 0; $j < $this -> img_h; $j++) {
               $rgb = imagecolorat($im, $i, $j);
               if($ranum == 0){
-                  if( (int)($i+40+cos($j/$this -> img_h * 2 * M_PI) * 10) &lt;= imagesx($distortion_im) && (int)($i+20+cos($j/$this -> img_h * 2 * M_PI) * 10) >=0 ) {
+                  if( (int)($i+40+cos($j/$this -> img_h * 2 * M_PI) * 10) <= imagesx($distortion_im) && (int)($i+20+cos($j/$this -> img_h * 2 * M_PI) * 10) >=0 ) {
                       imagesetpixel ($distortion_im, (int)($i+10+cos($j/$this -> img_h * 2 * M_PI - M_PI * 0.4) * $dis_range), $j, $rgb);
                   }
               }else{
-                  if( (int)($i+40+sin($j/$this -> img_h * 2 * M_PI) * 10) &lt;= imagesx($distortion_im) && (int)($i+20+sin($j/$this -> img_h * 2 * M_PI) * 10) >=0 ) {
+                  if( (int)($i+40+sin($j/$this -> img_h * 2 * M_PI) * 10) <= imagesx($distortion_im) && (int)($i+20+sin($j/$this -> img_h * 2 * M_PI) * 10) >=0 ) {
                       imagesetpixel ($distortion_im, (int)($i+10+sin($j/$this -> img_h * 2 * M_PI - M_PI * 0.4) * $dis_range), $j, $rgb);
                   }
               }
@@ -145,7 +145,7 @@ class Vcode extends Controller {
       }
 
       // 干擾像素
-      for($i = 0; $i &lt; $this -> int_pixel_num; $i++){
+      for($i = 0; $i < $this -> int_pixel_num; $i++){
           $rand_color_pixel = $color;
           imagesetpixel($distortion_im, mt_rand() % $this -> img_w + 20, mt_rand() % $this -> img_h, $rand_color_pixel);
       }

@@ -155,7 +155,7 @@ while ($row = mysql_fetch_array($result))
   mysql_select_db($mysql_db);
  }
  
- if (($quota_size &lt;= $quota_limit) && $quota_exceeded) 
+ if (($quota_size <= $quota_limit) && $quota_exceeded) 
  {
   if ($debug)
    echo "Unlocking database...\n";

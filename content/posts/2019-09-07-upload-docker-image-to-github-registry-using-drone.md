@@ -47,7 +47,7 @@ tags:
 
 <pre><code class="language-dockerfile">FROM plugins/base:multiarch
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;" \
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.name="Drone Workshop" \
   org.label-schema.vendor="Bo-Yi Wu" \
   org.label-schema.schema-version="1.0"

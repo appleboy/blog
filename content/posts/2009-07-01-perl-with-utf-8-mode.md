@@ -36,7 +36,7 @@ use utf8;
 binmode(STDIN, ':encoding(utf8)');
 binmode(STDOUT, ':encoding(utf8)');
 binmode(STDERR, ':encoding(utf8)');
-if($_ =~ m/\s*&lt;div\s*class="title">&lt;a\s*href=".+">(.+)&lt;\/a>&lt;\/div>\s*/)
+if($_ =~ m/\s*<div\s*class="title"><a\s*href=".+">(.+)<\/a><\/div>\s*/)
 {
   $pic_desc = $1;
   print "desc: " . $1 . " \n" if $verbose;

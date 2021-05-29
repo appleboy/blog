@@ -53,7 +53,7 @@ tags:
 傳送端只需要執行 `croc send file.txt` 即可
 
 <pre><code class="language-sh">$ croc send ~/Downloads/data.csv
-Sending &#039;data.csv&#039; (632.9 kB)
+Sending 'data.csv' (632.9 kB)
 Code is: cabinet-rodeo-mayday
 On the other computer run
 
@@ -62,9 +62,9 @@ croc cabinet-rodeo-mayday</code></pre>
 上面可以看到會自動產生一個 `secret code`，接著在另外一台電腦執行底下指令
 
 <pre><code class="language-sh">$ croc cabinet-rodeo-mayday
-Accept &#039;data.csv&#039; (632.9 kB)? (y/n) y
+Accept 'data.csv' (632.9 kB)? (y/n) y
 
-Receiving (&lt;-111.243.108.9:51032)</code></pre>
+Receiving (<-111.243.108.9:51032)</code></pre>
 
 當然你可以自訂 `secret code`
 
@@ -99,7 +99,7 @@ var (
 接著在傳送檔案也要跟著換掉 relay server
 
 <pre><code class="language-sh">$ croc --relay 127.0.0.1:3001 send ~/Downloads/data.csv
-Sending &#039;data.csv&#039; (632.9 kB)
+Sending 'data.csv' (632.9 kB)
 Code is: saddle-origin-horizon
 On the other computer run
 

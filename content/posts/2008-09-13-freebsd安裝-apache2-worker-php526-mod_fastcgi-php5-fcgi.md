@@ -65,12 +65,12 @@ Include etc/apache22/extra/httpd-mpm.conf</pre> 修改 Include etc/apache22/extr
 <pre class="brush: bash; title: ; notranslate" title="">#
 FastCgiConfig -maxClassProcesses 1
 ScriptAlias /fcgi-bin/ "/usr/local/www/fcgi-bin/"
-&lt;Directory /usr/local/www/fcgi-bin/>
+<Directory /usr/local/www/fcgi-bin/>
     SetHandler fastcgi-script
     AllowOverride All
     Order allow,deny
     Allow from all
-&lt;/Directory>
+</Directory>
 #
 AddHandler php-fastcgi .php
 Action php-fastcgi /fcgi-bin/php</pre> 這裡設定只能跑一隻 

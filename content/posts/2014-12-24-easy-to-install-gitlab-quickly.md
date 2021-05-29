@@ -28,7 +28,7 @@ tags:
 
 <pre><code class="language-bash">wget https://downloads-packages.s3.amazonaws.com/debian-7.7/gitlab_7.6.1-omnibus.5.3.0.ci-1_amd64.deb
 sudo apt-get install openssh-server
-sudo apt-get install postfix # Select &#039;Internet Site&#039;, using sendmail instead also works, exim has problems
+sudo apt-get install postfix # Select 'Internet Site', using sendmail instead also works, exim has problems
 sudo dpkg -i gitlab_7.6.1-omnibus.5.3.0.ci-1_amd64.deb</code></pre>
 
 完成後，你會看到畫面要求您執行 `gitlab-ctl reconfigure` 來啟動所有服務，檢查服務是否都正常啟動可以透過 `gitlab-ctl status` 看到底下就代表啟動成功
@@ -43,11 +43,11 @@ run: unicorn: (pid 2598) 1279s; run: log: (pid 25278) 2704s</code></pre>
 
 如果系統本身有安裝 [Nginx][4]，請將 GitLab 預設 80 port 改掉，請修改 `/etc/gitlab/gitlab.rb` 設定檔，找到底下
 
-<pre><code class="language-bash">nginx[&#039;redirect_http_to_https_port&#039;] = 80</code></pre>
+<pre><code class="language-bash">nginx['redirect_http_to_https_port'] = 80</code></pre>
 
 修改成
 
-<pre><code class="language-bash">nginx[&#039;redirect_http_to_https_port&#039;] = 8088</code></pre>
+<pre><code class="language-bash">nginx['redirect_http_to_https_port'] = 8088</code></pre>
 
 儲存設定檔後，請重新跑 `gitlab-ctl reconfigure` 即可，另外對外網址也請設定正確 `external_url`。另外官方也有寫出 Digital Ocean 也直接推出 [One-click install and deploy GitLab][9]，一個月才 10 美金，真是太超過了。
 

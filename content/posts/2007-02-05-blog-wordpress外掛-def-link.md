@@ -73,7 +73,7 @@ $ccompare="/".$achange[$m][name]."/i";
 @@ -31,7 +31,7 @@
  	
  		$m=0;
- 		while($m&lt;$n) {
+ 		while($m<$n) {
 -			$ccompare="/\b".$achange[$m][name]."\b/i";	
 +			$ccompare="/".$achange[$m][name]."/i";	
  				if($achange[$m][flag]==2) {
@@ -82,20 +82,20 @@ $ccompare="/".$achange[$m][name]."/i";
 @@ -42,7 +42,7 @@
  		}	
  		$m=0;
- 		while($m&lt;$n) {
+ 		while($m<$n) {
 -			$ccompare="/\b".$achange[$m][name]."\b/i";	
 +			$ccompare="/".$achange[$m][name]."/i";	
  				if($achange[$m][flag]==1) {
- 					$a1[$m]="&lt;a href=\"".$achange[$m][deflink]."\" target=\"_blank\">".$achange[$m][name]."&lt;/a>";
+ 					$a1[$m]="<a href=\"".$achange[$m][deflink]."\" target=\"_blank\">".$achange[$m][name]."</a>";
  					$intext= preg_replace("$ccompare","@%%$m%%@",$intext);
 @@ -53,7 +53,7 @@
  		}	
  		$m=0;
- 		while($m&lt;$n) {
+ 		while($m<$n) {
 -			$ccompare="/\b".$achange[$m][name]."\b/i";	
 +			$ccompare="/".$achange[$m][name]."/i";	
  				if($achange[$m][flag]==0) {
- 					$intext= preg_replace("$ccompare","&lt;a style=\"border-bottom: 1px dashed #000000; cursor: help;\" title=\"".$achange[$m][deflink]."\">".$achange[$m][name]."&lt;/a>",$intext);
+ 					$intext= preg_replace("$ccompare","<a style=\"border-bottom: 1px dashed #000000; cursor: help;\" title=\"".$achange[$m][deflink]."\">".$achange[$m][name]."</a>",$intext);
  				}
 @@ -72,7 +72,7 @@
  			$intext= preg_replace("/@%%$m%%@/",$a1[$m],$intext);			

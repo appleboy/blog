@@ -138,7 +138,7 @@ ENTRYPOINT ["/bin/hello"]</code></pre>
 
 拿到 secret name 之後，再透過底下指令找到 `ca.crt` 及 `token`
 
-<pre><code class="language-shell">$ kubectl get secret default-token-r5xdx -o yaml | egrep &#039;ca.crt:|token:&#039;</code></pre>
+<pre><code class="language-shell">$ kubectl get secret default-token-r5xdx -o yaml | egrep 'ca.crt:|token:'</code></pre>
 
 其中 token 還需要透過 base64 decode 過，才可以設定到 drone secret。完成上述步驟後，可以來設定 drone 部署:
 
@@ -192,7 +192,7 @@ spec:
         - containerPort: 8080
         env:
         - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-          value: &#039;THIS_STRING_IS_REPLACED_DURING_BUILD&#039;</code></pre>
+          value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'</code></pre>
 
 大家可以找到 `image: appleboy/golang-http:VERSION`，這邊需要寫個 sed 指令來取代 `VERSION`，部署到 staging 則是 `latest`，如果是 tag 則取代為 `DRONE_TAG`
 
@@ -209,7 +209,7 @@ prepare:
 
 <pre><code class="language-yaml">env:
 - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-  value: &#039;THIS_STRING_IS_REPLACED_DURING_BUILD&#039;</code></pre>
+  value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'</code></pre>
 
 目的是讓每次 kubernetes 都可以讀取不一樣的 template 確保 image 都可以即時更新，假設少了上述步驟，是無法讓 staging 保持更新狀態。畢竟使用 kubectl apply 時，如果 yaml 檔案是沒有更動過的，就不會更新。
 

@@ -27,7 +27,7 @@ tags:
 
 <pre class="brush: php; title: ; notranslate" title="">ignore_user_abort(true);
 set_time_limit(0);
-for($i = 1; $i &lt; 6; $i++){
+for($i = 1; $i < 6; $i++){
 if($_FILES['userfile' . $i]['size']){
 /*
 上傳圖檔寫在這裡
@@ -42,9 +42,9 @@ header("Location:index.php");
 然後這裡在進行縮圖，他就會在背景中執行
 */
 if($_POST['mode'] == 'add'){
-for($i = 1; $i &lt; 6; $i++){
+for($i = 1; $i < 6; $i++){
 convert_sh($upload_floder,$file_name[$i],$small_size[$i]);
 }
 }
-?&gt;
+?>
 </pre> 其實 ignore\_user\_abort(true); 根本就是變相的 unix 底下的 crontab ，還蠻好用的，好處很多，不過用的地方要注意就是了，並不是每個php檔案都需要用這個函式。

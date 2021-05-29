@@ -41,7 +41,7 @@ fi</code></pre>
 
 ## 使用方式
 
-<pre><code class="language-bash">$ git blame-someone-else &lt;author&gt; &lt;commit&gt;</code></pre>
+<pre><code class="language-bash">$ git blame-someone-else <author> <commit></code></pre>
 
 其中 author 格式為 `Name <Email>` 就可以了，附上執行前後的結果
 
@@ -49,7 +49,7 @@ fi</code></pre>
 
 <a data-flickr-embed="true"  href="https://www.flickr.com/photos/appleboy/24329093614/in/dateposted-public/" title="Screen Shot 2016-02-11 at 7.54.47 PM"><img src="https://i0.wp.com/farm2.staticflickr.com/1552/24329093614_158d7d5f7c_o.png?resize=524%2C492&#038;ssl=1" alt="Screen Shot 2016-02-11 at 7.54.47 PM" data-recalc-dims="1" /></a>
 
-<pre><code class="language-bash">$ git blame-someone-else "appleboy &lt;appleboy@wu-boy.com&gt;" 3adf61fc1605922fd880d98fb94d1f4f5a0a6289</code></pre>
+<pre><code class="language-bash">$ git blame-someone-else "appleboy <appleboy@wu-boy.com>" 3adf61fc1605922fd880d98fb94d1f4f5a0a6289</code></pre>
 
 執行後:
 

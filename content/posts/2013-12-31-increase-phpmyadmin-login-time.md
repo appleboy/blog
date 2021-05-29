@@ -24,7 +24,7 @@ tags:
 
 如果是裝 [php-fpm][3] 請修改 `/etc/php5/fpm/php.ini` 路徑
 
-<pre><code class="language-shell">;After this number of seconds, stored data will be seen as \&#039;garbage\&#039; and ; cleaned up by the garbage collection process. 
+<pre><code class="language-shell">;After this number of seconds, stored data will be seen as \'garbage\' and ; cleaned up by the garbage collection process. 
 ; http://php.net/session.gc-maxlifetime 
 session.gc_maxlifetime = 315360000</code></pre>
 
@@ -36,7 +36,7 @@ session.gc_maxlifetime = 315360000</code></pre>
 
 修改 `config.inc.php` 如果找不到此檔案，請複製 **config.sample.inc.php** 為 **config.inc.php**，接著增加底下設定即可
 
-<pre><code class="language-php">$cfg[&#039;LoginCookieValidity&#039;] = 3600 * 24 * 365;</code></pre>
+<pre><code class="language-php">$cfg['LoginCookieValidity'] = 3600 * 24 * 365;</code></pre>
 
 最後注意的是 `gc_maxlifetime` 設定值一定要超過 `LoginCookieValidity` 值，這樣才有作用
 

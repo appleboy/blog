@@ -39,7 +39,7 @@ AddType application/x-httpd-php-source .phps</pre> 啟動 fcgid 之前，要先�
 
 <span style="color:green">/etc/apache2/mods-available/fcgid.conf</span>，可以參考[官網設定方式][4]，在自己微調 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mod_fcgid.c>
+<pre class="brush: bash; title: ; notranslate" title=""><IfModule mod_fcgid.c>
   AddHandler    fcgid-script .php .fcgi
   FcgidIPCDir /var/lib/apache2/fcgid/sock
   IdleTimeout 3600
@@ -51,7 +51,7 @@ AddType application/x-httpd-php-source .phps</pre> 啟動 fcgid 之前，要先�
   IPCCommTimeout 360
   BusyTimeout 300
   FcgidWrapper /usr/bin/php5-cgi .php
-&lt;/IfModule></pre> 修改 php.ini (/etc/php5/cgi/php.ini 跟 etc/php5/cli/php.ini) 
+</IfModule></pre> 修改 php.ini (/etc/php5/cgi/php.ini 跟 etc/php5/cli/php.ini) 
 
 <pre class="brush: bash; title: ; notranslate" title="">cgi.fix_pathinfo=1</pre> 接下來 enable apache 的 module，利用 
 
@@ -68,24 +68,24 @@ service apache2 restart</pre>
 
 <span style="color:green">/etc/apache2/sites-available/default</span> 預設範例來建立其他 Virtual Host，由於跑 mod_fcgid，所以在 Options 部份請**<span style="color:red">務必</span>**加上 <span style="color:green"><strong>ExecCGI</strong></span>。 
 
-<pre class="brush: bash; title: ; notranslate" title="">&lt;VirtualHost *>
+<pre class="brush: bash; title: ; notranslate" title=""><VirtualHost *>
     ServerName blog.wu-boy.com
     ServerAdmin nobody@blog.wu-boy.com
 
     DocumentRoot /XXXXXX
     DirectoryIndex index.php
 
-    &lt;Directory />
+    <Directory />
         Options FollowSymLinks
         AllowOverride None
-    &lt;/Directory>
-    &lt;Directory /var/www/Blog/>
+    </Directory>
+    <Directory /var/www/Blog/>
         Options FollowSymLinks ExecCGI
         # Remove ExecCGI if you do not need php
         AllowOverride All
         Order allow,deny
         allow from all
-    &lt;/Directory>
+    </Directory>
     ErrorLog /var/log/apache2/error.log
 
     # Possible values include: debug, info, notice, warn, error, crit,
@@ -93,7 +93,7 @@ service apache2 restart</pre>
     LogLevel warn
 
     CustomLog /var/log/apache2/other_vhosts_access.log combined
-&lt;/VirtualHost></pre> 把此設定檔儲存到 
+</VirtualHost></pre> 把此設定檔儲存到 
 
 <span style="color:green">/etc/apache2/sites-available/Blog</span>，接下來用 <span style="color:red">a2ensite</span> 指令來 enable 
 

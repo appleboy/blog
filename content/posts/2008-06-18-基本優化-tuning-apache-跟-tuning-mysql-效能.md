@@ -48,7 +48,7 @@ vi /usr/local/etc/apache22/extra/httpd-mpm.conf
 # MaxSpareThreads: maximum number of worker threads which are kept spare
 # ThreadsPerChild: constant number of worker threads in each server process
 # MaxRequestsPerChild: maximum number of requests a server process serves
-&lt;IfModule mpm_worker_module>
+<IfModule mpm_worker_module>
 # Apache 啟動時先開啟 5 個 Threads
     StartServers          5
 # 最大的連線數
@@ -59,7 +59,7 @@ vi /usr/local/etc/apache22/extra/httpd-mpm.conf
     ThreadsPerChild      64
     MaxRequestsPerChild 200
     ThreadLimit          64
-&lt;/IfModule>
+</IfModule>
 </pre> 上面有很多參數，我不是很瞭解，所以還要去參考一下官方網站 
 
   * <a href="http://httpd.apache.org/docs/2.2/mod/mpm_common.html#startservers" target="_blank">StartServers</a>

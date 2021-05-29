@@ -21,7 +21,7 @@ tags:
 
 <pre class="brush: bash; title: ; notranslate" title=""># On branch develop
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       renamed:    nav/hacks.txt -> Nav/hacks.txt
 #       renamed:    nav/moo.fx.js -> Nav/moo.fx.js

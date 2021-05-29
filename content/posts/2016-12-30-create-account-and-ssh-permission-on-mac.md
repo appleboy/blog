@@ -55,7 +55,7 @@ Mac 預設是不讓外面透過 ssh 方式連線到使用者，所以必須透�
 
 首先產生 SSH Key
 
-<pre><code class="language-bash">$ ssh-keygen -f id_rsa -N &#039;&#039; -t rsa</code></pre>
+<pre><code class="language-bash">$ ssh-keygen -f id_rsa -N '' -t rsa</code></pre>
 
 複製 `id_rsa.pub` 到 drone-scp 家目錄
 

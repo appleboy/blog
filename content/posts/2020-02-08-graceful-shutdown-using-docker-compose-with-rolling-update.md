@@ -91,7 +91,7 @@ func main() {
     signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
     go func() {
-        &lt;-quit
+        <-quit
         logger.Println("Server is shutting down...")
 
         ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
@@ -108,7 +108,7 @@ func main() {
         logger.Fatalf("Could not listen on %s: %v\n", listenAddr, err)
     }
 
-    &lt;-done
+    <-done
     logger.Println("Server stopped")
 }</code></pre>
 
@@ -135,7 +135,7 @@ ENTRYPOINT ["/app"]</code></pre>
 
 準備 docker-compose.yml，使用 [Traefik][11] v2 版本來做 Load balancer。
 
-<pre><code class="language-yaml">version: &#039;3&#039;
+<pre><code class="language-yaml">version: '3'
 
 services:
   app:
@@ -202,9 +202,9 @@ docker 會把目前的容器都全部停止，假設這時候都有重要的工�
 <pre><code class="language-shell=">docker stop -t 30 \
   $(docker ps --format "table {{.ID}} {{.Names}} {{.CreatedAt}}" | \
   grep app | \
-  awk -F  " " &#039;{print $1 " " $3 "T" $4}&#039; ｜\
+  awk -F  " " '{print $1 " " $3 "T" $4}' ｜\
   sort -k2 | \
-  awk -F  "  " &#039;{print $1}&#039; | head -2)</code></pre>
+  awk -F  "  " '{print $1}' | head -2)</code></pre>
 
 其中 `-t 30` 一定要設定，預設會是 10 秒相當短，也就是 10 秒容器沒結束就自動 kill 了，後面的 `head -2` 代表移除舊的容器，原本是開兩台，就需要停止兩台。接著將已經停止的容器砍掉:
 

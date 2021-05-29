@@ -83,7 +83,7 @@ include /etc/nginx/sites-enabled/*;</pre> 如果覺得這步驟很麻煩的話�
 # description: Use PHP as a FastCGI process via nginx.
 # processname: php-fastcgi
 # pidfile: /var/run/php-cgi.pid
-# modified: Bo-Yi Wu &lt;appleboy.tw AT gmail.com>
+# modified: Bo-Yi Wu <appleboy.tw AT gmail.com>
 
 # Source function library.
 . /etc/rc.d/init.d/functions

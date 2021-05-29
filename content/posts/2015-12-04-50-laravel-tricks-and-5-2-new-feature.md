@@ -36,9 +36,9 @@ tags:
 ### scheduled tasks 支援 log 連續寫入檔案
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">$schedule-&gt;command('emails:send')
-    -&gt;hourly()
-    -&gt;appendOutputTo($filePath);</pre>
+  <pre class="brush: php; title: ; notranslate" title="">$schedule->command('emails:send')
+    ->hourly()
+    ->appendOutputTo($filePath);</pre>
 </div>
 
 ### 支援 Array 驗證
@@ -46,22 +46,22 @@ tags:
 html 寫法如下
 
 <div>
-  <pre class="brush: xml; title: ; notranslate" title="">&lt;p&gt;
-  &lt;input type="text" name="person[1][id]"&gt;
-  &lt;input type="text" name="person[1][name]"&gt;
-&lt;/p&gt;
-&lt;p&gt;
-  &lt;input type="text" name="person[2][id]"&gt;
-  &lt;input type="text" name="person[2][name]"&gt;
-&lt;/p&gt;</pre>
+  <pre class="brush: xml; title: ; notranslate" title=""><p>
+  <input type="text" name="person[1][id]">
+  <input type="text" name="person[1][name]">
+</p>
+<p>
+  <input type="text" name="person[2][id]">
+  <input type="text" name="person[2][name]">
+</p></pre>
 </div>
 
 在 Laravel 5.1 要用 loop 方式驗證，但是 5.2 可以改寫如下
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">$v = Validator::make($request-&gt;all(), [
-  'person.*.id' =&gt; 'exists:users.id',
-  'person.*.name' =&gt; 'required:string',
+  <pre class="brush: php; title: ; notranslate" title="">$v = Validator::make($request->all(), [
+  'person.*.id' => 'exists:users.id',
+  'person.*.name' => 'required:string',
 ]);</pre>
 </div>
 
@@ -70,7 +70,7 @@ html 寫法如下
 要讀取 posts 底下所有的 Title 可以寫成如下
 
 <div>
-  <pre class="brush: php; title: ; notranslate" title="">$posts-&gt;pluck('posts.*.title');</pre>
+  <pre class="brush: php; title: ; notranslate" title="">$posts->pluck('posts.*.title');</pre>
 </div>
 
 ### Database Session Driver 多支援兩個欄位

@@ -44,7 +44,7 @@ $ touch /opt/traefik/traefik.toml</code></pre>
 
 其中 `docker-compose.yml` 用來啟動 Traefik 服務，`acme.json` 則是存放 Let's Encrypt 的憑證，此檔案權限必須為 `600`，最後則是 traefik 設定檔 `traefik.toml`。一一介紹這些檔案的內容，底下是 `docker-compose.yml`
 
-<pre><code class="language-yaml">version: &#039;2&#039;
+<pre><code class="language-yaml">version: '2'
 
 services:
   traefik:
@@ -103,7 +103,7 @@ $ docker-compose up -d</code></pre>
 
 請打開 docker-compose.yml 檔案
 
-<pre><code class="language-yaml">version: &#039;3&#039;
+<pre><code class="language-yaml">version: '3'
 
 services:
   app_1:

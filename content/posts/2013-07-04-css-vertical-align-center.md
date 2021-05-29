@@ -15,18 +15,18 @@ tags:
 
 html 程式碼
 
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-&lt;meta charset=utf-8 /&gt;
-&lt;title&gt;JS Bin&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;div class="ot"&gt;
-    &lt;div class="wrapper"&gt;&lt;/div&gt;
-  &lt;/div&gt; 
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<pre><code class="language-html"><!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>JS Bin</title>
+</head>
+<body>
+  <div class="ot">
+    <div class="wrapper"></div>
+  </div> 
+</body>
+</html></code></pre>
 
 <!--more-->
 
@@ -41,7 +41,7 @@ CSS 程式碼
 }
 
 .ot:before {
-  content: &#039;&#039;;
+  content: '';
   display: inline-block;
   vertical-align: middle ;
   height: 100%;
@@ -80,7 +80,7 @@ Demo 結果
   font-size:0;
 }
 .box:before{
-  content: &#039;&#039;;
+  content: '';
   display: inline-block;
   vertical-align: middle;
   width: 0;

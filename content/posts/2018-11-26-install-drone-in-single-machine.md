@@ -54,7 +54,7 @@ tags:
 
 如果你喜歡用 docker-compose 請參考底下，或直接到 [GitHub 上面看看][4]
 
-<pre><code class="language-yml">version: &#039;2&#039;
+<pre><code class="language-yml">version: '2'
 
 services:
   drone-server:

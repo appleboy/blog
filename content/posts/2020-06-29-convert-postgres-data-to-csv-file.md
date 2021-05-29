@@ -50,20 +50,20 @@ tags:
 
 登入進 Postgres 後，透過簡單的指令就可以將單一資料表匯出成 csv 格式
 
-<pre><code class="language-bash">\COPY some_table TO &#039;/tmp/data.csv&#039; DELIMITER &#039;,&#039; CSV HEADER;</code></pre>
+<pre><code class="language-bash">\COPY some_table TO '/tmp/data.csv' DELIMITER ',' CSV HEADER;</code></pre>
 
 如果只是要 table 內幾個欄位，可以改成底下
 
-<pre><code class="language-bash">\COPY public.user(id, email) TO &#039;/tmp/data.csv&#039; DELIMITER &#039;,&#039; CSV HEADER;</code></pre>
+<pre><code class="language-bash">\COPY public.user(id, email) TO '/tmp/data.csv' DELIMITER ',' CSV HEADER;</code></pre>
 
 或者是要透過 SQL 方式將資料整理過
 
-<pre><code class="language-bash">\COPY (select id, email from public.user) TO &#039;/data.csv&#039; DELIMITER &#039;,&#039; CSV HEADER;</code></pre>
+<pre><code class="language-bash">\COPY (select id, email from public.user) TO '/data.csv' DELIMITER ',' CSV HEADER;</code></pre>
 
 另外可以針對 UTC 時間轉台灣時間
 
 <pre><code class="language-sql">select state, email, simulator, a.created_at \
-  at time zone &#039;utc&#039; at time zone &#039;Asia/Taipei&#039; as created_at \
+  at time zone 'utc' at time zone 'Asia/Taipei' as created_at \
   from public.simulation a join public.user b on a.user_id = b.id  \
   order by a.created_at desc limit 5</code></pre>
 

@@ -143,13 +143,13 @@ close(LOG);</pre> PHP 顯示部份，這邊就沒有動到，直接 copy 就可�
 
 
 
-&lt;table border=1 cellspacing=0 cellpadding=2>
+<table border=1 cellspacing=0 cellpadding=2>
 
 
 <tr>
-  &lt;td class=head>Server Name&lt;/td>&lt;td class=head>IP&lt;/td>
-  &lt;td class=head>CNAME&lt;/td>&lt;td class=head>latest commit of src&lt;/td>
-  &lt;td class=head>latest commit of ports&lt;/td>
+  <td class=head>Server Name</td><td class=head>IP</td>
+  <td class=head>CNAME</td><td class=head>latest commit of src</td>
+  <td class=head>latest commit of ports</td>
   
 </tr>
 
@@ -189,30 +189,30 @@ close(LOG);</pre> PHP 顯示部份，這邊就沒有動到，直接 copy 就可�
 
 <tr>
   \n";
-                          print "  &lt;td class=c>$server&lt;/td>\n";
-                          print "  &lt;td class=c>$ipaddr&lt;/td>\n";
-                          print "  &lt;td class=c>$aliases&lt;/td>\n";
+                          print "  <td class=c>$server</td>\n";
+                          print "  <td class=c>$ipaddr</td>\n";
+                          print "  <td class=c>$aliases</td>\n";
                           if( $src == $latest_src )
-                                  print "  &lt;td class=green>";
-                          elseif( $src &lt; $check )
-                                  print "  &lt;td class=red>";
+                                  print "  <td class=green>";
+                          elseif( $src < $check )
+                                  print "  <td class=red>";
                           else
-                                  print "  &lt;td class=c>";
-                          print strftime( $time_format, $src ) . "&lt;/td>\n";
+                                  print "  <td class=c>";
+                          print strftime( $time_format, $src ) . "</td>\n";
                           if( $ports == $latest_ports )
-                                  print "  &lt;td class=green>";
-                          elseif( $ports &lt; $check )
-                                  print "  &lt;td class=red>";
+                                  print "  <td class=green>";
+                          elseif( $ports < $check )
+                                  print "  <td class=red>";
                           else
-                                  print "  &lt;td class=c>";
-                          print strftime( $time_format, $ports ) . "&lt;/td>\n";
-  #                       print "  &lt;td align=right>$elapsed s&lt;/td>\n";
+                                  print "  <td class=c>";
+                          print strftime( $time_format, $ports ) . "</td>\n";
+  #                       print "  <td align=right>$elapsed s</td>\n";
                           print "
 </tr>\n";
                 }
         }
 ?>
-&lt;/table>
+</table>
 
 </pre>
 

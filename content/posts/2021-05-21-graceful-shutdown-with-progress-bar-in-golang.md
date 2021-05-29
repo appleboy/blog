@@ -92,7 +92,7 @@ func main() {
             // Select statement
             select {
             // Case to print current time
-            case &lt;-d.C:
+            case <-d.C:
                 if !bar.IsStarted() {
                     continue
                 }
@@ -154,12 +154,12 @@ func main() {
         for {
             // Select statement
             select {
-            case &lt;-finishCh:
+            case <-finishCh:
                 d.Stop()
                 log.Println("finished")
                 return
             // Case to print current time
-            case &lt;-d.C:
+            case <-d.C:
                 if !bar.IsStarted() {
                     continue
                 }
@@ -187,7 +187,7 @@ func main() {
 
 先宣告一個 `finishCh := make(chan struct{})`，用來通知 goroutine 跳出迴圈，大家注意看一下，最後是用的是關閉 Channel，如果是用底下方法:
 
-<pre><code class="language-go">finishCh &lt;- strunct{}{}</code></pre>
+<pre><code class="language-go">finishCh <- strunct{}{}</code></pre>
 
 這時候看看 switch case 有機率是同時到達，造成無法跳脫迴圈，而直接關閉 channel，可以確保 `case <-finishCh` 一直拿到空的資料，進而達成跳出迴圈的需求。
 
@@ -220,8 +220,8 @@ func withContextFunc(ctx context.Context, f func()) context.Context {
         defer signal.Stop(c)
 
         select {
-        case &lt;-ctx.Done():
-        case &lt;-c:
+        case <-ctx.Done():
+        case <-c:
             f()
             cancel()
         }
@@ -255,16 +255,16 @@ func main() {
         for {
             // Select statement
             select {
-            case &lt;-ctx.Done():
+            case <-ctx.Done():
                 d.Stop()
                 log.Println("interrupt received")
                 return
-            case &lt;-finishCh:
+            case <-finishCh:
                 d.Stop()
                 log.Println("finished")
                 return
             // Case to print current time
-            case &lt;-d.C:
+            case <-d.C:
                 if ctx.Err() != nil {
                     return
                 }
@@ -325,7 +325,7 @@ func (r readerFunc) Read(p []byte) (n int, err error) { return rf(p) }
 func copy(ctx context.Context, dst io.Writer, src io.Reader) error {
     _, err := io.Copy(dst, readerFunc(func(p []byte) (int, error) {
         select {
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             return 0, ctx.Err()
         default:
             return src.Read(p)
@@ -360,7 +360,7 @@ func (rf readerFunc) Read(p []byte) (n int, err error) { return rf(p) }
 func copy(ctx context.Context, dst io.Writer, src io.Reader) error {
     _, err := io.Copy(dst, readerFunc(func(p []byte) (int, error) {
         select {
-        case &lt;-ctx.Done():
+        case <-ctx.Done():
             return 0, ctx.Err()
         default:
             return src.Read(p)
@@ -377,8 +377,8 @@ func withContextFunc(ctx context.Context, f func()) context.Context {
         defer signal.Stop(c)
 
         select {
-        case &lt;-ctx.Done():
-        case &lt;-c:
+        case <-ctx.Done():
+        case <-c:
             f()
             cancel()
         }
@@ -412,15 +412,15 @@ func main() {
         for {
             // Select statement
             select {
-            case &lt;-ctx.Done():
+            case <-ctx.Done():
                 log.Println("stop to get current process")
                 return
-            case &lt;-finishCh:
+            case <-finishCh:
                 d.Stop()
                 log.Println("finished")
                 return
             // Case to print current time
-            case &lt;-d.C:
+            case <-d.C:
                 if !bar.IsStarted() {
                     continue
                 }

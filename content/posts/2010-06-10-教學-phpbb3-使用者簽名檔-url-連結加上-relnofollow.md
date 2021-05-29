@@ -72,7 +72,7 @@ tags:
 <a href="{URL}" class="postlink">{DESCRIPTION}</a><!-- END url -->
 +
 
-<!-- BEGIN url -->&lt;a href="{URL}" class="postlink" {NOFOLLOW}>{DESCRIPTION}&lt;/a>
+<!-- BEGIN url --><a href="{URL}" class="postlink" {NOFOLLOW}>{DESCRIPTION}</a>
 
 <!-- END url -->
 

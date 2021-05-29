@@ -56,7 +56,7 @@ categories:
 
 `(health: starting)` [<img src="https://i2.wp.com/farm1.staticflickr.com/788/40861013721_d7327500f9_z.jpg?w=840&#038;ssl=1" alt="Snip20180317_5" data-recalc-dims="1" />][6] 經過 10 秒後，就會執行指定的指令，就可以知道容器健康與否，最後狀態為 `(healtyy)`。 [<img src="https://i1.wp.com/farm1.staticflickr.com/783/39051186800_ee9a838403_z.jpg?w=840&#038;ssl=1" alt="Snip20180317_6" data-recalc-dims="1" />][7] 最後可以透過 `docker inspect` 指令來知道容器的狀態列表 (JSON 格式) 
 
-<pre class="brush: plain; title: ; notranslate" title="">$ docker inspect --format &#039;{{json .State.Health}}&#039; gorush | jq
+<pre class="brush: plain; title: ; notranslate" title="">$ docker inspect --format '{{json .State.Health}}' gorush | jq
 </pre>
 
 [<img src="https://i1.wp.com/farm5.staticflickr.com/4781/40861130401_08ca9e2cce_z.jpg?w=840&#038;ssl=1" alt="Snip20180318_8" data-recalc-dims="1" />][8] 從上圖可以知道每隔 10 秒 Docker 就會自動偵測一次。有了上述這些資料，就可以來寫系統報警通知了。如果對 Go 語言有興趣，可以參考[線上課程][9]。

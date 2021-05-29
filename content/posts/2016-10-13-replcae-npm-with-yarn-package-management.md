@@ -32,7 +32,7 @@ tags:
     
     RUN curl -o- -L https://yarnpkg.com/install.sh | bash && \
       echo "" >> ~/.bashrc && \
-      echo &#039;export PATH="$HOME/.yarn/bin:$PATH"&#039; >> ~/.bashrc
+      echo 'export PATH="$HOME/.yarn/bin:$PATH"' >> ~/.bashrc
     
     CMD /bin/bash
 
