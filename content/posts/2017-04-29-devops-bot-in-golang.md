@@ -35,9 +35,9 @@ tags:
 
 有興趣可以直接看投影片說明:
 
-<div style="margin-bottom:5px">
-  <strong> <a href="//www.slideshare.net/appleboy/go-devops-bot" title="用 Go 語言打造 DevOps Bot" target="_blank">用 Go 語言打造 DevOps Bot</a> </strong> from <strong><a target="_blank" href="https://www.slideshare.net/appleboy">Bo-Yi Wu</a></strong>
-</div> 大家可以直接下載 \[drone-line\](https://github.com/appleboy/drone-line/releases) 或 \[drone-facebook\](https://github.com/appleboy/drone-facebook/releases) 執行檔來玩玩。
+<script async class="speakerdeck-embed" data-id="fce9dfe844924cf6b88dcea5afcd502f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+大家可以直接下載 [drone-line](https://github.com/appleboy/drone-line/releases) 或 [drone-facebook](https://github.com/appleboy/drone-facebook/releases) 執行檔來玩玩。
 
  [1]: https://www.flickr.com/photos/appleboy/34200999131/in/dateposted-public/ "18190989_10210525473186864_1567687746_n"
  [2]: http://www.ithome.com.tw/

@@ -17,9 +17,9 @@ tags:
   - Monolithic
 
 ---
-[![][1]][1]
+![](https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080)
 
-今年在 \[ModernWeb\]\[1\] 講『用 Go 語言打造微服務架構』，蠻開心看到底下很多 \[Go\]\[2\] 開發者，希望未來能有更多公司導入 Go 語言，底下是會議大綱:
+今年在 [ModernWeb][1] 講『用 Go 語言打造微服務架構』，蠻開心看到底下很多 [Go][2] 開發者，希望未來能有更多公司導入 Go 語言，底下是會議大綱:
 
 * * *
 
@@ -70,8 +70,9 @@ tags:
 
 微服務架構並不適合每個團隊，請依照團隊目前狀況以及業務需求，再來拆微服務，而不是聽到別人說微服務很潮，就開始建議主管或者是導入。最後附上投影片:
 
-<div style="margin-bottom:5px">
-  <strong> <a href="//www.slideshare.net/appleboy/go-78757166" title="用 Go 語言 打造微服務架構" target="_blank">用 Go 語言 打造微服務架構</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong>
-</div> [1]:http://modernweb.tw/ [2]:https://golang.org [3]:https://aws.amazon.com/ [4]:https://cloud.google.com/
+{{< speakerdeck id="3b8ee107dbe040ed8db066d4071e8132" >}}
 
- [1]: https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080
+[1]:http://modernweb.tw/ 
+[2]:https://golang.org 
+[3]:https://aws.amazon.com/ 
+[4]:https://cloud.google.com/

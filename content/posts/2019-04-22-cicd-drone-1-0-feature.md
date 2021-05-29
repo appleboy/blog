@@ -20,7 +20,7 @@ categories:
 
 ## 影片介紹
 
-https://www.youtube.com/watch?v=BVfy02zq8Mo
+{{< youtube BVfy02zq8Mo >}}
 
 我自己在台北分享後，又自己錄製了一段，歡迎大家參考
 

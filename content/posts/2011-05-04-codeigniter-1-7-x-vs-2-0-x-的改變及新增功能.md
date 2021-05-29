@@ -18,13 +18,7 @@ tags:
 ---
 [CodeIgniter][1] 2.0.x 已經 Release 一段時間了，去年的 [2010 CodeIgniter Conference][2] 會議上一些國外講者分享了 2.0 的改變及新功能，底下這投影片個人覺得還不錯，點出了升級步驟及 2.0 新功能介紹，大家可以參考看看 
 
-<div style="width:425px" id="__ss_5061455">
-  <strong style="display:block;margin:12px 0 4px"><a href="http://www.slideshare.net/codeignitercon/cicon2010-adam-griffiths-codeigniter-2" title="CICON2010: Adam Griffiths - CodeIgniter 2">CICON2010: Adam Griffiths - CodeIgniter 2</a></strong> 
-  
-  <div style="padding:5px 0 12px">
-    View more <a href="http://www.slideshare.net/">presentations</a> from <a href="http://www.slideshare.net/codeignitercon">CodeIgniter Conference</a>
-  </div>
-</div>
+<iframe src="//www.slideshare.net/slideshow/embed_code/key/4ZJiL0DctRt4F7" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
 
 [2011 CodeIgniter Conference][3] 將會在紐約舉行，大家可以敬請期待。
 

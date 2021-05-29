@@ -27,16 +27,15 @@ tags:
 
   * 為什麼要制定團隊 Coding Style
   * PHP 語言的 Coding Style 及工具
-  * \[PostCSS\]\[1\] 簡介
+  * [PostCSS][6] 簡介
   * JavaScript ES5 Style Rule
   * 開始寫 [JavaScript 2015][5] 吧
 
-<div style="margin-bottom:5px">
-  <strong> <a href="//www.slideshare.net/appleboy/php-javascript-css-coding-style" title="PHP & JavaScript & CSS Coding style" target="_blank">PHP & JavaScript & CSS Coding style</a> </strong> from <strong><a href="//www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong>
-</div> [1]:https://github.com/postcss/postcss
+{{< speakerdeck id="d2635d2468a747aabca166eacda604cb" >}}
 
  [1]: https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Coding_Style
  [2]: https://secure.php.net/
  [3]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
  [4]: https://developer.mozilla.org/en-US/docs/Web/CSS
  [5]: https://babeljs.io/docs/learn-es2015/
+ [6]:https://github.com/postcss/postcss
