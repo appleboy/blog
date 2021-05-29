@@ -21,7 +21,7 @@ tags:
 
 ## 教學影片
 
-https://www.youtube.com/watch?v=SWfaH1HDBqQ
+{{< youtube SWfaH1HDBqQ >}}
 
 教學影片會之後放上，如果對於課程內容有興趣，可以參考底下課程。
 

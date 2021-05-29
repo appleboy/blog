@@ -30,7 +30,7 @@ tags:
 
 ## 影片介紹
 
-https://www.youtube.com/watch?v=JY9xapxBh28&t=9s
+{{< youtube JY9xapxBh28 >}}
 
 同步放在 Udemy 平台上面，有興趣的可以直接參考底下:
 

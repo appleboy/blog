@@ -23,7 +23,7 @@ tags:
 
 ## 教學影片
 
-https://www.youtube.com/watch?v=IXwppHYpvuI&t=6s
+{{< youtube IXwppHYpvuI >}}
 
 同步放在 Udemy 平台上面，有興趣的可以直接參考底下:
 

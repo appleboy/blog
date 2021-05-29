@@ -25,7 +25,7 @@ tags:
 
 ## 影片教學
 
-https://www.youtube.com/watch?v=wV9NH-g7La4
+{{< youtube wV9NH-g7La4 >}}
 
 更多實戰影片可以參考我的 Udemy 教學系列
 

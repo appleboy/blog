@@ -26,7 +26,7 @@ tags:
 
 ## 教學影片
 
-https://www.youtube.com/watch?v=jApleGS2hQY
+{{< youtube jApleGS2hQY >}}
 
 喜歡我的 Youtube 影片，可以訂閱 + 分享喔
 

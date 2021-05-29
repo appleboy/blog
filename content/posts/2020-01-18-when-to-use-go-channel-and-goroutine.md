@@ -25,7 +25,7 @@ tags:
 
 ## 教學影片
 
-https://www.youtube.com/watch?v=XTTg40JRAn8&t=267s
+{{< youtube XTTg40JRAn >}}
 
 更多實戰影片可以參考我的 Udemy 教學系列
 

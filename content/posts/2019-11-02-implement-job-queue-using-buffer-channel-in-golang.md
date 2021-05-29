@@ -21,7 +21,7 @@ tags:
 
 ## 投影片及教學影片
 
-https://www.youtube.com/watch?v=wvdbobFiXNg&t=500s
+{{< youtube wvdbobFiXNg >}}
 
 本篇的實作，也有錄製成教學影片，請參考如下:
 
