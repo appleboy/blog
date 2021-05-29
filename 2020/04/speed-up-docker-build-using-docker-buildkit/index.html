@@ -2,7 +2,7 @@
 
 程式碼範例請看這邊
 
-之前就有看到 Docker 推出 BuildKit 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 BuildKit，原始碼可以參考這邊，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 --cache-from 機制，可以適用在任何 CI/CD 流程，詳細說明可以參考這篇『在 docker-in-docker 環境中使用 cache-from 提升編譯速度』，下面使用到的程式碼都可以直接參考此 Repository，我還是使用 Go 語言當作參考範例。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/04\/speed-up-docker-build-using-docker-buildkit\/","name":"使用 docker build kit 加速編譯 image"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 Docker BuildKit 加速編譯 Image","description":"\n 程式碼範例請看這邊\n 之前就有看到 Docker 推出 BuildKit 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 BuildKit，原始碼可以參考這邊，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 --cache-from 機制，可以適用在任何 CI\/CD 流程，詳細說明可以參考這篇『在 docker-in-docker 環境中使用 cache-from 提升編譯速度』，下面使用到的程式碼都可以直接參考此 Repository，我還是使用 Go 語言當作參考範例。\n","inLanguage":"en","wordCount":702,"datePublished":"2020-04-26T05:29:32","dateModified":"2020-04-26T05:29:32","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["BuildKit, Docker, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/04\/speed-up-docker-build-using-docker-buildkit\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="使用 Docker BuildKit 加速編譯 Image"><meta property="og:description" content="
+之前就有看到 Docker 推出 BuildKit 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 BuildKit，原始碼可以參考這邊，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 --cache-from 機制，可以適用在任何 CI/CD 流程，詳細說明可以參考這篇『在 docker-in-docker 環境中使用 cache-from 提升編譯速度』，下面使用到的程式碼都可以直接參考此 Repository，我還是使用 Go 語言當作參考範例。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/04\/speed-up-docker-build-using-docker-buildkit\/","name":"使用 docker build kit 加速編譯 image"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 Docker BuildKit 加速編譯 Image","description":"\n 程式碼範例請看這邊\n 之前就有看到 Docker 推出 BuildKit 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 BuildKit，原始碼可以參考這邊，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 --cache-from 機制，可以適用在任何 CI\/CD 流程，詳細說明可以參考這篇『在 docker-in-docker 環境中使用 cache-from 提升編譯速度』，下面使用到的程式碼都可以直接參考此 Repository，我還是使用 Go 語言當作參考範例。\n","inLanguage":"en","wordCount":820,"datePublished":"2020-04-26T05:29:32","dateModified":"2020-04-26T05:29:32","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["BuildKit, Docker, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/04\/speed-up-docker-build-using-docker-buildkit\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="使用 Docker BuildKit 加速編譯 Image"><meta property="og:description" content="
 
 程式碼範例請看這邊
 
@@ -21,147 +21,306 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>使用 Docker BuildKit 加速編譯 Image</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 26, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;702&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#事前準備>事前準備</a></li><li><a href=#不使用-buildkit-編譯>不使用 BuildKit 編譯</a></li><li><a href=#使用-buildkit-編譯>使用 BuildKit 編譯</a></li><li><a href=#心得>心得</a></li></ul></li><li><a href=#程式碼範例請看這邊2><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></a></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" title="docker buildkit"><img src="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" alt="docker buildkit" title="docker buildkit"></a></p><blockquote><p><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></p></blockquote><p>之前就有看到 <a href=https://docker.com>Docker</a> 推出 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a> 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a>，原始碼可以<a href=https://github.com/moby/buildkit>參考這邊</a>，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 <code>--cache-from</code> 機制，可以適用在任何 CI/CD 流程，詳細說明可以參考這篇『<a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</a>』，下面使用到的程式碼都可以直接參考<a href=https://github.com/go-training/docker-buildkit-demo>此 Repository</a>，我還是使用 <a href=https://golang.org>Go 語言</a>當作參考範例。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/ZSUw4UvnRWI style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202004">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202004">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202004">DOCKER 容器開發部署實戰</a> (課程剛啟動，限時特價 $900 TWD)</li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=事前準備>事前準備</h2><p>由於 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a> 是實驗性的功能，預設安裝好 Docker 是不會啟動這功能。目前只有支援編譯 Linux 容器。請透過底下方式來啟動:</p><pre><code class="language-shell=">DOCKER_BUILDKIT=1 docker build .</code></pre><p>下完指令後，你會發現整個 output 結果不太一樣了，介面變得比較好看，也看到每個 Layer 編譯的時間</p><pre><code class="language-shell=">[+] Building 0.1s (15/15) FINISHED                                                                                     
- => [internal] load .dockerignore                                                                                 0.0s
- => => transferring context: 2B                                                                                   0.0s
- => [internal] load build definition from Dockerfile                                                              0.0s
- => => transferring dockerfile: 545B                                                                              0.0s
- => [internal] load metadata for docker.io/library/golang:1.14-alpine                                             0.0s
- => [1/10] FROM docker.io/library/golang:1.14-alpine                                                              0.0s
- => [internal] load build context                                                                                 0.0s
- => => transferring context: 184B                                                                                 0.0s
- => CACHED [2/10] RUN apk add bash ca-certificates git gcc g++ libc-dev                                           0.0s
- => CACHED [3/10] WORKDIR /app                                                                                    0.0s
- => CACHED [4/10] COPY go.mod .                                                                                   0.0s
- => CACHED [5/10] COPY go.sum .                                                                                   0.0s
- => CACHED [6/10] RUN go mod download                                                                             0.0s
- => CACHED [7/10] COPY main.go .                                                                                  0.0s
- => CACHED [8/10] COPY foo/foo.go foo/                                                                            0.0s
- => CACHED [9/10] COPY bar/bar.go bar/                                                                            0.0s
- => CACHED [10/10] RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .                      0.0s
- => exporting to image                                                                                            0.0s
- => => exporting layers                                                                                           0.0s
- => => writing image sha256:6cc56539b3191d5efd87fb4d05181993d013411299b5cefb74047d2447b4d0c9                      0.0s
- => => naming to docker.io/appleboy/demo                                                                          0.0s</code></pre><p>如果要詳細的編譯步驟，請加上 <code>--progress=plain</code>，就可以看到詳細的過程。其實我覺得重點在每個步驟都實際追加了時間，對於在開發上或者是 CI/CD 的流程上都相當有幫助。另外可以在 docker daemon 加上 config 就可以不用加上 <code>DOCKER_BUILDKIT</code> 環境變數</p><pre><code class=language-json>{
-  "debug": true,
-  "experimental": true,
-  "features": {
-    "buildkit": true
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;820&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#事前準備>事前準備</a></li><li><a href=#不使用-buildkit-編譯>不使用 BuildKit 編譯</a></li><li><a href=#使用-buildkit-編譯>使用 BuildKit 編譯</a></li><li><a href=#心得>心得</a></li></ul></li><li><a href=#程式碼範例請看這邊2><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></a></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" title="docker buildkit"><img src="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" alt="docker buildkit" title="docker buildkit"></a></p><blockquote><p><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></p></blockquote><p>之前就有看到 <a href=https://docker.com>Docker</a> 推出 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a> 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a>，原始碼可以<a href=https://github.com/moby/buildkit>參考這邊</a>，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 <code>--cache-from</code> 機制，可以適用在任何 CI/CD 流程，詳細說明可以參考這篇『<a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</a>』，下面使用到的程式碼都可以直接參考<a href=https://github.com/go-training/docker-buildkit-demo>此 Repository</a>，我還是使用 <a href=https://golang.org>Go 語言</a>當作參考範例。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/ZSUw4UvnRWI style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202004">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202004">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202004">DOCKER 容器開發部署實戰</a> (課程剛啟動，限時特價 $900 TWD)</li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=事前準備>事前準備</h2><p>由於 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a> 是實驗性的功能，預設安裝好 Docker 是不會啟動這功能。目前只有支援編譯 Linux 容器。請透過底下方式來啟動:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>DOCKER_BUILDKIT=1 docker build .
+</code></pre></td></tr></table></div></div><p>下完指令後，你會發現整個 output 結果不太一樣了，介面變得比較好看，也看到每個 Layer 編譯的時間</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>[+] Building 0.1s (15/15) FINISHED                                                                                     
+ =&gt; [internal] load .dockerignore                                                                                 0.0s
+ =&gt; =&gt; transferring context: 2B                                                                                   0.0s
+ =&gt; [internal] load build definition from Dockerfile                                                              0.0s
+ =&gt; =&gt; transferring dockerfile: 545B                                                                              0.0s
+ =&gt; [internal] load metadata for docker.io/library/golang:1.14-alpine                                             0.0s
+ =&gt; [1/10] FROM docker.io/library/golang:1.14-alpine                                                              0.0s
+ =&gt; [internal] load build context                                                                                 0.0s
+ =&gt; =&gt; transferring context: 184B                                                                                 0.0s
+ =&gt; CACHED [2/10] RUN apk add bash ca-certificates git gcc g++ libc-dev                                           0.0s
+ =&gt; CACHED [3/10] WORKDIR /app                                                                                    0.0s
+ =&gt; CACHED [4/10] COPY go.mod .                                                                                   0.0s
+ =&gt; CACHED [5/10] COPY go.sum .                                                                                   0.0s
+ =&gt; CACHED [6/10] RUN go mod download                                                                             0.0s
+ =&gt; CACHED [7/10] COPY main.go .                                                                                  0.0s
+ =&gt; CACHED [8/10] COPY foo/foo.go foo/                                                                            0.0s
+ =&gt; CACHED [9/10] COPY bar/bar.go bar/                                                                            0.0s
+ =&gt; CACHED [10/10] RUN go build -o /app -v -tags netgo -ldflags &#39;-w -extldflags &#34;-static&#34;&#39; .                      0.0s
+ =&gt; exporting to image                                                                                            0.0s
+ =&gt; =&gt; exporting layers                                                                                           0.0s
+ =&gt; =&gt; writing image sha256:6cc56539b3191d5efd87fb4d05181993d013411299b5cefb74047d2447b4d0c9                      0.0s
+ =&gt; =&gt; naming to docker.io/appleboy/demo                                                                          0.0s
+</code></pre></td></tr></table></div></div><p>如果要詳細的編譯步驟，請加上 <code>--progress=plain</code>，就可以看到詳細的過程。其實我覺得重點在每個步驟都實際追加了時間，對於在開發上或者是 CI/CD 的流程上都相當有幫助。另外可以在 docker daemon 加上 config 就可以不用加上 <code>DOCKER_BUILDKIT</code> 環境變數</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json>{
+  <span style=color:#8b008b;font-weight:700>&#34;debug&#34;</span>: <span style=color:#8b008b;font-weight:700>true</span>,
+  <span style=color:#8b008b;font-weight:700>&#34;experimental&#34;</span>: <span style=color:#8b008b;font-weight:700>true</span>,
+  <span style=color:#8b008b;font-weight:700>&#34;features&#34;</span>: {
+    <span style=color:#8b008b;font-weight:700>&#34;buildkit&#34;</span>: <span style=color:#8b008b;font-weight:700>true</span>
   }
-}</code></pre><p>請記得重新啟動 Docker 讓新的設定生效。</p><h2 id=不使用-buildkit-編譯>不使用 BuildKit 編譯</h2><p>這邊我們直接拿 Go 語言基本範例來測試看看到底省下多少時間，程式碼都可以在<a href=https://github.com/go-training/docker-buildkit-demo>這裡找到</a>，底下是範例:</p><pre><code class=language-go>package main
+}
+</code></pre></td></tr></table></div></div><p>請記得重新啟動 Docker 讓新的設定生效。</p><h2 id=不使用-buildkit-編譯>不使用 BuildKit 編譯</h2><p>這邊我們直接拿 Go 語言基本範例來測試看看到底省下多少時間，程式碼都可以在<a href=https://github.com/go-training/docker-buildkit-demo>這裡找到</a>，底下是範例:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "net/http"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;net/http&#34;</span>
 
-    "gin/bar"
-    "gin/foo"
+    <span style=color:#cd5555>&#34;gin/bar&#34;</span>
+    <span style=color:#cd5555>&#34;gin/foo&#34;</span>
 
-    "github.com/gin-gonic/gin"
+    <span style=color:#cd5555>&#34;github.com/gin-gonic/gin&#34;</span>
 )
 
-func main() {
-    r := gin.Default()
-    r.GET("/ping", func(c *gin.Context) {
-        c.JSON(http.StatusOK, gin.H{
-            "message": "pong",
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    r := gin.<span style=color:#008b45>Default</span>()
+    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+        c.<span style=color:#008b45>JSON</span>(http.StatusOK, gin.H{
+            <span style=color:#cd5555>&#34;message&#34;</span>: <span style=color:#cd5555>&#34;pong&#34;</span>,
         })
     })
-    r.GET("/ping2", func(c *gin.Context) {
-        c.JSON(http.StatusOK, gin.H{
-            "message": "pong2",
+    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping2&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+        c.<span style=color:#008b45>JSON</span>(http.StatusOK, gin.H{
+            <span style=color:#cd5555>&#34;message&#34;</span>: <span style=color:#cd5555>&#34;pong2&#34;</span>,
         })
     })
-    r.GET("/ping100", func(c *gin.Context) {
-        c.JSON(http.StatusOK, gin.H{
-            "message": foo.Foo(),
+    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping100&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+        c.<span style=color:#008b45>JSON</span>(http.StatusOK, gin.H{
+            <span style=color:#cd5555>&#34;message&#34;</span>: foo.<span style=color:#008b45>Foo</span>(),
         })
     })
-    r.GET("/ping101", func(c *gin.Context) {
-        c.JSON(http.StatusOK, gin.H{
-            "message": bar.Bar(),
+    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping101&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+        c.<span style=color:#008b45>JSON</span>(http.StatusOK, gin.H{
+            <span style=color:#cd5555>&#34;message&#34;</span>: bar.<span style=color:#008b45>Bar</span>(),
         })
     })
-    r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-}</code></pre><p>接著撰寫 Dockerfile</p><pre><code class=language-dockerfile>FROM golang:1.14-alpine
-
-LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
-
-RUN apk add bash ca-certificates git gcc g++ libc-dev
-WORKDIR /app
-# Force the go compiler to use modules
-ENV GO111MODULE=on
-# We want to populate the module cache based on the go.{mod,sum} files.
-COPY go.mod .
-COPY go.sum .
-RUN go mod download
-COPY main.go .
-COPY foo/foo.go foo/
-COPY bar/bar.go bar/
-
-ENV GOOS=linux
-ENV GOARCH=amd64
-RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
-
-CMD ["/app"]</code></pre><p>可以看到如果 go.mode 跟 go.sum 如果沒有任何變動，基本上 go module 檔案自然就可以透過 docker cache layer 處理。但是每次只要程式碼有任何異動，最後的 go build 會從無到有編譯，請看底下結果:</p><pre><code class=language-sh>docker build --progress=plain -t appleboy/docker-demo -f Dockerfile .
-#14 [10/10] RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-s...
-#14 0.391 gin/foo
-#14 0.403 gin/bar
-#14 0.412 github.com/go-playground/locales/currency
-#14 0.438 github.com/gin-gonic/gin/internal/bytesconv
-#14 0.441 github.com/go-playground/locales
-#14 0.449 golang.org/x/sys/unix
-#14 0.464 net
-#14 0.471 github.com/gin-gonic/gin/internal/json
-#14 0.508 github.com/go-playground/universal-translator
-#14 0.511 github.com/leodido/go-urn
-#14 0.694 github.com/golang/protobuf/proto
-#14 0.754 gopkg.in/yaml.v2
-#14 1.535 github.com/mattn/go-isatty
-#14 1.789 net/textproto
-#14 1.790 crypto/x509
-#14 1.920 vendor/golang.org/x/net/http/httpproxy
-#14 1.978 vendor/golang.org/x/net/http/httpguts
-#14 2.019 github.com/go-playground/validator/v10
-#14 2.434 crypto/tls
-#14 3.043 net/http/httptrace
-#14 3.085 net/http
-#14 4.211 net/rpc
-#14 4.212 github.com/gin-contrib/sse
-#14 4.212 net/http/httputil
-#14 4.372 github.com/ugorji/go/codec
-#14 6.322 github.com/gin-gonic/gin/binding
-#14 6.322 github.com/gin-gonic/gin/render
-#14 6.517 github.com/gin-gonic/gin
-#14 6.819 gin
-#14 DONE 7.8s</code></pre><p>總共花了 7.8 秒，但是各位想想，在自己電腦開發時，不會這麼久，而是會根據修正過的 Go 檔案才會進行編譯，但是在 CI/CD 流程怎麼做到呢？其實可以發現在電腦裡面都有 Cache 過已經編譯過的檔案。在 Linux 環境會是 <code>/root/.cache/go-build</code>。那我們該如何透過 buildKit 加速編譯？</p><h2 id=使用-buildkit-編譯>使用 BuildKit 編譯</h2><p>先來看看在 Dockerfile 該如何改進才可以讓編譯加速？底下看看</p><pre><code class=language-dockerfile># syntax = docker/dockerfile:experimental
-FROM golang:1.14-alpine
-
-LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
-
-RUN --mount=type=cache,target=/var/cache/apk apk add bash ca-certificates git gcc g++ libc-dev
-WORKDIR /app
-
-# Force the go compiler to use modules
-ENV GO111MODULE=on
-# We want to populate the module cache based on the go.{mod,sum} files.
-COPY go.mod .
-COPY go.sum .
-RUN --mount=type=cache,target=/go/pkg/mod go mod download
-COPY main.go .
-COPY foo/foo.go foo/
-COPY bar/bar.go bar/
-
-ENV GOOS=linux
-ENV GOARCH=amd64
-RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
-
-CMD ["/app"]</code></pre><p>首先看到第一行是務必要填寫</p><pre><code class=language-dockerfile># syntax = docker/dockerfile:experimental</code></pre><p>接著使用 <code>--mount</code> 方式進行檔案 cache，可以在任何 <code>RUN</code> 的步驟進行。所以可以看到在 go build 地方使用了:</p><pre><code class=language-dockerfile>RUN --mount=type=cache,target=/go/pkg/mod \
-  --mount=type=cache,target=/root/.cache/go-build</code></pre><p>可以看到此步驟將 go module 及 build 後的檔案全部 cache 下來，這樣下次編譯的時候，就會自動將檔案預設放在對應的位置，加速編譯流程</p><pre><code class=language-sh>docker build --progress=plain -t appleboy/docker-buildkit -f Dockerfile.buildkit .
-#16 [stage-0 10/10] RUN --mount=type=cache,target=/go/pkg/mod --mount=type=c...
-#16 0.381 gin/foo
-#16 0.447 gin
-#16 DONE 1.2s</code></pre><p>可以看到修改了檔案後，編譯的結果跟在自己電腦上一模一樣，縮短了六秒時間，在大型的 Go 專案省下的時間可不少啊。</p><h2 id=心得>心得</h2><p>現在 CI/CD 的工具不確定都有支持 docker buildKit，可能要自己做實驗試試看，像是現在 GitHub Action 官方也<a href=https://github.com/docker/github-actions/issues/12>不支援 docker buildkit</a>。如果是全部自己架設的話，基本上可以完全使用 docker buildKit + docker cache-from 兩者一起用，相信會省下不少時間啊。</p><h1 id=程式碼範例請看這邊2><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></h1><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/buildkit/>BuildKit</a>&nbsp;
+    r.<span style=color:#008b45>Run</span>() <span style=color:#228b22>// listen and serve on 0.0.0.0:8080 (for windows &#34;localhost:8080&#34;)
+</span><span style=color:#228b22></span>}
+</code></pre></td></tr></table></div></div><p>接著撰寫 Dockerfile</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-dockerfile data-lang=dockerfile><span style=color:#8b008b;font-weight:700>FROM</span><span style=color:#cd5555> golang:1.14-alpine</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>LABEL</span> <span style=color:#00688b>maintainer</span>=<span style=color:#cd5555>&#34;Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;&#34;</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>RUN</span> apk add bash ca-certificates git gcc g++ libc-dev<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>WORKDIR</span><span style=color:#cd5555> /app</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#228b22># Force the go compiler to use modules</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENV</span> <span style=color:#00688b>GO111MODULE</span>=on
+<span style=color:#228b22># We want to populate the module cache based on the go.{mod,sum} files.</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> go.mod .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> go.sum .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>RUN</span> go mod download<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> main.go .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> foo/foo.go foo/<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> bar/bar.go bar/<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENV</span> <span style=color:#00688b>GOOS</span>=linux
+<span style=color:#8b008b;font-weight:700>ENV</span> <span style=color:#00688b>GOARCH</span>=amd64
+<span style=color:#8b008b;font-weight:700>RUN</span> go build -o /app -v -tags netgo -ldflags <span style=color:#cd5555>&#39;-w -extldflags &#34;-static&#34;&#39;</span> .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>CMD</span> [<span style=color:#cd5555>&#34;/app&#34;</span>]<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table></div></div><p>可以看到如果 go.mode 跟 go.sum 如果沒有任何變動，基本上 go module 檔案自然就可以透過 docker cache layer 處理。但是每次只要程式碼有任何異動，最後的 go build 會從無到有編譯，請看底下結果:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>docker build --progress=plain -t appleboy/docker-demo -f Dockerfile .
+<span style=color:#228b22>#14 [10/10] RUN go build -o /app -v -tags netgo -ldflags &#39;-w -extldflags &#34;-s...</span>
+<span style=color:#228b22>#14 0.391 gin/foo</span>
+<span style=color:#228b22>#14 0.403 gin/bar</span>
+<span style=color:#228b22>#14 0.412 github.com/go-playground/locales/currency</span>
+<span style=color:#228b22>#14 0.438 github.com/gin-gonic/gin/internal/bytesconv</span>
+<span style=color:#228b22>#14 0.441 github.com/go-playground/locales</span>
+<span style=color:#228b22>#14 0.449 golang.org/x/sys/unix</span>
+<span style=color:#228b22>#14 0.464 net</span>
+<span style=color:#228b22>#14 0.471 github.com/gin-gonic/gin/internal/json</span>
+<span style=color:#228b22>#14 0.508 github.com/go-playground/universal-translator</span>
+<span style=color:#228b22>#14 0.511 github.com/leodido/go-urn</span>
+<span style=color:#228b22>#14 0.694 github.com/golang/protobuf/proto</span>
+<span style=color:#228b22>#14 0.754 gopkg.in/yaml.v2</span>
+<span style=color:#228b22>#14 1.535 github.com/mattn/go-isatty</span>
+<span style=color:#228b22>#14 1.789 net/textproto</span>
+<span style=color:#228b22>#14 1.790 crypto/x509</span>
+<span style=color:#228b22>#14 1.920 vendor/golang.org/x/net/http/httpproxy</span>
+<span style=color:#228b22>#14 1.978 vendor/golang.org/x/net/http/httpguts</span>
+<span style=color:#228b22>#14 2.019 github.com/go-playground/validator/v10</span>
+<span style=color:#228b22>#14 2.434 crypto/tls</span>
+<span style=color:#228b22>#14 3.043 net/http/httptrace</span>
+<span style=color:#228b22>#14 3.085 net/http</span>
+<span style=color:#228b22>#14 4.211 net/rpc</span>
+<span style=color:#228b22>#14 4.212 github.com/gin-contrib/sse</span>
+<span style=color:#228b22>#14 4.212 net/http/httputil</span>
+<span style=color:#228b22>#14 4.372 github.com/ugorji/go/codec</span>
+<span style=color:#228b22>#14 6.322 github.com/gin-gonic/gin/binding</span>
+<span style=color:#228b22>#14 6.322 github.com/gin-gonic/gin/render</span>
+<span style=color:#228b22>#14 6.517 github.com/gin-gonic/gin</span>
+<span style=color:#228b22>#14 6.819 gin</span>
+<span style=color:#228b22>#14 DONE 7.8s</span>
+</code></pre></td></tr></table></div></div><p>總共花了 7.8 秒，但是各位想想，在自己電腦開發時，不會這麼久，而是會根據修正過的 Go 檔案才會進行編譯，但是在 CI/CD 流程怎麼做到呢？其實可以發現在電腦裡面都有 Cache 過已經編譯過的檔案。在 Linux 環境會是 <code>/root/.cache/go-build</code>。那我們該如何透過 buildKit 加速編譯？</p><h2 id=使用-buildkit-編譯>使用 BuildKit 編譯</h2><p>先來看看在 Dockerfile 該如何改進才可以讓編譯加速？底下看看</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-dockerfile data-lang=dockerfile><span style=color:#228b22># syntax = docker/dockerfile:experimental</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>FROM</span><span style=color:#cd5555> golang:1.14-alpine</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>LABEL</span> <span style=color:#00688b>maintainer</span>=<span style=color:#cd5555>&#34;Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;&#34;</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>RUN</span> --mount=<span style=color:#00688b>type</span>=cache,target=/var/cache/apk apk add bash ca-certificates git gcc g++ libc-dev<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>WORKDIR</span><span style=color:#cd5555> /app</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#228b22># Force the go compiler to use modules</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENV</span> <span style=color:#00688b>GO111MODULE</span>=on
+<span style=color:#228b22># We want to populate the module cache based on the go.{mod,sum} files.</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> go.mod .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> go.sum .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>RUN</span> --mount=<span style=color:#00688b>type</span>=cache,target=/go/pkg/mod go mod download<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> main.go .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> foo/foo.go foo/<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> bar/bar.go bar/<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENV</span> <span style=color:#00688b>GOOS</span>=linux
+<span style=color:#8b008b;font-weight:700>ENV</span> <span style=color:#00688b>GOARCH</span>=amd64
+<span style=color:#8b008b;font-weight:700>RUN</span> --mount=<span style=color:#00688b>type</span>=cache,target=/go/pkg/mod --mount=<span style=color:#00688b>type</span>=cache,target=/root/.cache/go-build go build -o /app -v -tags netgo -ldflags <span style=color:#cd5555>&#39;-w -extldflags &#34;-static&#34;&#39;</span> .<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>CMD</span> [<span style=color:#cd5555>&#34;/app&#34;</span>]<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table></div></div><p>首先看到第一行是務必要填寫</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-dockerfile data-lang=dockerfile><span style=color:#228b22># syntax = docker/dockerfile:experimental</span><span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table></div></div><p>接著使用 <code>--mount</code> 方式進行檔案 cache，可以在任何 <code>RUN</code> 的步驟進行。所以可以看到在 go build 地方使用了:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-dockerfile data-lang=dockerfile><span style=color:#8b008b;font-weight:700>RUN</span> --mount=<span style=color:#00688b>type</span>=cache,target=/go/pkg/mod <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  --mount=<span style=color:#00688b>type</span>=cache,target=/root/.cache/go-build<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table></div></div><p>可以看到此步驟將 go module 及 build 後的檔案全部 cache 下來，這樣下次編譯的時候，就會自動將檔案預設放在對應的位置，加速編譯流程</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>docker build --progress=plain -t appleboy/docker-buildkit -f Dockerfile.buildkit .
+<span style=color:#228b22>#16 [stage-0 10/10] RUN --mount=type=cache,target=/go/pkg/mod --mount=type=c...</span>
+<span style=color:#228b22>#16 0.381 gin/foo</span>
+<span style=color:#228b22>#16 0.447 gin</span>
+<span style=color:#228b22>#16 DONE 1.2s</span>
+</code></pre></td></tr></table></div></div><p>可以看到修改了檔案後，編譯的結果跟在自己電腦上一模一樣，縮短了六秒時間，在大型的 Go 專案省下的時間可不少啊。</p><h2 id=心得>心得</h2><p>現在 CI/CD 的工具不確定都有支持 docker buildKit，可能要自己做實驗試試看，像是現在 GitHub Action 官方也<a href=https://github.com/docker/github-actions/issues/12>不支援 docker buildkit</a>。如果是全部自己架設的話，基本上可以完全使用 docker buildKit + docker cache-from 兩者一起用，相信會省下不少時間啊。</p><h1 id=程式碼範例請看這邊2><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></h1><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/buildkit/>BuildKit</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f04%2fspeed-up-docker-build-using-docker-buildkit%2f&text=%e4%bd%bf%e7%94%a8%20Docker%20BuildKit%20%e5%8a%a0%e9%80%9f%e7%b7%a8%e8%ad%af%20Image&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f04%2fspeed-up-docker-build-using-docker-buildkit%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f04%2fspeed-up-docker-build-using-docker-buildkit%2f&title=%e4%bd%bf%e7%94%a8%20Docker%20BuildKit%20%e5%8a%a0%e9%80%9f%e7%b7%a8%e8%ad%af%20Image" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f04%2fspeed-up-docker-build-using-docker-buildkit%2f&title=%e4%bd%bf%e7%94%a8%20Docker%20BuildKit%20%e5%8a%a0%e9%80%9f%e7%b7%a8%e8%ad%af%20Image" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f04%2fspeed-up-docker-build-using-docker-buildkit%2f&title=%e4%bd%bf%e7%94%a8%20Docker%20BuildKit%20%e5%8a%a0%e9%80%9f%e7%b7%a8%e8%ad%af%20Image" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f04%2fspeed-up-docker-build-using-docker-buildkit%2f&description=%e4%bd%bf%e7%94%a8%20Docker%20BuildKit%20%e5%8a%a0%e9%80%9f%e7%b7%a8%e8%ad%af%20Image" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2020/04/switch-graphql-go-to-gqlgen-in-golang/ data-toggle=tooltip data-placement=top title="[Go 語言] 從 graphql-go 轉換到 gqlgen">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/ data-toggle=tooltip data-placement=top title="用 10 分鐘了解 Go 語言 context package 使用場景及介紹">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2020/04/speed-up-docker-build-using-docker-buildkit>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2020/04/speed-up-docker-build-using-docker-buildkit'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

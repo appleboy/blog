@@ -9,16 +9,26 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>upx</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://demo.gh.wu-boy.com/2017/09/downsize-go-binary-using-upx/><h2 class=post-title>用 upx 壓縮 Go 語言執行擋</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 1, 2017
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;127&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>剛開始學 <a href=https://golang.org>Go</a> 語言的時候，跟學習其他語言一樣，寫了底下一個簡單的 Hello World 檔案</p><pre><code class=language-go>package main
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;152&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>剛開始學 <a href=https://golang.org>Go</a> 語言的時候，跟學習其他語言一樣，寫了底下一個簡單的 Hello World 檔案</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "fmt"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
 )
 
-func main() {
-    fmt.Println("Hello World!")
-}</code></pre><p>這是一個最簡單的程式碼，接著透過 <code>go build</code> 的方式編譯出執行檔，這時候我們看看檔案大小:</p><a href=https://demo.gh.wu-boy.com/2017/09/downsize-go-binary-using-upx/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/go/>Go</a>&nbsp;
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Hello World!&#34;</span>)
+}
+</code></pre></td></tr></table></div></div><p>這是一個最簡單的程式碼，接著透過 <code>go build</code> 的方式編譯出執行檔，這時候我們看看檔案大小:</p><a href=https://demo.gh.wu-boy.com/2017/09/downsize-go-binary-using-upx/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/go/>Go</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/upx/>upx</a>&nbsp;</div></article></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

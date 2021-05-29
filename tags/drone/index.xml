@@ -21,75 +21,165 @@
 &lt;p>很高興看到 &lt;a href="https://gitea.io" title="Gitea">Gitea&lt;/a> 正式支援 &lt;a href="https://github.com/go-gitea/gitea/pull/5378" title="OAuth Provider ">OAuth Provider&lt;/a> 了，此功能經歷了四個月終於正式合併進 master 分支，預計會在 &lt;a href="https://github.com/go-gitea/gitea/milestone/32" title="1.18 版本">1.8 版本&lt;/a>釋出，由於此功能已經進 master，這樣我們就可以把原本 Drone 透過帳號密碼登入，改成使用 OAtuh 方式了，增加安全性。但是在使用之前，Drone 需要合併 &lt;a href="https://github.com/drone/go-login/pull/3" title="drone/go-login">drone/go-login@3&lt;/a> 及 &lt;a href="https://github.com/drone/drone/pull/2622" title="drone/drone@2622">drone/drone@2622&lt;/a>。如果您會使用 Go 語言，不妨現在就可以來試試看了，透過 go build 來編譯原始碼。&lt;/p></description></item><item><title>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</title><link>https://demo.gh.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/</link><pubDate>Sun, 24 Feb 2019 12:37:23 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" title="提升 docker build 時間">&lt;img src="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" alt="提升 docker build 時間" title="提升 docker build 時間">&lt;/a>&lt;/p>
 &lt;p>在現代 CI/CD 的環境流程中，使用 &lt;a href="https://github.com/jpetazzo/dind">Docker In Docker&lt;/a> 來編譯容器已經相當流行了，像是 &lt;a href="https://about.gitlab.com/product/continuous-integration/">GitLab CI&lt;/a> 或 &lt;a href="https://github.com/drone/drone" title="Drone">Drone&lt;/a> 都是全走 &lt;a href="https://www.docker.com/" title="Docker">Docker&lt;/a> 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 &lt;a href="https://hub.docker.com/" title="Docker Hub">Docker Hub&lt;/a> 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 &lt;a href="https://github.com/docker/docker/releases/tag/v1.13.0">v1.13&lt;/a> 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。&lt;/p></description></item><item><title>有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔</title><link>https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/</link><pubDate>Fri, 25 Jan 2019 07:40:34 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" title="Jsonnet + Drone">&lt;img src="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" alt="Jsonnet + Drone" title="Jsonnet + Drone">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://github.com/drone/drone">Drone&lt;/a> 在 1.0 版本推出了用 &lt;a href="https://jsonnet.org">jsonnet&lt;/a> 來撰寫 &lt;a href="https://en.wikipedia.org/wiki/YAML">YAML&lt;/a> 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 &lt;code>.drone.yml&lt;/code> 內有非常多重複性的設定，假設 &lt;a href="https://golang.org" title="Go 語言">Go 語言&lt;/a>的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 &lt;a href="https://hub.docker.com/" title="Docker Hub">Docker Hub&lt;/a>，底下是 AMD64 的設定檔範例。剛好在 &lt;a href="https://www.udemy.com/devops-oneday" title="Udemy 課程">Udemy 課程&lt;/a>內有學員詢問到&lt;a href="https://www.udemy.com/devops-oneday/learn/v4/questions/6162884">相關問題&lt;/a>。&lt;/p>
-&lt;pre>&lt;code class="language-yaml">---
-kind: pipeline
-name: linux-arm64
-platform:
-os: linux
-arch: arm64
-steps:
-- name: build-push
-pull: always
-image: golang:1.11
-commands:
-- "go build -v -ldflags \"-X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/linux/arm64/drone-discord"
-environment:
-CGO_ENABLED: 0
-GO111MODULE: on
-when:
-event:
-- push
-- pull_request
-- name: build-tag
-pull: always
-image: golang:1.11
-commands:
-- "go build -v -ldflags \"-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/linux/arm64/drone-discord"
-environment:
-CGO_ENABLED: 0
-GO111MODULE: on
-when:
-event:
-- tag
-- name: executable
-pull: always
-image: golang:1.11
-commands:
-- ./release/linux/arm64/drone-discord --help
-- name: dryrun
-pull: always
-image: plugins/docker:linux-arm64
-settings:
-dockerfile: docker/Dockerfile.linux.arm64
-dry_run: true
-password:
-from_secret: docker_password
-repo: appleboy/drone-discord
-tags: linux-arm64
-username:
-from_secret: docker_username
-when:
-event:
-- pull_request
-- name: publish
-pull: always
-image: plugins/docker:linux-arm64
-settings:
-auto_tag: true
-auto_tag_suffix: linux-arm64
-dockerfile: docker/Dockerfile.linux.arm64
-password:
-from_secret: docker_password
-repo: appleboy/drone-discord
-username:
-from_secret: docker_username
-when:
-event:
-- push
-- tag
-trigger:
-branch:
-- master&lt;/code>&lt;/pre></description></item><item><title>用 Traefik 搭配 Docker 快速架設服務</title><link>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</link><pubDate>Tue, 08 Jan 2019 03:51:43 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</guid><description>&lt;p>&lt;strong>更新: 2019.01.10 新增教學影片&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#18">18&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#19">19&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#20">20&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#21">21&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#22">22&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#23">23&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#24">24&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#25">25&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#26">26&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#27">27&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#28">28&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#29">29&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#30">30&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="31">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#31">31&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="32">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#32">32&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="33">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#33">33&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="34">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#34">34&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="35">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#35">35&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="36">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#36">36&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="37">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#37">37&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="38">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#38">38&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="39">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#39">39&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="40">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#40">40&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="41">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#41">41&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="42">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#42">42&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="43">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#43">43&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="44">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#44">44&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="45">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#45">45&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="46">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#46">46&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="47">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#47">47&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="48">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#48">48&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="49">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#49">49&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="50">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#50">50&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="51">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#51">51&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="52">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#52">52&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="53">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#53">53&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="54">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#54">54&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="55">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#55">55&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="56">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#56">56&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="57">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#57">57&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="58">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#58">58&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="59">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#59">59&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="60">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#60">60&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="61">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#61">61&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="62">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#62">62&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="63">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#63">63&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="64">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#64">64&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="65">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#65">65&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="66">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#66">66&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="67">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#67">67&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="68">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#68">68&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="69">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#69">69&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="70">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#70">70&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="71">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#71">71&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="72">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#72">72&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="73">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#73">73&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="74">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#74">74&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="75">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#75">75&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="76">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#76">76&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="color:#008b45;text-decoration:underline">---&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">kind&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>pipeline&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">platform&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">os&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">arch&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">steps&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>build-push&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>golang:1.11&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">commands&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- &lt;span style="color:#cd5555">&amp;#34;go build -v -ldflags \&amp;#34;-X main.build=${DRONE_BUILD_NUMBER}\&amp;#34; -a -o release/linux/arm64/drone-discord&amp;#34;&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">environment&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">CGO_ENABLED&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#b452cd">0&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">GO111MODULE&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">on&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- push&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- pull_request&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>build-tag&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>golang:1.11&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">commands&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- &lt;span style="color:#cd5555">&amp;#34;go build -v -ldflags \&amp;#34;-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\&amp;#34; -a -o release/linux/arm64/drone-discord&amp;#34;&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">environment&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">CGO_ENABLED&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#b452cd">0&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">GO111MODULE&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">on&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- tag&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>executable&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>golang:1.11&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">commands&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- ./release/linux/arm64/drone-discord --help&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>dryrun&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>plugins/docker:linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">settings&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">dockerfile&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker/Dockerfile.linux.arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">dry_run&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">true&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">password&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_password&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">repo&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>appleboy/drone-discord&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">tags&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">username&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_username&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- pull_request&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>publish&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>plugins/docker:linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">settings&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">auto_tag&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">true&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">auto_tag_suffix&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">dockerfile&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker/Dockerfile.linux.arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">password&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_password&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">repo&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>appleboy/drone-discord&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">username&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_username&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- push&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- tag&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">trigger&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">branch&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- master&lt;span style="color:#bbb">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>用 Traefik 搭配 Docker 快速架設服務</title><link>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</link><pubDate>Tue, 08 Jan 2019 03:51:43 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</guid><description>&lt;p>&lt;strong>更新: 2019.01.10 新增教學影片&lt;/strong>&lt;/p>
 &lt;p>&lt;a href="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" title="drone traefik docker deploy">&lt;img src="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" alt="drone traefik docker deploy" title="drone traefik docker deploy">&lt;/a>&lt;/p>
 &lt;p>相信大家在架設服務肯定會選一套像是 &lt;a href="http://www.haproxy.org/">HAProxy&lt;/a>, &lt;a href="https://www.nginx.com/" title="Nginx">Nginx&lt;/a>, &lt;a href="https://httpd.apache.org/" title="Apache">Apache&lt;/a> 或 &lt;a href="https://caddyserver.com/" title="Caddy">Caddy&lt;/a>，這四套架設的難度差不多，如果要搭配 &lt;a href="https://letsencrypt.org/" title="Let's Encrypt">Let&amp;rsquo;s Encrypt&lt;/a> 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 &lt;a href="https://golang.org/" title="Golang">Golang&lt;/a> 開發裡面已經內建了 Let&amp;rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 &lt;a href="https://traefik.io/" title="Traefik">Traefik&lt;/a>，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 &lt;code>domain1.com&lt;/code> 及 &lt;code>domain2.com&lt;/code>。來看看如何快速設定 Traefik。&lt;/p>
 &lt;p>&lt;a href="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" title="traefik + docker + golang">&lt;img src="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" alt="traefik + docker + golang" title="traefik + docker + golang">&lt;/a>&lt;/p></description></item><item><title>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</title><link>https://demo.gh.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/</link><pubDate>Sun, 30 Dec 2018 03:07:54 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/</guid><description>&lt;p>&lt;a href="https://photos.google.com/share/AF1QipPZ8MkcLAazbfRWwBrT1CQpipCL8N_1uAcYosJmJ-o6du2XRRHNEokVarxey5Bp8w?key=clctLU9JYVMzcEdHYWR2dUlVTVZ6YnZUUjlYRG9B&amp;amp;source=ctrlq.org">&lt;img src="https://lh3.googleusercontent.com/Q5CP9S-xtRHxnDRvxDpWWkvBsEVw5C5uRyb5EiBh-UpYkrp_dkZp_oN8yi1WtqwruhSgnwNMB5QjJPxO94ABjG9oLBqmcRjlouNTNmrChIWbQcsAAbuV9eWB1wbsK-x-OY6iolb5ahc=w2400" alt="">&lt;/a>&lt;/p>
@@ -112,9 +202,19 @@ branch:
 &lt;li>在 [Kubernetes][7] 上跑 Gorush&lt;/li>
 &lt;/ul></description></item><item><title>Drone 搭配 Kubernetes 升級應用程式版本</title><link>https://demo.gh.wu-boy.com/2017/10/upgrade-kubernetes-container-using-drone/</link><pubDate>Tue, 10 Oct 2017 16:02:23 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/10/upgrade-kubernetes-container-using-drone/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/36944908123/in/dateposted-public/" title="Screen Shot 2017-10-10 at 9.22.48 PM">&lt;img src="https://i0.wp.com/farm5.staticflickr.com/4481/36944908123_68ecdb8139_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2017-10-10 at 9.22.48 PM" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>本篇要教大家如何透過 &lt;a href="https://github.com/drone/drone">Drone&lt;/a> 搭配 &lt;a href="https://kubernetes.io/">Kubernetes&lt;/a> 自動化升級 App container 版本。為什麼我只說升級 App 版本，而不是升級或調整 K8S Deployment 架構呢 (&lt;code>kubectl apply&lt;/code>)？原因是本篇會圍繞在 &lt;a href="https://github.com/honestbee">honestbee&lt;/a> 撰寫的 drone 外掛: &lt;a href="https://github.com/honestbee/drone-kubernetes">drone-kubernetes&lt;/a>，此外掛是透過 Shell Script 方式搭配 &lt;a href="https://kubernetes.io/docs/user-guide/kubectl-overview/">kubectl&lt;/a> 指令來完成升級 App 版本，可以看到程式原始碼並無用到 &lt;code>kubectl apply&lt;/code> 方式來升級，也並非用 &lt;a href="https://golang.org">Go 語言&lt;/a>搭配 k8s API 所撰寫，所以無法使用 &lt;a href="https://en.wikipedia.org/wiki/YAML">YAML&lt;/a> 方式來進行 Deployment 的升級。本篇講解的範例都可以在 &lt;a href="https://github.com/go-training/drone-nodejs-example">drone-nodejs-example&lt;/a> 內找到。底下指令就是外掛用來搭配 Drone 參數所使用。&lt;/p>
-&lt;pre>&lt;code class="language-bash">$ kubectl set image \
-deployment/nginx-deployment \
-nginx=nginx:1.9.1&lt;/code>&lt;/pre></description></item><item><title>用 Kubernetes 將 Drone CI/CD 架設在 AWS</title><link>https://demo.gh.wu-boy.com/2017/09/drone-on-kubernetes-on-aws/</link><pubDate>Sat, 23 Sep 2017 16:55:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/09/drone-on-kubernetes-on-aws/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/37237823752/in/dateposted-public/" title="Screen Shot 2017-09-24 at 12.53.39 AM">&lt;img src="https://i0.wp.com/farm5.staticflickr.com/4497/37237823752_68a508e4bb_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2017-09-24 at 12.53.39 AM" data-recalc-dims="1" />&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">$ kubectl &lt;span style="color:#658b00">set&lt;/span> image &lt;span style="color:#cd5555">\
+&lt;/span>&lt;span style="color:#cd5555">&lt;/span> deployment/nginx-deployment &lt;span style="color:#cd5555">\
+&lt;/span>&lt;span style="color:#cd5555">&lt;/span> &lt;span style="color:#00688b">nginx&lt;/span>=nginx:1.9.1
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>用 Kubernetes 將 Drone CI/CD 架設在 AWS</title><link>https://demo.gh.wu-boy.com/2017/09/drone-on-kubernetes-on-aws/</link><pubDate>Sat, 23 Sep 2017 16:55:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/09/drone-on-kubernetes-on-aws/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/37237823752/in/dateposted-public/" title="Screen Shot 2017-09-24 at 12.53.39 AM">&lt;img src="https://i0.wp.com/farm5.staticflickr.com/4497/37237823752_68a508e4bb_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2017-09-24 at 12.53.39 AM" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://github.com/drone/drone">Drone&lt;/a> 是我今年主推的 CI/CD 自架服務，詳細可以參考&lt;a href="https://blog.wu-boy.com/2017/09/why-i-choose-drone-as-ci-cd-tool/">這篇文章&lt;/a>，目前在公司內部團隊使用了一年以上，服務相當穩定。Drone 本身可以透過 &lt;a href="https://github.com/go-training/drone-tutorial">docker-compose 方式&lt;/a>快速在機器上架設完成，但是由於 &lt;a href="https://kubernetes.io/">Kubernetes&lt;/a> 的盛行，大家也希望能透過 Kubernetes 來安裝 Drone 服務。本篇會教大家如何在 AWS 上透過 Kubernetes 安裝完成。Drone 預設使用 &lt;a href="https://www.sqlite.org/">SQLite&lt;/a> 當作資料庫，檔案會直接存放在 &lt;code>/var/lib/drone&lt;/code> 路徑底下，但是容器內不支援寫入，所以必須要要額外掛上空間讓 Drone 可以寫入資料。此篇會以 &lt;a href="https://github.com">GitHub&lt;/a> 認證 + SQLite 來教學。&lt;/p></description></item><item><title>為什麼我用 Drone 取代 Jenkins 及 GitLab CI</title><link>https://demo.gh.wu-boy.com/2017/09/why-i-choose-drone-as-ci-cd-tool/</link><pubDate>Thu, 07 Sep 2017 02:58:44 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/09/why-i-choose-drone-as-ci-cd-tool/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/36906030282/in/dateposted-public/" title="Logo-DevOpsDays">&lt;img src="https://i1.wp.com/farm5.staticflickr.com/4382/36906030282_f489c96be3_z.jpg?w=840&amp;#038;ssl=1" alt="Logo-DevOpsDays" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>終於有機會正式跟大家介紹為什麼我會捨棄 [Jenkins][2] 跟 [GitLab CI][3]，取而代之的是用 &lt;a href="https://golang.org">Go&lt;/a> 語言寫的 [Drone][1]。今年很高興錄取台灣第一屆 &lt;a href="https://devopsdays.tw/">DevOps Day&lt;/a> 講師，在今年主題是『用 Drone 打造輕量級容器持續交付平台』，主要推廣這套 [Drone][1] CI/CD 工具，會議內容圍繞在 [Jenkins][2], [GitLab CI][3] 跟 Drone 的比較。也提到為什麼我不用 Jenkins 及 GitLab CI 的幾個原因。底下整理議程大綱。&lt;/p>
 &lt;hr>

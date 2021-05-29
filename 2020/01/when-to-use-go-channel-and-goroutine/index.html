@@ -3,7 +3,7 @@
 
 Do not communicate by sharing memory; instead, share memory by communicating.
 
-本篇會用簡單的例子來帶大家理解上述名言。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/01\/when-to-use-go-channel-and-goroutine\/","name":"使用 go channel 及 goroutine 時機"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 Go Channel 及 Goroutine 時機","description":"\n相信不少開發者肯定聽過 Go 語言之所以讓人非常喜歡，就是因為 Go concurrency，如果您對於 concurrency 不了解的朋友們，可以直接參考官網的範例開始了解，範例會帶您一步一步了解什麼是 Channel 什麼是 Go concurrency？本篇會介紹 Channel 使用時機，在大部分寫 application 時，老實說很少用到 Channel，所以很多人其實不知道該在哪種場景需要使用 Channel，底下這句名言大家肯定聽過:\n Do not communicate by sharing memory; instead, share memory by communicating.\n 本篇會用簡單的例子來帶大家理解上述名言。\n","inLanguage":"en","wordCount":298,"datePublished":"2020-01-18T06:11:54","dateModified":"2020-01-18T06:11:54","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, golang channel"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/01\/when-to-use-go-channel-and-goroutine\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="使用 Go Channel 及 Goroutine 時機"><meta property="og:description" content="
+本篇會用簡單的例子來帶大家理解上述名言。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/01\/when-to-use-go-channel-and-goroutine\/","name":"使用 go channel 及 goroutine 時機"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 Go Channel 及 Goroutine 時機","description":"\n相信不少開發者肯定聽過 Go 語言之所以讓人非常喜歡，就是因為 Go concurrency，如果您對於 concurrency 不了解的朋友們，可以直接參考官網的範例開始了解，範例會帶您一步一步了解什麼是 Channel 什麼是 Go concurrency？本篇會介紹 Channel 使用時機，在大部分寫 application 時，老實說很少用到 Channel，所以很多人其實不知道該在哪種場景需要使用 Channel，底下這句名言大家肯定聽過:\n Do not communicate by sharing memory; instead, share memory by communicating.\n 本篇會用簡單的例子來帶大家理解上述名言。\n","inLanguage":"en","wordCount":481,"datePublished":"2020-01-18T06:11:54","dateModified":"2020-01-18T06:11:54","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, golang channel"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/01\/when-to-use-go-channel-and-goroutine\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="使用 Go Channel 及 Goroutine 時機"><meta property="og:description" content="
 相信不少開發者肯定聽過 Go 語言之所以讓人非常喜歡，就是因為 Go concurrency，如果您對於 concurrency 不了解的朋友們，可以直接參考官網的範例開始了解，範例會帶您一步一步了解什麼是 Channel 什麼是 Go concurrency？本篇會介紹 Channel 使用時機，在大部分寫 application 時，老實說很少用到 Channel，所以很多人其實不知道該在哪種場景需要使用 Channel，底下這句名言大家肯定聽過:
 
 Do not communicate by sharing memory; instead, share memory by communicating.
@@ -19,91 +19,185 @@ Do not communicate by sharing memory; instead, share memory by communicating.
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>使用 Go Channel 及 Goroutine 時機</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 18, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;298&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#channel-基本知識>Channel 基本知識</a></li><li><a href=#communicating-by-sharing-memory>Communicating by sharing memory</a></li><li><a href=#share-memory-by-communicating>Share memory by communicating</a></li><li><a href=#benchmark>Benchmark</a></li><li><a href=#結論>結論</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>相信不少開發者肯定聽過 Go 語言之所以讓人非常喜歡，就是因為 Go concurrency，如果您對於 concurrency 不了解的朋友們，可以直接參考<a href=https://tour.golang.org/concurrency/1>官網的範例</a>開始了解，範例會帶您一步一步了解什麼是 Channel 什麼是 Go concurrency？本篇會介紹 Channel 使用時機，在大部分寫 application 時，老實說很少用到 Channel，所以很多人其實不知道該在哪種場景需要使用 Channel，底下這句名言大家肯定聽過:</p><blockquote><p>Do not communicate by sharing memory; instead, share memory by communicating.</p></blockquote><p>本篇會用簡單的例子來帶大家理解上述名言。</p><h2 id=教學影片>教學影片</h2><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202001">Go 語言實戰課程</a></li><li><a href="https://www.udemy.com/devops-oneday/?couponCode=202001">Drone CI/CD 自動化課程</a></li></ul><h2 id=channel-基本知識>Channel 基本知識</h2><p>Channel 分成讀跟寫，如果在實戰內用到非常多 Channel，請注意在程式碼任何地方對 Channel 進行讀寫都有可能造成不同的狀況，所以為了避免團隊內濫用 Channel，通常我都會限定在哪個情境只能寫，在哪個情境只能讀。如果混著用，最後會非常難除錯，也造成 Reviewer 非常難閱讀跟理解。</p><pre><code class=language-go>Write(chan<- int)
-Read(<-chan int)
-ReadWrite(chan int)</code></pre><p>分辨讀寫非常容易，請看 &lt;- 符號放在哪邊，chan&lt;- 指向自己就是寫，&lt;-chan 離開自己就是讀，相當好分辨，如果 func 內讀寫都需要使用，則不需要使用任何箭頭符號，但是我會建議把讀寫的邏輯都拆開不同的 func 處理，對於閱讀上非常有幫助。</p><h2 id=communicating-by-sharing-memory>Communicating by sharing memory</h2><p>其實不管在哪一個語言都會有類似範例，底下用 Go 來<a href=https://play.golang.org/p/GhFGWgq1YOa>舉例</a></p><pre><code class=language-go>package main
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;481&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#channel-基本知識>Channel 基本知識</a></li><li><a href=#communicating-by-sharing-memory>Communicating by sharing memory</a></li><li><a href=#share-memory-by-communicating>Share memory by communicating</a></li><li><a href=#benchmark>Benchmark</a></li><li><a href=#結論>結論</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>相信不少開發者肯定聽過 Go 語言之所以讓人非常喜歡，就是因為 Go concurrency，如果您對於 concurrency 不了解的朋友們，可以直接參考<a href=https://tour.golang.org/concurrency/1>官網的範例</a>開始了解，範例會帶您一步一步了解什麼是 Channel 什麼是 Go concurrency？本篇會介紹 Channel 使用時機，在大部分寫 application 時，老實說很少用到 Channel，所以很多人其實不知道該在哪種場景需要使用 Channel，底下這句名言大家肯定聽過:</p><blockquote><p>Do not communicate by sharing memory; instead, share memory by communicating.</p></blockquote><p>本篇會用簡單的例子來帶大家理解上述名言。</p><h2 id=教學影片>教學影片</h2><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202001">Go 語言實戰課程</a></li><li><a href="https://www.udemy.com/devops-oneday/?couponCode=202001">Drone CI/CD 自動化課程</a></li></ul><h2 id=channel-基本知識>Channel 基本知識</h2><p>Channel 分成讀跟寫，如果在實戰內用到非常多 Channel，請注意在程式碼任何地方對 Channel 進行讀寫都有可能造成不同的狀況，所以為了避免團隊內濫用 Channel，通常我都會限定在哪個情境只能寫，在哪個情境只能讀。如果混著用，最後會非常難除錯，也造成 Reviewer 非常難閱讀跟理解。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#008b45>Write</span>(<span style=color:#8b008b;font-weight:700>chan</span>&lt;- <span style=color:#00688b;font-weight:700>int</span>)
+<span style=color:#008b45>Read</span>(&lt;-<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>)
+<span style=color:#008b45>ReadWrite</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>)
+</code></pre></td></tr></table></div></div><p>分辨讀寫非常容易，請看 &lt;- 符號放在哪邊，chan&lt;- 指向自己就是寫，&lt;-chan 離開自己就是讀，相當好分辨，如果 func 內讀寫都需要使用，則不需要使用任何箭頭符號，但是我會建議把讀寫的邏輯都拆開不同的 func 處理，對於閱讀上非常有幫助。</p><h2 id=communicating-by-sharing-memory>Communicating by sharing memory</h2><p>其實不管在哪一個語言都會有類似範例，底下用 Go 來<a href=https://play.golang.org/p/GhFGWgq1YOa>舉例</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "fmt"
-    "sync"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;sync&#34;</span>
 )
 
-func addByShareMemory(n int) []int {
-    var ints []int
-    var wg sync.WaitGroup
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>addByShareMemory</span>(n <span style=color:#00688b;font-weight:700>int</span>) []<span style=color:#00688b;font-weight:700>int</span> {
+    <span style=color:#8b008b;font-weight:700>var</span> ints []<span style=color:#00688b;font-weight:700>int</span>
+    <span style=color:#8b008b;font-weight:700>var</span> wg sync.WaitGroup
 
-    wg.Add(n)
-    for i := 0; i < n; i++ {
-        go func(i int) {
-            defer wg.Done()
-            ints = append(ints, i)
+    wg.<span style=color:#008b45>Add</span>(n)
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; n; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(i <span style=color:#00688b;font-weight:700>int</span>) {
+            <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
+            ints = <span style=color:#658b00>append</span>(ints, i)
         }(i)
     }
 
-    wg.Wait()
-    return ints
+    wg.<span style=color:#008b45>Wait</span>()
+    <span style=color:#8b008b;font-weight:700>return</span> ints
 }
 
-func main() {
-    foo := addByShareMemory(10)
-    fmt.Println(len(foo))
-    fmt.Println(foo)
-}</code></pre><p>請直接將程式碼放到您的電腦執行，原本 ints 應該可以正常拿到 10 個值，但是你會發現每次拿到的結果都是不同的，原因就是在 func 內宣告 ints 是 []int，而在 goroutine 內是共享這變數，但是有可能在同一時間點對同位址 memory 進行讀寫，所以可以看到每次執行出來的結果都是不同的。用 goroutine 進行變數讀寫時，盡量不要用 share memory 來共享，有時候出錯真的蠻難 debug 的。</p><p>底下講幾個解決方式，有些方式不適合用在專案內。第一個就是透過修改 <strong>GOMAXPROCS</strong>:</p><pre><code class=language-go>package main
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    foo := <span style=color:#008b45>addByShareMemory</span>(<span style=color:#b452cd>10</span>)
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#658b00>len</span>(foo))
+    fmt.<span style=color:#008b45>Println</span>(foo)
+}
+</code></pre></td></tr></table></div></div><p>請直接將程式碼放到您的電腦執行，原本 ints 應該可以正常拿到 10 個值，但是你會發現每次拿到的結果都是不同的，原因就是在 func 內宣告 ints 是 []int，而在 goroutine 內是共享這變數，但是有可能在同一時間點對同位址 memory 進行讀寫，所以可以看到每次執行出來的結果都是不同的。用 goroutine 進行變數讀寫時，盡量不要用 share memory 來共享，有時候出錯真的蠻難 debug 的。</p><p>底下講幾個解決方式，有些方式不適合用在專案內。第一個就是透過修改 <strong>GOMAXPROCS</strong>:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "fmt"
-    "runtime"
-    "sync"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;runtime&#34;</span>
+    <span style=color:#cd5555>&#34;sync&#34;</span>
 )
 
-func init() {
-    runtime.GOMAXPROCS(1)
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>init</span>() {
+    runtime.<span style=color:#008b45>GOMAXPROCS</span>(<span style=color:#b452cd>1</span>)
 }
-</code></pre><p>原本會根據 CPU 有多少顆，做多少平行處理，但是可以透過 GOMAXPROCS 設定使用的 CPU 數量，這樣執行出來的結果就可以符合預期，但是誰會在 application 內使用 GOMAXPROCS，完全不合邏輯啊。另一種方式就是使用 <strong>sync</strong> 來解決:</p><pre><code class=language-go>func addByShareMemory(n int) []int {
-    var ints []int
-    var wg sync.WaitGroup
-    var mux sync.Mutex
 
-    wg.Add(n)
-    for i := 0; i < n; i++ {
-        go func(i int) {
-            defer wg.Done()
-            mux.Lock()
-            ints = append(ints, i)
-            mux.Unlock()
+</code></pre></td></tr></table></div></div><p>原本會根據 CPU 有多少顆，做多少平行處理，但是可以透過 GOMAXPROCS 設定使用的 CPU 數量，這樣執行出來的結果就可以符合預期，但是誰會在 application 內使用 GOMAXPROCS，完全不合邏輯啊。另一種方式就是使用 <strong>sync</strong> 來解決:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>addByShareMemory</span>(n <span style=color:#00688b;font-weight:700>int</span>) []<span style=color:#00688b;font-weight:700>int</span> {
+    <span style=color:#8b008b;font-weight:700>var</span> ints []<span style=color:#00688b;font-weight:700>int</span>
+    <span style=color:#8b008b;font-weight:700>var</span> wg sync.WaitGroup
+    <span style=color:#8b008b;font-weight:700>var</span> mux sync.Mutex
+
+    wg.<span style=color:#008b45>Add</span>(n)
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; n; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(i <span style=color:#00688b;font-weight:700>int</span>) {
+            <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
+            mux.<span style=color:#008b45>Lock</span>()
+            ints = <span style=color:#658b00>append</span>(ints, i)
+            mux.<span style=color:#008b45>Unlock</span>()
         }(i)
     }
 
-    wg.Wait()
-    return ints
-}</code></pre><p>只要是讀寫 ints 前面就放上 Lock，變數就不會被覆蓋，寫完之後就可以使用 Unlock 來解除，更簡單一點，可以使用 defer 來 Unlock。由於丟到 goroutine 方式來平行處理，所以需要使用 <strong>WaitGroup</strong> 確保全部 goroutine 拿到資料後，才結束 func。</p><h2 id=share-memory-by-communicating>Share memory by communicating</h2><p>上面的例子可以看到使用了 <strong>sync.WaitGroup</strong> 及 <strong>sync.Mutex</strong> 才能完成 goroutine 拿到正確資料，如果是透過 Channel 方式是否可以避免上面提到的問題呢？</p><pre><code class=language-go>func addByShareCommunicate(n int) []int {
-    var ints []int
-    channel := make(chan int, n)
+    wg.<span style=color:#008b45>Wait</span>()
+    <span style=color:#8b008b;font-weight:700>return</span> ints
+}
+</code></pre></td></tr></table></div></div><p>只要是讀寫 ints 前面就放上 Lock，變數就不會被覆蓋，寫完之後就可以使用 Unlock 來解除，更簡單一點，可以使用 defer 來 Unlock。由於丟到 goroutine 方式來平行處理，所以需要使用 <strong>WaitGroup</strong> 確保全部 goroutine 拿到資料後，才結束 func。</p><h2 id=share-memory-by-communicating>Share memory by communicating</h2><p>上面的例子可以看到使用了 <strong>sync.WaitGroup</strong> 及 <strong>sync.Mutex</strong> 才能完成 goroutine 拿到正確資料，如果是透過 Channel 方式是否可以避免上面提到的問題呢？</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>addByShareCommunicate</span>(n <span style=color:#00688b;font-weight:700>int</span>) []<span style=color:#00688b;font-weight:700>int</span> {
+    <span style=color:#8b008b;font-weight:700>var</span> ints []<span style=color:#00688b;font-weight:700>int</span>
+    channel := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, n)
 
-    for i := 0; i < n; i++ {
-        go func(channel chan<- int, order int) {
-            channel <- order
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; n; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(channel <span style=color:#8b008b;font-weight:700>chan</span>&lt;- <span style=color:#00688b;font-weight:700>int</span>, order <span style=color:#00688b;font-weight:700>int</span>) {
+            channel &lt;- order
         }(channel, i)
     }
 
-    for i := range channel {
-        ints = append(ints, i)
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#8b008b;font-weight:700>range</span> channel {
+        ints = <span style=color:#658b00>append</span>(ints, i)
 
-        if len(ints) == n {
-            break
+        <span style=color:#8b008b;font-weight:700>if</span> <span style=color:#658b00>len</span>(ints) == n {
+            <span style=color:#8b008b;font-weight:700>break</span>
         }
     }
 
-    close(channel)
+    <span style=color:#658b00>close</span>(channel)
 
-    return ints
-}</code></pre><p>從上面範例可以看到能夠寫入 <strong>ints</strong> 變數的只有一個 for 迴圈，這就是所謂的建立一個 channel 當作 share memory by communicating，而不是把一個變數丟進 goroutine 進行共享造成錯誤。</p><p>上面先使用了 goroutine 來進行寫入 channel，所以可以看到第一個參數使用 <strong>chan&lt;- int</strong> 確保在此 goroutine 只能寫入 channel，而不能從 channle 讀資料出來。接著後面使用一個 for 迴圈，陸續將 channle 裡面的值讀出來。用了 channel 就再也不需要 WaitGroup 及 Lock 機制，只要確保最後讀取 channel 後，要把 channle 關閉。</p><h2 id=benchmark>Benchmark</h2><p>我們把上面兩種實作方式做 Benchmark，結果如下:</p><pre><code class=language-bash>goos: darwin
+    <span style=color:#8b008b;font-weight:700>return</span> ints
+}
+</code></pre></td></tr></table></div></div><p>從上面範例可以看到能夠寫入 <strong>ints</strong> 變數的只有一個 for 迴圈，這就是所謂的建立一個 channel 當作 share memory by communicating，而不是把一個變數丟進 goroutine 進行共享造成錯誤。</p><p>上面先使用了 goroutine 來進行寫入 channel，所以可以看到第一個參數使用 <strong>chan&lt;- int</strong> 確保在此 goroutine 只能寫入 channel，而不能從 channle 讀資料出來。接著後面使用一個 for 迴圈，陸續將 channle 裡面的值讀出來。用了 channel 就再也不需要 WaitGroup 及 Lock 機制，只要確保最後讀取 channel 後，要把 channle 關閉。</p><h2 id=benchmark>Benchmark</h2><p>我們把上面兩種實作方式做 Benchmark，結果如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>goos: darwin
 goarch: amd64
-BenchmarkAddByShareMemory-8        31131   38005 ns/op  2098 B/op  11 allocs/op
-BenchmarkAddByShareCommunicate-8   22915   51837 ns/op  2936 B/op   9 allocs/op
-PASS</code></pre><p>可以發現其實第一種透過 waitGroup + Lock 方式會比用 Channel 效能還好。</p><h2 id=結論>結論</h2><p>可以總結底下兩點是我個人覺得可以參考的依據:</p><ul><li>除非是兩個 goruoutine 之間需要交換訊息，否則還是使用一般的 waitGroup + Lock 效能會比較好。不要因為使用 channel 比較潮，而強制在專案內使用。在很多狀況底下一般的 Slice 或 callback 效能會比較好。</li><li>如上面所說，使用了大量的 goroutine，中間需要交換資料，這時候就可以使用 Channel 來進行溝通，雖然如同上面的數據，效能也許會差一些，但是後續的 maintain 以及效能瓶頸，都不會是在交換 Channel 上面。</li></ul><p>上面程式範例可以在<a href=https://github.com/go-training/training/tree/master/example33-share-memory-by-communicating title=這邊找到>這邊找到</a>。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
+BenchmarkAddByShareMemory-8        <span style=color:#b452cd>31131</span>   <span style=color:#b452cd>38005</span> ns/op  <span style=color:#b452cd>2098</span> B/op  <span style=color:#b452cd>11</span> allocs/op
+BenchmarkAddByShareCommunicate-8   <span style=color:#b452cd>22915</span>   <span style=color:#b452cd>51837</span> ns/op  <span style=color:#b452cd>2936</span> B/op   <span style=color:#b452cd>9</span> allocs/op
+PASS
+</code></pre></td></tr></table></div></div><p>可以發現其實第一種透過 waitGroup + Lock 方式會比用 Channel 效能還好。</p><h2 id=結論>結論</h2><p>可以總結底下兩點是我個人覺得可以參考的依據:</p><ul><li>除非是兩個 goruoutine 之間需要交換訊息，否則還是使用一般的 waitGroup + Lock 效能會比較好。不要因為使用 channel 比較潮，而強制在專案內使用。在很多狀況底下一般的 Slice 或 callback 效能會比較好。</li><li>如上面所說，使用了大量的 goroutine，中間需要交換資料，這時候就可以使用 Channel 來進行溝通，雖然如同上面的數據，效能也許會差一些，但是後續的 maintain 以及效能瓶頸，都不會是在交換 Channel 上面。</li></ul><p>上面程式範例可以在<a href=https://github.com/go-training/training/tree/master/example33-share-memory-by-communicating title=這邊找到>這邊找到</a>。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f01%2fwhen-to-use-go-channel-and-goroutine%2f&text=%e4%bd%bf%e7%94%a8%20Go%20Channel%20%e5%8f%8a%20Goroutine%20%e6%99%82%e6%a9%9f&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f01%2fwhen-to-use-go-channel-and-goroutine%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f01%2fwhen-to-use-go-channel-and-goroutine%2f&title=%e4%bd%bf%e7%94%a8%20Go%20Channel%20%e5%8f%8a%20Goroutine%20%e6%99%82%e6%a9%9f" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f01%2fwhen-to-use-go-channel-and-goroutine%2f&title=%e4%bd%bf%e7%94%a8%20Go%20Channel%20%e5%8f%8a%20Goroutine%20%e6%99%82%e6%a9%9f" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f01%2fwhen-to-use-go-channel-and-goroutine%2f&title=%e4%bd%bf%e7%94%a8%20Go%20Channel%20%e5%8f%8a%20Goroutine%20%e6%99%82%e6%a9%9f" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f01%2fwhen-to-use-go-channel-and-goroutine%2f&description=%e4%bd%bf%e7%94%a8%20Go%20Channel%20%e5%8f%8a%20Goroutine%20%e6%99%82%e6%a9%9f" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/ data-toggle=tooltip data-placement=top title="用 GitHub Actions 部署 Go 語言服務">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2020/02/how-to-select-top-n-rows-from-each-key-in-sql/ data-toggle=tooltip data-placement=top title="[SQL] 如何從單一資料表取得每個 key 前 n 筆資料">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

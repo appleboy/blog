@@ -3,7 +3,7 @@
 
 用 Traefik 搭配 Docker 快速架設服務 (內附教學影片)
 Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證 (內附教學影片)
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/03\/setup-traefik-with-drone-ci-cd-in-ten-minutes\/","name":"10 分鐘內用 traefik 架設 drone 搭配 git hub 服務"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"10 分鐘內用 Traefik 架設 Drone 搭配 GitHub 服務","description":"\n這標題也許有點誇張，但是如果實際操作一次，肯定可以在 10 分鐘內操作完成。本篇來教大家如何用 Traefik 當作前端 Proxy，後端搭配 Drone 服務接 GitHub，為什麼會用 Traefik，原因很簡單，你可以把 Traefik 角色想成是 Nginx，但是又比 Nginx 更簡單設定，另外一點就是，Traefik 自動整合了 Let\u0026rsquo;s Encrypt 服務，您就不用擔心憑證會過期的問題。假如機器只會有一個 Drone 當 Host 的話，其實也可以不使用 Traefik，因為 Drone 其實也是內建自動更新憑證的功能。如果您對 Traefik 有興趣，可以直接參考底下兩篇文章\n 用 Traefik 搭配 Docker 快速架設服務 (內附教學影片) Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證 (內附教學影片) ","inLanguage":"en","wordCount":245,"datePublished":"2019-03-22T06:12:41","dateModified":"2019-03-22T06:12:41","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, drone, traefik"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/03\/setup-traefik-with-drone-ci-cd-in-ten-minutes\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="10 分鐘內用 Traefik 架設 Drone 搭配 GitHub 服務"><meta property="og:description" content="
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/03\/setup-traefik-with-drone-ci-cd-in-ten-minutes\/","name":"10 分鐘內用 traefik 架設 drone 搭配 git hub 服務"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"10 分鐘內用 Traefik 架設 Drone 搭配 GitHub 服務","description":"\n這標題也許有點誇張，但是如果實際操作一次，肯定可以在 10 分鐘內操作完成。本篇來教大家如何用 Traefik 當作前端 Proxy，後端搭配 Drone 服務接 GitHub，為什麼會用 Traefik，原因很簡單，你可以把 Traefik 角色想成是 Nginx，但是又比 Nginx 更簡單設定，另外一點就是，Traefik 自動整合了 Let\u0026rsquo;s Encrypt 服務，您就不用擔心憑證會過期的問題。假如機器只會有一個 Drone 當 Host 的話，其實也可以不使用 Traefik，因為 Drone 其實也是內建自動更新憑證的功能。如果您對 Traefik 有興趣，可以直接參考底下兩篇文章\n 用 Traefik 搭配 Docker 快速架設服務 (內附教學影片) Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證 (內附教學影片) ","inLanguage":"en","wordCount":257,"datePublished":"2019-03-22T06:12:41","dateModified":"2019-03-22T06:12:41","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, drone, traefik"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/03\/setup-traefik-with-drone-ci-cd-in-ten-minutes\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="10 分鐘內用 Traefik 架設 Drone 搭配 GitHub 服務"><meta property="og:description" content="
 這標題也許有點誇張，但是如果實際操作一次，肯定可以在 10 分鐘內操作完成。本篇來教大家如何用 Traefik 當作前端 Proxy，後端搭配 Drone 服務接 GitHub，為什麼會用 Traefik，原因很簡單，你可以把 Traefik 角色想成是 Nginx，但是又比 Nginx 更簡單設定，另外一點就是，Traefik 自動整合了 Let&rsquo;s Encrypt 服務，您就不用擔心憑證會過期的問題。假如機器只會有一個 Drone 當 Host 的話，其實也可以不使用 Traefik，因為 Drone 其實也是內建自動更新憑證的功能。如果您對 Traefik 有興趣，可以直接參考底下兩篇文章
 
 用 Traefik 搭配 Docker 快速架設服務 (內附教學影片)
@@ -20,56 +20,110 @@ Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證 (內附教學影片)
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>10 分鐘內用 Traefik 架設 Drone 搭配 GitHub 服務</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 22, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;245&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#設定單一-drone-服務>設定單一 Drone 服務</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/HIVQn1cNncIZ8EdJ7P-Nc9ohmuoSgGfnhB0Nfjl3fxsSoZ_RUBrz0yPB73EQy2Plc5NB1919QKsU7gwioFV0A9f-kD46qFovSkeJBO64iKPnTxZ860YGjdhRDMxseJ67OjSVSsEoskY=w2400"><img src="https://lh3.googleusercontent.com/HIVQn1cNncIZ8EdJ7P-Nc9ohmuoSgGfnhB0Nfjl3fxsSoZ_RUBrz0yPB73EQy2Plc5NB1919QKsU7gwioFV0A9f-kD46qFovSkeJBO64iKPnTxZ860YGjdhRDMxseJ67OjSVSsEoskY=w2400" alt></a></p><p>這標題也許有點誇張，但是如果實際操作一次，肯定可以在 10 分鐘內操作完成。本篇來教大家如何用 <a href=https://traefik.io/>Traefik</a> 當作前端 Proxy，後端搭配 <a href=https://github.com/drone/drone>Drone</a> 服務接 <a href=https://github.com>GitHub</a>，為什麼會用 Traefik，原因很簡單，你可以把 Traefik 角色想成是 <a href=https://www.nginx.com/>Nginx</a>，但是又比 Nginx 更簡單設定，另外一點就是，Traefik 自動整合了 <a href=https://letsencrypt.org/>Let&rsquo;s Encrypt</a> 服務，您就不用擔心憑證會過期的問題。假如機器只會有一個 Drone 當 Host 的話，其實也可以不使用 Traefik，因為 Drone 其實也是內建自動更新憑證的功能。如果您對 Traefik 有興趣，可以直接參考底下兩篇文章</p><ul><li><a href=https://blog.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/>用 Traefik 搭配 Docker 快速架設服務</a> (內附教學影片)</li><li><a href=https://blog.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/>Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證</a> (內附教學影片)</li></ul><h2 id=教學影片>教學影片</h2><ul><li>00:37 架設 Traefik 服務 Listen 80 及 443 port</li><li>02:42 用 Docker 架設 Drone 並且透過 Label 跟 Traefik 串接</li><li>04:11 在 GitHub 申請 App Client ID 及 Secret</li></ul><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=設定單一-drone-服務>設定單一 Drone 服務</h2><p>為什麼說是單一 Drone 服務呢，原因是在 Drone 1.0 開始支援在單一容器內就可以跑 server 跟 agent 同時啟動，降低大家入門門檻，本篇就是以單一容器來介紹，當然如果團隊比較大，建議還是把 server 跟 agent 拆開會比較適合。先建立 <code>docker-compose.yml</code>，相關代碼都可以在這邊<a href=https://github.com/go-training/drone-tutorial>找到</a>。</p><pre><code class=language-yaml>version: '2'
-
-services:
-  drone-server:
-    image: drone/drone:1.0.0
-    volumes:
-      - ./:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-    restart: always
-    environment:
-      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
-      - DRONE_SERVER_PROTO=${DRONE_SERVER_PROTO}
-      - DRONE_TLS_AUTOCERT=false
-      - DRONE_RUNNER_CAPACITY=3
-      # GitHub Config
-      - DRONE_GITHUB_SERVER=https://github.com
-      - DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID}
-      - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET}
-      - DRONE_LOGS_PRETTY=true
-      - DRONE_LOGS_COLOR=true
-    networks:
-      - web
-    logging:
-      options:
-        max-size: "100k"
-        max-file: "3"
-    labels:
-      - "traefik.docker.network=web"
-      - "traefik.enable=true"
-      - "traefik.basic.frontend.rule=Host:${DRONE_SERVER_HOST}"
-      - "traefik.basic.port=80"
-      - "traefik.basic.protocol=http"
-
-networks:
-  web:
-    external: true</code></pre><p>接著建立 <code>.env</code>，並且寫入底下資料</p><pre><code class=language-sh>DRONE_SERVER_HOST=
-DRONE_SERVER_PROTO=
-DRONE_GITHUB_CLIENT_ID=
-DRONE_GITHUB_CLIENT_SECRET=</code></pre><p>其中 proto 預設是跑 http，這邊不用動，traefik 會自動接上 container port，drone 預設跑在 80 port，這邊跟前一版的 drone 有些差異，請在 <code>traefik.basic.port</code> 設定 <code>80</code> 喔，接著跑 <code>docker-compose up</code></p><pre><code class=language-sh>$ docker-compose up
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;257&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#設定單一-drone-服務>設定單一 Drone 服務</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/HIVQn1cNncIZ8EdJ7P-Nc9ohmuoSgGfnhB0Nfjl3fxsSoZ_RUBrz0yPB73EQy2Plc5NB1919QKsU7gwioFV0A9f-kD46qFovSkeJBO64iKPnTxZ860YGjdhRDMxseJ67OjSVSsEoskY=w2400"><img src="https://lh3.googleusercontent.com/HIVQn1cNncIZ8EdJ7P-Nc9ohmuoSgGfnhB0Nfjl3fxsSoZ_RUBrz0yPB73EQy2Plc5NB1919QKsU7gwioFV0A9f-kD46qFovSkeJBO64iKPnTxZ860YGjdhRDMxseJ67OjSVSsEoskY=w2400" alt></a></p><p>這標題也許有點誇張，但是如果實際操作一次，肯定可以在 10 分鐘內操作完成。本篇來教大家如何用 <a href=https://traefik.io/>Traefik</a> 當作前端 Proxy，後端搭配 <a href=https://github.com/drone/drone>Drone</a> 服務接 <a href=https://github.com>GitHub</a>，為什麼會用 Traefik，原因很簡單，你可以把 Traefik 角色想成是 <a href=https://www.nginx.com/>Nginx</a>，但是又比 Nginx 更簡單設定，另外一點就是，Traefik 自動整合了 <a href=https://letsencrypt.org/>Let&rsquo;s Encrypt</a> 服務，您就不用擔心憑證會過期的問題。假如機器只會有一個 Drone 當 Host 的話，其實也可以不使用 Traefik，因為 Drone 其實也是內建自動更新憑證的功能。如果您對 Traefik 有興趣，可以直接參考底下兩篇文章</p><ul><li><a href=https://blog.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/>用 Traefik 搭配 Docker 快速架設服務</a> (內附教學影片)</li><li><a href=https://blog.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/>Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證</a> (內附教學影片)</li></ul><h2 id=教學影片>教學影片</h2><ul><li>00:37 架設 Traefik 服務 Listen 80 及 443 port</li><li>02:42 用 Docker 架設 Drone 並且透過 Label 跟 Traefik 串接</li><li>04:11 在 GitHub 申請 App Client ID 及 Secret</li></ul><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=設定單一-drone-服務>設定單一 Drone 服務</h2><p>為什麼說是單一 Drone 服務呢，原因是在 Drone 1.0 開始支援在單一容器內就可以跑 server 跟 agent 同時啟動，降低大家入門門檻，本篇就是以單一容器來介紹，當然如果團隊比較大，建議還是把 server 跟 agent 拆開會比較適合。先建立 <code>docker-compose.yml</code>，相關代碼都可以在這邊<a href=https://github.com/go-training/drone-tutorial>找到</a>。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>version</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#39;2&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>drone-server</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>drone/drone:1.0.0<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>volumes</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- ./:/data<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- /var/run/docker.sock:/var/run/docker.sock<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>environment</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_SERVER_HOST=${DRONE_SERVER_HOST}<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_SERVER_PROTO=${DRONE_SERVER_PROTO}<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_TLS_AUTOCERT=false<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_RUNNER_CAPACITY=3<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#228b22># GitHub Config</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_GITHUB_SERVER=https://github.com<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID}<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET}<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_LOGS_PRETTY=true<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- DRONE_LOGS_COLOR=true<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- web<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>logging</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>options</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-size</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;100k&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-file</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;3&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>labels</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.docker.network=web&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.enable=true&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.frontend.rule=Host:${DRONE_SERVER_HOST}&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.port=80&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.protocol=http&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>web</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>external</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>接著建立 <code>.env</code>，並且寫入底下資料</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=color:#00688b>DRONE_SERVER_HOST</span>=
+<span style=color:#00688b>DRONE_SERVER_PROTO</span>=
+<span style=color:#00688b>DRONE_GITHUB_CLIENT_ID</span>=
+<span style=color:#00688b>DRONE_GITHUB_CLIENT_SECRET</span>=
+</code></pre></td></tr></table></div></div><p>其中 proto 預設是跑 http，這邊不用動，traefik 會自動接上 container port，drone 預設跑在 80 port，這邊跟前一版的 drone 有些差異，請在 <code>traefik.basic.port</code> 設定 <code>80</code> 喔，接著跑 <code>docker-compose up</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ docker-compose up
 drone-server_1  | {
-drone-server_1  |   "acme": false,
-drone-server_1  |   "host": "drone.ggz.tw",
-drone-server_1  |   "level": "info",
-drone-server_1  |   "msg": "starting the http server",
-drone-server_1  |   "port": ":80",
-drone-server_1  |   "proto": "http",
-drone-server_1  |   "time": "2019-03-21T17:13:32Z",
-drone-server_1  |   "url": "http://drone.ggz.tw"
-drone-server_1  | }</code></pre><p>如果看到上面的訊息，代表已經架設完成。先假設各位已經都先安裝好 traefik，透過 docker label，traefik 會自動將流量 proxy 到對應的 container。</p><h2 id=心得>心得</h2><p>這是我玩過最簡單的 CI/CD 開源專案，設定相當容易，作者花了很多心思在這上面。另外我會在四月北上參加『<a href=https://battle.devopstw.club/>CI / CD 大亂鬥</a>』擔任 Drone 的代表，希望可以在現場多認識一些朋友，如果對 Drone 有任何疑問，隨時歡迎找我，或直接到現場交流。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+drone-server_1  |   <span style=color:#cd5555>&#34;acme&#34;</span>: false,
+drone-server_1  |   <span style=color:#cd5555>&#34;host&#34;</span>: <span style=color:#cd5555>&#34;drone.ggz.tw&#34;</span>,
+drone-server_1  |   <span style=color:#cd5555>&#34;level&#34;</span>: <span style=color:#cd5555>&#34;info&#34;</span>,
+drone-server_1  |   <span style=color:#cd5555>&#34;msg&#34;</span>: <span style=color:#cd5555>&#34;starting the http server&#34;</span>,
+drone-server_1  |   <span style=color:#cd5555>&#34;port&#34;</span>: <span style=color:#cd5555>&#34;:80&#34;</span>,
+drone-server_1  |   <span style=color:#cd5555>&#34;proto&#34;</span>: <span style=color:#cd5555>&#34;http&#34;</span>,
+drone-server_1  |   <span style=color:#cd5555>&#34;time&#34;</span>: <span style=color:#cd5555>&#34;2019-03-21T17:13:32Z&#34;</span>,
+drone-server_1  |   <span style=color:#cd5555>&#34;url&#34;</span>: <span style=color:#cd5555>&#34;http://drone.ggz.tw&#34;</span>
+drone-server_1  | }
+</code></pre></td></tr></table></div></div><p>如果看到上面的訊息，代表已經架設完成。先假設各位已經都先安裝好 traefik，透過 docker label，traefik 會自動將流量 proxy 到對應的 container。</p><h2 id=心得>心得</h2><p>這是我玩過最簡單的 CI/CD 開源專案，設定相當容易，作者花了很多心思在這上面。另外我會在四月北上參加『<a href=https://battle.devopstw.club/>CI / CD 大亂鬥</a>』擔任 Drone 的代表，希望可以在現場多認識一些朋友，如果對 Drone 有任何疑問，隨時歡迎找我，或直接到現場交流。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/traefik/>traefik</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f03%2fsetup-traefik-with-drone-ci-cd-in-ten-minutes%2f&text=10%20%e5%88%86%e9%90%98%e5%85%a7%e7%94%a8%20Traefik%20%e6%9e%b6%e8%a8%ad%20Drone%20%e6%90%ad%e9%85%8d%20GitHub%20%e6%9c%8d%e5%8b%99&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f03%2fsetup-traefik-with-drone-ci-cd-in-ten-minutes%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f03%2fsetup-traefik-with-drone-ci-cd-in-ten-minutes%2f&title=10%20%e5%88%86%e9%90%98%e5%85%a7%e7%94%a8%20Traefik%20%e6%9e%b6%e8%a8%ad%20Drone%20%e6%90%ad%e9%85%8d%20GitHub%20%e6%9c%8d%e5%8b%99" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f03%2fsetup-traefik-with-drone-ci-cd-in-ten-minutes%2f&title=10%20%e5%88%86%e9%90%98%e5%85%a7%e7%94%a8%20Traefik%20%e6%9e%b6%e8%a8%ad%20Drone%20%e6%90%ad%e9%85%8d%20GitHub%20%e6%9c%8d%e5%8b%99" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f03%2fsetup-traefik-with-drone-ci-cd-in-ten-minutes%2f&title=10%20%e5%88%86%e9%90%98%e5%85%a7%e7%94%a8%20Traefik%20%e6%9e%b6%e8%a8%ad%20Drone%20%e6%90%ad%e9%85%8d%20GitHub%20%e6%9c%8d%e5%8b%99" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f03%2fsetup-traefik-with-drone-ci-cd-in-ten-minutes%2f&description=10%20%e5%88%86%e9%90%98%e5%85%a7%e7%94%a8%20Traefik%20%e6%9e%b6%e8%a8%ad%20Drone%20%e6%90%ad%e9%85%8d%20GitHub%20%e6%9c%8d%e5%8b%99" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li><li><a href=/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a></li><li><a href=/2020/07/how-to-create-docker-image-in-reactjs-or-vuejs/>如何將前端網站打包成 Docker Image</a></li><li><a href=/2020/06/go-module-cache-variable-gomodcache/>Go 1.15 新增 Module cache 環境變數</a></li><li><a href=/2020/04/speed-up-docker-build-using-docker-buildkit/>使用 Docker BuildKit 加速編譯 Image</a></li><li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li><li><a href=/2020/03/docker-release-github-actions-plugin/>Docker 推出官方 GitHub Actions 套件</a></li><li><a href=/2020/03/read-private-module-in-golang/>Go Modules 處理私有 GIT Repository 流程</a></li><li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li><li><a href=/2020/02/deploy-static-files-to-github-using-drone/>用 Drone 部署靜態檔案到 GitHub Pages</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2019/03/gitea-support-oauth-provider/ data-toggle=tooltip data-placement=top title="開源專案 Gitea 支援 OAuth Provider">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/ data-toggle=tooltip data-placement=top title="用五分鐘了解什麼是 unbuffered vs buffered channel">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2019/03/setup-traefik-with-drone-ci-cd-in-ten-minutes>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2019/03/setup-traefik-with-drone-ci-cd-in-ten-minutes'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

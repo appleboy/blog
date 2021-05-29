@@ -1,6 +1,6 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>用 gofight 來測試 golang web API handler - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
 身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 gofight 工具，用來測試 Golang 的 http handler，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料，透過 Testify 來測試資料是否符合需求。
-目前大部份的 Golang Web Framework 都可以透過 gofight 來測試，除非作者有把 ServeHTTP 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 Gin, Mux, HttpRouter 都是可以使用的，底下來看看 gofight 該如何使用。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2016\/04\/gofight-tool-for-api-handler-testing-in-golang\/","name":"用 gofight 來測試 golang web API handler"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 gofight 來測試 golang web API handler","description":"\n身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 gofight 工具，用來測試 Golang 的 http handler，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料，透過 Testify 來測試資料是否符合需求。\n目前大部份的 Golang Web Framework 都可以透過 gofight 來測試，除非作者有把 ServeHTTP 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 Gin, Mux, HttpRouter 都是可以使用的，底下來看看 gofight 該如何使用。\n","inLanguage":"en","wordCount":321,"datePublished":"2016-04-06T07:18:21","dateModified":"2016-04-06T07:18:21","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["gofight, golang, Testing"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2016\/04\/gofight-tool-for-api-handler-testing-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 gofight 來測試 golang web API handler"><meta property="og:description" content="
+目前大部份的 Golang Web Framework 都可以透過 gofight 來測試，除非作者有把 ServeHTTP 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 Gin, Mux, HttpRouter 都是可以使用的，底下來看看 gofight 該如何使用。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2016\/04\/gofight-tool-for-api-handler-testing-in-golang\/","name":"用 gofight 來測試 golang web API handler"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 gofight 來測試 golang web API handler","description":"\n身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 gofight 工具，用來測試 Golang 的 http handler，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料，透過 Testify 來測試資料是否符合需求。\n目前大部份的 Golang Web Framework 都可以透過 gofight 來測試，除非作者有把 ServeHTTP 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 Gin, Mux, HttpRouter 都是可以使用的，底下來看看 gofight 該如何使用。\n","inLanguage":"en","wordCount":431,"datePublished":"2016-04-06T07:18:21","dateModified":"2016-04-06T07:18:21","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["gofight, golang, Testing"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2016\/04\/gofight-tool-for-api-handler-testing-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 gofight 來測試 golang web API handler"><meta property="og:description" content="
 身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 gofight 工具，用來測試 Golang 的 http handler，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料，透過 Testify 來測試資料是否符合需求。
 目前大部份的 Golang Web Framework 都可以透過 gofight 來測試，除非作者有把 ServeHTTP 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 Gin, Mux, HttpRouter 都是可以使用的，底下來看看 gofight 該如何使用。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="用 gofight 來測試 golang web API handler"><meta name=twitter:description content="
 身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 gofight 工具，用來測試 Golang 的 http handler，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
@@ -13,112 +13,229 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>用 gofight 來測試 golang web API handler</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 6, 2016
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;321&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#安裝方式>安裝方式</a></li><li><a href=#使用方式>使用方式</a><ul><li><a href=#自訂-header>自訂 header</a></li><li><a href=#自訂-form-data>自訂 Form Data</a></li><li><a href=#自訂-json-data>自訂 JSON Data</a></li><li><a href=#自訂-raw-data>自訂 RAW Data</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 <a href=https://github.com/appleboy/gofight>gofight</a> 工具，用來測試 <a href=https://golang.org/>Golang</a> 的 http <a href=https://golang.org/pkg/net/http/#Handler>handler</a>，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料，透過 <a href=https://github.com/stretchr/testify>Testify</a> 來測試資料是否符合需求。</p><p>目前大部份的 Golang Web Framework 都可以透過 <a href=https://github.com/appleboy/gofight>gofight</a> 來測試，除非作者有把 <code>ServeHTTP</code> 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 <a href=https://github.com/gin-gonic/gin>Gin</a>, <a href=https://github.com/gorilla/mux>Mux</a>, <a href=https://github.com/julienschmidt/httprouter>HttpRouter</a> 都是可以使用的，底下來看看 <a href=https://github.com/appleboy/gofight>gofight</a> 該如何使用。</p><h2 id=安裝方式>安裝方式</h2><pre><code class=language-bash>$ go get -u github.com/appleboy/gofight</code></pre><p><code>-u</code> 代表將 local 端程式碼更新到最新</p><h2 id=使用方式>使用方式</h2><p>不多說直接先看例子，用 golang 基本的 http handler</p><pre><code class=language-go>package main
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;431&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#安裝方式>安裝方式</a></li><li><a href=#使用方式>使用方式</a><ul><li><a href=#自訂-header>自訂 header</a></li><li><a href=#自訂-form-data>自訂 Form Data</a></li><li><a href=#自訂-json-data>自訂 JSON Data</a></li><li><a href=#自訂-raw-data>自訂 RAW Data</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 <a href=https://github.com/appleboy/gofight>gofight</a> 工具，用來測試 <a href=https://golang.org/>Golang</a> 的 http <a href=https://golang.org/pkg/net/http/#Handler>handler</a>，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料，透過 <a href=https://github.com/stretchr/testify>Testify</a> 來測試資料是否符合需求。</p><p>目前大部份的 Golang Web Framework 都可以透過 <a href=https://github.com/appleboy/gofight>gofight</a> 來測試，除非作者有把 <code>ServeHTTP</code> 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 <a href=https://github.com/gin-gonic/gin>Gin</a>, <a href=https://github.com/gorilla/mux>Mux</a>, <a href=https://github.com/julienschmidt/httprouter>HttpRouter</a> 都是可以使用的，底下來看看 <a href=https://github.com/appleboy/gofight>gofight</a> 該如何使用。</p><h2 id=安裝方式>安裝方式</h2><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ go get -u github.com/appleboy/gofight
+</code></pre></td></tr></table></div></div><p><code>-u</code> 代表將 local 端程式碼更新到最新</p><h2 id=使用方式>使用方式</h2><p>不多說直接先看例子，用 golang 基本的 http handler</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-  "io"
-  "net/http"
+<span style=color:#8b008b;font-weight:700>import</span> (
+  <span style=color:#cd5555>&#34;io&#34;</span>
+  <span style=color:#cd5555>&#34;net/http&#34;</span>
 )
 
-func BasicHelloHandler(w http.ResponseWriter, r *http.Request) {
-  io.WriteString(w, "Hello World")
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>BasicHelloHandler</span>(w http.ResponseWriter, r *http.Request) {
+  io.<span style=color:#008b45>WriteString</span>(w, <span style=color:#cd5555>&#34;Hello World&#34;</span>)
 }
 
-func BasicEngine() http.Handler {
-  mux := http.NewServeMux()
-  mux.HandleFunc("/", BasicHelloHandler)
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>BasicEngine</span>() http.Handler {
+  mux := http.<span style=color:#008b45>NewServeMux</span>()
+  mux.<span style=color:#008b45>HandleFunc</span>(<span style=color:#cd5555>&#34;/&#34;</span>, BasicHelloHandler)
 
-  return mux
-}</code></pre><p>撰寫測試</p><pre><code class=language-go>package main
+  <span style=color:#8b008b;font-weight:700>return</span> mux
+}
+</code></pre></td></tr></table></div></div><p>撰寫測試</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-  "github.com/appleboy/gofight"
-  "github.com/stretchr/testify/assert"
-  "net/http"
-  "testing"
+<span style=color:#8b008b;font-weight:700>import</span> (
+  <span style=color:#cd5555>&#34;github.com/appleboy/gofight&#34;</span>
+  <span style=color:#cd5555>&#34;github.com/stretchr/testify/assert&#34;</span>
+  <span style=color:#cd5555>&#34;net/http&#34;</span>
+  <span style=color:#cd5555>&#34;testing&#34;</span>
 )
 
-func TestBasicHelloWorld(t *testing.T) {
-  r := gofight.New()
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestBasicHelloWorld</span>(t *testing.T) {
+  r := gofight.<span style=color:#008b45>New</span>()
 
-  r.GET("/").
-    // trun on the debug mode.
-    SetDebug(true).
-    Run(BasicEngine(), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+  r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/&#34;</span>).
+    <span style=color:#228b22>// trun on the debug mode.
+</span><span style=color:#228b22></span>    <span style=color:#008b45>SetDebug</span>(<span style=color:#8b008b;font-weight:700>true</span>).
+    <span style=color:#008b45>Run</span>(<span style=color:#008b45>BasicEngine</span>(), <span style=color:#8b008b;font-weight:700>func</span>(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
 
-      assert.Equal(t, "Hello World", r.Body.String())
-      assert.Equal(t, http.StatusOK, r.Code)
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;Hello World&#34;</span>, r.Body.<span style=color:#008b45>String</span>())
+      assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
     })
-}</code></pre><h3 id=自訂-header>自訂 header</h3><p>透過 <code>SetHeader</code> 可以自訂 Request header</p><pre><code class=language-go>func TestBasicHelloWorld(t *testing.T) {
-  r := gofight.New()
-  version := "0.0.1"
+}
+</code></pre></td></tr></table></div></div><h3 id=自訂-header>自訂 header</h3><p>透過 <code>SetHeader</code> 可以自訂 Request header</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestBasicHelloWorld</span>(t *testing.T) {
+  r := gofight.<span style=color:#008b45>New</span>()
+  version := <span style=color:#cd5555>&#34;0.0.1&#34;</span>
 
-  r.GET("/").
-    // trun on the debug mode.
-    SetDebug(true).
-    SetHeader(gofight.H{
-      "X-Version": version,
+  r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/&#34;</span>).
+    <span style=color:#228b22>// trun on the debug mode.
+</span><span style=color:#228b22></span>    <span style=color:#008b45>SetDebug</span>(<span style=color:#8b008b;font-weight:700>true</span>).
+    <span style=color:#008b45>SetHeader</span>(gofight.H{
+      <span style=color:#cd5555>&#34;X-Version&#34;</span>: version,
     }).
-    Run(BasicEngine(), func(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
+    <span style=color:#008b45>Run</span>(<span style=color:#008b45>BasicEngine</span>(), <span style=color:#8b008b;font-weight:700>func</span>(r gofight.HTTPResponse, rq gofight.HTTPRequest) {
 
-      assert.Equal(t, version, rq.Header.Get("X-Version"))
-      assert.Equal(t, "Hello World", r.Body.String())
-      assert.Equal(t, http.StatusOK, r.Code)
+      assert.<span style=color:#008b45>Equal</span>(t, version, rq.Header.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;X-Version&#34;</span>))
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;Hello World&#34;</span>, r.Body.<span style=color:#008b45>String</span>())
+      assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
     })
-}</code></pre><h3 id=自訂-form-data>自訂 Form Data</h3><p>透過 <code>SetFORM</code> 來傳送 Form Data</p><pre><code class=language-go>func TestPostFormData(t *testing.T) {
-  r := gofight.New()
+}
+</code></pre></td></tr></table></div></div><h3 id=自訂-form-data>自訂 Form Data</h3><p>透過 <code>SetFORM</code> 來傳送 Form Data</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestPostFormData</span>(t *testing.T) {
+  r := gofight.<span style=color:#008b45>New</span>()
 
-  r.POST("/form").
-    SetFORM(gofight.H{
-      "a": "1",
-      "b": "2",
+  r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/form&#34;</span>).
+    <span style=color:#008b45>SetFORM</span>(gofight.H{
+      <span style=color:#cd5555>&#34;a&#34;</span>: <span style=color:#cd5555>&#34;1&#34;</span>,
+      <span style=color:#cd5555>&#34;b&#34;</span>: <span style=color:#cd5555>&#34;2&#34;</span>,
     }).
-    Run(BasicEngine(), func(r HTTPResponse, rq HTTPRequest) {
-      data := []byte(r.Body.String())
+    <span style=color:#008b45>Run</span>(<span style=color:#008b45>BasicEngine</span>(), <span style=color:#8b008b;font-weight:700>func</span>(r HTTPResponse, rq HTTPRequest) {
+      data := []<span style=color:#658b00>byte</span>(r.Body.<span style=color:#008b45>String</span>())
 
-      a, _ := jsonparser.GetString(data, "a")
-      b, _ := jsonparser.GetString(data, "b")
+      a, _ := jsonparser.<span style=color:#008b45>GetString</span>(data, <span style=color:#cd5555>&#34;a&#34;</span>)
+      b, _ := jsonparser.<span style=color:#008b45>GetString</span>(data, <span style=color:#cd5555>&#34;b&#34;</span>)
 
-      assert.Equal(t, "1", a)
-      assert.Equal(t, "2", b)
-      assert.Equal(t, http.StatusOK, r.Code)
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;1&#34;</span>, a)
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;2&#34;</span>, b)
+      assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
     })
-}</code></pre><h3 id=自訂-json-data>自訂 JSON Data</h3><p>透過 <code>SetJSON</code> 來傳送 JSON Data</p><pre><code class=language-go>func TestPostJSONData(t *testing.T) {
-  r := gofight.New()
+}
+</code></pre></td></tr></table></div></div><h3 id=自訂-json-data>自訂 JSON Data</h3><p>透過 <code>SetJSON</code> 來傳送 JSON Data</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestPostJSONData</span>(t *testing.T) {
+  r := gofight.<span style=color:#008b45>New</span>()
 
-  r.POST("/json").
-    SetJSON(gofight.D{
-      "a": 1,
-      "b": 2,
+  r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/json&#34;</span>).
+    <span style=color:#008b45>SetJSON</span>(gofight.D{
+      <span style=color:#cd5555>&#34;a&#34;</span>: <span style=color:#b452cd>1</span>,
+      <span style=color:#cd5555>&#34;b&#34;</span>: <span style=color:#b452cd>2</span>,
     }).
-    Run(BasicEngine, func(r HTTPResponse, rq HTTPRequest) {
-      data := []byte(r.Body.String())
+    <span style=color:#008b45>Run</span>(BasicEngine, <span style=color:#8b008b;font-weight:700>func</span>(r HTTPResponse, rq HTTPRequest) {
+      data := []<span style=color:#658b00>byte</span>(r.Body.<span style=color:#008b45>String</span>())
 
-      a, _ := jsonparser.GetInt(data, "a")
-      b, _ := jsonparser.GetInt(data, "b")
+      a, _ := jsonparser.<span style=color:#008b45>GetInt</span>(data, <span style=color:#cd5555>&#34;a&#34;</span>)
+      b, _ := jsonparser.<span style=color:#008b45>GetInt</span>(data, <span style=color:#cd5555>&#34;b&#34;</span>)
 
-      assert.Equal(t, 1, int(a))
-      assert.Equal(t, 2, int(b))
-      assert.Equal(t, http.StatusOK, r.Code)
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#b452cd>1</span>, <span style=color:#658b00>int</span>(a))
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#b452cd>2</span>, <span style=color:#658b00>int</span>(b))
+      assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
     })
-}</code></pre><h3 id=自訂-raw-data>自訂 RAW Data</h3><p>透過 <code>SetBody</code> 來傳送 RAW Data</p><pre><code class=language-go>func TestPostRawData(t *testing.T) {
-  r := gofight.New()
+}
+</code></pre></td></tr></table></div></div><h3 id=自訂-raw-data>自訂 RAW Data</h3><p>透過 <code>SetBody</code> 來傳送 RAW Data</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestPostRawData</span>(t *testing.T) {
+  r := gofight.<span style=color:#008b45>New</span>()
 
-  r.POST("/raw").
-    SetBody("a=1&b=1").
-    Run(BasicEngine, func(r HTTPResponse, rq HTTPRequest) {
-      data := []byte(r.Body.String())
+  r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/raw&#34;</span>).
+    <span style=color:#008b45>SetBody</span>(<span style=color:#cd5555>&#34;a=1&amp;b=1&#34;</span>).
+    <span style=color:#008b45>Run</span>(BasicEngine, <span style=color:#8b008b;font-weight:700>func</span>(r HTTPResponse, rq HTTPRequest) {
+      data := []<span style=color:#658b00>byte</span>(r.Body.<span style=color:#008b45>String</span>())
 
-      a, _ := jsonparser.GetString(data, "a")
-      b, _ := jsonparser.GetString(data, "b")
+      a, _ := jsonparser.<span style=color:#008b45>GetString</span>(data, <span style=color:#cd5555>&#34;a&#34;</span>)
+      b, _ := jsonparser.<span style=color:#008b45>GetString</span>(data, <span style=color:#cd5555>&#34;b&#34;</span>)
 
-      assert.Equal(t, "1", a)
-      assert.Equal(t, "2", b)
-      assert.Equal(t, http.StatusOK, r.Code)
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;1&#34;</span>, a)
+      assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;2&#34;</span>, b)
+      assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
     })
-}</code></pre><p>更多測試可以直接參考 <a href=https://github.com/appleboy/gofight/blob/master/gofight_test.go>gofight_test.go</a> 程式碼</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/gofight/>gofight</a>&nbsp;
+}
+</code></pre></td></tr></table></div></div><p>更多測試可以直接參考 <a href=https://github.com/appleboy/gofight/blob/master/gofight_test.go>gofight_test.go</a> 程式碼</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/gofight/>gofight</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/testing/>Testing</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2016%2f04%2fgofight-tool-for-api-handler-testing-in-golang%2f&text=%e7%94%a8%20gofight%20%e4%be%86%e6%b8%ac%e8%a9%a6%20golang%20web%20API%20handler&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2016%2f04%2fgofight-tool-for-api-handler-testing-in-golang%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2016%2f04%2fgofight-tool-for-api-handler-testing-in-golang%2f&title=%e7%94%a8%20gofight%20%e4%be%86%e6%b8%ac%e8%a9%a6%20golang%20web%20API%20handler" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2016%2f04%2fgofight-tool-for-api-handler-testing-in-golang%2f&title=%e7%94%a8%20gofight%20%e4%be%86%e6%b8%ac%e8%a9%a6%20golang%20web%20API%20handler" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2016%2f04%2fgofight-tool-for-api-handler-testing-in-golang%2f&title=%e7%94%a8%20gofight%20%e4%be%86%e6%b8%ac%e8%a9%a6%20golang%20web%20API%20handler" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2016%2f04%2fgofight-tool-for-api-handler-testing-in-golang%2f&description=%e7%94%a8%20gofight%20%e4%be%86%e6%b8%ac%e8%a9%a6%20golang%20web%20API%20handler" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2016/03/docker-commands-and-best-practices-cheat-sheet/ data-toggle=tooltip data-placement=top title="Docker 實用指令及 Best Practices Cheat Sheet 圖表">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2016/04/write-markdown-in-wordpress/ data-toggle=tooltip data-placement=top title="在 WordPress 內寫 Markdown 語法">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

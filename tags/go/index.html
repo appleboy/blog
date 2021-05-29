@@ -9,34 +9,44 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>Go</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://demo.gh.wu-boy.com/2017/09/downsize-go-binary-using-upx/><h2 class=post-title>用 upx 壓縮 Go 語言執行擋</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 1, 2017
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;127&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>剛開始學 <a href=https://golang.org>Go</a> 語言的時候，跟學習其他語言一樣，寫了底下一個簡單的 Hello World 檔案</p><pre><code class=language-go>package main
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;152&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>剛開始學 <a href=https://golang.org>Go</a> 語言的時候，跟學習其他語言一樣，寫了底下一個簡單的 Hello World 檔案</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "fmt"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
 )
 
-func main() {
-    fmt.Println("Hello World!")
-}</code></pre><p>這是一個最簡單的程式碼，接著透過 <code>go build</code> 的方式編譯出執行檔，這時候我們看看檔案大小:</p><a href=https://demo.gh.wu-boy.com/2017/09/downsize-go-binary-using-upx/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/go/>Go</a>&nbsp;
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Hello World!&#34;</span>)
+}
+</code></pre></td></tr></table></div></div><p>這是一個最簡單的程式碼，接著透過 <code>go build</code> 的方式編譯出執行檔，這時候我們看看檔案大小:</p><a href=https://demo.gh.wu-boy.com/2017/09/downsize-go-binary-using-upx/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/go/>Go</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/upx/>upx</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2017/04/devops-bot-in-golang/><h2 class=post-title>用 Go 語言打造 DevOps Bot</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 29, 2017
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;75&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=https://www.flickr.com/photos/appleboy/34200999131/in/dateposted-public/ title=18190989_10210525473186864_1567687746_n><img src="https://i0.wp.com/c1.staticflickr.com/5/4173/34200999131_48c1b84dd2_z.jpg?w=840&ssl=1" alt=18190989_10210525473186864_1567687746_n data-recalc-dims=1></a></p><p>在 4/27 參加 <a href=http://www.ithome.com.tw/>iThome</a> 舉辦的第一屆 <a href=http://chatbot.ithome.com.tw/>ChatBot Day</a>，我分享了如何用 <a href=https://golang.org>Go 語言</a> 實作 DevOps Bot，可以透過 <a href=https://developers.facebook.com/docs/messenger-platform>Facebook Messenger</a> 或 <a href=https://developers.line.me/messaging-api/overview>Line Messenger API</a> 來主動通知開發者。此議程希望可以幫助想玩 Bot 但是又不知道如何入門的開發者。如果不懂程式語言，也可以直些下載 Binary 來玩玩看。</p><a href=https://demo.gh.wu-boy.com/2017/04/devops-bot-in-golang/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/bot/>bot</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/go/>Go</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2017/03/error-handler-in-golang/><h2 class=post-title>Go 語言的錯誤訊息處理</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 23, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;493&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;652&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>每個語言對於錯誤訊息的處理方式都不同，在學習每個語言時，都要先學會如何在程式內處理錯誤訊息 (Error Handler)，而在 <a href=https://golang.org/>Go 語言</a>的錯誤處理是非常簡單，本篇會用簡單的範例教大家 Go 如何處理錯誤訊息。</p><a href=https://demo.gh.wu-boy.com/2017/03/error-handler-in-golang/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/error/>Error</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/go/>Go</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2016/02/the-simplest-way-to-use-docker-on-os-x-dlite/><h2 class=post-title>在 MAC OS 快速又簡單安裝 Docker 環境 – dlite</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 15, 2016
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;260&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;286&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在 Mac OS X 底下安裝 Docker 服務不難，只需要到 Docker Mac 教學網站下載 Docker Toolbox，就可以使用 docker-machine, docker, docker-compose 等指令操作 Docker 服務。本篇提供另外一種工具，讓 Mac 開發者可以快速使用 Docker 服務，就是這套用 Go 語言寫的 dlite 工具。
 安裝方式 dlite 提供三種方式安裝
 直接下載執行檔案 (推薦) (下載連結) 直接透過 brew 指令安裝: brew install dlite 開發者模式: git clone 專案，然後下 make dlite 產生執行檔案 請大家直接使用第一種方式安裝即可。
 使用方式 安裝 dlite 需要使用到磁碟空間及記憶體，你可以動態指定 memory 使用量，或者是磁碟空間，詳細指令可以透過 dlite install -h 觀看
-$ sudo dlite install -h Usage: dlite [OPTIONS] install [install-OPTIONS] creates an empty disk image, downloads the os, saves configuration and creates a launchd agent Help Options: -h, --help Show this help message [install command options] -c, --cpus= number of CPUs to allocate (default: 1) -d, --disk= size of disk in GiB to create (default: 20) -m, --memory= amount of memory in GiB to allocate (default: 2) -s, --ssh-key= path to public ssh key (default: $HOME/.
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 $ sudo dlite install -h Usage: dlite [OPTIONS] install [install-OPTIONS] creates an empty disk image, downloads the os, saves configuration and creates a launchd agent Help Options: -h, --help Show this help message [install command options] -c, --cpus= number of CPUs to allocate (default: 1) -d, --disk= size of disk in GiB to create (default: 20) -m, --memory= amount of memory in GiB to allocate (default: 2) -s, --ssh-key= path to public ssh key (default: $HOME/.
 <a href=https://demo.gh.wu-boy.com/2016/02/the-simplest-way-to-use-docker-on-os-x-dlite/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/dlite/>dlite</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/go/>Go</a>&nbsp;
@@ -55,7 +65,7 @@ $ sudo dlite install -h Usage: dlite [OPTIONS] install [install-OPTIONS] creates
 <a href=https://demo.gh.wu-boy.com/tags/redux/>Redux</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/webpack/>Webpack</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2014/04/go-git-service-using-go-language/><h2 class=post-title>用 Go 語言寫的 Github Git 服務</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 7, 2014
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;163&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;190&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i1.wp.com/farm4.staticflickr.com/3762/13686798143_dd15f54076_o.png?w=840&ssl=1" alt=null data-recalc-dims=1></p><p>最近看到大陸那邊用 <a href=http://golang.org/>Go</a> 語言寫了一套類似 <a href=https://github.com/>Github</a> 服務叫做 <a href=https://github.com/gogits/gogs>Gogs</a>(Go Git Service)，目前個人裝起來速度方面相當快，跟 <a href=http://gitlab.org>GitLab</a> 用 <a href=https://www.ruby-lang.org/en/>Ruby</a> 寫的 Git Service 速度有差，以功能完整性來說，GitLab 還是大勝 Gogs，安裝方式則是 Gogs 勝於 GitLab，如果最後要推薦用 Gogs 還是 GitLab，我個人還是會選 GitLab 因為畢竟還是要搭配 <a href=http://jenkins-ci.org/>Jenkins</a> 等 CI 服務才能發揮作用，這次來筆記如何在 Ubuntu 上安裝 Gogs。</p><a href=https://demo.gh.wu-boy.com/2014/04/go-git-service-using-go-language/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/github/>Github</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;

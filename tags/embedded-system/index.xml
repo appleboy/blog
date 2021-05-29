@@ -33,12 +33,33 @@ $(MAKE) &amp;&amp; $(MAKE) install ;\ --host, CC, CXX 請換上 Tool Chain 對�
 &lt;p>玩過嵌入式系統的使用者，一定都會知道 &lt;a href="http://zh.wikipedia.org/zh-tw/BusyBox">Busybox&lt;/a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel &lt;a href="http://www.netfilter.org/">netfilter&lt;/a> 部份，以及 user space 部份 &lt;a href="http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html">iptables extension&lt;/a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&amp;hellip;.。&lt;/p>
 &lt;p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。&lt;/p>
 &lt;p>if_readlist_proc 函式裡面:&lt;/p>
-&lt;pre>&lt;code class="language-c">fh = fopen_or_warn(_PATH_PROCNET_DEV, "r");
-if (!fh) {
-return if_readconf();
-}&lt;/code>&lt;/pre>
-&lt;p>看一下 /proc/net/dev 內容&lt;/p>
-&lt;pre>&lt;code class="language-bash">Inter-| Receive | Transmit
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-c" data-lang="c">fh = fopen_or_warn(_PATH_PROCNET_DEV, &lt;span style="color:#cd5555">&amp;#34;r&amp;#34;&lt;/span>);
+&lt;span style="color:#8b008b;font-weight:bold">if&lt;/span> (!fh) {
+&lt;span style="color:#8b008b;font-weight:bold">return&lt;/span> if_readconf();
+}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>看一下 /proc/net/dev 內容&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">Inter-| Receive | Transmit
 face |bytes packets errs drop fifo frame compressed multicast|bytes packets errs drop fifo colls carrier compressed
-lo: 104 1 0 0 0 0 0 0 104 1 0 0 0 0 0 0
-eth0:21798505 51360 0 0 0 0 0 0 7693686 46844 0 0 0 0 0 0&lt;/code>&lt;/pre></description></item></channel></rss>
+lo: &lt;span style="color:#b452cd">104&lt;/span> &lt;span style="color:#b452cd">1&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">104&lt;/span> &lt;span style="color:#b452cd">1&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span>
+eth0:21798505 &lt;span style="color:#b452cd">51360&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">7693686&lt;/span> &lt;span style="color:#b452cd">46844&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span> &lt;span style="color:#b452cd">0&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item></channel></rss>

@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ubuntu on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/ubuntu/</link><description>Recent content in Ubuntu on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Thu, 06 Apr 2017 08:34:14 +0000</lastBuildDate><atom:link href="https://demo.gh.wu-boy.com/tags/ubuntu/index.xml" rel="self" type="application/rss+xml"/><item><title>Debian/Ubuntu 的 update-rc.d 使用教學</title><link>https://demo.gh.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/</link><pubDate>Thu, 06 Apr 2017 08:34:14 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/33486150390/in/dateposted-public" title="Debian">&lt;img src="https://i2.wp.com/c1.staticflickr.com/3/2849/33486150390_198a19b880_n.jpg?w=840&amp;#038;ssl=1" alt="Debian" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>&lt;a href="http://manpages.ubuntu.com/manpages/precise/man8/update-rc.d.8.html">update-rc.d&lt;/a> 是在 &lt;a href="https://www.debian.org/">Debian&lt;/a> 或 &lt;a href="https://www.ubuntu.com/">Ubuntu&lt;/a> 內用來管理 &lt;code>/etc/init.d&lt;/code> 目錄內的 scripts 工具。不管是 Nginx 或 Mysql 等相關服務，都可以在 &lt;code>/etc/init.d&lt;/code> 目錄內找到相對應的 script 檔案，隨便打開一個 script 檔案就可以看到標頭有固定的格式寫法:&lt;/p>
-&lt;pre>&lt;code class="language-bash">### BEGIN INIT INFO
-# Provides: gorush
-# Required-Start: $syslog $network
-# Required-Stop: $syslog $network
-# Default-Start: 2 3 4 5
-# Default-Stop: 0 1 6
-# Short-Description: starts the gorush web server
-# Description: starts gorush using start-stop-daemon
-### END INIT INFO&lt;/code>&lt;/pre></description></item><item><title>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</title><link>https://demo.gh.wu-boy.com/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/</link><pubDate>Fri, 15 Jan 2016 01:26:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/</guid><description>&lt;p>&lt;a data-flickr-embed="true" href="https://www.flickr.com/photos/appleboy/23758702793/in/dateposted-public/" title="openssh">&lt;img src="https://i0.wp.com/farm2.staticflickr.com/1616/23758702793_abebfb7167_o.gif?resize=578%2C191&amp;#038;ssl=1" alt="openssh" data-recalc-dims="1" />&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5">5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6">6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7">7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8">8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9">9&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">&lt;span style="color:#228b22">### BEGIN INIT INFO&lt;/span>
+&lt;span style="color:#228b22"># Provides: gorush&lt;/span>
+&lt;span style="color:#228b22"># Required-Start: $syslog $network&lt;/span>
+&lt;span style="color:#228b22"># Required-Stop: $syslog $network&lt;/span>
+&lt;span style="color:#228b22"># Default-Start: 2 3 4 5&lt;/span>
+&lt;span style="color:#228b22"># Default-Stop: 0 1 6&lt;/span>
+&lt;span style="color:#228b22"># Short-Description: starts the gorush web server&lt;/span>
+&lt;span style="color:#228b22"># Description: starts gorush using start-stop-daemon&lt;/span>
+&lt;span style="color:#228b22">### END INIT INFO&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</title><link>https://demo.gh.wu-boy.com/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/</link><pubDate>Fri, 15 Jan 2016 01:26:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/</guid><description>&lt;p>&lt;a data-flickr-embed="true" href="https://www.flickr.com/photos/appleboy/23758702793/in/dateposted-public/" title="openssh">&lt;img src="https://i0.wp.com/farm2.staticflickr.com/1616/23758702793_abebfb7167_o.gif?resize=578%2C191&amp;#038;ssl=1" alt="openssh" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>&lt;a href="http://www.openssh.com/">OpenSSH&lt;/a> 今日公佈 Client Bug 漏洞 &lt;a href="http://undeadly.org/cgi?action=article&amp;amp;sid=20160114142733">CVE-2016-0777 and CVE-2016-0778&lt;/a>，發生原因是 SSH Clinet 跟 Server 溝通時，新功能 &lt;code>roaming&lt;/code> 造成傳輸過程被惡意程式破解，影響的 OpenSSH 版本為 5.4 - 7.1. 大家快看看自己是否為這版本區間。此問題會發生在 SSH Client 而不是 Server 端，所以 Linux &lt;a href="https://www.freebsd.org/">FreeBSD&lt;/a> 和 &lt;a href="https://zh.wikipedia.org/zh-tw/Mac_OS">MacOS&lt;/a> 都需要升級 OpenSSH，如果你是在 Windows 用 Putty 則不受影響。&lt;/p></description></item><item><title>Debian 7.x Install PHP 5.5 或 5.6 版本</title><link>https://demo.gh.wu-boy.com/2015/01/install-php-5-6-or-5-5-on-debian/</link><pubDate>Tue, 20 Jan 2015 05:06:10 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2015/01/install-php-5-6-or-5-5-on-debian/</guid><description>&lt;div style="margin:0 auto; text-align:center">
 &lt;a href="https://www.flickr.com/photos/appleboy/15703430593" title="screen by Bo-Yi Wu, on Flickr">&lt;img src="https://i1.wp.com/farm8.staticflickr.com/7487/15703430593_ffa1a49a44.jpg?resize=500%2C305&amp;#038;ssl=1" alt="screen" data-recalc-dims="1" />&lt;/a>
 &lt;/div>

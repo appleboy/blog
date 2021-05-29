@@ -1,7 +1,7 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>用 Traefik 搭配 Docker 快速架設服務 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="更新: 2019.01.10 新增教學影片
 
 相信大家在架設服務肯定會選一套像是 HAProxy, Nginx, Apache 或 Caddy，這四套架設的難度差不多，如果要搭配 Let&rsquo;s Encrypt 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 Golang 開發裡面已經內建了 Let&rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 Traefik，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 domain1.com 及 domain2.com。來看看如何快速設定 Traefik。
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/deploy-service-using-traefik-and-docker\/","name":"用 traefik 搭配 docker 快速架設服務"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Traefik 搭配 Docker 快速架設服務","description":"更新: 2019.01.10 新增教學影片\n\n相信大家在架設服務肯定會選一套像是 HAProxy, Nginx, Apache 或 Caddy，這四套架設的難度差不多，如果要搭配 Let\u0026rsquo;s Encrypt 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 Golang 開發裡面已經內建了 Let\u0026rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 Traefik，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 domain1.com 及 domain2.com。來看看如何快速設定 Traefik。\n\n","inLanguage":"en","wordCount":738,"datePublished":"2019-01-08T03:51:43","dateModified":"2019-01-08T03:51:43","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, drone, droneci, golang, traefik"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/deploy-service-using-traefik-and-docker\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 Traefik 搭配 Docker 快速架設服務"><meta property="og:description" content="更新: 2019.01.10 新增教學影片
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/deploy-service-using-traefik-and-docker\/","name":"用 traefik 搭配 docker 快速架設服務"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Traefik 搭配 Docker 快速架設服務","description":"更新: 2019.01.10 新增教學影片\n\n相信大家在架設服務肯定會選一套像是 HAProxy, Nginx, Apache 或 Caddy，這四套架設的難度差不多，如果要搭配 Let\u0026rsquo;s Encrypt 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 Golang 開發裡面已經內建了 Let\u0026rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 Traefik，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 domain1.com 及 domain2.com。來看看如何快速設定 Traefik。\n\n","inLanguage":"en","wordCount":834,"datePublished":"2019-01-08T03:51:43","dateModified":"2019-01-08T03:51:43","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, drone, droneci, golang, traefik"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/deploy-service-using-traefik-and-docker\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 Traefik 搭配 Docker 快速架設服務"><meta property="og:description" content="更新: 2019.01.10 新增教學影片
 
 相信大家在架設服務肯定會選一套像是 HAProxy, Nginx, Apache 或 Caddy，這四套架設的難度差不多，如果要搭配 Let&rsquo;s Encrypt 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 Golang 開發裡面已經內建了 Let&rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 Traefik，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 domain1.com 及 domain2.com。來看看如何快速設定 Traefik。
 "><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="用 Traefik 搭配 Docker 快速架設服務"><meta name=twitter:description content="更新: 2019.01.10 新增教學影片
@@ -17,255 +17,532 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>用 Traefik 搭配 Docker 快速架設服務</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 8, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;738&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片教學>影片教學</a></li><li><a href=#撰寫服務>撰寫服務</a></li><li><a href=#啟動-traefik-服務>啟動 Traefik 服務</a></li><li><a href=#啟動-app-服務>啟動 App 服務</a></li><li><a href=#搭配-lets-encrypt>搭配 Let&rsquo;s Encrypt</a></li><li><a href=#搭配-drone-自動化更新服務>搭配 Drone 自動化更新服務</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><strong>更新: 2019.01.10 新增教學影片</strong></p><p><a href="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" title="drone traefik docker deploy"><img src="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" alt="drone traefik docker deploy" title="drone traefik docker deploy"></a></p><p>相信大家在架設服務肯定會選一套像是 <a href=http://www.haproxy.org/>HAProxy</a>, <a href=https://www.nginx.com/ title=Nginx>Nginx</a>, <a href=https://httpd.apache.org/ title=Apache>Apache</a> 或 <a href=https://caddyserver.com/ title=Caddy>Caddy</a>，這四套架設的難度差不多，如果要搭配 <a href=https://letsencrypt.org/ title="Let's Encrypt">Let&rsquo;s Encrypt</a> 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 <a href=https://golang.org/ title=Golang>Golang</a> 開發裡面已經內建了 Let&rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 <a href=https://traefik.io/ title=Traefik>Traefik</a>，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 <code>domain1.com</code> 及 <code>domain2.com</code>。來看看如何快速設定 Traefik。</p><p><a href="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" title="traefik + docker + golang"><img src="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" alt="traefik + docker + golang" title="traefik + docker + golang"></a></p><h2 id=影片教學>影片教學</h2><p>不想看內文的，可以直接參考 Youtube 影片，如果喜歡的話歡迎訂閱</p><h2 id=撰寫服務>撰寫服務</h2><p>我們先透過底下 Go 語言實作後端，並且放到 <a href=https://hub.docker.com title="Docker Hub">Docker Hub</a> 內，方便之後透過 <a href=https://docs.docker.com/compose/ title=docker-compose>docker-compose</a> 設定。</p><pre><code class=language-go>package main
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;834&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片教學>影片教學</a></li><li><a href=#撰寫服務>撰寫服務</a></li><li><a href=#啟動-traefik-服務>啟動 Traefik 服務</a></li><li><a href=#啟動-app-服務>啟動 App 服務</a></li><li><a href=#搭配-lets-encrypt>搭配 Let&rsquo;s Encrypt</a></li><li><a href=#搭配-drone-自動化更新服務>搭配 Drone 自動化更新服務</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><strong>更新: 2019.01.10 新增教學影片</strong></p><p><a href="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" title="drone traefik docker deploy"><img src="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" alt="drone traefik docker deploy" title="drone traefik docker deploy"></a></p><p>相信大家在架設服務肯定會選一套像是 <a href=http://www.haproxy.org/>HAProxy</a>, <a href=https://www.nginx.com/ title=Nginx>Nginx</a>, <a href=https://httpd.apache.org/ title=Apache>Apache</a> 或 <a href=https://caddyserver.com/ title=Caddy>Caddy</a>，這四套架設的難度差不多，如果要搭配 <a href=https://letsencrypt.org/ title="Let's Encrypt">Let&rsquo;s Encrypt</a> 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 <a href=https://golang.org/ title=Golang>Golang</a> 開發裡面已經內建了 Let&rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 <a href=https://traefik.io/ title=Traefik>Traefik</a>，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 <code>domain1.com</code> 及 <code>domain2.com</code>。來看看如何快速設定 Traefik。</p><p><a href="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" title="traefik + docker + golang"><img src="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" alt="traefik + docker + golang" title="traefik + docker + golang"></a></p><h2 id=影片教學>影片教學</h2><p>不想看內文的，可以直接參考 Youtube 影片，如果喜歡的話歡迎訂閱</p><h2 id=撰寫服務>撰寫服務</h2><p>我們先透過底下 Go 語言實作後端，並且放到 <a href=https://hub.docker.com title="Docker Hub">Docker Hub</a> 內，方便之後透過 <a href=https://docs.docker.com/compose/ title=docker-compose>docker-compose</a> 設定。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "flag"
-    "fmt"
-    "log"
-    "net/http"
-    "os"
-    "time"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;flag&#34;</span>
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;log&#34;</span>
+    <span style=color:#cd5555>&#34;net/http&#34;</span>
+    <span style=color:#cd5555>&#34;os&#34;</span>
+    <span style=color:#cd5555>&#34;time&#34;</span>
 )
 
-// HelloWorld for hello world
-func HelloWorld() string {
-    return "Hello World, golang workshop!"
+<span style=color:#228b22>// HelloWorld for hello world
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>HelloWorld</span>() <span style=color:#00688b;font-weight:700>string</span> {
+    <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#cd5555>&#34;Hello World, golang workshop!&#34;</span>
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-    log.Printf("Got http request. time: %v", time.Now())
-    fmt.Fprintf(w, "I love %s!", r.URL.Path[1:])
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>handler</span>(w http.ResponseWriter, r *http.Request) {
+    log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;Got http request. time: %v&#34;</span>, time.<span style=color:#008b45>Now</span>())
+    fmt.<span style=color:#008b45>Fprintf</span>(w, <span style=color:#cd5555>&#34;I love %s!&#34;</span>, r.URL.Path[<span style=color:#b452cd>1</span>:])
 }
 
-func pinger(port string) error {
-    resp, err := http.Get("http://localhost:" + port)
-    if err != nil {
-        return err
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>pinger</span>(port <span style=color:#00688b;font-weight:700>string</span>) <span style=color:#00688b;font-weight:700>error</span> {
+    resp, err := http.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;http://localhost:&#34;</span> + port)
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        <span style=color:#8b008b;font-weight:700>return</span> err
     }
-    defer resp.Body.Close()
-    if resp.StatusCode != 200 {
-        return fmt.Errorf("server returned not-200 status code")
+    <span style=color:#8b008b;font-weight:700>defer</span> resp.Body.<span style=color:#008b45>Close</span>()
+    <span style=color:#8b008b;font-weight:700>if</span> resp.StatusCode != <span style=color:#b452cd>200</span> {
+        <span style=color:#8b008b;font-weight:700>return</span> fmt.<span style=color:#008b45>Errorf</span>(<span style=color:#cd5555>&#34;server returned not-200 status code&#34;</span>)
     }
 
-    return nil
+    <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
 }
 
-func main() {
-    var port string
-    var ping bool
-    flag.StringVar(&port, "port", "8080", "server port")
-    flag.StringVar(&port, "p", "8080", "server port")
-    flag.BoolVar(&ping, "ping", false, "check server live")
-    flag.Parse()
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    <span style=color:#8b008b;font-weight:700>var</span> port <span style=color:#00688b;font-weight:700>string</span>
+    <span style=color:#8b008b;font-weight:700>var</span> ping <span style=color:#00688b;font-weight:700>bool</span>
+    flag.<span style=color:#008b45>StringVar</span>(&amp;port, <span style=color:#cd5555>&#34;port&#34;</span>, <span style=color:#cd5555>&#34;8080&#34;</span>, <span style=color:#cd5555>&#34;server port&#34;</span>)
+    flag.<span style=color:#008b45>StringVar</span>(&amp;port, <span style=color:#cd5555>&#34;p&#34;</span>, <span style=color:#cd5555>&#34;8080&#34;</span>, <span style=color:#cd5555>&#34;server port&#34;</span>)
+    flag.<span style=color:#008b45>BoolVar</span>(&amp;ping, <span style=color:#cd5555>&#34;ping&#34;</span>, <span style=color:#8b008b;font-weight:700>false</span>, <span style=color:#cd5555>&#34;check server live&#34;</span>)
+    flag.<span style=color:#008b45>Parse</span>()
 
-    if p, ok := os.LookupEnv("PORT"); ok {
+    <span style=color:#8b008b;font-weight:700>if</span> p, ok := os.<span style=color:#008b45>LookupEnv</span>(<span style=color:#cd5555>&#34;PORT&#34;</span>); ok {
         port = p
     }
 
-    if ping {
-        if err := pinger(port); err != nil {
-            log.Printf("ping server error: %v\n", err)
+    <span style=color:#8b008b;font-weight:700>if</span> ping {
+        <span style=color:#8b008b;font-weight:700>if</span> err := <span style=color:#008b45>pinger</span>(port); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+            log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;ping server error: %v\n&#34;</span>, err)
         }
 
-        return
+        <span style=color:#8b008b;font-weight:700>return</span>
     }
 
-    http.HandleFunc("/", handler)
-    log.Println("http server run on " + port + " port")
-    log.Fatal(http.ListenAndServe(":"+port, nil))
-}</code></pre><p>撰寫 Dockerfile</p><pre><code class=language-yaml>FROM alpine:3.8
+    http.<span style=color:#008b45>HandleFunc</span>(<span style=color:#cd5555>&#34;/&#34;</span>, handler)
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;http server run on &#34;</span> + port + <span style=color:#cd5555>&#34; port&#34;</span>)
+    log.<span style=color:#008b45>Fatal</span>(http.<span style=color:#008b45>ListenAndServe</span>(<span style=color:#cd5555>&#34;:&#34;</span>+port, <span style=color:#8b008b;font-weight:700>nil</span>))
+}
+</code></pre></td></tr></table></div></div><p>撰寫 Dockerfile</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml>FROM alpine:3.8<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>LABEL maintainer=&#34;Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;&#34; \<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>org.label-schema.name=&#34;Drone Workshop&#34; \<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>org.label-schema.vendor=&#34;Bo-Yi Wu&#34; \<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>org.label-schema.schema-version=&#34;1.0&#34;<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>RUN apk add --no-cache ca-certificates &amp;&amp; \<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>rm -rf /var/cache/apk/*<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>ADD release/linux/i386/helloworld /bin/<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>ENTRYPOINT [&#34;/bin/helloworld&#34;]<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>設定 <a href=http://cloud.drone.io title=Drone>Drone</a> 自動上傳到 DockerHub，使用 <a href=https://github.com/drone/drone-docker title=drone-docker>drone-docker</a> 外掛。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#bbb>  </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>publish<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>plugins/docker:17.12<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>settings</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>repo</span>:<span style=color:#bbb> </span>appleboy/test<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>auto_tag</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>dockerfile</span>:<span style=color:#bbb> </span>Dockerfile.alpine<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>default_suffix</span>:<span style=color:#bbb> </span>alpine<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_username<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>password</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_password<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>when</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>event</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- push<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- tag<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>其中 <code>docker_username</code> 及 <code>docker_password</code> 可以到 drone 後台設定。</p><h2 id=啟動-traefik-服務>啟動 Traefik 服務</h2><p>如果只是單純綁定在非 80 或 443 port，您可以用一般帳號設定 Traefik，設定如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-toml data-lang=toml>debug = <span style=color:#8b008b;font-weight:700>false</span>
 
-LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
-  org.label-schema.name="Drone Workshop" \
-  org.label-schema.vendor="Bo-Yi Wu" \
-  org.label-schema.schema-version="1.0"
-
-RUN apk add --no-cache ca-certificates && \
-  rm -rf /var/cache/apk/*
-
-ADD release/linux/i386/helloworld /bin/
-
-ENTRYPOINT ["/bin/helloworld"]</code></pre><p>設定 <a href=http://cloud.drone.io title=Drone>Drone</a> 自動上傳到 DockerHub，使用 <a href=https://github.com/drone/drone-docker title=drone-docker>drone-docker</a> 外掛。</p><pre><code class=language-yaml>  - name: publish
-    image: plugins/docker:17.12
-    settings:
-      repo: appleboy/test
-      auto_tag: true
-      dockerfile: Dockerfile.alpine
-      default_suffix: alpine
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-    when:
-      event:
-        - push
-        - tag</code></pre><p>其中 <code>docker_username</code> 及 <code>docker_password</code> 可以到 drone 後台設定。</p><h2 id=啟動-traefik-服務>啟動 Traefik 服務</h2><p>如果只是單純綁定在非 80 或 443 port，您可以用一般帳號設定 Traefik，設定如下:</p><pre><code class=language-toml>debug = false
-
-logLevel = "INFO"
-defaultEntryPoints = ["http"]
+logLevel = <span style=color:#cd5555>&#34;INFO&#34;</span>
+defaultEntryPoints = [<span style=color:#cd5555>&#34;http&#34;</span>]
 
 [entryPoints]
   [entryPoints.http]
-  address = ":8080"
+  address = <span style=color:#cd5555>&#34;:8080&#34;</span>
 
 [retry]
 
-################################################################
-# Docker Provider
-################################################################
+<span style=color:#228b22>################################################################</span>
+<span style=color:#228b22># Docker Provider</span>
+<span style=color:#228b22>################################################################</span>
 
-# Enable Docker Provider.
+<span style=color:#228b22># Enable Docker Provider.</span>
 [docker]
 
-# Docker server endpoint. Can be a tcp or a unix socket endpoint.
-#
-# Required
-#
-endpoint = "unix:///var/run/docker.sock"
+<span style=color:#228b22># Docker server endpoint. Can be a tcp or a unix socket endpoint.</span>
+<span style=color:#228b22>#</span>
+<span style=color:#228b22># Required</span>
+<span style=color:#228b22>#</span>
+endpoint = <span style=color:#cd5555>&#34;unix:///var/run/docker.sock&#34;</span>
 
-# Enable watch docker changes.
-#
-# Optional
-#
-watch = true</code></pre><p>上面設定可以看到將 Traefik 啟動在 <code>8080</code> port，並且啟動 Docker Provider，讓 Traefik 可以自動偵測目前 Docker 啟動了哪些服務。底下是啟動 Traefik 的 docker-compose 檔案</p><pre><code class=language-yaml>version: '2'
-
-services:
-  traefik:
-    image: traefik
-    restart: always
-    ports:
-      - 8080:8080
-      # - 80:80
-      # - 443:443
-    networks:
-      - web
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/traefik.toml
-      # - ./acme.json:/acme.json
-    container_name: traefik
-
-networks:
-  web:
-    external: true</code></pre><p>啟動 Traefik 環境前需要建立虛擬網路名叫 web</p><pre><code class=language-bash>$ docker network create web
-$ docker-compose up -d</code></pre><h2 id=啟動-app-服務>啟動 App 服務</h2><p>接著只要透過 docker-compose 來啟動您的服務</p><pre><code class=language-yaml>version: '3'
-
-services:
-  app_1:
-    image: appleboy/test:alpine
-    restart: always
-    networks:
-      - web
-    logging:
-      options:
-        max-size: "100k"
-        max-file: "3"
-    labels:
-      - "traefik.docker.network=web"
-      - "traefik.enable=true"
-      - "traefik.basic.frontend.rule=Host:domain1.com"
-      - "traefik.basic.port=8080"
-      - "traefik.basic.protocol=http"
-
-  app_2:
-    image: appleboy/test:alpine
-    restart: always
-    networks:
-      - web
-    logging:
-      options:
-        max-size: "100k"
-        max-file: "3"
-    labels:
-      - "traefik.docker.network=web"
-      - "traefik.enable=true"
-      - "traefik.basic.frontend.rule=Host:domain2.com"
-      - "traefik.basic.port=8080"
-      - "traefik.basic.protocol=http"
-
-networks:
-  web:
-    external: true</code></pre><p>大家可以清楚看到透過設定 docker label 可以讓 Traefik 自動偵測到系統服務</p><pre><code class=language-yaml>    labels:
-      - "traefik.docker.network=web"
-      - "traefik.enable=true"
-      - "traefik.basic.frontend.rule=Host:domain2.com"
-      - "traefik.basic.port=8080"
-      - "traefik.basic.protocol=http"</code></pre><p>其中 <code>traefik.basic.frontend.rule</code> 可以填入網站 DNS Name，另外 <code>traefik.basic.port=8080</code> 則是服務預設啟動的 port (在 Go 語言內實作)。</p><p>驗證網站是否成功</p><pre><code class=language-bash>$ curl -v http://domain1.com:8080/test
-$ curl -v http://domain2.com:8080/test</code></pre><p><a href="https://lh3.googleusercontent.com/8RGL4EBCr8LDqhjc0y5l0o4UYTBbRY-CLbd_RKJl_PPbjr2LkgEYAc7Y7WuFxjXWKXC9OMZVi1jSV1JL18pAdRGG7PGwOi1UssZN0a-BqURPDSIZlU0X9EUlbMp7X2u_Y0qYY9DHtYw=w1920-h1080" title="bash screen"><img src="https://lh3.googleusercontent.com/8RGL4EBCr8LDqhjc0y5l0o4UYTBbRY-CLbd_RKJl_PPbjr2LkgEYAc7Y7WuFxjXWKXC9OMZVi1jSV1JL18pAdRGG7PGwOi1UssZN0a-BqURPDSIZlU0X9EUlbMp7X2u_Y0qYY9DHtYw=w1920-h1080" alt="bash screen" title="bash screen"></a></p><h2 id=搭配-lets-encrypt>搭配 Let&rsquo;s Encrypt</h2><p>這邊又要感謝 Go 語言內建 Let&rsquo;s Encrypt 套件，讓 Go 開發者可以快速整合憑證，這邊只需要修正 Traefik 服務設定檔</p><pre><code class=language-toml>logLevel = "INFO"
-defaultEntryPoints = ["https","http"]
+<span style=color:#228b22># Enable watch docker changes.</span>
+<span style=color:#228b22>#</span>
+<span style=color:#228b22># Optional</span>
+<span style=color:#228b22>#</span>
+watch = <span style=color:#8b008b;font-weight:700>true</span>
+</code></pre></td></tr></table></div></div><p>上面設定可以看到將 Traefik 啟動在 <code>8080</code> port，並且啟動 Docker Provider，讓 Traefik 可以自動偵測目前 Docker 啟動了哪些服務。底下是啟動 Traefik 的 docker-compose 檔案</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>version</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#39;2&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>traefik</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>traefik<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>ports</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#b452cd>8080</span>:<span style=color:#b452cd>8080</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#228b22># - 80:80</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#228b22># - 443:443</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- web<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>volumes</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- /var/run/docker.sock:/var/run/docker.sock<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- ./traefik.toml:/traefik.toml<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#228b22># - ./acme.json:/acme.json</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>container_name</span>:<span style=color:#bbb> </span>traefik<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>web</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>external</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>啟動 Traefik 環境前需要建立虛擬網路名叫 web</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ docker network create web
+$ docker-compose up -d
+</code></pre></td></tr></table></div></div><h2 id=啟動-app-服務>啟動 App 服務</h2><p>接著只要透過 docker-compose 來啟動您的服務</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>version</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#39;3&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>app_1</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>appleboy/test:alpine<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- web<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>logging</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>options</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-size</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;100k&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-file</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;3&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>labels</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.docker.network=web&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.enable=true&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.frontend.rule=Host:domain1.com&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.port=8080&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.protocol=http&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>app_2</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>appleboy/test:alpine<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- web<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>logging</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>options</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-size</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;100k&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-file</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;3&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>labels</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.docker.network=web&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.enable=true&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.frontend.rule=Host:domain2.com&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.port=8080&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.protocol=http&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>web</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>external</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>大家可以清楚看到透過設定 docker label 可以讓 Traefik 自動偵測到系統服務</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>labels</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.docker.network=web&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.enable=true&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.frontend.rule=Host:domain2.com&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.port=8080&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#cd5555>&#34;traefik.basic.protocol=http&#34;</span><span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>其中 <code>traefik.basic.frontend.rule</code> 可以填入網站 DNS Name，另外 <code>traefik.basic.port=8080</code> 則是服務預設啟動的 port (在 Go 語言內實作)。</p><p>驗證網站是否成功</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ curl -v http://domain1.com:8080/test
+$ curl -v http://domain2.com:8080/test
+</code></pre></td></tr></table></div></div><p><a href="https://lh3.googleusercontent.com/8RGL4EBCr8LDqhjc0y5l0o4UYTBbRY-CLbd_RKJl_PPbjr2LkgEYAc7Y7WuFxjXWKXC9OMZVi1jSV1JL18pAdRGG7PGwOi1UssZN0a-BqURPDSIZlU0X9EUlbMp7X2u_Y0qYY9DHtYw=w1920-h1080" title="bash screen"><img src="https://lh3.googleusercontent.com/8RGL4EBCr8LDqhjc0y5l0o4UYTBbRY-CLbd_RKJl_PPbjr2LkgEYAc7Y7WuFxjXWKXC9OMZVi1jSV1JL18pAdRGG7PGwOi1UssZN0a-BqURPDSIZlU0X9EUlbMp7X2u_Y0qYY9DHtYw=w1920-h1080" alt="bash screen" title="bash screen"></a></p><h2 id=搭配-lets-encrypt>搭配 Let&rsquo;s Encrypt</h2><p>這邊又要感謝 Go 語言內建 Let&rsquo;s Encrypt 套件，讓 Go 開發者可以快速整合憑證，這邊只需要修正 Traefik 服務設定檔</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-toml data-lang=toml>logLevel = <span style=color:#cd5555>&#34;INFO&#34;</span>
+defaultEntryPoints = [<span style=color:#cd5555>&#34;https&#34;</span>,<span style=color:#cd5555>&#34;http&#34;</span>]
 
 [entryPoints]
   [entryPoints.http]
-  address = ":80"
+  address = <span style=color:#cd5555>&#34;:80&#34;</span>
     [entryPoints.http.redirect]
-    entryPoint = "https"
+    entryPoint = <span style=color:#cd5555>&#34;https&#34;</span>
   [entryPoints.https]
-  address = ":443"
+  address = <span style=color:#cd5555>&#34;:443&#34;</span>
   [entryPoints.https.tls]
 
 [retry]
 
 [docker]
-endpoint = "unix:///var/run/docker.sock"
-watch = true
-exposedByDefault = false
+endpoint = <span style=color:#cd5555>&#34;unix:///var/run/docker.sock&#34;</span>
+watch = <span style=color:#8b008b;font-weight:700>true</span>
+exposedByDefault = <span style=color:#8b008b;font-weight:700>false</span>
 
 [acme]
-email = "appleboy.tw@gmail.com"
-storage = "acme.json"
-entryPoint = "https"
-onHostRule = true
+email = <span style=color:#cd5555>&#34;appleboy.tw@gmail.com&#34;</span>
+storage = <span style=color:#cd5555>&#34;acme.json&#34;</span>
+entryPoint = <span style=color:#cd5555>&#34;https&#34;</span>
+onHostRule = <span style=color:#8b008b;font-weight:700>true</span>
 [acme.httpChallenge]
-entryPoint = "http"</code></pre><p>跟之前 Traefik 比較多了 <code>entryPoints</code> 及 <code>acme</code>，另外在 docker-compose 內要把 80 及 443 port 啟動，並且將 acme.json 掛載進去</p><pre><code class=language-yaml>version: '2'
-
-services:
-  traefik:
-    image: traefik
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - web
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/traefik.toml
-      - ./acme.json:/acme.json
-    container_name: traefik
-
-networks:
-  web:
-    external: true</code></pre><p>其中先建立 <code>acme.json</code> 並且設定權限為 600</p><pre><code class=language-bash>$ touch acme.json
-$ chmod 600 acme.json</code></pre><p>再重新啟動 Traefik 服務</p><pre><code class=language-bash>$ docker-compose down
-$ docker-compose up -d</code></pre><p>最後只要改 <code>traefik.basic.frontend.rule</code> 換成真實的 Domain，你會發現 Traefik 會將憑證內容寫入 acme.json。這也為什麼我們需要將 acme.json 建立在 Host 空間上。</p><h2 id=搭配-drone-自動化更新服務>搭配 Drone 自動化更新服務</h2><p>未來所有服務都可以透過 docker-compose 來啟動，所以只要透過 Drone 將 一些 yaml 設定檔案傳到服務器即可</p><pre><code class=language-yaml>  - name: scp
-    image: appleboy/drone-scp
-    pull: true
-    settings:
-      host: demo1.com
-      username: deploy
-      key:
-        from_secret: deploy_key
-      target: /home/deploy/gobento
-      rm: true
-      source:
-        - release/*
-        - Dockerfile
-        - docker-compose.yml</code></pre><p>上面將檔案丟到遠端機器後，再透過 ssh 編譯並且部署</p><pre><code class=language-yaml>  - name: ssh
-    image: appleboy/drone-ssh
-    pull: true
-    settings:
-      host: console.gobento.co
-      user: deploy
-      key:
-        from_secret: deploy_key
-      target: /home/deploy/demo
-      rm: true
-      script:
-        - cd demo && docker-compose build
-        - docker-compose up -d --force-recreate --no-deps demo
-        - docker images --quiet --filter=dangling=true | xargs --no-run-if-empty docker rmi -f</code></pre><h2 id=心得>心得</h2><p>本篇教大家一步一步建立 Traefik 搭配 Docker，相對於 Nginx 我覺得簡單非常多，尤其時可以在 docker-compose 內設定 docker Label，而 Traefik 會自動偵測設定，並且重新啟動服務。希望這篇對於想要快速架設網站的開發者有幫助。如果您有在用 <a href=https://aws.amazon.com/tw/ title="AWS 服務">AWS 服務</a>，想省錢可以使用 Traefik 幫您省下一台 <a href=https://aws.amazon.com/tw/elasticloadbalancing/ title="ALB 或 ELB">ALB 或 ELB</a> 的費用。最後補充一篇效能文章：『<a href=https://zhuanlan.zhihu.com/p/41354937 title=NGINX、HAProxy和Traefik负载均衡能力对比>NGINX、HAProxy和Traefik负载均衡能力对比</a>』有興趣可以參考一下。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+entryPoint = <span style=color:#cd5555>&#34;http&#34;</span>
+</code></pre></td></tr></table></div></div><p>跟之前 Traefik 比較多了 <code>entryPoints</code> 及 <code>acme</code>，另外在 docker-compose 內要把 80 及 443 port 啟動，並且將 acme.json 掛載進去</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>version</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#39;2&#39;</span><span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>traefik</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>traefik<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>ports</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#b452cd>80</span>:<span style=color:#b452cd>80</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- <span style=color:#b452cd>443</span>:<span style=color:#b452cd>443</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- web<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>volumes</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- /var/run/docker.sock:/var/run/docker.sock<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- ./traefik.toml:/traefik.toml<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- ./acme.json:/acme.json<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>container_name</span>:<span style=color:#bbb> </span>traefik<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>networks</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>web</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>external</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>其中先建立 <code>acme.json</code> 並且設定權限為 600</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ touch acme.json
+$ chmod <span style=color:#b452cd>600</span> acme.json
+</code></pre></td></tr></table></div></div><p>再重新啟動 Traefik 服務</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ docker-compose down
+$ docker-compose up -d
+</code></pre></td></tr></table></div></div><p>最後只要改 <code>traefik.basic.frontend.rule</code> 換成真實的 Domain，你會發現 Traefik 會將憑證內容寫入 acme.json。這也為什麼我們需要將 acme.json 建立在 Host 空間上。</p><h2 id=搭配-drone-自動化更新服務>搭配 Drone 自動化更新服務</h2><p>未來所有服務都可以透過 docker-compose 來啟動，所以只要透過 Drone 將 一些 yaml 設定檔案傳到服務器即可</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#bbb>  </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>scp<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>appleboy/drone-scp<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>settings</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>host</span>:<span style=color:#bbb> </span>demo1.com<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb> </span>deploy<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>key</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>deploy_key<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>target</span>:<span style=color:#bbb> </span>/home/deploy/gobento<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>rm</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>source</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- release/*<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- Dockerfile<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- docker-compose.yml<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>上面將檔案丟到遠端機器後，再透過 ssh 編譯並且部署</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#bbb>  </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>ssh<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>appleboy/drone-ssh<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>settings</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>host</span>:<span style=color:#bbb> </span>console.gobento.co<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>user</span>:<span style=color:#bbb> </span>deploy<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>key</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>deploy_key<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>target</span>:<span style=color:#bbb> </span>/home/deploy/demo<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>rm</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>script</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- cd demo &amp;&amp; docker-compose build<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- docker-compose up -d --force-recreate --no-deps demo<span style=color:#bbb>
+</span><span style=color:#bbb>        </span>- docker images --quiet --filter=dangling=true | xargs --no-run-if-empty docker rmi -f<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><h2 id=心得>心得</h2><p>本篇教大家一步一步建立 Traefik 搭配 Docker，相對於 Nginx 我覺得簡單非常多，尤其時可以在 docker-compose 內設定 docker Label，而 Traefik 會自動偵測設定，並且重新啟動服務。希望這篇對於想要快速架設網站的開發者有幫助。如果您有在用 <a href=https://aws.amazon.com/tw/ title="AWS 服務">AWS 服務</a>，想省錢可以使用 Traefik 幫您省下一台 <a href=https://aws.amazon.com/tw/elasticloadbalancing/ title="ALB 或 ELB">ALB 或 ELB</a> 的費用。最後補充一篇效能文章：『<a href=https://zhuanlan.zhihu.com/p/41354937 title=NGINX、HAProxy和Traefik负载均衡能力对比>NGINX、HAProxy和Traefik负载均衡能力对比</a>』有興趣可以參考一下。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;

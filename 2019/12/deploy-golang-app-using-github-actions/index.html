@@ -5,7 +5,7 @@ GitHub Actions 也推出一陣子了，相信有不少雷，也是有很多優�
 編譯: 透過 go build 編譯出 Binary 檔案
 上傳: 寫 Dockerfile 將 Binary 包進容器內
 啟動: 透過 docker-compose 方式來更新服務
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/12\/deploy-golang-app-using-github-actions\/","name":"用 git hub actions 部署 go 語言服務"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 GitHub Actions 部署 Go 語言服務","description":"GitHub Actions 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 Travis 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 Go 語言服務，會用一個簡單 httpd 範例教大家如何透過 Docker 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -\u0026gt; 編譯 -\u0026gt; 上傳 -\u0026gt; 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。\n 測試: Unit Testing 多一層保護 編譯: 透過 go build 編譯出 Binary 檔案 上傳: 寫 Dockerfile 將 Binary 包進容器內 啟動: 透過 docker-compose 方式來更新服務 ","inLanguage":"en","wordCount":413,"datePublished":"2019-12-14T11:44:47","dateModified":"2019-12-14T11:44:47","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, Github, GitHub Actions, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/12\/deploy-golang-app-using-github-actions\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 GitHub Actions 部署 Go 語言服務"><meta property="og:description" content="
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/12\/deploy-golang-app-using-github-actions\/","name":"用 git hub actions 部署 go 語言服務"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 GitHub Actions 部署 Go 語言服務","description":"GitHub Actions 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 Travis 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 Go 語言服務，會用一個簡單 httpd 範例教大家如何透過 Docker 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -\u0026gt; 編譯 -\u0026gt; 上傳 -\u0026gt; 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。\n 測試: Unit Testing 多一層保護 編譯: 透過 go build 編譯出 Binary 檔案 上傳: 寫 Dockerfile 將 Binary 包進容器內 啟動: 透過 docker-compose 方式來更新服務 ","inLanguage":"en","wordCount":377,"datePublished":"2019-12-14T11:44:47","dateModified":"2019-12-14T11:44:47","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, Github, GitHub Actions, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/12\/deploy-golang-app-using-github-actions\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 GitHub Actions 部署 Go 語言服務"><meta property="og:description" content="
 GitHub Actions 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 Travis 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 Go 語言服務，會用一個簡單 httpd 範例教大家如何透過 Docker 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -> 編譯 -> 上傳 -> 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。
 
 測試: Unit Testing 多一層保護
@@ -24,112 +24,236 @@ GitHub Actions 也推出一陣子了，相信有不少雷，也是有很多優�
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>用 GitHub Actions 部署 Go 語言服務</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 14, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;413&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片介紹>影片介紹</a></li><li><a href=#啟動-github-actions>啟動 GitHub Actions</a></li><li><a href=#go-語言流程>Go 語言流程</a></li><li><a href=#使用容器當做基底>使用容器當做基底</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src="https://lh3.googleusercontent.com/NI2lnMOEhkrZJ-x_bmre_RoQxLnzYcpPXVB_p6eBMmPQ73yDgoftVmUHvk0P86Tt2MM_Q23IHNu7qq7j99RXzTEzG95BU1u1vdpell9krVGHlUmW3Ng7J7egj1LHugWHcHoezCty9o0=w1920-h1080" alt></p><p><a href=https://github.com/features/actions>GitHub Actions</a> 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 <a href=https://travis-ci.org/>Travis</a> 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 <a href=https://golang.org>Go 語言</a>服務，會用一個簡單 httpd 範例教大家如何透過 <a href=https://docker.com>Docker</a> 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -> 編譯 -> 上傳 -> 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。</p><ul><li>測試: Unit Testing 多一層保護</li><li>編譯: 透過 go build 編譯出 Binary 檔案</li><li>上傳: 寫 Dockerfile 將 Binary 包進容器內</li><li>啟動: 透過 docker-compose 方式來更新服務</li></ul><h2 id=影片介紹>影片介紹</h2><p>同步放在 Udemy 平台上面，有興趣的可以直接參考底下:</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=20191202">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=20191202">一天學會 DevOps 自動化測試及部署</a></li></ul><h2 id=啟動-github-actions>啟動 GitHub Actions</h2><p>只要在專案內建立 <code>.github/workflows/</code> 目錄，裡面可以放置多個 YAML 檔案，上傳至 GitHub，就可以開始使用了。我們先在該目錄建立一個 <code>deploy.yml</code> 檔案</p><pre><code class=language-yaml>name: Build and Test
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-jobs:
-  lint:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.platform }}
-    steps:
-    - name: hello world
-      run: |
-        echo "Hello World"</code></pre><p>可以看到現在可以直接在 GitHub 上面執行 Ubuntu 或 Windows 或 MacOS，詳細版本資訊可以<a href=https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on>參考這邊</a>。接著針對 GO 語言四個步驟來分別撰寫 YAML 設定。</p><h2 id=go-語言流程>Go 語言流程</h2><p>第一個步驟是下載專案原始碼，這邊跟其他 CI/CD 工具不一樣的是預設流程不會 checkout source code，必須要自己指定。</p><pre><code class=language-yaml>steps:
-- name: Check out code
-  uses: actions/checkout@v1</code></pre><p>第二個步驟是安裝 Go 語言環境，原因 Ubuntu 環境預設是空的，所以任何語言都需要再額外安裝:</p><pre><code class=language-yaml>strategy:
-  matrix:
-    go-version: [1.13.x]
-steps:
-- name: Install Go
-  uses: actions/setup-go@v1
-  with:
-    go-version: ${{ matrix.go-version }}</code></pre><p>第三步驟是測試</p><pre><code class=language-yaml>- name: Tesing
-  run: |
-    go test -v .</code></pre><p>第四步驟是編譯 binary 檔案</p><pre><code class=language-yaml>- name: Build binary
-  run: |
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -a -o release/linux/amd64/helloworld</code></pre><p>第五個步驟是將 binary 檔案包成容器上傳到 Docker Hub:</p><pre><code class=language-yaml>- name: Publish to Registry
-  uses: elgohr/Publish-Docker-Github-Action@2.9
-  with:
-    name: appleboy/helloworld
-    username: appleboy
-    password: ${{ secrets.docker_password }}
-    dockerfile: docker/helloworld/Dockerfile.linux.amd64</code></pre><p>其中 Dockerfile 內容為:</p><pre><code class=language-dockerfile>FROM plugins/base:linux-amd64
-
-LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
-  org.label-schema.name="helloworld" \
-  org.label-schema.vendor="Bo-Yi Wu" \
-  org.label-schema.schema-version="1.0"
-
-EXPOSE 8080
-
-COPY release/linux/amd64/helloworld /bin/
-
-ENTRYPOINT ["/bin/helloworld"]</code></pre><p>最後步驟為連線到遠端伺服器並重新啟動服務，最簡單方式就是透過 <a href=https://docs.docker.com/compose/>docker-compose</a> 來重新啟動。這邊透過 <a href=https://github.com/appleboy/ssh-action>ssh-actions</a></p><pre><code class=language-yaml>- name: Update the API service
-  uses: appleboy/ssh-action@v0.0.6
-  with:
-    host: ${{ secrets.ssh_host }}
-    username: deploy
-    key: ${{ secrets.ssh_key }}
-    script_stop: true
-    script: |
-      cd golang && docker-compose pull && docker-compose up -d</code></pre><p>全部設定檔如下:</p><pre><code class=language-yaml>name: Build and Test
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-jobs:
-  build:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
-    steps:
-    - name: Install Go
-      uses: actions/setup-go@v1
-      with:
-        go-version: ${{ matrix.go-version }}
-
-    - name: Check out code
-      uses: actions/checkout@v1
-
-    - name: Tesing
-      run: |
-        make test
-
-    - name: Build binary
-      run: |
-        make build_linux_amd64
-
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@2.9
-      with:
-        name: appleboy/helloworld
-        username: appleboy
-        password: ${{ secrets.docker_password }}
-        dockerfile: docker/helloworld/Dockerfile.linux.amd64
-
-    - name: Update the API service
-      uses: appleboy/ssh-action@v0.0.6
-      with:
-        host: ${{ secrets.ssh_host }}
-        username: deploy
-        key: ${{ secrets.ssh_key }}
-        script_stop: true
-        script: |
-          cd golang && docker-compose pull && docker-compose up -d</code></pre><h2 id=使用容器當做基底>使用容器當做基底</h2><p>從上面的設定檔我會有個疑問，就是每一個 Job 都要從最初始化安裝環境，像上面就是安裝 Go 語言環境。那能不能直接選用 Go 官方提供的容器當作基底，這樣就可以少裝一個步驟，答案是可以的，每一個 Job 都可以指定不同的容器來啟動</p><pre><code class=language-yaml>jobs:
-  build:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
-    container: golang:1.13</code></pre><p>上面這段意思是就是，先拿 Ubuntu 當作系統，在上面跑 <code>golang:1.13</code>，這樣 <code>build</code> 這個 Job 就是以官方的容器當作基底做後續處理。也就是不再依賴 <code>actions/setup-go@v1</code> 套件了。</p><h2 id=心得>心得</h2><p>雖然 GitHub Actions 已經正式 Release 了，但是要用在 Production 可能還需要等一陣子，原因是貿然轉換過來，需要一些時間來確認是否全部的流程都有人寫成 Plugin 放在 <a href="https://github.com/marketplace?type=actions">Marketplace</a>，找不到的話，就必須要自己去撰寫，有好處也有壞處。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;377&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片介紹>影片介紹</a></li><li><a href=#啟動-github-actions>啟動 GitHub Actions</a></li><li><a href=#go-語言流程>Go 語言流程</a></li><li><a href=#使用容器當做基底>使用容器當做基底</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src="https://lh3.googleusercontent.com/NI2lnMOEhkrZJ-x_bmre_RoQxLnzYcpPXVB_p6eBMmPQ73yDgoftVmUHvk0P86Tt2MM_Q23IHNu7qq7j99RXzTEzG95BU1u1vdpell9krVGHlUmW3Ng7J7egj1LHugWHcHoezCty9o0=w1920-h1080" alt></p><p><a href=https://github.com/features/actions>GitHub Actions</a> 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 <a href=https://travis-ci.org/>Travis</a> 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 <a href=https://golang.org>Go 語言</a>服務，會用一個簡單 httpd 範例教大家如何透過 <a href=https://docker.com>Docker</a> 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -> 編譯 -> 上傳 -> 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。</p><ul><li>測試: Unit Testing 多一層保護</li><li>編譯: 透過 go build 編譯出 Binary 檔案</li><li>上傳: 寫 Dockerfile 將 Binary 包進容器內</li><li>啟動: 透過 docker-compose 方式來更新服務</li></ul><h2 id=影片介紹>影片介紹</h2><p>同步放在 Udemy 平台上面，有興趣的可以直接參考底下:</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=20191202">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=20191202">一天學會 DevOps 自動化測試及部署</a></li></ul><h2 id=啟動-github-actions>啟動 GitHub Actions</h2><p>只要在專案內建立 <code>.github/workflows/</code> 目錄，裡面可以放置多個 YAML 檔案，上傳至 GitHub，就可以開始使用了。我們先在該目錄建立一個 <code>deploy.yml</code> 檔案</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Build and Test<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>on</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>push</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>branches</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- master<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull_request</span>:<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>jobs</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>lint</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>strategy</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>matrix</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>platform</span>:<span style=color:#bbb> </span>[ubuntu-latest, windows-latest, macos-latest]<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>runs-on</span>:<span style=color:#bbb> </span>${{ matrix.platform }}<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>steps</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>hello world<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>run</span>:<span style=color:#bbb> </span>|<span style=color:#cd5555>
+</span><span style=color:#cd5555>        </span><span style=color:#bbb>        </span>echo &#34;Hello World&#34;<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>可以看到現在可以直接在 GitHub 上面執行 Ubuntu 或 Windows 或 MacOS，詳細版本資訊可以<a href=https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on>參考這邊</a>。接著針對 GO 語言四個步驟來分別撰寫 YAML 設定。</p><h2 id=go-語言流程>Go 語言流程</h2><p>第一個步驟是下載專案原始碼，這邊跟其他 CI/CD 工具不一樣的是預設流程不會 checkout source code，必須要自己指定。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>steps</span>:<span style=color:#bbb>
+</span><span style=color:#bbb></span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Check out code<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>actions/checkout@v1<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>第二個步驟是安裝 Go 語言環境，原因 Ubuntu 環境預設是空的，所以任何語言都需要再額外安裝:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>strategy</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>matrix</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>go-version</span>:<span style=color:#bbb> </span>[<span style=color:#b452cd>1.13</span>.x]<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>steps</span>:<span style=color:#bbb>
+</span><span style=color:#bbb></span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Install Go<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>actions/setup-go@v1<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>go-version</span>:<span style=color:#bbb> </span>${{ matrix.go-version }}<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>第三步驟是測試</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Tesing<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>run</span>:<span style=color:#bbb> </span>|<span style=color:#cd5555>
+</span><span style=color:#cd5555>    </span><span style=color:#bbb>    </span>go test -v .<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>第四步驟是編譯 binary 檔案</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Build binary<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>run</span>:<span style=color:#bbb> </span>|<span style=color:#cd5555>
+</span><span style=color:#cd5555>    </span><span style=color:#bbb>    </span>CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -v -a -o release/linux/amd64/helloworld<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>第五個步驟是將 binary 檔案包成容器上傳到 Docker Hub:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Publish to Registry<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>elgohr/Publish-Docker-Github-Action@2.9<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>appleboy/helloworld<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb> </span>appleboy<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>password</span>:<span style=color:#bbb> </span>${{ secrets.docker_password }}<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>dockerfile</span>:<span style=color:#bbb> </span>docker/helloworld/Dockerfile.linux.amd64<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>其中 Dockerfile 內容為:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-dockerfile data-lang=dockerfile><span style=color:#8b008b;font-weight:700>FROM</span><span style=color:#cd5555> plugins/base:linux-amd64</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>LABEL</span> <span style=color:#00688b>maintainer</span>=<span style=color:#cd5555>&#34;Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;&#34;</span> <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  org.label-schema.name=<span style=color:#cd5555>&#34;helloworld&#34;</span> <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  org.label-schema.vendor=<span style=color:#cd5555>&#34;Bo-Yi Wu&#34;</span> <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  org.label-schema.schema-version=<span style=color:#cd5555>&#34;1.0&#34;</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>EXPOSE</span><span style=color:#cd5555> 8080</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> release/linux/amd64/helloworld /bin/<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENTRYPOINT</span> [<span style=color:#cd5555>&#34;/bin/helloworld&#34;</span>]<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table></div></div><p>最後步驟為連線到遠端伺服器並重新啟動服務，最簡單方式就是透過 <a href=https://docs.docker.com/compose/>docker-compose</a> 來重新啟動。這邊透過 <a href=https://github.com/appleboy/ssh-action>ssh-actions</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Update the API service<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>appleboy/ssh-action@v0.0.6<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>host</span>:<span style=color:#bbb> </span>${{ secrets.ssh_host }}<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb> </span>deploy<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>key</span>:<span style=color:#bbb> </span>${{ secrets.ssh_key }}<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>script_stop</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>script</span>:<span style=color:#bbb> </span>|<span style=color:#cd5555>
+</span><span style=color:#cd5555>      </span><span style=color:#bbb>      </span>cd golang &amp;&amp; docker-compose pull &amp;&amp; docker-compose up -d<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>全部設定檔如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Build and Test<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>on</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>push</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>branches</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- master<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull_request</span>:<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>jobs</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>build</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>strategy</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>matrix</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>platform</span>:<span style=color:#bbb> </span>[ubuntu-latest]<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>runs-on</span>:<span style=color:#bbb> </span>${{ matrix.platform }}<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>steps</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Install Go<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>actions/setup-go@v1<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>go-version</span>:<span style=color:#bbb> </span>${{ matrix.go-version }}<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Check out code<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>actions/checkout@v1<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Tesing<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>run</span>:<span style=color:#bbb> </span>|<span style=color:#cd5555>
+</span><span style=color:#cd5555>        </span><span style=color:#bbb>        </span>make test<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Build binary<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>run</span>:<span style=color:#bbb> </span>|<span style=color:#cd5555>
+</span><span style=color:#cd5555>        </span><span style=color:#bbb>        </span>make build_linux_amd64<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Publish to Registry<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>elgohr/Publish-Docker-Github-Action@2.9<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>appleboy/helloworld<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb> </span>appleboy<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>password</span>:<span style=color:#bbb> </span>${{ secrets.docker_password }}<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>dockerfile</span>:<span style=color:#bbb> </span>docker/helloworld/Dockerfile.linux.amd64<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>Update the API service<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>uses</span>:<span style=color:#bbb> </span>appleboy/ssh-action@v0.0.6<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>with</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>host</span>:<span style=color:#bbb> </span>${{ secrets.ssh_host }}<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb> </span>deploy<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>key</span>:<span style=color:#bbb> </span>${{ secrets.ssh_key }}<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>script_stop</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>script</span>:<span style=color:#bbb> </span>|<span style=color:#cd5555>
+</span><span style=color:#cd5555>          </span><span style=color:#bbb>          </span>cd golang &amp;&amp; docker-compose pull &amp;&amp; docker-compose up -d<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><h2 id=使用容器當做基底>使用容器當做基底</h2><p>從上面的設定檔我會有個疑問，就是每一個 Job 都要從最初始化安裝環境，像上面就是安裝 Go 語言環境。那能不能直接選用 Go 官方提供的容器當作基底，這樣就可以少裝一個步驟，答案是可以的，每一個 Job 都可以指定不同的容器來啟動</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>jobs</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>build</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>strategy</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>matrix</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>platform</span>:<span style=color:#bbb> </span>[ubuntu-latest]<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>runs-on</span>:<span style=color:#bbb> </span>${{ matrix.platform }}<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>container</span>:<span style=color:#bbb> </span>golang:1.13<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>上面這段意思是就是，先拿 Ubuntu 當作系統，在上面跑 <code>golang:1.13</code>，這樣 <code>build</code> 這個 Job 就是以官方的容器當作基底做後續處理。也就是不再依賴 <code>actions/setup-go@v1</code> 套件了。</p><h2 id=心得>心得</h2><p>雖然 GitHub Actions 已經正式 Release 了，但是要用在 Production 可能還需要等一陣子，原因是貿然轉換過來，需要一些時間來確認是否全部的流程都有人寫成 Plugin 放在 <a href="https://github.com/marketplace?type=actions">Marketplace</a>，找不到的話，就必須要自己去撰寫，有好處也有壞處。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/github/>Github</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f12%2fdeploy-golang-app-using-github-actions%2f&text=%e7%94%a8%20GitHub%20Actions%20%e9%83%a8%e7%bd%b2%20Go%20%e8%aa%9e%e8%a8%80%e6%9c%8d%e5%8b%99&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f12%2fdeploy-golang-app-using-github-actions%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f12%2fdeploy-golang-app-using-github-actions%2f&title=%e7%94%a8%20GitHub%20Actions%20%e9%83%a8%e7%bd%b2%20Go%20%e8%aa%9e%e8%a8%80%e6%9c%8d%e5%8b%99" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f12%2fdeploy-golang-app-using-github-actions%2f&title=%e7%94%a8%20GitHub%20Actions%20%e9%83%a8%e7%bd%b2%20Go%20%e8%aa%9e%e8%a8%80%e6%9c%8d%e5%8b%99" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f12%2fdeploy-golang-app-using-github-actions%2f&title=%e7%94%a8%20GitHub%20Actions%20%e9%83%a8%e7%bd%b2%20Go%20%e8%aa%9e%e8%a8%80%e6%9c%8d%e5%8b%99" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f12%2fdeploy-golang-app-using-github-actions%2f&description=%e7%94%a8%20GitHub%20Actions%20%e9%83%a8%e7%bd%b2%20Go%20%e8%aa%9e%e8%a8%80%e6%9c%8d%e5%8b%99" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2019/12/setup-laravel-environment-in-15-minutes/ data-toggle=tooltip data-placement=top title="用 15 分鐘快速打造 Laravel 開發環境">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine/ data-toggle=tooltip data-placement=top title="使用 Go Channel 及 Goroutine 時機">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2019/12/deploy-golang-app-using-github-actions>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2019/12/deploy-golang-app-using-github-actions'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

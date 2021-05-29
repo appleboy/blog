@@ -39,7 +39,15 @@
 &lt;p>相信大家踏入 &lt;a href="https://golang.org/">Go 語言&lt;/a>的世界，肯定是被強大的 Concurrency 所吸引，Go 語言用最簡單的關鍵字 &lt;code>go&lt;/code> 就可以將任務丟到背景處理，但是怎麼有效率的控制 Concurrency，這是入門 Go 語言必學的項目，本篇會介紹三種方式來帶大家認識 Concurrency，而這三種方式分別對應到三個不同的名詞: &lt;a href="https://gobyexample.com/waitgroups">WaitGroup&lt;/a>, &lt;a href="https://tour.golang.org/concurrency/2">Channel&lt;/a>, 及 &lt;a href="https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/">Context&lt;/a>，底下用簡單的範例帶大家了解。&lt;/p></description></item><item><title>Go 1.15 新增 Module cache 環境變數</title><link>https://demo.gh.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/</link><pubDate>Sat, 13 Jun 2020 13:45:47 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
 &lt;p>相信各位開發者在寫 &lt;a href="https://golang.org">Go 語言&lt;/a>專案，現在肯定都是使用 &lt;a href="https://blog.golang.org/using-go-modules">Go module&lt;/a> 了，而 Go Module 檔案預設寫在 &lt;code>/go/pkg/mod&lt;/code> 目錄內，要串 CI/CD 流程時，由於不在專案路徑底下，所以每一個 Container 無法共用 &lt;code>/go/pkg/mod&lt;/code> 路徑，造成重複下載第三方套件，其實跨容器的解決方式可以透過 &lt;a href="https://cloud.drone.io">Drone&lt;/a> 的 &lt;a href="https://docs.drone.io/pipeline/docker/syntax/volumes/temporary/">Temporary Volumes&lt;/a> 方式解決，但是最終希望跑完編譯流程時，可以將最後的 mod 目錄打包留到下次的 CI/CD 部署流程使用，這時候如果可以改變 &lt;code>/go/pkg/mod&lt;/code> 路徑，就可以動態調整目錄結構了。底下是針對 Drone 這套部署工具進行解說。&lt;/p></description></item><item><title>Go 語言用 pprof 找出程式碼效能瓶頸</title><link>https://demo.gh.wu-boy.com/2020/06/golang-benchmark-pprof/</link><pubDate>Sun, 07 Jun 2020 05:11:37 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/06/golang-benchmark-pprof/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://golang.org">Go 語言&lt;/a>除了內建強大的測試工具 (&lt;a href="https://golang.org/pkg/testing/">go test&lt;/a>) 之外，也提供了效能評估的工具 (&lt;a href="https://blog.golang.org/pprof">go tool pprof&lt;/a>)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。&lt;/p>
-&lt;pre>&lt;code class="language-bash">go test -bench=. -benchtime=3s ./lexer/&lt;/code>&lt;/pre></description></item><item><title>用 10 分鐘了解 Go 語言 context package 使用場景及介紹</title><link>https://demo.gh.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</link><pubDate>Sun, 03 May 2020 02:45:07 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go &lt;span style="color:#658b00">test&lt;/span> -bench=. -benchtime=3s ./lexer/
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>用 10 分鐘了解 Go 語言 context package 使用場景及介紹</title><link>https://demo.gh.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</link><pubDate>Sun, 03 May 2020 02:45:07 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://golang.org/pkg/context/">context&lt;/a> 是在 &lt;a href="https://golang.org/">Go 語言&lt;/a> 1.7 版才正式被納入官方標準庫內，為什麼今天要介紹 context 使用方式呢？原因很簡單，在初學 Go 時，寫 API 時，常常不時就會看到在 http handler 的第一個參數就會是 &lt;code>ctx context.Context&lt;/code>，而這個 context 在這邊使用的目的及含義到底是什麼呢，本篇就是帶大家了解什麼是 context，以及使用的場景及方式，內容不會提到 context 的原始碼，而是用幾個實際例子來了解。&lt;/p></description></item><item><title>使用 Docker BuildKit 加速編譯 Image</title><link>https://demo.gh.wu-boy.com/2020/04/speed-up-docker-build-using-docker-buildkit/</link><pubDate>Sun, 26 Apr 2020 05:29:32 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2020/04/speed-up-docker-build-using-docker-buildkit/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" title="docker buildkit">&lt;img src="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" alt="docker buildkit" title="docker buildkit">&lt;/a>&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;a href="https://github.com/go-training/docker-buildkit-demo">程式碼範例請看這邊&lt;/a>&lt;/p>
@@ -126,75 +134,165 @@ go mod tidy
 &lt;p>本篇要跟大家聊聊在 &lt;a href="https://golang.org" title="Go 語言">Go 語言&lt;/a>內什麼是『unbuffered vs buffered channel』，在初學 Go 語言時，最大的挑戰就是了解 Channel 的使用時機及差異，而 Channel 又分為兩種，一種是 buffered channel，另一種是 unbuffered channel，底下我來用幾個簡單的例子帶大家了解這兩種 channel 的差異，讓初學者可以很快的了解 channel 使用方式。&lt;/p></description></item><item><title>快速部署網站到 Heroku 雲平台</title><link>https://demo.gh.wu-boy.com/2019/02/deploy-golang-app-to-heroku/</link><pubDate>Mon, 18 Feb 2019 02:56:19 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/02/deploy-golang-app-to-heroku/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jx4kYMmehnuyhVbEhvZKNEQwjCAgcTg2JIQamusY9-SuIbEEvJl2zXLJidfq-m9Oy1PQrROA9GQxdjjSiRVsvAGIj3tikwT0ZNB9XhciyCwjE60XE_jDJIqqEMmaKqwDzCMirK0u7Hw=w1920-h1080" title="部署網站到 Heroku 平台">&lt;img src="https://lh3.googleusercontent.com/jx4kYMmehnuyhVbEhvZKNEQwjCAgcTg2JIQamusY9-SuIbEEvJl2zXLJidfq-m9Oy1PQrROA9GQxdjjSiRVsvAGIj3tikwT0ZNB9XhciyCwjE60XE_jDJIqqEMmaKqwDzCMirK0u7Hw=w1920-h1080" alt="部署網站到 Heroku 平台" title="部署網站到 Heroku 平台">&lt;/a>&lt;/p>
 &lt;p>大家在寫開源專案時，一定需要一個免費的雲空間來放置網站，方便其他開發者在 &lt;a href="https://github.com" title="GitHub">GitHub&lt;/a> 看到時，可以先點選 Demo 網站來試用，也許開發者可以使用 GitHub 提供的免&lt;a href="https://pages.github.com/" title="費靜態網站">費靜態網站&lt;/a>，但是如果是跑 &lt;a href="https://golang.org" title="Golang">Golang&lt;/a> 或是其他語言 &lt;a href="https://nodejs.org/" title="Node.js">Node.js&lt;/a> 就不支援了，本篇來介紹 &lt;a href="https://www.heroku.com/" title="Ｈeroku 雲平台">Heroku 雲平台&lt;/a>，它提供了開發者免費的方案，您可以將 GitHub 儲存庫跟 Heroku 結合，快速的將程式碼部署上去，Heroku 會給開發者一個固定的 URL (含有 HTTPS 憑證)，也可以動態的用自己買的網域。最重要的是 Heroku 提供了兩種更新方式，第一為 Git，只要開發者將程式碼 Push 到 Heroku 儲存庫，Heroku 就可以自動判斷開發者上傳的語言，並進行相對應的部署，另一種方式為 &lt;a href="https://www.docker.com/" title="Docker">Docker&lt;/a> 部署，只要在儲存庫內放上 Dockerfile，透過 &lt;a href="https://devcenter.heroku.com/articles/heroku-cli" title="Heroku CLI">Heroku CLI&lt;/a> 指令就可以將 Docker 容器上傳到 &lt;a href="https://devcenter.heroku.com/articles/container-registry-and-runtime" title="Heroku Docker Registry">Heroku Docker Registry&lt;/a>，並且自動部署網站。底下我們來透過簡單的 Go 語言專案: &lt;a href="https://github.com/go-training/facebook-account-kit" title="Facebook Account Kit">Facebook Account Kit&lt;/a> 來說明如何快速部署到 Heroku。&lt;/p></description></item><item><title>有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔</title><link>https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/</link><pubDate>Fri, 25 Jan 2019 07:40:34 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" title="Jsonnet + Drone">&lt;img src="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" alt="Jsonnet + Drone" title="Jsonnet + Drone">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://github.com/drone/drone">Drone&lt;/a> 在 1.0 版本推出了用 &lt;a href="https://jsonnet.org">jsonnet&lt;/a> 來撰寫 &lt;a href="https://en.wikipedia.org/wiki/YAML">YAML&lt;/a> 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 &lt;code>.drone.yml&lt;/code> 內有非常多重複性的設定，假設 &lt;a href="https://golang.org" title="Go 語言">Go 語言&lt;/a>的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 &lt;a href="https://hub.docker.com/" title="Docker Hub">Docker Hub&lt;/a>，底下是 AMD64 的設定檔範例。剛好在 &lt;a href="https://www.udemy.com/devops-oneday" title="Udemy 課程">Udemy 課程&lt;/a>內有學員詢問到&lt;a href="https://www.udemy.com/devops-oneday/learn/v4/questions/6162884">相關問題&lt;/a>。&lt;/p>
-&lt;pre>&lt;code class="language-yaml">---
-kind: pipeline
-name: linux-arm64
-platform:
-os: linux
-arch: arm64
-steps:
-- name: build-push
-pull: always
-image: golang:1.11
-commands:
-- "go build -v -ldflags \"-X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/linux/arm64/drone-discord"
-environment:
-CGO_ENABLED: 0
-GO111MODULE: on
-when:
-event:
-- push
-- pull_request
-- name: build-tag
-pull: always
-image: golang:1.11
-commands:
-- "go build -v -ldflags \"-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/linux/arm64/drone-discord"
-environment:
-CGO_ENABLED: 0
-GO111MODULE: on
-when:
-event:
-- tag
-- name: executable
-pull: always
-image: golang:1.11
-commands:
-- ./release/linux/arm64/drone-discord --help
-- name: dryrun
-pull: always
-image: plugins/docker:linux-arm64
-settings:
-dockerfile: docker/Dockerfile.linux.arm64
-dry_run: true
-password:
-from_secret: docker_password
-repo: appleboy/drone-discord
-tags: linux-arm64
-username:
-from_secret: docker_username
-when:
-event:
-- pull_request
-- name: publish
-pull: always
-image: plugins/docker:linux-arm64
-settings:
-auto_tag: true
-auto_tag_suffix: linux-arm64
-dockerfile: docker/Dockerfile.linux.arm64
-password:
-from_secret: docker_password
-repo: appleboy/drone-discord
-username:
-from_secret: docker_username
-when:
-event:
-- push
-- tag
-trigger:
-branch:
-- master&lt;/code>&lt;/pre></description></item><item><title>用 Traefik 搭配 Docker 快速架設服務</title><link>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</link><pubDate>Tue, 08 Jan 2019 03:51:43 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</guid><description>&lt;p>&lt;strong>更新: 2019.01.10 新增教學影片&lt;/strong>&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#18">18&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#19">19&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#20">20&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#21">21&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#22">22&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#23">23&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#24">24&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#25">25&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#26">26&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#27">27&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#28">28&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#29">29&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#30">30&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="31">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#31">31&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="32">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#32">32&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="33">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#33">33&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="34">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#34">34&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="35">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#35">35&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="36">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#36">36&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="37">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#37">37&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="38">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#38">38&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="39">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#39">39&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="40">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#40">40&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="41">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#41">41&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="42">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#42">42&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="43">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#43">43&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="44">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#44">44&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="45">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#45">45&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="46">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#46">46&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="47">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#47">47&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="48">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#48">48&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="49">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#49">49&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="50">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#50">50&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="51">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#51">51&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="52">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#52">52&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="53">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#53">53&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="54">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#54">54&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="55">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#55">55&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="56">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#56">56&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="57">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#57">57&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="58">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#58">58&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="59">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#59">59&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="60">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#60">60&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="61">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#61">61&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="62">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#62">62&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="63">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#63">63&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="64">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#64">64&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="65">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#65">65&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="66">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#66">66&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="67">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#67">67&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="68">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#68">68&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="69">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#69">69&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="70">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#70">70&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="71">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#71">71&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="72">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#72">72&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="73">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#73">73&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="74">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#74">74&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="75">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#75">75&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="76">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#76">76&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="color:#008b45;text-decoration:underline">---&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">kind&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>pipeline&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">platform&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">os&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">arch&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">steps&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>build-push&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>golang:1.11&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">commands&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- &lt;span style="color:#cd5555">&amp;#34;go build -v -ldflags \&amp;#34;-X main.build=${DRONE_BUILD_NUMBER}\&amp;#34; -a -o release/linux/arm64/drone-discord&amp;#34;&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">environment&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">CGO_ENABLED&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#b452cd">0&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">GO111MODULE&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">on&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- push&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- pull_request&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>build-tag&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>golang:1.11&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">commands&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- &lt;span style="color:#cd5555">&amp;#34;go build -v -ldflags \&amp;#34;-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\&amp;#34; -a -o release/linux/arm64/drone-discord&amp;#34;&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">environment&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">CGO_ENABLED&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#b452cd">0&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">GO111MODULE&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">on&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- tag&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>executable&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>golang:1.11&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">commands&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- ./release/linux/arm64/drone-discord --help&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>dryrun&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>plugins/docker:linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">settings&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">dockerfile&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker/Dockerfile.linux.arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">dry_run&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">true&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">password&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_password&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">repo&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>appleboy/drone-discord&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">tags&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">username&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_username&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- pull_request&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>- &lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>publish&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">pull&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>always&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">image&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>plugins/docker:linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">settings&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">auto_tag&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">true&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">auto_tag_suffix&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux-arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">dockerfile&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker/Dockerfile.linux.arm64&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">password&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_password&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">repo&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>appleboy/drone-discord&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">username&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">from_secret&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>docker_username&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">when&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">event&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- push&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- tag&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">trigger&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>&lt;span style="color:#8b008b;font-weight:bold">branch&lt;/span>:&lt;span style="color:#bbb">
+&lt;/span>&lt;span style="color:#bbb"> &lt;/span>- master&lt;span style="color:#bbb">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>用 Traefik 搭配 Docker 快速架設服務</title><link>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</link><pubDate>Tue, 08 Jan 2019 03:51:43 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/</guid><description>&lt;p>&lt;strong>更新: 2019.01.10 新增教學影片&lt;/strong>&lt;/p>
 &lt;p>&lt;a href="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" title="drone traefik docker deploy">&lt;img src="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" alt="drone traefik docker deploy" title="drone traefik docker deploy">&lt;/a>&lt;/p>
 &lt;p>相信大家在架設服務肯定會選一套像是 &lt;a href="http://www.haproxy.org/">HAProxy&lt;/a>, &lt;a href="https://www.nginx.com/" title="Nginx">Nginx&lt;/a>, &lt;a href="https://httpd.apache.org/" title="Apache">Apache&lt;/a> 或 &lt;a href="https://caddyserver.com/" title="Caddy">Caddy&lt;/a>，這四套架設的難度差不多，如果要搭配 &lt;a href="https://letsencrypt.org/" title="Let's Encrypt">Let&amp;rsquo;s Encrypt&lt;/a> 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 &lt;a href="https://golang.org/" title="Golang">Golang&lt;/a> 開發裡面已經內建了 Let&amp;rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 &lt;a href="https://traefik.io/" title="Traefik">Traefik&lt;/a>，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 &lt;code>domain1.com&lt;/code> 及 &lt;code>domain2.com&lt;/code>。來看看如何快速設定 Traefik。&lt;/p>
 &lt;p>&lt;a href="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" title="traefik + docker + golang">&lt;img src="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" alt="traefik + docker + golang" title="traefik + docker + golang">&lt;/a>&lt;/p></description></item><item><title>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</title><link>https://demo.gh.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/</link><pubDate>Sun, 30 Dec 2018 03:07:54 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/</guid><description>&lt;p>&lt;a href="https://photos.google.com/share/AF1QipPZ8MkcLAazbfRWwBrT1CQpipCL8N_1uAcYosJmJ-o6du2XRRHNEokVarxey5Bp8w?key=clctLU9JYVMzcEdHYWR2dUlVTVZ6YnZUUjlYRG9B&amp;amp;source=ctrlq.org">&lt;img src="https://lh3.googleusercontent.com/Q5CP9S-xtRHxnDRvxDpWWkvBsEVw5C5uRyb5EiBh-UpYkrp_dkZp_oN8yi1WtqwruhSgnwNMB5QjJPxO94ABjG9oLBqmcRjlouNTNmrChIWbQcsAAbuV9eWB1wbsK-x-OY6iolb5ahc=w2400" alt="">&lt;/a>&lt;/p>
@@ -211,8 +309,7 @@ branch:
 &lt;li>deadcode (沒有用到的程式碼)&lt;/li>
 &lt;/ul>
 &lt;p>但是這麼多驗證工具，要一一導入專案，實在有點麻煩，我自己在公司內部只有驗證 &lt;code>go fmt&lt;/code> 或 &lt;code>go vet&lt;/code> 或 &lt;a href="github.com/client9/misspell">misspell-check&lt;/a> (驗證英文單字是否錯誤) 及 &lt;a href="https://github.com/kardianos/govendor">vendor-check&lt;/a> (驗證開發者是否有去修改過 vendor 而沒有恢復修正)。如果你有在玩開源專案，其實可以不用這麼麻煩，導入兩套工具就可以讓你安心驗證別人發的 PR。底下來介紹一套工具及另外一套雲端服務。&lt;/p></description></item><item><title>Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers</title><link>https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/</link><pubDate>Sun, 16 Sep 2018 03:35:36 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/</guid><description>要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
-"pullRequests": &amp;graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests. ch 使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式
-package main import ( "encoding/json" "fmt" "log" "time" "github.com/graphql-go/graphql" ) type Foo struct { Name string } var FieldFooType = graphql.</description></item><item><title>在 Go 語言內的 URL RawQuery 的改變</title><link>https://demo.gh.wu-boy.com/2018/08/escape-url-rawquery-on-parse-in-golang/</link><pubDate>Mon, 27 Aug 2018 06:00:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/08/escape-url-rawquery-on-parse-in-golang/</guid><description>&lt;p>&lt;strong>更新 (2018.08.29) 感謝中國網友幫忙發個 &lt;a href="https://github.com/golang/go/issues/27302">Issue&lt;/a>，大家有空可以關注看看，等官方怎麼回應&lt;/strong>&lt;/p>
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 &amp;#34;pullRequests&amp;#34;: &amp;amp;graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests.</description></item><item><title>在 Go 語言內的 URL RawQuery 的改變</title><link>https://demo.gh.wu-boy.com/2018/08/escape-url-rawquery-on-parse-in-golang/</link><pubDate>Mon, 27 Aug 2018 06:00:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/08/escape-url-rawquery-on-parse-in-golang/</guid><description>&lt;p>&lt;strong>更新 (2018.08.29) 感謝中國網友幫忙發個 &lt;a href="https://github.com/golang/go/issues/27302">Issue&lt;/a>，大家有空可以關注看看，等官方怎麼回應&lt;/strong>&lt;/p>
 &lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://golang.org/">Go 語言&lt;/a>內的 &lt;code>net/url&lt;/code> 函式庫讓開發者可以簡單的 Parse 指定的 URL，最近 Google 上了這個 &lt;a href="https://github.com/golang/go/commit/1040626c0ce4a1bc2b312aa0866ffeb2ff53c1ab">Patch&lt;/a>，這個 Patch 讓原本的 RawQuery 值產生了變化，原先沒有驗證 RawQuery 是否包含了不合法的字元，現在只要 RawQuesy 內含有任意的不合法字元，就會直接被 &lt;code>QueryEscape&lt;/code> 函式轉換，這個 Patch 不影響這次 &lt;a href="https://blog.golang.org/go1.11">Go 1.11 版本&lt;/a>，會影響的是明年 2019 年釋出的 Go 1.12 版本，但是大家都知道在 &lt;a href="https://github.com">GitHub&lt;/a> 上面有在寫測試的話，都會在 &lt;a href="https://travis-ci.org">Travis&lt;/a> 內加入 &lt;code>master&lt;/code> 版本當作驗證，如果有用到 RawQuery 的話，肯定會遇到這問題，底下來描述為什麼會出現這問題。&lt;/p></description></item><item><title>Go 語言實戰 GraphQL</title><link>https://demo.gh.wu-boy.com/2018/07/graphql-in-go/</link><pubDate>Thu, 19 Jul 2018 01:12:07 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/07/graphql-in-go/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/41690303080/in/dateposted-public/" title="Screen Shot 2018-07-19 at 8.58.48 AM">&lt;img src="https://i1.wp.com/farm2.staticflickr.com/1769/41690303080_3d1a278b8a_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2018-07-19 at 8.58.48 AM" data-recalc-dims="1" />&lt;/a> 很高興能在 &lt;a href="http://modernweb.tw/">2018 ModernWeb&lt;/a> 研討會跟大家分享用 &lt;a href="https://golang.org">Go 語言&lt;/a>實戰 &lt;a href="https://graphql.org/">GraphQL&lt;/a>，相信大家都知道 GraphQL 帶給前端後端及手機開發者很多好處，強烈推薦大家來嘗試看看。這場議程最主要是推廣 GraphQL 及 Go 語言。底下有投影片大家可以參考看看。&lt;/p></description></item><item><title>在本機端快速產生網站免費憑證</title><link>https://demo.gh.wu-boy.com/2018/07/mkcert-zero-config-tool-to-make-locally-trusted-development-certificates/</link><pubDate>Fri, 06 Jul 2018 02:36:54 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/07/mkcert-zero-config-tool-to-make-locally-trusted-development-certificates/</guid><description>&lt;p>&lt;a href="https://i1.wp.com/farm2.staticflickr.com/1785/43227213371_a041db0810_o.png?ssl=1">&lt;img src="https://i1.wp.com/farm2.staticflickr.com/1785/43227213371_a041db0810_o.png?w=840&amp;#038;ssl=1" alt="" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>大家看到網站免費憑證，一定會想到 &lt;a href="https://letsencrypt.org/">Let&amp;rsquo;s encrypt&lt;/a> 服務商提供一個網域可以使用 100 個免費憑證，如果您有很多 subdomain 需求，還可以申請獨立一張 &lt;a href="https://community.letsencrypt.org/t/acme-v2-and-wildcard-certificate-support-is-live/55579">wildcard 憑證&lt;/a>，但是這是在伺服器端的操作，假設在本機端開發，該如何快速產生憑證，這樣開啟瀏覽器時，就可以看到綠色的 https 字眼&lt;/p>
@@ -227,19 +324,43 @@ package main import ( "encoding/json" "fmt" "log" "time" "github.com/graphql-go/
 &lt;/ol>
 &lt;p>第一點非常實用，尤其在專案很忙的時候，同事間只有少許的時間可以幫忙看程式碼或討論，如果大家都有寫測試，在時間的壓力下，只要稍微看一下，CI/CD 驗證過無誤，大致上就可以上線了。第二點在於，團隊其他成員需要修改一個不確定的地方，商業邏輯修正可能會造成很大的錯誤，而測試在這時候就發揮效果。最後一點就是程式碼品質，不管是新功能，或者是 Bug，任何時間點都需要補上測試，就算 code coverage 已經很高了，但是只要有任何 bug 就要補測試，測試寫的越多，專案的品質相對會提高。在 Go 語言專案內該如何寫測試了，為什麼專案要導入 Go 語言的原因之一就是『寫測試太簡單』了，底下來介紹如何寫基本的測試。&lt;/p></description></item><item><title>Go 語言的 init 函式</title><link>https://demo.gh.wu-boy.com/2018/04/init-func-in-golang/</link><pubDate>Thu, 19 Apr 2018 03:17:00 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/04/init-func-in-golang/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/" title="Go-brown-side.sh">&lt;img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&amp;#038;ssl=1" alt="Go-brown-side.sh" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>本篇會帶大家認識 &lt;a href="https://golang.org">Go 語言&lt;/a>的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看&lt;a href="https://play.golang.org/p/AN-6MK4qVVL">例子&lt;/a>，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。&lt;/p>
-&lt;pre>&lt;code class="language-go">package main
-import (
-"fmt"
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
+&lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
 )
-func init() {
-fmt.Println("init 1")
+&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">init&lt;/span>() {
+fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;init 1&amp;#34;&lt;/span>)
 }
-func init() {
-fmt.Println("init 2")
+&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">init&lt;/span>() {
+fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;init 2&amp;#34;&lt;/span>)
 }
-func main() {
-fmt.Println("Hello, playground")
-}&lt;/code>&lt;/pre></description></item><item><title>Go 語言基礎實戰教學影片上線了</title><link>https://demo.gh.wu-boy.com/2018/03/golang-introduction-video/</link><pubDate>Thu, 29 Mar 2018 01:45:35 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/03/golang-introduction-video/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/39050902230/in/dateposted-public/" title="Screen Shot 2018-03-17 at 11.40.12 PM">&lt;img src="https://i2.wp.com/farm1.staticflickr.com/805/39050902230_b1d91bc120_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2018-03-17 at 11.40.12 PM" data-recalc-dims="1" />&lt;/a>&lt;/p>
+&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
+fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;Hello, playground&amp;#34;&lt;/span>)
+}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Go 語言基礎實戰教學影片上線了</title><link>https://demo.gh.wu-boy.com/2018/03/golang-introduction-video/</link><pubDate>Thu, 29 Mar 2018 01:45:35 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/03/golang-introduction-video/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/39050902230/in/dateposted-public/" title="Screen Shot 2018-03-17 at 11.40.12 PM">&lt;img src="https://i2.wp.com/farm1.staticflickr.com/805/39050902230_b1d91bc120_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2018-03-17 at 11.40.12 PM" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;h1 id="購買連結2-去年在台灣推廣">&lt;a href="https://www.udemy.com/golang-fight/?couponCode=GOLANG-INTRO">購買連結&lt;/a> 去年在台灣推廣&lt;/h1>
 &lt;p>&lt;a href="https://drone.io/">Drone&lt;/a> 這套由 &lt;a href="https://golang.org">Go 語言&lt;/a>所撰寫的&lt;a href="https://github.com/drone/drone">開源專案&lt;/a>，身為維護者之一，也將 Drone 跟 &lt;a href="https://github.com/go-gitea/gitea">Gitea&lt;/a> 完成整合。如果對於從開發到部署整個流程，還不是很了解的朋友，我個人就是推薦使用 Drone，去年九月也推出 Drone 的教學影片系列:『&lt;a href="https://www.udemy.com/devops-oneday/?couponCode=DRONE-DEVOPS">一天學會自動化測試及部署&lt;/a>』，在公司使用 Drone 到現在，不曾看到服務中斷，啟動速度也是毫秒等級。為什麼會這麼穩定及快速呢？當然要歸功於 Go 語言。而這次我個人針對 Go 語言，錄製了一份基礎教學『&lt;a href="https://www.udemy.com/golang-fight/?couponCode=GOLANG-INTRO">GO 語言基礎實戰&lt;/a>』。&lt;/p></description></item><item><title>用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency</title><link>https://demo.gh.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go/</link><pubDate>Sat, 10 Mar 2018 08:26:38 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/25850362427/in/dateposted-public/" title="Screen Shot 2018-03-10 at 3.22.59 PM">&lt;img src="https://i2.wp.com/farm5.staticflickr.com/4781/25850362427_fb8199a5ee_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2018-03-10 at 3.22.59 PM" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>本篇教學會著重在如何使用 Go 語言的 &lt;a href="https://gobyexample.com/goroutines">goroutine&lt;/a> 及 &lt;a href="https://gobyexample.com/channels">channel&lt;/a>。&lt;a href="https://www.mongodb.com/">MongoDB&lt;/a> 是一套具有高效能讀寫的 NoSQL 資料庫，但是不像傳統關連式資料庫，有非常好用的 Transaction 交易模式，而在 MongoDB 也可以透過 &lt;a href="https://docs.mongodb.com/manual/tutorial/perform-two-phase-commits/">Two Phase Commits&lt;/a> 來達成交易功能，大家可以先打開文件看看，非常冗長，工程師需要花很多時間閱讀文件並且實現出來。而在 &lt;a href="https://golang.org">Go 語言&lt;/a>內，我們可以在 Single Thread 內同一時間點讀寫存取同一筆資料庫來解決此問題。此篇作法只適合運作在單一 application，如果是執行多個 application 則需要透過其他方式來解決，像是 &lt;a href="https://en.wikipedia.org/wiki/Optimistic_concurrency_control">Optimistic concurrency control&lt;/a>。&lt;/p></description></item><item><title>將 Go Html Template 存入 String 變數</title><link>https://demo.gh.wu-boy.com/2018/02/simply-output-go-html-template-execution-to-strings/</link><pubDate>Wed, 28 Feb 2018 01:12:52 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2018/02/simply-output-go-html-template-execution-to-strings/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
@@ -268,19 +389,43 @@ fmt.Println("Hello, playground")
 &lt;p>上週跟 &lt;a href="https://github.com/gin-gonic/gin">Gin&lt;/a> 作者 &lt;a href="https://github.com/javierprovecho">@javierprovecho&lt;/a> 討論要發佈新版本，很快地經過一兩天，作者終於整理好 &lt;a href="https://github.com/gin-gonic/gin/releases/tag/v1.2">v1.2&lt;/a> 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。&lt;/p></description></item><item><title>台灣第一屆 GoPher 大會</title><link>https://demo.gh.wu-boy.com/2017/06/gopher-day-in-taipei/</link><pubDate>Fri, 30 Jun 2017 02:56:18 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/06/gopher-day-in-taipei/</guid><description>&lt;p>&lt;a href="https://i0.wp.com/farm5.staticflickr.com/4285/35453214392_b37fcef501_z.jpg?ssl=1">&lt;img src="https://i0.wp.com/farm5.staticflickr.com/4285/35453214392_b37fcef501_z.jpg?w=840&amp;#038;ssl=1" alt="" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>很高興可以擔任第一屆 &lt;a href="http://gopher.ithome.com.tw/">GoPher Day&lt;/a> 大會講者，每次參加聚會都是跟一堆網友見面，人在新竹很難得大家見到面。很感謝 &lt;a href="http://www.ithome.com.tw/">iThome&lt;/a> 大力幫忙舉辦，才可以讓整天議程順利完成。底下分享『用 Go 語言實戰 Push Notification 服務』投影片。&lt;/p></description></item><item><title>Go 語言內 struct methods 該使用 pointer 或 value 傳值?</title><link>https://demo.gh.wu-boy.com/2017/05/go-struct-method-pointer-or-value/</link><pubDate>Mon, 22 May 2017 02:39:06 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/05/go-struct-method-pointer-or-value/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>上週末在台北講『&lt;a href="http://learning.ithome.com.tw/course/JjojzNh9P1N9H">Go 語言基礎課程&lt;/a>』，其中一段介紹 Struct 的使用，發現有幾個學員對於在 Method 內要放 Pointer 或 Value 感到困惑，而我自己平時在寫 Go 語言也沒有注意到這點。好在強者學員 &lt;a href="https://www.facebook.com/YinChenLiao?fref=nf">Dboy Liao&lt;/a> 找到一篇說明:『&lt;a href="https://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/">Don&amp;rsquo;t Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang&lt;/a>』，在 Go 語言如何區分 &lt;code>func (s *MyStruct)&lt;/code> 及 &lt;code>func (s MyStruct)&lt;/code>，底下我們先來看看簡單的 Struct 例子&lt;/p>
-&lt;pre>&lt;code class="language-go">package main
-import "fmt"
-type Cart struct {
-Name string
-Price int
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;span style="color:#8b008b;font-weight:bold">type&lt;/span> Cart &lt;span style="color:#8b008b;font-weight:bold">struct&lt;/span> {
+Name &lt;span style="color:#00688b;font-weight:bold">string&lt;/span>
+Price &lt;span style="color:#00688b;font-weight:bold">int&lt;/span>
 }
-func (c Cart) GetPrice() {
-fmt.Println(c.Price)
+&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> (c Cart) &lt;span style="color:#008b45">GetPrice&lt;/span>() {
+fmt.&lt;span style="color:#008b45">Println&lt;/span>(c.Price)
 }
-func main() {
-c := &amp;Cart{"bage", 100}
-c.GetPrice()
-}&lt;/code>&lt;/pre></description></item><item><title>用 Docker Multi-Stage 編譯出 Go 語言最小 Image</title><link>https://demo.gh.wu-boy.com/2017/04/build-minimal-docker-container-using-multi-stage-for-go-app/</link><pubDate>Sat, 29 Apr 2017 13:23:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/04/build-minimal-docker-container-using-multi-stage-for-go-app/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/25660808075/in/dateposted-public/" title="docker">&lt;img src="https://i2.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_z.jpg?w=840&amp;#038;ssl=1" alt="docker" data-recalc-dims="1" />&lt;/a>&lt;/p>
+&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
+c := &amp;amp;Cart{&lt;span style="color:#cd5555">&amp;#34;bage&amp;#34;&lt;/span>, &lt;span style="color:#b452cd">100&lt;/span>}
+c.&lt;span style="color:#008b45">GetPrice&lt;/span>()
+}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>用 Docker Multi-Stage 編譯出 Go 語言最小 Image</title><link>https://demo.gh.wu-boy.com/2017/04/build-minimal-docker-container-using-multi-stage-for-go-app/</link><pubDate>Sat, 29 Apr 2017 13:23:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/04/build-minimal-docker-container-using-multi-stage-for-go-app/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/25660808075/in/dateposted-public/" title="docker">&lt;img src="https://i2.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_z.jpg?w=840&amp;#038;ssl=1" alt="docker" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>之前應該沒寫過用 &lt;a href="https://www.docker.com/">Docker&lt;/a> 結合 Go 語言編譯出最小 Image 的文章，剛好趁這機會來介紹。其實網路上可以直接找到文章，像是這篇『&lt;a href="https://blog.codeship.com/building-minimal-docker-containers-for-go-applications/">Building Minimal Docker Containers for Go Applications&lt;/a>』，那本文來介紹 Docker 新功能 &lt;a href="https://github.com/moby/moby/pull/32063">multi-stage builds&lt;/a>，此功能只有在 &lt;a href="https://github.com/moby/moby/releases/tag/v17.05.0-ce-rc1">17.05.0-ce&lt;/a> 才支援，看起來是 2017/05/03 號會 release 出來。我們拿 Go 語言的 Hello World 來介紹 Single build 及 Multiple build。&lt;/p></description></item><item><title>用 Go 語言打造 DevOps Bot</title><link>https://demo.gh.wu-boy.com/2017/04/devops-bot-in-golang/</link><pubDate>Sat, 29 Apr 2017 03:33:49 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/04/devops-bot-in-golang/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/34200999131/in/dateposted-public/" title="18190989_10210525473186864_1567687746_n">&lt;img src="https://i0.wp.com/c1.staticflickr.com/5/4173/34200999131_48c1b84dd2_z.jpg?w=840&amp;#038;ssl=1" alt="18190989_10210525473186864_1567687746_n" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>在 4/27 參加 &lt;a href="http://www.ithome.com.tw/">iThome&lt;/a> 舉辦的第一屆 &lt;a href="http://chatbot.ithome.com.tw/">ChatBot Day&lt;/a>，我分享了如何用 &lt;a href="https://golang.org">Go 語言&lt;/a> 實作 DevOps Bot，可以透過 &lt;a href="https://developers.facebook.com/docs/messenger-platform">Facebook Messenger&lt;/a> 或 &lt;a href="https://developers.line.me/messaging-api/overview">Line Messenger API&lt;/a> 來主動通知開發者。此議程希望可以幫助想玩 Bot 但是又不知道如何入門的開發者。如果不懂程式語言，也可以直些下載 Binary 來玩玩看。&lt;/p></description></item><item><title>在 DigitalOcean 新竹社群簡介 Gitea 開源專案</title><link>https://demo.gh.wu-boy.com/2017/04/introduction-to-gitea-in-digitalocean-hsinchu/</link><pubDate>Sun, 23 Apr 2017 13:34:04 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/04/introduction-to-gitea-in-digitalocean-hsinchu/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/32012549582/in/dateposted-public/" title="gitea">&lt;img src="https://i2.wp.com/c1.staticflickr.com/1/306/32012549582_3de35c29c8_o.png?w=840&amp;#038;ssl=1" alt="gitea" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>很高興受到 &lt;a href="https://www.facebook.com/DigitalOceanHsinchu/">DigitalOcean 新竹社群&lt;/a>邀請來介紹輕量級的 Git 服務: &lt;a href="https://gitea.io">Gitea&lt;/a>，在不久之前筆者已經寫過一篇 &lt;a href="https://blog.wu-boy.com/2017/01/new-git-code-hosting-option-gitea/">Gitea 介紹&lt;/a>，這次到&lt;a href="http://www.nctu.edu.tw/">交通大學&lt;/a>宣傳這套免費的開源專案，目的就是希望台灣有更多開發者或企業可以了解用 &lt;a href="https://golang.org/">Go 語言&lt;/a>也可以打造一套輕量級 Git 服務，並且導入台灣的新創團隊。這次分享是透過 &lt;a href="https://www.digitalocean.com/">DigitalOcean&lt;/a> 最小機器 (512MB 記憶體，每個月五美金) 來 Demo 如何在 Ubuntu 16.04 快速架設 Gitea 及使用 &lt;a href="https://caddyserver.com/">Caddy&lt;/a> 來自動申請 &lt;a href="https://letsencrypt.org/">Let&amp;rsquo;s Encrypt&lt;/a> 憑證，最後搭配 &lt;a href="https://jenkins.io/">Jenkins&lt;/a> 串自動化部署及測試等&amp;hellip;。&lt;/p>
@@ -298,15 +443,31 @@ c.GetPrice()
 &lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/33499997070/in/dateposted-public/" title="Screen Shot 2017-04-07 at 9.52.40 AM">&lt;img src="https://i2.wp.com/c1.staticflickr.com/3/2820/33499997070_dfa4f1cf7c_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2017-04-07 at 9.52.40 AM" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>此篇會介紹在 &lt;a href="https://golang.org">Go 語言&lt;/a>如何跟 Let’s Encrypt 串接，底下有兩種方式。&lt;/p></description></item><item><title>Debian/Ubuntu 的 update-rc.d 使用教學</title><link>https://demo.gh.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/</link><pubDate>Thu, 06 Apr 2017 08:34:14 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/33486150390/in/dateposted-public" title="Debian">&lt;img src="https://i2.wp.com/c1.staticflickr.com/3/2849/33486150390_198a19b880_n.jpg?w=840&amp;#038;ssl=1" alt="Debian" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>&lt;a href="http://manpages.ubuntu.com/manpages/precise/man8/update-rc.d.8.html">update-rc.d&lt;/a> 是在 &lt;a href="https://www.debian.org/">Debian&lt;/a> 或 &lt;a href="https://www.ubuntu.com/">Ubuntu&lt;/a> 內用來管理 &lt;code>/etc/init.d&lt;/code> 目錄內的 scripts 工具。不管是 Nginx 或 Mysql 等相關服務，都可以在 &lt;code>/etc/init.d&lt;/code> 目錄內找到相對應的 script 檔案，隨便打開一個 script 檔案就可以看到標頭有固定的格式寫法:&lt;/p>
-&lt;pre>&lt;code class="language-bash">### BEGIN INIT INFO
-# Provides: gorush
-# Required-Start: $syslog $network
-# Required-Stop: $syslog $network
-# Default-Start: 2 3 4 5
-# Default-Stop: 0 1 6
-# Short-Description: starts the gorush web server
-# Description: starts gorush using start-stop-daemon
-### END INIT INFO&lt;/code>&lt;/pre></description></item><item><title>Go 語言官方推出的 dep 使用心得</title><link>https://demo.gh.wu-boy.com/2017/03/golang-dependency-management-tool-dep/</link><pubDate>Fri, 31 Mar 2017 01:58:01 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/03/golang-dependency-management-tool-dep/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5">5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6">6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7">7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8">8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9">9&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">&lt;span style="color:#228b22">### BEGIN INIT INFO&lt;/span>
+&lt;span style="color:#228b22"># Provides: gorush&lt;/span>
+&lt;span style="color:#228b22"># Required-Start: $syslog $network&lt;/span>
+&lt;span style="color:#228b22"># Required-Stop: $syslog $network&lt;/span>
+&lt;span style="color:#228b22"># Default-Start: 2 3 4 5&lt;/span>
+&lt;span style="color:#228b22"># Default-Stop: 0 1 6&lt;/span>
+&lt;span style="color:#228b22"># Short-Description: starts the gorush web server&lt;/span>
+&lt;span style="color:#228b22"># Description: starts gorush using start-stop-daemon&lt;/span>
+&lt;span style="color:#228b22">### END INIT INFO&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Go 語言官方推出的 dep 使用心得</title><link>https://demo.gh.wu-boy.com/2017/03/golang-dependency-management-tool-dep/</link><pubDate>Fri, 31 Mar 2017 01:58:01 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/03/golang-dependency-management-tool-dep/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://golang.org/">Go&lt;/a> 語言團隊在去年開始開發 Dependency Management Tool 稱作 &lt;a href="https://github.com/golang/dep">dep&lt;/a>，並且預計明年 2018 推出 1.10 Go 版本時內建，詳細可以參考官方的 &lt;a href="https://github.com/golang/dep/wiki/Roadmap">roadmap&lt;/a>，強者我朋友寫了一篇&lt;a href="https://github.com/kevingo/dep-example">使用教學&lt;/a>，有興趣的朋友可以參考看看，但是本篇會講幾點我目前不打算用 dep 的原因。&lt;/p></description></item><item><title>Go 語言的錯誤訊息處理</title><link>https://demo.gh.wu-boy.com/2017/03/error-handler-in-golang/</link><pubDate>Thu, 23 Mar 2017 07:25:00 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/03/error-handler-in-golang/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>每個語言對於錯誤訊息的處理方式都不同，在學習每個語言時，都要先學會如何在程式內處理錯誤訊息 (Error Handler)，而在 &lt;a href="https://golang.org/">Go 語言&lt;/a>的錯誤處理是非常簡單，本篇會用簡單的範例教大家 Go 如何處理錯誤訊息。&lt;/p></description></item><item><title>用 Golang 寫 Command line 工具</title><link>https://demo.gh.wu-boy.com/2017/02/write-command-line-in-golang/</link><pubDate>Thu, 16 Feb 2017 07:46:06 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/02/write-command-line-in-golang/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>如果你要寫 Command line 工具，又想在各平台 (像是 MacOS, Windows 或 Linux) 上執行，這時候 &lt;a href="https://golang.org">Golang&lt;/a> 就是您最好的選擇。在 &lt;a href="https://www.reddit.com">Reddit&lt;/a> 讀到一篇 &lt;a href="https://www.reddit.com/r/golang/comments/5sdvoh/what_is_the_essential_difference_between/">Command line 工具比較介紹&lt;/a>，這篇最主要講到兩個 CLI 工具，一個是 &lt;a href="https://github.com/urfave/cli">urfave/cli&lt;/a>，另一個是 &lt;a href="https://github.com/spf13/cobra">spf13/cobra&lt;/a>，這兩個工具其實都非常好用，後者是&lt;a href="http://spf13.com/post/joining-go-team-at-google/">去年加入 Google Golang 團隊&lt;/a>的 &lt;a href="http://spf13.com/">spf13&lt;/a> 所開發，該作者加入 Google 後呢，非常的忙，但是強者他同事有幫忙繼續維護 cobra 專案，兩個 CLI 工具各自都有有大型專案使用 urfave/cli 有 &lt;a href="https://github.com/docker/libcompose">docker/libcompose&lt;/a>, &lt;a href="https://github.com/docker/machine">docker/machine&lt;/a>, &lt;a href="https://github.com/drone/drone">Drone&lt;/a>, &lt;a href="https://gitea.io/">Gitea&lt;/a>, &lt;a href="https://gogs.io/">Gogs&lt;/a> 等，而後者 spf13/cobra 則有 &lt;a href="https://docker.com">docker&lt;/a>, &lt;a href="https://github.com/docker/distribution">docker/distribution&lt;/a>, &lt;a href="https://github.com/coreos/etcd">etcd&lt;/a> 等。本篇筆者會介紹 urfave/cli 該如何使用？&lt;/p></description></item><item><title>Caddy 搭配 Drone 伺服器設定</title><link>https://demo.gh.wu-boy.com/2017/02/caddy-setting-with-drone-ci-server/</link><pubDate>Tue, 07 Feb 2017 06:46:53 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2017/02/caddy-setting-with-drone-ci-server/</guid><description>&lt;p>&lt;a data-flickr-embed="true" href="https://www.flickr.com/photos/appleboy/32758934825/in/dateposted-public/" title="The_Caddy_web_server_logo.svg">&lt;img src="https://i0.wp.com/c1.staticflickr.com/1/528/32758934825_665c449ff3_z.jpg?resize=640%2C138&amp;#038;ssl=1" alt="The_Caddy_web_server_logo.svg" data-recalc-dims="1" />&lt;/a>&lt;/p>
@@ -331,4 +492,4 @@ c.GetPrice()
 安裝方式 dlite 提供三種方式安裝
 直接下載執行檔案 (推薦) (下載連結) 直接透過 brew 指令安裝: brew install dlite 開發者模式: git clone 專案，然後下 make dlite 產生執行檔案 請大家直接使用第一種方式安裝即可。
 使用方式 安裝 dlite 需要使用到磁碟空間及記憶體，你可以動態指定 memory 使用量，或者是磁碟空間，詳細指令可以透過 dlite install -h 觀看
-$ sudo dlite install -h Usage: dlite [OPTIONS] install [install-OPTIONS] creates an empty disk image, downloads the os, saves configuration and creates a launchd agent Help Options: -h, --help Show this help message [install command options] -c, --cpus= number of CPUs to allocate (default: 1) -d, --disk= size of disk in GiB to create (default: 20) -m, --memory= amount of memory in GiB to allocate (default: 2) -s, --ssh-key= path to public ssh key (default: $HOME/.</description></item></channel></rss>
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 $ sudo dlite install -h Usage: dlite [OPTIONS] install [install-OPTIONS] creates an empty disk image, downloads the os, saves configuration and creates a launchd agent Help Options: -h, --help Show this help message [install command options] -c, --cpus= number of CPUs to allocate (default: 1) -d, --disk= size of disk in GiB to create (default: 20) -m, --memory= amount of memory in GiB to allocate (default: 2) -s, --ssh-key= path to public ssh key (default: $HOME/.</description></item></channel></rss>

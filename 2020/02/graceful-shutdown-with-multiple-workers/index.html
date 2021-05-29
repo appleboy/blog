@@ -1,5 +1,5 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[Go 教學] graceful shutdown with multiple workers - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
-在閱讀本文章之前請先預習『用 Go 語言 buffered channel 實作 Job Queue』，本篇會針對投影片 p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/02\/graceful-shutdown-with-multiple-workers\/","name":"[ go 教學] graceful shutdown with multiple workers"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Go 教學] graceful shutdown with multiple workers","description":"\n在閱讀本文章之前請先預習『用 Go 語言 buffered channel 實作 Job Queue』，本篇會針對投影片 p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl \u002b c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。\n","inLanguage":"en","wordCount":497,"datePublished":"2020-02-02T14:53:48","dateModified":"2020-02-02T14:53:48","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["channel, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/02\/graceful-shutdown-with-multiple-workers\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Go 教學] graceful shutdown with multiple workers"><meta property="og:description" content="
+在閱讀本文章之前請先預習『用 Go 語言 buffered channel 實作 Job Queue』，本篇會針對投影片 p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/02\/graceful-shutdown-with-multiple-workers\/","name":"[ go 教學] graceful shutdown with multiple workers"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Go 教學] graceful shutdown with multiple workers","description":"\n在閱讀本文章之前請先預習『用 Go 語言 buffered channel 實作 Job Queue』，本篇會針對投影片 p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl \u002b c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。\n","inLanguage":"en","wordCount":1360,"datePublished":"2020-02-02T14:53:48","dateModified":"2020-02-02T14:53:48","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["channel, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/02\/graceful-shutdown-with-multiple-workers\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Go 教學] graceful shutdown with multiple workers"><meta property="og:description" content="
 在閱讀本文章之前請先預習『用 Go 語言 buffered channel 實作 Job Queue』，本篇會針對投影片 p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="[Go 教學] graceful shutdown with multiple workers"><meta name=twitter:description content="
 在閱讀本文章之前請先預習『用 Go 語言 buffered channel 實作 Job Queue』，本篇會針對投影片 p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
@@ -11,346 +11,709 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[Go 教學] graceful shutdown with multiple workers</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 2, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;497&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#關閉-channel>關閉 Channel</a></li><li><a href=#實作-consumer>實作 consumer</a></li><li><a href=#shutdown-with-sigterm-handling>Shutdown with Sigterm Handling</a></li><li><a href=#graceful-shutdown-with-worker>Graceful shutdown with worker</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>在閱讀本文章之前請先預習『<a href=https://blog.wu-boy.com/2019/11/implement-job-queue-using-buffer-channel-in-golang/>用 Go 語言 buffered channel 實作 Job Queue</a>』，本篇會針對<a href=https://www.slideshare.net/appleboy/job-queue-in-golang-184064840>投影片</a> p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。</p><h2 id=教學影片>教學影片</h2><p>教學影片會之後放上，如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202001">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202001">一天學會 DevOps 自動化測試及部署</a></li></ul><h2 id=關閉-channel>關閉 Channel</h2><p>通常會開一個 Channel 搭配多個 worker 才能達到平行處理，那該如何正確關閉 Channel? 底下看個例子:</p><pre><code class=language-go>func main() {
-    ch := make(chan int, 2)
-    go func() {
-        ch <- 1
-        ch <- 2
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;7&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1360&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#關閉-channel>關閉 Channel</a></li><li><a href=#實作-consumer>實作 consumer</a></li><li><a href=#shutdown-with-sigterm-handling>Shutdown with Sigterm Handling</a></li><li><a href=#graceful-shutdown-with-worker>Graceful shutdown with worker</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>在閱讀本文章之前請先預習『<a href=https://blog.wu-boy.com/2019/11/implement-job-queue-using-buffer-channel-in-golang/>用 Go 語言 buffered channel 實作 Job Queue</a>』，本篇會針對<a href=https://www.slideshare.net/appleboy/job-queue-in-golang-184064840>投影片</a> p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。</p><h2 id=教學影片>教學影片</h2><p>教學影片會之後放上，如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202001">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202001">一天學會 DevOps 自動化測試及部署</a></li></ul><h2 id=關閉-channel>關閉 Channel</h2><p>通常會開一個 Channel 搭配多個 worker 才能達到平行處理，那該如何正確關閉 Channel? 底下看個例子:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    ch := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>2</span>)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        ch &lt;- <span style=color:#b452cd>1</span>
+        ch &lt;- <span style=color:#b452cd>2</span>
     }()
 
-    for n := range ch {
-        fmt.Println(n)
+    <span style=color:#8b008b;font-weight:700>for</span> n := <span style=color:#8b008b;font-weight:700>range</span> ch {
+        fmt.<span style=color:#008b45>Println</span>(n)
     }
-}</code></pre><p>執行上述程式你會發現出現了</p><blockquote><p>fatal error: all goroutines are asleep - deadlock!</p></blockquote><p>原因在於沒有關閉 channel，造成 main 函式一直讀取 channel，但是 channle 裡面已經不會再有值了，就造成主程式 deadlock，避免此問題很簡單</p><pre><code class=language-go>func main() {
-    ch := make(chan int, 2)
-    go func() {
-        ch <- 1
-        ch <- 2
-        close(ch)
+}
+</code></pre></td></tr></table></div></div><p>執行上述程式你會發現出現了</p><blockquote><p>fatal error: all goroutines are asleep - deadlock!</p></blockquote><p>原因在於沒有關閉 channel，造成 main 函式一直讀取 channel，但是 channle 裡面已經不會再有值了，就造成主程式 deadlock，避免此問題很簡單</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    ch := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>2</span>)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        ch &lt;- <span style=color:#b452cd>1</span>
+        ch &lt;- <span style=color:#b452cd>2</span>
+        <span style=color:#658b00>close</span>(ch)
     }()
 
-    for n := range ch {
-        fmt.Println(n)
+    <span style=color:#8b008b;font-weight:700>for</span> n := <span style=color:#8b008b;font-weight:700>range</span> ch {
+        fmt.<span style=color:#008b45>Println</span>(n)
     }
-}</code></pre><p>除了 <code>close(ch)</code> 之外，另一個方式就將讀取 channel 也丟到 goroutine 內</p><pre><code class=language-go>func main() {
-    ch := make(chan int, 2)
-    go func() {
-        ch <- 1
-        ch <- 2
+}
+</code></pre></td></tr></table></div></div><p>除了 <code>close(ch)</code> 之外，另一個方式就將讀取 channel 也丟到 goroutine 內</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    ch := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>2</span>)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        ch &lt;- <span style=color:#b452cd>1</span>
+        ch &lt;- <span style=color:#b452cd>2</span>
     }()
 
-    go func() {
-        for n := range ch {
-            fmt.Println(n)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        <span style=color:#8b008b;font-weight:700>for</span> n := <span style=color:#8b008b;font-weight:700>range</span> ch {
+            fmt.<span style=color:#008b45>Println</span>(n)
         }
     }()
 
-    time.Sleep(1 * time.Second)
-}</code></pre><p>了解上述 channel 觀念後，可以來實作底下 consumer 流程</p><p><img src="https://lh3.googleusercontent.com/bsmMhN5bVzpyDy-741CsS8s_wTyPfRpbLeZvJ0u7hOmCkXhBmS0qmVwkky4zveLxtNqQgGTUufWeNi2OVvOyXwx6QrADvt5n_6tAJlSzmRJK27U9C1EgOhzziZmLqNp_FTyqf4NAits=w1920-h1080" alt></p><h2 id=實作-consumer>實作 consumer</h2><p>底下會創建兩個 channel 來實作 consumer，其中 jobsChan 後面會有多個 worker 串接。</p><p><img src="https://lh3.googleusercontent.com/MLHCSmyZXRq-89r0I8b26ZEQ07N28EI2NzeE8KLhpBJCnbUCHXkdQ3KqvzXOObPr6_mqJOt6lW7hoVxEr52HbmVVHmXE-1g5yqmmN2EN9UXtptfgHj5wL6Ff-0G1QO3WFw3ShYzDh10=w1920-h1080" alt></p><pre><code class=language-go>// Consumer struct
-type Consumer struct {
-    inputChan chan int
-    jobsChan  chan int
+    time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
+}
+</code></pre></td></tr></table></div></div><p>了解上述 channel 觀念後，可以來實作底下 consumer 流程</p><p><img src="https://lh3.googleusercontent.com/bsmMhN5bVzpyDy-741CsS8s_wTyPfRpbLeZvJ0u7hOmCkXhBmS0qmVwkky4zveLxtNqQgGTUufWeNi2OVvOyXwx6QrADvt5n_6tAJlSzmRJK27U9C1EgOhzziZmLqNp_FTyqf4NAits=w1920-h1080" alt></p><h2 id=實作-consumer>實作 consumer</h2><p>底下會創建兩個 channel 來實作 consumer，其中 jobsChan 後面會有多個 worker 串接。</p><p><img src="https://lh3.googleusercontent.com/MLHCSmyZXRq-89r0I8b26ZEQ07N28EI2NzeE8KLhpBJCnbUCHXkdQ3KqvzXOObPr6_mqJOt6lW7hoVxEr52HbmVVHmXE-1g5yqmmN2EN9UXtptfgHj5wL6Ff-0G1QO3WFw3ShYzDh10=w1920-h1080" alt></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#228b22>// Consumer struct
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>type</span> Consumer <span style=color:#8b008b;font-weight:700>struct</span> {
+    inputChan <span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>
+    jobsChan  <span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>
 }
 
-func main() {
-    // create the consumer
-    consumer := Consumer{
-        inputChan: make(chan int, 10),
-        jobsChan:  make(chan int, poolSize),
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    <span style=color:#228b22>// create the consumer
+</span><span style=color:#228b22></span>    consumer := Consumer{
+        inputChan: <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>10</span>),
+        jobsChan:  <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, poolSize),
     }
-}</code></pre><p>接著實現 worker 模組</p><p><img src="https://lh3.googleusercontent.com/gDAxAXt6HucaSmMiWudaBqM8lB7CEuV0u2CYPNdmij5GKwVOHbPqF300DiiupusbGfl3sXqT-mu7EAfaWRCjLS850b7yUpHlwiwJ-z-hBo2ZkKE71oHleH7f36Yifx6Kr3rkQavx7uI=w1920-h1080" alt></p><pre><code class=language-go>func (c *Consumer) queue(input int) {
-    select {
-    case c.inputChan <- input:
-        log.Println("already send input value:", input)
-        return true
-    default:
-        return false
+}
+</code></pre></td></tr></table></div></div><p>接著實現 worker 模組</p><p><img src="https://lh3.googleusercontent.com/gDAxAXt6HucaSmMiWudaBqM8lB7CEuV0u2CYPNdmij5GKwVOHbPqF300DiiupusbGfl3sXqT-mu7EAfaWRCjLS850b7yUpHlwiwJ-z-hBo2ZkKE71oHleH7f36Yifx6Kr3rkQavx7uI=w1920-h1080" alt></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>queue</span>(input <span style=color:#00688b;font-weight:700>int</span>) {
+    <span style=color:#8b008b;font-weight:700>select</span> {
+    <span style=color:#8b008b;font-weight:700>case</span> c.inputChan &lt;- input:
+        log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;already send input value:&#34;</span>, input)
+        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>true</span>
+    <span style=color:#8b008b;font-weight:700>default</span>:
+        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>false</span>
     }
 }
 
-func (c *Consumer) process(num, job int) {
-    n := getRandomTime()
-    log.Printf("Sleeping %d seconds...\n", n)
-    time.Sleep(time.Duration(n) * time.Second)
-    log.Println("worker:", num, " job value:", job)
+<span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>process</span>(num, job <span style=color:#00688b;font-weight:700>int</span>) {
+    n := <span style=color:#008b45>getRandomTime</span>()
+    log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;Sleeping %d seconds...\n&#34;</span>, n)
+    time.<span style=color:#008b45>Sleep</span>(time.<span style=color:#008b45>Duration</span>(n) * time.Second)
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;worker:&#34;</span>, num, <span style=color:#cd5555>&#34; job value:&#34;</span>, job)
 }
 
-func (c *Consumer) worker(num int) {
-    log.Println("start the worker", num)
-    for {
-        select {
-        case job := <-c.jobsChan:
-            c.process(num, job)
+<span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(num <span style=color:#00688b;font-weight:700>int</span>) {
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;start the worker&#34;</span>, num)
+    <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.jobsChan:
+            c.<span style=color:#008b45>process</span>(num, job)
         }
     }
 }
 
-func (c Consumer) startConsumer(ctx context.Context) {
-    for {
-        select {
-        case job := <-c.inputChan:
-            c.jobsChan <- job
+<span style=color:#8b008b;font-weight:700>func</span> (c Consumer) <span style=color:#008b45>startConsumer</span>(ctx context.Context) {
+    <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.inputChan:
+            c.jobsChan &lt;- job
         }
     }
 }
 
-const poolSize = 2
+<span style=color:#8b008b;font-weight:700>const</span> poolSize = <span style=color:#b452cd>2</span>
 
-func main() {
-    // create the consumer
-    consumer := Consumer{
-        inputChan: make(chan int, 10),
-        jobsChan:  make(chan int, poolSize),
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    <span style=color:#228b22>// create the consumer
+</span><span style=color:#228b22></span>    consumer := Consumer{
+        inputChan: <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>10</span>),
+        jobsChan:  <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, poolSize),
     }
 
-    for i := 0; i < poolSize; i++ {
-        go consumer.worker(i)
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; poolSize; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> consumer.<span style=color:#008b45>worker</span>(i)
     }
 
-    go consumer.startConsumer(ctx)
+    <span style=color:#8b008b;font-weight:700>go</span> consumer.<span style=color:#008b45>startConsumer</span>(ctx)
 
-    consumer.queue(1)
-    consumer.queue(2)
-    consumer.queue(3)
-    consumer.queue(4)
-    consumer.queue(5)
-}</code></pre><p>由上述程式碼可以看到，都會透過 for select 方式來對 channel 進行讀寫動作。其中 <code>queue</code> 用來將資料丟入 input channel。</p><h2 id=shutdown-with-sigterm-handling>Shutdown with Sigterm Handling</h2><p>接著處理當使用者按下 ctrl + c 或者是容器被移除時 (restart) 該如何接到此訊號?</p><p><img src="https://lh3.googleusercontent.com/5LzQ5lKJzfAyqKq608HbQnZJUnE_ktwdscY2rNv6FcT-G00-zo8bzObB1bph-oEdDOxOeL0r3sLQ27TONW4MBJN2FMHH20NdkciFY3xUhAaWto6BM8fbcot_E-be8iQ7uQdjSSmu3cQ=w1920-h1080" alt></p><p>這時候就需要用到 context</p><pre><code class=language-go>func withContextFunc(ctx context.Context, f func()) context.Context {
-    ctx, cancel := context.WithCancel(ctx)
-    go func() {
-        c := make(chan os.Signal)
-        signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
-        defer signal.Stop(c)
+    consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>1</span>)
+    consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>2</span>)
+    consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>3</span>)
+    consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>4</span>)
+    consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>5</span>)
+}
+</code></pre></td></tr></table></div></div><p>由上述程式碼可以看到，都會透過 for select 方式來對 channel 進行讀寫動作。其中 <code>queue</code> 用來將資料丟入 input channel。</p><h2 id=shutdown-with-sigterm-handling>Shutdown with Sigterm Handling</h2><p>接著處理當使用者按下 ctrl + c 或者是容器被移除時 (restart) 該如何接到此訊號?</p><p><img src="https://lh3.googleusercontent.com/5LzQ5lKJzfAyqKq608HbQnZJUnE_ktwdscY2rNv6FcT-G00-zo8bzObB1bph-oEdDOxOeL0r3sLQ27TONW4MBJN2FMHH20NdkciFY3xUhAaWto6BM8fbcot_E-be8iQ7uQdjSSmu3cQ=w1920-h1080" alt></p><p>這時候就需要用到 context</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>withContextFunc</span>(ctx context.Context, f <span style=color:#8b008b;font-weight:700>func</span>()) context.Context {
+    ctx, cancel := context.<span style=color:#008b45>WithCancel</span>(ctx)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal)
+        signal.<span style=color:#008b45>Notify</span>(c, syscall.SIGINT, syscall.SIGTERM)
+        <span style=color:#8b008b;font-weight:700>defer</span> signal.<span style=color:#008b45>Stop</span>(c)
 
-        select {
-        case <-ctx.Done():
-        case <-c:
-            cancel()
-            f()
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-c:
+            <span style=color:#008b45>cancel</span>()
+            <span style=color:#008b45>f</span>()
         }
     }()
 
-    return ctx
-}</code></pre><p>其中 <code>syscall.SIGINT</code>, <code>syscall.SIGTERM</code> 用來偵測使用者是否按下 <code>ctrl+c</code> 或者是容器被移除時就會執行。所以當開發者按下 <code>ctrl+c</code> 就會直接觸發 cancel()，所以在最前面會使用 <code>context.WithCancel</code>，之後有機會再詳細介紹 context 的使用方式。</p><p><img src="https://lh3.googleusercontent.com/9sRvEU3seyDRvDLE8Wg2L2Ydc9E1moSwHeTXl2Fy7NbqOgJp9nZv7M9ds0d4GD42CNFXVs3IVeTlbP2khg_btLgRDsvqfefvfQ6ZAaQaWQcgDw2tm0SiHgQcI_Hf1pqIhc6xw4ztroI=w1920-h1080" alt></p><p>由於使用了 context，這樣就可以在每個 func 帶入客製化的 context。需要變動的有 <code>startConsumer</code> 及 <code>worker</code></p><pre><code class=language-go>func (c Consumer) startConsumer(ctx context.Context) {
-    for {
-        select {
-        case job := <-c.inputChan:
-            if ctx.Err() != nil {
-                close(c.jobsChan)
-                return
+    <span style=color:#8b008b;font-weight:700>return</span> ctx
+}
+</code></pre></td></tr></table></div></div><p>其中 <code>syscall.SIGINT</code>, <code>syscall.SIGTERM</code> 用來偵測使用者是否按下 <code>ctrl+c</code> 或者是容器被移除時就會執行。所以當開發者按下 <code>ctrl+c</code> 就會直接觸發 cancel()，所以在最前面會使用 <code>context.WithCancel</code>，之後有機會再詳細介紹 context 的使用方式。</p><p><img src="https://lh3.googleusercontent.com/9sRvEU3seyDRvDLE8Wg2L2Ydc9E1moSwHeTXl2Fy7NbqOgJp9nZv7M9ds0d4GD42CNFXVs3IVeTlbP2khg_btLgRDsvqfefvfQ6ZAaQaWQcgDw2tm0SiHgQcI_Hf1pqIhc6xw4ztroI=w1920-h1080" alt></p><p>由於使用了 context，這樣就可以在每個 func 帶入客製化的 context。需要變動的有 <code>startConsumer</code> 及 <code>worker</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c Consumer) <span style=color:#008b45>startConsumer</span>(ctx context.Context) {
+    <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.inputChan:
+            <span style=color:#8b008b;font-weight:700>if</span> ctx.<span style=color:#008b45>Err</span>() != <span style=color:#8b008b;font-weight:700>nil</span> {
+                <span style=color:#658b00>close</span>(c.jobsChan)
+                <span style=color:#8b008b;font-weight:700>return</span>
             }
-            c.jobsChan <- job
-        case <-ctx.Done():
-            close(c.jobsChan)
-            return
+            c.jobsChan &lt;- job
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+            <span style=color:#658b00>close</span>(c.jobsChan)
+            <span style=color:#8b008b;font-weight:700>return</span>
         }
     }
 }
 
-func (c *Consumer) worker(ctx context.Context, num int) {
-    log.Println("start the worker", num)
-    for {
-        select {
-        case job := <-c.jobsChan:
-            if ctx.Err() != nil {
-                log.Println("get next job", job, "and close the worker", num)
-                return
+<span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(ctx context.Context, num <span style=color:#00688b;font-weight:700>int</span>) {
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;start the worker&#34;</span>, num)
+    <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.jobsChan:
+            <span style=color:#8b008b;font-weight:700>if</span> ctx.<span style=color:#008b45>Err</span>() != <span style=color:#8b008b;font-weight:700>nil</span> {
+                log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;get next job&#34;</span>, job, <span style=color:#cd5555>&#34;and close the worker&#34;</span>, num)
+                <span style=color:#8b008b;font-weight:700>return</span>
             }
-            c.process(num, job)
-        case <-ctx.Done():
-            log.Println("close the worker", num)
-            return
+            c.<span style=color:#008b45>process</span>(num, job)
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+            log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;close the worker&#34;</span>, num)
+            <span style=color:#8b008b;font-weight:700>return</span>
         }
     }
-}</code></pre><p>這邊要注意的是，當我們按下 ctrl+c 終止 worker 時，理論上會直接到 <code>case &lt;-ctx.Done()</code> 但是實際狀況是有時候會直接在繼續讀取 channel 下一個值。這時候就需要在讀取 channel 後判斷 context 是否已經取消。在 main 最後通常會放一個 channel 來判斷是否需要中斷 main 函式。</p><pre><code class=language-go>func main() {
-    finished := make(chan bool)
+}
+</code></pre></td></tr></table></div></div><p>這邊要注意的是，當我們按下 ctrl+c 終止 worker 時，理論上會直接到 <code>case &lt;-ctx.Done()</code> 但是實際狀況是有時候會直接在繼續讀取 channel 下一個值。這時候就需要在讀取 channel 後判斷 context 是否已經取消。在 main 最後通常會放一個 channel 來判斷是否需要中斷 main 函式。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    finished := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>bool</span>)
 
-    ctx := withContextFunc(context.Background(), func() {
-        log.Println("cancel from ctrl+c event")
-        close(finished)
+    ctx := <span style=color:#008b45>withContextFunc</span>(context.<span style=color:#008b45>Background</span>(), <span style=color:#8b008b;font-weight:700>func</span>() {
+        log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;cancel from ctrl+c event&#34;</span>)
+        <span style=color:#658b00>close</span>(finished)
     })
 
-    <-finished
-}</code></pre><p>上述完成後，按下 ctrl + c 後，就可以直接執行 close channel，整個主程式都停止，但是這不是我們預期得結果，預期的是需要等到全部的 worker 把正在處理的 Job 完成後，才進行停止才是。</p><h2 id=graceful-shutdown-with-worker>Graceful shutdown with worker</h2><p>要用什麼方式才可以等到 worker 處理完畢後才結束 main 函式呢？這時候需要用到 <code>sync.WaitGroup</code> 了</p><p><img src="https://lh3.googleusercontent.com/ysxHycsHwxRY9vxlQXzUoOz3Fb1LaaG0V47KqmBp8AB6kD5-kBznMP5oFm-ZVv24M01So92VTgpHtdO36EUKDgu3RzdFMLb3cCRf5sndyBJqPM_gRs_nh43W18gFC9M4KaxL1VYuS0o=w1920-h1080" alt></p><pre><code class=language-go>const poolSize = 2
+    &lt;-finished
+}
+</code></pre></td></tr></table></div></div><p>上述完成後，按下 ctrl + c 後，就可以直接執行 close channel，整個主程式都停止，但是這不是我們預期得結果，預期的是需要等到全部的 worker 把正在處理的 Job 完成後，才進行停止才是。</p><h2 id=graceful-shutdown-with-worker>Graceful shutdown with worker</h2><p>要用什麼方式才可以等到 worker 處理完畢後才結束 main 函式呢？這時候需要用到 <code>sync.WaitGroup</code> 了</p><p><img src="https://lh3.googleusercontent.com/ysxHycsHwxRY9vxlQXzUoOz3Fb1LaaG0V47KqmBp8AB6kD5-kBznMP5oFm-ZVv24M01So92VTgpHtdO36EUKDgu3RzdFMLb3cCRf5sndyBJqPM_gRs_nh43W18gFC9M4KaxL1VYuS0o=w1920-h1080" alt></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>const</span> poolSize = <span style=color:#b452cd>2</span>
 
-func main() {
-    finished := make(chan bool)
-    wg := &sync.WaitGroup{}
-    wg.Add(poolSize)
-}</code></pre><p>其中 poolSize 代表的是 worker 數量，接著調整 worker 函式</p><p><img src="https://lh3.googleusercontent.com/XP11UzmV5sgyCeI9et14wFgXBLHX0UPvozlur_b6PnZgoiOU2VlUbsxmL4e7t_CSaB2Whgzo-_qKhjVf0mV3PL1s9dFFZiYBbAiKqEQYfqKLHua1gt-UEC7txcveRtCSbW6-mHKaMTM=w1920-h1080" alt></p><pre><code class=language-go>func (c *Consumer) worker(ctx context.Context, num int, wg *sync.WaitGroup) {
-    defer wg.Done()
-    log.Println("start the worker", num)
-    for {
-        select {
-        case job := <-c.jobsChan:
-            if ctx.Err() != nil {
-                log.Println("get next job", job, "and close the worker", num)
-                return
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    finished := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>bool</span>)
+    wg := &amp;sync.WaitGroup{}
+    wg.<span style=color:#008b45>Add</span>(poolSize)
+}
+</code></pre></td></tr></table></div></div><p>其中 poolSize 代表的是 worker 數量，接著調整 worker 函式</p><p><img src="https://lh3.googleusercontent.com/XP11UzmV5sgyCeI9et14wFgXBLHX0UPvozlur_b6PnZgoiOU2VlUbsxmL4e7t_CSaB2Whgzo-_qKhjVf0mV3PL1s9dFFZiYBbAiKqEQYfqKLHua1gt-UEC7txcveRtCSbW6-mHKaMTM=w1920-h1080" alt></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(ctx context.Context, num <span style=color:#00688b;font-weight:700>int</span>, wg *sync.WaitGroup) {
+    <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;start the worker&#34;</span>, num)
+    <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.jobsChan:
+            <span style=color:#8b008b;font-weight:700>if</span> ctx.<span style=color:#008b45>Err</span>() != <span style=color:#8b008b;font-weight:700>nil</span> {
+                log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;get next job&#34;</span>, job, <span style=color:#cd5555>&#34;and close the worker&#34;</span>, num)
+                <span style=color:#8b008b;font-weight:700>return</span>
             }
-            c.process(num, job)
-        case <-ctx.Done():
-            log.Println("close the worker", num)
-            return
+            c.<span style=color:#008b45>process</span>(num, job)
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+            log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;close the worker&#34;</span>, num)
+            <span style=color:#8b008b;font-weight:700>return</span>
         }
     }
-}</code></pre><p>只有在最前面加上 <code>defer wg.Done()</code>，接著修正 context 的 callback 函式，增加 <code>wg.Wait()</code> 讓 main 函式等到所有的 worker 處理完畢後才關閉 <code>finished</code> channel。</p><pre><code class=language-go>    ctx := withContextFunc(context.Background(), func() {
-        log.Println("cancel from ctrl+c event")
-        wg.Wait()
-        close(finished)
-    })</code></pre><p>最後在主程式後面加上 <code>&lt;-finished</code> 即可。</p><pre><code class=language-go>const poolSize = 2
+}
+</code></pre></td></tr></table></div></div><p>只有在最前面加上 <code>defer wg.Done()</code>，接著修正 context 的 callback 函式，增加 <code>wg.Wait()</code> 讓 main 函式等到所有的 worker 處理完畢後才關閉 <code>finished</code> channel。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    ctx := <span style=color:#008b45>withContextFunc</span>(context.<span style=color:#008b45>Background</span>(), <span style=color:#8b008b;font-weight:700>func</span>() {
+        log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;cancel from ctrl+c event&#34;</span>)
+        wg.<span style=color:#008b45>Wait</span>()
+        <span style=color:#658b00>close</span>(finished)
+    })
+</code></pre></td></tr></table></div></div><p>最後在主程式後面加上 <code>&lt;-finished</code> 即可。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>const</span> poolSize = <span style=color:#b452cd>2</span>
 
-func main() {
-    finished := make(chan bool)
-    wg := &sync.WaitGroup{}
-    wg.Add(poolSize)
-    // create the consumer
-    consumer := Consumer{
-        inputChan: make(chan int, 10),
-        jobsChan:  make(chan int, poolSize),
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    finished := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>bool</span>)
+    wg := &amp;sync.WaitGroup{}
+    wg.<span style=color:#008b45>Add</span>(poolSize)
+    <span style=color:#228b22>// create the consumer
+</span><span style=color:#228b22></span>    consumer := Consumer{
+        inputChan: <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>10</span>),
+        jobsChan:  <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, poolSize),
     }
 
-    ctx := withContextFunc(context.Background(), func() {
-        log.Println("cancel from ctrl+c event")
-        wg.Wait()
-        close(finished)
+    ctx := <span style=color:#008b45>withContextFunc</span>(context.<span style=color:#008b45>Background</span>(), <span style=color:#8b008b;font-weight:700>func</span>() {
+        log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;cancel from ctrl+c event&#34;</span>)
+        wg.<span style=color:#008b45>Wait</span>()
+        <span style=color:#658b00>close</span>(finished)
     })
 
-    for i := 0; i < poolSize; i++ {
-        go consumer.worker(ctx, i, wg)
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; poolSize; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> consumer.<span style=color:#008b45>worker</span>(ctx, i, wg)
     }
 
-    <-finished
-    log.Println("Game over")
-}</code></pre><p>最後附上<a href=https://github.com/go-training/training/blob/61662e050886e27aaa9c8f757b9907dc096b7440/example34-graceful-shutdown-with-worker/graceful-shutdown/question/main.go#L1>完整的程式碼</a>讓大家測試:</p><pre><code class=language-go>package main
+    &lt;-finished
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Game over&#34;</span>)
+}
+</code></pre></td></tr></table></div></div><p>最後附上<a href=https://github.com/go-training/training/blob/61662e050886e27aaa9c8f757b9907dc096b7440/example34-graceful-shutdown-with-worker/graceful-shutdown/question/main.go#L1>完整的程式碼</a>讓大家測試:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>  1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>  2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>  3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>  4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>  5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>  6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>  7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>  8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>  9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10> 10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11> 11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12> 12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13> 13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14> 14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15> 15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16> 16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17> 17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18> 18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19> 19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20> 20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21> 21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22> 22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23> 23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24> 24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25> 25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26> 26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27> 27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28> 28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29> 29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30> 30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31> 31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32> 32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33> 33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34> 34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35> 35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36> 36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37> 37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38> 38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39> 39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40> 40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41> 41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42> 42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43> 43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44> 44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45> 45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46> 46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47> 47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48> 48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49> 49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50> 50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51> 51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52> 52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53> 53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54> 54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55> 55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56> 56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57> 57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58> 58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59> 59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60> 60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61> 61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62> 62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63> 63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64> 64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65> 65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66> 66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67> 67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68> 68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69> 69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70> 70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71> 71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72> 72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73> 73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74> 74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75> 75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76> 76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77> 77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78> 78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79> 79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80> 80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81> 81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82> 82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83> 83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84> 84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85> 85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86> 86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87> 87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88> 88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89> 89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90> 90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91> 91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92> 92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93> 93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94> 94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95> 95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96> 96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97> 97</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98><a style=outline:none;text-decoration:none;color:inherit href=#98> 98</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99><a style=outline:none;text-decoration:none;color:inherit href=#99> 99</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100><a style=outline:none;text-decoration:none;color:inherit href=#100>100</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=101><a style=outline:none;text-decoration:none;color:inherit href=#101>101</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=102><a style=outline:none;text-decoration:none;color:inherit href=#102>102</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=103><a style=outline:none;text-decoration:none;color:inherit href=#103>103</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=104><a style=outline:none;text-decoration:none;color:inherit href=#104>104</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=105><a style=outline:none;text-decoration:none;color:inherit href=#105>105</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=106><a style=outline:none;text-decoration:none;color:inherit href=#106>106</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=107><a style=outline:none;text-decoration:none;color:inherit href=#107>107</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=108><a style=outline:none;text-decoration:none;color:inherit href=#108>108</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=109><a style=outline:none;text-decoration:none;color:inherit href=#109>109</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=110><a style=outline:none;text-decoration:none;color:inherit href=#110>110</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=111><a style=outline:none;text-decoration:none;color:inherit href=#111>111</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=112><a style=outline:none;text-decoration:none;color:inherit href=#112>112</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=113><a style=outline:none;text-decoration:none;color:inherit href=#113>113</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=114><a style=outline:none;text-decoration:none;color:inherit href=#114>114</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=115><a style=outline:none;text-decoration:none;color:inherit href=#115>115</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=116><a style=outline:none;text-decoration:none;color:inherit href=#116>116</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=117><a style=outline:none;text-decoration:none;color:inherit href=#117>117</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=118><a style=outline:none;text-decoration:none;color:inherit href=#118>118</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=119><a style=outline:none;text-decoration:none;color:inherit href=#119>119</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=120><a style=outline:none;text-decoration:none;color:inherit href=#120>120</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=121><a style=outline:none;text-decoration:none;color:inherit href=#121>121</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=122><a style=outline:none;text-decoration:none;color:inherit href=#122>122</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=123><a style=outline:none;text-decoration:none;color:inherit href=#123>123</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=124><a style=outline:none;text-decoration:none;color:inherit href=#124>124</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=125><a style=outline:none;text-decoration:none;color:inherit href=#125>125</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=126><a style=outline:none;text-decoration:none;color:inherit href=#126>126</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=127><a style=outline:none;text-decoration:none;color:inherit href=#127>127</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=128><a style=outline:none;text-decoration:none;color:inherit href=#128>128</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=129><a style=outline:none;text-decoration:none;color:inherit href=#129>129</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "context"
-    "log"
-    "math/rand"
-    "os"
-    "os/signal"
-    "sync"
-    "syscall"
-    "time"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;context&#34;</span>
+    <span style=color:#cd5555>&#34;log&#34;</span>
+    <span style=color:#cd5555>&#34;math/rand&#34;</span>
+    <span style=color:#cd5555>&#34;os&#34;</span>
+    <span style=color:#cd5555>&#34;os/signal&#34;</span>
+    <span style=color:#cd5555>&#34;sync&#34;</span>
+    <span style=color:#cd5555>&#34;syscall&#34;</span>
+    <span style=color:#cd5555>&#34;time&#34;</span>
 )
 
-// Consumer struct
-type Consumer struct {
-    inputChan chan int
-    jobsChan  chan int
+<span style=color:#228b22>// Consumer struct
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>type</span> Consumer <span style=color:#8b008b;font-weight:700>struct</span> {
+    inputChan <span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>
+    jobsChan  <span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>
 }
 
-func getRandomTime() int {
-    rand.Seed(time.Now().UnixNano())
-    return rand.Intn(10)
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>getRandomTime</span>() <span style=color:#00688b;font-weight:700>int</span> {
+    rand.<span style=color:#008b45>Seed</span>(time.<span style=color:#008b45>Now</span>().<span style=color:#008b45>UnixNano</span>())
+    <span style=color:#8b008b;font-weight:700>return</span> rand.<span style=color:#008b45>Intn</span>(<span style=color:#b452cd>10</span>)
 }
 
-func withContextFunc(ctx context.Context, f func()) context.Context {
-    ctx, cancel := context.WithCancel(ctx)
-    go func() {
-        c := make(chan os.Signal)
-        signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
-        defer signal.Stop(c)
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>withContextFunc</span>(ctx context.Context, f <span style=color:#8b008b;font-weight:700>func</span>()) context.Context {
+    ctx, cancel := context.<span style=color:#008b45>WithCancel</span>(ctx)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal)
+        signal.<span style=color:#008b45>Notify</span>(c, syscall.SIGINT, syscall.SIGTERM)
+        <span style=color:#8b008b;font-weight:700>defer</span> signal.<span style=color:#008b45>Stop</span>(c)
 
-        select {
-        case <-ctx.Done():
-        case <-c:
-            cancel()
-            f()
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-c:
+            <span style=color:#008b45>cancel</span>()
+            <span style=color:#008b45>f</span>()
         }
     }()
 
-    return ctx
+    <span style=color:#8b008b;font-weight:700>return</span> ctx
 }
 
-func (c *Consumer) queue(input int) bool {
-    select {
-    case c.inputChan <- input:
-        log.Println("already send input value:", input)
-        return true
-    default:
-        return false
+<span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>queue</span>(input <span style=color:#00688b;font-weight:700>int</span>) <span style=color:#00688b;font-weight:700>bool</span> {
+    <span style=color:#8b008b;font-weight:700>select</span> {
+    <span style=color:#8b008b;font-weight:700>case</span> c.inputChan &lt;- input:
+        log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;already send input value:&#34;</span>, input)
+        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>true</span>
+    <span style=color:#8b008b;font-weight:700>default</span>:
+        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>false</span>
     }
 }
 
-func (c Consumer) startConsumer(ctx context.Context) {
-    for {
-        select {
-        case job := <-c.inputChan:
-            if ctx.Err() != nil {
-                close(c.jobsChan)
-                return
+<span style=color:#8b008b;font-weight:700>func</span> (c Consumer) <span style=color:#008b45>startConsumer</span>(ctx context.Context) {
+    <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.inputChan:
+            <span style=color:#8b008b;font-weight:700>if</span> ctx.<span style=color:#008b45>Err</span>() != <span style=color:#8b008b;font-weight:700>nil</span> {
+                <span style=color:#658b00>close</span>(c.jobsChan)
+                <span style=color:#8b008b;font-weight:700>return</span>
             }
-            c.jobsChan <- job
-        case <-ctx.Done():
-            close(c.jobsChan)
-            return
+            c.jobsChan &lt;- job
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+            <span style=color:#658b00>close</span>(c.jobsChan)
+            <span style=color:#8b008b;font-weight:700>return</span>
         }
     }
 }
 
-func (c *Consumer) process(num, job int) {
-    n := getRandomTime()
-    log.Printf("Sleeping %d seconds...\n", n)
-    time.Sleep(time.Duration(n) * time.Second)
-    log.Println("worker:", num, " job value:", job)
+<span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>process</span>(num, job <span style=color:#00688b;font-weight:700>int</span>) {
+    n := <span style=color:#008b45>getRandomTime</span>()
+    log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;Sleeping %d seconds...\n&#34;</span>, n)
+    time.<span style=color:#008b45>Sleep</span>(time.<span style=color:#008b45>Duration</span>(n) * time.Second)
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;worker:&#34;</span>, num, <span style=color:#cd5555>&#34; job value:&#34;</span>, job)
 }
 
-func (c *Consumer) worker(ctx context.Context, num int, wg *sync.WaitGroup) {
-    defer wg.Done()
-    log.Println("start the worker", num)
-    for {
-        select {
-        case job := <-c.jobsChan:
-            if ctx.Err() != nil {
-                log.Println("get next job", job, "and close the worker", num)
-                return
+<span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(ctx context.Context, num <span style=color:#00688b;font-weight:700>int</span>, wg *sync.WaitGroup) {
+    <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;start the worker&#34;</span>, num)
+    <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.jobsChan:
+            <span style=color:#8b008b;font-weight:700>if</span> ctx.<span style=color:#008b45>Err</span>() != <span style=color:#8b008b;font-weight:700>nil</span> {
+                log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;get next job&#34;</span>, job, <span style=color:#cd5555>&#34;and close the worker&#34;</span>, num)
+                <span style=color:#8b008b;font-weight:700>return</span>
             }
-            c.process(num, job)
-        case <-ctx.Done():
-            log.Println("close the worker", num)
-            return
+            c.<span style=color:#008b45>process</span>(num, job)
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+            log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;close the worker&#34;</span>, num)
+            <span style=color:#8b008b;font-weight:700>return</span>
         }
     }
 }
 
-const poolSize = 2
+<span style=color:#8b008b;font-weight:700>const</span> poolSize = <span style=color:#b452cd>2</span>
 
-func main() {
-    finished := make(chan bool)
-    wg := &sync.WaitGroup{}
-    wg.Add(poolSize)
-    // create the consumer
-    consumer := Consumer{
-        inputChan: make(chan int, 10),
-        jobsChan:  make(chan int, poolSize),
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    finished := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>bool</span>)
+    wg := &amp;sync.WaitGroup{}
+    wg.<span style=color:#008b45>Add</span>(poolSize)
+    <span style=color:#228b22>// create the consumer
+</span><span style=color:#228b22></span>    consumer := Consumer{
+        inputChan: <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>10</span>),
+        jobsChan:  <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, poolSize),
     }
 
-    ctx := withContextFunc(context.Background(), func() {
-        log.Println("cancel from ctrl+c event")
-        wg.Wait()
-        close(finished)
+    ctx := <span style=color:#008b45>withContextFunc</span>(context.<span style=color:#008b45>Background</span>(), <span style=color:#8b008b;font-weight:700>func</span>() {
+        log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;cancel from ctrl+c event&#34;</span>)
+        wg.<span style=color:#008b45>Wait</span>()
+        <span style=color:#658b00>close</span>(finished)
     })
 
-    for i := 0; i < poolSize; i++ {
-        go consumer.worker(ctx, i, wg)
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; poolSize; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> consumer.<span style=color:#008b45>worker</span>(ctx, i, wg)
     }
 
-    go consumer.startConsumer(ctx)
+    <span style=color:#8b008b;font-weight:700>go</span> consumer.<span style=color:#008b45>startConsumer</span>(ctx)
 
-    go func() {
-        consumer.queue(1)
-        consumer.queue(2)
-        consumer.queue(3)
-        consumer.queue(4)
-        consumer.queue(5)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>1</span>)
+        consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>2</span>)
+        consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>3</span>)
+        consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>4</span>)
+        consumer.<span style=color:#008b45>queue</span>(<span style=color:#b452cd>5</span>)
     }()
 
-    <-finished
-    log.Println("Game over")
+    &lt;-finished
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Game over&#34;</span>)
 }
-</code></pre><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/channel/>channel</a>&nbsp;
+
+</code></pre></td></tr></table></div></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/channel/>channel</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-with-multiple-workers%2f&text=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20with%20multiple%20workers&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-with-multiple-workers%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-with-multiple-workers%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20with%20multiple%20workers" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-with-multiple-workers%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20with%20multiple%20workers" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-with-multiple-workers%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20with%20multiple%20workers" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-with-multiple-workers%2f&description=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20with%20multiple%20workers" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2020/02/how-to-select-top-n-rows-from-each-key-in-sql/ data-toggle=tooltip data-placement=top title="[SQL] 如何從單一資料表取得每個 key 前 n 筆資料">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/ data-toggle=tooltip data-placement=top title="[Go 教學] 什麼是 graceful shutdown?">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

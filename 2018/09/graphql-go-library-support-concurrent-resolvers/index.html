@@ -1,8 +1,6 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
-&#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests. ch  使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式
-package main import ( &#34;encoding/json&#34; &#34;fmt&#34; &#34;log&#34; &#34;time&#34; &#34;github.com/graphql-go/graphql&#34; ) type Foo struct { Name string } var FieldFooType = graphql."><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","name":"Go 語言的 graph ql go 套件正式支援 concurrent resolvers"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers","description":"要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單\n\u0022pullRequests\u0022: \u0026graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) \/\/ Concurrent work via Goroutines. go func() { \/\/ Async work to obtain pullRequests. ch  使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式\npackage main import ( \u0022encoding\/json\u0022 \u0022fmt\u0022 \u0022log\u0022 \u0022time\u0022 \u0022github.com\/graphql-go\/graphql\u0022 ) type Foo struct { Name string } var FieldFooType = graphql.","inLanguage":"en","wordCount":276,"datePublished":"2018-09-16T03:35:36","dateModified":"2018-09-16T03:35:36","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, GraphQL"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta property="og:description" content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
-&#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests. ch  使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式
-package main import ( &#34;encoding/json&#34; &#34;fmt&#34; &#34;log&#34; &#34;time&#34; &#34;github.com/graphql-go/graphql&#34; ) type Foo struct { Name string } var FieldFooType = graphql."><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta name=twitter:description content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+1 2 3 4 5 6 7 8 9 10 11 12 13 14  &#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines.  go func() { // Async work to obtain pullRequests."><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","name":"Go 語言的 graph ql go 套件正式支援 concurrent resolvers"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers","description":"要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單\n1 2 3 4 5 6 7 8 9 10 11 12 13 14  \u0026#34;pullRequests\u0026#34;: \u0026amp;graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) \/\/ Concurrent work via Goroutines.  go func() { \/\/ Async work to obtain pullRequests.","inLanguage":"en","wordCount":601,"datePublished":"2018-09-16T03:35:36","dateModified":"2018-09-16T03:35:36","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, GraphQL"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta property="og:description" content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
+1 2 3 4 5 6 7 8 9 10 11 12 13 14  &#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines.  go func() { // Async work to obtain pullRequests."><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta name=twitter:description content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
 <a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
@@ -12,169 +10,339 @@ package main import ( &#34;encoding/json&#34; &#34;fmt&#34; &#34;log&#34; &#34;t
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 16, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;276&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#使用方式>使用方式</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>要在 <a href=https://golang.org>Go 語言</a>寫 graphQL，大家一定對 <a href=https://github.com/graphql-go/graphql>graphql-go</a> 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此<a href=https://github.com/appleboy/golang-graphql-benchmark>專案</a>，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 <a href=https://github.com/graphql-go/graphql/issues/389>Issue 來討論</a>，最終採用了 <a href=https://github.com/graphql-go/graphql/pull/388>Resolver returns a Thunk</a> 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單</p><pre><code class=language-go>"pullRequests": &graphql.Field{
-    Type: graphql.NewList(PullRequestType),
-    Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-        ch := make(chan []PullRequest)
-        // Concurrent work via Goroutines.
-        go func() {
-            // Async work to obtain pullRequests.
-            ch <- pullRequests
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;601&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#使用方式>使用方式</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>要在 <a href=https://golang.org>Go 語言</a>寫 graphQL，大家一定對 <a href=https://github.com/graphql-go/graphql>graphql-go</a> 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此<a href=https://github.com/appleboy/golang-graphql-benchmark>專案</a>，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 <a href=https://github.com/graphql-go/graphql/issues/389>Issue 來討論</a>，最終採用了 <a href=https://github.com/graphql-go/graphql/pull/388>Resolver returns a Thunk</a> 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#cd5555>&#34;pullRequests&#34;</span>: &amp;graphql.Field{
+    Type: graphql.<span style=color:#008b45>NewList</span>(PullRequestType),
+    Resolve: <span style=color:#8b008b;font-weight:700>func</span>(p graphql.ResolveParams) (<span style=color:#8b008b;font-weight:700>interface</span>{}, <span style=color:#00688b;font-weight:700>error</span>) {
+        ch := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> []PullRequest)
+        <span style=color:#228b22>// Concurrent work via Goroutines.
+</span><span style=color:#228b22></span>        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+            <span style=color:#228b22>// Async work to obtain pullRequests.
+</span><span style=color:#228b22></span>            ch &lt;- pullRequests
         }()
-        return func() interface{} {
-            return <-ch
-        }, nil
+        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>func</span>() <span style=color:#8b008b;font-weight:700>interface</span>{} {
+            <span style=color:#8b008b;font-weight:700>return</span> &lt;-ch
+        }, <span style=color:#8b008b;font-weight:700>nil</span>
     },
-},</code></pre><h2 id=使用方式>使用方式</h2><p>先用一個簡單例子來解釋之前的寫法會是什麼形式</p><pre><code class=language-go>package main
+},
+</code></pre></td></tr></table></div></div><h2 id=使用方式>使用方式</h2><p>先用一個簡單例子來解釋之前的寫法會是什麼形式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>  1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>  2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>  3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>  4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>  5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>  6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>  7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>  8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>  9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10> 10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11> 11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12> 12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13> 13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14> 14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15> 15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16> 16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17> 17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18> 18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19> 19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20> 20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21> 21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22> 22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23> 23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24> 24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25> 25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26> 26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27> 27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28> 28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29> 29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30> 30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31> 31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32> 32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33> 33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34> 34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35> 35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36> 36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37> 37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38> 38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39> 39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40> 40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41> 41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42> 42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43> 43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44> 44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45> 45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46> 46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47> 47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48> 48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49> 49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50> 50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51> 51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52> 52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53> 53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54> 54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55> 55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56> 56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57> 57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58> 58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59> 59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60> 60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61> 61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62> 62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63> 63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64> 64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65> 65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66> 66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67> 67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68> 68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69> 69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70> 70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71> 71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72> 72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73> 73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74> 74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75> 75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76> 76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77> 77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78> 78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79> 79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80> 80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81> 81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82> 82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83> 83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84> 84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85> 85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86> 86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87> 87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88> 88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89> 89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90> 90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91> 91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92> 92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93> 93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94> 94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95> 95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96> 96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97> 97</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98><a style=outline:none;text-decoration:none;color:inherit href=#98> 98</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99><a style=outline:none;text-decoration:none;color:inherit href=#99> 99</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100><a style=outline:none;text-decoration:none;color:inherit href=#100>100</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=101><a style=outline:none;text-decoration:none;color:inherit href=#101>101</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=102><a style=outline:none;text-decoration:none;color:inherit href=#102>102</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=103><a style=outline:none;text-decoration:none;color:inherit href=#103>103</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=104><a style=outline:none;text-decoration:none;color:inherit href=#104>104</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=105><a style=outline:none;text-decoration:none;color:inherit href=#105>105</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=106><a style=outline:none;text-decoration:none;color:inherit href=#106>106</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=107><a style=outline:none;text-decoration:none;color:inherit href=#107>107</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=108><a style=outline:none;text-decoration:none;color:inherit href=#108>108</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=109><a style=outline:none;text-decoration:none;color:inherit href=#109>109</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=110><a style=outline:none;text-decoration:none;color:inherit href=#110>110</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=111><a style=outline:none;text-decoration:none;color:inherit href=#111>111</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=112><a style=outline:none;text-decoration:none;color:inherit href=#112>112</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=113><a style=outline:none;text-decoration:none;color:inherit href=#113>113</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=114><a style=outline:none;text-decoration:none;color:inherit href=#114>114</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=115><a style=outline:none;text-decoration:none;color:inherit href=#115>115</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=116><a style=outline:none;text-decoration:none;color:inherit href=#116>116</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=117><a style=outline:none;text-decoration:none;color:inherit href=#117>117</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "encoding/json"
-    "fmt"
-    "log"
-    "time"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;encoding/json&#34;</span>
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;log&#34;</span>
+    <span style=color:#cd5555>&#34;time&#34;</span>
 
-    "github.com/graphql-go/graphql"
+    <span style=color:#cd5555>&#34;github.com/graphql-go/graphql&#34;</span>
 )
 
-type Foo struct {
-    Name string
+<span style=color:#8b008b;font-weight:700>type</span> Foo <span style=color:#8b008b;font-weight:700>struct</span> {
+    Name <span style=color:#00688b;font-weight:700>string</span>
 }
 
-var FieldFooType = graphql.NewObject(graphql.ObjectConfig{
-    Name: "Foo",
+<span style=color:#8b008b;font-weight:700>var</span> FieldFooType = graphql.<span style=color:#008b45>NewObject</span>(graphql.ObjectConfig{
+    Name: <span style=color:#cd5555>&#34;Foo&#34;</span>,
     Fields: graphql.Fields{
-        "name": &graphql.Field{Type: graphql.String},
+        <span style=color:#cd5555>&#34;name&#34;</span>: &amp;graphql.Field{Type: graphql.String},
     },
 })
 
-type Bar struct {
-    Name string
+<span style=color:#8b008b;font-weight:700>type</span> Bar <span style=color:#8b008b;font-weight:700>struct</span> {
+    Name <span style=color:#00688b;font-weight:700>string</span>
 }
 
-var FieldBarType = graphql.NewObject(graphql.ObjectConfig{
-    Name: "Bar",
+<span style=color:#8b008b;font-weight:700>var</span> FieldBarType = graphql.<span style=color:#008b45>NewObject</span>(graphql.ObjectConfig{
+    Name: <span style=color:#cd5555>&#34;Bar&#34;</span>,
     Fields: graphql.Fields{
-        "name": &graphql.Field{Type: graphql.String},
+        <span style=color:#cd5555>&#34;name&#34;</span>: &amp;graphql.Field{Type: graphql.String},
     },
 })
 
-// QueryType fields: `concurrentFieldFoo` and `concurrentFieldBar` are resolved
-// concurrently because they belong to the same field-level and their `Resolve`
-// function returns a function (thunk).
-var QueryType = graphql.NewObject(graphql.ObjectConfig{
-    Name: "Query",
+<span style=color:#228b22>// QueryType fields: `concurrentFieldFoo` and `concurrentFieldBar` are resolved
+</span><span style=color:#228b22>// concurrently because they belong to the same field-level and their `Resolve`
+</span><span style=color:#228b22>// function returns a function (thunk).
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>var</span> QueryType = graphql.<span style=color:#008b45>NewObject</span>(graphql.ObjectConfig{
+    Name: <span style=color:#cd5555>&#34;Query&#34;</span>,
     Fields: graphql.Fields{
-        "concurrentFieldFoo": &graphql.Field{
+        <span style=color:#cd5555>&#34;concurrentFieldFoo&#34;</span>: &amp;graphql.Field{
             Type: FieldFooType,
-            Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-                type result struct {
-                    data interface{}
-                    err  error
+            Resolve: <span style=color:#8b008b;font-weight:700>func</span>(p graphql.ResolveParams) (<span style=color:#8b008b;font-weight:700>interface</span>{}, <span style=color:#00688b;font-weight:700>error</span>) {
+                <span style=color:#8b008b;font-weight:700>type</span> result <span style=color:#8b008b;font-weight:700>struct</span> {
+                    data <span style=color:#8b008b;font-weight:700>interface</span>{}
+                    err  <span style=color:#00688b;font-weight:700>error</span>
                 }
-                ch := make(chan *result, 1)
-                go func() {
-                    defer close(ch)
-                    time.Sleep(1 * time.Second)
-                    foo := &Foo{Name: "Foo's name"}
-                    ch <- &result{data: foo, err: nil}
+                ch := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> *result, <span style=color:#b452cd>1</span>)
+                <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+                    <span style=color:#8b008b;font-weight:700>defer</span> <span style=color:#658b00>close</span>(ch)
+                    time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
+                    foo := &amp;Foo{Name: <span style=color:#cd5555>&#34;Foo&#39;s name&#34;</span>}
+                    ch &lt;- &amp;result{data: foo, err: <span style=color:#8b008b;font-weight:700>nil</span>}
                 }()
-                r := <-ch
-                return r.data, r.err
+                r := &lt;-ch
+                <span style=color:#8b008b;font-weight:700>return</span> r.data, r.err
             },
         },
-        "concurrentFieldBar": &graphql.Field{
+        <span style=color:#cd5555>&#34;concurrentFieldBar&#34;</span>: &amp;graphql.Field{
             Type: FieldBarType,
-            Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-                type result struct {
-                    data interface{}
-                    err  error
+            Resolve: <span style=color:#8b008b;font-weight:700>func</span>(p graphql.ResolveParams) (<span style=color:#8b008b;font-weight:700>interface</span>{}, <span style=color:#00688b;font-weight:700>error</span>) {
+                <span style=color:#8b008b;font-weight:700>type</span> result <span style=color:#8b008b;font-weight:700>struct</span> {
+                    data <span style=color:#8b008b;font-weight:700>interface</span>{}
+                    err  <span style=color:#00688b;font-weight:700>error</span>
                 }
-                ch := make(chan *result, 1)
-                go func() {
-                    defer close(ch)
-                    time.Sleep(1 * time.Second)
-                    bar := &Bar{Name: "Bar's name"}
-                    ch <- &result{data: bar, err: nil}
+                ch := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> *result, <span style=color:#b452cd>1</span>)
+                <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+                    <span style=color:#8b008b;font-weight:700>defer</span> <span style=color:#658b00>close</span>(ch)
+                    time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
+                    bar := &amp;Bar{Name: <span style=color:#cd5555>&#34;Bar&#39;s name&#34;</span>}
+                    ch &lt;- &amp;result{data: bar, err: <span style=color:#8b008b;font-weight:700>nil</span>}
                 }()
-                r := <-ch
-                return r.data, r.err
+                r := &lt;-ch
+                <span style=color:#8b008b;font-weight:700>return</span> r.data, r.err
             },
         },
     },
 })
 
-func main() {
-    schema, err := graphql.NewSchema(graphql.SchemaConfig{
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    schema, err := graphql.<span style=color:#008b45>NewSchema</span>(graphql.SchemaConfig{
         Query: QueryType,
     })
-    if err != nil {
-        log.Fatal(err)
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        log.<span style=color:#008b45>Fatal</span>(err)
     }
-    query := `
-        query {
-            concurrentFieldFoo {
-                name
-            }
-            concurrentFieldBar {
-                name
-            }
-        }
-    `
-    result := graphql.Do(graphql.Params{
+    query := <span style=color:#cd5555>`
+</span><span style=color:#cd5555>        query {
+</span><span style=color:#cd5555>            concurrentFieldFoo {
+</span><span style=color:#cd5555>                name
+</span><span style=color:#cd5555>            }
+</span><span style=color:#cd5555>            concurrentFieldBar {
+</span><span style=color:#cd5555>                name
+</span><span style=color:#cd5555>            }
+</span><span style=color:#cd5555>        }
+</span><span style=color:#cd5555>    `</span>
+    result := graphql.<span style=color:#008b45>Do</span>(graphql.Params{
         RequestString: query,
         Schema:        schema,
     })
-    b, err := json.Marshal(result)
-    if err != nil {
-        log.Fatal(err)
+    b, err := json.<span style=color:#008b45>Marshal</span>(result)
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        log.<span style=color:#008b45>Fatal</span>(err)
     }
-    fmt.Printf("%s", b)
-    /*
-        {
-          "data": {
-            "concurrentFieldBar": {
-              "name": "Bar's name"
-            },
-            "concurrentFieldFoo": {
-              "name": "Foo's name"
-            }
-          }
-        }
-    */
-}</code></pre><p>接著看看需要多少時間來完成執行</p><pre><code class=language-shell>$ time go run examples/concurrent-resolvers/main.go | jq
+    fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%s&#34;</span>, b)
+    <span style=color:#228b22>/*
+</span><span style=color:#228b22>        {
+</span><span style=color:#228b22>          &#34;data&#34;: {
+</span><span style=color:#228b22>            &#34;concurrentFieldBar&#34;: {
+</span><span style=color:#228b22>              &#34;name&#34;: &#34;Bar&#39;s name&#34;
+</span><span style=color:#228b22>            },
+</span><span style=color:#228b22>            &#34;concurrentFieldFoo&#34;: {
+</span><span style=color:#228b22>              &#34;name&#34;: &#34;Foo&#39;s name&#34;
+</span><span style=color:#228b22>            }
+</span><span style=color:#228b22>          }
+</span><span style=color:#228b22>        }
+</span><span style=color:#228b22>    */</span>
+}
+</code></pre></td></tr></table></div></div><p>接著看看需要多少時間來完成執行</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-shell data-lang=shell>$ <span style=color:#658b00>time</span> go run examples/concurrent-resolvers/main.go | jq
 {
-  "data": {
-    "concurrentFieldBar": {
-      "name": "Bar's name"
+  <span style=color:#cd5555>&#34;data&#34;</span>: {
+    <span style=color:#cd5555>&#34;concurrentFieldBar&#34;</span>: {
+      <span style=color:#cd5555>&#34;name&#34;</span>: <span style=color:#cd5555>&#34;Bar&#39;s name&#34;</span>
     },
-    "concurrentFieldFoo": {
-      "name": "Foo's name"
+    <span style=color:#cd5555>&#34;concurrentFieldFoo&#34;</span>: {
+      <span style=color:#cd5555>&#34;name&#34;</span>: <span style=color:#cd5555>&#34;Foo&#39;s name&#34;</span>
     }
   }
 }
 
 real    0m4.186s
 user    0m0.508s
-sys     0m0.925s</code></pre><p>總共花費了四秒，原因是每個 resolver 都是依序執行，所以都需要等每個 goroutines 執行完成才能進入到下一個 resolver，上面例子該如何改成 Concurrent 呢，很簡單，只要將 return 的部分換成</p><pre><code class=language-go>return func() (interface{}, error) {
-    r := <-ch
-    return r.data, r.err
-}, nil</code></pre><p>執行時間如下</p><pre><code class=language-shell>$ time go run examples/concurrent-resolvers/main.go | jq
+sys     0m0.925s
+</code></pre></td></tr></table></div></div><p>總共花費了四秒，原因是每個 resolver 都是依序執行，所以都需要等每個 goroutines 執行完成才能進入到下一個 resolver，上面例子該如何改成 Concurrent 呢，很簡單，只要將 return 的部分換成</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>func</span>() (<span style=color:#8b008b;font-weight:700>interface</span>{}, <span style=color:#00688b;font-weight:700>error</span>) {
+    r := &lt;-ch
+    <span style=color:#8b008b;font-weight:700>return</span> r.data, r.err
+}, <span style=color:#8b008b;font-weight:700>nil</span>
+</code></pre></td></tr></table></div></div><p>執行時間如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-shell data-lang=shell>$ <span style=color:#658b00>time</span> go run examples/concurrent-resolvers/main.go | jq
 {
-  "data": {
-    "concurrentFieldBar": {
-      "name": "Bar's name"
+  <span style=color:#cd5555>&#34;data&#34;</span>: {
+    <span style=color:#cd5555>&#34;concurrentFieldBar&#34;</span>: {
+      <span style=color:#cd5555>&#34;name&#34;</span>: <span style=color:#cd5555>&#34;Bar&#39;s name&#34;</span>
     },
-    "concurrentFieldFoo": {
-      "name": "Foo's name"
+    <span style=color:#cd5555>&#34;concurrentFieldFoo&#34;</span>: {
+      <span style=color:#cd5555>&#34;name&#34;</span>: <span style=color:#cd5555>&#34;Foo&#39;s name&#34;</span>
     }
   }
 }
 
 real    0m1.499s
 user    0m0.417s
-sys     0m0.242s</code></pre><p>從原本的 4 秒多，變成 1.5 秒，原因就是兩個 resolver 的 goroutines 會同時執行，最後才拿結果。</p><h2 id=心得>心得</h2><p>有了這功能後，比較複雜的 GraphQL 語法，就可以用此方式加速執行時間。作者也用 MongoDB + graphql 寫了一個<a href=https://gist.github.com/chris-ramon/e90e245ae79d664ec2f22e4c5682ea3b>範例</a>，大家可以參考看看。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
+sys     0m0.242s
+</code></pre></td></tr></table></div></div><p>從原本的 4 秒多，變成 1.5 秒，原因就是兩個 resolver 的 goroutines 會同時執行，最後才拿結果。</p><h2 id=心得>心得</h2><p>有了這功能後，比較複雜的 GraphQL 語法，就可以用此方式加速執行時間。作者也用 MongoDB + graphql 寫了一個<a href=https://gist.github.com/chris-ramon/e90e245ae79d664ec2f22e4c5682ea3b>範例</a>，大家可以參考看看。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/graphql/>GraphQL</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f09%2fgraphql-go-library-support-concurrent-resolvers%2f&text=Go%20%e8%aa%9e%e8%a8%80%e7%9a%84%20graphQL-go%20%e5%a5%97%e4%bb%b6%e6%ad%a3%e5%bc%8f%e6%94%af%e6%8f%b4%20Concurrent%20Resolvers&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f09%2fgraphql-go-library-support-concurrent-resolvers%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f09%2fgraphql-go-library-support-concurrent-resolvers%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%9a%84%20graphQL-go%20%e5%a5%97%e4%bb%b6%e6%ad%a3%e5%bc%8f%e6%94%af%e6%8f%b4%20Concurrent%20Resolvers" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f09%2fgraphql-go-library-support-concurrent-resolvers%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%9a%84%20graphQL-go%20%e5%a5%97%e4%bb%b6%e6%ad%a3%e5%bc%8f%e6%94%af%e6%8f%b4%20Concurrent%20Resolvers" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f09%2fgraphql-go-library-support-concurrent-resolvers%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%9a%84%20graphQL-go%20%e5%a5%97%e4%bb%b6%e6%ad%a3%e5%bc%8f%e6%94%af%e6%8f%b4%20Concurrent%20Resolvers" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2018%2f09%2fgraphql-go-library-support-concurrent-resolvers%2f&description=Go%20%e8%aa%9e%e8%a8%80%e7%9a%84%20graphQL-go%20%e5%a5%97%e4%bb%b6%e6%ad%a3%e5%bc%8f%e6%94%af%e6%8f%b4%20Concurrent%20Resolvers" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres/ data-toggle=tooltip data-placement=top title="在 PostgreSQL 時區轉換及計算時間">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2018/09/golang-project-quality/ data-toggle=tooltip data-placement=top title="Go 語言專案程式碼品質">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

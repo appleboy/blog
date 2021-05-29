@@ -1,43 +1,89 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>CSS 垂直置中解法 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="相信大家在 Google 可以找到很多解法，這幾天在 Facebook 發現更精彩的解決方式，就是用 CSS:before 跟 inline-block，底下提供範例:
 html 程式碼
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
 <!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>JS Bin</title>
+</head>
+<body>
+  <div class=&#34;ot&#34;>
+    <div class=&#34;wrapper&#34;></div>
+  </div> 
+</body>
+</html>
 
 
-
-JS Bin
-
-
-  
-    
-   
-
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2013\/07\/css-vertical-align-center\/","name":"Css 垂直置中解法"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"CSS 垂直置中解法","description":"相信大家在 Google 可以找到很多解法，這幾天在 Facebook 發現更精彩的解決方式，就是用 CSS:before 跟 inline-block，底下提供範例:\nhtml 程式碼\n  JS Bin      ","inLanguage":"en","wordCount":103,"datePublished":"2013-07-04T05:14:21","dateModified":"2013-07-04T05:14:21","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CSS, inline-block"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2013\/07\/css-vertical-align-center\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="CSS 垂直置中解法"><meta property="og:description" content="相信大家在 Google 可以找到很多解法，這幾天在 Facebook 發現更精彩的解決方式，就是用 CSS:before 跟 inline-block，底下提供範例:
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2013\/07\/css-vertical-align-center\/","name":"Css 垂直置中解法"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"CSS 垂直置中解法","description":"相信大家在 Google 可以找到很多解法，這幾天在 Facebook 發現更精彩的解決方式，就是用 CSS:before 跟 inline-block，底下提供範例:\nhtml 程式碼\n1 2 3 4 5 6 7 8 9 10 11 12  \u0026lt;!DOCTYPE html\u0026gt; \u0026lt;html\u0026gt; \u0026lt;head\u0026gt; \u0026lt;meta charset=utf-8 \/\u0026gt; \u0026lt;title\u0026gt;JS Bin\u0026lt;\/title\u0026gt; \u0026lt;\/head\u0026gt; \u0026lt;body\u0026gt; \u0026lt;div class=\u0026#34;ot\u0026#34;\u0026gt; \u0026lt;div class=\u0026#34;wrapper\u0026#34;\u0026gt;\u0026lt;\/div\u0026gt; \u0026lt;\/div\u0026gt; \u0026lt;\/body\u0026gt; \u0026lt;\/html\u0026gt;   ","inLanguage":"en","wordCount":178,"datePublished":"2013-07-04T05:14:21","dateModified":"2013-07-04T05:14:21","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CSS, inline-block"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2013\/07\/css-vertical-align-center\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="CSS 垂直置中解法"><meta property="og:description" content="相信大家在 Google 可以找到很多解法，這幾天在 Facebook 發現更精彩的解決方式，就是用 CSS:before 跟 inline-block，底下提供範例:
 html 程式碼
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
 <!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>JS Bin</title>
+</head>
+<body>
+  <div class=&#34;ot&#34;>
+    <div class=&#34;wrapper&#34;></div>
+  </div> 
+</body>
+</html>
 
-
-
-JS Bin
-
-
-  
-    
-   
 
 "><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2013/07/css-vertical-align-center/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="CSS 垂直置中解法"><meta name=twitter:description content="相信大家在 Google 可以找到很多解法，這幾天在 Facebook 發現更精彩的解決方式，就是用 CSS:before 跟 inline-block，底下提供範例:
 html 程式碼
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
 <!DOCTYPE html>
-
-
-
-JS Bin
-
-
-  
-    
-   
-
-"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<html>
+<head>
+<meta charset= …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
 <a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
@@ -48,63 +94,126 @@ JS Bin
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>CSS 垂直置中解法</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;103&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>相信大家在 <a href=http://www.google.com target=_blank>Google</a> 可以找到很多<a href="https://www.google.com.tw/search?q=css+vertical-align+center&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a" target=_blank>解法</a>，這幾天在 Facebook 發現<a href=https://www.facebook.com/josephj6802/posts/10200920251622230 target=_blank>更精彩的解決方式</a>，就是用 <a href=http://www.w3schools.com/cssref/sel_before.asp target=_blank>CSS:before</a> 跟 <a href=http://www.w3schools.com/cssref/pr_class_display.asp target=_blank>inline-block</a>，底下提供範例:</p><p>html 程式碼</p><pre><code class=language-html><!doctype html>
-<html>
-<head>
-<meta charset=utf-8>
-<title>JS Bin</title>
-</head>
-<body>
-  <div class=ot>
-    <div class=wrapper></div>
-  </div> 
-</body>
-</html></code></pre><p>CSS 程式碼</p><pre><code class=language-css>.ot {
-  width: 400px;
-  height: 400px;
-  border: 1px solid #FF6600;
-  text-align: center;
-  margin: 0 auto;
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;178&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>相信大家在 <a href=http://www.google.com target=_blank>Google</a> 可以找到很多<a href="https://www.google.com.tw/search?q=css+vertical-align+center&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a" target=_blank>解法</a>，這幾天在 Facebook 發現<a href=https://www.facebook.com/josephj6802/posts/10200920251622230 target=_blank>更精彩的解決方式</a>，就是用 <a href=http://www.w3schools.com/cssref/sel_before.asp target=_blank>CSS:before</a> 跟 <a href=http://www.w3schools.com/cssref/pr_class_display.asp target=_blank>inline-block</a>，底下提供範例:</p><p>html 程式碼</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-html data-lang=html><span style=color:#1e889b>&lt;!DOCTYPE html&gt;</span>
+&lt;<span style=color:#8b008b;font-weight:700>html</span>&gt;
+&lt;<span style=color:#8b008b;font-weight:700>head</span>&gt;
+&lt;<span style=color:#8b008b;font-weight:700>meta</span> <span style=color:#658b00>charset</span>=<span style=color:#cd5555>utf-8</span> /&gt;
+&lt;<span style=color:#8b008b;font-weight:700>title</span>&gt;JS Bin&lt;/<span style=color:#8b008b;font-weight:700>title</span>&gt;
+&lt;/<span style=color:#8b008b;font-weight:700>head</span>&gt;
+&lt;<span style=color:#8b008b;font-weight:700>body</span>&gt;
+  &lt;<span style=color:#8b008b;font-weight:700>div</span> <span style=color:#658b00>class</span>=<span style=color:#cd5555>&#34;ot&#34;</span>&gt;
+    &lt;<span style=color:#8b008b;font-weight:700>div</span> <span style=color:#658b00>class</span>=<span style=color:#cd5555>&#34;wrapper&#34;</span>&gt;&lt;/<span style=color:#8b008b;font-weight:700>div</span>&gt;
+  &lt;/<span style=color:#8b008b;font-weight:700>div</span>&gt; 
+&lt;/<span style=color:#8b008b;font-weight:700>body</span>&gt;
+&lt;/<span style=color:#8b008b;font-weight:700>html</span>&gt;
+</code></pre></td></tr></table></div></div><p>CSS 程式碼</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-css data-lang=css>.<span style=color:#008b45;font-weight:700>ot</span> {
+  <span style=color:#8b008b;font-weight:700>width</span>: <span style=color:#b452cd>400</span><span style=color:#00688b;font-weight:700>px</span>;
+  <span style=color:#8b008b;font-weight:700>height</span>: <span style=color:#b452cd>400</span><span style=color:#00688b;font-weight:700>px</span>;
+  <span style=color:#8b008b;font-weight:700>border</span>: <span style=color:#b452cd>1</span><span style=color:#00688b;font-weight:700>px</span> <span style=color:#8b008b;font-weight:700>solid</span> <span style=color:#b452cd>#FF6600</span>;
+  <span style=color:#8b008b;font-weight:700>text-align</span>: <span style=color:#8b008b;font-weight:700>center</span>;
+  <span style=color:#8b008b;font-weight:700>margin</span>: <span style=color:#b452cd>0</span> <span style=color:#8b008b;font-weight:700>auto</span>;
 }
 
-.ot:before {
-  content: '';
-  display: inline-block;
-  vertical-align: middle ;
-  height: 100%;
+.<span style=color:#008b45;font-weight:700>ot</span>:<span style=color:#707a7c>before</span> {
+  <span style=color:#8b008b;font-weight:700>content</span>: <span style=color:#cd5555>&#39;&#39;</span>;
+  <span style=color:#8b008b;font-weight:700>display</span>: <span style=color:#8b008b;font-weight:700>inline</span>-<span style=color:#8b008b;font-weight:700>block</span>;
+  <span style=color:#8b008b;font-weight:700>vertical-align</span>: <span style=color:#8b008b;font-weight:700>middle</span> ;
+  <span style=color:#8b008b;font-weight:700>height</span>: <span style=color:#b452cd>100</span><span style=color:#00688b;font-weight:700>%</span>;
 }
 
-.wrapper {
-  display: inline-block;
-  vertical-align: middle;
-  width: 200px;
-  height: 200px;
-  background: #ccc;
-}</code></pre><p>Demo 結果</p><p><a href=http://jsbin.com/ezodok/1/embed?live>JS Bin</a>{.jsbin-embed}</p><p>感謝留言提供一個不錯的<a href=http://www.iyunlu.com/view/css-xhtml/77.html target=_blank>教學連結: 未知高度多行文本垂直居中</a>，可以讓文字置中，也是透過上述方法。一般單行文字置中，可以透過底下方式</p><pre><code class=language-csss>.text {
+.<span style=color:#008b45;font-weight:700>wrapper</span> {
+  <span style=color:#8b008b;font-weight:700>display</span>: <span style=color:#8b008b;font-weight:700>inline</span>-<span style=color:#8b008b;font-weight:700>block</span>;
+  <span style=color:#8b008b;font-weight:700>vertical-align</span>: <span style=color:#8b008b;font-weight:700>middle</span>;
+  <span style=color:#8b008b;font-weight:700>width</span>: <span style=color:#b452cd>200</span><span style=color:#00688b;font-weight:700>px</span>;
+  <span style=color:#8b008b;font-weight:700>height</span>: <span style=color:#b452cd>200</span><span style=color:#00688b;font-weight:700>px</span>;
+  <span style=color:#8b008b;font-weight:700>background</span>: <span style=color:#b452cd>#ccc</span>;
+}
+</code></pre></td></tr></table></div></div><p>Demo 結果</p><p><a href=http://jsbin.com/ezodok/1/embed?live>JS Bin</a>{.jsbin-embed}</p><p>感謝留言提供一個不錯的<a href=http://www.iyunlu.com/view/css-xhtml/77.html target=_blank>教學連結: 未知高度多行文本垂直居中</a>，可以讓文字置中，也是透過上述方法。一般單行文字置中，可以透過底下方式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>.text {
   height: 26px;
   line-height: 26px;
-}</code></pre><p>如果是多行文字呢？也就是如果透過 P 標籤來顯示</p><blockquote><p>xxxxxxxxxxx</p></blockquote><pre><code class=language-css>*{margin:0;padding:0;}
+}
+</code></pre></td></tr></table></div></div><p>如果是多行文字呢？也就是如果透過 P 標籤來顯示</p><blockquote><p>xxxxxxxxxxx</p></blockquote><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-css data-lang=css>*{<span style=color:#8b008b;font-weight:700>margin</span>:<span style=color:#b452cd>0</span>;<span style=color:#8b008b;font-weight:700>padding</span>:<span style=color:#b452cd>0</span>;}
 
-.box{
-  height:200px;
-  width:300px;
-  background:pink;
-  margin:30px auto;
-  font-size:0;
+.<span style=color:#008b45;font-weight:700>box</span>{
+  <span style=color:#8b008b;font-weight:700>height</span>:<span style=color:#b452cd>200</span><span style=color:#00688b;font-weight:700>px</span>;
+  <span style=color:#8b008b;font-weight:700>width</span>:<span style=color:#b452cd>300</span><span style=color:#00688b;font-weight:700>px</span>;
+  <span style=color:#8b008b;font-weight:700>background</span>:<span style=color:#8b008b;font-weight:700>pink</span>;
+  <span style=color:#8b008b;font-weight:700>margin</span>:<span style=color:#b452cd>30</span><span style=color:#00688b;font-weight:700>px</span> <span style=color:#8b008b;font-weight:700>auto</span>;
+  <span style=color:#8b008b;font-weight:700>font-size</span>:<span style=color:#b452cd>0</span>;
 }
-.box:before{
-  content: '';
-  display: inline-block;
-  vertical-align: middle;
-  width: 0;
-  height: 100%;
+.<span style=color:#008b45;font-weight:700>box</span>:<span style=color:#707a7c>before</span>{
+  <span style=color:#8b008b;font-weight:700>content</span>: <span style=color:#cd5555>&#39;&#39;</span>;
+  <span style=color:#8b008b;font-weight:700>display</span>: <span style=color:#8b008b;font-weight:700>inline</span>-<span style=color:#8b008b;font-weight:700>block</span>;
+  <span style=color:#8b008b;font-weight:700>vertical-align</span>: <span style=color:#8b008b;font-weight:700>middle</span>;
+  <span style=color:#8b008b;font-weight:700>width</span>: <span style=color:#b452cd>0</span>;
+  <span style=color:#8b008b;font-weight:700>height</span>: <span style=color:#b452cd>100</span><span style=color:#00688b;font-weight:700>%</span>;
 }
-.text{
-  display: inline-block;
-  font-size:16px;
-  vertical-align: middle;
-}</code></pre><p>Demo 如下</p><p><a href=http://jsbin.com/ifexef/4/embed?live>多行文本未知高度垂直居中-by一丝</a>{.jsbin-embed}</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/css/>CSS</a>&nbsp;
+.<span style=color:#008b45;font-weight:700>text</span>{
+  <span style=color:#8b008b;font-weight:700>display</span>: <span style=color:#8b008b;font-weight:700>inline</span>-<span style=color:#8b008b;font-weight:700>block</span>;
+  <span style=color:#8b008b;font-weight:700>font-size</span>:<span style=color:#b452cd>16</span><span style=color:#00688b;font-weight:700>px</span>;
+  <span style=color:#8b008b;font-weight:700>vertical-align</span>: <span style=color:#8b008b;font-weight:700>middle</span>;
+}
+</code></pre></td></tr></table></div></div><p>Demo 如下</p><p><a href=http://jsbin.com/ifexef/4/embed?live>多行文本未知高度垂直居中-by一丝</a>{.jsbin-embed}</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/css/>CSS</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/inline-block/>inline-block</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2013%2f07%2fcss-vertical-align-center%2f&text=CSS%20%e5%9e%82%e7%9b%b4%e7%bd%ae%e4%b8%ad%e8%a7%a3%e6%b3%95&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2013%2f07%2fcss-vertical-align-center%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2013%2f07%2fcss-vertical-align-center%2f&title=CSS%20%e5%9e%82%e7%9b%b4%e7%bd%ae%e4%b8%ad%e8%a7%a3%e6%b3%95" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2013%2f07%2fcss-vertical-align-center%2f&title=CSS%20%e5%9e%82%e7%9b%b4%e7%bd%ae%e4%b8%ad%e8%a7%a3%e6%b3%95" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2013%2f07%2fcss-vertical-align-center%2f&title=CSS%20%e5%9e%82%e7%9b%b4%e7%bd%ae%e4%b8%ad%e8%a7%a3%e6%b3%95" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2013%2f07%2fcss-vertical-align-center%2f&description=CSS%20%e5%9e%82%e7%9b%b4%e7%bd%ae%e4%b8%ad%e8%a7%a3%e6%b3%95" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li><li><a href=/2014/01/10-great-css-tips-for-every-web-developer/>前端工程師必看: 十大 CSS 技巧</a></li><li><a href=/2013/09/css-clear-fix-tip/>CSS Clear Fix 小技巧</a></li><li><a href=/2013/07/twitter-bootstrap-release-3-rc1/>Twitter Bootstrap 發佈 3 RC1 版本</a></li><li><a href=/2013/05/web-responsive-design-test-tool/>測試 Web Responsive Design Tool</a></li><li><a href=/2012/07/develop-iphone-moblie-web-app-tip/>開發 iPhone Mobile Web App 一些小技巧</a></li><li><a href=/2012/07/css-layout-twitter-bootstrap-cdn/>CSS Layout 好幫手 Twitter bootstrap CDN</a></li><li><a href=/2012/04/how-to-install-livereload-on-windows/>Windows 下安裝 Web Developer tool LiveReload</a></li><li><a href=/2011/11/the-future-of-stylesheets-sass-compass/>Sass language 和 Compass 教學投影片</a></li><li><a href=/2011/11/front-end-engineer-love-livejs/>Front End Engineer 前端設計師必備工具 Live.js</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2013/06/php-5-5-0-release-zend-opcache/ data-toggle=tooltip data-placement=top title="PHP 5.5.0 Release note: support  Zend OPcache">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2013/07/seeking-new-owner-for-codeigniter/ data-toggle=tooltip data-placement=top title="CodeIgniter 尋找新東家">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2013/07/css-vertical-align-center>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2013/07/css-vertical-align-center'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

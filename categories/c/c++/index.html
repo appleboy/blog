@@ -22,7 +22,7 @@ git-server-的兩三事 Pro Git - Table of Contents 簡體中文版 Git 初學�
 <a href=https://demo.gh.wu-boy.com/2011/04/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E5%85%AB-android-javascript-css-php-perl-freebsd-linux/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/html5/>html5</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/><h2 class=post-title>2011 OSDC Day 1 筆記</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 31, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;264&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;268&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>Update: 補上 OSDC 紀錄影片 2011.06.26 今年很高興可以北上參加 OSDC 2011 (Open Source Developers Conference)，由於之前都在南部唸書及工作，沒有機會北上參加聚會，現在人在新竹，終於有機會可以參加了，雖然早上六點就要起床趕電車了，不過到現場聽課感覺就是不同，也可以認識很多新朋友，底下來紀錄上課筆記
 微軟與 jQuery 社群的親密接觸 講者: Eric Shangkuan (Microsoft) Slide: 微軟與 jQuery 社群的親密接觸 這是 OSDC 第一場演講，早上九點就開始了，雖然人不多，但是蠻多人還是為了講者而來，首先介紹什麼是 jQuery，以及 jQuery 一些基本用法，像是 CSS selector，如何在 Windows Visual Studio 上面開發 jQuery 及撰寫 plugin 整合進去 ASP.Net，最後介紹三個不錯用的 jQuery Plugin: Templeate, Datalink, Globalzation。
 Templeate: 這搭配 Facebook api 可以直接做個人頁面，請參考這裡 Globalzation: 前端多國語系實做 Datalink: 可以快速處理 form，利用 object 跟 jQuery 搭配 如果要研究上述三個 jQuery Plugin 可以參考底下: jQuery Datalink: https://github.com/jquery/jquery-datalink jQuery Templeate: https://github.
@@ -34,65 +34,50 @@ Templeate: 這搭配 Facebook api 可以直接做個人頁面，請參考這裡 
 <a href=https://demo.gh.wu-boy.com/tags/osdc/>OSDC</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/perl/>Perl</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/python/>Python</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/><h2 class=post-title>[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 26, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;612&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p><p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p><p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p><p>if_readlist_proc 函式裡面:</p><pre><code class=language-c>fh = fopen_or_warn(_PATH_PROCNET_DEV, "r");
-if (!fh) {
-    return if_readconf();
-}</code></pre><p>看一下 /proc/net/dev 內容</p><pre><code class=language-bash>Inter-|   Receive                                                |  Transmit
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;879&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p><p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p><p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p><p>if_readlist_proc 函式裡面:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c>fh = fopen_or_warn(_PATH_PROCNET_DEV, <span style=color:#cd5555>&#34;r&#34;</span>);
+<span style=color:#8b008b;font-weight:700>if</span> (!fh) {
+    <span style=color:#8b008b;font-weight:700>return</span> if_readconf();
+}
+</code></pre></td></tr></table></div></div><p>看一下 /proc/net/dev 內容</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>Inter-|   Receive                                                |  Transmit
  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
-    lo:     104       1    0    0    0     0          0         0      104       1    0    0    0     0       0          0
-  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0</code></pre><a href=https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/busybox/>Busybox</a>&nbsp;
+    lo:     <span style=color:#b452cd>104</span>       <span style=color:#b452cd>1</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>         <span style=color:#b452cd>0</span>      <span style=color:#b452cd>104</span>       <span style=color:#b452cd>1</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>       <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>
+  eth0:21798505   <span style=color:#b452cd>51360</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>         <span style=color:#b452cd>0</span>  <span style=color:#b452cd>7693686</span>   <span style=color:#b452cd>46844</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>       <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>
+</code></pre></td></tr></table></div></div><a href=https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/busybox/>Busybox</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/embedded-system/>Embedded System</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux/>Linux</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/><h2 class=post-title>[C/C++] 判斷檔案是否存在 file_exists</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 8, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;77&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:</p><pre><code class=language-php></code></pre><p>在 C 裡面該如何實做？有兩種方式如下:</p><h3 id=1-直接開檔>1. 直接開檔</h3><pre><code class=language-C>bool file_exists(const char * filename)
-{
-    if (FILE * file = fopen(filename, "r"))
-    {
-        fclose(file);
-        return true;
-    }
-    return false;
-}</code></pre><p>C++ 寫法</p><pre><code class=language-c>std::fstream foo;
-
-foo.open("bar");
-
-if(foo.is_open() == true)
-     std::cout << "Exist";
-else 
-     std::cout << "Doesn't Exist";</code></pre><h3 id=2-讀取檔案狀態>2. 讀取檔案狀態</h3><pre><code class=language-C>#include<sys/stat.h>
-int file_exists (char * fileName)
-{
-   struct stat buf;
-   int i = stat ( fileName, &buf );
-     /* File found */
-     if ( i == 0 )
-     {
-       return 1;
-     }
-     return 0;
-
-}</code></pre><blockquote></blockquote></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/><h2 class=post-title>[C/C++] 將字串轉成 16 進位</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 13, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;109&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>最近在碰嵌入式系統遇到一個還蠻常見的問題，我要將16進位的字串(例如 AAC2) test 轉成16進位的 unsigned int，讓我可以進行 & | not 一些二進位運算，底下是轉換程式，大家參考看看
-int power(int x,int n) { int i; int num = 1; for(i=1;i) == string[j]) { str_number += power(16, (sizeof(str_name)-1-i))* number[j]; break; } } } return str_number; } 由於嵌入式並沒有 pow 這個函式可以使用，所以自己寫了 power 來取代，我用在偵測網路線是否有插上：
-int detect_wan_wire() { FILE *fp = NULL; unsigned char *pch; unsigned char buf[128] = {0}; unsigned int mask = 0x0004; int retry = 3; int res = 0; int i = 0; unsigned int a; unsigned int b; sprintf(buf, "
-<a href=https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/><h2 class=post-title>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 4, 2010
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;126&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:
+1 2 3 4 5 &lt;?php if(file_exists("files/appleboy.c")) { echo "File found!"; } ?> 在 C 裡面該如何實做？有兩種方式如下:
+1. 直接開檔 1 2 3 4 5 6 7 8 9 bool file_exists(const char * filename) { if (FILE * file = fopen(filename, "r")) { fclose(file); return true; } return false; } C++ 寫法
+1 2 3 4 5 6 7 8 std::fstream foo; foo.
+<a href=https://demo.gh.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/><h2 class=post-title>[C/C++] 將字串轉成 16 進位</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 13, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;392&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;274&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>最近在碰嵌入式系統遇到一個還蠻常見的問題，我要將16進位的字串(例如 AAC2) test 轉成16進位的 unsigned int，讓我可以進行 & | not 一些二進位運算，底下是轉換程式，大家參考看看
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 int power(int x,int n) { int i; int num = 1; for(i=1;i&lt;=n;i++) num*=x; return num; } int transfer_string_to_hex(unsigned char *str_name) { char string[]="0123456789ABCDEF"; int number[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}; int i = 0; int j = 0; int str_number = 0; for(i=0; i&lt;sizeof(str_name); i++) { for(j=0; j&lt;sizeof(string); j++) { if(toupper(str_name&lt;em>&lt;/em>) == string[j]) { str_number += power(16, (sizeof(str_name)-1-i))* number[j]; break; } } } return str_number; } 由於嵌入式並沒有 pow 這個函式可以使用，所以自己寫了 power 來取代，我用在偵測網路線是否有插上：
+<a href=https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/><h2 class=post-title>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 4, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;540&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
-/* strcat example */ #include #include int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
-these strings are concatenated. 看一下 strcat 原始碼：
-char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 /* strcat example */ #include &lt;stdio.h>#include &lt;string.h> int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
+1 these strings are concatenated. 看一下 strcat 原始碼：
+1 2 3 4 5 6 7 8 9 char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。
 <a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/><h2 class=post-title>[C/C++] cstring (string.h) 搜尋函式：strstr, strchr</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 3, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;298&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>這次介紹 C 語言常用 string 函式：strstr，主要是針對兩個輸入參數做比對，Parameters 1 是輸入字串，Parameters 2 是找尋字串，strstr 會先將頭一次比對成功的 pointer 回傳，也就是如果要找尋 appleboyappleboy 字串中的 boy，函式會回傳第一次比對成功的 boy pointer，而並非回傳最後一個比對到的，底下是一個參考範例：
-strstr /* strstr example */ #include #include int main () { char str[] ="This is a simple string"; char * pch; /* 找尋 simple 字串 */ pch = strstr (str,"simple"); /* 將 simple 換成 sample */ strncpy (pch,"sample",6); puts (str); return 0; } 看一下 Kernel 原始檔案，strstr 函式：
-/* * Find the first occurrence of find in s.
+strstr 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 /* strstr example */ #include &lt;stdio.h>#include &lt;string.h> int main () { char str[] ="This is a simple string"; char * pch; /* 找尋 simple 字串 */ pch = strstr (str,"simple"); /* 將 simple 換成 sample */ strncpy (pch,"sample",6); puts (str); return 0; } 看一下 Kernel 原始檔案，strstr 函式：
 <a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/><h2 class=post-title>[網站] 好站連結 (七) Android, javascript, Css, PHP, Perl, FreeBSD, Linux</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 30, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
@@ -113,28 +98,10 @@ jQuery Week Calendar Javascript: reference the parent window from a popup How to
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/05/cc-count-1-bits-of-input-value-by-shifting/><h2 class=post-title>[C/C++] count 1 bits of input value by shifting.</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 18, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;76&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>之前寫了一篇：『<a href=http://blog.wu-boy.com/2010/02/24/2036/>[C/C++] 計算二進位任意數含有多少個位元為1?</a>』，裡面用 n &= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：</p><pre><code class=language-C>#include <stdio.h>
-#include <stdlib.h>
-int count_1_bit_count(unsigned int);
-int main(){
-    int count = 0, a;
-    a = 1023;
-    count = count_1_bit_count(a);
-    printf("%d有%d個位元為1\n\n", a, count);
-    system("pause");
-    return 0;
-}
-int count_1_bit_count(unsigned int n)
-{
-    int count = 0;
-    for(count = 0; n != 0; n >>= 1L)
-    {    
-        if(n & 0x01)
-            count++;
-    }    
-    return count;
-}</code></pre><p>關鍵就是在 <span style=color:green>n &#187;= 1L</span>，把該數字往右位移 1 bit，然後跟 <span style=color:green>0x01</span> 去做 and，如果數字大於0，count 就加 1。</p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=next><a href=https://demo.gh.wu-boy.com/categories/c/c++/page/2/>Older Posts &rarr;</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;97&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>之前寫了一篇：『[C/C++] 計算二進位任意數含有多少個位元為1?』，裡面用 n &= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 #include &lt;stdio.h>#include &lt;stdlib.h>int count_1_bit_count(unsigned int); int main(){ int count = 0, a; a = 1023; count = count_1_bit_count(a); printf("%d有%d個位元為1\n\n", a, count); system("pause"); return 0; } int count_1_bit_count(unsigned int n) { int count = 0; for(count = 0; n !
+<a href=https://demo.gh.wu-boy.com/2010/05/cc-count-1-bits-of-input-value-by-shifting/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=next><a href=https://demo.gh.wu-boy.com/categories/c/c++/page/2/>Older Posts &rarr;</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

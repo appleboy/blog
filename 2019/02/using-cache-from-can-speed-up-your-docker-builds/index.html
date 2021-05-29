@@ -1,5 +1,5 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>在 docker-in-docker 環境中使用 cache-from 提升編譯速度 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
-在現代 CI/CD 的環境流程中，使用 Docker In Docker 來編譯容器已經相當流行了，像是 GitLab CI 或 Drone 都是全走 Docker 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 Docker Hub 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 v1.13 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/02\/using-cache-from-can-speed-up-your-docker-builds\/","name":"在 docker in docker 環境中使用 cache from 提升編譯速度"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 docker-in-docker 環境中使用 cache-from 提升編譯速度","description":"\n在現代 CI\/CD 的環境流程中，使用 Docker In Docker 來編譯容器已經相當流行了，像是 GitLab CI 或 Drone 都是全走 Docker 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 Docker Hub 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 v1.13 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。\n","inLanguage":"en","wordCount":413,"datePublished":"2019-02-24T12:37:23","dateModified":"2019-02-24T12:37:23","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, drone, GitLab"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/02\/using-cache-from-can-speed-up-your-docker-builds\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="在 docker-in-docker 環境中使用 cache-from 提升編譯速度"><meta property="og:description" content="
+在現代 CI/CD 的環境流程中，使用 Docker In Docker 來編譯容器已經相當流行了，像是 GitLab CI 或 Drone 都是全走 Docker 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 Docker Hub 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 v1.13 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/02\/using-cache-from-can-speed-up-your-docker-builds\/","name":"在 docker in docker 環境中使用 cache from 提升編譯速度"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 docker-in-docker 環境中使用 cache-from 提升編譯速度","description":"\n在現代 CI\/CD 的環境流程中，使用 Docker In Docker 來編譯容器已經相當流行了，像是 GitLab CI 或 Drone 都是全走 Docker 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 Docker Hub 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 v1.13 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。\n","inLanguage":"en","wordCount":441,"datePublished":"2019-02-24T12:37:23","dateModified":"2019-02-24T12:37:23","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, drone, GitLab"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/02\/using-cache-from-can-speed-up-your-docker-builds\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="在 docker-in-docker 環境中使用 cache-from 提升編譯速度"><meta property="og:description" content="
 在現代 CI/CD 的環境流程中，使用 Docker In Docker 來編譯容器已經相當流行了，像是 GitLab CI 或 Drone 都是全走 Docker 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 Docker Hub 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 v1.13 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="在 docker-in-docker 環境中使用 cache-from 提升編譯速度"><meta name=twitter:description content="
 在現代 CI/CD 的環境流程中，使用 Docker In Docker 來編譯容器已經相當流行了，像是 GitLab CI 或 Drone 都是全走 Docker 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 Docker Hub 時都需要重新下載所有的 Docker …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
@@ -11,94 +11,191 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 24, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;413&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#使用---cache-from-加速編譯>使用 &ndash;cache-from 加速編譯</a></li><li><a href=#在-gitlab-ci-使用-cache-from>在 Gitlab CI 使用 cache-from</a></li><li><a href=#在-drone-如何使用---cache-from>在 Drone 如何使用 &ndash;cache-from</a></li><li><a href=#結論>結論</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" title="提升 docker build 時間"><img src="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" alt="提升 docker build 時間" title="提升 docker build 時間"></a></p><p>在現代 CI/CD 的環境流程中，使用 <a href=https://github.com/jpetazzo/dind>Docker In Docker</a> 來編譯容器已經相當流行了，像是 <a href=https://about.gitlab.com/product/continuous-integration/>GitLab CI</a> 或 <a href=https://github.com/drone/drone title=Drone>Drone</a> 都是全走 <a href=https://www.docker.com/ title=Docker>Docker</a> 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 <a href=https://hub.docker.com/ title="Docker Hub">Docker Hub</a> 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 <a href=https://github.com/docker/docker/releases/tag/v1.13.0>v1.13</a> 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。</p><h2 id=教學影片>教學影片</h2><p>歡迎訂閱我的 Youtube 頻道: <a href=http://bit.ly/youtube-boy>http://bit.ly/youtube-boy</a></p><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=使用---cache-from-加速編譯>使用 &ndash;cache-from 加速編譯</h2><p>在 Docker v1.13 版本中新增了 <code>--cache-from</code> 功能讓開發者可以在編譯 Dockerfile 時，同時指定先下載特定的 Docker Image，透過先下載好的 Docker Layer 在跟 Dockerfile 內文比較，如果有重複的就不會在被執行，這樣可以省下蠻多編譯時間，底下拿個簡單例子做說明，假設我們有底下的 Dockerfile</p><pre><code class=language-docker>FROM alpine:3.9
-LABEL maintainer="maintainers@gitea.io"
-
-EXPOSE 22 3000
-
-RUN apk --no-cache add \
-    bash \
-    ca-certificates \
-    curl \
-    gettext \
-    git \
-    linux-pam \
-    openssh \
-    s6 \
-    sqlite \
-    su-exec \
-    tzdata
-
-RUN addgroup \
-    -S -g 1000 \
-    git && \
-  adduser \
-    -S -H -D \
-    -h /data/git \
-    -s /bin/bash \
-    -u 1000 \
-    -G git \
-    git && \
-  echo "git:$(dd if=/dev/urandom bs=24 count=1 status=none | base64)" | chpasswd
-
-ENV USER git
-ENV GITEA_CUSTOM /data/gitea
-
-VOLUME ["/data"]
-
-ENTRYPOINT ["/usr/bin/entrypoint"]
-CMD ["/bin/s6-svscan", "/etc/s6"]
-
-COPY docker /
-COPY --from=build-env /go/src/code.gitea.io/gitea/gitea /app/gitea/gitea
-RUN ln -s /app/gitea/gitea /usr/local/bin/gitea</code></pre><p>透過底下命令列可以編譯出 Image</p><pre><code class=language-sh>$ docker build -t gitea/gitea .</code></pre><p>而在命令列內可以看到花最多時間的是底下這個步驟</p><pre><code class=language-docker>RUN apk --no-cache add \
-    bash \
-    ca-certificates \
-    curl \
-    gettext \
-    git \
-    linux-pam \
-    openssh \
-    s6 \
-    sqlite \
-    su-exec \
-    tzdata</code></pre><p>該如何透過 <code>--cache-from</code> 機制繞過此步驟加速 Docker 編譯時間，其實很簡單只要在網路上找到原本 image 就可以繞過此步驟，開發者總會知道原本的 Dockerfile 是用來編譯出哪一個 Image 名稱</p><pre><code class=language-sh>$ docker build --cache-from=gitea/gitea -t gitea/gitea .</code></pre><p><a href="https://lh3.googleusercontent.com/H_L7tVmjocwOvWEB4DgJsjhPqGyY3IObcl6f0ROl34qfUqDhnIaC9BtI4pN4I7RidYUg_VLw7bRtDdkDEG1eCk6EPdMZ8itjGvWm5aaobn-5oye7j0AsXQCIHIpZUfUW3XGvKCA1a1k=w1920-h1080"><img src="https://lh3.googleusercontent.com/H_L7tVmjocwOvWEB4DgJsjhPqGyY3IObcl6f0ROl34qfUqDhnIaC9BtI4pN4I7RidYUg_VLw7bRtDdkDEG1eCk6EPdMZ8itjGvWm5aaobn-5oye7j0AsXQCIHIpZUfUW3XGvKCA1a1k=w1920-h1080" alt></a></p><p>從上圖可以知道時間最久的步驟已經被 cache 下來了，所以 cache-from 會事先把 Image 下載下來，接著就可以使用該 Image 內的 cache layer 享受簡短 build time 的好處。</p><h2 id=在-gitlab-ci-使用-cache-from>在 Gitlab CI 使用 cache-from</h2><p>在 Gitlab CI 如何使用，其實很簡單，請<a href=https://gitlab.com/snippets/185782 title=參考此範例>參考此範例</a></p><pre><code class=language-yaml>image: docker:latest
-services:
-  - docker:dind
-stages:
-  - build
-  - test
-  - release
-variables:
-  CONTAINER_IMAGE: registry.anuary.com/$CI_PROJECT_PATH
-  DOCKER_DRIVER: overlay2
-build:
-  stage: build
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.anuary.com
-    - docker pull $CONTAINER_IMAGE:latest
-    - docker build --cache-from $CONTAINER_IMAGE:latest --build-arg NPM_TOKEN=${NPM_TOKEN} -t $CONTAINER_IMAGE:$CI_BUILD_REF -t $CONTAINER_IMAGE:latest .
-    - docker push $CONTAINER_IMAGE:$CI_BUILD_REF
-    - docker push $CONTAINER_IMAGE:latest</code></pre><p>這時候你會問時間到底差了多久，在 Node.js 內如果沒有使用 cache，每次 CI 時間至少會多不少時間，取決於開發者安裝多少套件，我會建議如果是使用 multiple stage build 請務必使用 <code>cache-from</code>。</p><h2 id=在-drone-如何使用---cache-from>在 Drone 如何使用 &ndash;cache-from</h2><p>在 Drone 1.0 架構內，可以架設多台 <a href=https://docs.drone.io/administration/agents/ title="Agent 服務">Agent 服務</a>加速 CI/CD 流程，但是如果想要跨機器的 storage 非常困難，所以有了 <code>cache-from</code> 後，就可以確保多台 agent 享有 docker cache layer 機制。底下來看看 <a href=https://github.com/drone-plugins/drone-docker title=plugins/docker>plugins/docker</a> 該如何設定。</p><pre><code class=language-yaml>- name: publish
-  pull: always
-  image: plugins/docker:linux-amd64
-  settings:
-    auto_tag: true
-    auto_tag_suffix: linux-amd64
-    cache_from: appleboy/drone-telegram
-    daemon_off: false
-    dockerfile: docker/Dockerfile.linux.amd64
-    password:
-      from_secret: docker_password
-    repo: appleboy/drone-telegram
-    username:
-      from_secret: docker_username
-  when:
-    event:
-      exclude:
-      - pull_request</code></pre><p>這邊拿公司的一個環境當作<a href=https://github.com/Mediatek-Cloud/simulator title=範例>範例</a>，在還沒使用 cache 前編譯時間為 <a href=https://cloud.drone.io/Mediatek-Cloud/simulator/2/1/2 title="2 分 30 秒">2 分 30 秒</a>，後來使用 <code>cache-from</code> 則變成 <a href=https://cloud.drone.io/Mediatek-Cloud/simulator/6/1/2 title="30 秒">30 秒</a>。</p><h2 id=結論>結論</h2><p>使用 <code>--cache-from</code> 需要額外多花下載 Image 檔案的時間，所以開發者需要評估下載 Image 時間跟直接在 Dockerfile 內直接執行的時間差，如果差很多就務必使用 <code>--cache-from</code>。不管是不是應用在 Docker In Docker 內，假如您需要改別人 Dockerfile，請務必先下載對應的 Docker Image 在執行端，這樣可以省去不少 docker build 時間，尤其是在 Dockerfile 內使用到 <code>apt-get instll</code> 或 <code>npm install</code> 這類型的命令。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;441&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#使用---cache-from-加速編譯>使用 &ndash;cache-from 加速編譯</a></li><li><a href=#在-gitlab-ci-使用-cache-from>在 Gitlab CI 使用 cache-from</a></li><li><a href=#在-drone-如何使用---cache-from>在 Drone 如何使用 &ndash;cache-from</a></li><li><a href=#結論>結論</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" title="提升 docker build 時間"><img src="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" alt="提升 docker build 時間" title="提升 docker build 時間"></a></p><p>在現代 CI/CD 的環境流程中，使用 <a href=https://github.com/jpetazzo/dind>Docker In Docker</a> 來編譯容器已經相當流行了，像是 <a href=https://about.gitlab.com/product/continuous-integration/>GitLab CI</a> 或 <a href=https://github.com/drone/drone title=Drone>Drone</a> 都是全走 <a href=https://www.docker.com/ title=Docker>Docker</a> 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 <a href=https://hub.docker.com/ title="Docker Hub">Docker Hub</a> 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 <a href=https://github.com/docker/docker/releases/tag/v1.13.0>v1.13</a> 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。</p><h2 id=教學影片>教學影片</h2><p>歡迎訂閱我的 Youtube 頻道: <a href=http://bit.ly/youtube-boy>http://bit.ly/youtube-boy</a></p><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=使用---cache-from-加速編譯>使用 &ndash;cache-from 加速編譯</h2><p>在 Docker v1.13 版本中新增了 <code>--cache-from</code> 功能讓開發者可以在編譯 Dockerfile 時，同時指定先下載特定的 Docker Image，透過先下載好的 Docker Layer 在跟 Dockerfile 內文比較，如果有重複的就不會在被執行，這樣可以省下蠻多編譯時間，底下拿個簡單例子做說明，假設我們有底下的 Dockerfile</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-docker data-lang=docker><span style=color:#8b008b;font-weight:700>FROM</span><span style=color:#cd5555> alpine:3.9</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>LABEL</span> <span style=color:#00688b>maintainer</span>=<span style=color:#cd5555>&#34;maintainers@gitea.io&#34;</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>EXPOSE</span><span style=color:#cd5555> 22 3000</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>RUN</span> apk --no-cache add <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    bash <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    ca-certificates <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    curl <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    gettext <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    git <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    linux-pam <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    openssh <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    s6 <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    sqlite <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    su-exec <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    tzdata<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>RUN</span> addgroup <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    -S -g <span style=color:#b452cd>1000</span> <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    git &amp;&amp; <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  adduser <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    -S -H -D <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    -h /data/git <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    -s /bin/bash <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    -u <span style=color:#b452cd>1000</span> <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    -G git <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    git &amp;&amp; <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>  <span style=color:#658b00>echo</span> <span style=color:#cd5555>&#34;git:</span><span style=color:#8b008b;font-weight:700>$(</span>dd <span style=color:#8b008b;font-weight:700>if</span>=/dev/urandom <span style=color:#00688b>bs</span>=<span style=color:#b452cd>24</span> <span style=color:#00688b>count</span>=<span style=color:#b452cd>1</span> <span style=color:#00688b>status</span>=none | base64<span style=color:#8b008b;font-weight:700>)</span><span style=color:#cd5555>&#34;</span> | chpasswd<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENV</span> USER git<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENV</span> GITEA_CUSTOM /data/gitea<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>VOLUME</span> [<span style=color:#cd5555>&#34;/data&#34;</span>]<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>ENTRYPOINT</span> [<span style=color:#cd5555>&#34;/usr/bin/entrypoint&#34;</span>]<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>CMD</span> [<span style=color:#cd5555>&#34;/bin/s6-svscan&#34;</span>, <span style=color:#cd5555>&#34;/etc/s6&#34;</span>]<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> docker /<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> --from=build-env /go/src/code.gitea.io/gitea/gitea /app/gitea/gitea<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>RUN</span> ln -s /app/gitea/gitea /usr/local/bin/gitea<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table></div></div><p>透過底下命令列可以編譯出 Image</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ docker build -t gitea/gitea .
+</code></pre></td></tr></table></div></div><p>而在命令列內可以看到花最多時間的是底下這個步驟</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-docker data-lang=docker><span style=color:#8b008b;font-weight:700>RUN</span> apk --no-cache add <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    bash <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    ca-certificates <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    curl <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    gettext <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    git <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    linux-pam <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    openssh <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    s6 <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    sqlite <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    su-exec <span style=color:#cd5555>\
+</span><span style=color:#cd5555></span>    tzdata<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table></div></div><p>該如何透過 <code>--cache-from</code> 機制繞過此步驟加速 Docker 編譯時間，其實很簡單只要在網路上找到原本 image 就可以繞過此步驟，開發者總會知道原本的 Dockerfile 是用來編譯出哪一個 Image 名稱</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ docker build --cache-from=gitea/gitea -t gitea/gitea .
+</code></pre></td></tr></table></div></div><p><a href="https://lh3.googleusercontent.com/H_L7tVmjocwOvWEB4DgJsjhPqGyY3IObcl6f0ROl34qfUqDhnIaC9BtI4pN4I7RidYUg_VLw7bRtDdkDEG1eCk6EPdMZ8itjGvWm5aaobn-5oye7j0AsXQCIHIpZUfUW3XGvKCA1a1k=w1920-h1080"><img src="https://lh3.googleusercontent.com/H_L7tVmjocwOvWEB4DgJsjhPqGyY3IObcl6f0ROl34qfUqDhnIaC9BtI4pN4I7RidYUg_VLw7bRtDdkDEG1eCk6EPdMZ8itjGvWm5aaobn-5oye7j0AsXQCIHIpZUfUW3XGvKCA1a1k=w1920-h1080" alt></a></p><p>從上圖可以知道時間最久的步驟已經被 cache 下來了，所以 cache-from 會事先把 Image 下載下來，接著就可以使用該 Image 內的 cache layer 享受簡短 build time 的好處。</p><h2 id=在-gitlab-ci-使用-cache-from>在 Gitlab CI 使用 cache-from</h2><p>在 Gitlab CI 如何使用，其實很簡單，請<a href=https://gitlab.com/snippets/185782 title=參考此範例>參考此範例</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>docker:latest<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- docker:dind<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>stages</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- build<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- test<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- release<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>variables</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>CONTAINER_IMAGE</span>:<span style=color:#bbb> </span>registry.anuary.com/$CI_PROJECT_PATH<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>DOCKER_DRIVER</span>:<span style=color:#bbb> </span>overlay2<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>build</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>stage</span>:<span style=color:#bbb> </span>build<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>script</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.anuary.com<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- docker pull $CONTAINER_IMAGE:latest<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- docker build --cache-from $CONTAINER_IMAGE:latest --build-arg NPM_TOKEN=${NPM_TOKEN} -t $CONTAINER_IMAGE:$CI_BUILD_REF -t $CONTAINER_IMAGE:latest .<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- docker push $CONTAINER_IMAGE:$CI_BUILD_REF<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- docker push $CONTAINER_IMAGE:latest<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>這時候你會問時間到底差了多久，在 Node.js 內如果沒有使用 cache，每次 CI 時間至少會多不少時間，取決於開發者安裝多少套件，我會建議如果是使用 multiple stage build 請務必使用 <code>cache-from</code>。</p><h2 id=在-drone-如何使用---cache-from>在 Drone 如何使用 &ndash;cache-from</h2><p>在 Drone 1.0 架構內，可以架設多台 <a href=https://docs.drone.io/administration/agents/ title="Agent 服務">Agent 服務</a>加速 CI/CD 流程，但是如果想要跨機器的 storage 非常困難，所以有了 <code>cache-from</code> 後，就可以確保多台 agent 享有 docker cache layer 機制。底下來看看 <a href=https://github.com/drone-plugins/drone-docker title=plugins/docker>plugins/docker</a> 該如何設定。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>publish<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>plugins/docker:linux-amd64<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>settings</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>auto_tag</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>auto_tag_suffix</span>:<span style=color:#bbb> </span>linux-amd64<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>cache_from</span>:<span style=color:#bbb> </span>appleboy/drone-telegram<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>daemon_off</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>false</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>dockerfile</span>:<span style=color:#bbb> </span>docker/Dockerfile.linux.amd64<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>password</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_password<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>repo</span>:<span style=color:#bbb> </span>appleboy/drone-telegram<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_username<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>when</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>event</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>exclude</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- pull_request<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>這邊拿公司的一個環境當作<a href=https://github.com/Mediatek-Cloud/simulator title=範例>範例</a>，在還沒使用 cache 前編譯時間為 <a href=https://cloud.drone.io/Mediatek-Cloud/simulator/2/1/2 title="2 分 30 秒">2 分 30 秒</a>，後來使用 <code>cache-from</code> 則變成 <a href=https://cloud.drone.io/Mediatek-Cloud/simulator/6/1/2 title="30 秒">30 秒</a>。</p><h2 id=結論>結論</h2><p>使用 <code>--cache-from</code> 需要額外多花下載 Image 檔案的時間，所以開發者需要評估下載 Image 時間跟直接在 Dockerfile 內直接執行的時間差，如果差很多就務必使用 <code>--cache-from</code>。不管是不是應用在 Docker In Docker 內，假如您需要改別人 Dockerfile，請務必先下載對應的 Docker Image 在執行端，這樣可以省去不少 docker build 時間，尤其是在 Dockerfile 內使用到 <code>apt-get instll</code> 或 <code>npm install</code> 這類型的命令。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f02%2fusing-cache-from-can-speed-up-your-docker-builds%2f&text=%e5%9c%a8%20docker-in-docker%20%e7%92%b0%e5%a2%83%e4%b8%ad%e4%bd%bf%e7%94%a8%20cache-from%20%e6%8f%90%e5%8d%87%e7%b7%a8%e8%ad%af%e9%80%9f%e5%ba%a6&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f02%2fusing-cache-from-can-speed-up-your-docker-builds%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f02%2fusing-cache-from-can-speed-up-your-docker-builds%2f&title=%e5%9c%a8%20docker-in-docker%20%e7%92%b0%e5%a2%83%e4%b8%ad%e4%bd%bf%e7%94%a8%20cache-from%20%e6%8f%90%e5%8d%87%e7%b7%a8%e8%ad%af%e9%80%9f%e5%ba%a6" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f02%2fusing-cache-from-can-speed-up-your-docker-builds%2f&title=%e5%9c%a8%20docker-in-docker%20%e7%92%b0%e5%a2%83%e4%b8%ad%e4%bd%bf%e7%94%a8%20cache-from%20%e6%8f%90%e5%8d%87%e7%b7%a8%e8%ad%af%e9%80%9f%e5%ba%a6" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f02%2fusing-cache-from-can-speed-up-your-docker-builds%2f&title=%e5%9c%a8%20docker-in-docker%20%e7%92%b0%e5%a2%83%e4%b8%ad%e4%bd%bf%e7%94%a8%20cache-from%20%e6%8f%90%e5%8d%87%e7%b7%a8%e8%ad%af%e9%80%9f%e5%ba%a6" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f02%2fusing-cache-from-can-speed-up-your-docker-builds%2f&description=%e5%9c%a8%20docker-in-docker%20%e7%92%b0%e5%a2%83%e4%b8%ad%e4%bd%bf%e7%94%a8%20cache-from%20%e6%8f%90%e5%8d%87%e7%b7%a8%e8%ad%af%e9%80%9f%e5%ba%a6" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li><li><a href=/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a></li><li><a href=/2020/07/how-to-create-docker-image-in-reactjs-or-vuejs/>如何將前端網站打包成 Docker Image</a></li><li><a href=/2020/06/go-module-cache-variable-gomodcache/>Go 1.15 新增 Module cache 環境變數</a></li><li><a href=/2020/04/speed-up-docker-build-using-docker-buildkit/>使用 Docker BuildKit 加速編譯 Image</a></li><li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li><li><a href=/2020/03/docker-release-github-actions-plugin/>Docker 推出官方 GitHub Actions 套件</a></li><li><a href=/2020/03/read-private-module-in-golang/>Go Modules 處理私有 GIT Repository 流程</a></li><li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li><li><a href=/2020/02/deploy-static-files-to-github-using-drone/>用 Drone 部署靜態檔案到 GitHub Pages</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2019/02/deploy-golang-app-to-heroku/ data-toggle=tooltip data-placement=top title="快速部署網站到 Heroku 雲平台">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2019/03/gitea-support-oauth-provider/ data-toggle=tooltip data-placement=top title="開源專案 Gitea 支援 OAuth Provider">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

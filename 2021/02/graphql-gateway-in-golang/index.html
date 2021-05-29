@@ -1,5 +1,5 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>使用 GraphQL Gateway 串接多個 Data Schema - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
-不久之前寫過一篇『從 graphql-go 轉換到 gqlgen』，目前團隊舊有的專案還是繼續用 graphql-go 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 gqlgen 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 single data graph。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 @apollo/gateway，但是由於個人比較偏好 Go 語言的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 nautilus/gateway，官方有提供文件以及教學 Blog 可以供開發者參考。底下會教大家使用 nautilus/gateway 將兩個不同的服務串接在一起。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/graphql-gateway-in-golang\/","name":"使用 graph ql gateway 串接多個 data schema"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 GraphQL Gateway 串接多個 Data Schema","description":"\n不久之前寫過一篇『從 graphql-go 轉換到 gqlgen』，目前團隊舊有的專案還是繼續用 graphql-go 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 gqlgen 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 single data graph。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 @apollo\/gateway，但是由於個人比較偏好 Go 語言的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 nautilus\/gateway，官方有提供文件以及教學 Blog 可以供開發者參考。底下會教大家使用 nautilus\/gateway 將兩個不同的服務串接在一起。\n","inLanguage":"en","wordCount":619,"datePublished":"2021-02-06T01:12:54","dateModified":"2021-02-06T01:12:54","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, GraphQL"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/graphql-gateway-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="使用 GraphQL Gateway 串接多個 Data Schema"><meta property="og:description" content="
+不久之前寫過一篇『從 graphql-go 轉換到 gqlgen』，目前團隊舊有的專案還是繼續用 graphql-go 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 gqlgen 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 single data graph。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 @apollo/gateway，但是由於個人比較偏好 Go 語言的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 nautilus/gateway，官方有提供文件以及教學 Blog 可以供開發者參考。底下會教大家使用 nautilus/gateway 將兩個不同的服務串接在一起。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/graphql-gateway-in-golang\/","name":"使用 graph ql gateway 串接多個 data schema"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 GraphQL Gateway 串接多個 Data Schema","description":"\n不久之前寫過一篇『從 graphql-go 轉換到 gqlgen』，目前團隊舊有的專案還是繼續用 graphql-go 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 gqlgen 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 single data graph。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 @apollo\/gateway，但是由於個人比較偏好 Go 語言的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 nautilus\/gateway，官方有提供文件以及教學 Blog 可以供開發者參考。底下會教大家使用 nautilus\/gateway 將兩個不同的服務串接在一起。\n","inLanguage":"en","wordCount":745,"datePublished":"2021-02-06T01:12:54","dateModified":"2021-02-06T01:12:54","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, GraphQL"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/graphql-gateway-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="使用 GraphQL Gateway 串接多個 Data Schema"><meta property="og:description" content="
 不久之前寫過一篇『從 graphql-go 轉換到 gqlgen』，目前團隊舊有的專案還是繼續用 graphql-go 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 gqlgen 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 single data graph。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 @apollo/gateway，但是由於個人比較偏好 Go 語言的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 nautilus/gateway，官方有提供文件以及教學 Blog 可以供開發者參考。底下會教大家使用 nautilus/gateway 將兩個不同的服務串接在一起。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2021/02/graphql-gateway-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="使用 GraphQL Gateway 串接多個 Data Schema"><meta name=twitter:description content="
 不久之前寫過一篇『從 graphql-go 轉換到 gqlgen』，目前團隊舊有的專案還是繼續用 graphql-go 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 gqlgen 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 single data graph。至於怎麼選擇 GraphQL …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
@@ -11,131 +11,261 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>使用 GraphQL Gateway 串接多個 Data Schema</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 6, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;619&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#線上影片>線上影片</a></li><li><a href=#整合-graphql-go--gqlgen>整合 graphql-go + gqlgen</a></li><li><a href=#撰寫-graphql-gateway>撰寫 graphql-gateway</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" title=infra><img src="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" alt=infra title=infra></a></p><p>不久之前寫過一篇『<a href=https://blog.wu-boy.com/2020/04/switch-graphql-go-to-gqlgen-in-golang/>從 graphql-go 轉換到 gqlgen</a>』，目前團隊舊有的專案還是繼續用 <a href=https://github.com/graphql-go/graphql>graphql-go</a> 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 <a href=https://gqlgen.com/>gqlgen</a> 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 <a href=https://principledgraphql.com/integrity#1-one-graph>single data graph</a>。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 <a href=https://www.apollographql.com/docs/federation/gateway/>@apollo/gateway</a>，但是由於個人比較偏好 <a href=https://golang.org>Go 語言</a>的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 <a href=https://github.com/nautilus/gateway>nautilus/gateway</a>，官方有<a href=https://gateway.nautilus.dev/>提供文件</a>以及<a href=https://medium.com/@aaivazis/a-guide-to-schema-federation-part-1-995b639ac035>教學 Blog</a> 可以供開發者參考。底下會教大家使用 nautilus/gateway 將兩個不同的服務串接在一起。</p><h2 id=線上影片>線上影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/f4KM3RFx8ro style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><ul><li>00:00​ 為什麼有 GraphQL Gateway 需求?</li><li>02:16​ 用兩個 Routing 來區分 graphql-go 跟 gqlgen</li><li>03:00​ 用 jwt token check</li><li>03:40​ 選擇 GraphQL Gateway 套件</li><li>04:58​ main.go 撰寫機制介紹</li><li>06:05​ 如何將 Token 往後面 Service 發送?</li><li>06:58​ 看看完整的程式代碼</li><li>07:56​ 最後心得感想</li></ul><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202101">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202101">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202101">DOCKER 容器開發部署實戰</a></li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=整合-graphql-go--gqlgen>整合 graphql-go + gqlgen</h2><p>要把兩個不同的套件整合在一起，最簡單的方式就是分不同的 URL 區隔開來，兩邊都是透過 Bearer Token 來進行使用者身份確認。</p><pre><code class=language-go>        g := e.Group("/graphql")
-        g.Use(auth.Check())
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;745&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#線上影片>線上影片</a></li><li><a href=#整合-graphql-go--gqlgen>整合 graphql-go + gqlgen</a></li><li><a href=#撰寫-graphql-gateway>撰寫 graphql-gateway</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" title=infra><img src="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" alt=infra title=infra></a></p><p>不久之前寫過一篇『<a href=https://blog.wu-boy.com/2020/04/switch-graphql-go-to-gqlgen-in-golang/>從 graphql-go 轉換到 gqlgen</a>』，目前團隊舊有的專案還是繼續用 <a href=https://github.com/graphql-go/graphql>graphql-go</a> 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 <a href=https://gqlgen.com/>gqlgen</a> 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 <a href=https://principledgraphql.com/integrity#1-one-graph>single data graph</a>。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 <a href=https://www.apollographql.com/docs/federation/gateway/>@apollo/gateway</a>，但是由於個人比較偏好 <a href=https://golang.org>Go 語言</a>的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 <a href=https://github.com/nautilus/gateway>nautilus/gateway</a>，官方有<a href=https://gateway.nautilus.dev/>提供文件</a>以及<a href=https://medium.com/@aaivazis/a-guide-to-schema-federation-part-1-995b639ac035>教學 Blog</a> 可以供開發者參考。底下會教大家使用 nautilus/gateway 將兩個不同的服務串接在一起。</p><h2 id=線上影片>線上影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/f4KM3RFx8ro style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><ul><li>00:00​ 為什麼有 GraphQL Gateway 需求?</li><li>02:16​ 用兩個 Routing 來區分 graphql-go 跟 gqlgen</li><li>03:00​ 用 jwt token check</li><li>03:40​ 選擇 GraphQL Gateway 套件</li><li>04:58​ main.go 撰寫機制介紹</li><li>06:05​ 如何將 Token 往後面 Service 發送?</li><li>06:58​ 看看完整的程式代碼</li><li>07:56​ 最後心得感想</li></ul><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202101">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202101">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202101">DOCKER 容器開發部署實戰</a></li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=整合-graphql-go--gqlgen>整合 graphql-go + gqlgen</h2><p>要把兩個不同的套件整合在一起，最簡單的方式就是分不同的 URL 區隔開來，兩邊都是透過 Bearer Token 來進行使用者身份確認。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>        g := e.<span style=color:#008b45>Group</span>(<span style=color:#cd5555>&#34;/graphql&#34;</span>)
+        g.<span style=color:#008b45>Use</span>(auth.<span style=color:#008b45>Check</span>())
         {
-            g.POST("", graphql.Handler())
-            if config.Server.GraphiQL {
-                g.GET("", graphql.Handler())
+            g.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;&#34;</span>, graphql.<span style=color:#008b45>Handler</span>())
+            <span style=color:#8b008b;font-weight:700>if</span> config.Server.GraphiQL {
+                g.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;&#34;</span>, graphql.<span style=color:#008b45>Handler</span>())
             }
         }
-        q := root.Group("/query")
-        q.Use(auth.Check())
+        q := root.<span style=color:#008b45>Group</span>(<span style=color:#cd5555>&#34;/query&#34;</span>)
+        q.<span style=color:#008b45>Use</span>(auth.<span style=color:#008b45>Check</span>())
         {
-            q.POST("", gqlgen.SchemaHandler())
-            q.GET("", gqlgen.SchemaHandler())
-        }</code></pre><p>透過 jwt 驗證及讀取使用者資料</p><pre><code class=language-go>// Check user bearer token
-func Check() gin.HandlerFunc {
-    return func(c *gin.Context) {
-        if data, err := jwt.New().GetClaimsFromJWT(c); err != nil {
-            c.Next()
-        } else if id, ok := data["id"]; ok {
-            var userID int64
-            switch v := id.(type) {
-            case int:
-                userID = int64(v)
-            case string:
-                i, err := strconv.ParseInt(v, 10, 64)
-                if err != nil {
-                    log.Error().Err(err).Msg("can't convert user id to int64")
+            q.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;&#34;</span>, gqlgen.<span style=color:#008b45>SchemaHandler</span>())
+            q.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;&#34;</span>, gqlgen.<span style=color:#008b45>SchemaHandler</span>())
+        }
+</code></pre></td></tr></table></div></div><p>透過 jwt 驗證及讀取使用者資料</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#228b22>// Check user bearer token
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>Check</span>() gin.HandlerFunc {
+    <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+        <span style=color:#8b008b;font-weight:700>if</span> data, err := jwt.<span style=color:#008b45>New</span>().<span style=color:#008b45>GetClaimsFromJWT</span>(c); err != <span style=color:#8b008b;font-weight:700>nil</span> {
+            c.<span style=color:#008b45>Next</span>()
+        } <span style=color:#8b008b;font-weight:700>else</span> <span style=color:#8b008b;font-weight:700>if</span> id, ok := data[<span style=color:#cd5555>&#34;id&#34;</span>]; ok {
+            <span style=color:#8b008b;font-weight:700>var</span> userID <span style=color:#00688b;font-weight:700>int64</span>
+            <span style=color:#8b008b;font-weight:700>switch</span> v := id.(<span style=color:#8b008b;font-weight:700>type</span>) {
+            <span style=color:#8b008b;font-weight:700>case</span> <span style=color:#00688b;font-weight:700>int</span>:
+                userID = <span style=color:#658b00>int64</span>(v)
+            <span style=color:#8b008b;font-weight:700>case</span> <span style=color:#00688b;font-weight:700>string</span>:
+                i, err := strconv.<span style=color:#008b45>ParseInt</span>(v, <span style=color:#b452cd>10</span>, <span style=color:#b452cd>64</span>)
+                <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+                    log.<span style=color:#008b45>Error</span>().<span style=color:#008b45>Err</span>(err).<span style=color:#008b45>Msg</span>(<span style=color:#cd5555>&#34;can&#39;t convert user id to int64&#34;</span>)
                 }
                 userID = i
-            case float64:
-                userID = int64(v)
-            default:
-                log.Info().Msgf("I don't know about user id type %T from token!", v)
+            <span style=color:#8b008b;font-weight:700>case</span> <span style=color:#00688b;font-weight:700>float64</span>:
+                userID = <span style=color:#658b00>int64</span>(v)
+            <span style=color:#8b008b;font-weight:700>default</span>:
+                log.<span style=color:#008b45>Info</span>().<span style=color:#008b45>Msgf</span>(<span style=color:#cd5555>&#34;I don&#39;t know about user id type %T from token!&#34;</span>, v)
             }
 
-            user, err := model.GetUserByID(userID)
-            if err != nil {
-                log.Error().Err(err).Msg("can't get user data")
+            user, err := model.<span style=color:#008b45>GetUserByID</span>(userID)
+            <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+                log.<span style=color:#008b45>Error</span>().<span style=color:#008b45>Err</span>(err).<span style=color:#008b45>Msg</span>(<span style=color:#cd5555>&#34;can&#39;t get user data&#34;</span>)
             }
 
-            ctx := context.WithValue(
-                c.Request.Context(),
+            ctx := context.<span style=color:#008b45>WithValue</span>(
+                c.Request.<span style=color:#008b45>Context</span>(),
                 config.ContextKeyUser,
                 user,
             )
-            c.Request = c.Request.WithContext(ctx)
+            c.Request = c.Request.<span style=color:#008b45>WithContext</span>(ctx)
         }
     }
-}</code></pre><h2 id=撰寫-graphql-gateway>撰寫 graphql-gateway</h2><p>使用 <a href=https://github.com/nautilus/gateway>nautilus/gateway</a> 可以簡單將 Schema 合併成單一 Data，不過此套件<a href=https://github.com/nautilus/gateway/issues/108>尚未支援 subscription</a>。</p><pre><code class=language-go>func main() {
-    // default port
-    port := "3001"
-    server := "api:8080"
-    if v, ok := os.LookupEnv("APP_PORT"); ok {
+}
+</code></pre></td></tr></table></div></div><h2 id=撰寫-graphql-gateway>撰寫 graphql-gateway</h2><p>使用 <a href=https://github.com/nautilus/gateway>nautilus/gateway</a> 可以簡單將 Schema 合併成單一 Data，不過此套件<a href=https://github.com/nautilus/gateway/issues/108>尚未支援 subscription</a>。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    <span style=color:#228b22>// default port
+</span><span style=color:#228b22></span>    port := <span style=color:#cd5555>&#34;3001&#34;</span>
+    server := <span style=color:#cd5555>&#34;api:8080&#34;</span>
+    <span style=color:#8b008b;font-weight:700>if</span> v, ok := os.<span style=color:#008b45>LookupEnv</span>(<span style=color:#cd5555>&#34;APP_PORT&#34;</span>); ok {
         port = v
     }
 
-    if v, ok := os.LookupEnv("APP_SERVER"); ok {
+    <span style=color:#8b008b;font-weight:700>if</span> v, ok := os.<span style=color:#008b45>LookupEnv</span>(<span style=color:#cd5555>&#34;APP_SERVER&#34;</span>); ok {
         server = v
     }
 
-    // introspect the apis
-    schemas, err := graphql.IntrospectRemoteSchemas(
-        "http://"+server+"/graphql",
-        "http://"+server+"/query",
+    <span style=color:#228b22>// introspect the apis
+</span><span style=color:#228b22></span>    schemas, err := graphql.<span style=color:#008b45>IntrospectRemoteSchemas</span>(
+        <span style=color:#cd5555>&#34;http://&#34;</span>+server+<span style=color:#cd5555>&#34;/graphql&#34;</span>,
+        <span style=color:#cd5555>&#34;http://&#34;</span>+server+<span style=color:#cd5555>&#34;/query&#34;</span>,
     )
-    if err != nil {
-        panic(err)
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        <span style=color:#658b00>panic</span>(err)
     }
 
-    // create the gateway instance
-    gw, err := gateway.New(schemas, gateway.WithMiddlewares(forwardUserID))
-    if err != nil {
-        panic(err)
+    <span style=color:#228b22>// create the gateway instance
+</span><span style=color:#228b22></span>    gw, err := gateway.<span style=color:#008b45>New</span>(schemas, gateway.<span style=color:#008b45>WithMiddlewares</span>(forwardUserID))
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        <span style=color:#658b00>panic</span>(err)
     }
 
-    // add the playground endpoint to the router
-    http.HandleFunc("/graphql", withUserInfo(gw.PlaygroundHandler))
+    <span style=color:#228b22>// add the playground endpoint to the router
+</span><span style=color:#228b22></span>    http.<span style=color:#008b45>HandleFunc</span>(<span style=color:#cd5555>&#34;/graphql&#34;</span>, <span style=color:#008b45>withUserInfo</span>(gw.PlaygroundHandler))
 
-    // start the server
-    fmt.Printf("🚀 Gateway is ready at http://localhost:%s/graphql\n", port)
-    err = http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
-    if err != nil {
-        fmt.Println(err.Error())
-        os.Exit(1)
+    <span style=color:#228b22>// start the server
+</span><span style=color:#228b22></span>    fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;🚀 Gateway is ready at http://localhost:%s/graphql\n&#34;</span>, port)
+    err = http.<span style=color:#008b45>ListenAndServe</span>(fmt.<span style=color:#008b45>Sprintf</span>(<span style=color:#cd5555>&#34;:%s&#34;</span>, port), <span style=color:#8b008b;font-weight:700>nil</span>)
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        fmt.<span style=color:#008b45>Println</span>(err.<span style=color:#008b45>Error</span>())
+        os.<span style=color:#008b45>Exit</span>(<span style=color:#b452cd>1</span>)
     }
-}</code></pre><p>由於之後要整合進 Docker 內，故透過 LookupEnv 來決定 Server 跟 Port。這樣可以將 <code>/graphql</code> 及 <code>/query</code> 的 Schema 綁定在一起了。另外要解決的就是如何將 Authorization 傳到後面 GraphQL Server 進行認證。</p><pre><code class=language-go>// the first thing we need to define is a middleware for our handler
-// that grabs the Authorization header and sets the context value for
-// our user id
-func withUserInfo(handler http.HandlerFunc) http.HandlerFunc {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        // look up the value of the Authorization header
-        tokenValue := r.Header.Get("Authorization")
-        // Allow CORS here By * or specific origin
-        w.Header().Set("Access-Control-Allow-Origin", "*")
-        w.Header().Set("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS")
-        w.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
-        w.Header().Set("Allow", "HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS")
-        // here is where you would perform some kind of validation on the token
-        // but we're going to skip that for this example and just save it as the
-        // id directly. PLEASE, DO NOT DO THIS IN PRODUCTION.
-
-        // invoke the handler with the new context
-        handler.ServeHTTP(w, r.WithContext(
-            context.WithValue(r.Context(), "tokenValue", tokenValue),
+}
+</code></pre></td></tr></table></div></div><p>由於之後要整合進 Docker 內，故透過 LookupEnv 來決定 Server 跟 Port。這樣可以將 <code>/graphql</code> 及 <code>/query</code> 的 Schema 綁定在一起了。另外要解決的就是如何將 Authorization 傳到後面 GraphQL Server 進行認證。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#228b22>// the first thing we need to define is a middleware for our handler
+</span><span style=color:#228b22>// that grabs the Authorization header and sets the context value for
+</span><span style=color:#228b22>// our user id
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>withUserInfo</span>(handler http.HandlerFunc) http.HandlerFunc {
+    <span style=color:#8b008b;font-weight:700>return</span> http.<span style=color:#008b45>HandlerFunc</span>(<span style=color:#8b008b;font-weight:700>func</span>(w http.ResponseWriter, r *http.Request) {
+        <span style=color:#228b22>// look up the value of the Authorization header
+</span><span style=color:#228b22></span>        tokenValue := r.Header.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;Authorization&#34;</span>)
+        <span style=color:#228b22>// Allow CORS here By * or specific origin
+</span><span style=color:#228b22></span>        w.<span style=color:#008b45>Header</span>().<span style=color:#008b45>Set</span>(<span style=color:#cd5555>&#34;Access-Control-Allow-Origin&#34;</span>, <span style=color:#cd5555>&#34;*&#34;</span>)
+        w.<span style=color:#008b45>Header</span>().<span style=color:#008b45>Set</span>(<span style=color:#cd5555>&#34;Access-Control-Allow-Methods&#34;</span>, <span style=color:#cd5555>&#34;GET,POST,PUT,PATCH,DELETE,OPTIONS&#34;</span>)
+        w.<span style=color:#008b45>Header</span>().<span style=color:#008b45>Set</span>(<span style=color:#cd5555>&#34;Access-Control-Allow-Headers&#34;</span>, <span style=color:#cd5555>&#34;authorization, origin, content-type, accept&#34;</span>)
+        w.<span style=color:#008b45>Header</span>().<span style=color:#008b45>Set</span>(<span style=color:#cd5555>&#34;Allow&#34;</span>, <span style=color:#cd5555>&#34;HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS&#34;</span>)
+        <span style=color:#228b22>// here is where you would perform some kind of validation on the token
+</span><span style=color:#228b22></span>        <span style=color:#228b22>// but we&#39;re going to skip that for this example and just save it as the
+</span><span style=color:#228b22></span>        <span style=color:#228b22>// id directly. PLEASE, DO NOT DO THIS IN PRODUCTION.
+</span><span style=color:#228b22></span>
+        <span style=color:#228b22>// invoke the handler with the new context
+</span><span style=color:#228b22></span>        handler.<span style=color:#008b45>ServeHTTP</span>(w, r.<span style=color:#008b45>WithContext</span>(
+            context.<span style=color:#008b45>WithValue</span>(r.<span style=color:#008b45>Context</span>(), <span style=color:#cd5555>&#34;tokenValue&#34;</span>, tokenValue),
         ))
     })
 }
 
-// the next thing we need to do is to modify the network requests to our services.
-// To do this, we have to define a middleware that pulls the id of the user out
-// of the context of the incoming request and sets it as the USER_ID header.
-var forwardUserID = gateway.RequestMiddleware(func(r *http.Request) error {
-    // the initial context of the request is set as the same context
-    // provided by net/http
-
-    // we are safe to extract the value we saved in context and set it as the outbound header
-    if tokenValue := r.Context().Value("tokenValue"); tokenValue != nil {
-        r.Header.Set("Authorization", tokenValue.(string))
+<span style=color:#228b22>// the next thing we need to do is to modify the network requests to our services.
+</span><span style=color:#228b22>// To do this, we have to define a middleware that pulls the id of the user out
+</span><span style=color:#228b22>// of the context of the incoming request and sets it as the USER_ID header.
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>var</span> forwardUserID = gateway.<span style=color:#008b45>RequestMiddleware</span>(<span style=color:#8b008b;font-weight:700>func</span>(r *http.Request) <span style=color:#00688b;font-weight:700>error</span> {
+    <span style=color:#228b22>// the initial context of the request is set as the same context
+</span><span style=color:#228b22></span>    <span style=color:#228b22>// provided by net/http
+</span><span style=color:#228b22></span>
+    <span style=color:#228b22>// we are safe to extract the value we saved in context and set it as the outbound header
+</span><span style=color:#228b22></span>    <span style=color:#8b008b;font-weight:700>if</span> tokenValue := r.<span style=color:#008b45>Context</span>().<span style=color:#008b45>Value</span>(<span style=color:#cd5555>&#34;tokenValue&#34;</span>); tokenValue != <span style=color:#8b008b;font-weight:700>nil</span> {
+        r.Header.<span style=color:#008b45>Set</span>(<span style=color:#cd5555>&#34;Authorization&#34;</span>, tokenValue.(<span style=color:#00688b;font-weight:700>string</span>))
     }
 
-    // return the modified request
-    return nil
-})</code></pre><p>其中上面的 Access-Control 用來解決 CORS 相關問題。前端用各自電腦開發時，就需要此部分。</p><h2 id=心得>心得</h2><p>用 gqlgen 在開發上效率差很多，現在透過這方式，可以保留舊的 Schema 搭配新的 gqlgen 開發模式，未來也可以將共通的功能獨立拆成單一服務，再透過 gateway 方式將多個模組合併。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
+    <span style=color:#228b22>// return the modified request
+</span><span style=color:#228b22></span>    <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
+})
+</code></pre></td></tr></table></div></div><p>其中上面的 Access-Control 用來解決 CORS 相關問題。前端用各自電腦開發時，就需要此部分。</p><h2 id=心得>心得</h2><p>用 gqlgen 在開發上效率差很多，現在透過這方式，可以保留舊的 Schema 搭配新的 gqlgen 開發模式，未來也可以將共通的功能獨立拆成單一服務，再透過 gateway 方式將多個模組合併。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/graphql/>GraphQL</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fgraphql-gateway-in-golang%2f&text=%e4%bd%bf%e7%94%a8%20GraphQL%20Gateway%20%e4%b8%b2%e6%8e%a5%e5%a4%9a%e5%80%8b%20Data%20Schema&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fgraphql-gateway-in-golang%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fgraphql-gateway-in-golang%2f&title=%e4%bd%bf%e7%94%a8%20GraphQL%20Gateway%20%e4%b8%b2%e6%8e%a5%e5%a4%9a%e5%80%8b%20Data%20Schema" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fgraphql-gateway-in-golang%2f&title=%e4%bd%bf%e7%94%a8%20GraphQL%20Gateway%20%e4%b8%b2%e6%8e%a5%e5%a4%9a%e5%80%8b%20Data%20Schema" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fgraphql-gateway-in-golang%2f&title=%e4%bd%bf%e7%94%a8%20GraphQL%20Gateway%20%e4%b8%b2%e6%8e%a5%e5%a4%9a%e5%80%8b%20Data%20Schema" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fgraphql-gateway-in-golang%2f&description=%e4%bd%bf%e7%94%a8%20GraphQL%20Gateway%20%e4%b8%b2%e6%8e%a5%e5%a4%9a%e5%80%8b%20Data%20Schema" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li><li><a href=/2020/11/improve-parser-performance-using-go-benchmark-tool/>善用 Go 語言效能測試工具來提升執行效率</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2020/12/write-the-simple-cli-tool-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言撰寫簡單的 Command Line 工具">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/ data-toggle=tooltip data-placement=top title="初探 Infrastructure as Code 工具 Terraform vs Pulumi">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2021/02/graphql-gateway-in-golang>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2021/02/graphql-gateway-in-golang'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

@@ -1,5 +1,5 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>用 Go 語言實戰 Limit Concurrency 方法 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
-最近看到一篇文章討論的非常熱烈，就是『concurrency is still not easy』這篇文章甚至上了 Hack News，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 Go 語言內，要寫 Concurrency 只要透過一個關鍵字 go 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 gops 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/09\/limit-concurrency-in-golang\/","name":"用 go 語言實戰 limit concurrency 方法"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Go 語言實戰 Limit Concurrency 方法","description":"\n最近看到一篇文章討論的非常熱烈，就是『concurrency is still not easy』這篇文章甚至上了 Hack News，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 Go 語言內，要寫 Concurrency 只要透過一個關鍵字 go 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 gops 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。\n","inLanguage":"en","wordCount":398,"datePublished":"2020-09-06T02:31:59","dateModified":"2020-09-06T02:31:59","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["concurrency, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/09\/limit-concurrency-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 Go 語言實戰 Limit Concurrency 方法"><meta property="og:description" content="
+最近看到一篇文章討論的非常熱烈，就是『concurrency is still not easy』這篇文章甚至上了 Hack News，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 Go 語言內，要寫 Concurrency 只要透過一個關鍵字 go 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 gops 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2020\/09\/limit-concurrency-in-golang\/","name":"用 go 語言實戰 limit concurrency 方法"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Go 語言實戰 Limit Concurrency 方法","description":"\n最近看到一篇文章討論的非常熱烈，就是『concurrency is still not easy』這篇文章甚至上了 Hack News，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 Go 語言內，要寫 Concurrency 只要透過一個關鍵字 go 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 gops 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。\n","inLanguage":"en","wordCount":800,"datePublished":"2020-09-06T02:31:59","dateModified":"2020-09-06T02:31:59","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["concurrency, golang"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2020\/09\/limit-concurrency-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 Go 語言實戰 Limit Concurrency 方法"><meta property="og:description" content="
 最近看到一篇文章討論的非常熱烈，就是『concurrency is still not easy』這篇文章甚至上了 Hack News，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 Go 語言內，要寫 Concurrency 只要透過一個關鍵字 go 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 gops 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2020/09/limit-concurrency-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="用 Go 語言實戰 Limit Concurrency 方法"><meta name=twitter:description content="
 最近看到一篇文章討論的非常熱烈，就是『concurrency is still not easy』這篇文章甚至上了 Hack News，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 Go 語言內，要寫 Concurrency 只要透過一個關鍵字 go 就可以輕易寫出，而多個 Goroutine …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
@@ -11,154 +11,315 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>用 Go 語言實戰 Limit Concurrency 方法</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 6, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;398&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#limit-concurrency-問題>Limit Concurrency 問題</a></li><li><a href=#將-limitch---struct-丟到背景處理>將 limitCh &lt;- struct{}{} 丟到背景處理</a></li><li><a href=#使用-worker-queue-寫法>使用 worker queue 寫法</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>最近看到一篇文章討論的非常熱烈，就是『<a href=https://utcc.utoronto.ca/~cks/space/blog/programming/GoConcurrencyStillNotEasy>concurrency is still not easy</a>』這篇文章甚至上了 <a href="https://news.ycombinator.com/item?id=24359650">Hack News</a>，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 <a href=https://golang.org>Go 語言</a>內，要寫 Concurrency 只要透過一個關鍵字 <code>go</code> 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 <a href=https://github.com/google/gops>gops</a> 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/jA7aYSRKVTQ style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202008">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202008">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202008">DOCKER 容器開發部署實戰</a></li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=limit-concurrency-問題>Limit Concurrency 問題</h2><p>Gops 是一套 CLI 工具，可以列出系統上正在用 Go 跑的全部 Process。要怎樣複製問題呢？很簡單，先安裝好 gops 指令後，先執行 <code>gops</code> 會看到底下結果</p><pre><code class="language-shell=">$ gops
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;800&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#limit-concurrency-問題>Limit Concurrency 問題</a></li><li><a href=#將-limitch---struct-丟到背景處理>將 limitCh &lt;- struct{}{} 丟到背景處理</a></li><li><a href=#使用-worker-queue-寫法>使用 worker queue 寫法</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>最近看到一篇文章討論的非常熱烈，就是『<a href=https://utcc.utoronto.ca/~cks/space/blog/programming/GoConcurrencyStillNotEasy>concurrency is still not easy</a>』這篇文章甚至上了 <a href="https://news.ycombinator.com/item?id=24359650">Hack News</a>，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 <a href=https://golang.org>Go 語言</a>內，要寫 Concurrency 只要透過一個關鍵字 <code>go</code> 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 <a href=https://github.com/google/gops>gops</a> 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/jA7aYSRKVTQ style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202008">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202008">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202008">DOCKER 容器開發部署實戰</a></li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=limit-concurrency-問題>Limit Concurrency 問題</h2><p>Gops 是一套 CLI 工具，可以列出系統上正在用 Go 跑的全部 Process。要怎樣複製問題呢？很簡單，先安裝好 gops 指令後，先執行 <code>gops</code> 會看到底下結果</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>$ gops
 98   1    com.docker.vmnetd  go1.13.14 com.docker.vmnetd
 2319 2275 gopls              go1.15    /Users/appleboy/go/bin/gopls
-4083 452  gops               go1.15    /Users/appleboy/go/bin/gops</code></pre><p>接著用底下程式碼繼續將 process 塞滿到 10 個，這時候在執行 <code>gops</code> 會發現系統完全不顯示了，也沒辦法結束。</p><pre><code class=language-go>package main
+4083 452  gops               go1.15    /Users/appleboy/go/bin/gops
+</code></pre></td></tr></table></div></div><p>接著用底下程式碼繼續將 process 塞滿到 10 個，這時候在執行 <code>gops</code> 會發現系統完全不顯示了，也沒辦法結束。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "fmt"
-    "time"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;time&#34;</span>
 )
 
-func main() {
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
 
-    timer1 := time.NewTicker(1 * time.Second)
+    timer1 := time.<span style=color:#008b45>NewTicker</span>(<span style=color:#b452cd>1</span> * time.Second)
 
-    for v := range timer1.C {
-        fmt.Println(v)
+    <span style=color:#8b008b;font-weight:700>for</span> v := <span style=color:#8b008b;font-weight:700>range</span> timer1.C {
+        fmt.<span style=color:#008b45>Println</span>(v)
     }
-}</code></pre><p>這問題發生在 8/5 有網友提出了 <a href=https://github.com/google/gops/pull/118>PR 去限制 Concurrency</a>，這寫法造成了上述出現的問題，導致 CLI 整個無法繼續運作，需要用 <code>ctrl + c</code> 才可以結束執行。底下是<a href=https://github.com/google/gops/blob/6fb0d860e5fa50629405d9e77e255cd32795967e/goprocess/gp.go#L28-L74>修改過後的程式碼</a>:</p><pre><code class=language-go>// FindAll returns all the Go processes currently running on this host.
-func FindAll() []P {
-    const concurrencyProcesses = 10 // limit the maximum number of concurrent reading process tasks
-    pss, err := ps.Processes()
-    if err != nil {
-        return nil
+}
+</code></pre></td></tr></table></div></div><p>這問題發生在 8/5 有網友提出了 <a href=https://github.com/google/gops/pull/118>PR 去限制 Concurrency</a>，這寫法造成了上述出現的問題，導致 CLI 整個無法繼續運作，需要用 <code>ctrl + c</code> 才可以結束執行。底下是<a href=https://github.com/google/gops/blob/6fb0d860e5fa50629405d9e77e255cd32795967e/goprocess/gp.go#L28-L74>修改過後的程式碼</a>:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#228b22>// FindAll returns all the Go processes currently running on this host.
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>FindAll</span>() []P {
+    <span style=color:#8b008b;font-weight:700>const</span> concurrencyProcesses = <span style=color:#b452cd>10</span> <span style=color:#228b22>// limit the maximum number of concurrent reading process tasks
+</span><span style=color:#228b22></span>    pss, err := ps.<span style=color:#008b45>Processes</span>()
+    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+        <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
     }
 
-    var wg sync.WaitGroup
-    wg.Add(len(pss))
-    found := make(chan P)
-    limitCh := make(chan struct{}, concurrencyProcesses)
+    <span style=color:#8b008b;font-weight:700>var</span> wg sync.WaitGroup
+    wg.<span style=color:#008b45>Add</span>(<span style=color:#658b00>len</span>(pss))
+    found := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> P)
+    limitCh := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{}, concurrencyProcesses)
 
-    for _, pr := range pss {
-        limitCh <- struct{}{}
+    <span style=color:#8b008b;font-weight:700>for</span> _, pr := <span style=color:#8b008b;font-weight:700>range</span> pss {
+        limitCh &lt;- <span style=color:#8b008b;font-weight:700>struct</span>{}{}
         pr := pr
-        go func() {
-            defer func() { <-limitCh }()
-            defer wg.Done()
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+            <span style=color:#8b008b;font-weight:700>defer</span> <span style=color:#8b008b;font-weight:700>func</span>() { &lt;-limitCh }()
+            <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
 
-            path, version, agent, ok, err := isGo(pr)
-            if err != nil {
-                // TODO(jbd): Return a list of errors.
+            path, version, agent, ok, err := <span style=color:#008b45>isGo</span>(pr)
+            <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+                <span style=color:#228b22>// TODO(jbd): Return a list of errors.
+</span><span style=color:#228b22></span>            }
+            <span style=color:#8b008b;font-weight:700>if</span> !ok {
+                <span style=color:#8b008b;font-weight:700>return</span>
             }
-            if !ok {
-                return
-            }
-            found <- P{
-                PID:          pr.Pid(),
-                PPID:         pr.PPid(),
-                Exec:         pr.Executable(),
+            found &lt;- P{
+                PID:          pr.<span style=color:#008b45>Pid</span>(),
+                PPID:         pr.<span style=color:#008b45>PPid</span>(),
+                Exec:         pr.<span style=color:#008b45>Executable</span>(),
                 Path:         path,
                 BuildVersion: version,
                 Agent:        agent,
             }
         }()
     }
-    go func() {
-        wg.Wait()
-        close(found)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        wg.<span style=color:#008b45>Wait</span>()
+        <span style=color:#658b00>close</span>(found)
     }()
-    var results []P
-    for p := range found {
-        results = append(results, p)
+    <span style=color:#8b008b;font-weight:700>var</span> results []P
+    <span style=color:#8b008b;font-weight:700>for</span> p := <span style=color:#8b008b;font-weight:700>range</span> found {
+        results = <span style=color:#658b00>append</span>(results, p)
     }
-    return results
-}</code></pre><p>我將上面的例子簡化寫成單一 main 函式來執行，效果是一樣的:</p><pre><code class=language-go>package main
+    <span style=color:#8b008b;font-weight:700>return</span> results
+}
+</code></pre></td></tr></table></div></div><p>我將上面的例子簡化寫成單一 main 函式來執行，效果是一樣的:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
-import (
-    "fmt"
-    "math/rand"
-    "sync"
-    "time"
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;math/rand&#34;</span>
+    <span style=color:#cd5555>&#34;sync&#34;</span>
+    <span style=color:#cd5555>&#34;time&#34;</span>
 )
 
-func main() {
-    const concurrencyProcesses = 10 // limit the maximum number of concurrent reading process tasks
-    const jobCount = 100
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    <span style=color:#8b008b;font-weight:700>const</span> concurrencyProcesses = <span style=color:#b452cd>10</span> <span style=color:#228b22>// limit the maximum number of concurrent reading process tasks
+</span><span style=color:#228b22></span>    <span style=color:#8b008b;font-weight:700>const</span> jobCount = <span style=color:#b452cd>100</span>
 
-    var wg sync.WaitGroup
-    wg.Add(jobCount)
-    found := make(chan int)
-    limitCh := make(chan struct{}, concurrencyProcesses)
+    <span style=color:#8b008b;font-weight:700>var</span> wg sync.WaitGroup
+    wg.<span style=color:#008b45>Add</span>(jobCount)
+    found := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>)
+    limitCh := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{}, concurrencyProcesses)
 
-    for i := 0; i < jobCount; i++ {
-        limitCh <- struct{}{}
-        go func(val int) {
-            defer func() {
-                wg.Done()
-                <-limitCh
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; jobCount; i++ {
+        limitCh &lt;- <span style=color:#8b008b;font-weight:700>struct</span>{}{}
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(val <span style=color:#00688b;font-weight:700>int</span>) {
+            <span style=color:#8b008b;font-weight:700>defer</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+                wg.<span style=color:#008b45>Done</span>()
+                &lt;-limitCh
             }()
-            waitTime := rand.Int31n(1000)
-            fmt.Println("job:", val, "wait time:", waitTime, "millisecond")
-            time.Sleep(time.Duration(waitTime) * time.Millisecond)
-            found <- val
+            waitTime := rand.<span style=color:#008b45>Int31n</span>(<span style=color:#b452cd>1000</span>)
+            fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;job:&#34;</span>, val, <span style=color:#cd5555>&#34;wait time:&#34;</span>, waitTime, <span style=color:#cd5555>&#34;millisecond&#34;</span>)
+            time.<span style=color:#008b45>Sleep</span>(time.<span style=color:#008b45>Duration</span>(waitTime) * time.Millisecond)
+            found &lt;- val
         }(i)
     }
-    go func() {
-        wg.Wait()
-        close(found)
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+        wg.<span style=color:#008b45>Wait</span>()
+        <span style=color:#658b00>close</span>(found)
     }()
-    var results []int
-    for p := range found {
-        fmt.Println("Finished job:", p)
-        results = append(results, p)
+    <span style=color:#8b008b;font-weight:700>var</span> results []<span style=color:#00688b;font-weight:700>int</span>
+    <span style=color:#8b008b;font-weight:700>for</span> p := <span style=color:#8b008b;font-weight:700>range</span> found {
+        fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Finished job:&#34;</span>, p)
+        results = <span style=color:#658b00>append</span>(results, p)
     }
 
-    fmt.Println("result:", results)
-}</code></pre><p>我把 <code>ps.Processes()</code> 的資料，換成 Job 數量來代表，來解釋為什麼麼這段程式碼造成了系統直接 hang 住不動。重點原因在 for 迴圈內的 <code>limitCh &lt;- struct{}{}</code>，先看到前面有設定了背景一次只能跑 10 個 Concurrency Processes</p><pre><code class=language-go>    for i := 0; i < jobCount; i++ {
-        limitCh <- struct{}{}
-        go func(val int) {
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;result:&#34;</span>, results)
+}
+</code></pre></td></tr></table></div></div><p>我把 <code>ps.Processes()</code> 的資料，換成 Job 數量來代表，來解釋為什麼麼這段程式碼造成了系統直接 hang 住不動。重點原因在 for 迴圈內的 <code>limitCh &lt;- struct{}{}</code>，先看到前面有設定了背景一次只能跑 10 個 Concurrency Processes</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; jobCount; i++ {
+        limitCh &lt;- <span style=color:#8b008b;font-weight:700>struct</span>{}{}
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(val <span style=color:#00688b;font-weight:700>int</span>) {
             ....
         }(i)
-    }</code></pre><p>這是一個標準的 Limit Concurrency 問題，在讀取第一個 Job 後，先將空 struct 丟入 limitCh 通道，這時候 limitCh 就是剩下 9 個可以繼續處理，接著持續一樣的動作，但是到第 11 個 Job 需要處理時，就會直接停在 <code>limitCh &lt;- struct{}{}</code>，在 for 迴圈後面的程式碼完全沒辦法執行，造成整個系統 deadlock，由此可知道，如果 Process 數量小於 10 的話，幾乎看不出來有任何問題，系統都可以正常運作 (大家可以把範例的 Job Count 換成 10)。下面會介紹兩種方式繞過此問題，大家可以參考看看</p><h2 id=將-limitch---struct-丟到背景處理>將 limitCh &lt;- struct{}{} 丟到背景處理</h2><p>相信很多開發者可能會想到，既然卡在 <code>limitCh &lt;- struct{}{}</code>，那就將此段程式碼也一樣丟到 goroutine 內處理就可以了。</p><pre><code class=language-go>    found := make(chan int)
-    limitCh := make(chan struct{}, concurrencyProcesses)
+    }
+</code></pre></td></tr></table></div></div><p>這是一個標準的 Limit Concurrency 問題，在讀取第一個 Job 後，先將空 struct 丟入 limitCh 通道，這時候 limitCh 就是剩下 9 個可以繼續處理，接著持續一樣的動作，但是到第 11 個 Job 需要處理時，就會直接停在 <code>limitCh &lt;- struct{}{}</code>，在 for 迴圈後面的程式碼完全沒辦法執行，造成整個系統 deadlock，由此可知道，如果 Process 數量小於 10 的話，幾乎看不出來有任何問題，系統都可以正常運作 (大家可以把範例的 Job Count 換成 10)。下面會介紹兩種方式繞過此問題，大家可以參考看看</p><h2 id=將-limitch---struct-丟到背景處理>將 limitCh &lt;- struct{}{} 丟到背景處理</h2><p>相信很多開發者可能會想到，既然卡在 <code>limitCh &lt;- struct{}{}</code>，那就將此段程式碼也一樣丟到 goroutine 內處理就可以了。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    found := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>)
+    limitCh := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{}, concurrencyProcesses)
 
-    for i := 0; i < jobCount; i++ {
-        go func() {
-            limitCh <- struct{}{}
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; jobCount; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+            limitCh &lt;- <span style=color:#8b008b;font-weight:700>struct</span>{}{}
         }()
-        go func(val int) {
-            defer func() {
-                <-limitCh
-                wg.Done()
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(val <span style=color:#00688b;font-weight:700>int</span>) {
+            <span style=color:#8b008b;font-weight:700>defer</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+                &lt;-limitCh
+                wg.<span style=color:#008b45>Done</span>()
             }()
-            waitTime := rand.Int31n(1000)
-            fmt.Println("job:", val, "wait time:", waitTime, "millisecond")
-            time.Sleep(time.Duration(waitTime) * time.Millisecond)
-            found <- val
+            waitTime := rand.<span style=color:#008b45>Int31n</span>(<span style=color:#b452cd>1000</span>)
+            fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;job:&#34;</span>, val, <span style=color:#cd5555>&#34;wait time:&#34;</span>, waitTime, <span style=color:#cd5555>&#34;millisecond&#34;</span>)
+            time.<span style=color:#008b45>Sleep</span>(time.<span style=color:#008b45>Duration</span>(waitTime) * time.Millisecond)
+            found &lt;- val
         }(i)
-    }</code></pre><p>很高興可以看到這方式解決掉系統 Hang 住的問題。但是你有沒有發現，程式碼沒辦法限制 Concurrency Processes，而是 100 個 Job 同時處理到結束。雖然這方式可以解決問題，但是回到問題的初衷，我們就是要寫 Limit Concurrency 啊。</p><h2 id=使用-worker-queue-寫法>使用 worker queue 寫法</h2><p>這寫法算是蠻常見的，既然要限制背景能同時處理的數量，那相對的就是建立特定數量的 Worker，每個 Worker 內在讀取 Channle 內的資料出來。第一步驟建立 queue 通道，並將所有的內容都丟進 queue 內</p><pre><code class=language-go>    found := make(chan int)
-    queue := make(chan int)
+    }
+</code></pre></td></tr></table></div></div><p>很高興可以看到這方式解決掉系統 Hang 住的問題。但是你有沒有發現，程式碼沒辦法限制 Concurrency Processes，而是 100 個 Job 同時處理到結束。雖然這方式可以解決問題，但是回到問題的初衷，我們就是要寫 Limit Concurrency 啊。</p><h2 id=使用-worker-queue-寫法>使用 worker queue 寫法</h2><p>這寫法算是蠻常見的，既然要限制背景能同時處理的數量，那相對的就是建立特定數量的 Worker，每個 Worker 內在讀取 Channle 內的資料出來。第一步驟建立 queue 通道，並將所有的內容都丟進 queue 內</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    found := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>)
+    queue := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>)
 
-    go func(queue chan<- int) {
-        for i := 0; i < jobCount; i++ {
-            queue <- i
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(queue <span style=color:#8b008b;font-weight:700>chan</span>&lt;- <span style=color:#00688b;font-weight:700>int</span>) {
+        <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; jobCount; i++ {
+            queue &lt;- i
         }
-        close(queue)
-    }(queue)</code></pre><p>這邊一樣是透過 goroutine 方式丟到背景，避免 block 整個 main 程式。接著建立特定的 Worker 數量來消化全部的 Job</p><pre><code class=language-go>    for i := 0; i < concurrencyProcesses; i++ {
-        go func(queue <-chan int, found chan<- int) {
-            for val := range queue {
-                defer wg.Done()
-                waitTime := rand.Int31n(1000)
-                fmt.Println("job:", val, "wait time:", waitTime, "millisecond")
-                time.Sleep(time.Duration(waitTime) * time.Millisecond)
-                found <- val
+        <span style=color:#658b00>close</span>(queue)
+    }(queue)
+</code></pre></td></tr></table></div></div><p>這邊一樣是透過 goroutine 方式丟到背景，避免 block 整個 main 程式。接著建立特定的 Worker 數量來消化全部的 Job</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; concurrencyProcesses; i++ {
+        <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(queue &lt;-<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, found <span style=color:#8b008b;font-weight:700>chan</span>&lt;- <span style=color:#00688b;font-weight:700>int</span>) {
+            <span style=color:#8b008b;font-weight:700>for</span> val := <span style=color:#8b008b;font-weight:700>range</span> queue {
+                <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
+                waitTime := rand.<span style=color:#008b45>Int31n</span>(<span style=color:#b452cd>1000</span>)
+                fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;job:&#34;</span>, val, <span style=color:#cd5555>&#34;wait time:&#34;</span>, waitTime, <span style=color:#cd5555>&#34;millisecond&#34;</span>)
+                time.<span style=color:#008b45>Sleep</span>(time.<span style=color:#008b45>Duration</span>(waitTime) * time.Millisecond)
+                found &lt;- val
             }
         }(queue, found)
-    }</code></pre><p>可以看到這邊的 for 迴圈就是以 <code>concurrencyProcesses</code> 為主了，裡面再用 goroutine 方式來讀取 Channel，直到全部的 Channel 都讀取完畢，整個 goroutine 就會結束。除了這解決方式之外，還是有其他方法可以實作，這邊就交由大家去發揮了。</p><h2 id=心得>心得</h2><p>這篇文章為什麼這麼火紅的原因，我猜也因為是該 Repo 是 Google 官方自行開發，但是所有的 PR 都需要經過 Googler 嚴格 Review 過後才可以 Merge 進 Master 分支，但是像這種小細節，如果沒有真的實際測試，真的還蠻難發現問題。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/concurrency/>concurrency</a>&nbsp;
+    }
+</code></pre></td></tr></table></div></div><p>可以看到這邊的 for 迴圈就是以 <code>concurrencyProcesses</code> 為主了，裡面再用 goroutine 方式來讀取 Channel，直到全部的 Channel 都讀取完畢，整個 goroutine 就會結束。除了這解決方式之外，還是有其他方法可以實作，這邊就交由大家去發揮了。</p><h2 id=心得>心得</h2><p>這篇文章為什麼這麼火紅的原因，我猜也因為是該 Repo 是 Google 官方自行開發，但是所有的 PR 都需要經過 Googler 嚴格 Review 過後才可以 Merge 進 Master 分支，但是像這種小細節，如果沒有真的實際測試，真的還蠻難發現問題。</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/concurrency/>concurrency</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f09%2flimit-concurrency-in-golang%2f&text=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e6%88%b0%20Limit%20Concurrency%20%e6%96%b9%e6%b3%95&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f09%2flimit-concurrency-in-golang%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f09%2flimit-concurrency-in-golang%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e6%88%b0%20Limit%20Concurrency%20%e6%96%b9%e6%b3%95" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f09%2flimit-concurrency-in-golang%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e6%88%b0%20Limit%20Concurrency%20%e6%96%b9%e6%b3%95" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f09%2flimit-concurrency-in-golang%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e6%88%b0%20Limit%20Concurrency%20%e6%96%b9%e6%b3%95" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2020%2f09%2flimit-concurrency-in-golang%2f&description=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e6%88%b0%20Limit%20Concurrency%20%e6%96%b9%e6%b3%95" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2020/08/three-ways-to-manage-concurrency-in-go/ data-toggle=tooltip data-placement=top title="在 Go 語言內管理 Concurrency 的三種方式">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2020/09/golang-scale-in-cloud-summit-taiwan/ data-toggle=tooltip data-placement=top title="用 Go 語言打造多台機器 Scale 架構">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2020/09/limit-concurrency-in-golang>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2020/09/limit-concurrency-in-golang'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

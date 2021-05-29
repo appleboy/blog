@@ -38,14 +38,13 @@
 </pre><a href=https://demo.gh.wu-boy.com/2010/08/codeigniter-%E5%88%A9%E7%94%A8-jquery-%E7%B0%A1%E6%98%93%E9%A9%97%E8%AD%89%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E8%99%9Femail/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/vim-%E5%B0%87-tab-%E8%BD%89%E6%8F%9B%E6%88%90-space/><h2 class=post-title>[Vim] 將 Tab 轉換成 Space</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 25, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;118&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;128&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>Update 2010.08.28: Pspad 轉換既有 Tabs to Spaces by bootleq
 為了統一 Windows 跟 Linux 底下的編輯器在使用 Tab 功能相同，所以調整了 Vim 及 Pspad(我常用編輯器)的設定，底下是針對 Vim 及 Pspad 的解決方法。首先當大家使用 Vim 編輯器撰寫程式，常常會使用 Tab 來縮排程式碼，我們可以使用 expandtab 來插入空白鍵(Space)取代 Tab:
-:set expandtab 控制插入 Tab 時所需要的空白鍵(Tab)字元數，例如用4個空白鍵取代 Tab:
-:set tabstop=4 在我們設定完 expandtab 之後，所有的 Tab 鍵將會被 Space 所取代，但是原本在檔案文件中的 Tab 將不會改變，為了取代原有的 Tab 到新的設定，我們必須鍵入：
-:retab 針對程式縮排所需要的 Space 個數，我們可以使用 shiftwidth 選項
-:set shiftwidth=4 底下舉個例子：
-將文件中 Tab 取代成 Space 所有 Tab 用4個 Space 取代 :set tabstop=4 :set shiftwidth=4 :set expandtab Pspad 設定 Settings -> Programing Settings -> Editor (Part 2)
+1 :set expandtab 控制插入 Tab 時所需要的空白鍵(Tab)字元數，例如用4個空白鍵取代 Tab:
+1 :set tabstop=4 在我們設定完 expandtab 之後，所有的 Tab 鍵將會被 Space 所取代，但是原本在檔案文件中的 Tab 將不會改變，為了取代原有的 Tab 到新的設定，我們必須鍵入：
+1 :retab 針對程式縮排所需要的 Space 個數，我們可以使用 shiftwidth 選項
+1 :set shiftwidth=4 底下舉個例子：
 <a href=https://demo.gh.wu-boy.com/2010/08/vim-%E5%B0%87-tab-%E8%BD%89%E6%8F%9B%E6%88%90-space/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/vim/>Vim</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/html5-%E6%A8%A1%E6%9D%BF%E6%9E%B6%E6%A7%8Bboilerplate/><h2 class=post-title>Html5 模板架構(Boilerplate)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 23, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;47&nbsp;words
@@ -98,18 +97,17 @@ chomp;
 # bad_line("
 <a href=https://demo.gh.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E3%80%8Cyou-have-some-suspicious-patch-lines%E3%80%8D/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/><h2 class=post-title>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 4, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;392&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;540&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
-/* strcat example */ #include #include int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
-these strings are concatenated. 看一下 strcat 原始碼：
-char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 /* strcat example */ #include &lt;stdio.h>#include &lt;string.h> int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
+1 these strings are concatenated. 看一下 strcat 原始碼：
+1 2 3 4 5 6 7 8 9 char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。
 <a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/><h2 class=post-title>[C/C++] cstring (string.h) 搜尋函式：strstr, strchr</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 3, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;298&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>這次介紹 C 語言常用 string 函式：strstr，主要是針對兩個輸入參數做比對，Parameters 1 是輸入字串，Parameters 2 是找尋字串，strstr 會先將頭一次比對成功的 pointer 回傳，也就是如果要找尋 appleboyappleboy 字串中的 boy，函式會回傳第一次比對成功的 boy pointer，而並非回傳最後一個比對到的，底下是一個參考範例：
-strstr /* strstr example */ #include #include int main () { char str[] ="This is a simple string"; char * pch; /* 找尋 simple 字串 */ pch = strstr (str,"simple"); /* 將 simple 換成 sample */ strncpy (pch,"sample",6); puts (str); return 0; } 看一下 Kernel 原始檔案，strstr 函式：
-/* * Find the first occurrence of find in s.
+strstr 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 /* strstr example */ #include &lt;stdio.h>#include &lt;string.h> int main () { char str[] ="This is a simple string"; char * pch; /* 找尋 simple 字串 */ pch = strstr (str,"simple"); /* 將 simple 換成 sample */ strncpy (pch,"sample",6); puts (str); return 0; } 看一下 Kernel 原始檔案，strstr 函式：
 <a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/><h2 class=post-title>[網站] 好站連結 (七) Android, javascript, Css, PHP, Perl, FreeBSD, Linux</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 30, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words

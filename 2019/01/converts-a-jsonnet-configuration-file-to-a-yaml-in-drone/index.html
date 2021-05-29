@@ -1,5 +1,85 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
 Drone 在 1.0 版本推出了用 jsonnet 來撰寫 YAML 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 .drone.yml 內有非常多重複性的設定，假設 Go 語言的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 Docker Hub，底下是 AMD64 的設定檔範例。剛好在 Udemy 課程內有學員詢問到相關問題。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+
+
 ---
 kind: pipeline
 name: linux-arm64
@@ -75,8 +155,91 @@ steps:
 
 trigger:
   branch:
-  - master"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone\/","name":"有效率的用 jsonnet 撰寫 drone ci cd 設定檔"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"有效率的用 jsonnet 撰寫  Drone CI\/CD 設定檔","description":"\nDrone 在 1.0 版本推出了用 jsonnet 來撰寫 YAML 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 .drone.yml 內有非常多重複性的設定，假設 Go 語言的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 Docker Hub，底下是 AMD64 的設定檔範例。剛好在 Udemy 課程內有學員詢問到相關問題。\n--- kind: pipeline name: linux-arm64 platform: os: linux arch: arm64 steps: - name: build-push pull: always image: golang:1.11 commands: - \u0022go build -v -ldflags \\\u0022-X main.build=${DRONE_BUILD_NUMBER}\\\u0022 -a -o release\/linux\/arm64\/drone-discord\u0022 environment: CGO_ENABLED: 0 GO111MODULE: on when: event: - push - pull_request - name: build-tag pull: always image: golang:1.11 commands: - \u0022go build -v -ldflags \\\u0022-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\\\u0022 -a -o release\/linux\/arm64\/drone-discord\u0022 environment: CGO_ENABLED: 0 GO111MODULE: on when: event: - tag - name: executable pull: always image: golang:1.11 commands: - .\/release\/linux\/arm64\/drone-discord --help - name: dryrun pull: always image: plugins\/docker:linux-arm64 settings: dockerfile: docker\/Dockerfile.linux.arm64 dry_run: true password: from_secret: docker_password repo: appleboy\/drone-discord tags: linux-arm64 username: from_secret: docker_username when: event: - pull_request - name: publish pull: always image: plugins\/docker:linux-arm64 settings: auto_tag: true auto_tag_suffix: linux-arm64 dockerfile: docker\/Dockerfile.linux.arm64 password: from_secret: docker_password repo: appleboy\/drone-discord username: from_secret: docker_username when: event: - push - tag trigger: branch: - master","inLanguage":"en","wordCount":838,"datePublished":"2019-01-25T07:40:34","dateModified":"2019-01-25T07:40:34","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone, golang, jsonnet"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="有效率的用 jsonnet 撰寫  Drone CI/CD 設定檔"><meta property="og:description" content="
+  - master
+
+
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone\/","name":"有效率的用 jsonnet 撰寫 drone ci cd 設定檔"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"有效率的用 jsonnet 撰寫  Drone CI\/CD 設定檔","description":"\nDrone 在 1.0 版本推出了用 jsonnet 來撰寫 YAML 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 .drone.yml 內有非常多重複性的設定，假設 Go 語言的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 Docker Hub，底下是 AMD64 的設定檔範例。剛好在 Udemy 課程內有學員詢問到相關問題。\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76  ---kind:pipelinename:linux-arm64platform:os:linuxarch:arm64steps:- name:build-pushpull:alwaysimage:golang:1.11commands:- \u0026#34;go build -v -ldflags \\\u0026#34;-X main.build=${DRONE_BUILD_NUMBER}\\\u0026#34; -a -o release\/linux\/arm64\/drone-discord\u0026#34;environment:CGO_ENABLED:0GO111MODULE:onwhen:event:- push- pull_request- name:build-tagpull:alwaysimage:golang:1.11commands:- \u0026#34;go build -v -ldflags \\\u0026#34;-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\\\u0026#34; -a -o release\/linux\/arm64\/drone-discord\u0026#34;environment:CGO_ENABLED:0GO111MODULE:onwhen:event:- tag- name:executablepull:alwaysimage:golang:1.11commands:- .\/release\/linux\/arm64\/drone-discord --help- name:dryrunpull:alwaysimage:plugins\/docker:linux-arm64settings:dockerfile:docker\/Dockerfile.linux.arm64dry_run:truepassword:from_secret:docker_passwordrepo:appleboy\/drone-discordtags:linux-arm64username:from_secret:docker_usernamewhen:event:- pull_request- name:publishpull:alwaysimage:plugins\/docker:linux-arm64settings:auto_tag:trueauto_tag_suffix:linux-arm64dockerfile:docker\/Dockerfile.linux.arm64password:from_secret:docker_passwordrepo:appleboy\/drone-discordusername:from_secret:docker_usernamewhen:event:- push- tagtrigger:branch:- master  ","inLanguage":"en","wordCount":1059,"datePublished":"2019-01-25T07:40:34","dateModified":"2019-01-25T07:40:34","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone, golang, jsonnet"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/01\/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="有效率的用 jsonnet 撰寫  Drone CI/CD 設定檔"><meta property="og:description" content="
 Drone 在 1.0 版本推出了用 jsonnet 來撰寫 YAML 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 .drone.yml 內有非常多重複性的設定，假設 Go 語言的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 Docker Hub，底下是 AMD64 的設定檔範例。剛好在 Udemy 課程內有學員詢問到相關問題。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+
+
 ---
 kind: pipeline
 name: linux-arm64
@@ -152,7 +315,10 @@ steps:
 
 trigger:
   branch:
-  - master"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="有效率的用 jsonnet 撰寫  Drone CI/CD 設定檔"><meta name=twitter:description content="
+  - master
+
+
+"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="有效率的用 jsonnet 撰寫  Drone CI/CD 設定檔"><meta name=twitter:description content="
 Drone 在 1.0 版本推出了用 jsonnet 來撰寫 YAML 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 .drone.yml 內有非常多重複性的設定，假設 Go 語言的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 Docker Hub，底下是 AMD64 的設定檔範例。 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
@@ -163,117 +329,247 @@ Drone 在 1.0 版本推出了用 jsonnet 來撰寫 YAML 設定檔，方便開發
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 25, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;838&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片教學>影片教學</a></li><li><a href=#安裝-drone-cli-執行檔>安裝 drone CLI 執行檔</a></li><li><a href=#撰寫-dronejsonnet-檔案>撰寫 .drone.jsonnet 檔案</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" title="Jsonnet + Drone"><img src="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" alt="Jsonnet + Drone" title="Jsonnet + Drone"></a></p><p><a href=https://github.com/drone/drone>Drone</a> 在 1.0 版本推出了用 <a href=https://jsonnet.org>jsonnet</a> 來撰寫 <a href=https://en.wikipedia.org/wiki/YAML>YAML</a> 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 <code>.drone.yml</code> 內有非常多重複性的設定，假設 <a href=https://golang.org title="Go 語言">Go 語言</a>的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 <a href=https://hub.docker.com/ title="Docker Hub">Docker Hub</a>，底下是 AMD64 的設定檔範例。剛好在 <a href=https://www.udemy.com/devops-oneday title="Udemy 課程">Udemy 課程</a>內有學員詢問到<a href=https://www.udemy.com/devops-oneday/learn/v4/questions/6162884>相關問題</a>。</p><pre><code class=language-yaml>---
-kind: pipeline
-name: linux-arm64
-
-platform:
-  os: linux
-  arch: arm64
-
-steps:
-- name: build-push
-  pull: always
-  image: golang:1.11
-  commands:
-  - "go build -v -ldflags \"-X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/linux/arm64/drone-discord"
-  environment:
-    CGO_ENABLED: 0
-    GO111MODULE: on
-  when:
-    event:
-    - push
-    - pull_request
-
-- name: build-tag
-  pull: always
-  image: golang:1.11
-  commands:
-  - "go build -v -ldflags \"-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/linux/arm64/drone-discord"
-  environment:
-    CGO_ENABLED: 0
-    GO111MODULE: on
-  when:
-    event:
-    - tag
-
-- name: executable
-  pull: always
-  image: golang:1.11
-  commands:
-  - ./release/linux/arm64/drone-discord --help
-
-- name: dryrun
-  pull: always
-  image: plugins/docker:linux-arm64
-  settings:
-    dockerfile: docker/Dockerfile.linux.arm64
-    dry_run: true
-    password:
-      from_secret: docker_password
-    repo: appleboy/drone-discord
-    tags: linux-arm64
-    username:
-      from_secret: docker_username
-  when:
-    event:
-    - pull_request
-
-- name: publish
-  pull: always
-  image: plugins/docker:linux-arm64
-  settings:
-    auto_tag: true
-    auto_tag_suffix: linux-arm64
-    dockerfile: docker/Dockerfile.linux.arm64
-    password:
-      from_secret: docker_password
-    repo: appleboy/drone-discord
-    username:
-      from_secret: docker_username
-  when:
-    event:
-    - push
-    - tag
-
-trigger:
-  branch:
-  - master</code></pre><p>大家可以看到上面總共快 80 行，如果要再支援 ARM 64，這時候就需要重新複製再貼上，並且把相關設定改掉，有沒有覺得這樣非常難維護 <code>.drone.yml</code>。Drone 的作者聽到大家的聲音了，在 1.0 版本整合了 <a href=https://jsonnet.org/>jsonnet</a> 這套 Data Templating Language，讓您可以寫一次代碼並產生出好幾種環境。底下簡單看一個例子:</p><pre><code class=language-json>// A function that returns an object.
-local Person(name='Alice') = {
-  name: name,
-  welcome: 'Hello ' + name + '!',
-};
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1059&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片教學>影片教學</a></li><li><a href=#安裝-drone-cli-執行檔>安裝 drone CLI 執行檔</a></li><li><a href=#撰寫-dronejsonnet-檔案>撰寫 .drone.jsonnet 檔案</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" title="Jsonnet + Drone"><img src="https://lh3.googleusercontent.com/z8q-kl8yaWy9LtUDNEluPfDiHouz0Q7GnQZDStid8j4CmOwgP9uZJsTOCXjmSzTTApmL6fukANr6UbEGAaebb5_iJ1j5LoXPFKtrrf_FdLOGFpt9zyYvdPo8OdpzrZ3qJDDx9CkanNM=w1920-h1080" alt="Jsonnet + Drone" title="Jsonnet + Drone"></a></p><p><a href=https://github.com/drone/drone>Drone</a> 在 1.0 版本推出了用 <a href=https://jsonnet.org>jsonnet</a> 來撰寫 <a href=https://en.wikipedia.org/wiki/YAML>YAML</a> 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 <code>.drone.yml</code> 內有非常多重複性的設定，假設 <a href=https://golang.org title="Go 語言">Go 語言</a>的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 <a href=https://hub.docker.com/ title="Docker Hub">Docker Hub</a>，底下是 AMD64 的設定檔範例。剛好在 <a href=https://www.udemy.com/devops-oneday title="Udemy 課程">Udemy 課程</a>內有學員詢問到<a href=https://www.udemy.com/devops-oneday/learn/v4/questions/6162884>相關問題</a>。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64>64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65>65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66>66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67>67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68>68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69>69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70>70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71>71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72>72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73>73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74>74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75>75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76>76</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#008b45;text-decoration:underline>---</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>kind</span>:<span style=color:#bbb> </span>pipeline<span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>linux-arm64<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>platform</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>os</span>:<span style=color:#bbb> </span>linux<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>arch</span>:<span style=color:#bbb> </span>arm64<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>steps</span>:<span style=color:#bbb>
+</span><span style=color:#bbb></span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>build-push<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>golang:1.11<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>commands</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- <span style=color:#cd5555>&#34;go build -v -ldflags \&#34;-X main.build=${DRONE_BUILD_NUMBER}\&#34; -a -o release/linux/arm64/drone-discord&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>environment</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>CGO_ENABLED</span>:<span style=color:#bbb> </span><span style=color:#b452cd>0</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>GO111MODULE</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>on</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>when</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>event</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- push<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- pull_request<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>build-tag<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>golang:1.11<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>commands</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- <span style=color:#cd5555>&#34;go build -v -ldflags \&#34;-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\&#34; -a -o release/linux/arm64/drone-discord&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>environment</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>CGO_ENABLED</span>:<span style=color:#bbb> </span><span style=color:#b452cd>0</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>GO111MODULE</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>on</span><span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>when</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>event</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- tag<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>executable<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>golang:1.11<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>commands</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- ./release/linux/arm64/drone-discord --help<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>dryrun<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>plugins/docker:linux-arm64<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>settings</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>dockerfile</span>:<span style=color:#bbb> </span>docker/Dockerfile.linux.arm64<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>dry_run</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>password</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_password<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>repo</span>:<span style=color:#bbb> </span>appleboy/drone-discord<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>tags</span>:<span style=color:#bbb> </span>linux-arm64<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_username<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>when</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>event</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- pull_request<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span>- <span style=color:#8b008b;font-weight:700>name</span>:<span style=color:#bbb> </span>publish<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>pull</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>plugins/docker:linux-arm64<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>settings</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>auto_tag</span>:<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>true</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>auto_tag_suffix</span>:<span style=color:#bbb> </span>linux-arm64<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>dockerfile</span>:<span style=color:#bbb> </span>docker/Dockerfile.linux.arm64<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>password</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_password<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>repo</span>:<span style=color:#bbb> </span>appleboy/drone-discord<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>username</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>from_secret</span>:<span style=color:#bbb> </span>docker_username<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>when</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>event</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- push<span style=color:#bbb>
+</span><span style=color:#bbb>    </span>- tag<span style=color:#bbb>
+</span><span style=color:#bbb>
+</span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>trigger</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>branch</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>  </span>- master<span style=color:#bbb>
+</span></code></pre></td></tr></table></div></div><p>大家可以看到上面總共快 80 行，如果要再支援 ARM 64，這時候就需要重新複製再貼上，並且把相關設定改掉，有沒有覺得這樣非常難維護 <code>.drone.yml</code>。Drone 的作者聽到大家的聲音了，在 1.0 版本整合了 <a href=https://jsonnet.org/>jsonnet</a> 這套 Data Templating Language，讓您可以寫一次代碼並產生出好幾種環境。底下簡單看一個例子:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json><span style=color:#a61717;background-color:#e3d2d2>//</span> <span style=color:#a61717;background-color:#e3d2d2>A</span> <span style=color:#a61717;background-color:#e3d2d2>function</span> <span style=color:#a61717;background-color:#e3d2d2>that</span> <span style=color:#a61717;background-color:#e3d2d2>returns</span> <span style=color:#a61717;background-color:#e3d2d2>an</span> <span style=color:#a61717;background-color:#e3d2d2>object.</span>
+<span style=color:#a61717;background-color:#e3d2d2>local</span> <span style=color:#a61717;background-color:#e3d2d2>Person(name=&#39;Alice&#39;)</span> <span style=color:#a61717;background-color:#e3d2d2>=</span> {
+  <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#a61717;background-color:#e3d2d2>name,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>welcome:</span> <span style=color:#a61717;background-color:#e3d2d2>&#39;Hello</span> <span style=color:#a61717;background-color:#e3d2d2>&#39;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>name</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>&#39;!&#39;,</span>
+}<span style=color:#a61717;background-color:#e3d2d2>;</span>
 {
-  person1: Person(),
-  person2: Person('Bob'),
-}</code></pre><p>透過 jsonnet 指令可以轉換如下:</p><pre><code class=language-json>{
-  "person1": {
-    "name": "Alice",
-    "welcome": "Hello Alice!"
+  <span style=color:#a61717;background-color:#e3d2d2>person1:</span> <span style=color:#a61717;background-color:#e3d2d2>Person(),</span>
+  <span style=color:#a61717;background-color:#e3d2d2>person2:</span> <span style=color:#a61717;background-color:#e3d2d2>Person(&#39;Bob&#39;),</span>
+}
+</code></pre></td></tr></table></div></div><p>透過 jsonnet 指令可以轉換如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json>{
+  <span style=color:#8b008b;font-weight:700>&#34;person1&#34;</span>: {
+    <span style=color:#8b008b;font-weight:700>&#34;name&#34;</span>: <span style=color:#cd5555>&#34;Alice&#34;</span>,
+    <span style=color:#8b008b;font-weight:700>&#34;welcome&#34;</span>: <span style=color:#cd5555>&#34;Hello Alice!&#34;</span>
   },
-  "person2": {
-    "name": "Bob",
-    "welcome": "Hello Bob!"
+  <span style=color:#8b008b;font-weight:700>&#34;person2&#34;</span>: {
+    <span style=color:#8b008b;font-weight:700>&#34;name&#34;</span>: <span style=color:#cd5555>&#34;Bob&#34;</span>,
+    <span style=color:#8b008b;font-weight:700>&#34;welcome&#34;</span>: <span style=color:#cd5555>&#34;Hello Bob!&#34;</span>
   }
-}</code></pre><p>那該如何改 drone 設定檔方便未來多個專案一起維護呢？</p><h2 id=影片教學>影片教學</h2><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=安裝-drone-cli-執行檔>安裝 drone CLI 執行檔</h2><p>請直接參考<a href=https://docs.drone.io/cli/install/>官方文件</a>就可以了，這邊不再詳細介紹，底下是 Mac 範例 (安裝的是 <a href=https://github.com/drone/drone-cli/releases/tag/v1.0.5 title="Drone v1.0.5">Drone v1.0.5</a>):</p><pre><code class=language-sh>$ curl -L https://github.com/drone/drone-cli/releases/download/v1.0.5/drone_darwin_amd64.tar.gz | tar zx
-$ sudo cp drone /usr/local/bin</code></pre><p>安裝完成後，還需要設定<a href=https://docs.drone.io/cli/setup/>環境變數</a>，才可以跟您的 Drone 伺服器溝通。</p><pre><code class=language-sh>$ drone
+}
+</code></pre></td></tr></table></div></div><p>那該如何改 drone 設定檔方便未來多個專案一起維護呢？</p><h2 id=影片教學>影片教學</h2><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=安裝-drone-cli-執行檔>安裝 drone CLI 執行檔</h2><p>請直接參考<a href=https://docs.drone.io/cli/install/>官方文件</a>就可以了，這邊不再詳細介紹，底下是 Mac 範例 (安裝的是 <a href=https://github.com/drone/drone-cli/releases/tag/v1.0.5 title="Drone v1.0.5">Drone v1.0.5</a>):</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ curl -L https://github.com/drone/drone-cli/releases/download/v1.0.5/drone_darwin_amd64.tar.gz | tar zx
+$ sudo cp drone /usr/local/bin
+</code></pre></td></tr></table></div></div><p>安裝完成後，還需要設定<a href=https://docs.drone.io/cli/setup/>環境變數</a>，才可以跟您的 Drone 伺服器溝通。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ drone
 NAME:
-   drone - command line utility
+   drone - <span style=color:#658b00>command</span> line utility
 
 USAGE:
-   drone [global options] command [command options] [arguments...]
+   drone [global options] <span style=color:#658b00>command</span> [<span style=color:#658b00>command</span> options] [arguments...]
 
 VERSION:
    1.0.5
 
 COMMANDS:
      build      manage builds
-     cron       manage cron jobs
+     cron       manage cron <span style=color:#658b00>jobs</span>
      log        manage logs
      encrypt    encrypt a secret
-     exec       execute a local build
+     <span style=color:#658b00>exec</span>       execute a <span style=color:#658b00>local</span> build
      info       show information about the current user
      repo       manage repositories
      user       manage users
@@ -286,202 +582,404 @@ COMMANDS:
      lint       lint the yaml file
      sign       sign the yaml file
      jsonnet    generate .drone.yml from jsonnet
-     plugins    plugin helper functions</code></pre><h2 id=撰寫-dronejsonnet-檔案>撰寫 .drone.jsonnet 檔案</h2><p>在專案目錄內放置 <code>.drone.jsonnet</code> 檔案，拿 Go 專案當範例：</p><ol><li>驗證程式碼品質</li><li>編譯執行檔</li><li>包成 Docker 容器</li><li>上傳到 Docker Hub</li><li>消息通知</li></ol><pre><code class=language-json>local PipelineTesting = {
-  kind: "pipeline",
-  name: "testing",
-  platform: {
-    os: "linux",
-    arch: "amd64",
-  },
-  steps: [
+     plugins    plugin helper functions
+</code></pre></td></tr></table></div></div><h2 id=撰寫-dronejsonnet-檔案>撰寫 .drone.jsonnet 檔案</h2><p>在專案目錄內放置 <code>.drone.jsonnet</code> 檔案，拿 Go 專案當範例：</p><ol><li>驗證程式碼品質</li><li>編譯執行檔</li><li>包成 Docker 容器</li><li>上傳到 Docker Hub</li><li>消息通知</li></ol><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>  1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>  2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>  3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>  4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>  5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>  6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>  7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>  8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>  9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10> 10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11> 11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12> 12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13> 13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14> 14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15> 15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16> 16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17> 17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18> 18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19> 19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20> 20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21> 21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22> 22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23> 23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24> 24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25> 25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26> 26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27> 27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28> 28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29> 29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30> 30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31> 31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32> 32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33> 33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34> 34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35> 35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36> 36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37> 37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38> 38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39> 39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40> 40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41> 41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42> 42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43> 43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44> 44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45> 45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46> 46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47> 47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48> 48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49> 49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50> 50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51> 51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52> 52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53> 53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54> 54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55> 55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56> 56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57> 57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58> 58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59> 59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60> 60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61> 61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62> 62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63> 63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64> 64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65> 65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66> 66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67> 67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68> 68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69> 69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70> 70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71> 71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72> 72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73> 73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74> 74</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=75><a style=outline:none;text-decoration:none;color:inherit href=#75> 75</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=76><a style=outline:none;text-decoration:none;color:inherit href=#76> 76</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=77><a style=outline:none;text-decoration:none;color:inherit href=#77> 77</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=78><a style=outline:none;text-decoration:none;color:inherit href=#78> 78</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=79><a style=outline:none;text-decoration:none;color:inherit href=#79> 79</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=80><a style=outline:none;text-decoration:none;color:inherit href=#80> 80</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=81><a style=outline:none;text-decoration:none;color:inherit href=#81> 81</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=82><a style=outline:none;text-decoration:none;color:inherit href=#82> 82</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=83><a style=outline:none;text-decoration:none;color:inherit href=#83> 83</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=84><a style=outline:none;text-decoration:none;color:inherit href=#84> 84</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=85><a style=outline:none;text-decoration:none;color:inherit href=#85> 85</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=86><a style=outline:none;text-decoration:none;color:inherit href=#86> 86</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=87><a style=outline:none;text-decoration:none;color:inherit href=#87> 87</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=88><a style=outline:none;text-decoration:none;color:inherit href=#88> 88</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=89><a style=outline:none;text-decoration:none;color:inherit href=#89> 89</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=90><a style=outline:none;text-decoration:none;color:inherit href=#90> 90</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=91><a style=outline:none;text-decoration:none;color:inherit href=#91> 91</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=92><a style=outline:none;text-decoration:none;color:inherit href=#92> 92</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=93><a style=outline:none;text-decoration:none;color:inherit href=#93> 93</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=94><a style=outline:none;text-decoration:none;color:inherit href=#94> 94</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=95><a style=outline:none;text-decoration:none;color:inherit href=#95> 95</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=96><a style=outline:none;text-decoration:none;color:inherit href=#96> 96</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=97><a style=outline:none;text-decoration:none;color:inherit href=#97> 97</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=98><a style=outline:none;text-decoration:none;color:inherit href=#98> 98</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=99><a style=outline:none;text-decoration:none;color:inherit href=#99> 99</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=100><a style=outline:none;text-decoration:none;color:inherit href=#100>100</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=101><a style=outline:none;text-decoration:none;color:inherit href=#101>101</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=102><a style=outline:none;text-decoration:none;color:inherit href=#102>102</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=103><a style=outline:none;text-decoration:none;color:inherit href=#103>103</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=104><a style=outline:none;text-decoration:none;color:inherit href=#104>104</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=105><a style=outline:none;text-decoration:none;color:inherit href=#105>105</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=106><a style=outline:none;text-decoration:none;color:inherit href=#106>106</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=107><a style=outline:none;text-decoration:none;color:inherit href=#107>107</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=108><a style=outline:none;text-decoration:none;color:inherit href=#108>108</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=109><a style=outline:none;text-decoration:none;color:inherit href=#109>109</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=110><a style=outline:none;text-decoration:none;color:inherit href=#110>110</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=111><a style=outline:none;text-decoration:none;color:inherit href=#111>111</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=112><a style=outline:none;text-decoration:none;color:inherit href=#112>112</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=113><a style=outline:none;text-decoration:none;color:inherit href=#113>113</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=114><a style=outline:none;text-decoration:none;color:inherit href=#114>114</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=115><a style=outline:none;text-decoration:none;color:inherit href=#115>115</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=116><a style=outline:none;text-decoration:none;color:inherit href=#116>116</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=117><a style=outline:none;text-decoration:none;color:inherit href=#117>117</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=118><a style=outline:none;text-decoration:none;color:inherit href=#118>118</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=119><a style=outline:none;text-decoration:none;color:inherit href=#119>119</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=120><a style=outline:none;text-decoration:none;color:inherit href=#120>120</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=121><a style=outline:none;text-decoration:none;color:inherit href=#121>121</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=122><a style=outline:none;text-decoration:none;color:inherit href=#122>122</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=123><a style=outline:none;text-decoration:none;color:inherit href=#123>123</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=124><a style=outline:none;text-decoration:none;color:inherit href=#124>124</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=125><a style=outline:none;text-decoration:none;color:inherit href=#125>125</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=126><a style=outline:none;text-decoration:none;color:inherit href=#126>126</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=127><a style=outline:none;text-decoration:none;color:inherit href=#127>127</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=128><a style=outline:none;text-decoration:none;color:inherit href=#128>128</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=129><a style=outline:none;text-decoration:none;color:inherit href=#129>129</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=130><a style=outline:none;text-decoration:none;color:inherit href=#130>130</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=131><a style=outline:none;text-decoration:none;color:inherit href=#131>131</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=132><a style=outline:none;text-decoration:none;color:inherit href=#132>132</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=133><a style=outline:none;text-decoration:none;color:inherit href=#133>133</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=134><a style=outline:none;text-decoration:none;color:inherit href=#134>134</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=135><a style=outline:none;text-decoration:none;color:inherit href=#135>135</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=136><a style=outline:none;text-decoration:none;color:inherit href=#136>136</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=137><a style=outline:none;text-decoration:none;color:inherit href=#137>137</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=138><a style=outline:none;text-decoration:none;color:inherit href=#138>138</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=139><a style=outline:none;text-decoration:none;color:inherit href=#139>139</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=140><a style=outline:none;text-decoration:none;color:inherit href=#140>140</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=141><a style=outline:none;text-decoration:none;color:inherit href=#141>141</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=142><a style=outline:none;text-decoration:none;color:inherit href=#142>142</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=143><a style=outline:none;text-decoration:none;color:inherit href=#143>143</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=144><a style=outline:none;text-decoration:none;color:inherit href=#144>144</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=145><a style=outline:none;text-decoration:none;color:inherit href=#145>145</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=146><a style=outline:none;text-decoration:none;color:inherit href=#146>146</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=147><a style=outline:none;text-decoration:none;color:inherit href=#147>147</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=148><a style=outline:none;text-decoration:none;color:inherit href=#148>148</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=149><a style=outline:none;text-decoration:none;color:inherit href=#149>149</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=150><a style=outline:none;text-decoration:none;color:inherit href=#150>150</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=151><a style=outline:none;text-decoration:none;color:inherit href=#151>151</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=152><a style=outline:none;text-decoration:none;color:inherit href=#152>152</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=153><a style=outline:none;text-decoration:none;color:inherit href=#153>153</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=154><a style=outline:none;text-decoration:none;color:inherit href=#154>154</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=155><a style=outline:none;text-decoration:none;color:inherit href=#155>155</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=156><a style=outline:none;text-decoration:none;color:inherit href=#156>156</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=157><a style=outline:none;text-decoration:none;color:inherit href=#157>157</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=158><a style=outline:none;text-decoration:none;color:inherit href=#158>158</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=159><a style=outline:none;text-decoration:none;color:inherit href=#159>159</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=160><a style=outline:none;text-decoration:none;color:inherit href=#160>160</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=161><a style=outline:none;text-decoration:none;color:inherit href=#161>161</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=162><a style=outline:none;text-decoration:none;color:inherit href=#162>162</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=163><a style=outline:none;text-decoration:none;color:inherit href=#163>163</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=164><a style=outline:none;text-decoration:none;color:inherit href=#164>164</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=165><a style=outline:none;text-decoration:none;color:inherit href=#165>165</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=166><a style=outline:none;text-decoration:none;color:inherit href=#166>166</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=167><a style=outline:none;text-decoration:none;color:inherit href=#167>167</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=168><a style=outline:none;text-decoration:none;color:inherit href=#168>168</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=169><a style=outline:none;text-decoration:none;color:inherit href=#169>169</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=170><a style=outline:none;text-decoration:none;color:inherit href=#170>170</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=171><a style=outline:none;text-decoration:none;color:inherit href=#171>171</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=172><a style=outline:none;text-decoration:none;color:inherit href=#172>172</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=173><a style=outline:none;text-decoration:none;color:inherit href=#173>173</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=174><a style=outline:none;text-decoration:none;color:inherit href=#174>174</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=175><a style=outline:none;text-decoration:none;color:inherit href=#175>175</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=176><a style=outline:none;text-decoration:none;color:inherit href=#176>176</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=177><a style=outline:none;text-decoration:none;color:inherit href=#177>177</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=178><a style=outline:none;text-decoration:none;color:inherit href=#178>178</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=179><a style=outline:none;text-decoration:none;color:inherit href=#179>179</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=180><a style=outline:none;text-decoration:none;color:inherit href=#180>180</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=181><a style=outline:none;text-decoration:none;color:inherit href=#181>181</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=182><a style=outline:none;text-decoration:none;color:inherit href=#182>182</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=183><a style=outline:none;text-decoration:none;color:inherit href=#183>183</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=184><a style=outline:none;text-decoration:none;color:inherit href=#184>184</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=185><a style=outline:none;text-decoration:none;color:inherit href=#185>185</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=186><a style=outline:none;text-decoration:none;color:inherit href=#186>186</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=187><a style=outline:none;text-decoration:none;color:inherit href=#187>187</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=188><a style=outline:none;text-decoration:none;color:inherit href=#188>188</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=189><a style=outline:none;text-decoration:none;color:inherit href=#189>189</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=190><a style=outline:none;text-decoration:none;color:inherit href=#190>190</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=191><a style=outline:none;text-decoration:none;color:inherit href=#191>191</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=192><a style=outline:none;text-decoration:none;color:inherit href=#192>192</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=193><a style=outline:none;text-decoration:none;color:inherit href=#193>193</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=194><a style=outline:none;text-decoration:none;color:inherit href=#194>194</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json><span style=color:#a61717;background-color:#e3d2d2>local</span> <span style=color:#a61717;background-color:#e3d2d2>PipelineTesting</span> <span style=color:#a61717;background-color:#e3d2d2>=</span> {
+  <span style=color:#a61717;background-color:#e3d2d2>kind:</span> <span style=color:#8b008b;font-weight:700>&#34;pipeline&#34;</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;testing&#34;</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>platform:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+    <span style=color:#a61717;background-color:#e3d2d2>os:</span> <span style=color:#8b008b;font-weight:700>&#34;linux&#34;</span>,
+    <span style=color:#a61717;background-color:#e3d2d2>arch:</span> <span style=color:#8b008b;font-weight:700>&#34;amd64&#34;</span>,
+  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>steps:</span> [
     {
-      name: "vet",
-      image: "golang:1.11",
-      pull: "always",
-      environment: {
-        GO111MODULE: "on",
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;vet&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;golang:1.11&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>environment:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>GO111MODULE:</span> <span style=color:#8b008b;font-weight:700>&#34;on&#34;</span>,
       },
-      commands: [
-        "make vet",
+      <span style=color:#a61717;background-color:#e3d2d2>commands:</span> [
+        <span style=color:#cd5555>&#34;make vet&#34;</span>,
       ],
-    },
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
     {
-      name: "lint",
-      image: "golang:1.11",
-      pull: "always",
-      environment: {
-        GO111MODULE: "on",
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;lint&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;golang:1.11&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>environment:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>GO111MODULE:</span> <span style=color:#8b008b;font-weight:700>&#34;on&#34;</span>,
       },
-      commands: [
-        "make lint",
+      <span style=color:#a61717;background-color:#e3d2d2>commands:</span> [
+        <span style=color:#cd5555>&#34;make lint&#34;</span>,
       ],
-    },
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
     {
-      name: "misspell",
-      image: "golang:1.11",
-      pull: "always",
-      environment: {
-        GO111MODULE: "on",
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;misspell&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;golang:1.11&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>environment:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>GO111MODULE:</span> <span style=color:#8b008b;font-weight:700>&#34;on&#34;</span>,
       },
-      commands: [
-        "make misspell-check",
+      <span style=color:#a61717;background-color:#e3d2d2>commands:</span> [
+        <span style=color:#cd5555>&#34;make misspell-check&#34;</span>,
       ],
-    },
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
     {
-      name: "test",
-      image: "golang:1.11",
-      pull: "always",
-      environment: {
-        GO111MODULE: "on",
-        WEBHOOK_ID: { "from_secret": "webhook_id" },
-        WEBHOOK_TOKEN: { "from_secret": "webhook_token" },
-      },
-      commands: [
-        "make test",
-        "make coverage",
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;test&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;golang:1.11&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>environment:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>GO111MODULE:</span> <span style=color:#8b008b;font-weight:700>&#34;on&#34;</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>WEBHOOK_ID:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span> <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;webhook_id&#34;</span> },
+        <span style=color:#a61717;background-color:#e3d2d2>WEBHOOK_TOKEN:</span> { <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;webhook_token&#34;</span> },
+      <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>commands:</span> [
+        <span style=color:#cd5555>&#34;make test&#34;</span>,
+        <span style=color:#cd5555>&#34;make coverage&#34;</span>,
       ],
-    },
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
     {
-      name: "codecov",
-      image: "robertstettner/drone-codecov",
-      pull: "always",
-      settings: {
-        token: { "from_secret": "codecov_token" },
-      },
-    },
-  ],
-  trigger: {
-    branch: [ "master" ],
-  },
-};
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;codecov&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;robertstettner/drone-codecov&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>settings:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>token:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span> <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;codecov_token&#34;</span> },
+      <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+  ]<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>trigger:</span> {
+    <span style=color:#a61717;background-color:#e3d2d2>branch:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;master&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
+  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
+<span style=color:#a61717;background-color:#e3d2d2>};</span>
 
-local PipelineBuild(os="linux", arch="amd64") = {
-  kind: "pipeline",
-  name: os + "-" + arch,
-  platform: {
-    os: os,
-    arch: arch,
-  },
-  steps: [
+<span style=color:#a61717;background-color:#e3d2d2>local</span> <span style=color:#a61717;background-color:#e3d2d2>PipelineBuild(os=</span><span style=color:#cd5555>&#34;linux&#34;</span><span style=color:#a61717;background-color:#e3d2d2>,</span> <span style=color:#a61717;background-color:#e3d2d2>arch=</span><span style=color:#cd5555>&#34;amd64&#34;</span><span style=color:#a61717;background-color:#e3d2d2>)</span> <span style=color:#a61717;background-color:#e3d2d2>=</span> {
+  <span style=color:#a61717;background-color:#e3d2d2>kind:</span> <span style=color:#8b008b;font-weight:700>&#34;pipeline&#34;</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#8b008b;font-weight:700>&#34;-&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>platform:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+    <span style=color:#a61717;background-color:#e3d2d2>os:</span> <span style=color:#a61717;background-color:#e3d2d2>os,</span>
+    <span style=color:#a61717;background-color:#e3d2d2>arch:</span> <span style=color:#a61717;background-color:#e3d2d2>arch,</span>
+  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>steps:</span> [
     {
-      name: "build-push",
-      image: "golang:1.11",
-      pull: "always",
-      environment: {
-        CGO_ENABLED: "0",
-        GO111MODULE: "on",
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;build-push&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;golang:1.11&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>environment:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>CGO_ENABLED:</span> <span style=color:#8b008b;font-weight:700>&#34;0&#34;</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>GO111MODULE:</span> <span style=color:#8b008b;font-weight:700>&#34;on&#34;</span>,
       },
-      commands: [
-        "go build -v -ldflags \"-X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/" + os + "/" + arch + "/drone-discord",
+      <span style=color:#a61717;background-color:#e3d2d2>commands:</span> [
+        <span style=color:#cd5555>&#34;go build -v -ldflags \&#34;-X main.build=${DRONE_BUILD_NUMBER}\&#34; -a -o release/&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;/&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;/drone-discord&#34;</span>,
       ],
-      when: {
-        event: [ "push", "pull_request" ],
+      <span style=color:#a61717;background-color:#e3d2d2>when:</span> {
+        <span style=color:#a61717;background-color:#e3d2d2>event:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;push&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;pull_request&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
       },
-    },
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
     {
-      name: "build-tag",
-      image: "golang:1.11",
-      pull: "always",
-      environment: {
-        CGO_ENABLED: "0",
-        GO111MODULE: "on",
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;build-tag&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;golang:1.11&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>environment:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>CGO_ENABLED:</span> <span style=color:#8b008b;font-weight:700>&#34;0&#34;</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>GO111MODULE:</span> <span style=color:#8b008b;font-weight:700>&#34;on&#34;</span>,
       },
-      commands: [
-        "go build -v -ldflags \"-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\" -a -o release/" + os + "/" + arch + "/drone-discord",
+      <span style=color:#a61717;background-color:#e3d2d2>commands:</span> [
+        <span style=color:#cd5555>&#34;go build -v -ldflags \&#34;-X main.version=${DRONE_TAG##v} -X main.build=${DRONE_BUILD_NUMBER}\&#34; -a -o release/&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;/&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;/drone-discord&#34;</span>,
       ],
-      when: {
-        event: [ "tag" ],
+      <span style=color:#a61717;background-color:#e3d2d2>when:</span> {
+        <span style=color:#a61717;background-color:#e3d2d2>event:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;tag&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
       },
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+    {
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;executable&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;golang:1.11&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>commands:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span>
+        <span style=color:#8b008b;font-weight:700>&#34;./release/&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;/&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;/drone-discord --help&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>],</span>
     },
     {
-      name: "executable",
-      image: "golang:1.11",
-      pull: "always",
-      commands: [
-        "./release/" + os + "/" + arch + "/drone-discord --help",
-      ],
-    },
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;dryrun&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;plugins/docker:&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;-&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>settings:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>dry_run:</span> <span style=color:#a61717;background-color:#e3d2d2>true,</span>
+        <span style=color:#a61717;background-color:#e3d2d2>tags:</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#8b008b;font-weight:700>&#34;-&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>dockerfile:</span> <span style=color:#8b008b;font-weight:700>&#34;docker/Dockerfile.&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;.&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>repo:</span> <span style=color:#8b008b;font-weight:700>&#34;appleboy/drone-discord&#34;</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>username:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span> <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;docker_username&#34;</span> },
+        <span style=color:#a61717;background-color:#e3d2d2>password:</span> { <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;docker_password&#34;</span> },
+      <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>when:</span> {
+        <span style=color:#a61717;background-color:#e3d2d2>event:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;pull_request&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
+      },
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
     {
-      name: "dryrun",
-      image: "plugins/docker:" + os + "-" + arch,
-      pull: "always",
-      settings: {
-        dry_run: true,
-        tags: os + "-" + arch,
-        dockerfile: "docker/Dockerfile." + os + "." + arch,
-        repo: "appleboy/drone-discord",
-        username: { "from_secret": "docker_username" },
-        password: { "from_secret": "docker_password" },
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;publish&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;plugins/docker:&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;-&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>settings:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>auto_tag:</span> <span style=color:#a61717;background-color:#e3d2d2>true,</span>
+        <span style=color:#a61717;background-color:#e3d2d2>auto_tag_suffix:</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#8b008b;font-weight:700>&#34;-&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>dockerfile:</span> <span style=color:#8b008b;font-weight:700>&#34;docker/Dockerfile.&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>os</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#cd5555>&#34;.&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>+</span> <span style=color:#a61717;background-color:#e3d2d2>arch</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>repo:</span> <span style=color:#8b008b;font-weight:700>&#34;appleboy/drone-discord&#34;</span>,
+        <span style=color:#a61717;background-color:#e3d2d2>username:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span> <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;docker_username&#34;</span> },
+        <span style=color:#a61717;background-color:#e3d2d2>password:</span> { <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;docker_password&#34;</span> },
+      <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>when:</span> {
+        <span style=color:#a61717;background-color:#e3d2d2>event:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;push&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;tag&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
       },
-      when: {
-        event: [ "pull_request" ],
-      },
-    },
-    {
-      name: "publish",
-      image: "plugins/docker:" + os + "-" + arch,
-      pull: "always",
-      settings: {
-        auto_tag: true,
-        auto_tag_suffix: os + "-" + arch,
-        dockerfile: "docker/Dockerfile." + os + "." + arch,
-        repo: "appleboy/drone-discord",
-        username: { "from_secret": "docker_username" },
-        password: { "from_secret": "docker_password" },
-      },
-      when: {
-        event: [ "push", "tag" ],
-      },
-    },
-  ],
-  depends_on: [
-    "testing",
-  ],
-  trigger: {
-    branch: [ "master" ],
-  },
-};
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+  ]<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>depends_on:</span> [
+    <span style=color:#cd5555>&#34;testing&#34;</span>,
+  ]<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>trigger:</span> {
+    <span style=color:#a61717;background-color:#e3d2d2>branch:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;master&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
+  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
+<span style=color:#a61717;background-color:#e3d2d2>};</span>
 
-local PipelineNotifications = {
-  kind: "pipeline",
-  name: "notifications",
-  platform: {
-    os: "linux",
-    arch: "amd64",
-  },
-  clone: {
-    disable: true,
-  },
-  steps: [
+<span style=color:#a61717;background-color:#e3d2d2>local</span> <span style=color:#a61717;background-color:#e3d2d2>PipelineNotifications</span> <span style=color:#a61717;background-color:#e3d2d2>=</span> {
+  <span style=color:#a61717;background-color:#e3d2d2>kind:</span> <span style=color:#8b008b;font-weight:700>&#34;pipeline&#34;</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;notifications&#34;</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>platform:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+    <span style=color:#a61717;background-color:#e3d2d2>os:</span> <span style=color:#8b008b;font-weight:700>&#34;linux&#34;</span>,
+    <span style=color:#a61717;background-color:#e3d2d2>arch:</span> <span style=color:#8b008b;font-weight:700>&#34;amd64&#34;</span>,
+  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>clone:</span> {
+    <span style=color:#a61717;background-color:#e3d2d2>disable:</span> <span style=color:#a61717;background-color:#e3d2d2>true,</span>
+  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>steps:</span> [
     {
-      name: "microbadger",
-      image: "plugins/webhook:1",
-      pull: "always",
-      settings: {
-        url: { "from_secret": "microbadger_url" },
-      },
-    },
-  ],
-  depends_on: [
-    "linux-amd64",
-    "linux-arm64",
-    "linux-arm",
-  ],
-  trigger: {
-    branch: [ "master" ],
-    event: [ "push", "tag" ],
-  },
-};
+      <span style=color:#a61717;background-color:#e3d2d2>name:</span> <span style=color:#8b008b;font-weight:700>&#34;microbadger&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>image:</span> <span style=color:#8b008b;font-weight:700>&#34;plugins/webhook:1&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>pull:</span> <span style=color:#8b008b;font-weight:700>&#34;always&#34;</span>,
+      <span style=color:#a61717;background-color:#e3d2d2>settings:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span>
+        <span style=color:#a61717;background-color:#e3d2d2>url:</span> <span style=color:#a61717;background-color:#e3d2d2>{</span> <span style=color:#8b008b;font-weight:700>&#34;from_secret&#34;</span>: <span style=color:#cd5555>&#34;microbadger_url&#34;</span> },
+      <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+    <span style=color:#a61717;background-color:#e3d2d2>}</span>,
+  ]<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>depends_on:</span> [
+    <span style=color:#cd5555>&#34;linux-amd64&#34;</span>,
+    <span style=color:#cd5555>&#34;linux-arm64&#34;</span>,
+    <span style=color:#cd5555>&#34;linux-arm&#34;</span>,
+  ]<span style=color:#a61717;background-color:#e3d2d2>,</span>
+  <span style=color:#a61717;background-color:#e3d2d2>trigger:</span> {
+    <span style=color:#a61717;background-color:#e3d2d2>branch:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;master&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
+    <span style=color:#a61717;background-color:#e3d2d2>event:</span> <span style=color:#a61717;background-color:#e3d2d2>[</span> <span style=color:#8b008b;font-weight:700>&#34;push&#34;</span>, <span style=color:#8b008b;font-weight:700>&#34;tag&#34;</span> <span style=color:#a61717;background-color:#e3d2d2>]</span>,
+  }<span style=color:#a61717;background-color:#e3d2d2>,</span>
+<span style=color:#a61717;background-color:#e3d2d2>};</span>
 
 [
-  PipelineTesting,
-  PipelineBuild("linux", "amd64"),
-  PipelineBuild("linux", "arm64"),
-  PipelineBuild("linux", "arm"),
-  PipelineNotifications,
-]</code></pre><p>大家可以看到 <code>local PipelineBuild</code> 就是一個 func 函數，可以用來產生不同的環境代碼</p><pre><code class=language-sh>  PipelineBuild("linux", "amd64"),
-  PipelineBuild("linux", "arm64"),
-  PipelineBuild("linux", "arm"),</code></pre><p>完成後，直接在專案目錄下執行</p><pre><code class=language-sh>$ drone jsonnet --stream</code></pre><p>您會發現專案下的 <code>.drone.yml</code> 已經成功修正，未來只要將變動部分抽成變數，就可以產生不同專案的環境，開發者就不需要每次手動修改很多變動的地方。至於要不要把 <code>.drone.jsonnet</code> 放入專案內進行版本控制就看情境了。其實可以另外開一個新的 Repo 放置 <code>.drone.jsonnet</code>，未來新專案開案，就可以快速 clone 下來，並且產生新專案的 <code>.drone.yml</code> 設定檔。底下是 Drone 執行結果:</p><p><a href="https://lh3.googleusercontent.com/n--AFC5iMIrQGufEyoiM2dag3ibgEyQACRzx4ZapvNDsJz-WjY1qRzei4a6Ov0URrjsVGX6S9eEa4p9cw3so08AtPpRM1iANCGxtRhh109cnV21ZXC-Bg1a6GzltV0G8QxCfqpMiIsc=w1920-h1080" title="Drone Output"><img src="https://lh3.googleusercontent.com/n--AFC5iMIrQGufEyoiM2dag3ibgEyQACRzx4ZapvNDsJz-WjY1qRzei4a6Ov0URrjsVGX6S9eEa4p9cw3so08AtPpRM1iANCGxtRhh109cnV21ZXC-Bg1a6GzltV0G8QxCfqpMiIsc=w1920-h1080" alt="Drone Output" title="Drone Output"></a></p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/drone/>drone</a>&nbsp;
+  <span style=color:#a61717;background-color:#e3d2d2>PipelineTesting</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>PipelineBuild(</span><span style=color:#cd5555>&#34;linux&#34;</span>, <span style=color:#cd5555>&#34;amd64&#34;</span><span style=color:#a61717;background-color:#e3d2d2>)</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>PipelineBuild(</span><span style=color:#cd5555>&#34;linux&#34;</span>, <span style=color:#cd5555>&#34;arm64&#34;</span><span style=color:#a61717;background-color:#e3d2d2>)</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>PipelineBuild(</span><span style=color:#cd5555>&#34;linux&#34;</span>, <span style=color:#cd5555>&#34;arm&#34;</span><span style=color:#a61717;background-color:#e3d2d2>)</span>,
+  <span style=color:#a61717;background-color:#e3d2d2>PipelineNotifications</span>,
+]
+</code></pre></td></tr></table></div></div><p>大家可以看到 <code>local PipelineBuild</code> 就是一個 func 函數，可以用來產生不同的環境代碼</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>  PipelineBuild(<span style=color:#cd5555>&#34;linux&#34;</span>, <span style=color:#cd5555>&#34;amd64&#34;</span>),
+  PipelineBuild(<span style=color:#cd5555>&#34;linux&#34;</span>, <span style=color:#cd5555>&#34;arm64&#34;</span>),
+  PipelineBuild(<span style=color:#cd5555>&#34;linux&#34;</span>, <span style=color:#cd5555>&#34;arm&#34;</span>),
+</code></pre></td></tr></table></div></div><p>完成後，直接在專案目錄下執行</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ drone jsonnet --stream
+</code></pre></td></tr></table></div></div><p>您會發現專案下的 <code>.drone.yml</code> 已經成功修正，未來只要將變動部分抽成變數，就可以產生不同專案的環境，開發者就不需要每次手動修改很多變動的地方。至於要不要把 <code>.drone.jsonnet</code> 放入專案內進行版本控制就看情境了。其實可以另外開一個新的 Repo 放置 <code>.drone.jsonnet</code>，未來新專案開案，就可以快速 clone 下來，並且產生新專案的 <code>.drone.yml</code> 設定檔。底下是 Drone 執行結果:</p><p><a href="https://lh3.googleusercontent.com/n--AFC5iMIrQGufEyoiM2dag3ibgEyQACRzx4ZapvNDsJz-WjY1qRzei4a6Ov0URrjsVGX6S9eEa4p9cw3so08AtPpRM1iANCGxtRhh109cnV21ZXC-Bg1a6GzltV0G8QxCfqpMiIsc=w1920-h1080" title="Drone Output"><img src="https://lh3.googleusercontent.com/n--AFC5iMIrQGufEyoiM2dag3ibgEyQACRzx4ZapvNDsJz-WjY1qRzei4a6Ov0URrjsVGX6S9eEa4p9cw3so08AtPpRM1iANCGxtRhh109cnV21ZXC-Bg1a6GzltV0G8QxCfqpMiIsc=w1920-h1080" alt="Drone Output" title="Drone Output"></a></p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/jsonnet/>jsonnet</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f01%2fconverts-a-jsonnet-configuration-file-to-a-yaml-in-drone%2f&text=%e6%9c%89%e6%95%88%e7%8e%87%e7%9a%84%e7%94%a8%20jsonnet%20%e6%92%b0%e5%af%ab%20%20Drone%20CI%2fCD%20%e8%a8%ad%e5%ae%9a%e6%aa%94&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f01%2fconverts-a-jsonnet-configuration-file-to-a-yaml-in-drone%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f01%2fconverts-a-jsonnet-configuration-file-to-a-yaml-in-drone%2f&title=%e6%9c%89%e6%95%88%e7%8e%87%e7%9a%84%e7%94%a8%20jsonnet%20%e6%92%b0%e5%af%ab%20%20Drone%20CI%2fCD%20%e8%a8%ad%e5%ae%9a%e6%aa%94" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f01%2fconverts-a-jsonnet-configuration-file-to-a-yaml-in-drone%2f&title=%e6%9c%89%e6%95%88%e7%8e%87%e7%9a%84%e7%94%a8%20jsonnet%20%e6%92%b0%e5%af%ab%20%20Drone%20CI%2fCD%20%e8%a8%ad%e5%ae%9a%e6%aa%94" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f01%2fconverts-a-jsonnet-configuration-file-to-a-yaml-in-drone%2f&title=%e6%9c%89%e6%95%88%e7%8e%87%e7%9a%84%e7%94%a8%20jsonnet%20%e6%92%b0%e5%af%ab%20%20Drone%20CI%2fCD%20%e8%a8%ad%e5%ae%9a%e6%aa%94" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2019%2f01%2fconverts-a-jsonnet-configuration-file-to-a-yaml-in-drone%2f&description=%e6%9c%89%e6%95%88%e7%8e%87%e7%9a%84%e7%94%a8%20jsonnet%20%e6%92%b0%e5%af%ab%20%20Drone%20CI%2fCD%20%e8%a8%ad%e5%ae%9a%e6%aa%94" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/ data-toggle=tooltip data-placement=top title="Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2019/02/deploy-golang-app-to-heroku/ data-toggle=tooltip data-placement=top title="快速部署網站到 Heroku 雲平台">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

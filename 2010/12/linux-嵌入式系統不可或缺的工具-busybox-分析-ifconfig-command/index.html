@@ -2,27 +2,69 @@
 玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel netfilter 部份，以及 user space 部份 iptables extension。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。
 要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。
 if_readlist_proc 函式裡面:
+
+
+1
+2
+3
+4
+
+
 fh = fopen_or_warn(_PATH_PROCNET_DEV, &#34;r&#34;);
 if (!fh) {
     return if_readconf();
 }
+
+
 看一下 /proc/net/dev 內容
+
+
+1
+2
+3
+4
+
+
 Inter-|   Receive                                                |  Transmit
  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
     lo:     104       1    0    0    0     0          0         0      104       1    0    0    0     0       0          0
-  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2010\/12\/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command\/","name":"[ linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command","description":"玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel netfilter 部份，以及 user space 部份 iptables extension。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等\u0026hellip;.。\n要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 \/proc\/net\/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 \/proc\/net\/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。\nif_readlist_proc 函式裡面:\nfh = fopen_or_warn(_PATH_PROCNET_DEV, \u0022r\u0022); if (!fh) { return if_readconf(); } 看一下 \/proc\/net\/dev 內容\nInter-| Receive | Transmit face |bytes packets errs drop fifo frame compressed multicast|bytes packets errs drop fifo colls carrier compressed lo: 104 1 0 0 0 0 0 0 104 1 0 0 0 0 0 0 eth0:21798505 51360 0 0 0 0 0 0 7693686 46844 0 0 0 0 0 0","inLanguage":"en","wordCount":612,"datePublished":"2010-12-26T16:08:07","dateModified":"2010-12-26T16:08:07","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Busybox, Embedded System, Linux"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2010\/12\/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command"><meta property="og:description" content="
+  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0
+
+
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2010\/12\/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command\/","name":"[ linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command","description":"玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel netfilter 部份，以及 user space 部份 iptables extension。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等\u0026hellip;.。\n要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 \/proc\/net\/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 \/proc\/net\/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。\nif_readlist_proc 函式裡面:\n1 2 3 4  fh = fopen_or_warn(_PATH_PROCNET_DEV, \u0026#34;r\u0026#34;); if (!fh) { return if_readconf(); }   看一下 \/proc\/net\/dev 內容\n1 2 3 4  Inter-| Receive | Transmit face |bytes packets errs drop fifo frame compressed multicast|bytes packets errs drop fifo colls carrier compressed lo: 104 1 0 0 0 0 0 0 104 1 0 0 0 0 0 0 eth0:21798505 51360 0 0 0 0 0 0 7693686 46844 0 0 0 0 0 0   ","inLanguage":"en","wordCount":879,"datePublished":"2010-12-26T16:08:07","dateModified":"2010-12-26T16:08:07","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Busybox, Embedded System, Linux"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2010\/12\/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command"><meta property="og:description" content="
 玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel netfilter 部份，以及 user space 部份 iptables extension。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。
 要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。
 if_readlist_proc 函式裡面:
+
+
+1
+2
+3
+4
+
+
 fh = fopen_or_warn(_PATH_PROCNET_DEV, &#34;r&#34;);
 if (!fh) {
     return if_readconf();
 }
+
+
 看一下 /proc/net/dev 內容
+
+
+1
+2
+3
+4
+
+
 Inter-|   Receive                                                |  Transmit
  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
     lo:     104       1    0    0    0     0          0         0      104       1    0    0    0     0       0          0
-  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command"><meta name=twitter:description content="
+  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0
+
+
+"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command"><meta name=twitter:description content="
 玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
@@ -33,184 +75,373 @@ Inter-|   Receive                                                |  Transmit
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 26, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;612&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p><p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p><p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p><p>if_readlist_proc 函式裡面:</p><pre><code class=language-c>fh = fopen_or_warn(_PATH_PROCNET_DEV, "r");
-if (!fh) {
-    return if_readconf();
-}</code></pre><p>看一下 /proc/net/dev 內容</p><pre><code class=language-bash>Inter-|   Receive                                                |  Transmit
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;879&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p><p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p><p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p><p>if_readlist_proc 函式裡面:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c>fh = fopen_or_warn(_PATH_PROCNET_DEV, <span style=color:#cd5555>&#34;r&#34;</span>);
+<span style=color:#8b008b;font-weight:700>if</span> (!fh) {
+    <span style=color:#8b008b;font-weight:700>return</span> if_readconf();
+}
+</code></pre></td></tr></table></div></div><p>看一下 /proc/net/dev 內容</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>Inter-|   Receive                                                |  Transmit
  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
-    lo:     104       1    0    0    0     0          0         0      104       1    0    0    0     0       0          0
-  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0</code></pre><p>首先濾掉前兩行不需要的資料，在利用 get_name 函式抓取 lo 跟 eth0 interface</p><pre><code class=language-c>fgets(buf, sizeof buf, fh); /* eat line */
-fgets(buf, sizeof buf, fh);
+    lo:     <span style=color:#b452cd>104</span>       <span style=color:#b452cd>1</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>         <span style=color:#b452cd>0</span>      <span style=color:#b452cd>104</span>       <span style=color:#b452cd>1</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>       <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>
+  eth0:21798505   <span style=color:#b452cd>51360</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>         <span style=color:#b452cd>0</span>  <span style=color:#b452cd>7693686</span>   <span style=color:#b452cd>46844</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>       <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>
+</code></pre></td></tr></table></div></div><p>首先濾掉前兩行不需要的資料，在利用 get_name 函式抓取 lo 跟 eth0 interface</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c>fgets(buf, <span style=color:#8b008b;font-weight:700>sizeof</span> buf, fh); <span style=color:#228b22>/* eat line */</span>
+fgets(buf, <span style=color:#8b008b;font-weight:700>sizeof</span> buf, fh);
 
 procnetdev_vsn = procnetdev_version(buf);
 
-err = 0;
-while (fgets(buf, sizeof buf, fh)) {
-    char *s, name[128];
+err = <span style=color:#b452cd>0</span>;
+<span style=color:#8b008b;font-weight:700>while</span> (fgets(buf, <span style=color:#8b008b;font-weight:700>sizeof</span> buf, fh)) {
+    <span style=color:#00688b;font-weight:700>char</span> *s, name[<span style=color:#b452cd>128</span>];
     s = get_name(name, buf);
     ife = add_interface(name);
     get_dev_fields(s, ife, procnetdev_vsn);
-    ife->statistics_valid = 1;
-    if (target && !strcmp(target, name))
-        break;
-}</code></pre><p>get_name 直接濾掉每行冒號 : 後面的資料，並且將其加入 interface structure 雙向 link list</p><pre><code class=language-c>static char *get_name(char *name, char *p)
+    ife-&gt;statistics_valid = <span style=color:#b452cd>1</span>;
+    <span style=color:#8b008b;font-weight:700>if</span> (target &amp;&amp; !strcmp(target, name))
+        <span style=color:#8b008b;font-weight:700>break</span>;
+}
+</code></pre></td></tr></table></div></div><p>get_name 直接濾掉每行冒號 : 後面的資料，並且將其加入 interface structure 雙向 link list</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c><span style=color:#8b008b;font-weight:700>static</span> <span style=color:#00688b;font-weight:700>char</span> *<span style=color:#008b45>get_name</span>(<span style=color:#00688b;font-weight:700>char</span> *name, <span style=color:#00688b;font-weight:700>char</span> *p)
 {
-    /* Extract <name> from nul-terminated p where p matches
-     * <name>: after leading whitespace.
-     * If match is not made, set name empty and return unchanged p
-     */
-    char *nameend;
-    char *namestart = skip_whitespace(p);
+    <span style=color:#228b22>/* Extract &lt;name&gt; from nul-terminated p where p matches
+</span><span style=color:#228b22>     * &lt;name&gt;: after leading whitespace.
+</span><span style=color:#228b22>     * If match is not made, set name empty and return unchanged p
+</span><span style=color:#228b22>     */</span>
+    <span style=color:#00688b;font-weight:700>char</span> *nameend;
+    <span style=color:#00688b;font-weight:700>char</span> *namestart = skip_whitespace(p);
 
     nameend = namestart;
-    while (*nameend && *nameend != ':' && !isspace(*nameend))
+    <span style=color:#8b008b;font-weight:700>while</span> (*nameend &amp;&amp; *nameend != <span style=color:#cd5555>&#39;:&#39;</span> &amp;&amp; !isspace(*nameend))
         nameend++;
-    if (*nameend == ':') {
-        if ((nameend - namestart) < IFNAMSIZ) {
+    <span style=color:#8b008b;font-weight:700>if</span> (*nameend == <span style=color:#cd5555>&#39;:&#39;</span>) {
+        <span style=color:#8b008b;font-weight:700>if</span> ((nameend - namestart) &lt; IFNAMSIZ) {
             memcpy(name, namestart, nameend - namestart);
-            name[nameend - namestart] = '\0';
+            name[nameend - namestart] = <span style=color:#cd5555>&#39;\0&#39;</span>;
             p = nameend;
-        } else {
-            /* Interface name too large */
-            name[0] = '\0';
+        } <span style=color:#8b008b;font-weight:700>else</span> {
+            <span style=color:#228b22>/* Interface name too large */</span>
+            name[<span style=color:#b452cd>0</span>] = <span style=color:#cd5555>&#39;\0&#39;</span>;
         }
-    } else {
-        /* trailing ':' not found - return empty */
-        name[0] = '\0';
+    } <span style=color:#8b008b;font-weight:700>else</span> {
+        <span style=color:#228b22>/* trailing &#39;:&#39; not found - return empty */</span>
+        name[<span style=color:#b452cd>0</span>] = <span style=color:#cd5555>&#39;\0&#39;</span>;
     }
-    return p + 1;
-}</code></pre><p>add_interface 將 network interface 加入 link list</p><pre><code class=language-c>static struct interface *add_interface(char *name)
+    <span style=color:#8b008b;font-weight:700>return</span> p + <span style=color:#b452cd>1</span>;
+}
+</code></pre></td></tr></table></div></div><p>add_interface 將 network interface 加入 link list</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c><span style=color:#8b008b;font-weight:700>static</span> <span style=color:#8b008b;font-weight:700>struct</span> interface *<span style=color:#008b45>add_interface</span>(<span style=color:#00688b;font-weight:700>char</span> *name)
 {
-    struct interface *ife, **nextp, *new;
+    <span style=color:#8b008b;font-weight:700>struct</span> interface *ife, **nextp, *new;
 
-    for (ife = int_last; ife; ife = ife->prev) {
-        int n = /*n*/strcmp(ife->name, name);
+    <span style=color:#8b008b;font-weight:700>for</span> (ife = int_last; ife; ife = ife-&gt;prev) {
+        <span style=color:#00688b;font-weight:700>int</span> n = <span style=color:#228b22>/*n*/</span>strcmp(ife-&gt;name, name);
 
-        if (n == 0)
-            return ife;
-        if (n < 0)
-            break;
+        <span style=color:#8b008b;font-weight:700>if</span> (n == <span style=color:#b452cd>0</span>)
+            <span style=color:#8b008b;font-weight:700>return</span> ife;
+        <span style=color:#8b008b;font-weight:700>if</span> (n &lt; <span style=color:#b452cd>0</span>)
+            <span style=color:#8b008b;font-weight:700>break</span>;
     }
 
-    new = xzalloc(sizeof(*new));
-    strncpy_IFNAMSIZ(new->name, name);
-    nextp = ife ? &ife->next : &int_list;
-    new->prev = ife;
-    new->next = *nextp;
-    if (new->next)
-        new->next->prev = new;
-    else
+    new = xzalloc(<span style=color:#8b008b;font-weight:700>sizeof</span>(*new));
+    strncpy_IFNAMSIZ(new-&gt;name, name);
+    nextp = ife ? &amp;ife-&gt;next : &amp;int_list;
+    new-&gt;prev = ife;
+    new-&gt;next = *nextp;
+    <span style=color:#8b008b;font-weight:700>if</span> (new-&gt;next)
+        new-&gt;next-&gt;prev = new;
+    <span style=color:#8b008b;font-weight:700>else</span>
         int_last = new;
     *nextp = new;
-    return new;
-}</code></pre><p>最後將 /proc/net/dev 剩餘資訊利用 get_dev_fields 讀取 sscanf</p><pre><code class=language-c>static void get_dev_fields(char *bp, struct interface *ife, int procnetdev_vsn)
+    <span style=color:#8b008b;font-weight:700>return</span> new;
+}
+</code></pre></td></tr></table></div></div><p>最後將 /proc/net/dev 剩餘資訊利用 get_dev_fields 讀取 sscanf</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c><span style=color:#8b008b;font-weight:700>static</span> <span style=color:#00688b;font-weight:700>void</span> <span style=color:#008b45>get_dev_fields</span>(<span style=color:#00688b;font-weight:700>char</span> *bp, <span style=color:#8b008b;font-weight:700>struct</span> interface *ife, <span style=color:#00688b;font-weight:700>int</span> procnetdev_vsn)
 {
-    memset(&ife->stats, 0, sizeof(struct user_net_device_stats));
+    memset(&amp;ife-&gt;stats, <span style=color:#b452cd>0</span>, <span style=color:#8b008b;font-weight:700>sizeof</span>(<span style=color:#8b008b;font-weight:700>struct</span> user_net_device_stats));
 
     sscanf(bp, ss_fmt[procnetdev_vsn],
-           &ife->stats.rx_bytes, /* missing for 0 */
-           &ife->stats.rx_packets,
-           &ife->stats.rx_errors,
-           &ife->stats.rx_dropped,
-           &ife->stats.rx_fifo_errors,
-           &ife->stats.rx_frame_errors,
-           &ife->stats.rx_compressed, /* missing for <= 1 */
-           &ife->stats.rx_multicast, /* missing for <= 1 */
-           &ife->stats.tx_bytes, /* missing for 0 */
-           &ife->stats.tx_packets,
-           &ife->stats.tx_errors,
-           &ife->stats.tx_dropped,
-           &ife->stats.tx_fifo_errors,
-           &ife->stats.collisions,
-           &ife->stats.tx_carrier_errors,
-           &ife->stats.tx_compressed /* missing for <= 1 */
+           &amp;ife-&gt;stats.rx_bytes, <span style=color:#228b22>/* missing for 0 */</span>
+           &amp;ife-&gt;stats.rx_packets,
+           &amp;ife-&gt;stats.rx_errors,
+           &amp;ife-&gt;stats.rx_dropped,
+           &amp;ife-&gt;stats.rx_fifo_errors,
+           &amp;ife-&gt;stats.rx_frame_errors,
+           &amp;ife-&gt;stats.rx_compressed, <span style=color:#228b22>/* missing for &lt;= 1 */</span>
+           &amp;ife-&gt;stats.rx_multicast, <span style=color:#228b22>/* missing for &lt;= 1 */</span>
+           &amp;ife-&gt;stats.tx_bytes, <span style=color:#228b22>/* missing for 0 */</span>
+           &amp;ife-&gt;stats.tx_packets,
+           &amp;ife-&gt;stats.tx_errors,
+           &amp;ife-&gt;stats.tx_dropped,
+           &amp;ife-&gt;stats.tx_fifo_errors,
+           &amp;ife-&gt;stats.collisions,
+           &amp;ife-&gt;stats.tx_carrier_errors,
+           &amp;ife-&gt;stats.tx_compressed <span style=color:#228b22>/* missing for &lt;= 1 */</span>
            );
 
-    if (procnetdev_vsn <= 1) {
-        if (procnetdev_vsn == 0) {
-            ife->stats.rx_bytes = 0;
-            ife->stats.tx_bytes = 0;
+    <span style=color:#8b008b;font-weight:700>if</span> (procnetdev_vsn &lt;= <span style=color:#b452cd>1</span>) {
+        <span style=color:#8b008b;font-weight:700>if</span> (procnetdev_vsn == <span style=color:#b452cd>0</span>) {
+            ife-&gt;stats.rx_bytes = <span style=color:#b452cd>0</span>;
+            ife-&gt;stats.tx_bytes = <span style=color:#b452cd>0</span>;
         }
-        ife->stats.rx_multicast = 0;
-        ife->stats.rx_compressed = 0;
-        ife->stats.tx_compressed = 0;
+        ife-&gt;stats.rx_multicast = <span style=color:#b452cd>0</span>;
+        ife-&gt;stats.rx_compressed = <span style=color:#b452cd>0</span>;
+        ife-&gt;stats.tx_compressed = <span style=color:#b452cd>0</span>;
     }
-}</code></pre><p>另外要得到 IP Address 資訊，就必須用 if_fetch 函式，透過 ioctl 進行讀取</p><pre><code class=language-c>/* Fetch the interface configuration from the kernel. */
-static int if_fetch(struct interface *ife)
+}
+</code></pre></td></tr></table></div></div><p>另外要得到 IP Address 資訊，就必須用 if_fetch 函式，透過 ioctl 進行讀取</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=51><a style=outline:none;text-decoration:none;color:inherit href=#51>51</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=52><a style=outline:none;text-decoration:none;color:inherit href=#52>52</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=53><a style=outline:none;text-decoration:none;color:inherit href=#53>53</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=54><a style=outline:none;text-decoration:none;color:inherit href=#54>54</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=55><a style=outline:none;text-decoration:none;color:inherit href=#55>55</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=56><a style=outline:none;text-decoration:none;color:inherit href=#56>56</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=57><a style=outline:none;text-decoration:none;color:inherit href=#57>57</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=61><a style=outline:none;text-decoration:none;color:inherit href=#61>61</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=62><a style=outline:none;text-decoration:none;color:inherit href=#62>62</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=63><a style=outline:none;text-decoration:none;color:inherit href=#63>63</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=64><a style=outline:none;text-decoration:none;color:inherit href=#64>64</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=65><a style=outline:none;text-decoration:none;color:inherit href=#65>65</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=66><a style=outline:none;text-decoration:none;color:inherit href=#66>66</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=67><a style=outline:none;text-decoration:none;color:inherit href=#67>67</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68>68</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69>69</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70>70</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=71><a style=outline:none;text-decoration:none;color:inherit href=#71>71</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=72><a style=outline:none;text-decoration:none;color:inherit href=#72>72</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=73><a style=outline:none;text-decoration:none;color:inherit href=#73>73</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=74><a style=outline:none;text-decoration:none;color:inherit href=#74>74</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c><span style=color:#228b22>/* Fetch the interface configuration from the kernel. */</span>
+<span style=color:#8b008b;font-weight:700>static</span> <span style=color:#00688b;font-weight:700>int</span> <span style=color:#008b45>if_fetch</span>(<span style=color:#8b008b;font-weight:700>struct</span> interface *ife)
 {
-    struct ifreq ifr;
-    char *ifname = ife->name;
-    int skfd;
+    <span style=color:#8b008b;font-weight:700>struct</span> ifreq ifr;
+    <span style=color:#00688b;font-weight:700>char</span> *ifname = ife-&gt;name;
+    <span style=color:#00688b;font-weight:700>int</span> skfd;
 
-    skfd = xsocket(AF_INET, SOCK_DGRAM, 0);
+    skfd = xsocket(AF_INET, SOCK_DGRAM, <span style=color:#b452cd>0</span>);
 
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    if (ioctl(skfd, SIOCGIFFLAGS, &ifr) < 0) {
+    <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFFLAGS, &amp;ifr) &lt; <span style=color:#b452cd>0</span>) {
         close(skfd);
-        return -1;
+        <span style=color:#8b008b;font-weight:700>return</span> -<span style=color:#b452cd>1</span>;
     }
-    ife->flags = ifr.ifr_flags;
+    ife-&gt;flags = ifr.ifr_flags;
 
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    memset(ife->hwaddr, 0, 32);
-    if (ioctl(skfd, SIOCGIFHWADDR, &ifr) >= 0)
-        memcpy(ife->hwaddr, ifr.ifr_hwaddr.sa_data, 8);
+    memset(ife-&gt;hwaddr, <span style=color:#b452cd>0</span>, <span style=color:#b452cd>32</span>);
+    <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFHWADDR, &amp;ifr) &gt;= <span style=color:#b452cd>0</span>)
+        memcpy(ife-&gt;hwaddr, ifr.ifr_hwaddr.sa_data, <span style=color:#b452cd>8</span>);
 
-    ife->type = ifr.ifr_hwaddr.sa_family;
-
-    strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    ife->metric = 0;
-    if (ioctl(skfd, SIOCGIFMETRIC, &ifr) >= 0)
-        ife->metric = ifr.ifr_metric;
+    ife-&gt;type = ifr.ifr_hwaddr.sa_family;
 
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    ife->mtu = 0;
-    if (ioctl(skfd, SIOCGIFMTU, &ifr) >= 0)
-        ife->mtu = ifr.ifr_mtu;
+    ife-&gt;metric = <span style=color:#b452cd>0</span>;
+    <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFMETRIC, &amp;ifr) &gt;= <span style=color:#b452cd>0</span>)
+        ife-&gt;metric = ifr.ifr_metric;
 
-    memset(&ife->map, 0, sizeof(struct ifmap));
-#ifdef SIOCGIFMAP
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    if (ioctl(skfd, SIOCGIFMAP, &ifr) == 0)
-        ife->map = ifr.ifr_map;
-#endif
+    ife-&gt;mtu = <span style=color:#b452cd>0</span>;
+    <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFMTU, &amp;ifr) &gt;= <span style=color:#b452cd>0</span>)
+        ife-&gt;mtu = ifr.ifr_mtu;
 
-#ifdef HAVE_TXQUEUELEN
-    strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-    ife->tx_queue_len = -1;  /* unknown value */
-    if (ioctl(skfd, SIOCGIFTXQLEN, &ifr) >= 0)
-        ife->tx_queue_len = ifr.ifr_qlen;
-#else
-    ife->tx_queue_len = -1;  /* unknown value */
-#endif
-
+    memset(&amp;ife-&gt;map, <span style=color:#b452cd>0</span>, <span style=color:#8b008b;font-weight:700>sizeof</span>(<span style=color:#8b008b;font-weight:700>struct</span> ifmap));
+<span style=color:#1e889b>#ifdef SIOCGIFMAP
+</span><span style=color:#1e889b></span>    strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
+    <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFMAP, &amp;ifr) == <span style=color:#b452cd>0</span>)
+        ife-&gt;map = ifr.ifr_map;
+<span style=color:#1e889b>#endif
+</span><span style=color:#1e889b></span>
+<span style=color:#1e889b>#ifdef HAVE_TXQUEUELEN
+</span><span style=color:#1e889b></span>    strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
+    ife-&gt;tx_queue_len = -<span style=color:#b452cd>1</span>;  <span style=color:#228b22>/* unknown value */</span>
+    <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFTXQLEN, &amp;ifr) &gt;= <span style=color:#b452cd>0</span>)
+        ife-&gt;tx_queue_len = ifr.ifr_qlen;
+<span style=color:#1e889b>#else
+</span><span style=color:#1e889b></span>    ife-&gt;tx_queue_len = -<span style=color:#b452cd>1</span>;  <span style=color:#228b22>/* unknown value */</span>
+<span style=color:#1e889b>#endif
+</span><span style=color:#1e889b></span>
     strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
     ifr.ifr_addr.sa_family = AF_INET;
-    memset(&ife->addr, 0, sizeof(struct sockaddr));
-    if (ioctl(skfd, SIOCGIFADDR, &ifr) == 0) {
-        ife->has_ip = 1;
-        ife->addr = ifr.ifr_addr;
+    memset(&amp;ife-&gt;addr, <span style=color:#b452cd>0</span>, <span style=color:#8b008b;font-weight:700>sizeof</span>(<span style=color:#8b008b;font-weight:700>struct</span> sockaddr));
+    <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFADDR, &amp;ifr) == <span style=color:#b452cd>0</span>) {
+        ife-&gt;has_ip = <span style=color:#b452cd>1</span>;
+        ife-&gt;addr = ifr.ifr_addr;
         strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-        memset(&ife->dstaddr, 0, sizeof(struct sockaddr));
-        if (ioctl(skfd, SIOCGIFDSTADDR, &ifr) >= 0)
-            ife->dstaddr = ifr.ifr_dstaddr;
+        memset(&amp;ife-&gt;dstaddr, <span style=color:#b452cd>0</span>, <span style=color:#8b008b;font-weight:700>sizeof</span>(<span style=color:#8b008b;font-weight:700>struct</span> sockaddr));
+        <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFDSTADDR, &amp;ifr) &gt;= <span style=color:#b452cd>0</span>)
+            ife-&gt;dstaddr = ifr.ifr_dstaddr;
 
         strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-        memset(&ife->broadaddr, 0, sizeof(struct sockaddr));
-        if (ioctl(skfd, SIOCGIFBRDADDR, &ifr) >= 0)
-            ife->broadaddr = ifr.ifr_broadaddr;
+        memset(&amp;ife-&gt;broadaddr, <span style=color:#b452cd>0</span>, <span style=color:#8b008b;font-weight:700>sizeof</span>(<span style=color:#8b008b;font-weight:700>struct</span> sockaddr));
+        <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFBRDADDR, &amp;ifr) &gt;= <span style=color:#b452cd>0</span>)
+            ife-&gt;broadaddr = ifr.ifr_broadaddr;
 
         strncpy_IFNAMSIZ(ifr.ifr_name, ifname);
-        memset(&ife->netmask, 0, sizeof(struct sockaddr));
-        if (ioctl(skfd, SIOCGIFNETMASK, &ifr) >= 0)
-            ife->netmask = ifr.ifr_netmask;
+        memset(&amp;ife-&gt;netmask, <span style=color:#b452cd>0</span>, <span style=color:#8b008b;font-weight:700>sizeof</span>(<span style=color:#8b008b;font-weight:700>struct</span> sockaddr));
+        <span style=color:#8b008b;font-weight:700>if</span> (ioctl(skfd, SIOCGIFNETMASK, &amp;ifr) &gt;= <span style=color:#b452cd>0</span>)
+            ife-&gt;netmask = ifr.ifr_netmask;
     }
 
     close(skfd);
-    return 0;
-}</code></pre><p>以上就是執行 ifconfig command 的流程，如果有任何問題可以直接留言 ^^</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/busybox/>Busybox</a>&nbsp;
+    <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>0</span>;
+}
+</code></pre></td></tr></table></div></div><p>以上就是執行 ifconfig command 的流程，如果有任何問題可以直接留言 ^^</p><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/busybox/>Busybox</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/embedded-system/>Embedded System</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux/>Linux</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2010%2f12%2flinux-%25E5%25B5%258C%25E5%2585%25A5%25E5%25BC%258F%25E7%25B3%25BB%25E7%25B5%25B1%25E4%25B8%258D%25E5%258F%25AF%25E6%2588%2596%25E7%25BC%25BA%25E7%259A%2584%25E5%25B7%25A5%25E5%2585%25B7-busybox-%25E5%2588%2586%25E6%259E%2590-ifconfig-command%2f&text=%5bLinux%5d%20%e5%b5%8c%e5%85%a5%e5%bc%8f%e7%b3%bb%e7%b5%b1%e4%b8%8d%e5%8f%af%e6%88%96%e7%bc%ba%e7%9a%84%e5%b7%a5%e5%85%b7%20%e2%80%93%20busybox%20%e5%88%86%e6%9e%90%20ifconfig%20command&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2010%2f12%2flinux-%25E5%25B5%258C%25E5%2585%25A5%25E5%25BC%258F%25E7%25B3%25BB%25E7%25B5%25B1%25E4%25B8%258D%25E5%258F%25AF%25E6%2588%2596%25E7%25BC%25BA%25E7%259A%2584%25E5%25B7%25A5%25E5%2585%25B7-busybox-%25E5%2588%2586%25E6%259E%2590-ifconfig-command%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2010%2f12%2flinux-%25E5%25B5%258C%25E5%2585%25A5%25E5%25BC%258F%25E7%25B3%25BB%25E7%25B5%25B1%25E4%25B8%258D%25E5%258F%25AF%25E6%2588%2596%25E7%25BC%25BA%25E7%259A%2584%25E5%25B7%25A5%25E5%2585%25B7-busybox-%25E5%2588%2586%25E6%259E%2590-ifconfig-command%2f&title=%5bLinux%5d%20%e5%b5%8c%e5%85%a5%e5%bc%8f%e7%b3%bb%e7%b5%b1%e4%b8%8d%e5%8f%af%e6%88%96%e7%bc%ba%e7%9a%84%e5%b7%a5%e5%85%b7%20%e2%80%93%20busybox%20%e5%88%86%e6%9e%90%20ifconfig%20command" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2010%2f12%2flinux-%25E5%25B5%258C%25E5%2585%25A5%25E5%25BC%258F%25E7%25B3%25BB%25E7%25B5%25B1%25E4%25B8%258D%25E5%258F%25AF%25E6%2588%2596%25E7%25BC%25BA%25E7%259A%2584%25E5%25B7%25A5%25E5%2585%25B7-busybox-%25E5%2588%2586%25E6%259E%2590-ifconfig-command%2f&title=%5bLinux%5d%20%e5%b5%8c%e5%85%a5%e5%bc%8f%e7%b3%bb%e7%b5%b1%e4%b8%8d%e5%8f%af%e6%88%96%e7%bc%ba%e7%9a%84%e5%b7%a5%e5%85%b7%20%e2%80%93%20busybox%20%e5%88%86%e6%9e%90%20ifconfig%20command" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2010%2f12%2flinux-%25E5%25B5%258C%25E5%2585%25A5%25E5%25BC%258F%25E7%25B3%25BB%25E7%25B5%25B1%25E4%25B8%258D%25E5%258F%25AF%25E6%2588%2596%25E7%25BC%25BA%25E7%259A%2584%25E5%25B7%25A5%25E5%2585%25B7-busybox-%25E5%2588%2586%25E6%259E%2590-ifconfig-command%2f&title=%5bLinux%5d%20%e5%b5%8c%e5%85%a5%e5%bc%8f%e7%b3%bb%e7%b5%b1%e4%b8%8d%e5%8f%af%e6%88%96%e7%bc%ba%e7%9a%84%e5%b7%a5%e5%85%b7%20%e2%80%93%20busybox%20%e5%88%86%e6%9e%90%20ifconfig%20command" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2010%2f12%2flinux-%25E5%25B5%258C%25E5%2585%25A5%25E5%25BC%258F%25E7%25B3%25BB%25E7%25B5%25B1%25E4%25B8%258D%25E5%258F%25AF%25E6%2588%2596%25E7%25BC%25BA%25E7%259A%2584%25E5%25B7%25A5%25E5%2585%25B7-busybox-%25E5%2588%2586%25E6%259E%2590-ifconfig-command%2f&description=%5bLinux%5d%20%e5%b5%8c%e5%85%a5%e5%bc%8f%e7%b3%bb%e7%b5%b1%e4%b8%8d%e5%8f%af%e6%88%96%e7%bc%ba%e7%9a%84%e5%b7%a5%e5%85%b7%20%e2%80%93%20busybox%20%e5%88%86%e6%9e%90%20ifconfig%20command" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</a></li><li><a href=/2015/12/a-super-small-docker-image-based-on-alpine-linux/>Alpine Linux 挑戰最小 docker image OS</a></li><li><a href=/2012/01/ubuntu-mount-dvd-iso-on-ubuntu/>[筆記] 在 Ubuntu mount DVD ISO 檔案</a></li><li><a href=/2011/12/linux-geany-sshfs-flag/>Geany 編輯器搭配 sshfs 參數注意事項</a></li><li><a href=/2011/10/how-to-remove-duplicated-rpm-package/>AWS 機器上 duplicated RPM 問題</a></li><li><a href=/2011/07/linux-geany-fuse/>Linux 程式開發編輯器 Geany + Fuse 遠端掛載</a></li><li><a href=/2011/05/busybox-iptunnel-%E5%99%B4%E5%87%BA%E9%8C%AF%E8%AA%A4%E8%A8%8A%E6%81%AF/>busybox iptunnel 噴出錯誤訊息</a></li><li><a href=/2011/05/%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%9D-amazon-ec2-lamp-%E7%92%B0%E5%A2%83-ec2-console/>快速安裝 Amazon EC2 LAMP 環境 (EC2 Console)</a></li><li><a href=/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/>2011 OSDC Day 1 筆記</a></li><li><a href=/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/>切換 Ubuntu apt 的 mirror site</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2010/12/%E8%99%9B%E6%93%AC%E4%B8%BB%E6%A9%9F-vps-linode-%E8%B4%88%E9%80%81-100000-%E7%BE%8E%E5%85%83%E7%B5%A6%E6%96%B0%E8%A8%BB%E5%86%8A%E6%9C%83%E5%93%A1/ data-toggle=tooltip data-placement=top title="[虛擬主機] VPS Linode 贈送 $100,000 美元給新註冊會員">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2010/12/linux-%E9%87%8B%E6%94%BE%E8%99%9B%E6%93%AC%E8%A8%98%E6%86%B6%E9%AB%94-cache/ data-toggle=tooltip data-placement=top title="[Linux] 釋放虛擬記憶體 (cache)">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
