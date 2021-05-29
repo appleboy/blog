@@ -34,7 +34,8 @@ dlite 提供三種方式安裝
 
 安裝 dlite 需要使用到磁碟空間及記憶體，你可以動態指定 memory 使用量，或者是磁碟空間，詳細指令可以透過 `dlite install -h` 觀看
 
-<pre><code class="language-bash">$ sudo dlite install -h
+```bash
+$ sudo dlite install -h
 Usage:
   dlite [OPTIONS] install [install-OPTIONS]
 
@@ -50,31 +51,42 @@ Help Options:
       -s, --ssh-key=    path to public ssh key (default: $HOME/.ssh/id_rsa.pub)
       -v, --os-version= version of DhyveOS to install
       -n, --hostname=   hostname to use for vm (default: local.docker)
-      -S, --share=      directory to export from NFS (default: /Users)</code></pre>
+      -S, --share=      directory to export from NFS (default: /Users)
+```
 
 可以看到指令預設會佔用 20GB 的磁碟使用量及 2GB 的記憶體，所以安裝時可以調整成個人需求大小，安裝請用 `root` 使用者
 
-<pre><code class="language-bash">$ sudo dlite install -d 10
+```bash
+$ sudo dlite install -d 10
 Building disk image: done
 Downloading OS: done
 Writing configuration: done
-Creating launchd agent: done</code></pre>
+Creating launchd agent: done
+```
 
 完成後請啟動 dlite 服務
 
-<pre><code class="language-bash">$ dlite start</code></pre>
+```bash
+$ dlite start
+```
 
 這邊要提醒執行上述指令後，請大約等 10 ~ 20 秒，再用 `docker ps` 來確認是否有成功，啟動後可以透過 `ssh docker@local.docker` 連到 Docker VM。可以在 `/etc/hosts` 看到
 
-<pre><code class="language-bash">192.168.64.8 local.docker # added by dlite</code></pre>
+```bash
+192.168.64.8 local.docker # added by dlite
+```
 
 關閉 VM 服務可以使用 `stop` 指令
 
-<pre><code class="language-bash">$ dlite stop</code></pre>
+```bash
+$ dlite stop
+```
 
 如果沒有要用 Docker 了，請切換到 root 直接 `uninstall` 即可
 
-<pre><code class="language-bash">$ sudo dlite uninstall</code></pre>
+```bash
+$ sudo dlite uninstall
+```
 
 移除後會清空 `/etc/hosts` 內新增的 row，但是沒有清除 `/etc/exports` 內的資料，於是發了 PR 給作者 [remove export command][8]。
 

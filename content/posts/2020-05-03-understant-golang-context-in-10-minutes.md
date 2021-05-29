@@ -34,7 +34,8 @@ tags:
 
 學 Go 時肯定要學習如何使用併發 (goroutine)，而開發者該如何控制併發呢？其實有兩種方式，一種是 [WaitGroup][8]，另一種就是 context，而什麼時候需要用到 WaitGroup 呢？很簡單，就是當您需要將同一件事情拆成不同的 Job 下去執行，最後需要等到全部的 Job 都執行完畢才繼續執行主程式，這時候就需要用到 WaitGroup，看個實際例子
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -58,13 +59,15 @@ func main() {
     }()
     wg.Wait()
     fmt.Println("All Done.")
-}</code></pre>
+}
+```
 
 上面範例可以看到主程式透過 `wg.Wait()` 來等待全部 job 都執行完畢，才印出最後的訊息。這邊會遇到一個情境就是，雖然把 job 拆成多個，並且丟到背景去跑，可是使用者該如何透過其他方式來終止相關 goroutine 工作呢 (像是開發者都會寫背景程式監控，需要長時間執行)？例如 UI 上面有停止的按鈕，點下去後，如何主動通知並且停止正在跑的 Job，這邊很簡單，可以使用 channel + select 方式。
 
 ## 使用 channel + select
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -91,7 +94,8 @@ func main() {
     fmt.Println("stop the gorutine")
     stop <- true
     time.Sleep(5 * time.Second)
-}</code></pre>
+}
+```
 
 上面可以看到，透過 select + channel 可以快速解決這問題，只要在任何地方將 bool 值丟入 stop channel 就可以停止背景正在處理的 Job。上述用 channel 來解決此問題，但是現在有個問題，假設背景有跑了無數個 goroutine，或者是 goroutine 內又有跑 goroutine 呢，變得相當複雜，例如底下的狀況
 
@@ -103,7 +107,8 @@ func main() {
 
 從上圖可以看到我們建立了三個 worker node 來處理不同的 Job，所以會在主程式最上面宣告一個主 `context.Background()`，然後在每個 worker node 分別在個別建立子 context，其最主要目的就是當關閉其中一個 context 就可以直接取消該 worker 內正在跑的 Job。拿上面的例子進行改寫
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "context"
@@ -131,15 +136,19 @@ func main() {
     fmt.Println("stop the gorutine")
     cancel()
     time.Sleep(5 * time.Second)
-}</code></pre>
+}
+```
 
 其實可以看到只是把原本的 channel 換成使用 context 來處理，其他完全不變，這邊提到使用了 `context.WithCancel`，使用底下方式可以擴充 context
 
-<pre><code class="language-go">ctx, cancel := context.WithCancel(context.Background())</code></pre>
+```go
+ctx, cancel := context.WithCancel(context.Background())
+```
 
 這用意在於每個 worknode 都有獨立的 `cancel func` 開發者可以透過其他地方呼叫 cancel() 來決定哪一個 worker 需要被停止，這時候可以做到使用 context 來停止多個 goroutine 的效果，底下看看實際例子
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "context"
@@ -171,7 +180,8 @@ func worker(ctx context.Context, name string) {
             time.Sleep(1 * time.Second)
         }
     }
-}</code></pre>
+}
+```
 
 上面透過一個 context 可以一次停止多個 worker，看邏輯如何宣告 context 以及什麼時機去執行 cancel()，通常我個人都是搭配 graceful shutdown 進行取消正在跑的 Job，或者是停止資料庫連線等等..
 

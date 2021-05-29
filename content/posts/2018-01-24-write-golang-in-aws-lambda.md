@@ -24,7 +24,8 @@ tags:
 
 如果想搭配 API Gateway 後端 Lambda 可能接 Restful 或 GraphQL API 的話，肯定要 Listen 單一 Http Port，底下是用 Gin 來實現一個簡單的 http 伺服器:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -69,14 +70,17 @@ func routerEngine() *gin.Engine {
 func main() {
     addr := ":" + os.Getenv("PORT")
     log.Fatal(http.ListenAndServe(addr, routerEngine()))
-}</code></pre>
+}
+```
 
 可以很清楚看到在 Gin 內，只要實現 Router 部分，就可以透過 `http.ListenAndServe` 方式來啟動小型 Web 服務，但是上面的程式碼不能跑在 Lambda 內，這邊就要使用 [Go 大神 TJ][10] 所開發的 [apex/gateway][11]，只要將 `http.ListenAndServe` 換成 `gateway.ListenAndServe` 就可以了
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     addr := ":" + os.Getenv("PORT")
     log.Fatal(gateway.ListenAndServe(addr, routerEngine()))
-}</code></pre>
+}
+```
 
 有沒有簡單到不行？詳細範例可以參考此 [GitHub Repo][12]。
 
@@ -90,8 +94,10 @@ func main() {
 
 AWS Lambda 只有支援 Linux 架構，所以只需要透過底下指令就可以編譯出來:
 
-<pre><code class="language-bash">$ GOOS=linux go build -o main .
-$ zip deployment.zip main</code></pre>
+```bash
+$ GOOS=linux go build -o main .
+$ zip deployment.zip main
+```
 
 把輸出檔案設定為 `main`，最後透過 zip 方式打包成 `deployment.zip`，並且從 AWS Web Console 頁面上傳。
 
@@ -99,11 +105,13 @@ $ zip deployment.zip main</code></pre>
 
 覺得每次都要手動上傳有點麻煩，歡迎大家試試看 [drone-lambda][16]，可以透過指令方式更新 Lambda function。下一篇會教大家自動化更新 Lambda
 
-<pre><code class="language-bash">$ drone-lambda --region ap-southeast-1 \
+```bash
+$ drone-lambda --region ap-southeast-1 \
   --access-key xxxx \
   --secret-key xxxx \
   --function-name upload-s3 \
-  --zip-file deployment.zip</code></pre>
+  --zip-file deployment.zip
+```
 
 ## API Gateway + Cloud Watch
 
@@ -119,24 +127,28 @@ $ zip deployment.zip main</code></pre>
 
 預設 AWS Lambda 使用 128 MB 記憶體，那下面透過 [vegeta][19] 來看看 Go 的效能。之後有機會可以跟 Python 或 Node.js 比較看看。底下是 **128 MB** 記憶體。每秒打 1024 request 並且持續 10 秒
 
-<pre><code class="language-bash">$ vegeta attack -rate=1024 -duration=10s -targets=target2.txt | tee results.bin | vegeta report
+```bash
+$ vegeta attack -rate=1024 -duration=10s -targets=target2.txt | tee results.bin | vegeta report
 Requests      [total, rate]            10240, 1024.10
 Duration      [total, attack, wait]    20.335101947s, 9.999018014s, 10.336083933s
 Latencies     [mean, 50, 95, 99, max]  6.091282008s, 4.893951645s, 14.508009942s, 17.11847442s, 20.128384389s
 Bytes In      [total, mean]            143360, 14.00
 Bytes Out     [total, mean]            0, 0.00
 Success       [ratio]                  100.00%
-Status Codes  [code:count]             200:10240</code></pre>
+Status Codes  [code:count]             200:10240
+```
 
 換 512 MB 每秒打 1024 request 並且持續 10 秒
 
-<pre><code class="language-bash">Requests      [total, rate]            10240, 1024.10
+```bash
+Requests      [total, rate]            10240, 1024.10
 Duration      [total, attack, wait]    11.989730554s, 9.999012371s, 1.990718183s
 Latencies     [mean, 50, 95, 99, max]  1.491340336s, 1.114643849s, 4.112241113s, 6.087949237s, 10.107294516s
 Bytes In      [total, mean]            143360, 14.00
 Bytes Out     [total, mean]            0, 0.00
 Success       [ratio]                  100.00%
-Status Codes  [code:count]             200:10240</code></pre>
+Status Codes  [code:count]             200:10240
+```
 
 可以看到 128MB Latencies 是 `6.091282008s` 而 512MB 可以降到 `1.491340336s`
 

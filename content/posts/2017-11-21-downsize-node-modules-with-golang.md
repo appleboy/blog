@@ -28,7 +28,8 @@ tags:
 
 底下是 node-prune 預設刪除的`檔案列表`
 
-<pre><code class="language-go">var DefaultFiles = []string{
+```go
+var DefaultFiles = []string{
     "Makefile",
     "Gulpfile.js",
     "Gruntfile.js",
@@ -47,11 +48,13 @@ tags:
     "AUTHORS",
     "CONTRIBUTORS",
     ".yarn-integrity",
-}</code></pre>
+}
+```
 
 預設`刪除目錄`
 
-<pre><code class="language-go">var DefaultDirectories = []string{
+```go
+var DefaultDirectories = []string{
     "__tests__",
     "test",
     "tests",
@@ -67,18 +70,21 @@ tags:
     "examples",
     "coverage",
     ".nyc_output",
-}</code></pre>
+}
+```
 
 預設刪除的`副檔名`
 
-<pre><code class="language-go">var DefaultExtensions = []string{
+```go
+var DefaultExtensions = []string{
     ".md",
     ".ts",
     ".jst",
     ".coffee",
     ".tgz",
     ".swp",
-}</code></pre>
+}
+```
 
 作者也非常好心，開了 `WithDir`, `WithExtensions` ... 等接口讓開發者可以動態調整名單。其實這專案不只可以用在 Node.js 專案，也可以用在 PHP 或者是 Go 專案上。
 
@@ -86,12 +92,14 @@ tags:
 
 對於非 Go 的開發者來說，要使用此套件還需要額外安裝 Go 語言環境才可以正常編譯出 Binary 檔案，也看到有人提問[無法搞定 Go 語言環境][8]，所以我直接 [Fork 此專案][9]，再搭配 [Drone CI][10] 方式輕易產生各種環境的 Binary 檔案，現在只有產生 Windows, Linux 及 MacOS。大家可以從底下連結直接下載來試試看。下載完成，放到 `/usr/local/bin` 底下即可。使用方式很簡單，到專案底下直接執行 `node-prune`
 
-<pre><code class="language-bash">$ node-prune
+```bash
+$ node-prune
 
          files total 16,674
        files removed 4,452
         size removed 18 MB
-            duration 1.547s</code></pre>
+            duration 1.547s
+```
 
 # [下載連結][11]
 

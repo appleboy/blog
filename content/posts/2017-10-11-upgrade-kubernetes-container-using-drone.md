@@ -20,9 +20,11 @@ tags:
 
 本篇要教大家如何透過 [Drone][2] 搭配 [Kubernetes][3] 自動化升級 App container 版本。為什麼我只說升級 App 版本，而不是升級或調整 K8S Deployment 架構呢 (`kubectl apply`)？原因是本篇會圍繞在 [honestbee][4] 撰寫的 drone 外掛: [drone-kubernetes][5]，此外掛是透過 Shell Script 方式搭配 [kubectl][6] 指令來完成升級 App 版本，可以看到程式原始碼並無用到 `kubectl apply` 方式來升級，也並非用 [Go 語言][7]搭配 k8s API 所撰寫，所以無法使用 [YAML][8] 方式來進行 Deployment 的升級。本篇講解的範例都可以在 [drone-nodejs-example][9] 內找到。底下指令就是外掛用來搭配 Drone 參數所使用。
 
-<pre><code class="language-bash">$ kubectl set image \
+```bash
+$ kubectl set image \
   deployment/nginx-deployment \
-  nginx=nginx:1.9.1</code></pre>
+  nginx=nginx:1.9.1
+```
 
 <!--more-->
 
@@ -37,7 +39,8 @@ tags:
 
 首先要先建立一個 Service 帳號給 Drone 服務使用，也方便設定權限。
 
-<pre><code class="language-yml">apiVersion: v1
+```yml
+apiVersion: v1
 kind: Namespace
 metadata:
   name: demo
@@ -76,18 +79,22 @@ subjects:
 roleRef:
   kind: Role
   name: drone-deploy
-  apiGroup: rbac.authorization.k8s.io</code></pre>
+  apiGroup: rbac.authorization.k8s.io
+```
 
 先建立 `demo` namespace，再建立 drone-deploy 帳號，完成後就可以拿到此帳號 Token 跟 CA，可以透過底下指令來確認是否有 drone-deploy 帳號
 
-<pre><code class="language-bash">$ kubectl -n demo get serviceAccounts
+```bash
+$ kubectl -n demo get serviceAccounts
 NAME           SECRETS   AGE
 default        1         1h
-drone-deploy   1         1h</code></pre>
+drone-deploy   1         1h
+```
 
 接著顯示 `drone-deploy` 帳戶的詳細資訊
 
-<pre><code class="language-bash">$ kubectl -n demo get serviceAccounts/drone-deploy -o yaml
+```bash
+$ kubectl -n demo get serviceAccounts/drone-deploy -o yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -98,26 +105,32 @@ metadata:
   selfLink: /api/v1/namespaces/demo/serviceaccounts/drone-deploy
   uid: 4f445728-adbc-11e7-b130-06d06b7f944c
 secrets:
-- name: drone-deploy-token-2xzqw</code></pre>
+- name: drone-deploy-token-2xzqw
+```
 
 可以看到 `drone-deploy-token-2xzqw` 此 secret name，接著從這名稱取得 `ca.cert` 跟 `token`:
 
-<pre><code class="language-bash">$ kubectl -n demo get \
+```bash
+$ kubectl -n demo get \
   secret/drone-deploy-token-2xzqw \
-  -o yaml | egrep 'ca.crt:|token:'</code></pre>
+  -o yaml | egrep 'ca.crt:|token:'
+```
 
 由於 token 是透過 `base64` encode 輸出的。那也是要用 base64 decode 解出
 
-<pre><code class="language-bash"># linux:
+```bash
+# linux:
 $ echo token | base64 -d && echo''
 # macOS:
-$ echo token | base64 -D && echo''</code></pre>
+$ echo token | base64 -D && echo''
+```
 
 ### 建立 K8S Deployment
 
 在這邊我們需要先建立第一次 K8S 環境。
 
-<pre><code class="language-yml">apiVersion: extensions/v1beta1
+```yml
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: k8s-node-demo
@@ -160,19 +173,23 @@ spec:
   ports:
   - protocol: TCP
     port: 80
-    targetPort: 8080</code></pre>
+    targetPort: 8080
+```
 
 先定義好 `replicas` 數量，及建立好 [AWS Load Balancer][10]。完成後，基本上你可以看到第一版本成功上線
 
-<pre><code class="language-bash">$ kubectl get service
+```bash
+$ kubectl get service
 NAME            CLUSTER-IP      EXTERNAL-IP        PORT(S)        AGE
-k8s-node-demo   100.67.24.253   a4fba848aadbc...   80:30664/TCP   11h</code></pre>
+k8s-node-demo   100.67.24.253   a4fba848aadbc...   80:30664/TCP   11h
+```
 
 ## 設定 Drone + Kubernetes
 
 要完成 k8s 部署，必須要先將專案打包成 Image 並且上 Tag 丟到自家的 Private Registry。
 
-<pre><code class="language-yml">publish:
+```yml
+publish:
   image: plugins/docker
   repo: appleboy/k8s-node-demo
   dockerfile: Dockerfile
@@ -183,11 +200,13 @@ k8s-node-demo   100.67.24.253   a4fba848aadbc...   80:30664/TCP   11h</code></pr
       target: docker_password
   tags: [ '${DRONE_TAG}' ]
   when:
-    event: tag</code></pre>
+    event: tag
+```
 
 請先到 Drone 專案後台的 Secrets 設定 `demo_username` 及 `demo_password` 內容。並採用 GitHub 流程透過 Git Tag 方式進行。接著設定 K8S Deploy:
 
-<pre><code class="language-yml">deploy:
+```yml
+deploy:
   image: quay.io/honestbee/drone-kubernetes
   namespace: demo
   deployment: k8s-node-demo
@@ -202,7 +221,8 @@ k8s-node-demo   100.67.24.253   a4fba848aadbc...   80:30664/TCP   11h</code></pr
     - source: k8s_token
       target: plugin_kubernetes_token
   when:
-    event: tag</code></pre>
+    event: tag
+```
 
 請注意 `k8s_cert` 跟 `k8s_token`，你需要拿上面的 `ca.cert` 跟 `token` 內容新增到 Drone Secrets 設定頁面。
 

@@ -29,67 +29,94 @@ container 放大架構圖
 
 下載映像檔
 
-<pre><code class="language-bash">$ docker pull image\_name</code></pre>
+```bash
+$ docker pull image\_name
+```
 
 啟動或關閉 container
 
-<pre><code class="language-bash">$ docker \[start|stop\] container\_name</code></pre>
+```bash
+$ docker \[start|stop\] container\_name
+```
 
 建立 -> 啟動 -> 執行指令 (`-ti` 參數)
 
-<pre><code class="language-bash">$ docker run -ti --name container\_name image\_name command</code></pre>
+```bash
+$ docker run -ti --name container\_name image\_name command
+```
 
 建立 -> 啟動 -> 執行指令 -> 刪除 container (`-rm` 參數)
 
-<pre><code class="language-bash">$ docker run --rm -ti image\_name command</code></pre>
+```bash
+$ docker run --rm -ti image\_name command
+```
 
 file system 及 port 對應 (`-v` 及 `-p` 參數)
 
-<pre><code class="language-bash">$ docker run -ti --rm -p 80:80 -v /your\_path:/container\_path -e PASSWORD=1234 image\_name</code></pre>
+```bash
+$ docker run -ti --rm -p 80:80 -v /your\_path:/container\_path -e PASSWORD=1234 image\_name
+```
 
 ### Docker 清除 (cleanup) 指令
 
 刪除所有正在執行的 container
 
-<pre><code class="language-bash">$ docker kill $(docker ps -q)</code></pre>
+```bash
+$ docker kill $(docker ps -q)
+```
 
 刪除 dangling 映像檔
 
-<pre><code class="language-bash">docker rmi $(docker images -q -f dangling=true)</code></pre>
+```bash
+docker rmi $(docker images -q -f dangling=true)
+```
 
 刪除全部已停止的 container
 
-<pre><code class="language-bash">docker rm $(docker ps -a -q)</code></pre>
+```bash
+docker rm $(docker ps -a -q)
+```
 
 ### Docker machine 指令
 
 啟動 machine
 
-<pre><code class="language-bash">$ docker-machine start machine\_name</code></pre>
+```bash
+$ docker-machine start machine\_name
+```
 
 指定 machine 來設定 docker
 
-<pre><code class="language-bash">$ eval "$(docker-machine env machine\_name)"</code></pre>
+```bash
+$ eval "$(docker-machine env machine\_name)"
+```
 
 ### 與 container 互動指令
 
 在 container 內執行指令
 
-<pre><code class="language-bash">$ docker exec -ti container\_name command</code></pre>
+```bash
+$ docker exec -ti container\_name command
+```
 
 線上觀看 container logs
 
-<pre><code class="language-bash">$ docker logs -ft container\_name</code></pre>
+```bash
+$ docker logs -ft container\_name
+```
 
 儲存正在執行的 container 成 image 檔案
 
-<pre><code class="language-bash">$ docker commit -m "message" -a "author" container\_name username/image\_name:tag</code></pre>
+```bash
+$ docker commit -m "message" -a "author" container\_name username/image\_name:tag
+```
 
 ### docker compose 格式
 
 `docker-compose.yml` 格式如下
 
-<pre><code class="language-yml">version: "2"
+```yml
+version: "2"
 service:
   container_name: "hello-world"
   image: golang
@@ -99,11 +126,14 @@ service:
   volumes:
     - /hello-world:/root/hello-world
 redis:
-  image: redis</code></pre>
+  image: redis
+```
 
 建立 -> 執行 container
 
-<pre><code class="language-bash">$ docker-compose up</code></pre>
+```bash
+$ docker-compose up
+```
 
 以上是常用的 docker 指令，初學者務必學習。
 

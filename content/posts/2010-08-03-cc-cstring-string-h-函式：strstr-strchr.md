@@ -18,7 +18,8 @@ tags:
 
 ## strstr
 
-<pre><code class="language-c">/* strstr example */
+```c
+/* strstr example */
 #include <stdio.h>
 #include <string.h>
 
@@ -32,11 +33,13 @@ int main ()
   strncpy (pch,"sample",6);
   puts (str);
   return 0;
-}</code></pre>
+}
+```
 
 看一下 Kernel 原始檔案，strstr 函式：
 
-<pre><code class="language-c">/*
+```c
+/*
  * Find the first occurrence of find in s.
  */
 char *
@@ -57,7 +60,8 @@ strstr(s, find)
         s--;
     }
     return ((char *)s);
-}</code></pre>
+}
+```
 
 先將 sc 指定為內容字串，c 指定為找尋字串，利用兩個迴圈開始一一筆對，利用 strncmp 比對字串，在將比對成功的 pointer 回傳，但是回傳之前需要在將 s-- 回到前一個指標，這樣就ok了。
 
@@ -65,7 +69,8 @@ strstr(s, find)
 
 這字串用來找尋<span style="color:red">第一次比對成功單一字母符號</span>，也是一樣回傳該指標，底下是範例：
 
-<pre><code class="language-c">/* strchr example */
+```c
+/* strchr example */
 #include <stdio.h>
 #include <string.h>
 
@@ -81,11 +86,13 @@ int main ()
     pch=strchr(pch+1,'s');
   }
   return 0;
-}</code></pre>
+}
+```
 
 上面範例很容易，那底下來看看完整 [strchr][2] 程式碼：
 
-<pre><code class="language-c">char * strchr
+```c
+char * strchr
 (const char *p, int ch)
 {
     char c;
@@ -98,7 +105,8 @@ int main ()
             return (NULL);
     }
     /* NOTREACHED */
-}</code></pre>
+}
+```
 
 就只能針對<span style="color:red"><strong>單一字母</strong></span>符號做搜尋，跟 strstr 不同的是 strstr 是針對<span style="color:red"><strong>多個字母符號</strong></span>搜尋，很好區別吧 ^^。
 

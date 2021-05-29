@@ -50,31 +50,39 @@ Pyroscope 是一套開源的效能即時監控平台，簡單的 Server 及 Agen
 
 啟動方式有兩種，第一是直接用 docker 指令啟動
 
-<pre><code class="language-sh">docker run -it -p 4040:4040 pyroscope/pyroscope:latest server</code></pre>
+```sh
+docker run -it -p 4040:4040 pyroscope/pyroscope:latest server
+```
 
 另一種可以用 docker-compose 啟動
 
-<pre><code class="language-yaml">---
+```yaml
+---
 services:
   pyroscope:
     image: "pyroscope/pyroscope:latest"
     ports:
       - "4040:4040"
     command:
-      - "server"</code></pre>
+      - "server"
+```
 
 ## 在 Go 裡面安裝 agent
 
 本篇用 Go 語言當作範例，先 import package
 
-<pre><code class="language-go">import "github.com/pyroscope-io/pyroscope/pkg/agent/profiler"</code></pre>
+```go
+import "github.com/pyroscope-io/pyroscope/pkg/agent/profiler"
+```
 
 接著在 `main.go` 寫入底下程式碼即可:
 
-<pre><code class="language-go">profiler.Start(profiler.Config{
+```go
+profiler.Start(profiler.Config{
     ApplicationName: "simple.golang.app",
     ServerAddress:   "http://pyroscope:4040",
-})</code></pre>
+})
+```
 
 其中 `http://pyroscope` 可以換成自訂的 hostname 即可，接著打開上述網址就可以看到效能監控的畫面了
 

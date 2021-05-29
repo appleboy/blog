@@ -33,7 +33,8 @@ tags:
 
 用 docker-compose 可以快速設定 Drone Server
 
-<pre><code class="language-yaml">services:
+```yaml
+services:
   drone-server:
     image: drone/drone:1
     ports:
@@ -51,7 +52,8 @@ tags:
       - DRONE_GITLAB_CLIENT_ID=${DRONE_GITLAB_CLIENT_ID}
       - DRONE_GITLAB_CLIENT_SECRET=${DRONE_GITLAB_CLIENT_SECRET}
       - DRONE_LOGS_PRETTY=true
-      - DRONE_LOGS_COLOR=true</code></pre>
+      - DRONE_LOGS_COLOR=true
+```
 
 只要在 `docker-compose.yml` 底下新增 `.env` 檔案，將上面的變數值填寫進去即可
 
@@ -59,7 +61,8 @@ tags:
 
 雖然 drone 在 1.0 提供單機版，也就是 server 跟 agent 可以裝在同一台，但是本篇教學還是以分開安裝為主，對未來擴充性會更好。
 
-<pre><code class="language-yaml">  drone-agent:
+```yaml
+  drone-agent:
     image: drone/agent:1
     restart: always
     depends_on:
@@ -69,7 +72,8 @@ tags:
     environment:
       - DRONE_RPC_SERVER=http://drone-server
       - DRONE_RPC_SECRET=${DRONE_RPC_SECRET}
-      - DRONE_RUNNER_CAPACITY=3</code></pre>
+      - DRONE_RUNNER_CAPACITY=3
+```
 
 完整的設定檔可以[參考這邊][5]。
 

@@ -25,15 +25,18 @@ tags:
 
 首先需要一個測試檔案，通常會在專案底下建立 `testdata` 目錄，裡面放置一個叫 `hello.txt` 檔案，內容為 `world`。接著安裝 `gofight` 套件，可以用團隊內喜愛的 vendor 工具，我個人偏好 [govendor][6]：
 
-<pre><code class="language-shell">$ govendor fetch github.com/kardianos/govendor
+```shell
+$ govendor fetch github.com/kardianos/govendor
 或
-$ go get -u github.com/kardianos/govendor</code></pre>
+$ go get -u github.com/kardianos/govendor
+```
 
 ## 檔案上傳範例
 
 這邊用 [gin][7] 框架當作範例，如果您用其他框架只要支援 `http.HandlerFunc` 都可以使用。
 
-<pre><code class="language-go">func gintFileUploadHandler(c *gin.Context) {
+```go
+func gintFileUploadHandler(c *gin.Context) {
     ip := c.ClientIP()
     hello, err := c.FormFile("hello")
     if err != nil {
@@ -79,7 +82,8 @@ func GinEngine() *gin.Engine {
     r.POST("/upload", gintFileUploadHandler)
 
     return r
-}</code></pre>
+}
+```
 
 上面例子可以發現，測試端需要傳兩個 post 參數，加上一個檔案 (檔名為 test)，底下看看 gofight 怎麼寫測試。
 
@@ -92,16 +96,19 @@ gofight 現在支援一個函式叫 `SetFileFromPath` 此 func 支援兩個參�
 
 第一項上傳檔案格式，可以是從實體路徑讀取，或者是透過 `[]byte` 讀取兩種格式都可以，在 gofight 可以看到 `UploadFile` struct 如下:
 
-<pre><code class="language-go">// UploadFile for upload file struct
+```go
+// UploadFile for upload file struct
 type UploadFile struct {
     Path    string
     Name    string
     Content []byte
-}</code></pre>
+}
+```
 
 假設是透過實體路徑上傳，請在 `Path` 填上實體路徑名稱，例如: `./testdata/hello.txt`，而 `Name` 則是在 Gin 裡面接受的 Upload File 名稱 `c.FormFile("hello")`，其中的 `hello` 參數。底下是一個實際例子教大家如何上傳多個檔案測試。
 
-<pre><code class="language-go">func TestUploadFile(t *testing.T) {
+```go
+func TestUploadFile(t *testing.T) {
     r := New()
 
     r.POST("/upload").
@@ -140,11 +147,13 @@ type UploadFile struct {
             assert.Equal(t, http.StatusOK, r.Code)
             assert.Equal(t, "application/json; charset=utf-8", r.HeaderMap.Get("Content-Type"))
         })
-}</code></pre>
+}
+```
 
 假設專案內有使用 [Resource Embedding][8] 像是 [fileb0x][9]，就可以透過設定 `Content` 方式來讀取喔，要注意的是，由於不是從實體路徑讀取，所以 `Path` 請直接放檔案名稱即可。測試程式碼如下:
 
-<pre><code class="language-go">    r := New()
+```go
+    r := New()
 
     helloContent, err := ioutil.ReadFile("./testdata/hello.txt")
     if err != nil {
@@ -193,7 +202,8 @@ type UploadFile struct {
             assert.Equal(t, "", ip.String())
             assert.Equal(t, http.StatusOK, r.Code)
             assert.Equal(t, "application/json; charset=utf-8", r.HeaderMap.Get("Content-Type"))
-        })</code></pre>
+        })
+```
 
 ## 心得
 

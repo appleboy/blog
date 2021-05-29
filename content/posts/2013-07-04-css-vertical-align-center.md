@@ -15,7 +15,8 @@ tags:
 
 html 程式碼
 
-<pre><code class="language-html"><!DOCTYPE html>
+```html
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset=utf-8 />
@@ -26,13 +27,15 @@ html 程式碼
     <div class="wrapper"></div>
   </div> 
 </body>
-</html></code></pre>
+</html>
+```
 
 <!--more-->
 
 CSS 程式碼
 
-<pre><code class="language-css">.ot {
+```css
+.ot {
   width: 400px;
   height: 400px;
   border: 1px solid #FF6600;
@@ -53,7 +56,8 @@ CSS 程式碼
   width: 200px;
   height: 200px;
   background: #ccc;
-}</code></pre>
+}
+```
 
 Demo 結果
 
@@ -61,16 +65,19 @@ Demo 結果
 
 感謝留言提供一個不錯的<a href="http://www.iyunlu.com/view/css-xhtml/77.html" target="_blank">教學連結: 未知高度多行文本垂直居中</a>，可以讓文字置中，也是透過上述方法。一般單行文字置中，可以透過底下方式
 
-<pre><code class="language-csss">.text {
+```csss
+.text {
   height: 26px;
   line-height: 26px;
-}</code></pre>
+}
+```
 
 如果是多行文字呢？也就是如果透過 P 標籤來顯示
 
 > xxxxxxxxxxx
 
-<pre><code class="language-css">*{margin:0;padding:0;}
+```css
+*{margin:0;padding:0;}
 
 .box{
   height:200px;
@@ -90,7 +97,8 @@ Demo 結果
   display: inline-block;
   font-size:16px;
   vertical-align: middle;
-}</code></pre>
+}
+```
 
 Demo 如下
 

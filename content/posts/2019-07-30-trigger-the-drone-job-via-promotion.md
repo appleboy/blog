@@ -26,7 +26,8 @@ tags:
 
 首先你必須要先安裝好 Drone CLI，安裝方式可以直接參考[官方教學][6]即可，透過底下例子來了解怎麼使用 promotion
 
-<pre><code class="language-yaml">kind: pipeline
+```yaml
+kind: pipeline
 name: testing
 
 steps:
@@ -52,15 +53,20 @@ steps:
   - echo "testing"
   when:
     event: [ promote ]
-    target: [ testing ]</code></pre>
+    target: [ testing ]
+```
 
 上面可以看到，在 when 的條件子句內，可以設定 event 為 `promote`，接著 target 可以設定為任意名稱，只要是 `promote` 的 event type，在透過 git commit 預設都不會啟動的，只能透過 drone CLI 方式才可以觸發，那該如何執行命令呢？請看底下
 
-<pre><code class="language-sh">drone build promote <repo> <build> <environment></code></pre>
+```sh
+drone build promote <repo> <build> <environment>
+```
 
 其中 `build` 就是直接在後台列表上找一個已經執行過的 job ID
 
-<pre><code class="language-sh">drone build promote appleboy/golang-example 6 production</code></pre>
+```sh
+drone build promote appleboy/golang-example 6 production
+```
 
 ## 心得
 

@@ -28,53 +28,70 @@ tags:
 
 在練習 git 指令之前請先註冊好 github 帳號，並且開一個測試 repository，建立 Submodule 非常容易，範例如下:
 
-<pre><code class="language-bash">git submodule add <repository> [<path>]</code></pre>
+```bash
+git submodule add <repository> [<path>]
+```
 
 實際指令範例:
 
-<pre><code class="language-bash">git submodule add https://github.com/appleboy/CodeIgniter-TW-Language user_guide</code></pre>
+```bash
+git submodule add https://github.com/appleboy/CodeIgniter-TW-Language user_guide
+```
 
 下這指令之前請注意最後面的 <span style="color:red"><strong>path</strong></span> 部份，請勿先建立空的目錄，也就是如果該目錄存在，就會衝突，所以並不需要額外幫 module 建立目錄，指令完成結果如下:
 
-<pre><code class="language-bash">Cloning into user_guide...
+```bash
+Cloning into user_guide...
 remote: Counting objects: 32, done.
 remote: Compressing objects: 100% (19/19), done.
 remote: Total 32 (delta 12), reused 32 (delta 12)
-Unpacking objects: 100% (32/32), done.</code></pre>
+Unpacking objects: 100% (32/32), done.
+```
 
 這時候在目錄底下打入指令 git status，你會發現多了兩個檔案需要 commit
 
-<pre><code class="language-bash"># On branch master
+```bash
+# On branch master
 # Changes to be committed:
 #   (use "git reset HEAD <file>..." to unstage)
 #
 #       new file:   .gitmodules
 #       new file:   user_guide
-#</code></pre>
+#
+```
 
 注意第一個檔案 .gitmodules，裡面紀錄 submodule 的對應關係，我們實際打開看內容:
 
-<pre><code class="language-bash">[submodule "user_guide"]
+```bash
+[submodule "user_guide"]
     path = user_guide
-    url = https://github.com/appleboy/CodeIgniter-TW-Language</code></pre>
+    url = https://github.com/appleboy/CodeIgniter-TW-Language
+```
 
 裡面寫的很清楚，之後如果要清除 sub module 也是要從這檔案移除相關設定，接著就是直接 commit 到 project 底下吧
 
-<pre><code class="language-bash">git commit -a -m "first commit with submodule codeigniter user guide" && git push</code></pre>
+```bash
+git commit -a -m "first commit with submodule codeigniter user guide" && git push
+```
 
 接著回去看 github 網站就會多出一個小圖示了 [<img src="https://i0.wp.com/farm7.static.flickr.com/6166/6171610249_1ca6a15544.jpg?resize=500%2C147&#038;ssl=1" alt="git_submodule" data-recalc-dims="1" />][1] 最後還是需要初始化 init submodule，透過底下指令來達成，否則 git 不知道你有新增 module
 
-<pre><code class="language-bash">git submodule init</code></pre>
+```bash
+git submodule init
+```
 
 ## clone project with Git Submodule
 
 我們還是拿上面的例子來測試，首先還是一樣用 git clone 來下載程式碼:
 
-<pre><code class="language-bash">git clone git@github.com:appleboy/test.git test2</code></pre>
+```bash
+git clone git@github.com:appleboy/test.git test2
+```
 
 可是你有沒有發現 user_guide 這 sub module 是<span style="color:red"><strong>空目錄</strong></span>，這時候就是要透過 git submodule 來下載程式碼
 
-<pre><code class="language-bash">[freebsd][root][ /home/git/test2 ]# git submodule init
+```bash
+[freebsd][root][ /home/git/test2 ]# git submodule init
 Submodule 'user_guide' (https://github.com/appleboy/CodeIgniter-TW-Language) registered for path 'user_guide'
 [freebsd][root][ /home/git/test2 ]# git submodule update
 Cloning into user_guide...
@@ -82,56 +99,77 @@ remote: Counting objects: 32, done.
 remote: Compressing objects: 100% (19/19), done.
 remote: Total 32 (delta 12), reused 32 (delta 12)
 Unpacking objects: 100% (32/32), done.
-Submodule path 'user_guide': checked out '7efead6378993edfaa0c55927d4a4fdf629c4726'</code></pre>
+Submodule path 'user_guide': checked out '7efead6378993edfaa0c55927d4a4fdf629c4726'
+```
 
 注意上面，有沒有看到 git submodule init 來設定 **<span style="color:green">.git/config</span>**，在接著用 git submodule update 來更新檔案，可以打開 **<span style="color:green">.git/config</span>** 可以發現多了底下資料:
 
-<pre><code class="language-bash">[submodule "user_guide"]
-    url = https://github.com/appleboy/CodeIgniter-TW-Language</code></pre>
+```bash
+[submodule "user_guide"]
+    url = https://github.com/appleboy/CodeIgniter-TW-Language
+```
 
 ## 更新已安裝 module
 
 一樣切換到 sub module 目錄，接著做 git pull
 
-<pre><code class="language-bash">cd user_guide/
-git pull origin master</code></pre>
+```bash
+cd user_guide/
+git pull origin master
+```
 
 這時候我們切回去上層目錄，執行 git status
 
-<pre><code class="language-bash"># On branch master
+```bash
+# On branch master
 # Changed but not updated:
 #   (use "git add <file>..." to update what will be committed)
 #   (use "git checkout -- <file>..." to discard changes in working directory)
 #
-#       modified:   user_guide (new commits)</code></pre>
+#       modified:   user_guide (new commits)
+```
 
 我們有了 new commit，有沒有發現與 git submodule add 的時候一樣，這時候我們需要同步 sub module commit ID 到 parent，所以一樣執行 git commit && git push 即可。
 
-<pre><code class="language-bash">git commit -a -m "first commit with submodule codeigniter user guide" && git push</code></pre>
+```bash
+git commit -a -m "first commit with submodule codeigniter user guide" && git push
+```
 
 最後可以透過 statu 來看看是否有相同的 commit ID
 
-<pre><code class="language-bash">git submodule status</code></pre>
+```bash
+git submodule status
+```
 
 ## 移除 Sub module
 
 移除方式非常容易，上面有提到的檔案都必需要經過修改
 
   1. 移除目錄 
-    <pre><code class="language-bash">git rm --cached [目錄]
-git rm [目錄]</code></pre>
+    ```bash
+git rm --cached [目錄]
+git rm [目錄]
+```
 
   2. 修改 .gitmodules，移除不需要的 module 
-    <pre><code class="language-bash">vi .gitmodules</code></pre>
+    ```bash
+vi .gitmodules
+```
 
   3. 修改 .git/config，移除 submodule URL 
-    <pre><code class="language-bash">vi .git/config</code></pre>
+    ```bash
+vi .git/config
+```
 
   4. 執行 commit 
-    <pre><code class="language-bash">git add . && git commit -m "Remove sub module"</code></pre>
+    ```bash
+git add . && git commit -m "Remove sub module"
+```
 
   5. 最後 syn module 資料 
-    <pre><code class="language-bash">git submodule sync</code></pre>
+    ```bash
+git submodule sync
+```
 
 ## 總結歸納
 

@@ -37,7 +37,8 @@ tags:
 
 針對上述的問題，先透過 Sync 套件的 WaitGroup 來確保 20 個 JOB 處理完成後才結束 main 函式。
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -58,7 +59,8 @@ func main() {
     }
 
     wg.Wait()
-}</code></pre>
+}
+```
 
 大家可以先拿上面的範例來練習看看如何達到需求，而不是在 go func 內直接印出結果。
 
@@ -66,13 +68,16 @@ func main() {
 
 首先在 main 宣告三個 Channel 通道
 
-<pre><code class="language-go">    outChan := make(chan int)
+```go
+    outChan := make(chan int)
     errChan := make(chan error)
-    finishChan := make(chan struct{})</code></pre>
+    finishChan := make(chan struct{})
+```
 
 接著要在最後直接讀取這三個 Channel 值，可以透過 Select，由於 outChan 會傳入 20 個值，所以需要搭配 for 迴圈方式來讀取多個值
 
-<pre><code class="language-go">Loop:
+```go
+Loop:
     for {
         select {
         case val := <-outChan:
@@ -83,19 +88,23 @@ func main() {
         case <-finishChan:
             break Loop
         }
-    }</code></pre>
+    }
+```
 
 這邊我們看到需要加上 `Loop` 自定義 Tag，來達到 break for 迴圈，而不是 break select 函式。但是有沒有發現程式碼會一直卡在 `wg.Wait()`，不會進入到 for 迴圈內，這時候就必須將 `wg.Wait()` 丟到背景。
 
-<pre><code class="language-go">    go func() {
+```go
+    go func() {
         wg.Wait()
         fmt.Println("finish all job")
         close(finishChan)
-    }()</code></pre>
+    }()
+```
 
 也就是當 20 個 job 都完成後，會觸發 `close(finishChan)`，就可以在 for 迴圈內結束整個 main 函式。最後需要設定 timout 機制，請把 select 多補上一個 `time.After()`
 
-<pre><code class="language-go">Loop:
+```go
+Loop:
     for {
         select {
         case val := <-outChan:
@@ -108,11 +117,13 @@ func main() {
         case <-time.After(100000 * time.Millisecond):
             break Loop
         }
-    }</code></pre>
+    }
+```
 
 來看看 go func 內怎麼將值丟到 Channel
 
-<pre><code class="language-go">    for i := 0; i < 20; i++ {
+```go
+    for i := 0; i < 20; i++ {
         go func(outChan chan<- int, errChan chan<- error, val int, wg *sync.WaitGroup) {
             defer wg.Done()
             time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
@@ -123,7 +134,8 @@ func main() {
             }
 
         }(outChan, errChan, i, &wg)
-    }</code></pre>
+    }
+```
 
 宣告 `chan<- int` 代表在 go func 只能將訊息丟到通道內，而不能讀取通道。
 
@@ -131,7 +143,8 @@ func main() {
 
 希望透過上述簡單的例子，讓大家初學 Go 的時候有個基礎的理解。用法其實不難，但是請參考專案內容特性來決定如何使用 Channel，最後附上完整的程式碼:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "errors"
@@ -180,7 +193,8 @@ Loop:
             break Loop
         }
     }
-}</code></pre>
+}
+```
 
 也可以在 [Go Playground 試試看][6]。
 

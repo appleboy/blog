@@ -41,17 +41,20 @@ tags:
 
 就以 RBAC 為範例，第一個 **Query Input** 的資料，就需要帶入像是使用者所在的群組 (user)，使用者現在要執行的動作 (action)，使用者要對什麼資源做事情 (object)。這三個資料轉成 JSON 格式如下:
 
-<pre><code class="language-json">{
+```json
+{
   "input": {
     "user": ["design_group_kpi_editor", "system_group_kpi_editor"],
     "action": "edit",
     "object": "design"
   }
-}</code></pre>
+}
+```
 
 第二項就是準備系統內建的 Data 資料給 OPA，上述資料可以看到 user 所在的群組資訊，但是這些群組能做哪些事情，是 OPA 沒辦法知道的，所以需要將這些資料整理成 JSON 格式，並且上傳到 OPA 系統內
 
-<pre><code class="language-json">{
+```json
+{
   "group_roles": {
     "admin": ["admin"],
     "quality_head_design": ["quality_head_design"],
@@ -118,11 +121,13 @@ tags:
     ],
     "viewer_limit_m": [{"action": "view_l3_project", "object": "manufacture"}]
   }
-}</code></pre>
+}
+```
 
 上述 Data 可以知道 Group 跟 Role 的對應關係，以及 Role 可以做得相對應事情。最後一項就是撰寫 OPA Policy，要透過 [Rego 語言][11]來撰寫，其實沒有很難。
 
-<pre><code class="language-go">package rbac.authz
+```go
+package rbac.authz
 
 import data.rbac.authz.acl
 import input
@@ -145,7 +150,8 @@ allow {
 
     # check if the permission granted to r matches the user's request
     p == {"action": input.action, "object": input.object}
-}</code></pre>
+}
+```
 
 上面就是先把 User 對應的 Group Role 找到之後，再將全部的 Role 權限拿出來進行最後的比對產生結果，回傳值就會是 `allow` 布林值。
 
@@ -159,22 +165,29 @@ allow {
 
 透過底下指令依序將資料上傳到 OPA Server 內，第一個先上傳 data
 
-<pre><code class="language-bash">curl -X PUT http://localhost:8181/v1/data/rbac/authz/acl \
-  --data-binary @data.json</code></pre>
+```bash
+curl -X PUT http://localhost:8181/v1/data/rbac/authz/acl \
+  --data-binary @data.json
+```
 
 接著上傳 Policy
 
-<pre><code class="language-bash">curl -X PUT http://localhost:8181/v1/policies/rbac.authz \
-  --data-binary @rbac.authz.rego</code></pre>
+```bash
+curl -X PUT http://localhost:8181/v1/policies/rbac.authz \
+  --data-binary @rbac.authz.rego
+```
 
 最後驗證 input 資料
 
-<pre><code class="language-bash">curl -X POST http://localhost:8181/v1/data/rbac/authz/allow \
-  --data-binary @input.json</code></pre>
+```bash
+curl -X POST http://localhost:8181/v1/data/rbac/authz/allow \
+  --data-binary @input.json
+```
 
 用 [bat tool][12] 驗證
 
-<pre><code class="language-bash">$ bat POST http://localhost:8181/v1/data/rbac/authz/allow < input.json
+```bash
+$ bat POST http://localhost:8181/v1/data/rbac/authz/allow < input.json
 POST /v1/data/rbac/authz/allow HTTP/1.1
 Host: localhost:8181
 Accept: application/json
@@ -191,11 +204,13 @@ Content-Length: 15
 
 {
   "result": true
-}</code></pre>
+}
+```
 
 或者可以透過簡單的 Go 語言來驗證，用 Go 1.16 新的 embed package 來驗證。
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "bytes"
@@ -239,7 +254,8 @@ func main() {
         return
     }
     fmt.Println(string(body))
-}</code></pre>
+}
+```
 
 ## 結論
 

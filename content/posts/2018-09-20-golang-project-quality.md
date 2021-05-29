@@ -52,11 +52,15 @@ tags:
 
 [go-critic][10] 也是一套檢查程式碼品質的工具，只提供 CLI 方式驗證，不提供雲端整合服務，如果要導入 CI/CD 流程，請自行取用，為什麼特別介紹這套，這套工具其實是在幫助您如何寫出 Best Practice 的 Go 語言程式碼，就算你不打算用這套工具，那推薦壹定要閱讀完[驗證清單][11]，這會讓專案的程式碼品質再提升。像是寫 Bool 函式，可能會這樣命名:
 
-<pre><code class="language-go">func Enabled() bool</code></pre>
+```go
+func Enabled() bool
+```
 
 用了此工具，會建議寫成 (是不是更好閱讀了)
 
-<pre><code class="language-go">func IsEnabled() bool</code></pre>
+```go
+func IsEnabled() bool
+```
 
 還有很多驗證請自行參考，不過此工具會根據專案的大小來決定執行時間，所以我個人不推薦導入 CI/CD 流程，而是久久可以在自己電腦跑一次，一次性修改全部，這樣才不會影響部署時間。
 

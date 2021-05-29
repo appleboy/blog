@@ -26,31 +26,38 @@ tags:
 
 本篇介紹一個用 [Go 語言][5]寫的工具叫做 [mkcert][6]，此工具目前只有支援 MacOS 及 Linux 環境，未來會支援 Windows，如果有在玩 Windows 的開發者，也可以直接開 PR 啦。安裝方式非常簡單。在 MacOS 可以用 brew
 
-<pre><code class="language-bash">$ brew install mkcert
-$ brew install nss # if you use Firefox</code></pre>
+```bash
+$ brew install mkcert
+$ brew install nss # if you use Firefox
+```
 
 ## 使用 mkcert
 
 第一步驟就是先初始化目錄
 
-<pre><code class="language-bash">$ mkcert -install</code></pre>
+```bash
+$ mkcert -install
+```
 
 接著看看有幾個網站 domain 需要在本機端使用可以一次申請
 
-<pre><code class="language-bash">$ mkcert myapp.dev example.com
+```bash
+$ mkcert myapp.dev example.com
 Using the local CA at "/Users/xxxxxx/Library/Application Support/mkcert" ✨
 
 Created a new certificate valid for the following names 📜
  - "example.com"
  - "myapp.dev"
 
-The certificate is at "./example.com+1.pem" and the key at "./example.com+1-key.pem" ✅</code></pre>
+The certificate is at "./example.com+1.pem" and the key at "./example.com+1-key.pem" ✅
+```
 
 ## 撰寫簡單 https 服務
 
 這邊用 Go 語言當例子
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -69,11 +76,13 @@ func main() {
     if err != nil {
         log.Fatal("ListenAndServe: ", err)
     }
-}</code></pre>
+}
+```
 
 其中 `ssl/localhost.pem` 跟 `ssl/localhost-key.pem` 就是剛剛透過 mkcert 產生出來的金鑰。透過 curl 工具，可以快速驗證是否成功:
 
-<pre><code class="language-bash">$ curl -v https://localhost/hello
+```bash
+$ curl -v https://localhost/hello
 *   Trying ::1...
 * TCP_NODELAY set
 * Connected to localhost (::1) port 443 (#0)
@@ -118,7 +127,8 @@ func main() {
 < date: Fri, 06 Jul 2018 02:30:54 GMT
 <
 This is an example server.
-* Connection #0 to host localhost left intact</code></pre>
+* Connection #0 to host localhost left intact
+```
 
 上面範例放在 [go-training 專案][7]內，歡迎大家取用。
 

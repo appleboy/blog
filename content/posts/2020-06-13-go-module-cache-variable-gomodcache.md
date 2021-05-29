@@ -36,13 +36,16 @@ tags:
 
 [Go 1.15][10] 開始支援 `GOMODCACHE` 環境變數，此變數預設是 `GOPATH[0]/pkg/mod`，現在這個路徑可以透過環境變數進行修正了。本篇教學會使用 [meltwater/drone-cache][11] 套件來完成 go module 的 cache 機制，加快後續每次的 CI/CD 部署。要進行 cache 前，我們需要在 pipeline 先建立 Temporary Volumes
 
-<pre><code class="language-yaml">volumes:
+```yaml
+volumes:
 - name: cache
-  temp: {}</code></pre>
+  temp: {}
+```
 
 有了這個暫時性的空間，就可以在不同步驟的容器內看到相同的檔案了。接著設定編譯 Go 專案的步驟
 
-<pre><code class="language-yaml">- name: build
+```yaml
+- name: build
   pull: always
   image: golang:1.15-rc
   commands:
@@ -57,7 +60,8 @@ tags:
       - tag
   volumes:
   - name: cache
-    path: /go</code></pre>
+    path: /go
+```
 
 這邊可以注意，由於 Go 1.15 尚未釋出 (預計 2020/08)，所以先用了 rc 版本。這邊可以注意我們修改了 `GOMODCACHE`，將原本 mod 內容放到 `/drone/src/pkg.mod` 而 `/drone/src` 就是專案目錄了，所以記得設定一個不會用到的目錄名稱，請使用絕對路徑。
 
@@ -65,7 +69,8 @@ tags:
 
 在 CI/CD 編譯流程，第一個步驟就是將遠端備份好的 mod 檔案下載到容器內，並且解壓縮到 `GOMODCACHE` 所指定的路徑。
 
-<pre><code class="language-yaml">- name: restore-cache
+```yaml
+- name: restore-cache
   image: meltwater/drone-cache
   environment:
     AWS_ACCESS_KEY_ID:
@@ -86,11 +91,13 @@ tags:
       - pkg.build
   volumes:
   - name: cache
-    path: /go</code></pre>
+    path: /go
+```
 
 這邊可以看到我是使用了 AWS S3 做為背後的 Storage，你也可以透過 SFTP 或其他方式來做變化。在 `archive_format` 請選擇 gzip，可以讓檔案更小些。接著會進行一系列 Go 的流程，像是測試，編譯，打包 ... 等等，最後會將 `pkg.mod` 進行打包再上傳到 AWS S3。
 
-<pre><code class="language-yaml">- name: rebuild-cache
+```yaml
+- name: rebuild-cache
   image: meltwater/drone-cache
   pull: always
   environment:
@@ -109,7 +116,8 @@ tags:
       - pkg.build
   volumes:
   - name: cache
-    path: /go</code></pre>
+    path: /go
+```
 
 ## 程式碼[請參考這邊][12]
 

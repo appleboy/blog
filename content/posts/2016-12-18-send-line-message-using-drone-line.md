@@ -38,7 +38,9 @@ tags:
 
 不管是 Windows 64/32 位元的作業系統，都可以直接在 drone-line [release 頁面][7] 找到相對應的下載點。下載後，直接在 Windows 執行 cmd 指令，跳出命令提示列視窗，鍵入:
 
-<pre><code class="language-bash">$ drone-line-v1.4.0-windows-amd64.exe -h</code></pre>
+```bash
+$ drone-line-v1.4.0-windows-amd64.exe -h
+```
 
 看到底下畫面就代表成功了
 
@@ -48,28 +50,34 @@ tags:
 
 透過 Webhook Service 才可以跟 Line Server 互相溝通，拿到使用者專屬 ID，請直接底下指令就可以架設 Webhook service。
 
-<pre><code class="language-bash">$ drone-line-v1.4.0-windows-amd64.exe \
+```bash
+$ drone-line-v1.4.0-windows-amd64.exe \
   --secret xxxx \
   --token xxxx \
-  webhook</code></pre>
+  webhook
+```
 
 其中 `--secret` 及 `--token` 請自行替換，預設會跑在 `8088` port，如果要換連接埠，請使用 `--port` 參數
 
-<pre><code class="language-bash">$ drone-line-v1.4.0-windows-amd64.exe \
+```bash
+$ drone-line-v1.4.0-windows-amd64.exe \
   --port 2001 \
   --secret xxxx \
   --token xxxx \
-  webhook</code></pre>
+  webhook
+```
 
 ### 傳送訊息
 
 拿到使用者 ID 就可以透過指令直接發送訊息
 
-<pre><code class="language-bash">$ drone-line-v1.4.0-windows-amd64.exe \
+```bash
+$ drone-line-v1.4.0-windows-amd64.exe \
   --secret xxxx \
   --token xxxx \
   --to xxxx \
-  --message "Test Message"</code></pre>
+  --message "Test Message"
+```
 
 其中 `--to` 是代表使用者 ID，如果要傳給多個人，請用 `,` 符號隔開。
 
@@ -81,29 +89,35 @@ tags:
 
 一行指令完成 webhook service 架設
 
-<pre><code class="language-bash">docker run --rm \
+```bash
+docker run --rm \
   -e PLUGIN_CHANNEL_SECRET=xxxxxxx \
   -e PLUGIN_CHANNEL_TOKEN=xxxxxxx \
-  appleboy/drone-line webhook</code></pre>
+  appleboy/drone-line webhook
+```
 
 如果要換預設連接埠 (8088) 請加上 `PLUGIN_PORT` 全域變數
 
-<pre><code class="language-bash">docker run --rm \
+```bash
+docker run --rm \
   -e PLUGIN_CHANNEL_SECRET=xxxxxxx \
   -e PLUGIN_CHANNEL_TOKEN=xxxxxxx \
   -e PLUGIN_PORT=2001 \
-  appleboy/drone-line webhook</code></pre>
+  appleboy/drone-line webhook
+```
 
 ### 傳送訊息
 
 一樣很簡單，一行指令搞定
 
-<pre><code class="language-bash">docker run --rm \
+```bash
+docker run --rm \
   -e PLUGIN_CHANNEL_SECRET=xxxxxxx \
   -e PLUGIN_CHANNEL_TOKEN=xxxxxxx \
   -e PLUGIN_TO=xxxxxxx \
   -e PLUGIN_MESSAGE=test \
-  appleboy/drone-line</code></pre>
+  appleboy/drone-line
+```
 
 ## 後記
 

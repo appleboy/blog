@@ -25,9 +25,11 @@ tags:
 
 啟動方式如下:
 
-<pre><code class="language-bash">cache:
+```bash
+cache:
   directories:
-    - ${HOME}/docker</code></pre>
+    - ${HOME}/docker
+```
 
 假設有其他目錄需要 cache，像是 [npm][6] 的 `node_module` 或是 [Laravel][7] 的 `vendor`，都可以透過此方式設定。
 
@@ -35,20 +37,25 @@ tags:
 
 在 `before_install` 內透過 [docker load][8] 指令讀取 cache 資料
 
-<pre><code class="language-bash">before_install:
-  - if [ -f ${DOCKER_CACHE_FILE} ]; then gunzip -c ${DOCKER_CACHE_FILE} | docker load; fi</code></pre>
+```bash
+before_install:
+  - if [ -f ${DOCKER_CACHE_FILE} ]; then gunzip -c ${DOCKER_CACHE_FILE} | docker load; fi
+```
 
 其中 DOCKER\_CACHE\_FILE 可以定義在 env 內
 
-<pre><code class="language-yml">env:
+```yml
+env:
   global:
-    - DOCKER_CACHE_FILE=${HOME}/docker/cache.tar.gz</code></pre>
+    - DOCKER_CACHE_FILE=${HOME}/docker/cache.tar.gz
+```
 
 ### 儲存 Docker Image cache 快取
 
 經過測試及編譯 Image 後，就可以進行 儲存 Docker 快取
 
-<pre><code class="language-yml">script:
+```yml
+script:
   # 進行測試
   - make test
   # 編譯 Image
@@ -57,7 +64,8 @@ tags:
   - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     mkdir -p $(dirname ${DOCKER_CACHE_FILE});
     docker save $(docker history -q appleboy/drone-line:latest | grep -v '<missing>') | gzip > ${DOCKER_CACHE_FILE};
-    fi</code></pre>
+    fi
+```
 
 透過 [docker save][9] 指令將 Image 存起來，這樣下次再執行編譯 Image 時，就會先找看看是否有快取。上面設定只有 master branch 才會儲存快取，但是在任何一個 branch 都可以享受到快取的服務喔。
 

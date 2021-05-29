@@ -24,19 +24,25 @@ tags:
 
 如果是裝 [php-fpm][3] 請修改 `/etc/php5/fpm/php.ini` 路徑
 
-<pre><code class="language-shell">;After this number of seconds, stored data will be seen as \'garbage\' and ; cleaned up by the garbage collection process. 
+```shell
+;After this number of seconds, stored data will be seen as \'garbage\' and ; cleaned up by the garbage collection process. 
 ; http://php.net/session.gc-maxlifetime 
-session.gc_maxlifetime = 315360000</code></pre>
+session.gc_maxlifetime = 315360000
+```
 
 重新啟動 php-fpm
 
-<pre><code class="language-shell">$ /etc/init.d/php5-fpm restart</code></pre>
+```shell
+$ /etc/init.d/php5-fpm restart
+```
 
 ## phpMyAdmin 設定檔
 
 修改 `config.inc.php` 如果找不到此檔案，請複製 **config.sample.inc.php** 為 **config.inc.php**，接著增加底下設定即可
 
-<pre><code class="language-php">$cfg['LoginCookieValidity'] = 3600 * 24 * 365;</code></pre>
+```php
+$cfg['LoginCookieValidity'] = 3600 * 24 * 365;
+```
 
 最後注意的是 `gc_maxlifetime` 設定值一定要超過 `LoginCookieValidity` 值，這樣才有作用
 

@@ -38,7 +38,8 @@ tags:
 
 本篇會用 Go 語言寫個小型 Http 服務，來證明使用 tag 事件及 master 分支都可以正確部署，底下先看看 Go 的程式碼:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -74,20 +75,24 @@ func main() {
     if err := http.ListenAndServe(":"+port, nil); err != nil {
         log.Fatal(err)
     }
-}</code></pre>
+}
+```
 
 從上面程式可以看到，在編譯 Go 語言專案時，可以從外部帶入 version 變數，證明目前的 App 版本。請參考 Makefile 內的
 
-<pre><code class="language-makefile">build:
+```makefile
+build:
 ifneq ($(DRONE_TAG),)
     go build -v -ldflags "-X main.version=$(DRONE_TAG)" -a -o release/linux/amd64/hello
 else
     go build -v -ldflags "-X main.version=$(DRONE_COMMIT)" -a -o release/linux/amd64/hello
-endif</code></pre>
+endif
+```
 
 只要是 master 分支的 commit，就會執行 `-X main.version=$(DRONE_COMMIT)`，如果是 push tag 到伺服器，則會執行 `-X main.version=$(DRONE_TAG)`。最後看看 Drone 如何編譯
 
-<pre><code class="language-yaml">pipeline:
+```yaml
+pipeline:
   build_linux_amd64:
     image: golang:1.10
     group: build
@@ -96,7 +101,8 @@ endif</code></pre>
       - GOARCH=amd64
       - CGO_ENABLED=0
     commands:
-      - cd example19-deploy-with-kubernetes && make build</code></pre>
+      - cd example19-deploy-with-kubernetes && make build
+```
 
 記得將 `GOOS`, `GOARCH` 和 `CGO_ENABLED` 設定好。
 
@@ -104,22 +110,26 @@ endif</code></pre>
 
 上一個步驟可以編譯出 linux 的二進制檔案，這時候就可以直接放到容器內直接執行:
 
-<pre><code class="language-dockerfile">FROM plugins/base:multiarch
+```dockerfile
+FROM plugins/base:multiarch
 
 ADD example19-deploy-with-kubernetes/release/linux/amd64/hello /bin/
 
-ENTRYPOINT ["/bin/hello"]</code></pre>
+ENTRYPOINT ["/bin/hello"]
+```
 
 其中 `plugins/base:multiarch` 用的是 docker scratch 最小 image 搭配 SSL 憑證檔案，接著把 go 編譯出來的二進制檔案放入，所以整體容器大小已經是最小的了。看看 drone 怎麼上傳到 [DockerHub][12]。
 
-<pre><code class="language-yaml">docker_golang:
+```yaml
+docker_golang:
   image: plugins/docker:17.12
   secrets: [ docker_username, docker_password ]
   repo: appleboy/golang-http
   dockerfile: example19-deploy-with-kubernetes/Dockerfile
   default_tags: true
   when:
-    event: [ push, tag ]</code></pre>
+    event: [ push, tag ]
+```
 
 其中 `default_tags` 會自動將 `master` 分支上傳到 `latest` 標籤，而假設上傳 `1.1.1` 版本時，drone 則會幫忙編譯出三個不同的 tag 標籤，分別是 `1`, `1.1`, `1.1.1` 這是完全符合 [Semantic Versioning][13]，如果有在開源專案打滾的朋友們，一定知道版本的重要性。而 Drone 在這地方提供了很簡單的設定讓開發者可以上傳一次 tag 做到三種不同的 image 標籤。
 
@@ -133,24 +143,31 @@ ENTRYPOINT ["/bin/hello"]</code></pre>
 
 `KUBERNETES_SERVER` 可以打開家目錄底下的 `~/.kube/config` 檔案直接找到，cert 及 token 請先透過 pod 找到 secret token name:
 
-<pre><code class="language-shell">$ kubectl describe po/frontend-9f5ccc8d4-8n9xq | grep SecretName | grep token
-    SecretName:  default-token-r5xdx</code></pre>
+```shell
+$ kubectl describe po/frontend-9f5ccc8d4-8n9xq | grep SecretName | grep token
+    SecretName:  default-token-r5xdx
+```
 
 拿到 secret name 之後，再透過底下指令找到 `ca.crt` 及 `token`
 
-<pre><code class="language-shell">$ kubectl get secret default-token-r5xdx -o yaml | egrep 'ca.crt:|token:'</code></pre>
+```shell
+$ kubectl get secret default-token-r5xdx -o yaml | egrep 'ca.crt:|token:'
+```
 
 其中 token 還需要透過 base64 decode 過，才可以設定到 drone secret。完成上述步驟後，可以來設定 drone 部署:
 
-<pre><code class="language-yaml">deploy:
+```yaml
+deploy:
   image: sh4d1/drone-kubernetes
   kubernetes_template: example19-deploy-with-kubernetes/deployment.yml
   kubernetes_namespace: default
-  secrets: [ kubernetes_server, kubernetes_cert, kubernetes_token ]</code></pre>
+  secrets: [ kubernetes_server, kubernetes_cert, kubernetes_token ]
+```
 
 其中 `deployment.yml` 就是該服務的 deploy 檔案:
 
-<pre><code class="language-yaml">apiVersion: extensions/v1beta1
+```yaml
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: frontend
@@ -192,31 +209,38 @@ spec:
         - containerPort: 8080
         env:
         - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-          value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'</code></pre>
+          value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'
+```
 
 大家可以找到 `image: appleboy/golang-http:VERSION`，這邊需要寫個 sed 指令來取代 `VERSION`，部署到 staging 則是 `latest`，如果是 tag 則取代為 `DRONE_TAG`
 
-<pre><code class="language-makefile">ifneq ($(DRONE_TAG),)
+```makefile
+ifneq ($(DRONE_TAG),)
     VERSION ?= $(DRONE_TAG)
 else
     VERSION ?= latest
 endif
 
 prepare:
-    sed -ie "s/VERSION/$(VERSION)/g" deployment.yml</code></pre>
+    sed -ie "s/VERSION/$(VERSION)/g" deployment.yml
+```
 
 這邊有個問題就是，我們怎麼讓在同一個 image:latest 下，也可以保持更新 App 呢，首先必須設定 `imagePullPolicy` 為 `Always`，以及設定一個 env 讓 drone 可以動態修改 template 檔案
 
-<pre><code class="language-yaml">env:
+```yaml
+env:
 - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-  value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'</code></pre>
+  value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'
+```
 
 目的是讓每次 kubernetes 都可以讀取不一樣的 template 確保 image 都可以即時更新，假設少了上述步驟，是無法讓 staging 保持更新狀態。畢竟使用 kubectl apply 時，如果 yaml 檔案是沒有更動過的，就不會更新。
 
-<pre><code class="language-makefile">prepare:
+```makefile
+prepare:
     sed -ie "s/VERSION/$(VERSION)/g" deployment.yml
     sed -ie "s/THIS_STRING_IS_REPLACED_DURING_BUILD/$(shell date)/g" deployment.yml
-    cat deployment.yml</code></pre>
+    cat deployment.yml
+```
 
 而 Tag 就不用擔心，原因就是 `VERSION` 就會改變不一樣的值，所以肯定會即時更新，那假設團隊想要上傳相同 tag (這是不好的做法，請盡量不要使用)，這時候動態修改 env 的作法就發揮功效了。從上面的教學，現在我們看安新的透過 GitHub Flow 來完成部署 Staging 及 Production 了。
 

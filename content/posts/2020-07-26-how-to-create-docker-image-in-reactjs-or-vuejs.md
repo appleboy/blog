@@ -35,8 +35,10 @@ tags:
 
 直接看 Reactjs 的 [Deployment 章節][12]，文件寫的非常清楚，透過簡單的指令就可以將前端網站編譯在 `build` 目錄內，開發者只要將 `build` 目錄打包丟上遠端伺服器即可。
 
-<pre><code class="language-bash">npm ci
-npm run build:staging</code></pre>
+```bash
+npm ci
+npm run build:staging
+```
 
 簡單兩個步驟就搞定了，接下來要將 `build` 目錄放進 Docker Image。
 
@@ -44,7 +46,8 @@ npm run build:staging</code></pre>
 
 首先前端的 Dockerfile 相當簡單，只要選 nginx 當做基底，再把相關的 html 檔案複製進去即可
 
-<pre><code class="language-dockerfile=">FROM nginx:1.19
+```dockerfile=
+FROM nginx:1.19
 
 LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.name="web" \
@@ -56,32 +59,40 @@ EXPOSE 8080
 COPY ./config/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY build /usr/share/nginx/html
 
-CMD ["nginx", "-g", "daemon off;"]</code></pre>
+CMD ["nginx", "-g", "daemon off;"]
+```
 
 可以在前端專案建立 docker 目錄，將上述內容存放成 `Dockerfile`。大家有無發現多了一行 nginx config 設定
 
-<pre><code class="language-bash">COPY ./config/nginx/nginx.conf /etc/nginx/conf.d/default.conf</code></pre>
+```bash
+COPY ./config/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+```
 
 這目的是要將所有的 URL Routing 都直接轉給 React 或 Vue 去控管，不然只要重新整理網頁就會看到 `404 not found`
 
-<pre><code class="language-bash">server {
+```bash
+server {
   listen       80;
   location / {
     root   /usr/share/nginx/html;
     index  index.html index.htm;
     try_files $uri $uri/ /index.html =404;
   }
-}</code></pre>
+}
+```
 
 透過 `try_files` 可以解決掉 404 的問題。完成上述步驟後，就可以直接在電腦測試
 
-<pre><code class="language-bash">docker build -t appleboy/app -f docker/Dockerfile.linux.amd64 .</code></pre>
+```bash
+docker build -t appleboy/app -f docker/Dockerfile.linux.amd64 .
+```
 
 ## 串接部署
 
 這邊就看團隊是用什麼工具部署，底下是 [GitHub Action][13] 部署方式，流程都是一樣的，只是用的工具不同，相信會一套，理論上另一種工具也要會
 
-<pre><code class="language-yml">name: CI
+```yml
+name: CI
 
 on: [push]
 
@@ -123,7 +134,8 @@ jobs:
           cd /home/deploy/api/io && aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin ecr.ap-northeast-1.amazonaws.com/frontend
           docker-compose pull
           docker-compose up -d web
-</code></pre>
+
+```
 
 步驟就是
 

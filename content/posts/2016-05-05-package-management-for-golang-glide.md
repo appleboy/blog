@@ -25,13 +25,15 @@ Golang 1.5 版本提出 `vendor experiment` 功能，讓每個 Package 都可以
 
 ### example
 
-<pre><code class="language-bash">- $GOPATH/src/github.com/example/foo
+```bash
+- $GOPATH/src/github.com/example/foo
   |
   -- main.go
   |
   -- vendor/
        |
-       -- github.com/example/bar</code></pre>
+       -- github.com/example/bar
+```
 
 在這範例可以看到有主程式 `main.go`，在 main.go 內 import `github.com/example/bar`，系統就會把相關 import package 都下載到 `vendor` 目錄，取代原本會下載到 `$GOPATH` 目錄，這邊要注意的是，開發中的專案目錄（在這範例是 `github.com/example/foo`），**務必要放在 `$GOPATH` 目錄內**。如果你還在用 go 1.5 版本，請記得加上環境變數 `GO15VENDOREXPERIMENT=1`，1.6 版本已經預設將 `GO15VENDOREXPERIMENT` 設定為 1 了，不知道環境變數可以透過 `go env` 看看目前 go 變數狀態。
 
@@ -43,20 +45,25 @@ Glide 是 golang 套件管理工具，用來管理專案的 `vendor` 目錄，�
 
 安裝 Glide 非常簡單，可以直接到 [Github 下載 Binary][11] 執行檔，或者是透過 go 來安裝
 
-<pre><code class="language-bash">$ go get github.com/Masterminds/glide
-$ cd $GOPATH/src/github.com/Masterminds/glide && make install</code></pre>
+```bash
+$ go get github.com/Masterminds/glide
+$ cd $GOPATH/src/github.com/Masterminds/glide && make install
+```
 
 ### 使用 Glide
 
 在專案內直接執行底下指令來建立 `glide.yaml` 設定檔
 
-<pre><code class="language-bash">$ glide init
+```bash
+$ glide init
 # 或
-$ glide create</code></pre>
+$ glide create
+```
 
 產生出來的 `glide.yaml` 格式如下
 
-<pre><code class="language-yml">package: github.com/appleboy/gorush
+```yml
+package: github.com/appleboy/gorush
 import:
 - package: gopkg.in/yaml.v2
 - package: gopkg.in/redis.v3
@@ -73,11 +80,13 @@ import:
 - package: github.com/stretchr/testify
 - package: github.com/asdine/storm
 - package: github.com/appleboy/gofight
-- package: github.com/buger/jsonparser</code></pre>
+- package: github.com/buger/jsonparser
+```
 
 如果原本專案內就有使用 [Godep][12], [GPM][13], or [GB][14] 等套件管理，Glide 會自動把該套件無痛整合進來。完成後可以透過 `glide up` 或 `glide install` 來安裝相關套件。兩個指令差別在哪？如果專案內沒有 `glide.lock` 檔案，當您執行 `glide install` 後，其實系統會先執行 `glide up` 產生 `glide.lock` 檔案，glide.lock 內記錄了所以套件版本資訊。你可以把 glide.lock 想像成 PHP 的 `composer.lock`。
 
-<pre><code class="language-yml">hash: 4e05c4dd1a8106a87fee3b589dd32aecc7ffeb1246bed8f8516b32fe745034d6
+```yml
+hash: 4e05c4dd1a8106a87fee3b589dd32aecc7ffeb1246bed8f8516b32fe745034d6
 updated: 2016-05-04T14:26:47.161898051+08:00
 imports:
 - name: github.com/alecthomas/kingpin
@@ -85,11 +94,14 @@ imports:
 - name: github.com/alecthomas/template
   version: a0175ee3bccc567396460bf5acd36800cb10c49c
   subpackages:
-  - parse</code></pre>
+  - parse
+```
 
 也就是專案內使用了 A 套件，A 又使用了 B，這樣 Glide 會把套件 hash 值記錄在 `glide.lock` 檔案內，其他開發者下載您的專案後，只需要下 `glide install` 就可以開始 build binary 了。如果要安裝單一套件呢，可以使用 `glide get` 指令，該指令會將新的套件寫入 `glide.yaml` 設定檔。
 
-<pre><code class="language-bash">$ glide get --all-dependencies -s -v github.com/gin-gonic/gin</code></pre>
+```bash
+$ glide get --all-dependencies -s -v github.com/gin-gonic/gin
+```
 
   * `--all-dependencies`: 下載相依套件全部的 dependencies
   * `-s`: 下載後刪除 .git 目錄
@@ -97,11 +109,15 @@ imports:
 
 當然你也可以指定套件版號
 
-<pre><code class="language-bash">$ glide get --all-dependencies -s -v github.com/gin-gonic/gin#v1.0rc1</code></pre>
+```bash
+$ glide get --all-dependencies -s -v github.com/gin-gonic/gin#v1.0rc1
+```
 
 如果是想更新全部 dependencies 寫到 `glide.lock`，可以直接下底下指令，Glide 會把套件 dependencies 全部下載到 `vender` 內，就好比執行 `go get -d -t ./...` 指令一樣。
 
-<pre><code class="language-bash">$ glide update --all-dependencies --resolve-current</code></pre>
+```bash
+$ glide update --all-dependencies --resolve-current
+```
 
 ## 結論
 

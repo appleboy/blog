@@ -38,7 +38,8 @@ tags:
 
 此篇直接用 [Go 語言][12]的範例來進行線上部署，GitHub Actions 直接使用 [lambda-action][13]。
 
-<pre><code class="language-yaml">name: deploy to lambda
+```yaml
+name: deploy to lambda
 on: [push]
 jobs:
 
@@ -66,13 +67,15 @@ jobs:
           aws_region: ${{ secrets.AWS_REGION }}
           function_name: gorush
           zip_file: example/deployment.zip
-          debug: true</code></pre>
+          debug: true
+```
 
 首先第一個步驟就是編譯 Binary 接著打包成 zip 檔案後，才可以進行部署，接著在 Plugin 寫上 function name 跟 zip 檔案路徑就可以直接更新到 AWS Lambda 了。
 
 ## Drone CI
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 name: testing
 
@@ -99,7 +102,8 @@ steps:
       from_secret: AWS_REGION
     function_name: gorush
     zip_file: example/deployment.zip
-    debug: true</code></pre>
+    debug: true
+```
 
 寫法跟 GitHub Actions 非常類似，因為在同一個 Piepline，所以可以在第一個步驟產生出來的 zip 檔案，也可以在第二個步驟部署。
 
@@ -107,7 +111,8 @@ steps:
 
 其實 GitLab CI 已經有寫一篇[完整的教學][14]，裡面用的是 [Server less 框架][15]來部署程式碼，所以開發者還需要看一下怎麼使用此框架，相對來說比較難上手，那底下來介紹用 drone-lambda 方式來進行部署。
 
-<pre><code class="language-yaml">variables:
+```yaml
+variables:
   ARTIFACTS_DIR: artifacts
   GIT_DEPTH: 1
 
@@ -141,7 +146,8 @@ deploy:
     paths:
       - ${ARTIFACTS_DIR}
   script:
-    - /bin/drone-lambda</code></pre>
+    - /bin/drone-lambda
+```
 
 在 GitLab CI 比較不同的是，每個步驟都是需要重新 git clone 整個專案，步驟結束，就會把整個容器砍掉，包含整個 Project Data，這邊就需要透過 artifacts 來共享資料。詳細資料可以參考艦長寫的這篇『[CI/CD Pipeline 之 stage: build][16]』
 

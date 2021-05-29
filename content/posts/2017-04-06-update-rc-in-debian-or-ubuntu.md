@@ -21,7 +21,8 @@ tags:
 
 [update-rc.d][2] 是在 [Debian][3] 或 [Ubuntu][4] 內用來管理 `/etc/init.d` 目錄內的 scripts 工具。不管是 Nginx 或 Mysql 等相關服務，都可以在 `/etc/init.d` 目錄內找到相對應的 script 檔案，隨便打開一個 script 檔案就可以看到標頭有固定的格式寫法:
 
-<pre><code class="language-bash">### BEGIN INIT INFO
+```bash
+### BEGIN INIT INFO
 # Provides:          gorush
 # Required-Start:    $syslog $network
 # Required-Stop:     $syslog $network
@@ -29,7 +30,8 @@ tags:
 # Default-Stop:      0 1 6
 # Short-Description: starts the gorush web server
 # Description:       starts gorush using start-stop-daemon
-### END INIT INFO</code></pre>
+### END INIT INFO
+```
 
 <!--more-->
 
@@ -43,7 +45,9 @@ tags:
 
 在 `/etc/init.d` 目錄下寫好 script 後，可以用 `update-rc.d` 自動在 `/etc/rcX` 產生 link 檔案，請直接使用底下指令
 
-<pre><code class="language-bash">$ update-rc.d gorush default 20</code></pre>
+```bash
+$ update-rc.d gorush default 20
+```
 
 如果執行上述指令遇到底下錯誤:
 
@@ -51,17 +55,23 @@ tags:
 
 請直接將指令改成
 
-<pre><code class="language-bash">$ update-rc.d gorush start 20 2 3 4 5 . stop 80 0 1 6 .</code></pre>
+```bash
+$ update-rc.d gorush start 20 2 3 4 5 . stop 80 0 1 6 .
+```
 
 如果您的服務必須先將 Mysql 啟動，有兩種方式解決這問題，第一種是透過 update-rc.d 修改起動順序:
 
-<pre><code class="language-bash">$ update-rc.d mysqld defaults 80 20
-$ update-rc.d gorush defaults 90 10</code></pre>
+```bash
+$ update-rc.d mysqld defaults 80 20
+$ update-rc.d gorush defaults 90 10
+```
 
 上面就是代表啟動時，先啟動 mysqld 後啟動 gorush，關機時，先停止 gorush 後停止 mysqld。個人不推薦使用這方法，另一個方式就是調整 script 標頭內容
 
-<pre><code class="language-diff">- # Required-Start:    $syslog $network
-+ # Required-Start:    $mysqld $syslog $network</code></pre>
+```diff
+- # Required-Start:    $syslog $network
++ # Required-Start:    $mysqld $syslog $network
+```
 
 這樣就可以確保執行 gorush 前，MySQL 服務已經先啟動了。
 

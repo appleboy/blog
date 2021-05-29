@@ -52,58 +52,72 @@ tags:
 
 傳送端只需要執行 `croc send file.txt` 即可
 
-<pre><code class="language-sh">$ croc send ~/Downloads/data.csv
+```sh
+$ croc send ~/Downloads/data.csv
 Sending 'data.csv' (632.9 kB)
 Code is: cabinet-rodeo-mayday
 On the other computer run
 
-croc cabinet-rodeo-mayday</code></pre>
+croc cabinet-rodeo-mayday
+```
 
 上面可以看到會自動產生一個 `secret code`，接著在另外一台電腦執行底下指令
 
-<pre><code class="language-sh">$ croc cabinet-rodeo-mayday
+```sh
+$ croc cabinet-rodeo-mayday
 Accept 'data.csv' (632.9 kB)? (y/n) y
 
-Receiving (<-111.243.108.9:51032)</code></pre>
+Receiving (<-111.243.108.9:51032)
+```
 
 當然你可以自訂 `secret code`
 
-<pre><code class="language-sh">croc send --code appleboy ~/Downloads/data.csv</code></pre>
+```sh
+croc send --code appleboy ~/Downloads/data.csv
+```
 
 由於此工具是透過 relay server 方式來進行傳送，所以指令會預設連到官方所架設的服務器
 
-<pre><code class="language-go">// DEFAULT_RELAY is the default relay used (can be set using --relay)
+```go
+// DEFAULT_RELAY is the default relay used (can be set using --relay)
 var (
     DEFAULT_RELAY      = "croc.schollz.com"
     DEFAULT_RELAY6     = "croc6.schollz.com"
     DEFAULT_PORT       = "9009"
     DEFAULT_PASSPHRASE = "pass123"
-)</code></pre>
+)
+```
 
 假設你想要自己架設 relay server 呢？很簡單，這工具也讓開發者很快架設一台 relay server，只要執行底下
 
-<pre><code class="language-sh">$ croc relay
+```sh
+$ croc relay
 [info]  2021/02/16 11:38:59 starting croc relay version v8.6.7-05640cd
 [info]  2021/02/16 11:38:59 starting TCP server on 9010
 [info]  2021/02/16 11:38:59 starting TCP server on 9012
 [info]  2021/02/16 11:38:59 starting TCP server on 9009
 [info]  2021/02/16 11:38:59 starting TCP server on 9013
-[info]  2021/02/16 11:38:59 starting TCP server on 9011</code></pre>
+[info]  2021/02/16 11:38:59 starting TCP server on 9011
+```
 
 可以指定單一 port:
 
-<pre><code class="language-sh">$ croc relay --ports 3001
+```sh
+$ croc relay --ports 3001
 [info]  2021/02/16 11:39:22 starting croc relay version v8.6.7-05640cd
-[info]  2021/02/16 11:39:22 starting TCP server on 3001</code></pre>
+[info]  2021/02/16 11:39:22 starting TCP server on 3001
+```
 
 接著在傳送檔案也要跟著換掉 relay server
 
-<pre><code class="language-sh">$ croc --relay 127.0.0.1:3001 send ~/Downloads/data.csv
+```sh
+$ croc --relay 127.0.0.1:3001 send ~/Downloads/data.csv
 Sending 'data.csv' (632.9 kB)
 Code is: saddle-origin-horizon
 On the other computer run
 
-croc --relay 127.0.0.1:3001 saddle-origin-horizon</code></pre>
+croc --relay 127.0.0.1:3001 saddle-origin-horizon
+```
 
 可以看到需要加上 `--relay 127.0.0.1:3001` 就可以完成了，所以很簡單的架設 relay server，這樣官方服務掛了，你也可以在任意一台電腦裝上 relay server 了。
 

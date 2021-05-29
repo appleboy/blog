@@ -23,11 +23,15 @@ tags:
 
 當專案是使用 Yaml 或 JSON 存放設定檔時，在不同的部署環境都需要不同的設定檔。這時候就需要設定 App 可以指定不同設定檔路徑，指令如下
 
-<pre><code class="language-bash">$ app -c config.yaml</code></pre>
+```bash
+$ app -c config.yaml
+```
 
 這樣測試同事拿到執行檔時，就可以透過 `-c` 參數來讀取個人設定檔。有個問題，假設設定檔需要動態修改，每次測完就改動一次有點麻煩，所以 App 必須要支援環境變數，像是如下:
 
-<pre><code class="language-bash">$ APP_PORT=8088 app -c config.yaml</code></pre>
+```bash
+$ APP_PORT=8088 app -c config.yaml
+```
 
 假如沒有帶入 `-c` 參數，App 要能讀取系統預設環境設定檔案，像是 (`$HOME/.app/config.yaml`)。下面來教大家如何透過 Viper 做到上述環境。
 
@@ -35,24 +39,31 @@ tags:
 
 在 Go 語言內可以先用變數方式將 Yaml 直接寫在程式碼內:
 
-<pre><code class="language-go">var defaultConf = []byte(`
+```go
+var defaultConf = []byte(`
 app:
   port: 3000
-`)</code></pre>
+`)
+```
 
 接著設定 Viper 讀取 `Yaml` 檔案型態。
 
-<pre><code class="language-go">viper.SetConfigType("yaml")</code></pre>
+```go
+viper.SetConfigType("yaml")
+```
 
 ## 讀取指定檔案
 
 透過 Go 語言的 flag 套件可以輕易實作出命令列 `-c` 參數
 
-<pre><code class="language-go">flag.StringVar(&configFile, "c", "", "Configuration file path.")</code></pre>
+```go
+flag.StringVar(&configFile, "c", "", "Configuration file path.")
+```
 
 接著就可以直接讀取 Yaml 檔案
 
-<pre><code class="language-go">if configFile != "" {
+```go
+if configFile != "" {
     content, err := ioutil.ReadFile(confPath)
 
     if err != nil {
@@ -60,7 +71,8 @@ app:
     }
 
     viper.ReadConfig(bytes.NewBuffer(content))
-}</code></pre>
+}
+```
 
 可以看到透過 `viper.ReadConfig` 可以把 Yaml 內容丟進去，之後就可以透過 `viper.GetInt("app.port")` 來存取資料。
 
@@ -74,39 +86,53 @@ Viper 有個功能就是可以直接幫忙找尋相關目錄內的設定檔案�
 
 首先設定 Viper 要去找 `config` 開頭的設定檔案
 
-<pre><code class="language-go">viper.SetConfigName("config")</code></pre>
+```go
+viper.SetConfigName("config")
+```
 
 上面設定好，就會直接找 `config.yaml` 檔案，如果設定 `app` 則是找 `app.yaml`。接著指定設定檔所在目錄
 
-<pre><code class="language-go">viper.AddConfigPath("/etc/app/")
+```go
+viper.AddConfigPath("/etc/app/")
 viper.AddConfigPath("$HOME/.app")
-viper.AddConfigPath(".")</code></pre>
+viper.AddConfigPath(".")
+```
 
 最後透過 `ReadInConfig` 來自動搜尋並且讀取檔案。
 
-<pre><code class="language-go">if err := viper.ReadInConfig(); err == nil {
+```go
+if err := viper.ReadInConfig(); err == nil {
     fmt.Println("Using config file:", viper.ConfigFileUsed())
-}</code></pre>
+}
+```
 
 ## 從環境變數讀取
 
 如果專案需要跑在容器環境，這樣此功能對部署來說非常重要，也就是我只需要將 Go 語言的執行檔包進去 Docker 就好，而不需要將 Yaml 設定檔一起包入，或是透過 Volume 方式掛起來。這樣至少減少了一個步驟。首先設定 Viper 自動讀取環境變數:
 
-<pre><code class="language-go">// read in environment variables that match
-viper.AutomaticEnv()</code></pre>
+```go
+// read in environment variables that match
+viper.AutomaticEnv()
+```
 
 接著設定環境變數 Prefix，避免跟其他專案衝突
 
-<pre><code class="language-go">// will be uppercased automatically
-viper.SetEnvPrefix("test")</code></pre>
+```go
+// will be uppercased automatically
+viper.SetEnvPrefix("test")
+```
 
 最後設定環境變數的分隔符號從 `.` 換成 `_`
 
-<pre><code class="language-go">viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))</code></pre>
+```go
+viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+```
 
 以上面的例子來說，你可以透過 `TEST_APP_PORT` 來指定不同的 port
 
-<pre><code class="language-bash">$ TEST_APP_PORT=3001 app -c config.yaml</code></pre>
+```bash
+$ TEST_APP_PORT=3001 app -c config.yaml
+```
 
 ## 實作範例
 
@@ -118,7 +144,8 @@ viper.SetEnvPrefix("test")</code></pre>
 
 假如 App 讀取特定路徑設定檔 (`-c` 參數)，那就不會執行 2, 3 步驟，步驟 1 省略的話，App 就會自動先找預設路徑，如果預設路徑找不到就會執行步驟 3。程式碼範例如下:
 
-<pre><code class="language-go">viper.SetConfigType("yaml")
+```go
+viper.SetConfigType("yaml")
 viper.AutomaticEnv()         // read in environment variables that match
 viper.SetEnvPrefix("gorush") // will be uppercased automatically
 viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
@@ -145,7 +172,8 @@ if confPath != "" {
         // load default config
         viper.ReadConfig(bytes.NewBuffer(defaultConf))
     }
-}</code></pre>
+}
+```
 
 ## 結論
 

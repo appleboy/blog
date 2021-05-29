@@ -61,34 +61,44 @@ tags:
 
 ### 下載程式碼
 
-<pre><code class="language-bash">$ git clone https://github.com/appleboy/drone-line.git
-$ cd drone-line</code></pre>
+```bash
+$ git clone https://github.com/appleboy/drone-line.git
+$ cd drone-line
+```
 
 ### 編譯 Docker Image
 
 進入 example 目錄後，會發現有 server.go 跟 Dockerfile 兩檔案
 
-<pre><code class="language-bash">$ docker build -t line example</code></pre>
+```bash
+$ docker build -t line example
+```
 
 上面的 `line` 可以自行換掉，換成自己想要的名字，接著啟動編譯好的 Image。
 
 ### 啟動 Webhook 服務
 
-<pre><code class="language-bash">$ docker run --rm \
+```bash
+$ docker run --rm \
   -e CHANNEL_SECRET=xxxx \
   -e CHANNEL_TOKEN=xxxx \
   -p 8089:8089 \
-  line</code></pre>
+  line
+```
 
 如果不是透過 Docker，請直接執行 Go 指令即可
 
-<pre><code class="language-bash">$ go run server.go</code></pre>
+```bash
+$ go run server.go
+```
 
 ### 用 ngrok 穿牆
 
 這時候會發現系統聽 `8089` port，接著透過 [ngrok][12] 來做穿牆，並且提供 https 服務
 
-<pre><code class="language-bash">$ ngrok http 8089</code></pre>
+```bash
+$ ngrok http 8089
+```
 
 <a data-flickr-embed="true"  href="https://www.flickr.com/photos/appleboy/30961153696/in/dateposted-public/" title="Screen Shot 2016-11-15 at 4.08.47 PM"><img src="https://i2.wp.com/c1.staticflickr.com/6/5669/30961153696_893767bf41_z.jpg?resize=640%2C417&#038;ssl=1" alt="Screen Shot 2016-11-15 at 4.08.47 PM" data-recalc-dims="1" /></a>
 
@@ -102,27 +112,33 @@ $ cd drone-line</code></pre>
 
 透過 **[drone-line][13]** 包好的 Docker Image ([appleboy/drone-line][14])來主動發送訊息，來到這邊，就是假設你已經取得 Line Secret, Token 及使用者 ID，透過下面 Docker 指令
 
-<pre><code class="language-bash">docker run --rm \
+```bash
+docker run --rm \
   -e LINE_CHANNEL_SECRET=xxxxxxx \
   -e LINE_CHANNEL_TOKEN=xxxxxxx \
   -e PLUGIN_TO=xxxxxxx \
   -e PLUGIN_MESSAGE=test \
-  appleboy/drone-line</code></pre>
+  appleboy/drone-line
+```
 
 其中 `LINE_CHANNEL_SECRET`, `LINE_CHANNEL_TOKEN` 和 `PLUGIN_TO` 請填入相對應設定。如果覺得指令太長，也可以把設定包在 `.env` 檔案內
 
-<pre><code class="language-bash">LINE_CHANNEL_SECRET=xxxxxxx
+```bash
+LINE_CHANNEL_SECRET=xxxxxxx
 LINE_CHANNEL_TOKEN=xxxxxxx
 PLUGIN_TO=xxxxxxx
-PLUGIN_MESSAGE=test</code></pre>
+PLUGIN_MESSAGE=test
+```
 
 請務必將檔案放在執行指令的目錄底下，接著透過底下指令發送訊息
 
-<pre><code class="language-bash">docker run --rm \
+```bash
+docker run --rm \
   -e ENV_FILE=your_env_file_path \
   -v $(pwd):$(pwd) \
   -w $(pwd) \
-  appleboy/drone-line</code></pre>
+  appleboy/drone-line
+```
 
 ## 總結
 

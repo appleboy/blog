@@ -36,7 +36,8 @@ tags:
 
 從上面的圖可以看到，要完成這頁面需要兩次 Request 才可以拿回全部資料，也就是需要兩次 connection。但是在 GraphQL 可以直接將 Query 語法寫在一起送到後端，後端全部處理完成後再一次回給前端
 
-<pre><code class="language-bash">query {
+```bash
+query {
   blog (
     id: 10
   ) {
@@ -54,7 +55,8 @@ tags:
     username
     email
   }
-}</code></pre>
+}
+```
 
 用上面的語法就可以直接拿到全部資料，大幅降低 connection 次數。
 
@@ -66,14 +68,16 @@ tags:
 
 在右上角前端只需要使用者的個人頭像 + email 好了，但是後端 API 卻回給前端 10 個欄位，但是真正只需要兩個欄位，其他 8 個都是多餘的，這邊在 RESTful API 也可以根據不同畫面回不同的欄位資訊，卻造成後端很大的負擔。這時候用 GraphQL 解決了此問題，只要在 Query 語法內定義好要拿的資料即可
 
-<pre><code class="language-bash">query {
+```bash
+query {
   me {
     username
     email
     firstName
     lastName
   }
-}</code></pre>
+}
+```
 
 ## 3. 即時 API 文件
 

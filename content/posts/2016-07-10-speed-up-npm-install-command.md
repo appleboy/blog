@@ -26,29 +26,35 @@ tags:
 
 底下一行指令請加入測試流程內，讓 CI Server 專注在測試
 
-<pre><code class="language-bash">$ tar xf ../nm_cache.tar && \
+```bash
+$ tar xf ../nm_cache.tar && \
   npm prune && \
   npm install && \
-  tar cf ../nm_cache.tar node_modules</code></pre>
+  tar cf ../nm_cache.tar node_modules
+```
 
 步驟很簡單，先拿上一次備份的 `node_modules`，再透過 `npm prune` 移除不必要的 package，再透過 `npm install` 安裝新的 package，最後一樣打包給下一次測試使用。這指令非常好用，不管你是不是用 npm@3 都很需要這指令加速 npm install。底下是我隨意拿一個 open source 專案來測試，先假設沒有 cache 機制。
 
-<pre><code class="language-bash">$ rm -rf ~/.npm && rm -rf node_modules && time npm install
+```bash
+$ rm -rf ~/.npm && rm -rf node_modules && time npm install
 
 real    2m7.751s
 user    1m8.704s
-sys 0m19.272s</code></pre>
+sys 0m19.272s
+```
 
 如果導入 cache 機制
 
-<pre><code class="language-bash">$ time (tar xf ../nm_cache.tar && npm prune && rm -rf ~/.npm && npm install && tar cf ../nm_cache.tar node_modules)
+```bash
+$ time (tar xf ../nm_cache.tar && npm prune && rm -rf ~/.npm && npm install && tar cf ../nm_cache.tar node_modules)
 
 > labs-web@0.0.1 postinstall /Users/mtk10671/git/labs-web
 > node node_modules/fbjs-scripts/node/check-dev-engines.js package.json
 
 real    0m32.370s
 user    0m19.884s
-sys 0m13.582s</code></pre>
+sys 0m13.582s
+```
 
 從 2 分 7 秒變成 32 秒，大約提升了 4 倍，大家可以嘗試看看，這招在 Deploy 跟測試非常有感覺。
 

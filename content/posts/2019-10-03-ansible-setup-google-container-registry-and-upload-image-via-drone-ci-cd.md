@@ -27,26 +27,32 @@ tags:
 
 Google 提供了[好幾種方式][5]來登入 Docker Registry 服務，本篇使用『[JSON 金鑰檔案][6]』方式來長期登入專案，開發者會拿到一個 JSON 檔案，在本機電腦可以透過底下指令登入:
 
-<pre><code class="language-bash">cat keyfile.json | docker login \
+```bash
+cat keyfile.json | docker login \
   -u _json_key \
   --password-stdin \
-  https://[HOSTNAME]</code></pre>
+  https://[HOSTNAME]
+```
 
 如果沒有支援 `password-stdin` 則可以使用底下:
 
-<pre><code class="language-bash">docker login -u _json_key \
+```bash
+docker login -u _json_key \
   -p "$(cat keyfile.json)" \
-  https://[HOSTNAME]</code></pre>
+  https://[HOSTNAME]
+```
 
 請注意這邊的使用者帳號統一都是使用 `_json_key`，而在 Ansible 則是使用 [docker_login][7] 模組
 
-<pre><code class="language-yaml">- name: Log into GCR private registry and force re-authorization
+```yaml
+- name: Log into GCR private registry and force re-authorization
   docker_login:
     registry: "https://asia.gcr.io"
     username: "_json_key"
     password: "{{ lookup('template', 'gcr.json', convert_data=False) | string }}"
     config_path: "{{ deploy_home_dir }}/.docker/config.json"
-    reauthorize: yes</code></pre>
+    reauthorize: yes
+```
 
 注意 `password` 欄位，請將 `gcr.json` 放置在 `role/templates` 目錄，透過 lookup 方式並轉成 string 才可以正常登入，網路上有解法說需要在 `password` 前面加上一個空白才可以登入成功，詳細情況可以[參考這篇][8]。
 
@@ -54,7 +60,8 @@ Google 提供了[好幾種方式][5]來登入 Docker Registry 服務，本篇使
 
 講 Drone 之前，我們先來看看 GitLab 怎麼上傳，其實也不難:
 
-<pre><code class="language-yaml">cloudbuild:
+```yaml
+cloudbuild:
   stage: deploy
   image: google/cloud-sdk
   services:
@@ -67,11 +74,13 @@ Google 提供了[好幾種方式][5]來登入 Docker Registry 服務，本篇使
     - gcloud config set project $GCP_PROJECT_ID
     - gcloud builds submit . --config=cloudbuild.yaml --substitutions _IMAGE_NAME=$PROJECT_NAME,_VERSION=$VERSION
   only:
-    - release</code></pre>
+    - release
+```
 
 透過 [gcloud][9] 就可以快速自動上傳。而使用 Drone 設定也是很簡單:
 
-<pre><code class="language-yaml">- name: publish
+```yaml
+- name: publish
   pull: always
   image: plugins/docker
   settings:
@@ -89,7 +98,8 @@ Google 提供了[好幾種方式][5]來登入 Docker Registry 服務，本篇使
   when:
     event:
       exclude:
-      - pull_request</code></pre>
+      - pull_request
+```
 
 其中 `password` 可以透過後台將 json 資料寫入。這邊有幾個重要功能列給大家參考
 

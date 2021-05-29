@@ -39,7 +39,8 @@ tags:
 
 首先準備用 Go 語言服務來當作範例，底下是 Dockerfile 設定，本篇的程式碼的都可以在[這邊找到][13]。
 
-<pre><code class="language-dockerfile">FROM golang:1.14-alpine
+```dockerfile
+FROM golang:1.14-alpine
 
 LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
@@ -56,11 +57,13 @@ ENV GOOS=linux
 ENV GOARCH=amd64
 RUN go build -o /app -tags netgo -ldflags '-w -extldflags "-static"' .
 
-CMD ["/app"]</code></pre>
+CMD ["/app"]
+```
 
 Docker 詳細的設定方式可以參考[此文件][14]
 
-<pre><code class="language-yml">- name: build and push image
+```yml
+- name: build and push image
   uses: docker/build-push-action@v1
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
@@ -68,11 +71,13 @@ Docker 詳細的設定方式可以參考[此文件][14]
     repository: appleboy/gin-docker-demo
     dockerfile: Dockerfile
     always_pull: true
-    tags: latest</code></pre>
+    tags: latest
+```
 
 由於我們是拿 docker hub 當作範例，故不需要指定 registry，假設您只要有下 git tag 才做上傳的話，可以使用
 
-<pre><code class="language-yaml">- name: build and push image
+```yaml
+- name: build and push image
   uses: docker/build-push-action@v1
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
@@ -80,7 +85,8 @@ Docker 詳細的設定方式可以參考[此文件][14]
     repository: appleboy/gin-docker-demo
     dockerfile: Dockerfile
     tag_with_ref: true
-    push: ${{ startsWith(github.ref, 'refs/tags/') }}</code></pre>
+    push: ${{ startsWith(github.ref, 'refs/tags/') }}
+```
 
 其實設定不難，整個過程的 Log 可以看[這邊][15]。底下來介紹 Drone 的使用方式
 
@@ -88,7 +94,8 @@ Docker 詳細的設定方式可以參考[此文件][14]
 
 GitHub Actions 的版本跟 Drone 的 Plugin 共通點都是用 CLI 完成全部指令，也全都用 Go 語言打造，所以設定方式其實蠻雷同的。
 
-<pre><code class="language-yaml">- name: publish
+```yaml
+- name: publish
   pull: always
   image: plugins/docker:linux-amd64
   settings:
@@ -104,7 +111,8 @@ GitHub Actions 的版本跟 Drone 的 Plugin 共通點都是用 CLI 完成全部
   when:
     event:
       exclude:
-      - pull_request</code></pre>
+      - pull_request
+```
 
 兩邊設定完成後，可以透過兩邊的 Log 方式，為什麼 Drone 只需要不到半分鐘的時間就可以執行完畢，而在 GitHub Actions 則是需要一分鐘以上，原因在於 Drone 支援了 `--cache-from`，不了解的可以直接參考『[在 docker-in-docker 環境中使用 cache-from 提升編譯速度][16]』，大概的意思就是在 docker build 之前，先把最新版本的 Image 下載下來，這時候在編譯的時候就會找到相同的 docker layer 而進行 Cache 動作。不過別擔心，為了能讓 GitHub Action 享有這個機制，我也發了 [PR 來支援此參數][17]，等到官方審核通過就可以使用了。
 

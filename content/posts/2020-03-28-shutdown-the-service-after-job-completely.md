@@ -25,7 +25,8 @@ tags:
 
 當服務被關閉或者強制使用 ctrl + c 停止，則應該等到所有的 worker 都完成全部 Job 才停止服務。先來看看之前第一版的寫法有什麼問題，當開發者按下 ctrl + c 就會送出 cancel() 訊號，接著看看 worker 原先是怎麼寫的？完整程式碼請[參考這邊][5]。
 
-<pre><code class="language-go">func (c *Consumer) worker(ctx context.Context, num int, wg *sync.WaitGroup) {
+```go
+func (c *Consumer) worker(ctx context.Context, num int, wg *sync.WaitGroup) {
     defer wg.Done()
     log.Println("start the worker", num)
     for {
@@ -41,7 +42,8 @@ tags:
             return
         }
     }
-}</code></pre>
+}
+```
 
 假設現在有 10 個 job 同時進來，有四個 worker 同時處理，接著按下 ctrl + c 後，就會觸發 ctx.Done() channel，因為 Select 接受兩個 channel，開發者不能預期哪一個先觸發，但是假設 jobsChan 還有其他 job 需要處理，就會被程式終止。該如何解決此問題呢？繼續往下看
 
@@ -49,18 +51,21 @@ tags:
 
 其實很簡單只要將 worker 部分重新改寫即可，不要使用 select 方式 (程式碼請[參考這邊][6])
 
-<pre><code class="language-go">func (c *Consumer) worker(num int, wg *sync.WaitGroup) {
+```go
+func (c *Consumer) worker(num int, wg *sync.WaitGroup) {
     defer wg.Done()
     log.Println("start the worker", num)
 
     for job := range c.jobsChan {
         c.process(num, job)
     }
-}</code></pre>
+}
+```
 
 使用 for 方式來讀取 jobsChan，這邊就會等到 channle 完全為空的時候才會結束 for 迴圈，所以有多個 worker 同時讀取 jobsChan。for 結束後，才會觸發 wg.Done() 告訴主程式此 worker 已經完成，主程式可以進行關閉動作了。這邊要注意的是在 Consumer 會先收到 cancel() 觸發，接著關閉 jobsChan 通道，但是關閉通道還是可以透過 for 方式將剩下的 job 從 channel 內讀取出來。可以看看 consumer 寫法 (完整程式碼請[參考這邊][7]):
 
-<pre><code class="language-go">func (c Consumer) startConsumer(ctx context.Context) {
+```go
+func (c Consumer) startConsumer(ctx context.Context) {
     for {
         select {
         case job := <-c.inputChan:
@@ -78,7 +83,8 @@ tags:
             return
         }
     }
-}</code></pre>
+}
+```
 
 ## 心得
 

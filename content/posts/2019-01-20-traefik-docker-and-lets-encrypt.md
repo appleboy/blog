@@ -30,21 +30,28 @@ tags:
 
 在啟動 Traefik 服務前，需要建立一個獨立的 Docker 網路，請在 Host 內下
 
-<pre><code class="language-bash">$ docker network create web</code></pre>
+```bash
+$ docker network create web
+```
 
 接著建立 Traefik 設定檔存放目錄 `/opt/traefik` 此目錄自由命名。
 
-<pre><code class="language-bash">$ mkdir -p /opt/traefik</code></pre>
+```bash
+$ mkdir -p /opt/traefik
+```
 
 接著在此目錄底下建立三個檔案
 
-<pre><code class="language-bash">$ touch /opt/traefik/docker-compose.yml
+```bash
+$ touch /opt/traefik/docker-compose.yml
 $ touch /opt/traefik/acme.json && chmod 600 /opt/traefik/acme.json
-$ touch /opt/traefik/traefik.toml</code></pre>
+$ touch /opt/traefik/traefik.toml
+```
 
 其中 `docker-compose.yml` 用來啟動 Traefik 服務，`acme.json` 則是存放 Let's Encrypt 的憑證，此檔案權限必須為 `600`，最後則是 traefik 設定檔 `traefik.toml`。一一介紹這些檔案的內容，底下是 `docker-compose.yml`
 
-<pre><code class="language-yaml">version: '2'
+```yaml
+version: '2'
 
 services:
   traefik:
@@ -63,11 +70,13 @@ services:
 
 networks:
   web:
-    external: true</code></pre>
+    external: true
+```
 
 此檔案必須要由 `root` 使用者來執行，原因是要 Listen 80 及 443 連接埠，其中 acme.json 及 traefik.toml 則由 host 檔案直接掛載進容器內。接著看 `traefik.toml`
 
-<pre><code class="language-toml">debug = false
+```toml
+debug = false
 
 logLevel = "INFO"
 defaultEntryPoints = ["https","http"]
@@ -92,18 +101,22 @@ entryPoint = "http"
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-watch = true</code></pre>
+watch = true
+```
 
 其中 `onHostRule` 用於讀取 docker container 內的 `frontend.rule` 的 `Host` 設定，這樣才可以跟 Let's Encrypt 申請到憑證。最後啟動步驟
 
-<pre><code class="language-bash">$ cd /opt/traefik
-$ docker-compose up -d</code></pre>
+```bash
+$ cd /opt/traefik
+$ docker-compose up -d
+```
 
 ## 啟動 App 服務
 
 請打開 docker-compose.yml 檔案
 
-<pre><code class="language-yaml">version: '3'
+```yaml
+version: '3'
 
 services:
   app_1:
@@ -140,7 +153,8 @@ services:
 
 networks:
   web:
-    external: true</code></pre>
+    external: true
+```
 
 可以看到透過 [docker labels][7] 設定讓 traefik 直接讀取並且套用設定。啟動服務後可以看到 `acme.json` 已經存放了各個 host 的憑證資訊，未來只要將此檔案備份，就可以不用一直申請了。最後用 curl 來測試看看
 
@@ -150,7 +164,9 @@ networks:
 
 由於 Traefik 可以自動讀取 docker label 內容，未來只需要維護 App 的 docker-compose 檔案，對於部署上面相當方便啊，透過底下指令就可以重新啟動容器設定
 
-<pre><code class="language-bash">$ docker-compose up -d --force-recreate --no-deps app</code></pre>
+```bash
+$ docker-compose up -d --force-recreate --no-deps app
+```
 
 如果對於自動化部署有興趣，可以參考我在 Udemy 上的線上課程
 

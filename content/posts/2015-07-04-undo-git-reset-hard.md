@@ -22,14 +22,16 @@ tags:
 
 現在的問題是如果開發者不小心下了 `git reset --hard HEAD^`，上一個 commit 就會消失了，這時候該如何救回來呢？答案可以使用 `git reflog` 指令然觀看開發者全部 git 的操作記錄，裡面詳細記載你曾經下過的 git 指令
 
-<pre><code class="language-bash">$ git reflog
+```bash
+$ git reflog
 794be8b HEAD@{0}: reset: moving to HEAD^
 5e2be6f HEAD@{1}: commit (amend): update
 bfa593c HEAD@{2}: cherry-pick: update
 794be8b HEAD@{3}: reset: moving to 649c658
 794be8b HEAD@{4}: reset: moving to HEAD^
 649c658 HEAD@{5}: commit: update
-794be8b HEAD@{6}: commit (initial): addd</code></pre>
+794be8b HEAD@{6}: commit (initial): addd
+```
 
 上面可以看到之前 commit 的記錄，接著可以透過 `git reset --hard xxxxx`，或者是用 `git cherry-pick xxxxx` 將上一個 commit ID 記錄抓回來即可。
 

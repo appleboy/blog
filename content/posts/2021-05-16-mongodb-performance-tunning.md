@@ -19,9 +19,11 @@ tags:
 
 最近剛好在實作 [Prometheus][2] + [Grafana][3] 的時候，對 MongoDB 做了容器 CPU 使用率 (`container_cpu_usage_seconds_total`) 的監控，Metrics 寫法如下:
 
-<pre><code class="language-bash">sum(
+```bash
+sum(
     rate(container_cpu_usage_seconds_total{name!~"(^$|^0_.*)"}[1m]))
-by (name)</code></pre>
+by (name)
+```
 
 從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？
 
@@ -29,13 +31,15 @@ by (name)</code></pre>
 
 接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 [Loki][5]，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki
 
-<pre><code class="language-yaml=">    logging:
+```yaml=
+    logging:
       driver: loki
       options:
         loki-url: "http://xxxxxxx/loki/api/v1/push"
         loki-retries: "5"
         loki-batch-size: "400"
-        loki-external-labels: "environment=production,project=mongo"</code></pre>
+        loki-external-labels: "environment=production,project=mongo"
+```
 
 ![][6] 
 
@@ -51,8 +55,10 @@ by (name)</code></pre>
 
 MongoDB 預設 Profiler 是關閉的，遇到效能問題，就需要打開，來收集所有的操作記錄 (CRUD)，透過底下指令可以知道目前 MongoDB 的 [Profiler 狀態][9]
 
-<pre><code class="language-bash=">> db.getProfilingStatus()
-{ "was" : 0, "slowms" : 100, "sampleRate" : 1 }</code></pre>
+```bash=
+> db.getProfilingStatus()
+{ "was" : 0, "slowms" : 100, "sampleRate" : 1 }
+```
 
 可以看到 `was` 為 0 代表沒有啟動
 
@@ -64,8 +70,10 @@ MongoDB 預設 Profiler 是關閉的，遇到效能問題，就需要打開，�
 
 這邊先將 Level 設定為 2，或者是只需要看 slow query，那就設定為 1
 
-<pre><code class="language-bash=">> db.setProfilingLevel(2)
-{ "was" : 0, "slowms" : 100, "sampleRate" : 1, "ok" : 1 }</code></pre>
+```bash=
+> db.setProfilingLevel(2)
+{ "was" : 0, "slowms" : 100, "sampleRate" : 1, "ok" : 1 }
+```
 
 如果使用完畢，請將 Profiler 關閉。
 
@@ -77,44 +85,55 @@ MongoDB 預設 Profiler 是關閉的，遇到效能問題，就需要打開，�
 
 最後驗證結果就很簡單，只要 Log 量減少及 CPU 使用率下降，就代表成功了，底下介紹幾個好用的分析效能語法。第一直接找目前系統 command 類別內執行時間最久的狀況 (millis: -1 反向排序) 
 
-<pre><code class="language-bash">db.system.profile.
+```bash
+db.system.profile.
   find({ op: { $eq: "command" }}).
   sort({ millis: -1 }).
   limit(2).
-  pretty();</code></pre>
+  pretty();
+```
 
 第二可以找執行時間超過 100 ms 的指令。
 
-<pre><code class="language-bash">db.system.profile.
+```bash
+db.system.profile.
   find({ millis: { $gt: 100 }}).
-  pretty();</code></pre>
+  pretty();
+```
 
 最後透過 `planSummary` 語法可以找出 query command 掃描 (`COLSCAN`) 整個資料表，代表語法沒有被優化，資料表越大，查詢速度越慢
 
-<pre><code class="language-bash=">db.system.profile.
+```bash=
+db.system.profile.
   find({ "planSummary": { $eq: "COLLSCAN" }, "op": { $eq: "query" }}).
   sort({ millis: -1 }).
-  pretty();</code></pre>
+  pretty();
+```
 
 或者可以透過 [db.currentOp][10] 觀察現在正在執行中的 Command，底下語法可以針對 `db1` 資料庫查詢執行超過 3 秒鐘的指令
 
-<pre><code class="language-bash=">db.currentOp(
+```bash=
+db.currentOp(
    {
      "active" : true,
      "secs_running" : { "$gt" : 3 },
      "ns" : /^db1\./
    }
-)</code></pre>
+)
+```
 
 ## 了解 Slow Query
 
 從上面的 Profiler 效能分析指令，可以查詢到哪些 SQL 指令造成系統效能不穩定，這些 SQL 可以透過 `EXPLAIN` 方式找尋到執行效能瓶頸。底下直接透過 explain 方式會產生出 JSON 格式輸出：
 
-<pre><code class="language-shell=">db.orders.explain("executionStats").find({maID:"bfce30cab12311eba55d09972",maOrderID:"2222318209",deleted:false})</code></pre>
+```shell=
+db.orders.explain("executionStats").find({maID:"bfce30cab12311eba55d09972",maOrderID:"2222318209",deleted:false})
+```
 
 透過 [db.collection.explain][10] 可以知道此 Query 在 Mongodb 內是怎麼有效率的執行，底下來看看 [explain][11] 回傳的結果:
 
-<pre><code class="language-json=">{
+```json=
+{
   "queryPlanner" : {
     "plannerVersion" : 1,
     "namespace" : "fullinn.orders",
@@ -210,11 +229,13 @@ MongoDB 預設 Profiler 是關閉的，遇到效能問題，就需要打開，�
     "gitVersion" : "8db30a63db1a9d84bdcad0c83369623f708e0397"
   },
   "ok" : 1
-}</code></pre>
+}
+```
 
 直接注意到幾個數據，看到 `executionTimeMillis` 執行時間，`totalDocsExamined` 是在執行過程會掃過多少資料 (越低越好)，由上面可以知道此 Query 執行時間是 `237 ms`，並且需要掃過 `192421` 筆資料，另外一個重要指標就是 `executionStages` 內的 `stage`
 
-<pre><code class="language-json=">    "executionStages" : {
+```json=
+    "executionStages" : {
       "stage" : "COLLSCAN",
       "filter" : {
         "$and" : [
@@ -247,7 +268,8 @@ MongoDB 預設 Profiler 是關閉的，遇到效能問題，就需要打開，�
       "direction" : "forward",
       "docsExamined" : 192421
     }
-  },</code></pre>
+  },
+```
 
 Stage 狀態分成底下幾種
 
@@ -259,11 +281,14 @@ Stage 狀態分成底下幾種
 
 這次我們遇到的就是第一種 `COLLSCAN`，資料表全掃，所以造成效能非常低，這時就要檢查看看是否哪邊增加 Index 可以解決效能問題。底下增加一個 index key 看看結果如何？
 
-<pre><code class="language-shell=">db.orders.createIndex({maID: 1})</code></pre>
+```shell=
+db.orders.createIndex({maID: 1})
+```
 
 接著再執行一次，可以看到底下結果:
 
-<pre><code class="language-json=">  "executionStats" : {
+```json=
+  "executionStats" : {
     "executionSuccess" : true,
     "nReturned" : 0,
     "executionTimeMillis" : 2,
@@ -331,7 +356,8 @@ Stage 狀態分成底下幾種
         "dupsDropped" : 0
       }
     }
-  },</code></pre>
+  },
+```
 
 可以看到 `executionTimeMillis` 降低到 2，`totalDocsExamined` 變成 1，用 index 去找就是特別快。inputStage.stage 用的就是 `IXSCAN`。針對上述找尋方式把相對的 index key 補上，並且優化商業邏輯，就可以達到底下結果
 

@@ -26,22 +26,29 @@ tags:
 
 我建立了一個 [Dockerfile][9]，讓開發者可以透過 [Docker][10] 快速在任何作業系統產生開發環境，安裝步驟如下:
 
-<pre><code class="language-bash">$ git clone https://github.com/appleboy/linkit-smart-7688-golang.git 
-$ cd linkit-smart-7688-golang && docker build -t mt7688 .</code></pre>
+```bash
+$ git clone https://github.com/appleboy/linkit-smart-7688-golang.git 
+$ cd linkit-smart-7688-golang && docker build -t mt7688 .
+```
 
 開啟 7688 terminal 環境
 
-<pre><code class="language-bash">$ docker run -ti --name 7688 mt7688 /bin/bash</code></pre>
+```bash
+$ docker run -ti --name 7688 mt7688 /bin/bash
+```
 
 ### 啟動 gccgo 和 libgo
 
 底下步驟教您如何打開 gccgo 及 libgo 選單。打開 `package/libs/toolchain/Makefile` 找到
 
-<pre><code class="language-bash">define Package/ldd</code></pre>
+```bash
+define Package/ldd
+```
 
 在前面插入
 
-<pre><code class="language-bash">define Package/libgo
+```bash
+define Package/libgo
 $(call Package/gcc/Default)
   TITLE:=Go support library
   DEPENDS+=@INSTALL_GCCGO
@@ -66,51 +73,68 @@ define Package/libgo/config
                default "./usr/lib/libgo.so.*"
 
        endmenu
-endef</code></pre>
+endef
+```
 
 找到
 
-<pre><code class="language-bash">define Package/libssp/install</code></pre>
+```bash
+define Package/libssp/install
+```
 
 在前面插入
 
-<pre><code class="language-bash">define Package/libgo/install
+```bash
+define Package/libgo/install
     $(INSTALL_DIR) $(1)/usr/lib
     $(if $(CONFIG_TARGET_avr32)$(CONFIG_TARGET_coldfire),,$(CP) $(TOOLCHAIN_DIR)/lib/libgo.so.* $(1)/usr/lib/)
-endef</code></pre>
+endef
+```
 
 找到
 
-<pre><code class="language-bash">$(eval $(call BuildPackage,ldd))</code></pre>
+```bash
+$(eval $(call BuildPackage,ldd))
+```
 
 在前面插入
 
-<pre><code class="language-bash">$(eval $(call BuildPackage,libgo))</code></pre>
+```bash
+$(eval $(call BuildPackage,libgo))
+```
 
 打開 `toolchain/gcc/Config.in`
 
 最後面插入
 
-<pre><code class="language-bash">config INSTALL_GCCGO
+```bash
+config INSTALL_GCCGO
     bool
     prompt "Build/install gccgo compiler?" if TOOLCHAINOPTS && !(GCC_VERSION_4_6 || GCC_VERSION_4_6_LINARO)
     default n
     help
-        Build/install GNU gccgo compiler ?</code></pre>
+        Build/install GNU gccgo compiler ?
+```
 
 打開 `toolchain/gcc/common.mk`
 
 找到
 
-<pre><code class="language-bash">TARGET_LANGUAGES:="c,c++$(if $(CONFIG_INSTALL_LIBGCJ),$(SEP)java)$(if $(CONFIG_INSTALL_GFORTRAN),$(SEP)fortran)"</code></pre>
+```bash
+TARGET_LANGUAGES:="c,c++$(if $(CONFIG_INSTALL_LIBGCJ),$(SEP)java)$(if $(CONFIG_INSTALL_GFORTRAN),$(SEP)fortran)"
+```
 
 取代成
 
-<pre><code class="language-bash">TARGET_LANGUAGES:="c,c++$(if $(CONFIG_INSTALL_LIBGCJ),$(SEP)java)$(if $(CONFIG_INSTALL_GFORTRAN),$(SEP)fortran)$(if $(CONFIG_INSTALL_GCCGO),$(SEP)go)"</code></pre>
+```bash
+TARGET_LANGUAGES:="c,c++$(if $(CONFIG_INSTALL_LIBGCJ),$(SEP)java)$(if $(CONFIG_INSTALL_GFORTRAN),$(SEP)fortran)$(if $(CONFIG_INSTALL_GCCGO),$(SEP)go)"
+```
 
 打開 Kernel Configuration
 
-<pre><code class="language-bash">$ make menuconfig</code></pre>
+```bash
+$ make menuconfig
+```
 
   * Target System: Ralink RT288x/RT3xxx
   * Subtarget: MT7688 based boards
@@ -118,11 +142,13 @@ endef</code></pre>
 
 啟動 gccgo
 
-<pre><code class="language-bash">-> Advanced configuration options
+```bash
+-> Advanced configuration options
 -> Toolchain options
 -> Select Build/Install gccgo
 -> C library implementation
--> Use eglibc</code></pre>
+-> Use eglibc
+```
 
 ### 撰寫 golang hello world
 
@@ -130,26 +156,34 @@ endef</code></pre>
 
 用 `alias` 設定 mips gccgo 路徑
 
-<pre><code class="language-bash">alias mips_gccgo='/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/bin/mipsel-openwrt-linux-gccgo -Wl,-R,/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib/gcc/mipsel-openwrt-linux-gnu/4.8.3 -L /root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib'</code></pre>
+```bash
+alias mips_gccgo='/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/bin/mipsel-openwrt-linux-gccgo -Wl,-R,/root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib/gcc/mipsel-openwrt-linux-gnu/4.8.3 -L /root/openwrt/staging_dir/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_glibc-2.19/lib'
+```
 
 hello world 程式
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import "fmt"
 
 func main() {
   fmt.Println("hello world")
-}</code></pre>
+}
+```
 
 編譯執行檔
 
-<pre><code class="language-bash">$ mips_gccgo -Wall -o helloworld_static_libgo helloworld.go -static-libgo</code></pre>
+```bash
+$ mips_gccgo -Wall -o helloworld_static_libgo helloworld.go -static-libgo
+```
 
 在 7688 裝置內執行 `helloworld_static_libgo`
 
-<pre><code class="language-bash">root@mylinkit:/tmp/7688# ./helloworld_static_libgo 
-hello world</code></pre>
+```bash
+root@mylinkit:/tmp/7688# ./helloworld_static_libgo 
+hello world
+```
 
 以上步驟就可以完成 hello world 程式，詳細步驟都記錄在 [linkit-smart-7688-golang][8]
 

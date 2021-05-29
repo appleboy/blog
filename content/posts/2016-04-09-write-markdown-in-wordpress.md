@@ -21,7 +21,8 @@ tags:
 
 ## golang 範例
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -29,7 +30,8 @@ import (
 
 func main() {
     fmt.Println("Welcome Golang World")
-}</code></pre>
+}
+```
 
 為了解決 SyntaxHighlighter 問題，後來換到 [jetpack][4] plugin，這套 Plugin 蠻強大的，內建一堆好用的工具，像是會自動分析每天來造訪你的 Blog 有哪些人。所以推薦大家用 jetpack。最後要學習 Markdown 語法，可以直接參考[這網站教學][5]。
 

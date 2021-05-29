@@ -31,9 +31,11 @@ tags:
 
 通常有時候我們會需要重新跑已經失敗或者是取消的 Job，但是不好意思，GitHub Actions 沒有任何按鈕可以讓你重新跑單一 Commit 的 Job，你必須要重新 push 後，才可以重新啟動 Job，我覺得非常不合理，在 UI 上面有支持 Stop Job，但是不支援 Restart Job，我只能 .... 了。透過底下可以重新啟動 Job，但是太笨了
 
-<pre><code class="language-shell">$ git reset —soft HEAD^
+```shell
+$ git reset —soft HEAD^
 $ git commit -a -m "foo"
-$ git push origin master -f</code></pre>
+$ git push origin master -f
+```
 
 ## 不支援 Global Secrets
 
@@ -47,27 +49,32 @@ $ git push origin master -f</code></pre>
 
 舉個實際例子比較快，現在有個 repo 必須同時部署到兩台密碼不同的 Linux Server，假設 Image 只支援 Password 這 global variable
 
-<pre><code class="language-shell">  secrets = [
+```shell
+  secrets = [
     "PASSWORD",
   ]
   args = [
     "--user", "actions",
     "--script", "whoami",
-  ] </code></pre>
+  ] 
+```
 
 我該怎麼在後台設定兩個不同變數讓 Docker 去讀取，這邊就不能這樣解決，所以開發者必須在程式裡面支援 指定 CLI 變數
 
-<pre><code class="language-shell">  secrets = [
+```shell
+  secrets = [
     "PASSWORD01",
   ]
   args = [
     "-p", "$PASSWORD01",
     "--script", "whoami",
-  ] </code></pre>
+  ] 
+```
 
 如果 Actions 沒有支援 `-p` 來設定參數，我相信這個套件肯定不能用。這就是 GitHub Actions 的缺點。我們看看 Drone 怎麼實作:
 
-<pre><code class="language-yaml">kind: pipeline
+```yaml
+kind: pipeline
 name: default
 
 steps:
@@ -77,20 +84,23 @@ steps:
     USERNAME:
       from_secret: username
     PASSWORD:
-      from_secret: password </code></pre>
+      from_secret: password 
+```
 
 有沒有注意到 `from_secret` 用來接受多個不同的 variable 變數。
 
 ## 環境變數太少
 
-<pre><code class="language-shell">action "Hello World" {
+```shell
+action "Hello World" {
   uses = "./my-action"
   env = {
     FIRST_NAME  = "Mona"
     MIDDLE_NAME = "Lisa"
     LAST_NAME   = "Octocat"
   }
-} </code></pre>
+} 
+```
 
 在 Actions 內開發者可以拿到底下變數內容
 

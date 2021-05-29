@@ -25,7 +25,8 @@ tags:
 
 我在官方發了一個 [Issue][6]，發現大家 workaround 的方式就是自己移除 healthcheck 檢查，然後再自行發布到 DockerHub，這方法也是可行啦，只是這樣還要自己去更新版本有點麻煩，後來官方直接[發個 PR][7] 把整段 Healthcheck 腳本移除，官方說法是說，容器那大家的設定的執行 User 或權限都不同，所以造成無法讀取 netstat 資料，所以直接移除，用大家熟悉的 curl 方式來執行，在 kubernets 內可以使用
 
-<pre><code class="language-yaml">healthcheck:
+```yaml
+healthcheck:
   image: minio/minio:RELEASE.2019-08-14T20-37-41Z
       test: ["CMD", "curl", "-f", "http://minio1:9000/minio/health/live"]
   volumes:
@@ -35,13 +36,15 @@ tags:
   ports:
       retries: 3
    - "9002:9000"
-      start_period: 3m</code></pre>
+      start_period: 3m
+```
 
 ## 自行開發 healthcheck
 
 如果你有看之前 minio 程式碼，可以發現寫得相當複雜，通常預設只要 ping 通 web 服務就可以了
 
-<pre><code class="language-go">resp, err := http.Get("http://localhost" + config.Server.Addr + "/healthz")
+```go
+resp, err := http.Get("http://localhost" + config.Server.Addr + "/healthz")
 if err != nil {
   log.Error().
     Err(err).
@@ -55,12 +58,15 @@ if resp.StatusCode != http.StatusOK {
     Msg("health seems to be in bad state")
   return fmt.Errorf("server returned non-200 status code")
 }
-return nil</code></pre>
+return nil
+```
 
 接著在 Dockerfile 裡面寫入底下，就大功告成啦。
 
-<pre><code class="language-dockerfile">HEALTHCHECK --start-period=2s --interval=10s --timeout=5s \
-  CMD ["/bin/crosspoint-server", "health"]</code></pre>
+```dockerfile
+HEALTHCHECK --start-period=2s --interval=10s --timeout=5s \
+  CMD ["/bin/crosspoint-server", "health"]
+```
 
  [1]: https://lh3.googleusercontent.com/3lAv9HlhI9mxCfow0jHY5-G6H-tvXJLCv3S2QvzKReV_R-61oywRIXW6sruwPrS69CXpMAuIrccgVH8HY5hIzDGvenyhFhKcGmBk0CmU1c36k6NrjSvYESSmAEAejlxmxdW_gduXZio=w1920-h1080 "minio golang"
  [2]: https://min.io/

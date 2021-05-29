@@ -26,18 +26,22 @@ tags:
 
 Mac 不像是其他 Linux 作業系統，可以直接透過一行指令完成建立帳號動作，所以透過 Google 找到了[這篇解法][5]
 
-<pre><code class="language-bash">dscl . -create /Users/drone-scp
+```bash
+dscl . -create /Users/drone-scp
 dscl . -create /Users/drone-scp UserShell /bin/bash
 dscl . -create /Users/drone-scp RealName "Joe Admin" 
 dscl . -create /Users/drone-scp UniqueID "510"
 dscl . -create /Users/drone-scp PrimaryGroupID 20
 dscl . -create /Users/drone-scp NFSHomeDirectory /Users/drone-scp
 dscl . -passwd /Users/drone-scp password 
-dscl . -append /Groups/admin GroupMembership drone-scp</code></pre>
+dscl . -append /Groups/admin GroupMembership drone-scp
+```
 
 上面指令完成後，請切到 Root 下重新開機的指令
 
-<pre><code class="language-bash">$ reboot</code></pre>
+```bash
+$ reboot
+```
 
 這時候你會看到右上角多了一個帳號 `drone-scp`
 
@@ -55,15 +59,21 @@ Mac 預設是不讓外面透過 ssh 方式連線到使用者，所以必須透�
 
 首先產生 SSH Key
 
-<pre><code class="language-bash">$ ssh-keygen -f id_rsa -N '' -t rsa</code></pre>
+```bash
+$ ssh-keygen -f id_rsa -N '' -t rsa
+```
 
 複製 `id_rsa.pub` 到 drone-scp 家目錄
 
-<pre><code class="language-bash">$ cp -r id_rsa.pub /Users/drone-scp/.ssh/authorized_keys</code></pre>
+```bash
+$ cp -r id_rsa.pub /Users/drone-scp/.ssh/authorized_keys
+```
 
 透過 ssh 指令測試看看是否可以登入，請注意 `id_rsa` 權限必須為 `400`
 
-<pre><code class="language-bash">$ ssh -i id_rsa -l drone-scp localhost</code></pre>
+```bash
+$ ssh -i id_rsa -l drone-scp localhost
+```
 
 有看到成功登入的畫面吧 ^\___^
 

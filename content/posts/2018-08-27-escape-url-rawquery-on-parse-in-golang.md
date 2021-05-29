@@ -24,7 +24,8 @@ tags:
 
 首先來看看在 Go 1.11 版本時本來應該輸出什麼，請直接線上看[例子][8]。
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -42,7 +43,8 @@ func main() {
     }
 
     log.Printf("%#v", u.Query())
-}</code></pre>
+}
+```
 
 在 Go 1.11 以前，你會直接看到底下輸出:
 
@@ -58,7 +60,8 @@ func main() {
 
 修正方式其實很簡單，自己在寫個小型 Parser 把原本的格式在轉換就好，請參考[線上解法][10]
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -96,17 +99,20 @@ func resetQuery(m map[string][]string) map[string][]string {
         }
     }
     return dicts
-}</code></pre>
+}
+```
 
 只要 RawQuery 裡面有包含底下字元，就會被 escape 掉
 
-<pre><code class="language-bash">// validQuery reports whether s is a valid query string per RFC 3986
+```bash
+// validQuery reports whether s is a valid query string per RFC 3986
 // Section 3.4:
 //     query       = *( pchar / "/" / "?" )
 //     pchar       = unreserved / pct-encoded / sub-delims / ":" / "@"
 //     unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
 //     sub-delims  = "!" / "$" / "&" / "'" / "(" / ")"
-//                   / "*" / "+" / "," / ";" / "="</code></pre>
+//                   / "*" / "+" / "," / ";" / "="
+```
 
 ## 後記
 

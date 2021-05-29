@@ -41,7 +41,8 @@ Gitea 目前發展方向就是自己服務自己，大家可能有發現原本�
 
 透過 docker-compose 方式安裝會是最快的，大家可以參考[此 Repository][13]
 
-<pre><code class="language-yaml">version: "2"
+```yaml
+version: "2"
 
 networks:
   gitea:
@@ -88,7 +89,8 @@ volumes:
   gitea:
     driver: local
   mysql:
-    driver: local</code></pre>
+    driver: local
+```
 
 由上面可以看到只有啟動 Gitea + MySQL 服務就完成了，啟動時間根本不用 10 秒鐘，打開瀏覽器就可以看到安裝畫面了。
 

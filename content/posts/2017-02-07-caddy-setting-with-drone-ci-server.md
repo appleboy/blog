@@ -29,16 +29,20 @@ tags:
 
 在 `0.9.5` 版本以前，Caddy 預設是沒有將 [Timeouts][9] 模組載入，所以只要使用底下設定就可以成功串起 Drone 服務
 
-<pre><code class="language-bash">example.com {
+```bash
+example.com {
   proxy / localhost:8000 {
     websocket
     transparent
   }
-}</code></pre>
+}
+```
 
 Drone 預設跑 8000 Port，另外在 Agent 跑 wss 連線
 
-<pre><code class="language-bash">export DRONE_SERVER="wss://example.com/ws/broker"</code></pre>
+```bash
+export DRONE_SERVER="wss://example.com/ws/broker"
+```
 
 Caddy 在 `0.9.5` 版本啟動 Timeouts 模組，也就是沒有支援 long connection，預設值如下
 
@@ -49,7 +53,8 @@ Caddy 在 `0.9.5` 版本啟動 Timeouts 模組，也就是沒有支援 long conn
 
 也就是每 10 秒就會自動斷線在連線，解決方式也不難，就是把 Timeouts 模組關閉
 
-<pre><code class="language-bash">example.com {
+```bash
+example.com {
   # please comment the timeouts configures
   # if caddy server version under 0.9.5
   timeouts none
@@ -57,7 +62,8 @@ Caddy 在 `0.9.5` 版本啟動 Timeouts 模組，也就是沒有支援 long conn
     websocket
     transparent
   }
-}</code></pre>
+}
+```
 
 這樣就可以解決 Drone 搭配 Caddy 0.9.5 版本的問題，請注意 `timeouts` 只支援 `0.9.5` 以上版本，非此版本就會出現底下錯誤
 

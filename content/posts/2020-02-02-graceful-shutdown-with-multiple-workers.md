@@ -30,7 +30,8 @@ tags:
 
 通常會開一個 Channel 搭配多個 worker 才能達到平行處理，那該如何正確關閉 Channel? 底下看個例子:
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     ch := make(chan int, 2)
     go func() {
         ch <- 1
@@ -40,7 +41,8 @@ tags:
     for n := range ch {
         fmt.Println(n)
     }
-}</code></pre>
+}
+```
 
 執行上述程式你會發現出現了
 
@@ -48,7 +50,8 @@ tags:
 
 原因在於沒有關閉 channel，造成 main 函式一直讀取 channel，但是 channle 裡面已經不會再有值了，就造成主程式 deadlock，避免此問題很簡單
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     ch := make(chan int, 2)
     go func() {
         ch <- 1
@@ -59,11 +62,13 @@ tags:
     for n := range ch {
         fmt.Println(n)
     }
-}</code></pre>
+}
+```
 
 除了 `close(ch)` 之外，另一個方式就將讀取 channel 也丟到 goroutine 內
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     ch := make(chan int, 2)
     go func() {
         ch <- 1
@@ -77,7 +82,8 @@ tags:
     }()
 
     time.Sleep(1 * time.Second)
-}</code></pre>
+}
+```
 
 了解上述 channel 觀念後，可以來實作底下 consumer 流程
 
@@ -89,7 +95,8 @@ tags:
 
 ![][7] 
 
-<pre><code class="language-go">// Consumer struct
+```go
+// Consumer struct
 type Consumer struct {
     inputChan chan int
     jobsChan  chan int
@@ -101,13 +108,15 @@ func main() {
         inputChan: make(chan int, 10),
         jobsChan:  make(chan int, poolSize),
     }
-}</code></pre>
+}
+```
 
 接著實現 worker 模組
 
 ![][8] 
 
-<pre><code class="language-go">func (c *Consumer) queue(input int) {
+```go
+func (c *Consumer) queue(input int) {
     select {
     case c.inputChan <- input:
         log.Println("already send input value:", input)
@@ -163,7 +172,8 @@ func main() {
     consumer.queue(3)
     consumer.queue(4)
     consumer.queue(5)
-}</code></pre>
+}
+```
 
 由上述程式碼可以看到，都會透過 for select 方式來對 channel 進行讀寫動作。其中 `queue` 用來將資料丟入 input channel。
 
@@ -175,7 +185,8 @@ func main() {
 
 這時候就需要用到 context
 
-<pre><code class="language-go">func withContextFunc(ctx context.Context, f func()) context.Context {
+```go
+func withContextFunc(ctx context.Context, f func()) context.Context {
     ctx, cancel := context.WithCancel(ctx)
     go func() {
         c := make(chan os.Signal)
@@ -191,7 +202,8 @@ func main() {
     }()
 
     return ctx
-}</code></pre>
+}
+```
 
 其中 `syscall.SIGINT`, `syscall.SIGTERM` 用來偵測使用者是否按下 `ctrl+c` 或者是容器被移除時就會執行。所以當開發者按下 `ctrl+c` 就會直接觸發 cancel()，所以在最前面會使用 `context.WithCancel`，之後有機會再詳細介紹 context 的使用方式。
 
@@ -199,7 +211,8 @@ func main() {
 
 由於使用了 context，這樣就可以在每個 func 帶入客製化的 context。需要變動的有 `startConsumer` 及 `worker`
 
-<pre><code class="language-go">func (c Consumer) startConsumer(ctx context.Context) {
+```go
+func (c Consumer) startConsumer(ctx context.Context) {
     for {
         select {
         case job := <-c.inputChan:
@@ -230,11 +243,13 @@ func (c *Consumer) worker(ctx context.Context, num int) {
             return
         }
     }
-}</code></pre>
+}
+```
 
 這邊要注意的是，當我們按下 ctrl+c 終止 worker 時，理論上會直接到 `case <-ctx.Done()` 但是實際狀況是有時候會直接在繼續讀取 channel 下一個值。這時候就需要在讀取 channel 後判斷 context 是否已經取消。在 main 最後通常會放一個 channel 來判斷是否需要中斷 main 函式。
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     finished := make(chan bool)
 
     ctx := withContextFunc(context.Background(), func() {
@@ -243,7 +258,8 @@ func (c *Consumer) worker(ctx context.Context, num int) {
     })
 
     <-finished
-}</code></pre>
+}
+```
 
 上述完成後，按下 ctrl + c 後，就可以直接執行 close channel，整個主程式都停止，但是這不是我們預期得結果，預期的是需要等到全部的 worker 把正在處理的 Job 完成後，才進行停止才是。
 
@@ -253,19 +269,22 @@ func (c *Consumer) worker(ctx context.Context, num int) {
 
 ![][11] 
 
-<pre><code class="language-go">const poolSize = 2
+```go
+const poolSize = 2
 
 func main() {
     finished := make(chan bool)
     wg := &sync.WaitGroup{}
     wg.Add(poolSize)
-}</code></pre>
+}
+```
 
 其中 poolSize 代表的是 worker 數量，接著調整 worker 函式
 
 ![][12] 
 
-<pre><code class="language-go">func (c *Consumer) worker(ctx context.Context, num int, wg *sync.WaitGroup) {
+```go
+func (c *Consumer) worker(ctx context.Context, num int, wg *sync.WaitGroup) {
     defer wg.Done()
     log.Println("start the worker", num)
     for {
@@ -281,19 +300,23 @@ func main() {
             return
         }
     }
-}</code></pre>
+}
+```
 
 只有在最前面加上 `defer wg.Done()`，接著修正 context 的 callback 函式，增加 `wg.Wait()` 讓 main 函式等到所有的 worker 處理完畢後才關閉 `finished` channel。
 
-<pre><code class="language-go">    ctx := withContextFunc(context.Background(), func() {
+```go
+    ctx := withContextFunc(context.Background(), func() {
         log.Println("cancel from ctrl+c event")
         wg.Wait()
         close(finished)
-    })</code></pre>
+    })
+```
 
 最後在主程式後面加上 `<-finished` 即可。
 
-<pre><code class="language-go">const poolSize = 2
+```go
+const poolSize = 2
 
 func main() {
     finished := make(chan bool)
@@ -317,11 +340,13 @@ func main() {
 
     <-finished
     log.Println("Game over")
-}</code></pre>
+}
+```
 
 最後附上[完整的程式碼][13]讓大家測試:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "context"
@@ -449,7 +474,8 @@ func main() {
     <-finished
     log.Println("Game over")
 }
-</code></pre>
+
+```
 
  [1]: https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080 "golang logo"
  [2]: https://blog.wu-boy.com/2019/11/implement-job-queue-using-buffer-channel-in-golang/

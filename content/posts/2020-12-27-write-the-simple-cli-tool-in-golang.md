@@ -43,7 +43,8 @@ tags:
 
 底下教學就拿 [docker-backup-database][9] 為範例，我從目錄結構開始講，剛入門的朋友肯定對於 Go 語言在目錄這塊定義的不是很清楚，但是其實這跟個人或團隊喜好也有點關係，底下看看目錄結構
 
-<pre><code class="language-sh">├── LICENSE
+```sh
+├── LICENSE
 ├── Makefile
 ├── README.md
 ├── cmd
@@ -87,20 +88,25 @@ tags:
         │   └── disk_test.go
         ├── minio
         │   └── minio.go
-        └── storage.go</code></pre>
+        └── storage.go
+```
 
 其實目錄結構相當清楚，根目錄底下只會放跟部署或教學相關的資訊，像是 `.drone.yml` 用來做 CI/CD 幫忙自動化建立 [Docker][10] Image 並且上傳到 Docker Hub。而 docker-compose.yml 則是一份簡單的教學範例，讓想使用此工具的開發者可以快速建置出 [Minio][11] 或 Postgres 環境。而最後一個 Makefile 存放很多相關的指令，我本身不太喜歡打很長的指令，直接把用到的指令全都寫在 Makefile 內，這樣在寫 CI/CD 或同事及開發者想快速使用時，幾個指令就可以搞定了。盡量不要把指令在 CI/CD 流程中複雜化，這樣不好維護。而 docker 目錄會是此專案用到的所有 Dockerfile，就放在一起了，透過 [Drone][12] 直接平行化編譯 Image 並上傳。
 
 ## cmd 目錄
 
-<pre><code class="language-sh">├── cmd
+```sh
+├── cmd
 │   └── backup
 │       ├── config.go
-│       └── main.go</code></pre>
+│       └── main.go
+```
 
 開發者都可以發現在 GitHub 上面的 Go 開源專案，幾乎都會有一個 cmd 目錄，因為不想把 main.go 放在跟目錄下，然後又要命名一個還不錯的名稱，就需要建立在 cmd 目錄底下，這樣大家透過 `go get` 才可以正確下載到您要的命令，通常一個專案也許會有多個 CLI 工具，那就會在 cmd 底下建立多個目錄，每個目錄都會有 main.go 檔案，以現在這個範例為例，只會有一個 CLI，大家可以透過底下指令來下載 CLI。
 
-<pre><code class="language-sh">go get github.com/appleboy/docker-backup-database/cmd/backup</code></pre>
+```sh
+go get github.com/appleboy/docker-backup-database/cmd/backup
+```
 
 在 CLI 套件選擇，我則是選擇了 [urfave/cli][13]，原因很簡單，此工具未來會應用在 CI/CD 流程上，所以會希望可以直接支援 [GitHub Actions][14], Drone CI 或 [GitLab CI][15]，而 urfave/cli 讓開發者可以自行定義 ENV，原因是 GitHub Actions 只支援 `INPUT_` 而 Drone CI 只支援 `PLUGIN_`，故 urfave/cli 讓我自由定義，只有這個原因才選這套件。
 
@@ -108,7 +114,8 @@ tags:
 
 我會把專案用到的其他功能都一併建立在這邊，由這個目錄底下在做分類
 
-<pre><code class="language-sh">└── pkg
+```sh
+└── pkg
     ├── config
     │   └── config.go
     ├── dbdump
@@ -129,11 +136,13 @@ tags:
         │   └── disk_test.go
         ├── minio
         │   └── minio.go
-        └── storage.go</code></pre>
+        └── storage.go
+```
 
 可以看到我分了幾個目錄，config 用來存放 CLI 用到的環境變數，而 storage 用來定義上傳雲服務 AWS S3 或 Minio 的 Interface:
 
-<pre><code class="language-go">// Storage for s3 and disk
+```go
+// Storage for s3 and disk
 type Storage interface {
     // CreateBucket for create new folder
     CreateBucket(string, string) error
@@ -159,19 +168,23 @@ type Storage interface {
     Client() interface{}
     // SignedURL get signed URL
     SignedURL(string, string, *core.SignedURLOptions) (string, error)
-}</code></pre>
+}
+```
 
 定義完成後，未來有其他的 Storage 需要支援，就可以直接在 storage 目錄底下建立新的目錄，接著就可以直接開發了。另外 dbdump 也是同樣原理，現在支援三種 Database 而已，未來可以接受擴充到任何資料庫型態。
 
-<pre><code class="language-go">// Backup database interface
+```go
+// Backup database interface
 type Backup interface {
     // Exec backup database
     Exec() error
-}</code></pre>
+}
+```
 
 可以看到 NewEngine
 
-<pre><code class="language-go">// NewEngine return storage interface
+```go
+// NewEngine return storage interface
 func NewEngine(cfg config.Config) (backup Backup, err error) {
     switch cfg.Database.Driver {
     case "postgres":
@@ -204,7 +217,8 @@ func NewEngine(cfg config.Config) (backup Backup, err error) {
     }
 
     return nil, errors.New("We don't support Databaser Dirver: " + cfg.Database.Driver)
-}</code></pre>
+}
+```
 
 ## 心得
 

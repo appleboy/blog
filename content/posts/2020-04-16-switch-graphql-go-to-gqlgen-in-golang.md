@@ -78,7 +78,8 @@ tags:
 
 等蠻多細部差異，graphql-go 目前不支持檔案上傳，所以還是需要透過 RESTFul API 方式上傳，但是已經有人[提過 Issue 且發了 PR][13]， 作者看起來沒有想處理這題。就拿上傳檔案當做例子，在 gqlgen 寫檔案上傳相當容易，先寫 schema
 
-<pre><code class="language-sh">"The `Upload` scalar type represents a multipart file upload."
+```sh
+"The `Upload` scalar type represents a multipart file upload."
 scalar Upload
 
 "The `File` type, represents the response of uploading a file."
@@ -87,11 +88,13 @@ type File {
   contentType: String!
   size: Int!
   url: String!
-}</code></pre>
+}
+```
 
 就可以直接在 resolver 使用:
 
-<pre><code class="language-go">type File struct {
+```go
+type File struct {
     Name        string
     Size        int
     Content     []byte
@@ -120,13 +123,15 @@ func (r *mutationResolver) getFile(file graphql.Upload) (*File, error) {
         Content:     content,
         ContentType: contentType,
     }, nil
-}</code></pre>
+}
+```
 
 ## Schema first
 
 後端設計 API 時需要針對使用者情境及 Database 架構來設計 GraphQL Schema，詳細可以參考 [Schema Definition Language][14]。底下可以拿使用者註冊來當做例子:
 
-<pre><code class="language-sh">enum EnumGender {
+```sh
+enum EnumGender {
   MAN
   WOMAN
 }
@@ -157,20 +162,25 @@ type User {
 
 type Mutation {
   createUser(input: createUserInput!): createUserPayload
-}</code></pre>
+}
+```
 
 除了可以先寫 Schema 之外，還可以根據不同情境的做分類，將一個完整的 Schema 拆成不同模組，這個在 gqlgen 都可以很容易做到。
 
-<pre><code class="language-yaml">resolver:
+```yaml
+resolver:
   layout: follow-schema
-  dir: graph</code></pre>
+  dir: graph
+```
 
 之後 gqlgen 會將目錄結構產生如下
 
-<pre><code class="language-sh">user.graphql
+```sh
+user.graphql
 user.resolver.go
 cart.graphql
-cart.resolver.go</code></pre>
+cart.resolver.go
+```
 
 開發者只要將相對應的 resolver method 實現出來就可以了。
 
@@ -178,16 +188,21 @@ cart.resolver.go</code></pre>
 
 如果有在寫 graphql-go 就可以知道該如何取得使用者 input 參數，在 graphql-go 使用的是 `map[string]interface{}` 型態，要正確拿到參數值，就必須要轉換型態
 
-<pre><code class="language-go">username := strings.ToLower(p.Args["username"].(string))
-password := p.Args["password"].(string)</code></pre>
+```go
+username := strings.ToLower(p.Args["username"].(string))
+password := p.Args["password"].(string)
+```
 
 多了一層轉換相當複雜，而 gqlgen 則是直接幫忙轉成 struct 強型別
 
-<pre><code class="language-go">CreateUser(ctx context.Context, input model.CreateUserInput)</code></pre>
+```go
+CreateUser(ctx context.Context, input model.CreateUserInput)
+```
 
 其中 `model.CreateUserInput` 就是完整的 struct，而並非是 `map[string]interface{}`，在傳遞參數時，就不用多寫太多 interface 轉換，完整的註冊流程可以參考底下:
 
-<pre><code class="language-go">func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.CreateUserPayload, error) {
+```go
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.CreateUserPayload, error) {
     resp, err := api.CreateUser(r.Config, api.ReqCreateUser{
         Email:      input.Email,
         Password:   input.Password,
@@ -202,13 +217,15 @@ password := p.Args["password"].(string)</code></pre>
         DigitalCode: convert.String(resp.DigitalCode),
         ActCode:     convert.String(resp.ActCode),
     }, nil
-}</code></pre>
+}
+```
 
 ## 自動產生代碼
 
 要維護欄位非常多的 Schema 相當不容易，在 graphql-go 每次改動欄位，都需要開發者自行修改，底下是 user type 範例:
 
-<pre><code class="language-go">var userType = graphql.NewObject(graphql.ObjectConfig{
+```go
+var userType = graphql.NewObject(graphql.ObjectConfig{
     Name:        "UserType",
     Description: "User Type",
     Fields: graphql.Fields{
@@ -247,11 +264,13 @@ password := p.Args["password"].(string)</code></pre>
             Type: graphql.DateTime,
         },
     },
-})</code></pre>
+})
+```
 
 上面這段程式碼是要靠開發者自行維護，只要有任何異動，都需要手動自行修改，但是在 gqlgen 就不需要了，你只要把 schema 定義完整後，如下:
 
-<pre><code class="language-sh">type User {
+```sh
+type User {
   id: ID
   email: String!
   username: String
@@ -259,13 +278,16 @@ password := p.Args["password"].(string)</code></pre>
   isNewcomer: Boolean
   createdAt: Time
   updatedAt: Time
-}</code></pre>
+}
+```
 
 在 console 端下 `go run github.com/99designs/gqlgen`，就會自動將代碼生成完畢。你也可以將 User 綁定在開發者自己定義的 Model 層級。
 
-<pre><code class="language-yaml">models:
+```yaml
+models:
   User:
-    model: pkg/model.User</code></pre>
+    model: pkg/model.User
+```
 
 之後需要新增任何欄位，只要在 `pkg/model.User` 提供相對應的欄位或 method，重跑一次 gqlgen 就完成了。省下超多開發時間。
 

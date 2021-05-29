@@ -52,20 +52,28 @@ tags:
 
 首先你要在自己電腦安裝上 Pulumi CLI 工具，請參考[官方網站][2]，根據您的作業環境有不同的安裝方式，底下以 Mac 環境為主
 
-<pre><code class="language-sh">brew install pulumi</code></pre>
+```sh
+brew install pulumi
+```
 
 透過 brew 即可安裝成功，那升級工具透過底下即可
 
-<pre><code class="language-sh">brew upgrade pulumi</code></pre>
+```sh
+brew upgrade pulumi
+```
 
 或者您沒有使用 brew，也可以透過 curl 安裝
 
-<pre><code class="language-sh">curl -fsSL https://get.pulumi.com | sh</code></pre>
+```sh
+curl -fsSL https://get.pulumi.com | sh
+```
 
 測試 CLI 指令
 
-<pre><code class="language-sh">$ pulumi version
-v2.20.0</code></pre>
+```sh
+$ pulumi version
+v2.20.0
+```
 
 有看到版本資訊就是安裝成功了
 
@@ -73,7 +81,8 @@ v2.20.0</code></pre>
 
 透過 `pulumi new -h` 可以看到說明
 
-<pre><code class="language-sh">Usage:
+```sh
+Usage:
   pulumi new [template|url] [flags]
 
 Flags:
@@ -88,11 +97,13 @@ Flags:
   -o, --offline                   Use locally cached templates without making any network requests
       --secrets-provider string   The type of the provider that should be used to encrypt and decrypt secrets (possible choices: default, passphrase, awskms, azurekeyvault, gcpkms, hashivault) (default "default")
   -s, --stack string              The stack name; either an existing stack or stack to create; if not specified, a prompt will request it
-  -y, --yes                       Skip prompts and proceed with default values</code></pre>
+  -y, --yes                       Skip prompts and proceed with default values
+```
 
 可以選擇的 Template 超多，那我們這次用 AWS 搭配 Go 語言的 Temaplate 當作範例
 
-<pre><code class="language-sh">$ pulumi new aws-go --dir demo
+```sh
+$ pulumi new aws-go --dir demo
 This command will walk you through creating a new Pulumi project.
 
 Enter a value or leave blank to accept the (default), and press <ENTER>.
@@ -116,20 +127,24 @@ Finished installing dependencies
 
 Your new project is ready to go! ✨
 
-To perform an initial deployment, run 'cd demo', then, run 'pulumi up'</code></pre>
+To perform an initial deployment, run 'cd demo', then, run 'pulumi up'
+```
 
 ### 步驟三: 檢查專案目錄結構
 
-<pre><code class="language-sh">└── demo
+```sh
+└── demo
     ├── Pulumi.dev.yaml
     ├── Pulumi.yaml
     ├── go.mod
     ├── go.sum
-    └── main.go</code></pre>
+    └── main.go
+```
 
 其中 `main.go` 就是主程式檔案
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "github.com/pulumi/pulumi-aws/sdk/v3/go/aws/s3"
@@ -148,7 +163,8 @@ func main() {
         ctx.Export("bucketName", bucket.ID())
         return nil
     })
-}</code></pre>
+}
+```
 
 ## 設定 AWS 環境
 
@@ -158,13 +174,17 @@ func main() {
 
 請先將 AWS 環境設定完畢，請用 `aws configure` 完成 profile 設定
 
-<pre><code class="language-sh">aws configure --profile demo</code></pre>
+```sh
+aws configure --profile demo
+```
 
 ### 步驟一: 設定 AWS Region
 
 可以參考 [AWS 官方的 Available Regions][7]，並且透過 Pulumi CLI 做調整
 
-<pre><code class="language-sh">cd demo && pulumi config set aws:region ap-northeast-1</code></pre>
+```sh
+cd demo && pulumi config set aws:region ap-northeast-1
+```
 
 切換到 demo 目錄，並執行 `pulumi config`
 
@@ -172,26 +192,33 @@ func main() {
 
 如果你有很多環境需要設定，請使用 AWS Profile 作切換，不要用 default profile。其中 `demo` 為 profile 名稱
 
-<pre><code class="language-sh">pulumi config set aws:profile demo</code></pre>
+```sh
+pulumi config set aws:profile demo
+```
 
 ## 初始化 Pulumi 架構 (建立 S3 Bucket)
 
 ### 步驟一: 建立新的 S3 Bucket
 
-<pre><code class="language-go">        bucket, err := s3.NewBucket(ctx, "my-bucket", nil)
+```go
+        bucket, err := s3.NewBucket(ctx, "my-bucket", nil)
         if err != nil {
             return err
-        }</code></pre>
+        }
+```
 
 ### 步驟二: 執行 Pulumi CLI 預覽
 
 透過底下指令可以直接預覽每個操作步驟所做的改變:
 
-<pre><code class="language-sh">pulumi up</code></pre>
+```sh
+pulumi up
+```
 
 可以看到底下預覽:
 
-<pre><code class="language-sh">Previewing update (dev)
+```sh
+Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/db6a9e4e-f391-4cc4-b50c-408319b3d8e2
 
@@ -205,18 +232,21 @@ Resources:
 Do you want to perform this update?  [Use arrows to move, enter to select, type to filter]
   yes
 > no
-  details</code></pre>
+  details
+```
 
 選擇最後的 details:
 
-<pre><code class="language-sh">Do you want to perform this update? details
+```sh
+Do you want to perform this update? details
 + pulumi:pulumi:Stack: (create)
     [urn=urn:pulumi:dev::demo::pulumi:pulumi:Stack::demo-dev]
     + aws:s3/bucket:Bucket: (create)
         [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
         acl         : "private"
         bucket      : "my-bucket-e3d8115"
-        forceDestroy: false</code></pre>
+        forceDestroy: false
+```
 
 可以看到更詳細的建立步驟及權限，在此步驟可以詳細知道 Pulumi 會怎麼設定 AWS 架構，透過此預覽方式避免人為操作失誤。
 
@@ -224,7 +254,8 @@ Do you want to perform this update?  [Use arrows to move, enter to select, type 
 
 看完上面的預覽，我們最後就直接執行:
 
-<pre><code class="language-sh">Do you want to perform this update? yes
+```sh
+Do you want to perform this update? yes
 Updating (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/updates/3
@@ -239,7 +270,8 @@ Outputs:
 Resources:
     + 2 created
 
-Duration: 17s</code></pre>
+Duration: 17s
+```
 
 透過上述 UI 也可以看到蠻多詳細的資訊
 
@@ -247,13 +279,16 @@ Duration: 17s</code></pre>
 
 ### 步驟四: 顯示更多 Bucket 詳細資訊
 
-<pre><code class="language-go">        // Export the name of the bucket
+```go
+        // Export the name of the bucket
         ctx.Export("bucketID", bucket.ID())
-        ctx.Export("bucketName", bucket.Bucket)</code></pre>
+        ctx.Export("bucketName", bucket.Bucket)
+```
 
 執行 `pulumi up`
 
-<pre><code class="language-go">Updating (dev)
+```go
+Updating (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/updates/4
 
@@ -267,11 +302,13 @@ Outputs:
 Resources:
     2 unchanged
 
-Duration: 7s</code></pre>
+Duration: 7s
+```
 
 ### 步驟五: 更新 Bucket 名稱
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     pulumi.Run(func(ctx *pulumi.Context) error {
         // Create an AWS resource (S3 Bucket)
         bucket, err := s3.NewBucket(ctx, "my-bucket", &s3.BucketArgs{
@@ -286,11 +323,13 @@ Duration: 7s</code></pre>
         ctx.Export("bucketName", bucket.Bucket)
         return nil
     })
-}</code></pre>
+}
+```
 
 透過 `pulumi up`
 
-<pre><code class="language-sh">Previewing update (dev)
+```sh
+Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/7180c121-235c-40cc-9ae2-d0f68455296f
 
@@ -322,7 +361,8 @@ Do you want to perform this update? details
       ~ bucket: "my-bucket-9dd3052" => "foobar-1234"
     --outputs:--
   ~ bucketID  : "my-bucket-9dd3052" => output<string>
-  ~ bucketName: "my-bucket-9dd3052" => "foobar-1234"</code></pre>
+  ~ bucketName: "my-bucket-9dd3052" => "foobar-1234"
+```
 
 可以看到系統會砍掉舊的，在建立一個新的 bucket
 
@@ -338,15 +378,18 @@ Do you want to perform this update? details
 
 建立 `content/index.html` 檔案，內容如下
 
-<pre><code class="language-html"><html>
+```html
+<html>
   <body>
     <h1>Hello Pulumi S3 Bucket</h1>
   </body>
-</html></code></pre>
+</html>
+```
 
 修改 `main.go`，將 `index.html` 加入到 S3 bucket 內
 
-<pre><code class="language-go">        index := path.Join("content", "index.html")
+```go
+        index := path.Join("content", "index.html")
         _, err = s3.NewBucketObject(ctx, "index.html", &s3.BucketObjectArgs{
             Bucket: bucket.Bucket,
             Source: pulumi.NewFileAsset(index),
@@ -354,22 +397,26 @@ Do you want to perform this update? details
 
         if err != nil {
             return err
-        }</code></pre>
+        }
+```
 
 其中目錄結構如下
 
-<pre><code class="language-sh">├── demo
+```sh
+├── demo
 │   ├── Pulumi.dev.yaml
 │   ├── Pulumi.yaml
 │   ├── content
 │   │   └── index.html
 │   ├── go.mod
 │   ├── go.sum
-│   └── main.go</code></pre>
+│   └── main.go
+```
 
 部署到 S3 Bucket 內
 
-<pre><code class="language-sh">$ pulumi up
+```sh
+$ pulumi up
 Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/a0ac1b69-06b9-4109-800d-20618b36e5c8
@@ -391,13 +438,15 @@ Do you want to perform this update? details
         bucket      : "foobar-1234"
         forceDestroy: false
         key         : "index.html"
-        source      : asset(file:77aab46) { content/index.html }</code></pre>
+        source      : asset(file:77aab46) { content/index.html }
+```
 
 ### 步驟二: 設定 S3 為 Web Hosting
 
 修改 main.go
 
-<pre><code class="language-go">        bucket, err := s3.NewBucket(ctx, "my-bucket", &s3.BucketArgs{
+```go
+        bucket, err := s3.NewBucket(ctx, "my-bucket", &s3.BucketArgs{
             Bucket: pulumi.String("foobar-1234"),
             Website: s3.BucketWebsiteArgs{
                 IndexDocument: pulumi.String("index.html"),
@@ -410,15 +459,19 @@ Do you want to perform this update? details
             Source:      pulumi.NewFileAsset(index),
             Acl:         pulumi.String("public-read"),
             ContentType: pulumi.String(mime.TypeByExtension(path.Ext(index))),
-        })</code></pre>
+        })
+```
 
 最後設定輸出 URL:
 
-<pre><code class="language-go">ctx.Export("bucketEndpoint", bucket.WebsiteEndpoint)</code></pre>
+```go
+ctx.Export("bucketEndpoint", bucket.WebsiteEndpoint)
+```
 
 最後完整程式碼如下:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "mime"
@@ -460,11 +513,13 @@ func main() {
 
         return nil
     })
-}</code></pre>
+}
+```
 
 執行 pulumi up
 
-<pre><code class="language-sh">Previewing update (dev)
+```sh
+Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/edbaefca-f723-4ac5-aabd-7cb638636612
 
@@ -515,17 +570,21 @@ Resources:
     ~ 2 updated
     1 unchanged
 
-Duration: 13s</code></pre>
+Duration: 13s
+```
 
 ### 步驟三: 測試 URL
 
 透過底下指令可以拿到 S3 的 URL:
 
-<pre><code class="language-sh">pulumi stack output bucketEndpoint</code></pre>
+```sh
+pulumi stack output bucketEndpoint
+```
 
 透過 CURL 指令測試看看
 
-<pre><code class="language-sh">$ curl -v $(pulumi stack output bucketEndpoint)
+```sh
+$ curl -v $(pulumi stack output bucketEndpoint)
 *   Trying 52.219.16.96...
 * TCP_NODELAY set
 * Connected to foobar-1234.s3-website-ap-northeast-1.amazonaws.com (52.219.16.96) port 80 (#0)
@@ -549,7 +608,8 @@ Duration: 13s</code></pre>
     <h1>Hello Pulumi S3 Bucket</h1>
   </body>
 </html>
-* Connection #0 to host foobar-1234.s3-website-ap-northeast-1.amazonaws.com left intact</code></pre>
+* Connection #0 to host foobar-1234.s3-website-ap-northeast-1.amazonaws.com left intact
+```
 
 ## 心得
 

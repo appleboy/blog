@@ -36,8 +36,10 @@ tags:
 
 假設原本的專案有導入 vendor 工具類似 [govendor][9] 或 [dep][10]，可以在目錄底下找到 `vendor/vendor.json` 或 `Gopkg.toml`，這時候請在專案目錄底下執行
 
-<pre><code class="language-bash">$ go mod init github.com/appleboy/drone-line
-$ go mod download</code></pre>
+```bash
+$ go mod init github.com/appleboy/drone-line
+$ go mod download
+```
 
 您會發現 go module 會從 `vendor/vendor.json` 或 `Gopkg.toml` 讀取相關套件資訊，接著寫進去 `go.mod` 檔案，完成後可以下 `go mod dowload` 下載所有套件到 `$HOME/go/pkg/mod`
 
@@ -45,8 +47,10 @@ $ go mod download</code></pre>
 
 新專案只需要兩個步驟就可以把相關套件設定好
 
-<pre><code class="language-bash">$ go mod init github.com/appleboy/drone-line
-$ go mod tidy</code></pre>
+```bash
+$ go mod init github.com/appleboy/drone-line
+$ go mod tidy
+```
 
 其中 tidy 可以確保 `go.mod` 或 `go.sum` 裡面的內容都跟專案內所以資料同步，假設在程式碼內移除了 package，這樣 tidy 會確保同步性移除相關 package。
 
@@ -54,11 +58,13 @@ $ go mod tidy</code></pre>
 
 go module 在 1.11 版本預設是不啟動的，那在 Travis 要把 `GO111MODULE` 環境變數打開
 
-<pre><code class="language-yaml">matrix:
+```yaml
+matrix:
   fast_finish: true
   include:
   - go: 1.11.x
-    env: GO111MODULE=on</code></pre>
+    env: GO111MODULE=on
+```
 
 完成後可以到 [Travis 的環境][11]看到底下 `go get` 紀錄
 
@@ -66,7 +72,8 @@ go module 在 1.11 版本預設是不啟動的，那在 Travis 要把 `GO111MODU
 
 而在 [Drone 的設定][14]如下:
 
-<pre><code class="language-yaml">steps:
+```yaml
+steps:
   - name: testing
     image: golang:1.11
     pull: true
@@ -78,7 +85,8 @@ go module 在 1.11 版本預設是不啟動的，那在 Travis 要把 `GO111MODU
       - make misspell-check
       - make fmt-check
       - make build_linux_amd64
-      - make test</code></pre>
+      - make test
+```
 
 [![][15]][16]
 
@@ -86,7 +94,8 @@ go module 在 1.11 版本預設是不啟動的，那在 Travis 要把 `GO111MODU
 
 在開源專案內為了相容 Go 舊版本，所以 [Gin][17] 同時支援了 govendor 及 go module，其實還蠻難維護的，但是可以透過 travis 環境變數的判斷來達成目的:
 
-<pre><code class="language-yaml">language: go
+```yaml
+language: go
 sudo: false
 go:
   - 1.6.x
@@ -112,7 +121,8 @@ before_install:
 install:
   - if [[ "${GO111MODULE}" = "on" ]]; then go mod download; else make install; fi
   - if [[ "${GO111MODULE}" = "on" ]]; then export PATH="${GOPATH}/bin:${GOROOT}/bin:${PATH}"; fi
-  - if [[ "${GO111MODULE}" = "on" ]]; then make tools; fi</code></pre>
+  - if [[ "${GO111MODULE}" = "on" ]]; then make tools; fi
+```
 
 詳細設定請[參考 .travis 設定][18]
 

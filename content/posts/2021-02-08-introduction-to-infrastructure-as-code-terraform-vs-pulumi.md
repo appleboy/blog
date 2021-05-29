@@ -62,7 +62,8 @@ tags:
 
 IaC 工具真的太多了，此篇先拿 Pulumi 跟 Terraform 來管理雲平台做比較。Terraform 在 2014 年由 [HashiCorp][11] 公司推出，由 Go 語言所撰寫，並自定義了 [HCL 語言][12] (HashiCorp configuration language)，所以如果要入門 Terraform 的話，你首先需要先熟悉 HCL 語法，熟悉到一定程度後，就可以開始撰寫 HCL 來管理雲平台。底下看看 HCL 語法
 
-<pre><code class="language-yaml">data "aws_ami" "ubuntu_16_04_docker" {
+```yaml
+data "aws_ami" "ubuntu_16_04_docker" {
   filter {
     name   = "name"
     values = ["app-base-docker-image-*"]
@@ -87,7 +88,8 @@ resource "aws_instance" "foobar_api_01" {
     Project     = "foobar"
     Environment = var.environment["production"]
   }
-}</code></pre>
+}
+```
 
 另外來看一下後起之秀 [Pulumi][5]，其實 Pulumi 是站在 [Terraform Provider][13] 的肩膀上發展出來，也就是 Pulumi 寫了 Terraform Provider 的 Bridge，所以 Terrafrom Provider 提供了各種雲平台的 CRUD 之後，開發者就可以透過自己喜歡的語言來撰寫整體架構跟流程。最後讓我選擇 Pulumi 最大的原因還是在於開發者可以透過自己喜歡的語言來做到一樣的事情，新人不用重新熟悉 HCL 語法，加上如果在整體架構上有些額外的需求像是變數或邏輯上 Loop 比較複雜，在 HCL 上面會比較難實現，但是對於自己熟悉的語言 (GO, Python, JS ... 等) 就可以很簡單的去實現出業務邏輯。
 
@@ -97,7 +99,8 @@ resource "aws_instance" "foobar_api_01" {
 
 Terraform 跟 Pulumi 要使用前，一定需要安裝[各自的 CLI 工具][15]，並透過 up 或 preview 來檢視需要修正的部分，自動化部署就需要把 CLI 安裝好才算完成。但是就在 2020 年末，Pulumi 直接[推出 Automaton API][16]，讓開發者可以直接將流程整合進去自行開發的軟體架構，不再依賴 CLI 工具，簡單舉個例子，假設需要開一個 RDS 服務，這時開發者會透過 Pulumi 撰寫格式，程式碼如下:
 
-<pre><code class="language-go=">    _, err = rds.NewClusterInstance(ctx, "dbInstance", &rds.ClusterInstanceArgs{
+```go=
+    _, err = rds.NewClusterInstance(ctx, "dbInstance", &rds.ClusterInstanceArgs{
       ClusterIdentifier:  cluster.ClusterIdentifier,
       InstanceClass:      rds.InstanceType_T3_Small,
       Engine:             rds.EngineTypeAuroraMysql,
@@ -113,11 +116,13 @@ Terraform 跟 Pulumi 要使用前，一定需要安裝[各自的 CLI 工具][15]
     ctx.Export("dbName", dbName)
     ctx.Export("dbUser", dbUser)
     ctx.Export("dbPass", dbPass)
-</code></pre>
+
+```
 
 當拿到 DB 相關資訊後，接著要做一些 Migration，開發者無法在 pulumi up 同時完成 Migration 動作，而現在透過 Automation API，就可以輕鬆完成這件事情:
 
-<pre><code class="language-go=">  // create our stack with an "inline" Pulumi program (deployFunc)
+```go=
+  // create our stack with an "inline" Pulumi program (deployFunc)
   stack := auto.UpsertStackInlineSource(ctx, stackName, projectName, deployFunc)
   // run the update to deploy our database
   res, err := stack.Up(ctx, stdoutStreamer)
@@ -143,7 +148,8 @@ Terraform 跟 Pulumi 要使用前，一定需要安裝[各自的 CLI 工具][15]
     PRIMARY KEY(id)
   );
  `)
-</code></pre>
+
+```
 
 開發者現在可以輕易打造自己的服務，或撰寫好用的 CLI 工具提供給其他開發者使用，而這些工具都是透過 Pulumi API 輕鬆完成，再也不需要 Pulumi CLI 就可以完成這些事情。
 

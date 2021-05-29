@@ -35,7 +35,8 @@ tags:
 
 直接看官方給的例子:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import "embed"
 
@@ -53,22 +54,26 @@ func main() {
     data, _ := f.ReadFile("hello.txt")
     print(string(data))
 
-}</code></pre>
+}
+```
 
 可以看到關鍵字: `go:embed`，透過註解就可以將靜態檔案直接使用在開發上面，另外也可以引用多個檔案或多個目錄:
 
-<pre><code class="language-go">package server
+```go
+package server
 
 import "embed"
 
 // content holds our static web server content.
 //go:embed image/* template/*
 //go:embed html/index.html
-var content embed.FS</code></pre>
+var content embed.FS
+```
 
 可以看到 `go:embed` 支援多個目錄，單一檔案或多個檔案都可以，假如沒有用到 `embed.FS`，請在 import 時加上 `_`，範例如下:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import _ "embed"
 
@@ -80,7 +85,8 @@ func main() {
     //go:embed hello.txt
     var b []byte
     print(string(b))
-}</code></pre>
+}
+```
 
 有了這個 Package 後，再也不需要[第三方套件 Resource Embedding][10] 了，底下來看看如何將 embed 套件整合進 [Gin][11]？
 
@@ -88,7 +94,8 @@ func main() {
 
 先假設 Gin 需要包含靜態圖片及 Template，底下是目錄結構:
 
-<pre><code class="language-bash">├── assets
+```bash
+├── assets
 │   ├── favicon.ico
 │   └── images
 │       └── example.png
@@ -98,11 +105,13 @@ func main() {
 └── templates
     ├── foo
     │   └── bar.tmpl
-    └── index.tmpl</code></pre>
+    └── index.tmpl
+```
 
 該如何將 Template 跟 assets 目錄直接打包進 Go 呢？直接看 `main.go`
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "embed"
@@ -145,28 +154,35 @@ func main() {
     })
 
     router.Run(":8080")
-}</code></pre>
+}
+```
 
 開發者可以很簡單用兩行就將靜態檔案直接包進來:
 
-<pre><code class="language-go">//go:embed assets/* templates/*
-var f embed.FS</code></pre>
+```go
+//go:embed assets/* templates/*
+var f embed.FS
+```
 
 靜態檔案的 route 可以直接透過底下設定:
 
-<pre><code class="language-go">// example: /public/assets/images/example.png
-router.StaticFS("/public", http.FS(f))</code></pre>
+```go
+// example: /public/assets/images/example.png
+router.StaticFS("/public", http.FS(f))
+```
 
 也可以透過 `ReadFile` 讀取單一檔案:
 
-<pre><code class="language-go">router.GET("favicon.ico", func(c *gin.Context) {
+```go
+router.GET("favicon.ico", func(c *gin.Context) {
     file, _ := f.ReadFile("assets/favicon.ico")
     c.Data(
         http.StatusOK,
         "image/x-icon",
         file,
     )
-})</code></pre>
+})
+```
 
 程式範例可以直接在[這邊找到][12]。
 

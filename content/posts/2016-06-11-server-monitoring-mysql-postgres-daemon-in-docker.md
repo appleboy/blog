@@ -34,20 +34,23 @@ tags:
 
 在 Docker 要啟動 Database 服務相當容易，底下分別為 MySQL 及 Postgres 啟動步驟
 
-<pre><code class="language-bash"># Postgres
+```bash
+# Postgres
 $ docker run --name some-postgres \
   -d postgres:latest
 
 # MySQL
 $ docker run --name some-mysql \
   -d -e MYSQL_ROOT_PASSWORD=1234 \
-  mysql:latest</code></pre>
+  mysql:latest
+```
 
 ### 偵測 Database 服務
 
 透過 [Docker exec][5] 指令偵測 MySQL 及 Postgres 是否啟動，Postgres 透過 `pg_isready` 指令，Mysql 則是使用 `mysqladmin`
 
-<pre><code class="language-bash"># Postgres
+```bash
+# Postgres
 $ docker exec some-postgres pg_isready -h 127.0.0.1
 127.0.0.1:5432 - accepting connections
 
@@ -56,14 +59,17 @@ $ docker exec some-mysql mysqladmin -uroot -p123 ping
 mysqld is alive
 # 或者是直接執行單一 SQL 語法
 $ docker exec some-mysql mysql -uroot -p123 \
-  -e "SHOW Databases;"</code></pre>
+  -e "SHOW Databases;"
+```
 
 在 Docker 內如果是用 `mysqladmin ping` 的方式，我發現會抓不到 `$?` 錯誤代碼，所以還是建議用後者方式，透過執行單一 SQL 方式，在 [HAProxy][6] 搭配 [Percona XtraDB Cluster][7] 也是透過後者來偵測，詳情可以參考之前寫的『[Percona XtraDB Cluster 搭配 HAProxy][8]』。知道如何偵測後，就要寫 While 迴圈每一秒持續偵測。
 
-<pre><code class="language-bash">while ! pg_isready -h postgres; do
+```bash
+while ! pg_isready -h postgres; do
   output "Database service is unavailable - sleeping"
   sleep 1
-done</code></pre>
+done
+```
 
 完成上述偵測步驟，就可以正常執行 Databse Migration
 

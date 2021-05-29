@@ -24,7 +24,8 @@ tags:
 
 <!--more-->
 
-<pre><code class="language-c">#include <stdio.h>
+```c
+#include <stdio.h>
 #include <string.h>
 
 int main() {
@@ -34,29 +35,37 @@ int main() {
   t[5] = 0;
   printf("%s\n", t);
 }
-</code></pre>
+
+```
 
 strncpy函數原型如下
 
-<pre><code class="language-c">char *strncpy(char *dest, const char *src, size_t n);
-</code></pre>
+```c
+char *strncpy(char *dest, const char *src, size_t n);
+
+```
 
 dest為目標字串，src為來源字串，n為複製的字數。所以我們可以去變動src的指標，這樣就可以用strncpy()來模擬substr()了，我想這也是為什麼C語言不提供substr()的原因，畢竟用strncpy()就可以簡單的模擬出來。
 
 唯一比較討厭的是
 
-<pre><code class="language-c">t[5] = 0;</code></pre>
+```c
+t[5] = 0;
+```
 
 因為strncpy()不保證傳回的一定是NULL terminated，所以要自己補0當結尾，這是C語言比較醜的地方，若覺得strncpy()用法很醜陋，可以自己包成substr()。 然後也可以利用底下 function 的方式來實做：
 
-<pre><code class="language-c">void substr(char *dest, const char* src, unsigned int start, unsigned int cnt) {
+```c
+void substr(char *dest, const char* src, unsigned int start, unsigned int cnt) {
   strncpy(dest, src + start, cnt);
   dest[cnt] = 0;
-}</code></pre>
+}
+```
 
 寫成 function 方式來呼叫比較簡單，底下就是上面學弟作業的解答
 
-<pre><code class="language-c">#include <stdio.h>
+```c
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
@@ -108,7 +117,8 @@ int main(int argc,char *argv[])
     do_next_op(&op);         
   }
   return 0;
-}</code></pre>
+}
+```
 
 reference: [<http://www.cnblogs.com/oomusou/archive/2008/03/08/1096832.html>][1]
 

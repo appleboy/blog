@@ -19,7 +19,8 @@ tags:
 
 [Drone][2] 在 1.0 版本推出了用 [jsonnet][3] 來撰寫 [YAML][4] 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 `.drone.yml` 內有非常多重複性的設定，假設 [Go 語言][5]的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 [Docker Hub][6]，底下是 AMD64 的設定檔範例。剛好在 [Udemy 課程][7]內有學員詢問到[相關問題][8]。
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 name: linux-arm64
 
@@ -94,13 +95,15 @@ steps:
 
 trigger:
   branch:
-  - master</code></pre>
+  - master
+```
 
 <!--more-->
 
 大家可以看到上面總共快 80 行，如果要再支援 ARM 64，這時候就需要重新複製再貼上，並且把相關設定改掉，有沒有覺得這樣非常難維護 `.drone.yml`。Drone 的作者聽到大家的聲音了，在 1.0 版本整合了 [jsonnet][9] 這套 Data Templating Language，讓您可以寫一次代碼並產生出好幾種環境。底下簡單看一個例子:
 
-<pre><code class="language-json">// A function that returns an object.
+```json
+// A function that returns an object.
 local Person(name='Alice') = {
   name: name,
   welcome: 'Hello ' + name + '!',
@@ -108,11 +111,13 @@ local Person(name='Alice') = {
 {
   person1: Person(),
   person2: Person('Bob'),
-}</code></pre>
+}
+```
 
 透過 jsonnet 指令可以轉換如下:
 
-<pre><code class="language-json">{
+```json
+{
   "person1": {
     "name": "Alice",
     "welcome": "Hello Alice!"
@@ -121,7 +126,8 @@ local Person(name='Alice') = {
     "name": "Bob",
     "welcome": "Hello Bob!"
   }
-}</code></pre>
+}
+```
 
 那該如何改 drone 設定檔方便未來多個專案一起維護呢？
 
@@ -134,12 +140,15 @@ local Person(name='Alice') = {
 
 請直接參考[官方文件][10]就可以了，這邊不再詳細介紹，底下是 Mac 範例 (安裝的是 [Drone v1.0.5][11]):
 
-<pre><code class="language-sh">$ curl -L https://github.com/drone/drone-cli/releases/download/v1.0.5/drone_darwin_amd64.tar.gz | tar zx
-$ sudo cp drone /usr/local/bin</code></pre>
+```sh
+$ curl -L https://github.com/drone/drone-cli/releases/download/v1.0.5/drone_darwin_amd64.tar.gz | tar zx
+$ sudo cp drone /usr/local/bin
+```
 
 安裝完成後，還需要設定[環境變數][12]，才可以跟您的 Drone 伺服器溝通。
 
-<pre><code class="language-sh">$ drone
+```sh
+$ drone
 NAME:
    drone - command line utility
 
@@ -167,7 +176,8 @@ COMMANDS:
      lint       lint the yaml file
      sign       sign the yaml file
      jsonnet    generate .drone.yml from jsonnet
-     plugins    plugin helper functions</code></pre>
+     plugins    plugin helper functions
+```
 
 ## 撰寫 .drone.jsonnet 檔案
 
@@ -179,7 +189,8 @@ COMMANDS:
   4. 上傳到 Docker Hub 
   5. 消息通知
 
-<pre><code class="language-json">local PipelineTesting = {
+```json
+local PipelineTesting = {
   kind: "pipeline",
   name: "testing",
   platform: {
@@ -372,17 +383,22 @@ local PipelineNotifications = {
   PipelineBuild("linux", "arm64"),
   PipelineBuild("linux", "arm"),
   PipelineNotifications,
-]</code></pre>
+]
+```
 
 大家可以看到 `local PipelineBuild` 就是一個 func 函數，可以用來產生不同的環境代碼
 
-<pre><code class="language-sh">  PipelineBuild("linux", "amd64"),
+```sh
+  PipelineBuild("linux", "amd64"),
   PipelineBuild("linux", "arm64"),
-  PipelineBuild("linux", "arm"),</code></pre>
+  PipelineBuild("linux", "arm"),
+```
 
 完成後，直接在專案目錄下執行
 
-<pre><code class="language-sh">$ drone jsonnet --stream</code></pre>
+```sh
+$ drone jsonnet --stream
+```
 
 您會發現專案下的 `.drone.yml` 已經成功修正，未來只要將變動部分抽成變數，就可以產生不同專案的環境，開發者就不需要每次手動修改很多變動的地方。至於要不要把 `.drone.jsonnet` 放入專案內進行版本控制就看情境了。其實可以另外開一個新的 Repo 放置 `.drone.jsonnet`，未來新專案開案，就可以快速 clone 下來，並且產生新專案的 `.drone.yml` 設定檔。底下是 Drone 執行結果:
 

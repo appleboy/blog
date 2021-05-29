@@ -26,7 +26,8 @@ tags:
 
 請直接參考[官網 Wiki 安裝方式][5]，完成後可以發現預設跑在 `8080` port，搭配 Nginx 設定就可以跑在 `80` port。
 
-<pre><code class="language-bash">server {
+```bash
+server {
 
   listen 80;
   server_name your_host_name;
@@ -42,7 +43,8 @@ tags:
     proxy_pass          http://127.0.0.1:8081;
     proxy_read_timeout  90;
   }
-}</code></pre>
+}
+```
 
 ## 安裝 Golang Plugin
 
@@ -54,8 +56,10 @@ tags:
 
 要跑 golang 測試非常簡單，只需要兩個指令就可以測試
 
-<pre><code class="language-bash">$ go get -t -d -v ./...
-$ go test -v -cover ./...</code></pre>
+```bash
+$ go get -t -d -v ./...
+$ go test -v -cover ./...
+```
 
 設定完成後，跑測試，會出現底下錯誤訊息
 
@@ -63,12 +67,14 @@ $ go test -v -cover ./...</code></pre>
 
 可以發現 jenkins 預設不會將 `$GOPATH` 設定好，所以必須手動將 `$GOPATH` 相關目錄設定完成，請不要將 `$WORKSPACE` 設定成 `$GOPATH`，因為 `$WORKSPACE` 目錄底下包含 `src`, `pkg`, `bin` 三大目錄，請將底下 Script 設定到專案內
 
-<pre><code class="language-bash">export GOPATH=$WORKSPACE/gopath
+```bash
+export GOPATH=$WORKSPACE/gopath
 export PATH=$GOPATH/bin:$PATH
 mkdir -p $GOPATH/bin
 mkdir -p $GOPATH/src/github.com/appleboy/go-hello
 rsync -az --exclude="gopath" ${WORKSPACE}/ $GOPATH/src/github.com/appleboy/go-hello
-cd $GOPATH/src/github.com/appleboy/go-hello</code></pre>
+cd $GOPATH/src/github.com/appleboy/go-hello
+```
 
 附上設定圖檔
 

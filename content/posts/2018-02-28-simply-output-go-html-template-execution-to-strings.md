@@ -18,7 +18,8 @@ tags:
 
 <!--more-->
 
-<pre><code class="language-go">func GetString(filename string, data interface{}) (string, error) {
+```go
+func GetString(filename string, data interface{}) (string, error) {
     t := template.New(filename).Funcs(NewFuncMap())
 
     content, err := ReadFile(filename)
@@ -38,7 +39,8 @@ tags:
     }
 
     return tpl.String(), nil
-}</code></pre>
+}
+```
 
 其中 `ReadFile` 是讀取檔案函式，`NewFuncMap` 則是 [Function Map][4]。
 

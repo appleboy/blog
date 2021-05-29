@@ -31,10 +31,12 @@ tags:
 
 由於現在 Web Application 技術越來越先進，所以造成 CI/CD 流程相對複雜，所以每次只要 commit code，部署 + 測試時間相當久，在 Go 語言可以把前端 Source Code 整個包進去 Go Binary，所以 Production 機器根本不需要安裝任何 Package 就可以進行部署，這省下的時間對於大團隊而言是很可觀的。在 Go 語言只需要一個指令，就可以直接 build 出 binary file (不管是 ARM, Linux, MacOS, Windows) 32 bit or 64 bit
 
-<pre><code class="language-bash">$ GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o hello package
+```bash
+$ GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o hello package
 $ GOOS=linux GOARCH=arm CGO_ENABLED=0 go build -o hello package
 $ GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o hello package
-$ GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -o hello.exe package</code></pre>
+$ GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -o hello.exe package
+```
 
 ## 2. Static Type System
 

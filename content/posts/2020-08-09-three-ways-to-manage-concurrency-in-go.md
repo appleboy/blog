@@ -34,7 +34,8 @@ tags:
 
 先來了解有什麼情境需要使用到 WaitGroup，假設您有兩台機器需要同時上傳最新的程式碼，兩台機器分別上傳完成後，才能執行最後的重啟步驟。就像是把一個 Job 同時拆成好幾份同時一起做，可以減少不少時間，但是最後需要等到全部做完，才能執行下一步，這時候就需要用到 WaitGroup 函式才能做到。底下看個簡單例子
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -63,13 +64,15 @@ func main() {
     wg.Wait() // wait for tasks to be done
     fmt.Println("all goroutine done")
     fmt.Println(i)
-}</code></pre>
+}
+```
 
 ## Channel
 
 另外一種實際的案例就是，我們需要主動通知一個 Goroutine 進行停止的動作。舉例來說，當 App 啟動時，會在背景跑一些監控程式，而當整個 App 需要停止前，需要發個 Notification 給背景的監控程式，將其先停止，這時候就需要用到 Channel 來通知。底下來看個範例:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -93,7 +96,8 @@ func main() {
     fmt.Println("Notify Exit")
     exit <- true //keep main goroutine alive
     time.Sleep(5 * time.Second)
-}</code></pre>
+}
+```
 
 上面例子可以發現，背景用了一個 Goutine 及一個 Channel 來控制。可以想像當背景有無數個 Goroutine 的時候，我們就需要宣告多個 Channel 才能進行控制，也許 Goroutine 內又會產生 Goroutine，開發者這時候就會發現已經無法單純使用 Channel 來控制多個 Goroutine 了。這時候解決方式會是透過 `context`
 
@@ -101,7 +105,8 @@ func main() {
 
 大家可以想像，今天有一個背景任務 A，A 任務又產生了 B 任務，B 任務又產生了 C 任務，也就是可以按照此模式一直產生下去，假設中途我們需要停止 A 任務，而 A 又必須告訴 B 及 C 要一起停止，這時候透過 context 方式是最快的了。
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "context"
@@ -141,7 +146,8 @@ func main() {
     time.Sleep(5 * time.Second)
     cancel() //mock client exit, and pass the signal, ctx.Done() gets the signal  time.Sleep(3 * time.Second)
     time.Sleep(3 * time.Second)
-}</code></pre>
+}
+```
 
 大家可以把 context 想成是一個 controller，可以隨時控制不確定個數的 Goroutine，由上往下，只要宣告 `context.WithCancel` 後，再任意時間點都可以透過 `cancel()` 來停止整個背景服務。這邊實在案例會用在當 App 需要重新 restart 時，要先通知全部 goroutine 停止，正常停止後，才會重新啟動 App。
 

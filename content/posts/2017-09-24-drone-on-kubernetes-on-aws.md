@@ -35,13 +35,16 @@ tags:
 
 第二，你需要先在 AWS 上面建立一個 1G 的 EBS 空間，空間大小由你決定，你可以透過 AWS CLI 或直接到 AWS Console 頁面建立，底下是建立 EBS 的指令
 
-<pre><code class="language-bash">$ aws ec2 create-volume \
+```bash
+$ aws ec2 create-volume \
   --availability-zone=ap-southeast-1a \
-  --size=1 --volume-type=gp2</code></pre>
+  --size=1 --volume-type=gp2
+```
 
 注意 `availability-zone` 區域要跟 K8S 同樣，大小先設定 1G。完成後會看到底下訊息:
 
-<pre><code class="language-json">{
+```json
+{
     "AvailabilityZone": "ap-southeast-1a",
     "Encrypted": false,
     "VolumeType": "gp2",
@@ -51,7 +54,8 @@ tags:
     "SnapshotId": "",
     "CreateTime": "2017-09-23T15:42:24.319Z",
     "Size": 1
-}</code></pre>
+}
+```
 
 之後會用到 `VolumeId`。假如沒有做此步驟，您會發現 Drone 伺服器是無法啟動成功。最後是請到 GitHub 帳號內建立一個全新 OAuth App，並取得 `CLient` 跟 `Secret` 代碼。
 
@@ -59,48 +63,62 @@ tags:
 
 所有的 Yaml 檔案都可以直接在 [appleoy/drone-on-kubernetes][11]，找到。首先打開 `drone-server-deployment.yaml`，找到 `volumeID` 取代成上述建立好的結果。
 
-<pre><code class="language-diff">  awsElasticBlockStore:
+```diff
+  awsElasticBlockStore:
     fsType: ext4
     # NOTE: This needs to be pointed at a volume in the same AZ.
     # You need not format it beforehand, but it must already exist.
     # CHANGEME: Substitute your own EBS volume ID here.
 -   volumeID: vol-xxxxxxxxxxxxxxxxx
-+   volumeID: vol-01f13b969e9dabff7</code></pre>
++   volumeID: vol-01f13b969e9dabff7
+```
 
 再來設定 server 跟 agent 溝通用的 Secret，打開 `drone-secret.yaml`
 
-<pre><code class="language-diff">data:
+```diff
+data:
 -  server.secret: ZHJvbmUtdGVzdC1kZW1v
-+  server.secret: ZHJvbmUtdGVzdC1zZWNyZXQ=</code></pre>
++  server.secret: ZHJvbmUtdGVzdC1zZWNyZXQ=
+```
 
 透過 base64 指令換掉上面的代碼。假設密碼設定 `drone-test-secret`，請執行底下指令
 
-<pre><code class="language-bash">$ echo -n "drone-test-secret" | base64
-ZHJvbmUtdGVzdC1zZWNyZXQ=</code></pre>
+```bash
+$ echo -n "drone-test-secret" | base64
+ZHJvbmUtdGVzdC1zZWNyZXQ=
+```
 
 在 GitHub 上面建立新的 Application，並且拿到 Client ID 跟 Secret Key，修改 `drone-configmap.yaml` 檔案
 
-<pre><code class="language-bash">server.host: drone.example.com
+```bash
+server.host: drone.example.com
 server.remote.github.client: xxxxx
-server.remote.github.secret: xxxxx</code></pre>
+server.remote.github.secret: xxxxx
+```
 
 接著陸續執行底下指令，新增 Drone NameSpace 並且將 server 及 agent 服務啟動
 
-<pre><code class="language-bash">$ kubectl create -f drone-namespace.yaml
+```bash
+$ kubectl create -f drone-namespace.yaml
 $ kubectl create -f drone-secret.yaml
 $ kubectl create -f drone-configmap.yaml
 $ kubectl create -f drone-server-deployment.yaml
 $ kubectl create -f drone-server-service.yaml
-$ kubectl create -f drone-agent-deployment.yaml</code></pre>
+$ kubectl create -f drone-agent-deployment.yaml
+```
 
 完成後，k8s 會自動建立 ELB，透過 kubectl 可以看到 ELB 名稱
 
-<pre><code class="language-bash">$ kubectl --namespace=drone get service -o wide</code></pre>
+```bash
+$ kubectl --namespace=drone get service -o wide
+```
 
 執行後看到底下結果:
 
-<pre><code class="language-bash">NAME            CLUSTER-IP      EXTERNAL-IP
-drone-service   100.68.89.117   xxxxxxxxx.ap-southeast-1.elb.amazonaws.com</code></pre>
+```bash
+NAME            CLUSTER-IP      EXTERNAL-IP
+drone-service   100.68.89.117   xxxxxxxxx.ap-southeast-1.elb.amazonaws.com
+```
 
 拿到 ELB 網域後，可以直接更新 GitHub 的 application 資料
 
@@ -112,14 +130,18 @@ drone-service   100.68.89.117   xxxxxxxxx.ap-southeast-1.elb.amazonaws.com</code
 
 上述步驟是不是有點複雜，要執行的 kubectl 指令非常多，所以我提供了另一種安裝方式，就是透過 [install-drone.sh]，執行這 Shell Script 檔案前，你必須先做兩件事情。1. 申請 EBS 空間，完成後請修改 `drone-server-deployment.yaml` 內的 `volumeID`。2. 申請 [GitHub OAuth Application][13]，完成後請修改 `drone-configmap.yaml` 內的 GitHub 設定。最後執行底下指令
 
-<pre><code class="language-bash">$ ./install-drone.sh</code></pre>
+```bash
+$ ./install-drone.sh
+```
 
 ## 擴展 agent 服務
 
 假設一個 agent 已經不符合團隊需求，在 k8s 內只要一個指令就可以自動水平擴展 agent:
 
-<pre><code class="language-bash">$ kubectl scale deploy/drone-agent \
-  --replicas=2 --namespace=drone</code></pre>
+```bash
+$ kubectl scale deploy/drone-agent \
+  --replicas=2 --namespace=drone
+```
 
 其中 `replicas` 可以改成你要的數字。
 
@@ -127,7 +149,9 @@ drone-service   100.68.89.117   xxxxxxxxx.ap-southeast-1.elb.amazonaws.com</code
 
 我們已經將 Drone 資料庫備份在 EBS，所以隨時都可以移除 Drone 服務，透過簡單的指令就可以清除掉 Drone 所有容器，只要下清除 Namespace 即可
 
-<pre><code class="language-bash">$ kubectl delete -f drone-namespace.yaml</code></pre>
+```bash
+$ kubectl delete -f drone-namespace.yaml
+```
 
 # 歡迎追蹤 [drone-on-kubernetes][11]
 

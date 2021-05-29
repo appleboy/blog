@@ -20,7 +20,8 @@ tags:
 
 <!--more-->
 
-<pre><code class="language-sql">-- foo table
+```sql
+-- foo table
 DROP TABLE IF EXISTS "foo";
 CREATE TABLE `foo` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -39,7 +40,8 @@ CREATE TABLE `bar` (
   `created_at` DATETIME NULL, 
   `data` TEXT NULL, 
   `memo` TEXT NULL
-)</code></pre>
+)
+```
 
 其中 `foo` 資料表內的 name + key 是唯一值，所以會是一對多狀態，一把 key 會對應到 `bar` 內的多組資料。而 bar 內的 `timestamp` 則是用來處理版本控制，每一次的修改就會多出一組新的 `timestamp` 資料。底下會來介紹該如何取得每一把 key 的前幾筆 data 資料。
 
@@ -47,7 +49,8 @@ CREATE TABLE `bar` (
 
 先講資料不多的時候可以透過 **UNION** 方式解決，如下:
 
-<pre><code class="language-sql">select * from bar where foo_id=1 order by timestamp desc limit 3
+```sql
+select * from bar where foo_id=1 order by timestamp desc limit 3
 UNION
 select * from bar where foo_id=2 order by timestamp desc limit 3
 UNION
@@ -55,7 +58,8 @@ select * from bar where foo_id=3 order by timestamp desc limit 3
 .
 .
 .
-select * from bar where foo_id=n order by timestamp desc limit 3</code></pre>
+select * from bar where foo_id=n order by timestamp desc limit 3
+```
 
 這個做法其實還不預期可以解決版本控制的問題，假設同一筆 `foo_id` 的資料在每一個 timestamp 版本筆數不一樣，這樣就會噴錯
 
@@ -75,9 +79,11 @@ select * from bar where foo_id=n order by timestamp desc limit 3</code></pre>
 
 [rank()][2] 方式可以在 [MySQL][3], [SQLite][4] 或 [Postgres][5] 都支援，由於目前我開發模式都是本機使用 SQLite，Production 環境則用 [Postgres][5]，所以在寫 SQL 同時都會兼顧是否三者都能並行 (執行開源專案養成的 XD)，這時候來實驗看看用 rank 來標記 timestamp:
 
-<pre><code class="language-sql">SELECT bar.*, 
+```sql
+SELECT bar.*, 
   rank() OVER (PARTITION BY foo_id ORDER BY "timestamp" DESC) as rank
-  FROM bar</code></pre>
+  FROM bar
+```
 
 就會拿到底下資料
 
@@ -112,11 +118,13 @@ select * from bar where foo_id=n order by timestamp desc limit 3</code></pre>
   * foo_id 為 2 時的 102 版本
   * foo_id 為 3 時的 105 版本
 
-<pre><code class="language-sql">select bar.* from 
+```sql
+select bar.* from 
 (SELECT bar.*, 
   rank() OVER (PARTITION BY foo_id ORDER BY "timestamp" DESC) as rank
   FROM bar) bar
-  where rank = 1</code></pre>
+  where rank = 1
+```
 
 資料如下:
 
@@ -133,11 +141,13 @@ select * from bar where foo_id=n order by timestamp desc limit 3</code></pre>
   * foo_id 為 2 時的 102 版本
   * foo_id 為 3 時的 100 版本 (100 最今近 102)
 
-<pre><code class="language-sql">select bar.* from 
+```sql
+select bar.* from 
 (SELECT bar.*, 
   rank() OVER (PARTITION BY foo_id ORDER BY "timestamp" DESC) as rank
   FROM bar where "timestamp" <= 102) bar
-  where rank = 1</code></pre>
+  where rank = 1
+```
 
 資料如下:
 

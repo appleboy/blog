@@ -20,28 +20,38 @@ Update 2010.08.28: [**Pspad 轉換既有 Tabs to Spaces**][1] by [bootleq][2]
 
 [<img src="https://i0.wp.com/farm5.static.flickr.com/4080/4925098933_f7fb7a1312_o.gif?resize=180%2C45&#038;ssl=1" alt="vim_header" data-recalc-dims="1" />][3] 為了統一 Windows 跟 Linux 底下的編輯器在使用 Tab 功能相同，所以調整了 [Vim][4] 及 [Pspad][5](我常用編輯器)的設定，底下是針對 Vim 及 Pspad 的解決方法。首先當大家使用 Vim 編輯器撰寫程式，常常會使用 Tab 來縮排程式碼，我們可以使用 <span style="color:green"><strong>expandtab</strong></span> 來插入空白鍵(Space)取代 Tab:
 
-<pre><code class="language-bash">:set expandtab</code></pre>
+```bash
+:set expandtab
+```
 
 控制插入 Tab 時所需要的空白鍵(Tab)字元數，例如用4個空白鍵取代 Tab:
 
-<pre><code class="language-bash">:set tabstop=4</code></pre>
+```bash
+:set tabstop=4
+```
 
 在我們設定完 <span style="color:green"><strong>expandtab</strong></span> 之後，所有的 Tab 鍵將會被 Space 所取代，但是原本在檔案文件中的 Tab 將不會改變，為了取代原有的 Tab 到新的設定，我們必須鍵入：
 
-<pre><code class="language-bash">:retab</code></pre>
+```bash
+:retab
+```
 
 針對程式縮排所需要的 Space 個數，我們可以使用 <span style="color:green"><strong>shiftwidth</strong></span> 選項
 
-<pre><code class="language-bash">:set shiftwidth=4</code></pre>
+```bash
+:set shiftwidth=4
+```
 
 底下舉個例子：
 
   * 將文件中 Tab 取代成 Space
   * 所有 Tab 用4個 Space 取代
 
-<pre><code class="language-bash">:set tabstop=4
+```bash
+:set tabstop=4
 :set shiftwidth=4
-:set expandtab</code></pre>
+:set expandtab
+```
 
 ## Pspad 設定
 
@@ -49,8 +59,10 @@ Settings -> Programing Settings -> Editor (Part 2)
 
 設定：
 
-<pre><code class="language-bash">Tab Width:4
-Indent Width:4</code></pre>
+```bash
+Tab Width:4
+Indent Width:4
+```
 
 請勿勾選 Real Tab，如果要把既有的 Tab 轉換成 Space，可以使用: 
 
@@ -60,7 +72,9 @@ Indent Width:4</code></pre>
 
 針對 Makefile 需要使用 Tab，我們必須在 .vimrc 裡面在加入底下：
 
-<pre><code class="language-bash">autocmd FileType make setlocal noexpandtab</code></pre>
+```bash
+autocmd FileType make setlocal noexpandtab
+```
 
 ## 參考文章
 

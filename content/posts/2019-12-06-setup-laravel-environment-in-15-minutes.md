@@ -32,8 +32,10 @@ tags:
 
 先來定義 laradock 該如何跟既有或者是全新專案結合，底下提供一種目錄結構
 
-<pre><code class="language-sh">├── laradock
-└── www</code></pre>
+```sh
+├── laradock
+└── www
+```
 
 其實蠻好懂的，先建立空目錄，www 代表專案的程式碼，而 laradock 就是本機端開發環境。你也可以直接將 laradock 放進 www 內也可以。
 
@@ -41,44 +43,60 @@ tags:
 
 修改
 
-<pre><code class="language-yaml">APP_CODE_PATH_HOST=../www</code></pre>
+```yaml
+APP_CODE_PATH_HOST=../www
+```
 
 專案架構調整為:
 
-<pre><code class="language-sh">├── laradock
-└── www</code></pre>
+```sh
+├── laradock
+└── www
+```
 
 如果機器本身已經有 [nginx][4], [apache][5] 或 [traefik][6]，請將 nginx container port 修改為:
 
-<pre><code class="language-sh">NGINX_HOST_HTTP_PORT=8000
-NGINX_HOST_HTTPS_PORT=4430</code></pre>
+```sh
+NGINX_HOST_HTTP_PORT=8000
+NGINX_HOST_HTTPS_PORT=4430
+```
 
 ## 下載專案原始碼
 
 如果已經有 Source Code 了請忽略此步驟，如果是全新的專案，請先進入 `workspace` 容器:
 
-<pre><code class="language-sh">docker-compose exec workspace bash</code></pre>
+```sh
+docker-compose exec workspace bash
+```
 
 進去後預設會在 `/var/www` 目錄底下，接著下載 laravel 官方原始碼
 
-<pre><code class="language-sh">composer create-project laravel/laravel --prefer-dist .</code></pre>
+```sh
+composer create-project laravel/laravel --prefer-dist .
+```
 
 完成後請離開 container，就可以看到在 `www` 底下有完整的 laravel 代碼，避免跟主機 Host 衝突。接著啟動專案 (nginx + mariadb)
 
-<pre><code class="language-sh">docker-compose up -d nginx mariadb</code></pre>
+```sh
+docker-compose up -d nginx mariadb
+```
 
 ## 設定 nginx 檔案
 
 先假設網域名稱為 `laravel.test`，先複製 config
 
-<pre><code class="language-sh">cp -r nginx/sites/laravel.conf.example nginx/sites/laravel.test.conf</code></pre>
+```sh
+cp -r nginx/sites/laravel.conf.example nginx/sites/laravel.test.conf
+```
 
 修改 `nginx/sites/laravel.test.conf`
 
-<pre><code class="language-sh"># 將底下
+```sh
+# 將底下
 root /var/www/laravel/public
 # 改成
-root /var/www/public</code></pre>
+root /var/www/public
+```
 
 這邊我有[發個 PR][7] 到 Laradock，最後新增 laravel.test 到 `/etc/hosts` 檔案
 
@@ -86,18 +104,23 @@ root /var/www/public</code></pre>
 
 由於 php-fpm 容器運行的 www-data 的使用者，所以您必須在 Host 設定相對應的 uid 及 gid，先進入 `php-fpm` 來取得 www-data 個人資訊:
 
-<pre><code class="language-sh">$ docker-compose exec php-fpm id www-data
-uid=1000(www-data) gid=1000(www-data) groups=1000(www-data)</code></pre>
+```sh
+$ docker-compose exec php-fpm id www-data
+uid=1000(www-data) gid=1000(www-data) groups=1000(www-data)
+```
 
 設定權限
 
-<pre><code class="language-sh">chown -R 1000:1000 www/storage/</code></pre>
+```sh
+chown -R 1000:1000 www/storage/
+```
 
 ## 編輯 laradock/docker-compose.yml
 
 Docker 預設使用 172.21.x 開頭的 IP，可以修改 docker-compose.yml 來調整網路設定:
 
-<pre><code class="language-yaml">networks:
+```yaml
+networks:
   frontend:
     driver: ${NETWORKS_DRIVER}
     ipam:
@@ -115,7 +138,8 @@ Docker 預設使用 172.21.x 開頭的 IP，可以修改 docker-compose.yml 來�
     ipam:
       driver: default
       config:
-        - subnet: 192.168.110.0/24</code></pre>
+        - subnet: 192.168.110.0/24
+```
 
 避免跟公司網路 172.xxx.xxx.xxx 網域衝到造成網路斷線。
 

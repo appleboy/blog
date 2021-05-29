@@ -34,14 +34,16 @@ tags:
 
 Drone 在 1.6 版才正式支援『Auto cancellation』，而且每個專案預設是不啟動的，需要透過 [Drone CLI][4] 才能正確啟動。底下來看看如何透過 CLI 啟動：
 
-<pre><code class="language-bash"># 啟用 pull request
+```bash
+# 啟用 pull request
 drone repo update \
   --auto-cancel-pull-requests=true 
   appleboy/go-hello
 # 啟用 push event
 drone repo update \
   --auto-cancel-pushes=true \
-  appleboy/go-hello</code></pre>
+  appleboy/go-hello
+```
 
 目前還沒有辦法透過後台 UI 介面啟用，請大家使用上述指令來開啟 Auto Cancellation 功能。
 

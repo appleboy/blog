@@ -25,7 +25,9 @@ tags:
 
 ## 安裝方式
 
-<pre><code class="language-bash">$ go get -u github.com/appleboy/gofight</code></pre>
+```bash
+$ go get -u github.com/appleboy/gofight
+```
 
 `-u` 代表將 local 端程式碼更新到最新
 
@@ -33,7 +35,8 @@ tags:
 
 不多說直接先看例子，用 golang 基本的 http handler
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
   "io"
@@ -49,11 +52,13 @@ func BasicEngine() http.Handler {
   mux.HandleFunc("/", BasicHelloHandler)
 
   return mux
-}</code></pre>
+}
+```
 
 撰寫測試
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
   "github.com/appleboy/gofight"
@@ -73,13 +78,15 @@ func TestBasicHelloWorld(t *testing.T) {
       assert.Equal(t, "Hello World", r.Body.String())
       assert.Equal(t, http.StatusOK, r.Code)
     })
-}</code></pre>
+}
+```
 
 ### 自訂 header
 
 透過 `SetHeader` 可以自訂 Request header
 
-<pre><code class="language-go">func TestBasicHelloWorld(t *testing.T) {
+```go
+func TestBasicHelloWorld(t *testing.T) {
   r := gofight.New()
   version := "0.0.1"
 
@@ -95,13 +102,15 @@ func TestBasicHelloWorld(t *testing.T) {
       assert.Equal(t, "Hello World", r.Body.String())
       assert.Equal(t, http.StatusOK, r.Code)
     })
-}</code></pre>
+}
+```
 
 ### 自訂 Form Data
 
 透過 `SetFORM` 來傳送 Form Data
 
-<pre><code class="language-go">func TestPostFormData(t *testing.T) {
+```go
+func TestPostFormData(t *testing.T) {
   r := gofight.New()
 
   r.POST("/form").
@@ -119,13 +128,15 @@ func TestBasicHelloWorld(t *testing.T) {
       assert.Equal(t, "2", b)
       assert.Equal(t, http.StatusOK, r.Code)
     })
-}</code></pre>
+}
+```
 
 ### 自訂 JSON Data
 
 透過 `SetJSON` 來傳送 JSON Data
 
-<pre><code class="language-go">func TestPostJSONData(t *testing.T) {
+```go
+func TestPostJSONData(t *testing.T) {
   r := gofight.New()
 
   r.POST("/json").
@@ -143,13 +154,15 @@ func TestBasicHelloWorld(t *testing.T) {
       assert.Equal(t, 2, int(b))
       assert.Equal(t, http.StatusOK, r.Code)
     })
-}</code></pre>
+}
+```
 
 ### 自訂 RAW Data
 
 透過 `SetBody` 來傳送 RAW Data
 
-<pre><code class="language-go">func TestPostRawData(t *testing.T) {
+```go
+func TestPostRawData(t *testing.T) {
   r := gofight.New()
 
   r.POST("/raw").
@@ -164,7 +177,8 @@ func TestBasicHelloWorld(t *testing.T) {
       assert.Equal(t, "2", b)
       assert.Equal(t, http.StatusOK, r.Code)
     })
-}</code></pre>
+}
+```
 
 更多測試可以直接參考 [gofight_test.go][9] 程式碼
 

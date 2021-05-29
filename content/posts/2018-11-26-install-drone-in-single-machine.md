@@ -30,7 +30,8 @@ tags:
 
 可以直接參考[官網安裝方式][3]
 
-<pre><code class="language-bash">docker run \
+```bash
+docker run \
   --volume=/var/run/docker.sock:/var/run/docker.sock \
   --volume=/var/lib/drone:/data \
   --env=DRONE_GITHUB_SERVER=https://github.com \
@@ -45,7 +46,8 @@ tags:
   --restart=always \
   --detach=true \
   --name=drone \
-  drone/drone:1.0.0-rc.1</code></pre>
+  drone/drone:1.0.0-rc.1
+```
 
 上述是用單行指令就可以架設好 drone，可以注意兩個地方。
 
@@ -54,7 +56,8 @@ tags:
 
 如果你喜歡用 docker-compose 請參考底下，或直接到 [GitHub 上面看看][4]
 
-<pre><code class="language-yml">version: '2'
+```yml
+version: '2'
 
 services:
   drone-server:
@@ -75,7 +78,8 @@ services:
       - DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID}
       - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET}
       - DRONE_LOGS_PRETTY=true
-      - DRONE_LOGS_COLOR=true</code></pre>
+      - DRONE_LOGS_COLOR=true
+```
 
 ## 心得
 

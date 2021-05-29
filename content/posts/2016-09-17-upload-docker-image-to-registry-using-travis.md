@@ -25,14 +25,17 @@ tags:
 
 啟動方式非常簡單，只要加入底下程式碼到 `.travis.yml`
 
-<pre><code class="language-yml">services:
-  - docker</code></pre>
+```yml
+services:
+  - docker
+```
 
 ### 準備 Dockerfile 編譯 Image
 
 我們用 Golang 為例，底下是 Dockerfile 範例
 
-<pre><code class="language-bash">FROM alpine:3.4
+```bash
+FROM alpine:3.4
 
 RUN apk update && \
   apk add \
@@ -40,19 +43,24 @@ RUN apk update && \
   rm -rf /var/cache/apk/*
 
 ADD drone-line /bin/
-ENTRYPOINT ["/bin/drone-line"]</code></pre>
+ENTRYPOINT ["/bin/drone-line"]
+```
 
 接著透過底下指令編譯出 Dokcer Image
 
-<pre><code class="language-bash">$ docker build --rm -t $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE) .</code></pre>
+```bash
+$ docker build --rm -t $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE) .
+```
 
 `DEPLOY_ACCOUNT` 是 Dokcer hub 帳號，以我的帳號為例就是 [appleboy][9]，`DEPLOY_IMAGE` 則是 Image 名稱。請將這指令寫道 `.travis.yml` 內的 `script` 內
 
-<pre><code class="language-yml">script:
+```yml
+script:
   # 執行測試
   - make test
   # 通過測試後開始編譯 Image
-  - docker build --rm -t $DEPLOY_ACCOUNT/$DEPLOY_IMAGE .</code></pre>
+  - docker build --rm -t $DEPLOY_ACCOUNT/$DEPLOY_IMAGE .
+```
 
 最後一道指令就是上傳了
 
@@ -64,16 +72,20 @@ ENTRYPOINT ["/bin/drone-line"]</code></pre>
 
 將帳號密碼設定完成後，請在 `after_success` 加上上傳指令
 
-<pre><code class="language-yml">after_success:
+```yml
+after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_GO_VERSION" == "1.7.1" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
     make docker_deploy tag=latest;
-    fi</code></pre>
+    fi
+```
 
 上面表示只要是 `master` 分支，測試環境為 Golang 1.7.1 且不是在 Pull Request 狀態就執行登入，並且上傳，其中 `make docker_deploy tag=latest` 代表意思如下 (我把指令寫在 Makefile 內):
 
-<pre><code class="language-bash">docker tag $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE):latest $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE):$(tag)
-docker push $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE):$(tag)</code></pre>
+```bash
+docker tag $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE):latest $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE):$(tag)
+docker push $(DEPLOY_ACCOUNT)/$(DEPLOY_IMAGE):$(tag)
+```
 
 上面步驟完成，之後只要 commit 到主分支，Travis 就會自動編譯 Image 並且上傳到 Dokcer Hub，蠻方便的。
 

@@ -33,7 +33,8 @@ tags:
 
 根據上述的需求，我們可以知道，當有 100 個連線交易時，理論上該使用者的存款會變成 $1000 + $50*100 = $6000 USD。這是理想狀態，假設如果同時間打上來，大家可以知道最後存款肯定不到 $6000。底下程式碼可以複製出此問題
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     session, _ := mgo.Dial("localhost:27017")
     globalDB = session.DB("queue")
     globalDB.C("bank").DropCollection()
@@ -48,11 +49,13 @@ tags:
     log.Println("Listen server on 8000 port")
     http.HandleFunc("/", pay)
     http.ListenAndServe(":8000", nil)
-}</code></pre>
+}
+```
 
 上述是主程式，新增一個 Handle 為 pay，用來處理交易。
 
-<pre><code class="language-go">func pay(w http.ResponseWriter, r *http.Request) {
+```go
+func pay(w http.ResponseWriter, r *http.Request) {
     entry := currency{}
     // step 1: get current amount
     err := globalDB.C("bank").Find(bson.M{"account": account}).One(&entry)
@@ -75,23 +78,29 @@ tags:
     fmt.Printf("%+v\n", entry)
 
     io.WriteString(w, "ok")
-}</code></pre>
+}
+```
 
 ## 解決方式
 
 這邊提供幾個解決方式，第一種就是透過 `sync.Mutex` 方式，直接將交易區段程式碼 lock 住，這樣可以避免同時寫入或讀出的問題。在 Handler 內直接新增底下程式碼就可以解決，詳細程式碼請參考 [safe.go][8]
 
-<pre><code class="language-go">mu.Lock()
-defer mu.Unlock()</code></pre>
+```go
+mu.Lock()
+defer mu.Unlock()
+```
 
 第二種方式可以用 Go 語言內的優勢: [goroutine][2] + [channel][3]，在這邊我們只要建立兩個 Channle，第一個是使用者帳號 (string) 第二個是輸出 Result (struct)。[完整程式碼範例][9]
 
-<pre><code class="language-go">in = make(chan string)
-out = make(chan Result)</code></pre>
+```go
+in = make(chan string)
+out = make(chan Result)
+```
 
 在 main func 內建立第一個 goroutine
 
-<pre><code class="language-go">go func(in *chan string) {
+```go
+go func(in *chan string) {
   for {
     select {
     case account := <-*in:
@@ -118,11 +127,13 @@ out = make(chan Result)</code></pre>
     }
   }
 
-}(&in)</code></pre>
+}(&in)
+```
 
 上面可以很清楚看到使用到 `select` 來接受 input channel，並且透過 `go` 將 for loop 丟到背景執行。所以在每個交易時，將帳號丟到 `in` channel 內，就可以開始進行交易，同時間並不會有其他交易。在 handler 內，也是透過此方式來讀取使用者最後存款餘額
 
-<pre><code class="language-go">wg := sync.WaitGroup{}
+```go
+wg := sync.WaitGroup{}
 wg.Add(1)
 
 go func(wg *sync.WaitGroup) {
@@ -137,11 +148,13 @@ go func(wg *sync.WaitGroup) {
   }
 }(&wg)
 
-wg.Wait()</code></pre>
+wg.Wait()
+```
 
 不過上面這方法，可想而知，只有一個 Queue 幫忙處理交易資料，那假設有幾百萬個交易要同時進行呢，該如何消化更多的交易，就要將上面程式碼改成 Multiple Queue [完整程式碼範例][10]。假設我們有 100 個帳號，開 10 個 Queue 去處理，每一個 Queue 來處理 10 個帳號，也就是說 ID 為 23 號的分給第 3 (23 % 10) 個 Queue，ID 為 59 號則分給第 9 個 Queue。
 
-<pre><code class="language-go">for i := range in {
+```go
+for i := range in {
   go func(in *chan string, i int) {
     for {
       select {
@@ -154,18 +167,22 @@ wg.Wait()</code></pre>
     }
 
   }(&in<em></em>, i)
-}</code></pre>
+}
+```
 
 其中 channel 要宣告為底下: maxThread 為 10 (可以由開發者任意設定)
 
-<pre><code class="language-go">in = make([]chan string, maxThread)
-out = make([]chan Result, maxThread)</code></pre>
+```go
+in = make([]chan string, maxThread)
+out = make([]chan Result, maxThread)
+```
 
 ## Optimistic concurrency control
 
 假設需要擴展服務，執行超過一個服務，就會遇到 [Optimistic concurrency control][7]，原因在上述方法只能保證在單一服務內不會同時存取同一筆資料，但是如果是多個服務則還是會發生同時存取或寫入單筆資料。這邊可以用簡單的機制來解決應用層的問題，直接在資料表加上 `Version`，初始值為 `1`，要執行更新時請透過底下語法來更新:
 
-<pre><code class="language-go">entry.Amount = entry.Amount + 50.000
+```go
+entry.Amount = entry.Amount + 50.000
 err = globalDB.C("bank").Update(bson.M{
   "version": entry.Version,
   "_id":     entry.ID,
@@ -176,7 +193,8 @@ err = globalDB.C("bank").Update(bson.M{
 
 if err != nil {
   goto LOOP
-}</code></pre>
+}
+```
 
 如果資料不存在時，就無法寫入，這樣可以避免同時寫入問題。
 

@@ -40,7 +40,8 @@ tags:
 
 為了解決上述兩大問題，我建議在公司團隊內使用 GitHub Flow 來減少流程步驟，讓工程師可以更專心在開發上面，而不是花更多時間在 Git 分支操作上面。GitHub Flow 只需要記住主分支 `master` 其他分支都是從主分支在開出來，所以新人很容易理解，不管是解 Issue 還是開發新功能，都是以 `master` 分支為基底來建立新的分支，開發團隊也只需要懂到這邊就可以了。接下來 Deploy 到 Production 則是透過 Tag 方式來解決。由開發團隊主管來下 Tag，這樣可以避免團隊內部成員不小心合併分支造成 Deploy 到正式環境的錯誤狀況。另外大家會遇到上線後，如何緊急上 Patch 並且發佈下一個版本，底下是最簡單的操作步驟。
 
-<pre><code class="language-bash"># 抓取遠端所有 tag
+```bash
+# 抓取遠端所有 tag
 $ git fetch -t origin
 
 # 從上一版本建立 branch (0.2.4 代表上一個版本)
@@ -56,7 +57,8 @@ $ git push origin 0.2.5
 # 將 patch 也同步到 master 分支
 $ git checkout master
 $ git cherry-pick commit_id
-$ git push origin master</code></pre>
+$ git push origin master
+```
 
 有沒有覺得跟 Git Flow 流程差異很多，大家只需要記住兩件事情，第一是專案內只會有 `master` 分支需要受到保護。第二是部署流程一律走 Tag 事件，這樣可以避免工程師不小心 Merge commit 造成提前部署，因為平常開發過程，不會有人隨便下 Git Tag，所以只要跟團隊同步好，Git Tag 都由團隊特定人士才可以執行即可。底下附上團隊內的流程:
 

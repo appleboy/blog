@@ -22,31 +22,41 @@ tags:
 
 進入 Ubuntu 容器會透過底下指令:
 
-<pre><code class="language-bash">docker run -ti ubuntu /bin/bash</code></pre>
+```bash
+docker run -ti ubuntu /bin/bash
+```
 
 這時候可以透過 `-u` 方式將使用者 uid 及群組 gid 傳入容器內。
 
-<pre><code class="language-bash">mkdir tmp
+```bash
+mkdir tmp
 docker run -ti -v $PWD/tmp:/test \
-  -u uid:gid ubuntu /bin/bash</code></pre>
+  -u uid:gid ubuntu /bin/bash
+```
 
 如何找到目前使用者 uid 及 gid 呢，可以透過底下方式
 
-<pre><code class="language-bash">id -u
-id -g</code></pre>
+```bash
+id -u
+id -g
+```
 
 上述指令可以改成:
 
-<pre><code class="language-bash">docker run -ti -v $PWD/tmp:/test \
-  -u $(id -u):$(id -g) ubuntu /bin/bash</code></pre>
+```bash
+docker run -ti -v $PWD/tmp:/test \
+  -u $(id -u):$(id -g) ubuntu /bin/bash
+```
 
 ## 使用 Dockerfile 指定使用者
 
 也可以直接在 [dockerfile][3] 內直接指定使用者:
 
-<pre><code class="language-bash"># Dockerfile
+```bash
+# Dockerfile
 
-USER 1000:1000</code></pre>
+USER 1000:1000
+```
 
 我個人不是很推薦這方式，除非是在 container 內獨立建立使用者，並且指定權限。
 
@@ -54,7 +64,8 @@ USER 1000:1000</code></pre>
 
 透過 [docker-compose][4] 可以一次啟動多個服務。用 `user` 可以指定使用者權限來寫入特定的 volume
 
-<pre><code class="language-yaml">services:
+```yaml
+services:
   agent:
     image: xxxxxxxx
     restart: always
@@ -66,12 +77,15 @@ USER 1000:1000</code></pre>
         max-file: "3"
     volumes:
       - ${STORAGE_PATH}:/data
-    user: ${CURRENT_UID}</code></pre>
+    user: ${CURRENT_UID}
+```
 
 接著可以透過 `.env` 來指定變數值
 
-<pre><code class="language-bash">STORAGE_PATH=/home/deploy/xxxx
-CURRENT_UID=1001:1001</code></pre>
+```bash
+STORAGE_PATH=/home/deploy/xxxx
+CURRENT_UID=1001:1001
+```
 
 ## 心得
 

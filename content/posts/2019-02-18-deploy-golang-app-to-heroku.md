@@ -31,7 +31,8 @@ tags:
 
 註冊網站後，可以直接在後台建立 App，此 App 名稱就是未來的網站 URL 前置名稱。進入 App 的後台，切換到 Deploy 的 Tab 可以看到 Heroku 提供了三種方式，本文只會講其中兩種，在開始之前請先安裝好 [Heroku CLI][12] 工具，底下所有操作都會以 CLI 介面為主。用 Git 來部署是最簡單的，開發者可以不用考慮任何情形，只要將程式碼部署到 Heroku 上面即可。在 Go 語言只要觸發 Push Event 系統會預設使用 go1.11.4 來編譯環境，產生的 Log 如下:
 
-<pre><code class="language-go">-----> Go app detected
+```go
+-----> Go app detected
 -----> Fetching jq... done
  !!    
  !!    Go modules are an experimental feature of go1.11
@@ -56,28 +57,36 @@ tags:
  !!    
  !!    For more details see: https://devcenter.heroku.com/articles/go-apps-with-modules#build-configuration
  !!    
------> Running: go install -v -tags heroku . </code></pre>
+-----> Running: go install -v -tags heroku . 
+```
 
 系統第一步會偵測該專案使用什麼語言，就會產生相對應得環境，所以用 Git 方式非常簡單，開發者不需要額外設定就可以看到網站已經部署完畢，底下是 Git 基本操作，首先是登入 Heroku 平台。這邊會打開瀏覽器登入視窗。
 
-<pre><code class="language-sh">$ heroku login</code></pre>
+```sh
+$ heroku login
+```
 
 新增 Heroku 為另一個 Remote 節點
 
-<pre><code class="language-sh">$ heroku git:clone -a heroku-demo-tw
-$ cd heroku-demo-tw</code></pre>
+```sh
+$ heroku git:clone -a heroku-demo-tw
+$ cd heroku-demo-tw
+```
 
 簡單編輯程式碼，並且推到 Heroku Git 服務
 
-<pre><code class="language-sh">$ git add .
+```sh
+$ git add .
 $ git commit -am "make it better"
-$ git push heroku master</code></pre>
+$ git push heroku master
+```
 
 ## 使用 Docker 部署
 
 Heroku 也提供免費的 Docker Registry 讓開發者可以寫 [Dockerfile][13] 來部署，底下是透過 [Docker multiple stage][14] 來編譯 Go 語言 App
 
-<pre><code class="language-docker">FROM golang:1.11-alpine as build_base
+```docker
+FROM golang:1.11-alpine as build_base
 RUN apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
 # Force the go compiler to use modules
@@ -102,30 +111,41 @@ EXPOSE 8080
 COPY --from=server_builder /app/templates /templates
 COPY --from=server_builder /app/images /images
 COPY --from=server_builder /facebook-account-kit /facebook-account-kit
-CMD ["/facebook-account-kit"]</code></pre>
+CMD ["/facebook-account-kit"]
+```
 
 這裡面有一個小技巧，讓每次 Docker 編譯時可以 cache 住 golang 的 vendor，就是底下這兩行啦
 
-<pre><code class="language-dockerfile"># We want to populate the module cache based on the go.{mod,sum} files.
+```dockerfile
+# We want to populate the module cache based on the go.{mod,sum} files.
 COPY go.mod .
 COPY go.sum .
-RUN go mod download</code></pre>
+RUN go mod download
+```
 
 這時候只要我們沒有動過 `go.*` 相關檔案，每次編譯時系統就會自動幫忙 cache 相關 vendor 套件，加速網站部署，完成上述設定後，接著用 Heroku CLI 來完成最後步驟。首先在開發電腦上面必須安裝好 Docker 環境，可以透過底下指令來確認電腦是否有安裝好 Docker
 
-<pre><code class="language-sh">$ docker ps</code></pre>
+```sh
+$ docker ps
+```
 
 現在可以登入 Container Registry Now you can sign into Container Registry.
 
-<pre><code class="language-sh">$ heroku container:login</code></pre>
+```sh
+$ heroku container:login
+```
 
 上傳 Docker 映像檔到 Heroku，這邊會在 Local 直接編譯產生 Image
 
-<pre><code class="language-sh">$ heroku container:push web</code></pre>
+```sh
+$ heroku container:push web
+```
 
 上面步驟只是上傳而已，並非部署上線，透過底下指令才能正確看到網站更新。
 
-<pre><code class="language-sh">$ heroku container:release web</code></pre>
+```sh
+$ heroku container:release web
+```
 
 ## 心得
 

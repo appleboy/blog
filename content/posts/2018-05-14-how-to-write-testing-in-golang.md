@@ -29,7 +29,8 @@ tags:
 
 在 Go 語言內，不需要而外安裝任何第三方套件就可以開使寫測試，首先該將測試放在哪個目錄內呢？不需要建立特定目錄來存放測試程式碼，而是針對每個 Go 的原始檔案，建立一個全新測試檔案，並且檔名最後加上 `_test` 就可以了，假設程式碼為 `car.go` 那麼測試程式就是 `car_test.go`，底下舉個[範例][2]
 
-<pre><code class="language-go">package car
+```go
+package car
 
 import "errors"
 
@@ -58,11 +59,13 @@ func New(name string, price float32) (*Car, error) {
         Name:  name,
         Price: price,
     }, nil
-}</code></pre>
+}
+```
 
 驗證上面的程式碼可以建立 `car_test.go`，並且寫下[第一個測試程式][3]：
 
-<pre><code class="language-go">// Simple testing what different between Fatal and Error
+```go
+// Simple testing what different between Fatal and Error
 func TestNew(t *testing.T) {
     c, err := New("", 100)
     if err != nil {
@@ -72,7 +75,8 @@ func TestNew(t *testing.T) {
     if c == nil {
         t.Error("car should be nil")
     }
-}</code></pre>
+}
+```
 
 首先 func 名稱一定要以 `Test` 作為開頭，而 Go 內建 testing 套件，可以使用簡易的 t.Fatal 或 t.Error 來驗證錯誤，這兩個的差異在於 t.Fatal 會中斷測試，而 t.Error 不會，簡單來說，假設您需要整個完整測試後才顯示錯誤，那就需要用 t.Error，反之就使用 t.Fatal 來中斷測試。
 
@@ -80,7 +84,8 @@ func TestNew(t *testing.T) {
 
 這邊只會介紹一個第三方套件那就是 [testify][4]，裡面內建很多好用的測試等大家發掘，底下用簡單的 assert 套件來修改上方的[測試程式][5]:
 
-<pre><code class="language-go">func TestNewWithAssert(t *testing.T) {
+```go
+func TestNewWithAssert(t *testing.T) {
     c, err := New("", 100)
     assert.NotNil(t, err)
     assert.Error(t, err)
@@ -91,11 +96,14 @@ func TestNew(t *testing.T) {
     assert.NoError(t, err)
     assert.NotNil(t, c)
     assert.Equal(t, "foo", c.Name)
-}</code></pre>
+}
+```
 
 有沒有看起來比較簡潔。這邊測試用的 command，也可以針對單一函式做測試。
 
-<pre><code class="language-bash">$ go test -v -run=TestNewWithAssert ./example18-write-testing-and-doc/...</code></pre>
+```bash
+$ go test -v -run=TestNewWithAssert ./example18-write-testing-and-doc/...
+```
 
 可以看到 `-run` 讓開發者可以針對單一函式做測試，對於大型專案來說非常方便，假設修正完 bug，並且寫了測試，就可以針對單一函式做測試，這點 Go 做得相當棒。
 
@@ -107,7 +115,8 @@ func TestNew(t *testing.T) {
 
 這邊為什麼要平行測試呢？原因是單一函式測試，假設一個情境需要執行時間為 0.5 秒，那麼假設寫了 10 種狀況，就需要 10 * 0.5 秒，這樣花費太久了。這時候就需要請 Go 幫忙做平行測試。先看看底下範例:
 
-<pre><code class="language-go">func TestCar_SetName(t *testing.T) {
+```go
+func TestCar_SetName(t *testing.T) {
     type fields struct {
         Name  string
         Price float32
@@ -155,7 +164,8 @@ func TestNew(t *testing.T) {
             }
         })
     }
-}</code></pre>
+}
+```
 
 上面範例跑了兩個測試，一個是沒有 input value，一個則是有 input，根據 for 迴圈會依序執行測試，其中裡面的 `t.Run` 是指 sub test，如下圖
 
@@ -163,7 +173,8 @@ func TestNew(t *testing.T) {
 
 上述的程式碼都是 vscode 幫忙產生的，開發者只需要把測試資料補上就可以了。假設有 10 個情境需要測試，那該如何讓 Go 幫忙平行測試呢？請使用 `t.Parallel()`
 
-<pre><code class="language-go">    for _, tt := range tests {
+```go
+    for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
             t.Parallel()
             c := &Car{
@@ -174,11 +185,13 @@ func TestNew(t *testing.T) {
                 t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
             }
         })
-    }</code></pre>
+    }
+```
 
 在 `t.Run` 的 callback 測試內補上 `t.Parallel()` 就可以了喔。寫到這邊，大家應該可以看出一個問題，就是平行測試的內容怎麼都會是測試同一個情境，也就是本來要測試 10 種情境，但是會發現 Go 把最後一個情境同時跑了 10 次？這邊的問題點出在哪邊，請大家注意 `tt` 變數，由於跑平行測試，那麼 for 迴圈最後一次就會蓋掉之前的所有 tt 變數，要修正此狀況也非常容易，在迴圈內重新宣告一次即可 `tt := tt`
 
-<pre><code class="language-go">    for _, tt := range tests {
+```go
+    for _, tt := range tests {
         tt := tt
         t.Run(tt.name, func(t *testing.T) {
             t.Parallel()
@@ -190,7 +203,8 @@ func TestNew(t *testing.T) {
                 t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
             }
         })
-    }</code></pre>
+    }
+```
 
 ## 感想
 

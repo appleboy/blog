@@ -26,7 +26,8 @@ tags:
 
 安裝特定版本的 Go 語言，只要自行下載 Windows msi 執行檔，接著安裝就可以了:
 
-<pre><code class="language-yaml">environment:
+```yaml
+environment:
   GOPATH: c:\gopath
   GO111MODULE: on
   GOVERSION: 1.12.4
@@ -42,7 +43,8 @@ install:
       docker version
       go version
   - ps: |
-      $env:Path = "c:\gopath\bin;$env:Path"</code></pre>
+      $env:Path = "c:\gopath\bin;$env:Path"
+```
 
 會碰到這個問題最主要是 Go module 在 [1.11.1 ~ 1.11.3 有個 bug][8] 就是，只要在 go.mod 內寫了 `go 1.12` 這樣此套件就會判斷目前的 Go 版本，如果小於 go1.12 就無法編譯套件，這問題在 go1.11.4 已經被解決，但是 appveyor 還停留在 go 1.11.2 版本，所以造成需要自行升級 Go 版本。有需要在 Windows 測試 GO 語言的，現在透過此方式可以編譯不同版本的環境。
 

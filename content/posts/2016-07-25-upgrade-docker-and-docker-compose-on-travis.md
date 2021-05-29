@@ -37,7 +37,8 @@ tags:
 
 雖然官方網站有教如何升級 docker-compose，但是光是升級 docker-compose 是沒用的，如果 [docker-engine][8] 沒有升級，還是會出現此錯誤訊息，正確解法就是將 docker 也順便升級，打開 `.travis.yml` 檔案，在 `before_install` 內補上底下 script。
 
-<pre><code class="language-yml">services:
+```yml
+services:
   - docker
 
 env:
@@ -50,7 +51,8 @@ before_install:
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin</code></pre>
+  - sudo mv docker-compose /usr/local/bin
+```
 
 請參考完整的 [.travis.yml 設定檔][9]。
 

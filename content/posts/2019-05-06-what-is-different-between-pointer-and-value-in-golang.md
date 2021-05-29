@@ -24,7 +24,8 @@ tags:
 
 要區別 pointer 跟 value 可以透過下面的例子快速了解:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import "fmt"
 
@@ -58,7 +59,8 @@ func main() {
     fmt.Println(toyota.name)
     toyota.SetName02("test")
     fmt.Println(toyota.name)
-}</code></pre>
+}
+```
 
 上面範例可以看到如果是透過 `SetName02` 來設定最後是拿不到設定值，這就代表使用 `SetName02` 時候，是會將整個 struct 複製一份。假設 struct 內有很多成員，這樣付出的代價就相對提高。
 

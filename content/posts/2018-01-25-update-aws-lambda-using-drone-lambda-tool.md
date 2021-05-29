@@ -22,10 +22,12 @@ categories:
 
 要上傳更新 Lambda 服務，步驟很簡單 `編譯` => `打包` => `上傳`，三個步驟就可以搞定，底下來看看如何執行指令
 
-<pre><code class="language-bash"># 編譯
+```bash
+# 編譯
 $ GOOS=linux go build -o main .
 # 打包
-$ zip deployment.zip main</code></pre>
+$ zip deployment.zip main
+```
 
 上傳部分則是可以透過 Web Console 或 [AWS CLI][9]，這些步驟可以很輕易的整合進 Jenkins 或其他 CI/CD 服務，但是我個人又開發了 [drone-lambda][10]，讓開發者可以不用裝任何套件，就可以跨平台執行 Lambda 上傳。
 
@@ -46,32 +48,38 @@ $ zip deployment.zip main</code></pre>
 
 假設已經打包好 zip 檔案，就可以透過底指令上傳
 
-<pre><code class="language-shell">$ drone-lambda --region ap-southeast-1 \
+```shell
+$ drone-lambda --region ap-southeast-1 \
   --access-key xxxx \
   --secret-key xxxx \
   --function-name upload-s3 \
-  --zip-file deployment.zip</code></pre>
+  --zip-file deployment.zip
+```
 
 ## 透過 s3 bucket 上傳
 
 前提是 zip 檔案已經在 s3 bucket 內
 
-<pre><code class="language-shell">$ drone-lambda --region ap-southeast-1 \
+```shell
+$ drone-lambda --region ap-southeast-1 \
   --access-key xxxx \
   --secret-key xxxx \
   --function-name upload-s3 \
   --s3-bucket some-bucket \
-  --s3-key lambda-dir/lambda.zip</code></pre>
+  --s3-key lambda-dir/lambda.zip
+```
 
 ## 自動打包上傳
 
 開發者可以指定需要打包的檔案，如果有多個檔案，這邊支援正規語法喔
 
-<pre><code class="language-shell">$ drone-lambda --region ap-southeast-1 \
+```shell
+$ drone-lambda --region ap-southeast-1 \
   --access-key xxxx \
   --secret-key xxxx \
   --function-name upload-s3 \
-  --source main</code></pre>
+  --source main
+```
 
 其中的 `main` 就是 Go 語言產生的執行檔，使用 `--source` 好處就是直接幫忙打包成 zip 檔案直接上傳，這樣在 Deploy 流程就可以少一個 zip 步驟。
 
@@ -79,7 +87,8 @@ $ zip deployment.zip main</code></pre>
 
 由於此工具使用到 AWS Lambda 上傳的功能，所以必須要在 AWS Role 打開底下權限:
 
-<pre><code class="language-json">{
+```json
+{
   "Version": "2012-10-17",
   "Statement": [
     {
@@ -93,7 +102,8 @@ $ zip deployment.zip main</code></pre>
       "Resource": "arn:aws:logs:*:*:*"
     }
   ]
-}</code></pre>
+}
+```
 
 注意務必加上 `UpdateFunctionCode`。
 
@@ -101,14 +111,16 @@ $ zip deployment.zip main</code></pre>
 
 在 Drone 的 Yaml 檔案設定方式非常容易，請直接參考底下:
 
-<pre><code class="language-json">  lambda:
+```json
+  lambda:
     image: appleboy/drone-lambda
     pull: true
     secrets: [ aws_access_key_id, aws_secret_access_key ]
     region: ap-southeast-1
     function_name: gin
     source:
-      - main</code></pre>
+      - main
+```
 
 其中 `aws_access_key_id` 及 `aws_secret_access_key` 可以透過 Web 或 CLI 方式設定。
 

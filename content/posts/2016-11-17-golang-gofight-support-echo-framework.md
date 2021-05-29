@@ -25,7 +25,8 @@ tags:
 
 舊版 [gofight v1][9] 針對 Echo 框架測試寫法
 
-<pre><code class="language-go">func TestEchoPostFormData(t *testing.T) {
+```go
+func TestEchoPostFormData(t *testing.T) {
     r := New()
 
     r.POST("/form").
@@ -40,13 +41,15 @@ tags:
             assert.Equal(t, "2", b)
             assert.Equal(t, http.StatusOK, r.Status())
         })
-}</code></pre>
+}
+```
 
 ## gofight v2 寫法 (新式)
 
 新版 [gofight v2][10] 針對 Echo 框架測試寫法
 
-<pre><code class="language-go">func TestEchoPut(t *testing.T) {
+```go
+func TestEchoPut(t *testing.T) {
     r := New()
 
     r.PUT("/update").
@@ -61,7 +64,8 @@ tags:
             assert.Equal(t, "2", d)
             assert.Equal(t, http.StatusOK, r.Code)
         })
-}</code></pre>
+}
+```
 
 可以看到只要取代底下 func 就可以無痛轉換
 
@@ -77,7 +81,9 @@ tags:
 
 ### 載入 Gofight v2
 
-<pre><code class="language-go">import "gopkg.in/appleboy/gofight.v2"</code></pre>
+```go
+import "gopkg.in/appleboy/gofight.v2"
+```
 
 ## 後記
 

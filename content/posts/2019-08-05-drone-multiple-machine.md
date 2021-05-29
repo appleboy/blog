@@ -29,7 +29,8 @@ tags:
 
 底下來看看如何將前端及後端的工作拆成兩台機器去跑:
 
-<pre><code class="language-yaml">kind: pipeline
+```yaml
+kind: pipeline
 name: frontend
 
 steps:
@@ -52,11 +53,13 @@ steps:
 
 services:
 - name: redis
-  image: redis</code></pre>
+  image: redis
+```
 
 簡單設定兩個不同的 pipeline，就可以將兩條 pipeline 流程丟到不同機器上面執行。上述平行執行後，可以透過 `depends_on` 來等到上述兩個流程跑完，再執行。
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 name: after
 
@@ -69,7 +72,8 @@ steps:
 
 depends_on:
 - frontend
-- backend</code></pre>
+- backend
+```
 
  [1]: https://lh3.googleusercontent.com/q2Z5tLXdw_GINCveZ4860CTUhfnJtrhdSuWt4VItXWggiPnKqc0sI_0lvxz4lfB4v-MoCPNW50H16QwzQUzOwuIfgug6fvwemQme0Km9c9UeEdCYL2cZzHuK7lhZ4lMClDZ07CBVLiM=w1920-h1080 "drone multiple machine"
  [2]: https://docs.drone.io/user-guide/pipeline/multi-machine/

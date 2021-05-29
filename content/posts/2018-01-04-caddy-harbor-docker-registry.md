@@ -23,13 +23,15 @@ tags:
 
 我本來把 Harbor 架設在 AWS EC2 上面，而剛開始是採用 `http` 並非使用 `https`，這在搭配 [Kubernetes][10] 會有個問題，因為假設使用 `http` 的話，Docker 預設是不吃 http 的，所以必須要在 k8s 每一個 Node 機器內補上下面設定
 
-<pre><code class="language-bash"># open /etc/docker/daemon.json
+```bash
+# open /etc/docker/daemon.json
 {
   "debug" : true,
   "insecure-registries" : [
     "harbor.xxxx.com"
   ]
-}</code></pre>
+}
+```
 
 如果在個人電腦上面 (Mac) 則是需要到底下 Docker 設定頁面補上 register 資訊
 
@@ -41,34 +43,44 @@ tags:
 
 在 Harbor 內可以參考[此份文件][12]將憑證檔案放到 Docker 內部。假設今天沒有憑證，其實可以透過 Caddy 方式來拿到憑證放到 Dokcer 內部。第一步先找到 Caddy 存放路徑，一般來說是放在 `~/.caddy/` 目錄，接著透過 link 方式放到 `/data` 目錄 (`/data` 是 Harbor 預設放在 Host 的目錄)
 
-<pre><code class="language-bash">ln -sf ~/.caddy/acme/acme-v01.api.letsencrypt.org/sites/your_domain.com/harbor.wu-boy.com.key /data/cert/server.key
-ln -sf ~/.caddy/acme/acme-v01.api.letsencrypt.org/sites/your_domain.com/harbor.wu-boy.com.cert /data/cert/server.cert</code></pre>
+```bash
+ln -sf ~/.caddy/acme/acme-v01.api.letsencrypt.org/sites/your_domain.com/harbor.wu-boy.com.key /data/cert/server.key
+ln -sf ~/.caddy/acme/acme-v01.api.letsencrypt.org/sites/your_domain.com/harbor.wu-boy.com.cert /data/cert/server.cert
+```
 
 接著打開 `harbor.cfg` 將 `ui_url_protocol` 設定為 `https`
 
-<pre><code class="language-bash">ui_url_protocol = https</code></pre>
+```bash
+ui_url_protocol = https
+```
 
 重新啟動 harbor
 
-<pre><code class="language-bash">$ ./prepare
+```bash
+$ ./prepare
 $ docker-compose down
-$ docker-compose up -d</code></pre>
+$ docker-compose up -d
+```
 
 ## 設定 Caddy
 
 這邊不確定是不是 Harbor 的 bug，理論上如果在 Harbor 內跑 http，只要把 Caddy 設定好 proxy 理論上要可以通，但是實際上就是不行，必須要在 harbor 跑 `https` 然後 Caddy 也跑 `https` 才行
 
-<pre><code class="language-bash">your_domain.com {
+```bash
+your_domain.com {
   log stdout
   proxy / https://your_domain.com:8089 {
     websocket
     transparent
   }
-}</code></pre>
+}
+```
 
 其中 8089 就是對應到 harbor 容器內的 443 port。這樣還不夠，你必須要在 `/etc/hosts` 底下補上
 
-<pre><code class="language-bash">127.0.0.1 your_domain.com</code></pre>
+```bash
+127.0.0.1 your_domain.com
+```
 
 這樣才可以正確讓 Caddy + Harbor 正式跑起來，並且三個月自動更換憑證。
 

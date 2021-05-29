@@ -35,7 +35,8 @@ tags:
 
 在 Docker v1.13 版本中新增了 `--cache-from` 功能讓開發者可以在編譯 Dockerfile 時，同時指定先下載特定的 Docker Image，透過先下載好的 Docker Layer 在跟 Dockerfile 內文比較，如果有重複的就不會在被執行，這樣可以省下蠻多編譯時間，底下拿個簡單例子做說明，假設我們有底下的 Dockerfile
 
-<pre><code class="language-docker">FROM alpine:3.9
+```docker
+FROM alpine:3.9
 LABEL maintainer="maintainers@gitea.io"
 
 EXPOSE 22 3000
@@ -75,15 +76,19 @@ CMD ["/bin/s6-svscan", "/etc/s6"]
 
 COPY docker /
 COPY --from=build-env /go/src/code.gitea.io/gitea/gitea /app/gitea/gitea
-RUN ln -s /app/gitea/gitea /usr/local/bin/gitea</code></pre>
+RUN ln -s /app/gitea/gitea /usr/local/bin/gitea
+```
 
 透過底下命令列可以編譯出 Image
 
-<pre><code class="language-sh">$ docker build -t gitea/gitea .</code></pre>
+```sh
+$ docker build -t gitea/gitea .
+```
 
 而在命令列內可以看到花最多時間的是底下這個步驟
 
-<pre><code class="language-docker">RUN apk --no-cache add \
+```docker
+RUN apk --no-cache add \
     bash \
     ca-certificates \
     curl \
@@ -94,11 +99,14 @@ RUN ln -s /app/gitea/gitea /usr/local/bin/gitea</code></pre>
     s6 \
     sqlite \
     su-exec \
-    tzdata</code></pre>
+    tzdata
+```
 
 該如何透過 `--cache-from` 機制繞過此步驟加速 Docker 編譯時間，其實很簡單只要在網路上找到原本 image 就可以繞過此步驟，開發者總會知道原本的 Dockerfile 是用來編譯出哪一個 Image 名稱
 
-<pre><code class="language-sh">$ docker build --cache-from=gitea/gitea -t gitea/gitea .</code></pre>
+```sh
+$ docker build --cache-from=gitea/gitea -t gitea/gitea .
+```
 
 [![][8]][8]
 
@@ -108,7 +116,8 @@ RUN ln -s /app/gitea/gitea /usr/local/bin/gitea</code></pre>
 
 在 Gitlab CI 如何使用，其實很簡單，請[參考此範例][9]
 
-<pre><code class="language-yaml">image: docker:latest
+```yaml
+image: docker:latest
 services:
   - docker:dind
 stages:
@@ -125,7 +134,8 @@ build:
     - docker pull $CONTAINER_IMAGE:latest
     - docker build --cache-from $CONTAINER_IMAGE:latest --build-arg NPM_TOKEN=${NPM_TOKEN} -t $CONTAINER_IMAGE:$CI_BUILD_REF -t $CONTAINER_IMAGE:latest .
     - docker push $CONTAINER_IMAGE:$CI_BUILD_REF
-    - docker push $CONTAINER_IMAGE:latest</code></pre>
+    - docker push $CONTAINER_IMAGE:latest
+```
 
 這時候你會問時間到底差了多久，在 Node.js 內如果沒有使用 cache，每次 CI 時間至少會多不少時間，取決於開發者安裝多少套件，我會建議如果是使用 multiple stage build 請務必使用 `cache-from`。
 
@@ -133,7 +143,8 @@ build:
 
 在 Drone 1.0 架構內，可以架設多台 [Agent 服務][10]加速 CI/CD 流程，但是如果想要跨機器的 storage 非常困難，所以有了 `cache-from` 後，就可以確保多台 agent 享有 docker cache layer 機制。底下來看看 [plugins/docker][11] 該如何設定。
 
-<pre><code class="language-yaml">- name: publish
+```yaml
+- name: publish
   pull: always
   image: plugins/docker:linux-amd64
   settings:
@@ -150,7 +161,8 @@ build:
   when:
     event:
       exclude:
-      - pull_request</code></pre>
+      - pull_request
+```
 
 這邊拿公司的一個環境當作[範例][12]，在還沒使用 cache 前編譯時間為 [2 分 30 秒][13]，後來使用 `cache-from` 則變成 [30 秒][14]。
 

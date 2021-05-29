@@ -20,7 +20,8 @@ tags:
 
 [strcat][1] 此函式用來連接兩字串合併成單一字串，直接看底下範例：
 
-<pre><code class="language-c">/* strcat example */
+```c
+/* strcat example */
 #include <stdio.h>
 #include <string.h>
 
@@ -33,15 +34,19 @@ int main ()
   strcat (str,"concatenated.");
   puts (str);
   return 0;
-}</code></pre>
+}
+```
 
 output: 
 
-<pre><code class="language-sh">these strings are concatenated. </code></pre>
+```sh
+these strings are concatenated. 
+```
 
 看一下 strcat 原始碼：
 
-<pre><code class="language-c">char *
+```c
+char *
 strcat(char * __restrict s, const char * __restrict append)
 {
     char *save = s;
@@ -49,7 +54,8 @@ strcat(char * __restrict s, const char * __restrict append)
     for (; *s; ++s);
     while ((*s++ = *append++));
     return(save);
-}</code></pre>
+}
+```
 
 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。
 
@@ -57,7 +63,8 @@ strcat(char * __restrict s, const char * __restrict append)
 
 [strcmp][2] 用來比較兩字串是否相同，相同回傳 0，不相同則回傳兩字串 ASCII 相減的值。底下範例：
 
-<pre><code class="language-c">/* strcmp example */
+```c
+/* strcmp example */
 #include <stdio.h>
 #include <string.h>
 
@@ -71,11 +78,13 @@ int main ()
   } while (strcmp (szKey,szInput) != 0);
   puts ("Correct answer!");
   return 0;
-}</code></pre>
+}
+```
 
 來看看 strcmp 原始碼
 
-<pre><code class="language-c">#include <string.h>
+```c
+#include <string.h>
 
 /*
  * Compare strings.
@@ -88,7 +97,8 @@ strcmp(s1, s2)
         if (*s1++ == 0)
             return (0);
     return (*(const unsigned char *)s1 - *(const unsigned char *)(s2 - 1));
-}</code></pre>
+}
+```
 
 大家可以看到，比對字串會依序比對，直到 s1 最後字元 \0 則會回傳 0 代表比對成功，如果中途有字元比對不同，則會將兩個字元相減回傳。
 
@@ -96,7 +106,8 @@ strcmp(s1, s2)
 
 [strncat][3] 用來串接指定多少字元，底下範例：
 
-<pre><code class="language-c">/* strncat example */
+```c
+/* strncat example */
 #include <stdio.h>
 #include <string.h>
 
@@ -109,11 +120,13 @@ int main ()
   strncat (str1, str2, 6);
   printf("%s\n", str1);
   return 0;
-}</code></pre>
+}
+```
 
 strncat 原始碼
 
-<pre><code class="language-c">#include <string.h>
+```c
+#include <string.h>
 
 /*
  * Concatenate src on the end of dst.  At most strlen(dst)+n+1 bytes
@@ -136,7 +149,8 @@ strncat(char * __restrict dst, const char * __restrict src, size_t n)
         *d = 0;
     }
     return (dst);
-}</code></pre>
+}
+```
 
 一樣是先將 dst 指標指向最後一個字元+1，再根據需要串接的大小來決定 dst 最後的指標。
 
@@ -144,7 +158,8 @@ strncat(char * __restrict dst, const char * __restrict src, size_t n)
 
 直接看範例，比較字串前兩個字元是否相同，如果相同則印出
 
-<pre><code class="language-c">/* strncmp example */
+```c
+/* strncmp example */
 #include <stdio.h>
 #include <string.h>
 
@@ -159,11 +174,13 @@ int main ()
       printf ("found %s\n",str[n]);
     }
   return 0;
-}</code></pre>
+}
+```
 
 [strncmp][4] 原始碼
 
-<pre><code class="language-c">#include <string.h>
+```c
+#include <string.h>
 
 int
 strncmp(s1, s2, n)
@@ -181,7 +198,8 @@ strncmp(s1, s2, n)
             break;
     } while (--n != 0);
     return (0);
-}</code></pre>
+}
+```
 
 最後參數傳入 0 則會直接回傳 0，依序比對，直到 n =0 的時候跳出比較迴圈，然後回傳 0，代表比對成功。
 

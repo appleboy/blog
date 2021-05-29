@@ -30,9 +30,11 @@ tags:
 
 如果主機是使用 Amazone EC2，可以直接用 [AWS Certificate Manager][9]，用 AWS 的好處就是只要透過[後台介面搭配 ELB][10] 就可以直接設定好 HTTPS 對應到 EC2 主機，壞處就是直接被綁死，將來如果不要使用 AWS，要轉移機器會相當痛苦。所以本篇會紀錄如何用 Nginx 搭配 [Let's Encrypt][11]。為了方便部署機器，我們選用 [dehydrated][12] 來設定 Let's Encrypt，好處就是不用安裝 Python 套件，官方網站提供的安裝方式需要安裝 Python 相關環境。透過 wget 將 dehydrated 安裝到 `/etc/dehydrated/` 底下
 
-<pre><code class="language-bash">$ mkdir -p /etc/dehydrated/
+```bash
+$ mkdir -p /etc/dehydrated/
 $ wget https://raw.githubusercontent.com/lukas2511/dehydrated/master/dehydrated -O /etc/dehydrated/dehydrated
-$ chmod 755 /etc/dehydrated/dehydrated</code></pre>
+$ chmod 755 /etc/dehydrated/dehydrated
+```
 
 ### 建立設定檔
 
@@ -43,17 +45,22 @@ $ chmod 755 /etc/dehydrated/dehydrated</code></pre>
 
 Nginx 設定，先在 80 port 的 Server section 內寫入底下設定:
 
-<pre><code class="language-bash">location /.well-known/acme-challenge/ {
+```bash
+location /.well-known/acme-challenge/ {
   alias /var/www/dehydrated/;
-}</code></pre>
+}
+```
 
 可以先丟個檔案到 `/var/www/dehydrated/` 確定網站可以正常讀取檔案，接著透過 dehydrated 指令產生 SSL 設定檔
 
-<pre><code class="language-bash">$ /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com</code></pre>
+```bash
+$ /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com
+```
 
 執行上述指令會看到底下結果
 
-<pre><code class="language-bash"># INFO: Using main config file /etc/dehydrated/config
+```bash
+# INFO: Using main config file /etc/dehydrated/config
 Processing fbbot.wu-boy.com
  + Signing domains...
  + Generating private key...
@@ -65,11 +72,13 @@ Processing fbbot.wu-boy.com
  + Checking certificate...
  + Done!
  + Creating fullchain.pem...
- + Done!</code></pre>
+ + Done!
+```
 
 最後在設定一次 nginx
 
-<pre><code class="language-bash">server {
+```bash
+server {
   # don't forget to tell on which port this server listens
   listen 80;
 
@@ -93,7 +102,8 @@ server {
   location / {
     proxy_pass http://localhost:8081;
   }
-}</code></pre>
+}
+```
 
 上面是將 80 port 自動轉到 https，如果下次要重新 renew 的時候才不會又要打開 80 port 一次。
 
@@ -101,7 +111,9 @@ server {
 
 每天半夜可以自動 renew 一次，請參考 <https://letsencrypt.tw/> 最後章節
 
-<pre><code class="language-bash">0 0 * * * root sleep $(expr $(printf "\%d" "0x$(hostname | md5sum | cut -c 1-8)") \% 86400); ( /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com; /usr/sbin/service nginx reload ) > /tmp/dehydrated-fbbot.wu-boy.com.log 2>&1</code></pre>
+```bash
+0 0 * * * root sleep $(expr $(printf "\%d" "0x$(hostname | md5sum | cut -c 1-8)") \% 86400); ( /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com; /usr/sbin/service nginx reload ) > /tmp/dehydrated-fbbot.wu-boy.com.log 2>&1
+```
 
 ### 後記
 

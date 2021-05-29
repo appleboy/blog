@@ -18,7 +18,8 @@ tags:
 
 時常用到 [Postgres][3] 轉換資料的功能，來即時協助 PM 了解目前使用者實際狀況，底下紀錄常用的指令。首先安裝 Postgres 環境，這邊其實就是用 Docker 方式來啟動一個全新的 Postgres DB。
 
-<pre><code class="language-yaml">  db:
+```yaml
+  db:
     image: postgres:12
     restart: always
     volumes:
@@ -30,7 +31,8 @@ tags:
     environment:
       POSTGRES_USER: db
       POSTGRES_DB: db
-      POSTGRES_PASSWORD: db</code></pre>
+      POSTGRES_PASSWORD: db
+```
 
 上面的 `environment` 參數可以自由調整，接著透過 `docker-compose up -d` 來啟動資料庫進行 App 串接。
 
@@ -40,32 +42,44 @@ tags:
 
 假設 Docker 容器沒有 expos 5432 port 的話，基本上就是要登入到容器內操作，但是如果 expose 出來，那 Host 機器就是要裝 postgres client 套件，才有辦法登入，底下我們直接登入容器內，才不會有 clinet tool 跟 server 版本不一至問題。
 
-<pre><code class="language-bash">docker-compose exec db /bin/bash</code></pre>
+```bash
+docker-compose exec db /bin/bash
+```
 
 其中 `db` 就是在 docker-compose.yml 內的名稱，請自行更換。進入容器內後，再透過 psql 指令來登入 postgres 資料庫
 
-<pre><code class="language-bash">psql -h 127.0.0.1 -d db -U db -W</code></pre>
+```bash
+psql -h 127.0.0.1 -d db -U db -W
+```
 
 ## 將資料匯出成 CSV 格式
 
 登入進 Postgres 後，透過簡單的指令就可以將單一資料表匯出成 csv 格式
 
-<pre><code class="language-bash">\COPY some_table TO '/tmp/data.csv' DELIMITER ',' CSV HEADER;</code></pre>
+```bash
+\COPY some_table TO '/tmp/data.csv' DELIMITER ',' CSV HEADER;
+```
 
 如果只是要 table 內幾個欄位，可以改成底下
 
-<pre><code class="language-bash">\COPY public.user(id, email) TO '/tmp/data.csv' DELIMITER ',' CSV HEADER;</code></pre>
+```bash
+\COPY public.user(id, email) TO '/tmp/data.csv' DELIMITER ',' CSV HEADER;
+```
 
 或者是要透過 SQL 方式將資料整理過
 
-<pre><code class="language-bash">\COPY (select id, email from public.user) TO '/data.csv' DELIMITER ',' CSV HEADER;</code></pre>
+```bash
+\COPY (select id, email from public.user) TO '/data.csv' DELIMITER ',' CSV HEADER;
+```
 
 另外可以針對 UTC 時間轉台灣時間
 
-<pre><code class="language-sql">select state, email, simulator, a.created_at \
+```sql
+select state, email, simulator, a.created_at \
   at time zone 'utc' at time zone 'Asia/Taipei' as created_at \
   from public.simulation a join public.user b on a.user_id = b.id  \
-  order by a.created_at desc limit 5</code></pre>
+  order by a.created_at desc limit 5
+```
 
 時間轉換可以參考之前的一篇教學:『[在 PostgreSQL 時區轉換及計算時間][4]』
 
@@ -73,7 +87,9 @@ tags:
 
 上述資料會存放在容器內的 `/data.csv`，這時候可以透過 docker cp 指令將資料拿出來。透過 `docker ps` 找到 postgres 容器 ID，在執行下面指令
 
-<pre><code class="language-bash">docker cp container_id:/tmp/data.csv .</code></pre>
+```bash
+docker cp container_id:/tmp/data.csv .
+```
 
 之後就可以針對上面全部步驟，做自動化處理。
 

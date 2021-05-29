@@ -24,23 +24,31 @@ tags:
 
 <!--more-->
 
-<pre><code class="language-bash">$ curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
-$ sudo apt-get install gitlab-ce</code></pre>
+```bash
+$ curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+$ sudo apt-get install gitlab-ce
+```
 
 完成後，請直接透過底下指令重新啟動服務
 
-<pre><code class="language-bash">$ gitlab-ctl reconfigure</code></pre>
+```bash
+$ gitlab-ctl reconfigure
+```
 
 下一步驟就是透過帳號 `root` 及密碼 `5iveL!` 登入 Gitlab，這時候你會發現為什麼都無法登入，後來找了很久，原來安裝完後，資料庫預設是空的，所以需要搭配底下指令來初始化資料庫
 
-<pre><code class="language-bash">$ gitlab-rake gitlab:setup RAILS_ENV=production</code></pre>
+```bash
+$ gitlab-rake gitlab:setup RAILS_ENV=production
+```
 
 接著打開 `/etc/gitlab/gitlab.rb` 修改 `external_url` 設定
 
-<pre><code class="language-bash">## Url on which GitLab will be reachable.
+```bash
+## Url on which GitLab will be reachable.
 ## For more details on configuring external_url see:
 ## https://gitlab.com/gitlab-org/omnibus-gitlab/blob/629def0a7a26e7c2326566f0758d4a27857b52a3/README.md#configuring-the-external-url-for-gitlab
-external_url 'http://localhost:8088'</code></pre>
+external_url 'http://localhost:8088'
+```
 
 後面的 8088 port 就是 Gitlab 內建的 Nginx port，可以任意改成其他 port，不要設定為 80 就好，這樣會噴 port 已經被佔用的錯誤。到這邊打開 `<a href="https://localhost:8088">https://localhost:8088</a>` 就可以看到登入畫面了
 
@@ -48,7 +56,9 @@ external_url 'http://localhost:8088'</code></pre>
 
 安裝過程請多開一個 Terminal 視窗來監控 Log 狀態
 
-<pre><code class="language-bash">$ gitlab-ctl tail</code></pre>
+```bash
+$ gitlab-ctl tail
+```
 
 ### 跟 github 整合帳號
 
@@ -58,7 +68,8 @@ external_url 'http://localhost:8088'</code></pre>
 
 把上述資料填寫完成後，按下送出就可以拿到 Client ID 及 Client Secret 接著到 `/etc/gitlab/gitlab.rb` 把 Github 相關設定檔打開
 
-<pre><code class="language-bash">gitlab_rails['omniauth_enabled'] = true
+```bash
+gitlab_rails['omniauth_enabled'] = true
 gitlab_rails['omniauth_allow_single_sign_on'] = false
 gitlab_rails['omniauth_block_auto_created_users'] = true
 gitlab_rails['omniauth_providers'] = [
@@ -69,7 +80,8 @@ gitlab_rails['omniauth_providers'] = [
       "url" => "https://github.com/",
       "args" => { "scope" => "user:email" }
     }
-]</code></pre>
+]
+```
 
 重新啟動 `gitlab-ctl reconfigure`，這樣就完成了，更詳細的步驟可以參考 [Integrate your server with GitHub][3]，但是這不代表你可以不用註冊帳號，用第三方帳號註冊，GitLab 還是要你先註冊帳號，然後到帳戶設定內，把 `Connected Accounts` 內的 Github 啟動，這樣才可以用 Github 帳號登入
 
@@ -83,16 +95,19 @@ GitLab 也支援多個 open source project 平台的匯入功能，像是可以�
 
 Gitlab 內建 Nginx 服務，但是通常都會用自己架設的 Nginx，尤其是我比較喜歡裝 Nginx mainline 的版本，這樣才可以用 [Http2][4]。一樣先打開 `/etc/gitlab/gitlab.rb`，修改底下設定
 
-<pre><code class="language-bash">nginx['enable'] = false
+```bash
+nginx['enable'] = false
 gitlab_workhorse['enable'] = true
 gitlab_workhorse['listen_network'] = "tcp"
 gitlab_workhorse['listen_addr'] = "localhost:8181"
 unicorn['listen'] = '127.0.0.1'
-unicorn['port'] = 10080</code></pre>
+unicorn['port'] = 10080
+```
 
 注意將內建的 Nginx 關閉，在 8.2 版本的時候，官方已經將 `gitlab_git_http_server` 換成 `gitlab_workhorse`，所以網路上看到的教學文件記得要過濾，GitLab 必須要開啟 unicorn 及 workhorse 服務，才可以跟 Nginx 串接，底下是 Nginx 完整設定檔
 
-<pre><code class="language-bash">
+```bash
+
 upstream gitlab {
   server 127.0.0.1:10080 fail_timeout=0;
 }
@@ -217,13 +232,16 @@ server {
   }
 
   error_page 502 /502.html;
-}</code></pre>
+}
+```
 
 如果沒設定 gitlab-git-http-server，這樣 Client 端使用 git clone <http://xxx> 時就會跳出底下訊息。如果要設定 `https` 可以參考 [gitlab.conf][5]
 
-<pre><code class="language-bash">Fetching changes...
+```bash
+Fetching changes...
 Checking out dbed0c03 as master...
-fatal: reference is not a tree: <ssha hash></code></pre>
+fatal: reference is not a tree: <ssha hash>
+```
 
 ### Gitlab multiple runner
 
@@ -233,7 +251,9 @@ Gitlab 可以建立 Project 專屬的 CI Runner，請到 Project 內的左邊選
 
 中間有 Token 是要讓你建立 Runner 的時候使用，接著在機器內裝 gitlab multiple runner 套件
 
-<pre><code class="language-bash">$ aptitude install gitlab-ci-multi-runner</code></pre>
+```bash
+$ aptitude install gitlab-ci-multi-runner
+```
 
 最後執行 `gitlab-ci-multi-runner register`
 
@@ -241,7 +261,8 @@ Gitlab 可以建立 Project 專屬的 CI Runner，請到 Project 內的左邊選
 
 可以發現 gitlab 支援 Docker build 及基本的 shell command。完成後，請在專案底下建立 `.gitlab-ci.yml` 檔案，寫入測試步驟即可
 
-<pre><code class="language-bash">
+```bash
+
 before_script:
   - nvm install 4
 
@@ -257,7 +278,8 @@ build:
 test:
   stage: test
   script:
-    - npm test</code></pre>
+    - npm test
+```
 
 [<img src="https://i0.wp.com/farm1.staticflickr.com/608/23693388065_8872802ea0_z.jpg?w=840&#038;ssl=1" alt="Screen Shot 2015-12-12 at 5.20.54 PM" data-recalc-dims="1" />][6]
 

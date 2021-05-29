@@ -25,7 +25,9 @@ tags:
 
 透過 Composer 指令建立 Laravel 專案
 
-<pre><code class="language-bash">$ composer create-project --prefer-dist laravel/laravel blog</code></pre>
+```bash
+$ composer create-project --prefer-dist laravel/laravel blog
+```
 
 先假設 blog 目錄路徑為 `~/git/blog`，此路徑底下會用到
 
@@ -33,17 +35,23 @@ tags:
 
 首先從 [Docker hub][7] 下載 [laraedit-docker][8] 映像檔
 
-<pre><code class="language-bash">$ docker pull laraedit/laraedit</code></pre>
+```bash
+$ docker pull laraedit/laraedit
+```
 
 完成下載後，就可以直接啟動專案
 
-<pre><code class="language-bash">$ docker run -d --name laravel -p 8082:80 -p 3307:3306 -v ~/git/blog:/var/www/html/app laraedit/laraedit</code></pre>
+```bash
+$ docker run -d --name laravel -p 8082:80 -p 3307:3306 -v ~/git/blog:/var/www/html/app laraedit/laraedit
+```
 
 參數說明
 
-<pre><code class="language-bash">--name: 啟動後服務名稱
+```bash
+--name: 啟動後服務名稱
 -p: 啟動外面的 port 對應到 container 內部 port
--v: 目錄掛載</code></pre>
+-v: 目錄掛載
+```
 
 laraedit 預設將 80, 443, 3306, 6379 port 開出來，所以如果外部要直接存取，請使用 `-p` 參數來設定。
 
@@ -51,7 +59,9 @@ laraedit 預設將 80, 443, 3306, 6379 port 開出來，所以如果外部要直
 
 要透過 ssh 連入 Docker 請透過底下指令
 
-<pre><code class="language-bash">$ docker exec -it laravel /bin/bash</code></pre>
+```bash
+$ docker exec -it laravel /bin/bash
+```
 
 其中 `laravel` 就是最上面 `--name` 設定，執行指令後，你就會進入 Shell 模式，可以進行 DB 操作記錄，執行 DB Migration 等...
 
@@ -59,11 +69,14 @@ laraedit 預設將 80, 443, 3306, 6379 port 開出來，所以如果外部要直
 
 上面我們將 3307 port 對應到 docker 內部 3306 port，所以可以透過 mysql 指令直接連上 MySQL 服務
 
-<pre><code class="language-bash">$ mysql -u homestead -h 192.168.99.100 -P 3307 -p</code></pre>
+```bash
+$ mysql -u homestead -h 192.168.99.100 -P 3307 -p
+```
 
 預設帳號為 `homestead` 密碼為 `secret`
 
-<pre><code class="language-bash">$ mysql -u homestead -h 192.168.99.100 -P 3307 -p
+```bash
+$ mysql -u homestead -h 192.168.99.100 -P 3307 -p
 Enter password:
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 8
@@ -89,7 +102,8 @@ mysql> show databases;
 +--------------------+
 5 rows in set (0.01 sec)
 
-mysql></code></pre>
+mysql>
+```
 
 大致上用 Docker 就取代了 Homestead，所以大家快點把 Docker 安裝到自己的電腦。
 

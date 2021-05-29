@@ -32,18 +32,24 @@ Drone 提供 CLI 工具，讓開發者可以快速跟 Drone 服務溝通，底�
 
 另外一種方式則是透過 `go get` 方式來安裝，前提是您必須要安裝 [Go 語言環境][7]。
 
-<pre><code class="language-bash">$ go get github.com/drone/drone-cli/drone</code></pre>
+```bash
+$ go get github.com/drone/drone-cli/drone
+```
 
 ## Drone CLI 教學
 
 下面指令是透過 CLI 呼叫 Drone 執行指定的專案 Job Number。如果沒有提供 Number 編號，則是執行該專案最後一個 Build Number。
 
-<pre><code class="language-bash">$ drone build start --fork <repository> <build></code></pre>
+```bash
+$ drone build start --fork <repository> <build>
+```
 
 `--fork` 代表啟動**新的任務**，並非是重新啟動該編號任務。下面指令則是根據專案 Branch 名稱得到最後 Build Number。
 
-<pre><code class="language-bash">$ drone build last --format="{{ .Number }}" \
-  --branch=<branch> <repository></code></pre>
+```bash
+$ drone build last --format="{{ .Number }}" \
+  --branch=<branch> <repository>
+```
 
 拿到最後一個 Number 後，就可以開始寫 Cron job 任務
 
@@ -51,9 +57,11 @@ Drone 提供 CLI 工具，讓開發者可以快速跟 Drone 服務溝通，底�
 
 從上面教學可以知道如何透過 Drone CLI 拿到專案最後執行的 Job 任務編號，以及如何重新執行專案任務，這時我們可以將指令合併成一行，變且寫進 `crontab -e` 檔案內
 
-<pre><code class="language-bash">* 22 * * * drone build start --fork octocat/hello-world \
+```bash
+* 22 * * * drone build start --fork octocat/hello-world \
   $(drone build last --format="{{ .Number }}" \
-  --branch=master octocat/hello-world)</code></pre>
+  --branch=master octocat/hello-world)
+```
 
 將 `branch` 及 `octocat/hello-world` 換成您的專案名稱即可。
 

@@ -31,9 +31,11 @@ tags:
 
 ## GitHub 認證
 
-<pre><code class="language-bash">$ docker login docker.pkg.github.com \
+```bash
+$ docker login docker.pkg.github.com \
   -u USERNAME \
-  -p PASSWORD/TOKEN</code></pre>
+  -p PASSWORD/TOKEN
+```
 
 要登入 GitHub 的 Docker Registry，最快的方式就是用個人的帳號及密碼就可以直接登入，而 Registry 設定則是 `docker.pkg.github.com`，這邊請注意，雖然官方有寫可以用個人的 Password 登入，如果你有使用 OTP 方式登入，這個方式就不適用，也不安全，我個人強烈建議去後台建立一把專屬的 Token。
 
@@ -45,7 +47,8 @@ tags:
 
 從 commit 到自動化上傳 Docker Image 可以透過 Drone 快速完成，底下我們先建立 `Dockerfile`
 
-<pre><code class="language-dockerfile">FROM plugins/base:multiarch
+```dockerfile
+FROM plugins/base:multiarch
 
 LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.name="Drone Workshop" \
@@ -56,11 +59,13 @@ ADD release/linux/amd64/helloworld /bin/
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD [ "/bin/helloworld", "-ping" ]
 
-ENTRYPOINT ["/bin/helloworld"]</code></pre>
+ENTRYPOINT ["/bin/helloworld"]
+```
 
 接著透過 Drone 官方 [docker][10] 套件來完成自動化上傳
 
-<pre><code class="language-yaml">kind: pipeline
+```yaml
+kind: pipeline
 name: default
 
 steps:
@@ -78,7 +83,8 @@ steps:
     auto_tag_suffix: linux-amd64
     username: appleboy
     password:
-      from_secret: docker_password</code></pre>
+      from_secret: docker_password
+```
 
 比較需要注意的是 GitHub 跟 DockerHub 不同的是，GitHub 格式是 `OWNER/REPOSITORY/IMAGE_NAME`，注意中間有多一個 `REPOSITORY` 而 DockerHub 是 `OWNER/IMAGE_NAME`。接著到後台將 `docker_password` 設定完成，就可以正確部署了。
 

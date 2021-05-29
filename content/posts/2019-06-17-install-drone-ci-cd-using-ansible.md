@@ -33,7 +33,9 @@ tags:
 
 首先在您的電腦上安裝 ansible 環境，在 MacOS 很簡單，只需要透過 `pip` 就可以安裝完成
 
-<pre><code class="language-bash">$ pip install ansible</code></pre>
+```bash
+$ pip install ansible
+```
 
 更多安裝方式，可以直接看[官方文件 Installation Guide][5]
 
@@ -41,7 +43,8 @@ tags:
 
 來看看 Ansible 專案目錄結構
 
-<pre><code class="language-bash">├── Makefile
+```bash
+├── Makefile
 ├── host.ini
 ├── playbook.yml
 ├── roles
@@ -49,29 +52,35 @@ tags:
 │   └── docker
 └── vars
     ├── drone-agent.yml
-    └── drone-server.yml</code></pre>
+    └── drone-server.yml
+```
 
 其中 `roles` 目錄是放置原本專案的角色，本篇內容不會提到，接著我們一一講解每個檔案，首先是 `Makefile`，裡面其實很簡單，只是兩個 ansible 指令，透過 `ansible-lint` 可以驗證 playbook 語法是否有錯誤，可以選用。
 
-<pre><code class="language-makefile">all: ansible
+```makefile
+all: ansible
 
 lint:
     ansible-lint playbook.yml
 
 ansible: lint
-    ansible-playbook -i host.ini playbook.yml</code></pre>
+    ansible-playbook -i host.ini playbook.yml
+```
 
 接著定義要在哪一台 VM 上面安裝 drone-server 或 drone-agent，請打開 `host.ini`
 
-<pre><code class="language-yaml">[drone_server]
+```yaml
+[drone_server]
 dog ansible_user=multipass ansible_host=192.168.64.11 ansible_port=22
 
 [drone_agent]
-cat ansible_user=multipass ansible_host=192.168.64.11 ansible_port=22</code></pre>
+cat ansible_user=multipass ansible_host=192.168.64.11 ansible_port=22
+```
 
 這邊先暫時把 server 跟 agent 裝在同一台，如果要多台 drone-agent，請自行修改。接下來寫 `playbook`
 
-<pre><code class="language-yaml">- name: "deploy drone server."
+```yaml
+- name: "deploy drone server."
   hosts: drone_server
   become: true
   become_user: root
@@ -87,24 +96,29 @@ cat ansible_user=multipass ansible_host=192.168.64.11 ansible_port=22</code></pr
   roles:
     - { role: appleboy.drone }
   vars_files:
-    - vars/drone-agent.yml</code></pre>
+    - vars/drone-agent.yml
+```
 
 可以看到其中 `var` 目錄底下是放 server 跟 agent 的設定檔案，server 預設是跑 sqlite 資料庫。其中 `drone_server_enable` 要設定為 `true`，代表要安裝 drone-server
 
-<pre><code class="language-yaml">drone_server_enable: "true"
+```yaml
+drone_server_enable: "true"
 drone_version: "latest"
 drone_github_client_id: "e2bdde88b88f7ccf873a"
 drone_github_client_secret: "b0412c975bbf2b6fcd9b3cf5f19c8165b1c14d0c"
 drone_server_host: "368a7a66.ngrok.io"
 drone_server_proto: "https"
-drone_rpc_secret: "30075d074bfd9e74cfd0b84a5886b986"</code></pre>
+drone_rpc_secret: "30075d074bfd9e74cfd0b84a5886b986"
+```
 
 接著看 `drone-agent.yml`，也會看到要安裝 agent 就必須設定 `drone_agent_enable` 為 `true`。
 
-<pre><code class="language-yaml">drone_agent_enable: "true"
+```yaml
+drone_agent_enable: "true"
 drone_version: "latest"
 drone_rpc_server: "http://192.168.64.2:8081"
-drone_rpc_secret: "30075d074bfd9e74cfd0b84a5886b986"</code></pre>
+drone_rpc_secret: "30075d074bfd9e74cfd0b84a5886b986"
+```
 
 更多變數內容請參考[這邊][6]。
 
@@ -112,15 +126,21 @@ drone_rpc_secret: "30075d074bfd9e74cfd0b84a5886b986"</code></pre>
 
 我寫了 [ansible-drone][7] 角色來讓開發者可以快速安裝 drone 服務，安裝方式如下
 
-<pre><code class="language-bash">$ ansible-galaxy install appleboy.drone</code></pre>
+```bash
+$ ansible-galaxy install appleboy.drone
+```
 
 上面步驟是安裝 master 版本，如果要指定穩定版本請改成如下 (後面接上 `,0.0.2` 版號)
 
-<pre><code class="language-bash">$ ansible-galaxy install appleboy.drone,0.0.2</code></pre>
+```bash
+$ ansible-galaxy install appleboy.drone,0.0.2
+```
 
 安裝角色後，就可以直接執行了，過程中會將機器先安裝好 Docker 環境，才會接著安裝 server 及 agent。
 
-<pre><code class="language-bash">$ ansible-playbook -i host.ini playbook.yml</code></pre>
+```bash
+$ ansible-playbook -i host.ini playbook.yml
+```
 
 以上 Ansible 程式碼可以直接從[**這邊下載**][8]
 

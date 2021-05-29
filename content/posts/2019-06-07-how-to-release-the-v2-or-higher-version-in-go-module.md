@@ -39,7 +39,8 @@ tags:
 
 使用 `go mod init` 之後會在專案目錄產生 go.mod 檔案，裡面可以看到像是底下的訊息
 
-<pre><code class="language-go">module github.com/go-ggz/ggz
+```go
+module github.com/go-ggz/ggz
 
 go 1.12
 
@@ -50,35 +51,48 @@ require (
     gopkg.in/nicksrandall/dataloader.v5 v5.0.0
     gopkg.in/testfixtures.v2 v2.5.3
     gopkg.in/urfave/cli.v2 v2.0.0-20180128182452-d3ae77c26ac8
-)</code></pre>
+)
+```
 
 Go module 版本發佈請遵守 [semver.org][5] 規範，當然不只有 Go 語言，發佈其他語言的套件也請務必遵守。而在 Go module 內有說明『[Semantic Import Versioning][2]』裡面大意大致上是說，如果你的套件版本是 v1 以下，像是 `v1.2.3`，可以直接透過 `go get xxxx` 方式將套件版本寫入 `go.mod`，但是看上面的例子，可以發現有些奇怪的字眼，像是 `+incompatible` 等。如果是看到像底下的套件
 
-<pre><code class="language-go">firebase.google.com/go v3.8.0+incompatible</code></pre>
+```go
+firebase.google.com/go v3.8.0+incompatible
+```
 
 表示使用此套件版本大於 `v1` 這時候是不可以直接下 `go get firebase.google.com/go`，而要在最後補上 `v4`，不過這也要看該套件是否有支援 v2, v3, v4 等版本號套件，像 `firebase` 就不支援 `v2, v3` 直接跳到 v4 去了。
 
-<pre><code class="language-go">$ go get firebase.google.com/go/v4</code></pre>
+```go
+$ go get firebase.google.com/go/v4
+```
 
 就如同上面的
 
-<pre><code class="language-go">    github.com/appleboy/gofight/v2 v2.0.0
+```go
+    github.com/appleboy/gofight/v2 v2.0.0
     gopkg.in/nicksrandall/dataloader.v5 v5.0.0
-    gopkg.in/testfixtures.v2 v2.5.3</code></pre>
+    gopkg.in/testfixtures.v2 v2.5.3
+```
 
 而可以發現 gopkg.in 服務已經符合 semver 的需求在做後面補上了 `.v2` 或 `.v5` 所以並不會出現 `+incompatible` 字眼，另外在看 Go Module 也支援直接抓 Git 單個 Commit ID，相當方便。指令如下
 
-<pre><code class="language-bash">go get github.com/appleboy/gorush@36a2e18</code></pre>
+```bash
+go get github.com/appleboy/gorush@36a2e18
+```
 
 可以看到在 `go.mod` 出現如下:
 
-<pre><code class="language-go">github.com/appleboy/gorush v1.12.1-0.20200623031759-36a2e181aa9b</code></pre>
+```go
+github.com/appleboy/gorush v1.12.1-0.20200623031759-36a2e181aa9b
+```
 
 ## 發佈 v2 以上版本方式
 
 官方提供了兩種做法讓開發者可以發佈 v2 以上版本，一種是透過主 branch，另一種是建立版本目錄，底下來一一說明，第一種是直接在主 branch，像是 `master` 內的 `go.mod` 內補上版本，底下是範例:
 
-<pre><code class="language-go">module github.com/appleboy/gofight/v2</code></pre>
+```go
+module github.com/appleboy/gofight/v2
+```
 
 這時候你就可以陸續發佈 v2 版本的 Tag。大家可以發現這個方式，是不需要建立任何 sub folder，而另外一種方式是不需要改動 `go.mod`，直接在專案目錄內放置 `v2` 目錄，然後把所有程式碼複製一份到該目錄底下，接著繼續開發，這方式我個人不太建議，原因檔案容量會增加很快，也不好維護。
 

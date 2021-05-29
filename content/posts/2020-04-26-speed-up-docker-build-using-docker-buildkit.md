@@ -39,11 +39,14 @@ tags:
 
 由於 [BuildKit][4] 是實驗性的功能，預設安裝好 Docker 是不會啟動這功能。目前只有支援編譯 Linux 容器。請透過底下方式來啟動:
 
-<pre><code class="language-shell=">DOCKER_BUILDKIT=1 docker build .</code></pre>
+```shell=
+DOCKER_BUILDKIT=1 docker build .
+```
 
 下完指令後，你會發現整個 output 結果不太一樣了，介面變得比較好看，也看到每個 Layer 編譯的時間
 
-<pre><code class="language-shell=">[+] Building 0.1s (15/15) FINISHED                                                                                     
+```shell=
+[+] Building 0.1s (15/15) FINISHED                                                                                     
  => [internal] load .dockerignore                                                                                 0.0s
  => => transferring context: 2B                                                                                   0.0s
  => [internal] load build definition from Dockerfile                                                              0.0s
@@ -64,17 +67,20 @@ tags:
  => exporting to image                                                                                            0.0s
  => => exporting layers                                                                                           0.0s
  => => writing image sha256:6cc56539b3191d5efd87fb4d05181993d013411299b5cefb74047d2447b4d0c9                      0.0s
- => => naming to docker.io/appleboy/demo                                                                          0.0s</code></pre>
+ => => naming to docker.io/appleboy/demo                                                                          0.0s
+```
 
 如果要詳細的編譯步驟，請加上 `--progress=plain`，就可以看到詳細的過程。其實我覺得重點在每個步驟都實際追加了時間，對於在開發上或者是 CI/CD 的流程上都相當有幫助。另外可以在 docker daemon 加上 config 就可以不用加上 `DOCKER_BUILDKIT` 環境變數
 
-<pre><code class="language-json">{
+```json
+{
   "debug": true,
   "experimental": true,
   "features": {
     "buildkit": true
   }
-}</code></pre>
+}
+```
 
 請記得重新啟動 Docker 讓新的設定生效。
 
@@ -82,7 +88,8 @@ tags:
 
 這邊我們直接拿 Go 語言基本範例來測試看看到底省下多少時間，程式碼都可以在[這裡找到][2]，底下是範例:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "net/http"
@@ -116,11 +123,13 @@ func main() {
         })
     })
     r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-}</code></pre>
+}
+```
 
 接著撰寫 Dockerfile
 
-<pre><code class="language-dockerfile">FROM golang:1.14-alpine
+```dockerfile
+FROM golang:1.14-alpine
 
 LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
@@ -140,11 +149,13 @@ ENV GOOS=linux
 ENV GOARCH=amd64
 RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
 
-CMD ["/app"]</code></pre>
+CMD ["/app"]
+```
 
 可以看到如果 go.mode 跟 go.sum 如果沒有任何變動，基本上 go module 檔案自然就可以透過 docker cache layer 處理。但是每次只要程式碼有任何異動，最後的 go build 會從無到有編譯，請看底下結果:
 
-<pre><code class="language-sh">docker build --progress=plain -t appleboy/docker-demo -f Dockerfile .
+```sh
+docker build --progress=plain -t appleboy/docker-demo -f Dockerfile .
 #14 [10/10] RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-s...
 #14 0.391 gin/foo
 #14 0.403 gin/bar
@@ -175,7 +186,8 @@ CMD ["/app"]</code></pre>
 #14 6.322 github.com/gin-gonic/gin/render
 #14 6.517 github.com/gin-gonic/gin
 #14 6.819 gin
-#14 DONE 7.8s</code></pre>
+#14 DONE 7.8s
+```
 
 總共花了 7.8 秒，但是各位想想，在自己電腦開發時，不會這麼久，而是會根據修正過的 Go 檔案才會進行編譯，但是在 CI/CD 流程怎麼做到呢？其實可以發現在電腦裡面都有 Cache 過已經編譯過的檔案。在 Linux 環境會是 `/root/.cache/go-build`。那我們該如何透過 buildKit 加速編譯？
 
@@ -183,7 +195,8 @@ CMD ["/app"]</code></pre>
 
 先來看看在 Dockerfile 該如何改進才可以讓編譯加速？底下看看
 
-<pre><code class="language-dockerfile"># syntax = docker/dockerfile:experimental
+```dockerfile
+# syntax = docker/dockerfile:experimental
 FROM golang:1.14-alpine
 
 LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
@@ -205,24 +218,31 @@ ENV GOOS=linux
 ENV GOARCH=amd64
 RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
 
-CMD ["/app"]</code></pre>
+CMD ["/app"]
+```
 
 首先看到第一行是務必要填寫
 
-<pre><code class="language-dockerfile"># syntax = docker/dockerfile:experimental</code></pre>
+```dockerfile
+# syntax = docker/dockerfile:experimental
+```
 
 接著使用 `--mount` 方式進行檔案 cache，可以在任何 `RUN` 的步驟進行。所以可以看到在 go build 地方使用了:
 
-<pre><code class="language-dockerfile">RUN --mount=type=cache,target=/go/pkg/mod \
-  --mount=type=cache,target=/root/.cache/go-build</code></pre>
+```dockerfile
+RUN --mount=type=cache,target=/go/pkg/mod \
+  --mount=type=cache,target=/root/.cache/go-build
+```
 
 可以看到此步驟將 go module 及 build 後的檔案全部 cache 下來，這樣下次編譯的時候，就會自動將檔案預設放在對應的位置，加速編譯流程
 
-<pre><code class="language-sh">docker build --progress=plain -t appleboy/docker-buildkit -f Dockerfile.buildkit .
+```sh
+docker build --progress=plain -t appleboy/docker-buildkit -f Dockerfile.buildkit .
 #16 [stage-0 10/10] RUN --mount=type=cache,target=/go/pkg/mod --mount=type=c...
 #16 0.381 gin/foo
 #16 0.447 gin
-#16 DONE 1.2s</code></pre>
+#16 DONE 1.2s
+```
 
 可以看到修改了檔案後，編譯的結果跟在自己電腦上一模一樣，縮短了六秒時間，在大型的 Go 專案省下的時間可不少啊。
 

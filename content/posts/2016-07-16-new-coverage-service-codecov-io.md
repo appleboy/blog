@@ -26,32 +26,42 @@ tags:
 
 Coveralls 會先給一把 Token，你要將 Token 加密到 [Travis][4] 設定檔，或者是直接將明碼寫到 `.travis.yml` 檔案內，如果我們要的是前者，就必須在個人電腦裝上 `travis` 指令
 
-<pre><code class="language-bash">$ gem install travis</code></pre>
+```bash
+$ gem install travis
+```
 
 使用 [gem][5] 指令之前，請先把 [Ruby][6] 環境安裝好，看到這裡是不是覺得很麻煩了。完成後，透過底下指令將 Token 加密到 config 內
 
-<pre><code class="language-bash">$ travis encrypt COVERALLS_TOKEN=xxxxx--add env.global</code></pre>
+```bash
+$ travis encrypt COVERALLS_TOKEN=xxxxx--add env.global
+```
 
 就可以到 `.travis.yml` 看到
 
-<pre><code class="language-bash">env:
+```bash
+env:
   global:
-    secure: jeSgPztK8ytfBEBlZiswBIjXd1dafxxxx</code></pre>
+    secure: jeSgPztK8ytfBEBlZiswBIjXd1dafxxxx
+```
 
 還沒結束，你要將 golang coverage report file 送到 Coveralls Server 前，還要安裝 [goveralls][7] 工具來完成此任務
 
-<pre><code class="language-bash">install:
+```bash
+install:
   - export GO15VENDOREXPERIMENT=1
   - glide install
   - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls</code></pre>
+  - go get github.com/mattn/goveralls
+```
 
 上面的最後一行是必須的喔。最後執行測試後才將結果傳到 server
 
-<pre><code class="language-bash">script:
+```bash
+script:
   - make test
   - go test -v -covermode=count -coverprofile=coverage.out
-  - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN</code></pre>
+  - $(go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken=$COVERALLS_TOKEN
+```
 
 ### Codecov.io
 
@@ -61,11 +71,13 @@ Coveralls 會先給一把 Token，你要將 Token 加密到 [Travis][4] 設定�
 
 有看到安裝方式嗎？就只有一行
 
-<pre><code class="language-bash">script:
+```bash
+script:
   - go test -v -covermode=count -coverprofile=coverage.out
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)</code></pre>
+  - bash <(curl -s https://codecov.io/bash)
+```
 
 只要你是 open source 專案，根本不需要 token，Codecov 會自動分析 golang 編譯出來的 report。在 Dashboard 你會發現這句話
 

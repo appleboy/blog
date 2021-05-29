@@ -44,7 +44,8 @@ tags:
 
 底下直接用範例解釋 (此範例來源自『[go里面select-case和time.Ticker的使用注意事项][7]』)，也可以參考[整個 FB 討論串][8]
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -74,7 +75,8 @@ func main() {
     }
     close(ch)
     tick.Stop()
-}</code></pre>
+}
+```
 
 大家可以看到上面開始有個 goroutine 用來接收 ch channel 的內容，接著看看下面的 for 迴圈內有個 select 用來接受或寫入 Channel，但是這時候會發生一個問題，當 i = 5 時，是有機率會兩個 case 同時發生，這時候按照 [Go 語言官方範例][9]提到內容
 
@@ -82,7 +84,8 @@ func main() {
 
 是會隨機的方式選取一個，所以會發現有機率會少接收到 ch 值，所以底下有幾種方式可以解決此問題。也就是要確保 ch 可以接收到 0 ~ 29 數字。其中第一個做法就是將 ch <- i 加入到 tick.C 內
 
-<pre><code class="language-go">    for i := 0; i < 30; i++ {
+```go
+    for i := 0; i < 30; i++ {
         select {
         case ch <- i:
         case <-tick.C:
@@ -91,11 +94,13 @@ func main() {
         }
 
         time.Sleep(200 * time.Millisecond)
-    }</code></pre>
+    }
+```
 
 第二種作法就是透過 select default 方式不要讓程式 blocking
 
-<pre><code class="language-go">    for i := 0; i < 30; i++ {
+```go
+    for i := 0; i < 30; i++ {
         ch <- i
         select {
         case <-tick.C:
@@ -104,7 +109,8 @@ func main() {
         }
 
         time.Sleep(200 * time.Millisecond)
-    }</code></pre>
+    }
+```
 
 上述這兩種方式都可以，只是真的要依照團隊業務邏輯來決定怎樣修改才是正確的。這概念已經有在去年 (2019) 的 Blog 講過，如果要再多了解 Select 語法，可以參考之前寫的文章『[Go 語言使用 Select 四大用法][10]』
 

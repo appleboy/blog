@@ -31,7 +31,8 @@ tags:
 
 你也可以使用外面公開的 GO Proxy 服務，非 China 地區請使用 [goproxy.io][6]，如果在中國內地，請使用 [gorpoxy.cn][7]，會降低不少 CI/CD 時間。架設 ATHENS 並不難，只需要透過 [Docker][8] 一個指令就可以完成，更詳細的步驟可以參考[官方文件][9]
 
-<pre><code class="language-bash">export ATHENS_STORAGE=~/athens-storage
+```bash
+export ATHENS_STORAGE=~/athens-storage
 mkdir -p $ATHENS_STORAGE
 docker run -d -v $ATHENS_STORAGE:/var/lib/athens \
    -e ATHENS_DISK_STORAGE_ROOT=/var/lib/athens \
@@ -39,7 +40,8 @@ docker run -d -v $ATHENS_STORAGE:/var/lib/athens \
    --name athens-proxy \
    --restart always \
    -p 3000:3000 \
-   gomods/athens:latest</code></pre>
+   gomods/athens:latest
+```
 
 其中 `ATHENS_STORAGE` 請定義一個實體空間路徑，存放從網路抓下來的第三方套件，當然 ATHENS 還有支援不同的 storage type，像是 Memory, AWS S3 或公司內部有架設 [Minio][10]，都是可以設定的。
 
@@ -47,14 +49,17 @@ docker run -d -v $ATHENS_STORAGE:/var/lib/athens \
 
 使用方式非常簡單，只要在您的開發環境加上一些環境變數
 
-<pre><code class="language-bash">$ export GO111MODULE=on
-$ export GOPROXY=http://127.0.0.1:3000</code></pre>
+```bash
+$ export GO111MODULE=on
+$ export GOPROXY=http://127.0.0.1:3000
+```
 
 接著專案使用的任何 Go 指令，只要需要 Donwload 第三方套件，都會先詢問公司內部的 Proxy 服務，如果沒有就會透過 Proxy 抓一份下來 Cache，下次有團隊同仁需要用到，就不需要上 Internet 抓取了。
 
 至於 CI/CD 流程該如何設定呢？非常簡單，底下是 [drone][11] 的設定方式:
 
-<pre><code class="language-yml">- name: embedmd
+```yml
+- name: embedmd
   pull: always
   image: golang:1.12
   commands:
@@ -64,7 +69,8 @@ $ export GOPROXY=http://127.0.0.1:3000</code></pre>
     GOPROXY: http://127.0.0.1:3000
   volumes:
   - name: gopath
-    path: /go</code></pre>
+    path: /go
+```
 
 ## 心得
 

@@ -29,8 +29,10 @@ tags:
 
 也就是說現在時間為 `2018-09-02 15:00` 那就是請抓取 `2018-09-01 15:00` 到 `2018-09-02 15:00` 區間內所有記錄，這個問題其實不難，跟時區也沒有任何關係，不管系統是存 UTC+0 或 UTC+8 都不影響。只要我們抓 `now()` 往前推算 24 小時即可。假設資料表有一個欄位為 `created_at` 存的是 timestamp 格式。底下就是解法:
 
-<pre><code class="language-sql">select title, desc from users \
-  where created_at > now() - interval '1 day'</code></pre>
+```sql
+select title, desc from users \
+  where created_at > now() - interval '1 day'
+```
 
 其中 `now() - interval '1 day'` 代表著現在時間去減掉 1 天的時間。這邊沒有時區的問題，假設另一個問題如下:
 
@@ -56,7 +58,9 @@ tags:
 
 這時候使用上面的解法試試看:
 
-<pre><code class="language-sql">where created_at  > now() - interval '6 day'</code></pre>
+```sql
+where created_at  > now() - interval '6 day'
+```
 
 拿到底下資料
 
@@ -73,7 +77,9 @@ tags:
 
 這時候你會發，怎麼 27 號的資料都沒有進來呢？原因出在 `now() - interval '6 day'` 計算出來的結果會是讀取時間大於 `2018-08-27 16:00+08:00`，那換算 UTC 時間則為 `2018-08-27 08:00+00:00`，這樣是不對的，那 8/27 該天的 00:00 ~ 08:00 的時間也沒被算進去，這時候需要時間的轉換
 
-<pre><code class="language-sql">where created_at  > (now() - interval '6 day')::date</code></pre>
+```sql
+where created_at  > (now() - interval '6 day')::date
+```
 
 `(now() - interval '6 day')::date` 就可以把時間調整為當天 00:00 開始計算。這樣我們找出來的資料便是:
 
@@ -93,8 +99,10 @@ tags:
 
 可以正確抓到 2018-08-27 的資料，但是看到這邊是不是又覺得怪怪的，最前面兩筆應該也要被算進來，我們先把上面的時區全部 +08:00
 
-<pre><code class="language-sql">select created_at, \
-  created_at at time zone 'UTC' at time zone 'Asia/Taipei'</code></pre>
+```sql
+select created_at, \
+  created_at at time zone 'UTC' at time zone 'Asia/Taipei'
+```
 
 | created_at (utc+0)      | created_at (utc+8)      |
 | ----------------------- | ----------------------- |
@@ -114,8 +122,10 @@ tags:
 
 有沒有發現第一筆跟第二筆，在台灣時間是在 08-27 號，所以理論上應該要是我們的查詢範圍之間，但是沒有被查到。解決方式就是將欄位都先轉成使用者時區再去做計算
 
-<pre><code class="language-sql">created_at at time zone 'utc' time zone 'Asia/Taipei' > \
- (now() at time zone 'Asia/Taipei1' - interval '6 day')::date</code></pre>
+```sql
+created_at at time zone 'utc' time zone 'Asia/Taipei' > \
+ (now() at time zone 'Asia/Taipei1' - interval '6 day')::date
+```
 
 其中關鍵點就在把 `created_at` 先轉 utc+0 再轉 utc+8 最後才做比較。
 

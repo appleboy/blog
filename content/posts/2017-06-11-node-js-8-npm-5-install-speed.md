@@ -32,14 +32,18 @@ tags:
 
 先把 node_modules 刪除，及系統相關 Cache 目錄都移除
 
-<pre><code class="language-bash">$ npm cache verify
+```bash
+$ npm cache verify
 $ rm -rf ~/.npm/_cacache/
-$ time npm install</code></pre>
+$ time npm install
+```
 
 npm 花費時間: 1m43.370s
 
-<pre><code class="language-bash">$ yarn cache clean
-$ time yarn install</code></pre>
+```bash
+$ yarn cache clean
+$ time yarn install
+```
 
 yarn 花費時間: 1m1.707s
 
@@ -47,13 +51,17 @@ yarn 花費時間: 1m1.707s
 
 執行完第一次安裝後，我們把 node_modules 移除後再安裝一次試試看
 
-<pre><code class="language-bash">$ rm -rf node_moduels
-$ time npm install</code></pre>
+```bash
+$ rm -rf node_moduels
+$ time npm install
+```
 
 npm 花費時間: 0m38.819s
 
-<pre><code class="language-bash">$ rm -rf node_moduels
-$ time yarn install</code></pre>
+```bash
+$ rm -rf node_moduels
+$ time yarn install
+```
 
 yarn 花費時間: 0m24.219s
 
@@ -61,11 +69,15 @@ yarn 花費時間: 0m24.219s
 
 最後保留 node_modules 目錄，再執行一次安裝
 
-<pre><code class="language-bash">$ time npm install</code></pre>
+```bash
+$ time npm install
+```
 
 npm 花費時間: 0m11.216s
 
-<pre><code class="language-bash">$ time yarn install</code></pre>
+```bash
+$ time yarn install
+```
 
 yarn 花費時間: 0m0.954s
 

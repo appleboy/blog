@@ -45,7 +45,8 @@ tags:
 
 要把兩個不同的套件整合在一起，最簡單的方式就是分不同的 URL 區隔開來，兩邊都是透過 Bearer Token 來進行使用者身份確認。
 
-<pre><code class="language-go">        g := e.Group("/graphql")
+```go
+        g := e.Group("/graphql")
         g.Use(auth.Check())
         {
             g.POST("", graphql.Handler())
@@ -58,11 +59,13 @@ tags:
         {
             q.POST("", gqlgen.SchemaHandler())
             q.GET("", gqlgen.SchemaHandler())
-        }</code></pre>
+        }
+```
 
 透過 jwt 驗證及讀取使用者資料
 
-<pre><code class="language-go">// Check user bearer token
+```go
+// Check user bearer token
 func Check() gin.HandlerFunc {
     return func(c *gin.Context) {
         if data, err := jwt.New().GetClaimsFromJWT(c); err != nil {
@@ -97,13 +100,15 @@ func Check() gin.HandlerFunc {
             c.Request = c.Request.WithContext(ctx)
         }
     }
-}</code></pre>
+}
+```
 
 ## 撰寫 graphql-gateway
 
 使用 [nautilus/gateway][8] 可以簡單將 Schema 合併成單一 Data，不過此套件[尚未支援 subscription][15]。
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     // default port
     port := "3001"
     server := "api:8080"
@@ -140,11 +145,13 @@ func Check() gin.HandlerFunc {
         fmt.Println(err.Error())
         os.Exit(1)
     }
-}</code></pre>
+}
+```
 
 由於之後要整合進 Docker 內，故透過 LookupEnv 來決定 Server 跟 Port。這樣可以將 `/graphql` 及 `/query` 的 Schema 綁定在一起了。另外要解決的就是如何將 Authorization 傳到後面 GraphQL Server 進行認證。
 
-<pre><code class="language-go">// the first thing we need to define is a middleware for our handler
+```go
+// the first thing we need to define is a middleware for our handler
 // that grabs the Authorization header and sets the context value for
 // our user id
 func withUserInfo(handler http.HandlerFunc) http.HandlerFunc {
@@ -181,7 +188,8 @@ var forwardUserID = gateway.RequestMiddleware(func(r *http.Request) error {
 
     // return the modified request
     return nil
-})</code></pre>
+})
+```
 
 其中上面的 Access-Control 用來解決 CORS 相關問題。前端用各自電腦開發時，就需要此部分。
 

@@ -35,14 +35,17 @@ tags:
 
 Gops 是一套 CLI 工具，可以列出系統上正在用 Go 跑的全部 Process。要怎樣複製問題呢？很簡單，先安裝好 gops 指令後，先執行 `gops` 會看到底下結果
 
-<pre><code class="language-shell=">$ gops
+```shell=
+$ gops
 98   1    com.docker.vmnetd  go1.13.14 com.docker.vmnetd
 2319 2275 gopls              go1.15    /Users/appleboy/go/bin/gopls
-4083 452  gops               go1.15    /Users/appleboy/go/bin/gops</code></pre>
+4083 452  gops               go1.15    /Users/appleboy/go/bin/gops
+```
 
 接著用底下程式碼繼續將 process 塞滿到 10 個，這時候在執行 `gops` 會發現系統完全不顯示了，也沒辦法結束。
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -56,11 +59,13 @@ func main() {
     for v := range timer1.C {
         fmt.Println(v)
     }
-}</code></pre>
+}
+```
 
 這問題發生在 8/5 有網友提出了 [PR 去限制 Concurrency][10]，這寫法造成了上述出現的問題，導致 CLI 整個無法繼續運作，需要用 `ctrl + c` 才可以結束執行。底下是[修改過後的程式碼][11]:
 
-<pre><code class="language-go">// FindAll returns all the Go processes currently running on this host.
+```go
+// FindAll returns all the Go processes currently running on this host.
 func FindAll() []P {
     const concurrencyProcesses = 10 // limit the maximum number of concurrent reading process tasks
     pss, err := ps.Processes()
@@ -106,11 +111,13 @@ func FindAll() []P {
         results = append(results, p)
     }
     return results
-}</code></pre>
+}
+```
 
 我將上面的例子簡化寫成單一 main 函式來執行，效果是一樣的:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -152,16 +159,19 @@ func main() {
     }
 
     fmt.Println("result:", results)
-}</code></pre>
+}
+```
 
 我把 `ps.Processes()` 的資料，換成 Job 數量來代表，來解釋為什麼麼這段程式碼造成了系統直接 hang 住不動。重點原因在 for 迴圈內的 `limitCh <- struct{}{}`，先看到前面有設定了背景一次只能跑 10 個 Concurrency Processes
 
-<pre><code class="language-go">    for i := 0; i < jobCount; i++ {
+```go
+    for i := 0; i < jobCount; i++ {
         limitCh <- struct{}{}
         go func(val int) {
             ....
         }(i)
-    }</code></pre>
+    }
+```
 
 這是一個標準的 Limit Concurrency 問題，在讀取第一個 Job 後，先將空 struct 丟入 limitCh 通道，這時候 limitCh 就是剩下 9 個可以繼續處理，接著持續一樣的動作，但是到第 11 個 Job 需要處理時，就會直接停在 `limitCh <- struct{}{}`，在 for 迴圈後面的程式碼完全沒辦法執行，造成整個系統 deadlock，由此可知道，如果 Process 數量小於 10 的話，幾乎看不出來有任何問題，系統都可以正常運作 (大家可以把範例的 Job Count 換成 10)。下面會介紹兩種方式繞過此問題，大家可以參考看看
 
@@ -169,7 +179,8 @@ func main() {
 
 相信很多開發者可能會想到，既然卡在 `limitCh <- struct{}{}`，那就將此段程式碼也一樣丟到 goroutine 內處理就可以了。
 
-<pre><code class="language-go">    found := make(chan int)
+```go
+    found := make(chan int)
     limitCh := make(chan struct{}, concurrencyProcesses)
 
     for i := 0; i < jobCount; i++ {
@@ -186,7 +197,8 @@ func main() {
             time.Sleep(time.Duration(waitTime) * time.Millisecond)
             found <- val
         }(i)
-    }</code></pre>
+    }
+```
 
 很高興可以看到這方式解決掉系統 Hang 住的問題。但是你有沒有發現，程式碼沒辦法限制 Concurrency Processes，而是 100 個 Job 同時處理到結束。雖然這方式可以解決問題，但是回到問題的初衷，我們就是要寫 Limit Concurrency 啊。
 
@@ -194,7 +206,8 @@ func main() {
 
 這寫法算是蠻常見的，既然要限制背景能同時處理的數量，那相對的就是建立特定數量的 Worker，每個 Worker 內在讀取 Channle 內的資料出來。第一步驟建立 queue 通道，並將所有的內容都丟進 queue 內
 
-<pre><code class="language-go">    found := make(chan int)
+```go
+    found := make(chan int)
     queue := make(chan int)
 
     go func(queue chan<- int) {
@@ -202,11 +215,13 @@ func main() {
             queue <- i
         }
         close(queue)
-    }(queue)</code></pre>
+    }(queue)
+```
 
 這邊一樣是透過 goroutine 方式丟到背景，避免 block 整個 main 程式。接著建立特定的 Worker 數量來消化全部的 Job
 
-<pre><code class="language-go">    for i := 0; i < concurrencyProcesses; i++ {
+```go
+    for i := 0; i < concurrencyProcesses; i++ {
         go func(queue <-chan int, found chan<- int) {
             for val := range queue {
                 defer wg.Done()
@@ -216,7 +231,8 @@ func main() {
                 found <- val
             }
         }(queue, found)
-    }</code></pre>
+    }
+```
 
 可以看到這邊的 for 迴圈就是以 `concurrencyProcesses` 為主了，裡面再用 goroutine 方式來讀取 Channel，直到全部的 Channel 都讀取完畢，整個 goroutine 就會結束。除了這解決方式之外，還是有其他方法可以實作，這邊就交由大家去發揮了。
 

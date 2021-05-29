@@ -28,7 +28,8 @@ tags:
 
 ## 基本 HTTPD 服務
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -56,11 +57,14 @@ func main() {
     }
 
     log.Println("Server exiting")
-}</code></pre>
+}
+```
 
 上述程式碼在我們寫基本的 web 服務都不會考慮到 graceful shutdown，如果有重要的 Job 在上面跑，我強烈建議一定要加上 [Go][4] 在 1.8 版推出的 [graceful shutdown 函式][5]，上述程式碼假設透過底下指令執行:
 
-<pre><code class="language-sh">curl -v http://localhost:8080</code></pre>
+```sh
+curl -v http://localhost:8080
+```
 
 接著把 server 關閉，就會強制關閉 client 連線，並且噴錯。底下會用 graceful shutdown 來解決此問題。
 
@@ -73,7 +77,8 @@ Go 1.8 推出 graceful shutdown，讓開發者可以針對不同的情境在升�
 
 可以看到步驟 1. 會先關閉連接埠，確保沒有新的使用者連上服務，第二步驟就是確保處理完剩下的 http 連線才會正常關閉，來看看底下範例
 
-<pre><code class="language-go">// +build go1.8
+```go
+// +build go1.8
 
 package main
 
@@ -125,19 +130,24 @@ func main() {
     }
 
     log.Println("Server exiting")
-}</code></pre>
+}
+```
 
 首先可以看到將 `srv.ListenAndServe` 直接丟到背景執行，這樣才不會阻斷後續的流程，接著宣告一個 `os.Signal` 訊號的 Channel，並且接受系統 SIGINT 及 SIGTERM，也就是只要透過 kill 或者是 `docker rm` 就會收到訊號關閉 `quit` 通道
 
-<pre><code class="language-go"><-quit</code></pre>
+```go
+<-quit
+```
 
 由上面可知，整個 main func 會被 block 在這地方，假設按下 ctrl + c 就會被系統訊號 (SIGINT 及 SIGTERM) 通知關閉 quit 通道，通道被關閉後，就會繼續往下執行
 
-<pre><code class="language-go">ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+```go
+ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 defer cancel()
 if err := srv.Shutdown(ctx); err != nil {
     log.Fatal("Server Shutdown: ", err)
-}</code></pre>
+}
+```
 
 最後可以看到 `srv.Shutdown` 就是用來處理『1. 關閉連接埠』及『2. 等待所有連線處理結束』，可以看到傳了一個 context 進 Shutdown 函式，目的就是讓程式最多等待 5 秒時間，如果超過 5 秒就強制關閉所有連線，所以您需要根據 server 處理的資料時間來決 定等待時間，設定太短就會造成強制關閉，建議依照情境來設定。至於服務 shutdown 後可以處理哪些事情就看開發者決定。
 

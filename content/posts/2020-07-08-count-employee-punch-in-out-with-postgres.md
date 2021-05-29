@@ -22,7 +22,8 @@ tags:
 
 建立表格來紀錄，其中 `test` 為 [Postgres][3] 的 [Schema][4]
 
-<pre><code class="language-sql">CREATE TABLE "test"."workshift" (
+```sql
+CREATE TABLE "test"."workshift" (
     "id" int8 NOT NULL DEFAULT nextval('workshift_id_seq'::regclass),
     "company_id" int8,
     "employee_id" int8,
@@ -30,7 +31,8 @@ tags:
     "created_at" timestamp,
     "updated_at" timestamp,
     PRIMARY KEY ("id")
-);</code></pre>
+);
+```
 
 其中 `recorded_at` 是員工刷卡傳送上來的時間，本篇會介紹兩種情境的寫法，用來分別紀錄每個月各別員工刷卡次數，以及單月每天員工刷卡總次數。
 
@@ -45,7 +47,8 @@ tags:
 
 底下會用 postgres 內的 `CASE WHEN` 語法
 
-<pre><code class="language-sql">SELECT
+```sql
+SELECT
     employee_id,
     sum(
         CASE WHEN to_char(recorded_at, 'hh24:mi') >= '07:00'
@@ -71,7 +74,8 @@ GROUP BY
     employee_id
 ORDER BY
     employee_id DESC
-LIMIT 50</code></pre>
+LIMIT 50
+```
 
 ## 單月統計每天資料
 
@@ -84,7 +88,8 @@ LIMIT 50</code></pre>
 
 SQL 語法如下
 
-<pre><code class="language-sql">SELECT
+```sql
+SELECT
     to_char(recorded_at, 'YYYY-MM-DD') AS day_of_month,
     sum(
         CASE WHEN to_char(recorded_at, 'hh24:mi') >= '07:00'
@@ -110,11 +115,13 @@ GROUP BY
     day_of_month
 ORDER BY
     day_of_month DESC
-LIMIT 50</code></pre>
+LIMIT 50
+```
 
 比較不一樣的地方是，透過 `to_char` 函式來取的每一天時間來計算所有員工刷卡次數來結算金額。搭配 GraphQL 語法搜尋會是
 
-<pre><code class="language-graphql">query {
+```graphql
+query {
   reports(
     category: Day
     timeRange: {
@@ -146,7 +153,8 @@ LIMIT 50</code></pre>
       dinnerCount
     }
   }
-}</code></pre>
+}
+```
 
 由於是寫 RAW SQL，如果有使用 [ORM][5] 套件，要注意 [SQL Injection][6] 部分。歡迎大家提供更好的寫法或 DB 結構。
 

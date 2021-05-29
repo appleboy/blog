@@ -42,7 +42,8 @@ tags:
 
 [up][15] 可以在幾秒鐘的時間將專案直接部署到 AWS Lambda，透過 up 可以快速將 Staging 及 Productoon 環境建置完成。底下直接用 GO 語言當例子。
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "os"
@@ -68,36 +69,47 @@ func main() {
     })
 
     r.Run(port)
-}</code></pre>
+}
+```
 
 接著在專案內放置 `up.json` 檔案，內容如下:
 
-<pre><code class="language-json">{
+```json
+{
   "name": "demo",
   "profile": "default",
   "regions": [
     "ap-southeast-1"
   ]
-}</code></pre>
+}
+```
 
 `name` 代表 aws lambda 函數名稱，`profile` 會讀 `~/.aws/credentials` 底下的 profile 設定。接著執行 `up -v`
 
-<pre><code class="language-bash">$ up -v</code></pre>
+```bash
+$ up -v
+```
 
 [<img src="https://i1.wp.com/farm2.staticflickr.com/1963/45494403542_a91463e6cc_z.jpg?w=840&#038;ssl=1" alt="up_json_—_training" data-recalc-dims="1" />][16]
 
 從上圖可以看到預設編譯行為是
 
-<pre><code class="language-bash">$ GOOS=linux GOARCH=amd64 go build -o server *.go</code></pre>
+```bash
+$ GOOS=linux GOARCH=amd64 go build -o server *.go
+```
 
 並且上傳完成後會將 `server` 移除。登入 AWS Lambda 入口，可以看到 up 幫忙建立了兩個環境，一個是 `staging` 另一個是 `production`，假設要部署專案到 production 環境可以下
 
-<pre><code class="language-bash">$ up deploy production -v</code></pre>
+```bash
+$ up deploy production -v
+```
 
 部署完成後，可以直接透過 up 拿到 API Gateway 給的測試 URL，可以在瀏覽器瀏覽
 
-<pre><code class="language-bash">$ up url
-https://xxxxxxx.execute-api.ap-southeast-1.amazonaws.com/staging/</code></pre>
+```bash
+$ up url
+https://xxxxxxx.execute-api.ap-southeast-1.amazonaws.com/staging/
+```
 
 當然也可以到 API Gateway 那邊設定好 Custom Domain 就可以直接用自己的 Domain，而不會有 `/staging/` 字眼在 URL 路徑上。
 
@@ -105,7 +117,8 @@ https://xxxxxxx.execute-api.ap-southeast-1.amazonaws.com/staging/</code></pre>
 
 在自己電腦測試完成後，接著要設定 CI/CD 來達到自動化部署，本文直接拿 [Drone][17] 來串接。底下是 .drone.yml 設定檔
 
-<pre><code class="language-yaml">pipeline:
+```yaml
+pipeline:
   build:
     image: golang:1.11
     pull: true
@@ -133,11 +146,13 @@ https://xxxxxxx.execute-api.ap-southeast-1.amazonaws.com/staging/</code></pre>
       - production
     directory: ./example23-deploy-go-application-with-up
     when:
-      event: tag</code></pre>
+      event: tag
+```
 
 上面可以很清楚看到，只要是 push 到 master branch 就會觸發 staging 環境部署。而下 Tag 則是部署到 Production。要注意的是由於 up 會有預設編譯行為，但是專案複雜的話就需要透過其他指令去執行。只要去蓋掉預設行為就可以。
 
-<pre><code class="language-json">{
+```json
+{
   "name": "demo",
   "profile": "default",
   "regions": [
@@ -150,7 +165,8 @@ https://xxxxxxx.execute-api.ap-southeast-1.amazonaws.com/staging/</code></pre>
     "clean": [
     ]
   }
-}</code></pre>
+}
+```
 
 看到 `hooks` 階段，其中 build 部分需要填寫，不可以是空白。
 

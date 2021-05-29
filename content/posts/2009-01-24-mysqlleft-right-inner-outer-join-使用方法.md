@@ -44,23 +44,29 @@ join 總共分為六種
 
 ### Inner Join
 
-<pre><code class="language-sql">--
+```sql
+--
 -- 這算是最普通的 join 方法
 --
-SELECT a.*, b.* FROM `test1` as a, `test2` as b where a.id = b.id</code></pre>
+SELECT a.*, b.* FROM `test1` as a, `test2` as b where a.id = b.id
+```
 
 ### Natural Join
 
-<pre><code class="language-sql">--
+```sql
+--
 -- 利用兩資料表相同欄位，自動連接上
-SELECT a.*, b.* FROM `test1` as a NATURAL JOIN `test2` as b</code></pre>
+SELECT a.*, b.* FROM `test1` as a NATURAL JOIN `test2` as b
+```
 
 ### Left, Right join
 
-<pre><code class="language-sql">--
+```sql
+--
 -- 這兩個其實是相同的，left join 就是顯示左邊表格所有資料，如果匹對沒有的話，就是顯示 NULL
 -- right 則是相反
-SELECT a.*, b.* FROM `test1` as a LEFT JOIN `test2` as b on a.id = b.id</code></pre>
+SELECT a.*, b.* FROM `test1` as a LEFT JOIN `test2` as b on a.id = b.id
+```
 
 ### Full Outer Join
 
@@ -70,13 +76,17 @@ SELECT a.*, b.* FROM `test1` as a LEFT JOIN `test2` as b on a.id = b.id</code></
 
 在 MySQL 語法裡面，它相同於 INNER Join，但是在標準 SQL 底下，它們不盡相同 
 
-<pre><code class="language-sql">SELECT * FROM t1 LEFT JOIN (t2, t3, t4)
-                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)</code></pre>
+```sql
+SELECT * FROM t1 LEFT JOIN (t2, t3, t4)
+                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)
+```
 
 同等於
 
-<pre><code class="language-sql">SELECT * FROM t1 LEFT JOIN (t2 CROSS JOIN t3 CROSS JOIN t4)
-                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)</code></pre>
+```sql
+SELECT * FROM t1 LEFT JOIN (t2 CROSS JOIN t3 CROSS JOIN t4)
+                 ON (t2.a=t1.a AND t3.b=t1.b AND t4.c=t1.c)
+```
 
 取一段 MySQL 官網的文字：
 

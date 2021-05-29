@@ -47,7 +47,8 @@ tags:
 
 本教學使用 [Minio][23] 來代替 AWS S3，底下用 docker-compose 來架設 Minio 及 PostgreSQL 12 版本
 
-<pre><code class="language-yaml">services:
+```yaml
+services:
   minio:
     image: minio/minio:edge
     restart: always
@@ -77,11 +78,13 @@ tags:
     environment:
       POSTGRES_USER: db
       POSTGRES_DB: db
-      POSTGRES_PASSWORD: db</code></pre>
+      POSTGRES_PASSWORD: db
+```
 
 接著挑選特定資料庫版本的 Docker Image
 
-<pre><code class="language-yaml">  backup_postgres:
+```yaml
+  backup_postgres:
     image: appleboy/docker-backup-database:postgres-12
     logging:
       options:
@@ -103,11 +106,13 @@ tags:
       DATABASE_USERNAME: db
       DATABASE_PASSWORD: db
       DATABASE_NAME: db
-      DATABASE_OPTS:</code></pre>
+      DATABASE_OPTS:
+```
 
 其中 `STORAGE_BUCKET` 是 AWS S3 的 bucket 名稱，還有需要設定 `STORAGE_PATH` 這樣待會可以設定 bucket lifecycle，可以設定幾天後刪除舊的資料，接著設定 Minio S3 的 bucket lifecycle:
 
-<pre><code class="language-sh">$ mc ilm import minio/test <<EOF
+```sh
+$ mc ilm import minio/test <<EOF
 {
     "Rules": [
         {
@@ -122,11 +127,13 @@ tags:
         }
     ]
 }
-EOF</code></pre>
+EOF
+```
 
 上面設定是一次性的備份，也就是手動使用 `docker-compose up backup_postgres` 就可以進行一次備份，當然可以固定每天晚上時間來備份
 
-<pre><code class="language-yaml">  backup_mysql:
+```yaml
+  backup_mysql:
     image: appleboy/docker-backup-database:mysql-8
     logging:
       options:
@@ -151,7 +158,8 @@ EOF</code></pre>
       DATABASE_OPTS:
 
       TIME_SCHEDULE: "@daily"
-      TIME_LOCATION: Asia/Taipei</code></pre>
+      TIME_LOCATION: Asia/Taipei
+```
 
 `TIME_LOCATION` 可以設定台灣時區，不然預設會是 UTC+0 時間。更多詳細的設定可以[參考文件][9]。
 

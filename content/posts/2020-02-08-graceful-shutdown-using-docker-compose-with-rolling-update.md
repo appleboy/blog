@@ -25,7 +25,9 @@ tags:
 
 假設您有一個 App 服務，需要在單機版上面透過 docker-compose 同時啟動兩個容器，可以透過底下指令一次完成：
 
-<pre><code class="language-shell=">docker-compose up -d --scale app=2</code></pre>
+```shell=
+docker-compose up -d --scale app=2
+```
 
 其中 `app` 就是在 YAML 裡面的服務名稱。這時候可以看到背景就跑了兩個容器，接著要升級 App 服務，您會發現在下一次上述指令，可以看到 docker 會先把兩個容器先停止，但是容器被停止前會透過 graceful shutdown 確認背景的服務或工作需要完成結束，才可以正確停止容器並且移除，最後再啟動新的 App 容器。這時候你會發現 App 服務被終止了幾分鐘時間完全無法運作。底下來介紹該如何解決此問題，以及驗證 graceful shutdown 是否可以正常運作
 
@@ -41,7 +43,8 @@ tags:
 
 先簡單寫個 Go 範例:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "context"
@@ -110,17 +113,21 @@ func main() {
 
     <-done
     logger.Println("Server stopped")
-}</code></pre>
+}
+```
 
 上面程式可以知道，直接打 `/` 就會等待 15 秒後才能拿到回應
 
-<pre><code class="language-shell=">curl -v -H Host:app.docker.localhost http://127.0.0.1:8088</code></pre>
+```shell=
+curl -v -H Host:app.docker.localhost http://127.0.0.1:8088
+```
 
 ## 準備 docker 環境
 
 準備 dockerfile 
 
-<pre><code class="language-dockerfile="># build stage
+```dockerfile=
+# build stage
 FROM golang:alpine AS build-env
 ADD . /src
 RUN cd /src && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
@@ -131,11 +138,13 @@ COPY --from=build-env /src/app /
 
 EXPOSE 8080
 
-ENTRYPOINT ["/app"]</code></pre>
+ENTRYPOINT ["/app"]
+```
 
 準備 docker-compose.yml，使用 [Traefik][11] v2 版本來做 Load balancer。
 
-<pre><code class="language-yaml">version: '3'
+```yaml
+version: '3'
 
 services:
   app:
@@ -160,7 +169,8 @@ services:
       - "8080:8080"
     volumes:
       # So that Traefik can listen to the Docker events
-      - /var/run/docker.sock:/var/run/docker.sock</code></pre>
+      - /var/run/docker.sock:/var/run/docker.sock
+```
 
 可以看到 `8088` port 會是入口，`app.docker.localhost` 會是 app 網域名稱。
 
@@ -168,22 +178,30 @@ services:
 
 啟動全部服務，App 及 Traefik 都有被正式啟動
 
-<pre><code class="language-shell=">docker-compose up -d --scale app=2</code></pre>
+```shell=
+docker-compose up -d --scale app=2
+```
 
 接下來先修改原本的 Go 範例，在編譯一次把 Image 先產生好。另外開兩個 console 頁面直接下
 
-<pre><code class="language-shell=">curl -v -H Host:app.docker.localhost http://127.0.0.1:8088</code></pre>
+```shell=
+curl -v -H Host:app.docker.localhost http://127.0.0.1:8088
+```
 
 會發現 curl 會等待 15 秒才能拿到回應，這時候直接下
 
-<pre><code class="language-shell=">docker-compose up -d --scale app=2</code></pre>
+```shell=
+docker-compose up -d --scale app=2
+```
 
 就可以看到
 
-<pre><code class="language-shell=">app_2   | http: 2020/02/08 14:06:20 Server is shutting down... 
+```shell=
+app_2   | http: 2020/02/08 14:06:20 Server is shutting down... 
 app_2   | http: 2020/02/08 14:06:20 Server stopped
 app_1   | http: 2020/02/08 14:06:20 Server is shutting down...
-app_1   | http: 2020/02/08 14:06:20 Server stopped</code></pre>
+app_1   | http: 2020/02/08 14:06:20 Server stopped
+```
 
 這代表 graceful shutdown 可以正常運作，確保 app 連線及後續處理的動作可以正常被執行。
 
@@ -191,28 +209,38 @@ app_1   | http: 2020/02/08 14:06:20 Server stopped</code></pre>
 
 從上面可以看到，當執行了
 
-<pre><code class="language-shell=">docker-compose up -d --scale app=2</code></pre>
+```shell=
+docker-compose up -d --scale app=2
+```
 
 docker 會把目前的容器都全部停止，假設這時候都有重要的工作需要繼續執行，但是 graceful shutdown 已經將連接埠停止，造成使用者已經無法連線，這問題該如何解決呢？其實不難，只需要修正幾個指令就可以做到。由於 `docker-compose up -d` 會先將所有容器先停止，造成無法連線，這時候需要使用 `--no-recreate` flag 來避免這問題
 
-<pre><code class="language-shell=">docker-compose up -d --scale app=3 --no-recreate</code></pre>
+```shell=
+docker-compose up -d --scale app=3 --no-recreate
+```
 
 將數量 + 1 的意思就是先啟動一個新的容器用來接受新的連線，接著將舊的容器移除:
 
-<pre><code class="language-shell=">docker stop -t 30 \
+```shell=
+docker stop -t 30 \
   $(docker ps --format "table {{.ID}} {{.Names}} {{.CreatedAt}}" | \
   grep app | \
   awk -F  " " '{print $1 " " $3 "T" $4}' ｜\
   sort -k2 | \
-  awk -F  "  " '{print $1}' | head -2)</code></pre>
+  awk -F  "  " '{print $1}' | head -2)
+```
 
 其中 `-t 30` 一定要設定，預設會是 10 秒相當短，也就是 10 秒容器沒結束就自動 kill 了，後面的 `head -2` 代表移除舊的容器，原本是開兩台，就需要停止兩台。接著將已經停止的容器砍掉:
 
-<pre><code class="language-shell=">docker container prune -f</code></pre>
+```shell=
+docker container prune -f
+```
 
 現在正在執行的容器只剩下一台，故還需要透過 scale 將不足的容器補上:
 
-<pre><code class="language-shell=">docker-compose up -d --scale app=2 --no-recreate</code></pre>
+```shell=
+docker-compose up -d --scale app=2 --no-recreate
+```
 
 完成上述步驟後，就可以確保服務不會中斷。如果有更好的解法歡迎大家提供。
 

@@ -16,7 +16,8 @@ tags:
 
 本篇會帶大家認識 [Go 語言][2]的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看[例子][3]，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -32,7 +33,8 @@ func init() {
 
 func main() {
     fmt.Println("Hello, playground")
-}</code></pre>
+}
+```
 
 <!--more-->
 
@@ -40,10 +42,12 @@ func main() {
 
 有種狀況底下，主程式需要單獨讀取 package 內的 init func 而不讀取額外的變數，這時候就要透過 `_` 來讀取 package。假設要讀取 [lib/pq][4] 內的 [init][5]，一定要使用 `_`
 
-<pre><code class="language-go">import(
+```go
+import(
     // Needed for the Postgresql driver
     _ "github.com/lib/pq
-)</code></pre>
+)
+```
 
 如果沒有加上 `_`，當編譯的時候就會報錯，原因就是 main 主程式內沒有用到 pq 內任何非 init() 的功能，所以不可編譯成功。如果有多個 package 的 init 需要同時引入，這邊也是會依照 import 的順序來讀取。
 
@@ -51,7 +55,8 @@ func main() {
 
 大家一定很好奇 init 的執行時間是什麼時候，底下舉個[例子][6]
 
-<pre><code class="language-go">var global = convert()
+```go
+var global = convert()
 
 func convert() int {
     return 100
@@ -63,11 +68,13 @@ func init() {
 
 func main() {
     fmt.Println("global is", global)
-}</code></pre>
+}
+```
 
 或者是把 init() 放到最上面
 
-<pre><code class="language-go">func init() {
+```go
+func init() {
     global = 0
 }
 
@@ -79,7 +86,8 @@ func convert() int {
 
 func main() {
     fmt.Println("global is", global)
-}</code></pre>
+}
+```
 
 兩種結果都是 0，這邊大家就可以知，init 執行的時機會是在執行 main func 之前，所以不管前面做了哪些事情，都不會影響 init 的執行結果。最後提醒大家，只要 package 內有 init 的 func，在引入 package 時都會被執行。
 

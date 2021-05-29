@@ -31,13 +31,17 @@ tags:
 
 為了能讓 Gogs 用戶可以無痛轉換到 Gitea，我們寫了一篇[升級教學][14]，除此之外，也提供了各種安裝方式: [Docker 安裝][15]、[下載執行檔][16]、[用套件][17]、[Windows 安裝][18]、[自行編譯][19] .. 等各種方式。最簡單的方式就是透過[下載執行檔][20]，只要一個指令就可以看到歡迎畫面了
 
-<pre><code class="language-bash">./gitea web</code></pre>
+```bash
+./gitea web
+```
 
 <a data-flickr-embed="true"  href="https://www.flickr.com/photos/appleboy/32013522942/in/dateposted-public/" title="安裝頁面   Gitea  Git with a cup of tea"><img src="https://i1.wp.com/c7.staticflickr.com/1/292/32013522942_76d7b1fa02_c.jpg?resize=579%2C800&#038;ssl=1" alt="安裝頁面   Gitea  Git with a cup of tea" data-recalc-dims="1" /></a>
 
 將來如果要升級 gitea，更是容易，你不用停掉 gitea 服務，只要下載新的檔案，覆蓋掉原有的執行檔，接著下: (其中 `custom/run/app.pid` 是 gitea 執行的 pid 記錄檔)
 
-<pre><code class="language-bash">kill -USR2 $(cat custom/run/app.pid)</code></pre>
+```bash
+kill -USR2 $(cat custom/run/app.pid)
+```
 
 就可以完成升級，原本的服務也不會因此而中斷。這要感謝 [Facebook][21] 開發的 [grace][22] 套件，這套件並不支援 Windows，所以上面的升級方式不適用在 Windows 平台，不過我相信很少人會把 Git 服務架在 Windows 系統。
 

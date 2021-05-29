@@ -18,17 +18,20 @@ tags:
 ---
 在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:
 
-<pre><code class="language-php"><?php
+```php
+<?php
 if(file_exists("files/appleboy.c")) {
     echo "File found!";
 }
-?></code></pre>
+?>
+```
 
 在 C 裡面該如何實做？有兩種方式如下:
 
 ### 1. 直接開檔
 
-<pre><code class="language-C">bool file_exists(const char * filename)
+```C
+bool file_exists(const char * filename)
 {
     if (FILE * file = fopen(filename, "r"))
     {
@@ -36,22 +39,26 @@ if(file_exists("files/appleboy.c")) {
         return true;
     }
     return false;
-}</code></pre>
+}
+```
 
 C++ 寫法
 
-<pre><code class="language-c">std::fstream foo;
+```c
+std::fstream foo;
 
 foo.open("bar");
 
 if(foo.is_open() == true)
      std::cout << "Exist";
 else 
-     std::cout << "Doesn't Exist";</code></pre>
+     std::cout << "Doesn't Exist";
+```
 
 ### 2. 讀取檔案狀態
 
-<pre><code class="language-C">#include<sys/stat.h>
+```C
+#include<sys/stat.h>
 int file_exists (char * fileName)
 {
    struct stat buf;
@@ -63,4 +70,5 @@ int file_exists (char * fileName)
      }
      return 0;
 
-}</code></pre>
+}
+```

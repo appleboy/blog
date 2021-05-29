@@ -61,7 +61,8 @@ tags:
 
 本篇會使用兩種 CI/CD 工具，分別是 [Drone][14] 及 [GitHub Actions][2]，詳細檔案內容可以[參考這邊][15]。底下是使用 Drone CI/CD:
 
-<pre><code class="language-yaml">- name: publish
+```yaml
+- name: publish
   pull: always
   image: plugins/ecr
   settings:
@@ -79,11 +80,13 @@ tags:
   when:
     event:
       exclude:
-      - pull_request</code></pre>
+      - pull_request
+```
 
 底下是使用 GitHub Actions
 
-<pre><code class="language-yaml">build:
+```yaml
+build:
   name: upload image
   runs-on: ubuntu-latest
   steps:
@@ -96,7 +99,8 @@ tags:
       registry: ${{ secrets.registry }}
       cache_from: ${{ secrets.cache }}
       repo: api-sample
-      region: ap-northeast-1</code></pre>
+      region: ap-northeast-1
+```
 
 兩種使用方式都是一樣的，會用 Drone CI/CD，那使用 GitHub Actions 也不會有問題，另外還支援了 `cache_from`，省下了一點部署的時間，時間取決於跑的專案 Image 大小了。
 

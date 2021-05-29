@@ -24,42 +24,50 @@ tags:
 
 首先如何取得 select 的 value 跟 text
 
-<pre><code class="language-js">/*
+```js
+/*
 *
 * 取得 select value 值
 */
-$('#selectList').val();</code></pre>
+$('#selectList').val();
+```
 
 取得 text 值，可以利用 :selected 這個
 
-<pre><code class="language-js">/*
+```js
+/*
 *
 * 取得 select text 值
 */
-$('#selectList :selected').text();</code></pre>
+$('#selectList :selected').text();
+```
 
 <!--more-->
 
 底下是一個範例，實做選取 select options 加入到另一個 select，html 部份：
 
-<pre><code class="language-html"><select id="test1" name="test1" />
+```html
+<select id="test1" name="test1" />
   <option value="1">中正大學</option>
   <option value="2">台灣大學</option>
   <option value="3">交通大學</option>
 </select>
 <select id="test2" />
   <option value="0">請選擇</option>
-</select></code></pre>
+</select>
+```
 
 jQuery 部份：
 
-<pre><code class="language-js">$("#test1").change(function(){
+```js
+$("#test1").change(function(){
   /*
   * $(this).val() : #test1 的 value 值
   * $('#test1 :selected').text() : #test1 的 text 值     
   */
   $("#test2").addOption($(this).val(), $('#test1 :selected').text());
-});</code></pre>
+});
+```
 
 ## 參考文章
 

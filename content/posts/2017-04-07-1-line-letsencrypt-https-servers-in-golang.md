@@ -30,13 +30,16 @@ tags:
 
 大家可以把 [Caddy][8] 想成跟 [Nginx][9] 同等關係，不同的是 Caddy 是一套完全用 Go 語言打造的伺服器，這邊就會介紹 Caddy 怎麼設定 HTTPS 憑證。先假設 domain 為 example.com，底下就是讓此 domain 自動掛上憑證的 `Caddyfile` 設定檔
 
-<pre><code class="language-bash">example.com {
+```bash
+example.com {
   proxy / localhost:3000
-}</code></pre>
+}
+```
 
 上面設定會自動將 `http` 轉換成 `https`，也就是在瀏覽器鍵入 <http://example.com> Caddy 會自動換成 <https://example.com。如果是> Nginx 呢？看看底下設定
 
-<pre><code class="language-bash">server {
+```bash
+server {
   listen 0.0.0.0:80;
   server_name example.com;
 
@@ -57,7 +60,8 @@ server {
 
   # The host name to respond to
   server_name codeigniter.org.tw;
-}</code></pre>
+}
+```
 
 很明顯可以看出，用 Caddy 大勝 Nginx 設定檔簡易程度。另外 Let’s Encrypt 憑證會在三個月後過期，如果是使用 Caddy，可以不用擔心過期問題，Caddy 會自動在三個月內幫忙更新憑證有效日期，如果是 Nginx，請寫 Script 並且放到 [Crontab][10] 內。結論就是 Caddy 自動幫忙處理申請+更新憑證，而 Nginx 都必須手動打造。
 
@@ -67,7 +71,8 @@ server {
 
 #### [程式碼範例][13]
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "crypto/tls"
@@ -97,13 +102,15 @@ func main() {
         Handler:   r,
     }
     s.ListenAndServeTLS("", "")
-}</code></pre>
+}
+```
 
 程式碼內有兩個地方需要注意，一個是 `HostWhitelist` 這是綁定特定 Domain，請務必填寫，當然你也可以填空，但是這樣任意 Domain 指向你的機器，就可以直接對 Let’s Encrypt 請求憑證，所以請務必填上自己的 Domain，另一個是 `DirCache` 這是憑證存放的目錄，你可以任意指定到其他目錄，第一次請求會比較久，原因是憑證還沒下來。上面範例你會發現，哪是一行，看起來就是好幾行才完成此功能，在不久之前(本週) [@bradfitz][14] (Go 語言 HTTP 核心開發者) 開發了 `Listener` 函示 (相關 [Commit][15])，讓開發者可以用一行取代上面冗長的程式碼:
 
 #### [程式碼範例][16]
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -122,7 +129,8 @@ func main() {
     })
 
     log.Fatal(http.Serve(autocert.NewListener("example1.com", "example2.com"), r))
-}</code></pre>
+}
+```
 
 現在只要填入您的 Domain 就可以綁定憑證及自動更新 (不必擔心三個月會過期)，這邊你會問，那憑證是放在哪裡呢？
 
@@ -132,13 +140,16 @@ func main() {
 
 如果是搭配 Docker，你可以指定 `XDG_CACHE_HOME` 變數來轉換您想要的目錄。請在 Dockerfile 內放入
 
-<pre><code class="language-bash">ENV XDG_CACHE_HOME /var/lib/.cache</code></pre>
+```bash
+ENV XDG_CACHE_HOME /var/lib/.cache
+```
 
 這樣 docker 會把憑證放在 `/var/lib/.cache/golang-autocert` 內，使用者不用管憑證放哪裡，因為就算消失了，下次重新啟動，自然會在產生一次。最後要講的是，如何用 Go 語言實現 `http` 轉到 `https` 呢？非常簡單，請參考底下程式碼
 
 #### [程式碼範例][17]
 
-<pre><code class="language-go">var g errgroup.Group
+```go
+var g errgroup.Group
 
 g.Go(func() error {
   return http.ListenAndServe(":http", http.RedirectHandler("https://example.com", 303))
@@ -149,7 +160,8 @@ g.Go(func() error {
 
 if err := g.Wait(); err != nil {
   log.Fatal(err)
-}</code></pre>
+}
+```
 
 ## 總結
 

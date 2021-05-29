@@ -44,7 +44,8 @@ Build Detail 頁面
 
 Drone 現在可以指定專案跑在哪一種架構上面，像是 ARM, Windows 或 AMD64，只要透過底下簡單的設定
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 
 platform:
@@ -56,11 +57,13 @@ steps:
   image: golang
   commands:
   - go build
-  - go test</code></pre>
+  - go test
+```
 
 也可以在 YAML 設定將兩個 pipeline 丟給不同的主機去跑
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 name: backend
 
@@ -91,13 +94,15 @@ steps:
   - npm test
 
 depends_on:
-- backend</code></pre>
+- backend
+```
 
 ## 平行處理
 
 除了可以透過兩個 pipeline 丟給不同的主機跑之外，單一主機也是可以跑平行處理的
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 name: default
 
@@ -120,13 +125,15 @@ steps:
     channel: general
   depends_on:
   - backend
-  - frontend</code></pre>
+  - frontend
+```
 
 ## 用程式寫 yaml 設定
 
 之前寫過一篇『[有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔][11]』，現在遇到相同的 YAML 設定都可以透過寫程式的方式來自動產生 YAML 設定了
 
-<pre><code class="language-shell">local pipeline = import 'pipeline.libsonnet';
+```shell
+local pipeline = import 'pipeline.libsonnet';
 local name = 'drone-ssh';
 
 [
@@ -141,13 +148,15 @@ local name = 'drone-ssh';
     'linux-arm',
     'release-binary',
   ]),
-]</code></pre>
+]
+```
 
 ## 支援外部 Secret 管理
 
 Drone 正式支援 [Vault][12], [Kubernetes Secret][13] 或 [AWS Secret][14]，團隊可以將 Drone 安裝在 k8s 或 AWS 容器內，並且使用期 Secret 管理工具，當然也可以整合大家喜歡的 Vault。
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: secret
 name: slack_webhook
 get:
@@ -170,7 +179,8 @@ steps:
   settings:
     channel: general
     webhook:
-      from_secret: slack_webhook</code></pre>
+      from_secret: slack_webhook
+```
 
 ## 支援 Global Secret
 
@@ -180,23 +190,28 @@ steps:
 
 1.0 也正是透過 UI 可以設定 Cron Job，這對於寫 Firmware 的開發者非常有幫助，半夜都需要跑 Daily build 產出相對應的 binary，現在可以透過後台直接設定了，在 Yaml 內也可以指定 pipeline 跑 cron job。
 
-<pre><code class="language-yaml"># example when configuration
+```yaml
+# example when configuration
 when:
   cron: [ nightly ]
 
 # example trigger configuration
 trigger:
-  cron: [ nightly ]</code></pre>
+  cron: [ nightly ]
+```
 
 ## 支援 Gitlab 或 bitbucket YAML 設定轉換
 
 如果有在用 Gitlab CI 的團隊，現在可以透過 Drone CLI 直接將 YAML 設定檔轉換到 Drone 了，以 Gitlab CI 為例:
 
-<pre><code class="language-shell">$ drone convert .gitlab-ci.yml</code></pre>
+```shell
+$ drone convert .gitlab-ci.yml
+```
 
 底下是 `.gitlab-ci.yml`
 
-<pre><code class="language-yaml">image: ruby:2.2
+```yaml
+image: ruby:2.2
 
 services:
   - postgres:9.3
@@ -206,11 +221,13 @@ before_script:
 
 test:
   script:
-  - bundle exec rake spec</code></pre>
+  - bundle exec rake spec
+```
 
 轉換後
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 name: test
 
@@ -229,7 +246,8 @@ services:
 - name: postgres-9-3
   image: postgres:9.3
 
-...</code></pre>
+...
+```
 
 也可以直接從後台設定讀取 gitlab ci 設定
 
@@ -239,7 +257,8 @@ services:
 
 現在 drone 可以讓 JOB 指定機器執行，也就是假設有一個 job 需要 CPU 或記憶體非常高的機器來 跑，可以透過 YAML 來指定
 
-<pre><code class="language-yaml">kind: pipeline
+```yaml
+kind: pipeline
 name: default
 
 steps:
@@ -250,7 +269,8 @@ steps:
   - go test
 
 node:
-  instance: highmem</code></pre>
+  instance: highmem
+```
 
 ## 心得
 

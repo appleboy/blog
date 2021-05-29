@@ -39,13 +39,15 @@ tags:
 
 ### 使用 Drone 觸發
 
-<pre><code class="language-yml">pipeline:
+```yml
+pipeline:
   gitlab:
     image: appleboy/drone-gitlab-ci
     host: https://gitlab.com
     token: xxxxxxxxxx
     ref: master
-    id: gitlab-project-id</code></pre>
+    id: gitlab-project-id
+```
 
 其中 `host` 請改成公司內部的 Git 伺服器網址，`id` 是專案獨立 ID，最後 `Token` 則是上面步驟所拿到的 Token。詳細設定可以參考 [README][9]，如果不是用 Drone 也沒關係，可以用 [Docker][4] 或透過 Go 語言可以包成各作業系統執行檔 (包含 Windows)
 
@@ -53,39 +55,47 @@ tags:
 
 請使用 [appleboy/drone-gitlab-ci][10] 映像檔，檔案大小為 **2MB**
 
-<pre><code class="language-bash">docker run --rm \
+```bash
+docker run --rm \
   -e GITLAB_HOST=https://gitlab.com/
   -e GITLAB_TOKEN=xxxxx
   -e GITLAB_REF=master
   -e GITLAB_ID=gitlab-ci-project-id
-  appleboy/drone-gitlab-ci</code></pre>
+  appleboy/drone-gitlab-ci
+```
 
 ### 使用 CLI 觸發
 
 請先從 [Release 頁面][11]下載相關執行檔，重點是你也可以在 Windows 做到此事情喔 (這就是 Go 語言跨平台的好處)。在命令列使用底下指令。
 
-<pre><code class="language-bash">drone-gitlab-ci \
+```bash
+drone-gitlab-ci \
   --host https://gitlab.com/ \
   --token XXXXXXXX \
   --ref master \
-  --id gitlab-ci-project-id</code></pre>
+  --id gitlab-ci-project-id
+```
 
 ### 測試看看
 
 這邊提供 [GitLab 專案][12]的資料給大家直接測試看看
 
-<pre><code class="language-bash">drone-gitlab-ci \
+```bash
+drone-gitlab-ci \
   --host https://gitlab.com \
   --token 9184302d980918efad05bce8b97774 \
   --ref master \
-  --id 3573921</code></pre>
+  --id 3573921
+```
 
 上面指令沒意外的話，會看到底下結果:
 
-<pre><code class="language-bash">2017/06/27 15:01:59 build id: 9360879
+```bash
+2017/06/27 15:01:59 build id: 9360879
 2017/06/27 15:01:59 build sha: 169e7c1d798c9593c06fbd9d474da9c07f699634
 2017/06/27 15:01:59 build ref: master
-2017/06/27 15:01:59 build status: pending</code></pre>
+2017/06/27 15:01:59 build status: pending
+```
 
 直接到 [pipeline 頁面][13]看結果
 
@@ -103,13 +113,15 @@ tags:
 
 ### 使用 Drone 觸發
 
-<pre><code class="language-yml">pipeline:
+```yml
+pipeline:
   jenkins:
     image: appleboy/drone-jenkins
     url: http://example.com
     user: appleboy
     token: xxxxxxxxxx
-    job: drone-jenkins-plugin-job</code></pre>
+    job: drone-jenkins-plugin-job
+```
 
 其中 `url` 請改成公司內部的 Jenkins 伺服器網址，`job` 是 Jenkins 任務名稱，最後 `Token` 則是上面個人帳號所拿到的 Token。詳細設定可以參考 [README][17]，如果不是用 Drone 也沒關係，可以用 [Docker][4] 或透過 Go 語言可以包成各作業系統執行檔 (包含 Windows)
 
@@ -117,22 +129,26 @@ tags:
 
 請使用 [appleboy/drone-jenkins][18] 映像檔，檔案大小為 **2MB**
 
-<pre><code class="language-bash">docker run --rm \
+```bash
+docker run --rm \
   -e JENKINS_BASE_URL=http://jenkins.example.com/
   -e JENKINS_USER=appleboy
   -e JENKINS_TOKEN=xxxxxxx
   -e JENKINS_JOB=drone-jenkins-plugin
-  appleboy/drone-jenkins</code></pre>
+  appleboy/drone-jenkins
+```
 
 ### 使用 CLI 觸發
 
 請先從 [Release 頁面][19]下載相關執行檔，重點是你也可以在 Windows 做到此事情喔 (這就是 Go 語言跨平台的好處)。在命令列使用底下指令。
 
-<pre><code class="language-bash">drone-jenkins \
+```bash
+drone-jenkins \
   --host http://jenkins.example.com/ \
   --user appleboy \
   --token XXXXXXXX \
-  --job drone-jenkins-plugin</code></pre>
+  --job drone-jenkins-plugin
+```
 
 ## 歡迎大家關注此專案 [drone-jenkins][20]
 

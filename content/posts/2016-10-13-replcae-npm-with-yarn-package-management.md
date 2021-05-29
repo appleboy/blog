@@ -48,23 +48,31 @@ tags:
 
 第一階段就是沒有任何 Cache 之下來測試安裝速度
 
-<pre><code class="language-bash">$ npm cache clean
-$ npm install</code></pre>
+```bash
+$ npm cache clean
+$ npm install
+```
 
 結果: 93.00 秒
 
-<pre><code class="language-bash">$ yarn cache clean
-$ yarn install</code></pre>
+```bash
+$ yarn cache clean
+$ yarn install
+```
 
 結果: 42.80s
 
 第二階段就是保留 `node_modules` 目錄，在下一次安裝
 
-<pre><code class="language-bash">$ npm install</code></pre>
+```bash
+$ npm install
+```
 
 結果: 13.00 秒
 
-<pre><code class="language-bash">$ yarn install</code></pre>
+```bash
+$ yarn install
+```
 
 結果: 0.16 秒 (注意連 1 秒都不到 XD)
 

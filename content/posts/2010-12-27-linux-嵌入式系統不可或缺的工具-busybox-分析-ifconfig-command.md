@@ -28,23 +28,28 @@ tags:
 
 if\_readlist\_proc 函式裡面:
 
-<pre><code class="language-c">fh = fopen_or_warn(_PATH_PROCNET_DEV, "r");
+```c
+fh = fopen_or_warn(_PATH_PROCNET_DEV, "r");
 if (!fh) {
     return if_readconf();
-}</code></pre>
+}
+```
 
 看一下 /proc/net/dev 內容
 
-<pre><code class="language-bash">Inter-|   Receive                                                |  Transmit
+```bash
+Inter-|   Receive                                                |  Transmit
  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
     lo:     104       1    0    0    0     0          0         0      104       1    0    0    0     0       0          0
-  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0</code></pre>
+  eth0:21798505   51360    0    0    0     0          0         0  7693686   46844    0    0    0     0       0          0
+```
 
 <!--more-->
 
 首先濾掉前兩行不需要的資料，在利用 get_name 函式抓取 lo 跟 eth0 interface
 
-<pre><code class="language-c">fgets(buf, sizeof buf, fh); /* eat line */
+```c
+fgets(buf, sizeof buf, fh); /* eat line */
 fgets(buf, sizeof buf, fh);
 
 procnetdev_vsn = procnetdev_version(buf);
@@ -58,11 +63,13 @@ while (fgets(buf, sizeof buf, fh)) {
     ife->statistics_valid = 1;
     if (target && !strcmp(target, name))
         break;
-}</code></pre>
+}
+```
 
 get_name 直接濾掉每行冒號 : 後面的資料，並且將其加入 interface structure 雙向 link list
 
-<pre><code class="language-c">static char *get_name(char *name, char *p)
+```c
+static char *get_name(char *name, char *p)
 {
     /* Extract <name> from nul-terminated p where p matches
      * <name>: after leading whitespace.
@@ -88,11 +95,13 @@ get_name 直接濾掉每行冒號 : 後面的資料，並且將其加入 interfa
         name[0] = '\0';
     }
     return p + 1;
-}</code></pre>
+}
+```
 
 add_interface 將 network interface 加入 link list
 
-<pre><code class="language-c">static struct interface *add_interface(char *name)
+```c
+static struct interface *add_interface(char *name)
 {
     struct interface *ife, **nextp, *new;
 
@@ -116,11 +125,13 @@ add_interface 將 network interface 加入 link list
         int_last = new;
     *nextp = new;
     return new;
-}</code></pre>
+}
+```
 
 最後將 /proc/net/dev 剩餘資訊利用 get\_dev\_fields 讀取 sscanf
 
-<pre><code class="language-c">static void get_dev_fields(char *bp, struct interface *ife, int procnetdev_vsn)
+```c
+static void get_dev_fields(char *bp, struct interface *ife, int procnetdev_vsn)
 {
     memset(&ife->stats, 0, sizeof(struct user_net_device_stats));
 
@@ -152,11 +163,13 @@ add_interface 將 network interface 加入 link list
         ife->stats.rx_compressed = 0;
         ife->stats.tx_compressed = 0;
     }
-}</code></pre>
+}
+```
 
 另外要得到 IP Address 資訊，就必須用 if_fetch 函式，透過 ioctl 進行讀取
 
-<pre><code class="language-c">/* Fetch the interface configuration from the kernel. */
+```c
+/* Fetch the interface configuration from the kernel. */
 static int if_fetch(struct interface *ife)
 {
     struct ifreq ifr;
@@ -229,7 +242,8 @@ static int if_fetch(struct interface *ife)
 
     close(skfd);
     return 0;
-}</code></pre>
+}
+```
 
 以上就是執行 ifconfig command 的流程，如果有任何問題可以直接留言 ^^
 

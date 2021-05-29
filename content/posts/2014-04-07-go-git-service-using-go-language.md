@@ -26,41 +26,51 @@ tags:
 
 如果用 [Ubuntu][7] / [Debian][8] 系列，請不要透過 apt 方式安裝，因為安裝完成的 Go 版本會非常舊，請使用 tarball 方式安裝，首先到[官方網站][9]下載最新檔案
 
-<pre><code class="language-bash">$ wget https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz
-$ export PATH=$PATH:/usr/local/go/bin</code></pre>
+```bash
+$ wget https://go.googlecode.com/files/go1.2.1.linux-amd64.tar.gz
+$ export PATH=$PATH:/usr/local/go/bin
+```
 
 也可以把 `$PATH` 寫到 `.bashrc` 檔案內，這樣下次開 Shell 就不用重新打一次，接著下 `go version` 看到底下結果表示安裝成功
 
-<pre><code class="language-bash">$ go version
-go version go1.2.1 linux/amd64</code></pre>
+```bash
+$ go version
+go version go1.2.1 linux/amd64
+```
 
 最後將 `$GOROOT` 及 `$GOPATH` 設定上去
 
-<pre><code class="language-bash">$ export GOROOT=/usr/local/go
+```bash
+$ export GOROOT=/usr/local/go
 $ export PATH=$PATH:$GOROOT/bin
-$ export GOPATH=/home/git/gocode</code></pre>
+$ export GOPATH=/home/git/gocode
+```
 
 ### 安裝 Gogs service
 
 安裝非常容易，只要透過底下兩個指令就安裝完成了
 
-<pre><code class="language-bash"># Download and install dependencies
+```bash
+# Download and install dependencies
 $ go get -u github.com/gogits/gogs
 
 # Build main program
 $ cd $GOPATH/src/github.com/gogits/gogs
-$ go build</code></pre>
+$ go build
+```
 
 原始目錄會在 `/home/git/gocode/src/github.com/gogits/gogs` 接著可以看到 `conf/app.ini` 原始設定檔，官方建議不要修改此檔案，使用者可以自行建立 `custom/conf/app.ini` 來取代原始設定內容。最後執行 `./gogs web`
 
-<pre><code class="language-bash">$ ./gogs web
+```bash
+$ ./gogs web
 Server is running...
 2014/04/07 15:19:07 [conf.go:309] <em></em> Log Mode: Console(Trace)
 2014/04/07 15:19:07 [conf.go:310] <em></em> Cache Service Enabled
 2014/04/07 15:19:07 [conf.go:311] <em></em> Session Service Enabled
 2014/04/07 15:19:07 [install.go:53] <em></em> Run Mode: Development
 2014/04/07 15:19:07 [command.go:73] <em></em> Gogs: Go Git Service 0.2.0.0403 Alpha
-2014/04/07 15:19:07 [command.go:73] <em></em> Listen: :3001</code></pre>
+2014/04/07 15:19:07 [command.go:73] <em></em> Listen: :3001
+```
 
 打開 http://localhost:3001 就可以看到下面畫面，代表安裝成功
 

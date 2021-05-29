@@ -26,7 +26,8 @@ tags:
 
 先看個例子:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -36,16 +37,21 @@ import (
 
 func main() {
     fmt.Println(random.String(10))
-}</code></pre>
+}
+```
 
 將此專案放在 `$GOPATH/src/github.com/appleboy/test` 這是大家寫專案必定遵守的目錄規則，而 vendor 管理則會從 [PackageManagementTools][5] 選擇一套。底下是用 [govendor][6] 來當作例子
 
-<pre><code class="language-shell">$ govendor init
-$ govendor fetch github.com/appleboy/com/random</code></pre>
+```shell
+$ govendor init
+$ govendor fetch github.com/appleboy/com/random
+```
 
 最後用 `go build` 產生 binary
 
-<pre><code class="language-shell">$ go build -v -o main .</code></pre>
+```shell
+$ go build -v -o main .
+```
 
 如果您不在 `GOPATH` 裡面工作，就會遇到底下錯誤訊息:
 
@@ -57,22 +63,29 @@ $ govendor fetch github.com/appleboy/com/random</code></pre>
 
 用 go module 解決兩個問題，第一專案內不必再使用 vendor 管理套件，第二開發者可以任意 clone 專案到任何地方，直接下 go build 就可以拿到執行檔了。底下是使用方式
 
-<pre><code class="language-shell">project
+```shell
+project
 --> main.go
---> main_test.go</code></pre>
+--> main_test.go
+```
 
 初始化專案，先啟動 `GO111MODULE` 變數，在 go 1.11 預設是 `auto`
 
-<pre><code class="language-shell">$ export GO111MODULE=on
-$ go mod init github.com/appleboy/project</code></pre>
+```shell
+$ export GO111MODULE=on
+$ go mod init github.com/appleboy/project
+```
 
 可以看到專案會多出一個 `go.mod` 檔案，用來記錄使用到的套件版本，如果本身已經在使用 vendor 管理，那麼 `mod init` 會自動將 vendor 紀錄的版本寫入到 `go.mod`。接著執行下載
 
-<pre><code class="language-shell">$ go mod download</code></pre>
+```shell
+$ go mod download
+```
 
 專案內會多出 `go.sum` 檔案，其實根本不用執行 `go mod download`，只要在專案內下任何 `go build|test|install` 指令，就會自動將 pkg 下載到 `GOPATH/pkg/mod` 內
 
-<pre><code class="language-shell">$ tree ~/go/pkg/mod/github.com/
+```shell
+$ tree ~/go/pkg/mod/github.com/
 /Users/mtk10671/git/go/pkg/mod/github.com/
 └── appleboy
     └── com@v0.0.0-20180410030638-c0b5901f9622
@@ -92,11 +105,14 @@ $ go mod init github.com/appleboy/project</code></pre>
         │   ├── random.go
         │   └── random_test.go
         └── vendor
-            └── vendor.json</code></pre>
+            └── vendor.json
+```
 
 目前 go module 還在實驗階段，如果升級套件或下載套件有任何問題，請透過底下指令將 pkg 目錄清空就可以了。
 
-<pre><code class="language-shell">$ go clean -i -x -modcache</code></pre>
+```shell
+$ go clean -i -x -modcache
+```
 
 ## 心得
 

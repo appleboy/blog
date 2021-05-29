@@ -55,7 +55,8 @@ tags:
 
 OPA 官網已經[提供完整的範例][14]給各位開發者參考，也有完整的 [Rego 文件格式][15]，我們先定義 User 跟 Role 權限關係，接著定義 Role 可以執行哪些操作
 
-<pre><code class="language-go">package rbac.authz
+```go
+package rbac.authz
 
 # user-role assignments
 user_roles := {
@@ -121,11 +122,13 @@ role_permissions := {
   "viewer_limit_m":[
     {"action": "view_l3_project",  "object": "manufacture"},
   ],
-}</code></pre>
+}
+```
 
 資料準備完成後，接著就是寫政策
 
-<pre><code class="language-go="># logic that implements RBAC.
+```go=
+# logic that implements RBAC.
 default allow = false
 allow {
   # lookup the list of roles for the user
@@ -138,35 +141,41 @@ allow {
   p := permissions[_]
   # check if the permission granted to r matches the user's request
   p == {"action": input.action, "object": input.object}
-}</code></pre>
+}
+```
 
 大家可以看到其中 `input` 就是上面第一點 Query 條件，可以是任意的 JSON 格式，接著在 allow 裡面開始處理整個政策流程，第一就是拿到 User 是屬於哪些角色，第二就是找到這些角色相對應得權限，最後就是拿 Query 的條件進行比對，最後可以輸出結果 `true` 或 `false`。寫完上面 Rego 檔案後，開發者可以下 OPA 執行檔，並且撰寫測試文件，進行驗證，跟 Go 語言一樣，直接檔名加上 `_test` 即可
 
-<pre><code class="language-go=">test_design_group_kpi_editor {
+```go=
+test_design_group_kpi_editor {
   allow with input as {"user": ["design_group_kpi_editor"], "action": "view_all", "object": "design"}
   allow with input as {"user": ["design_group_kpi_editor"], "action": "edit", "object": "design"}
   allow with input as {"user": ["design_group_kpi_editor"], "action": "view_all", "object": "system"}
   not allow with input as {"user": ["design_group_kpi_editor"], "action": "edit", "object": "system"}
   not allow with input as {"user": ["design_group_kpi_editor"], "action": "view_all", "object": "manufacture"}
   not allow with input as {"user": ["design_group_kpi_editor"], "action": "edit", "object": "manufacture"}
-}</code></pre>
+}
+```
 
 像是這樣的格式，接著用 OPA Command 執行測試
 
-<pre><code class="language-bash=">$ opa test -v *.rego
+```bash=
+$ opa test -v *.rego
 data.rbac.authz.test_design_group_kpi_editor: PASS (8.604833ms)
 data.rbac.authz.test_system_group_kpi_editor: PASS (7.260166ms)
 data.rbac.authz.test_manufacture_group_kpi_editor: PASS (2.217125ms)
 data.rbac.authz.test_project_leader: PASS (1.823833ms)
 data.rbac.authz.test_design_group_kpi_editor_and_system_group_kpi_editor: PASS (1.150791ms)
 --------------------------------------------------------------------------------
-PASS: 5/5</code></pre>
+PASS: 5/5
+```
 
 ## 整合 Go 語言驗證及測試
 
 上面是透過 OPA 官方的 Command 驗證 Policy 是否正確，接著我們可以整合 Go 語言進行驗證。通常會架設一台 OPA 服務，用來處理授權機制，那現在直接把 Policy 寫進去 Go 執行檔，減少驗證的 Latency。
 
-<pre><code class="language-go=">package main
+```go=
+package main
 
 import (
     "context"
@@ -228,11 +237,13 @@ func result(ctx context.Context, query rego.PreparedEvalQuery, input map[string]
     }
 
     return results[0].Bindings["x"].(bool), nil
-}</code></pre>
+}
+```
 
 其中 readPolicy 可以直接用 go1.16 推出的 embed 套件，將 rego 檔案直接整合進 go binary。
 
-<pre><code class="language-go=">// +build go1.16
+```go=
+// +build go1.16
 
 package main
 
@@ -245,11 +256,13 @@ var policy []byte
 
 func readPolicy(path string) ([]byte, error) {
     return policy, nil
-}</code></pre>
+}
+```
 
 撰寫測試，直接在 Go 語言進行測試及資料讀取，以便驗證更多細項功能
 
-<pre><code class="language-go=">package main
+```go=
+package main
 
 import (
     "context"
@@ -367,7 +380,8 @@ func Test_result(t *testing.T) {
             }
         })
     }
-}</code></pre>
+}
+```
 
 ## 心得
 

@@ -44,7 +44,8 @@ tags:
 
 ### 步驟一: 撰寫讀取 Config 函式
 
-<pre><code class="language-go">func getEnv(ctx *pulumi.Context, key string, fallback ...string) string {
+```go
+func getEnv(ctx *pulumi.Context, key string, fallback ...string) string {
     if value, ok := ctx.GetConfig(key); ok {
         return value
     }
@@ -54,33 +55,41 @@ tags:
     }
 
     return ""
-}</code></pre>
+}
+```
 
 pulumi 的 context 內有一個讀取環境變數函式叫 `GetConfig`，接著我們在設計一個 fallback 當作 default 回傳值。底下設定一個變數 `s3:siteDir`
 
-<pre><code class="language-sh">pulumi config set s3:siteDir production</code></pre>
+```sh
+pulumi config set s3:siteDir production
+```
 
 打開 `Pulumi.dev.yaml` 可以看到
 
-<pre><code class="language-yaml">config:
+```yaml
+config:
   aws:profile: demo
   aws:region: ap-northeast-1
-  s3:siteDir: production</code></pre>
+  s3:siteDir: production
+```
 
 接著將程式碼改成如下:
 
-<pre><code class="language-go">        site := getEnv(ctx, "s3:siteDir", "content")
+```go
+        site := getEnv(ctx, "s3:siteDir", "content")
         index := path.Join(site, "index.html")
         _, err = s3.NewBucketObject(ctx, "index.html", &s3.BucketObjectArgs{
             Bucket:      bucket.Bucket,
             Source:      pulumi.NewFileAsset(index),
             Acl:         pulumi.String("public-read"),
             ContentType: pulumi.String(mime.TypeByExtension(path.Ext(index))),
-        })</code></pre>
+        })
+```
 
 ### 步驟二: 更新 Infrastructure
 
-<pre><code class="language-sh">$ pulumi up
+```sh
+$ pulumi up
 Previewing update (dev)
 
 View Live: https://app.pulumi.com/appleboy/demo/dev/previews/d76d2f9b-16c8-4bfd-820d-d5368d29f592
@@ -100,7 +109,8 @@ Do you want to perform this update? details
         [id=index.html]
         [urn=urn:pulumi:dev::demo::aws:s3/bucketObject:BucketObject::index.html]
       - source: asset(file:77aab46) { content/index.html }
-      + source: asset(file:01c09f4) { production/index.html }</code></pre>
+      + source: asset(file:01c09f4) { production/index.html }
+```
 
 可以看到 source 會被換成 `production/index.html`
 
@@ -108,7 +118,8 @@ Do you want to perform this update? details
 
 整個 Web 專案肯定不止一個檔案，所以再來改一下原本的讀取檔案列表流程
 
-<pre><code class="language-go">        site := getEnv(ctx, "s3:siteDir", "content")
+```go
+        site := getEnv(ctx, "s3:siteDir", "content")
         files, err := ioutil.ReadDir(site)
         if err != nil {
             return err
@@ -124,11 +135,13 @@ Do you want to perform this update? details
             }); err != nil {
                 return err
             }
-        }</code></pre>
+        }
+```
 
 執行部署
 
-<pre><code class="language-sh">     Type                    Name        Status      Info
+```sh
+     Type                    Name        Status      Info
      pulumi:pulumi:Stack     demo-dev
  +   ├─ aws:s3:BucketObject  about.html  created
  ~   └─ aws:s3:BucketObject  index.html  updated     [diff: ~source]
@@ -143,11 +156,13 @@ Resources:
     ~ 1 updated
     2 changes. 2 unchanged
 
-Duration: 9s</code></pre>
+Duration: 9s
+```
 
 完整程式碼如下:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "io/ioutil"
@@ -209,7 +224,8 @@ func getEnv(ctx *pulumi.Context, key string, fallback ...string) string {
     }
 
     return ""
-}</code></pre>
+}
+```
 
 ## 建立第二個 Pulumi Stack 環境
 
@@ -219,48 +235,59 @@ func getEnv(ctx *pulumi.Context, key string, fallback ...string) string {
 
 透過 pulumi stack 可以建立全新環境
 
-<pre><code class="language-sh">$ pulumi stack ls
+```sh
+$ pulumi stack ls
 NAME  LAST UPDATE   RESOURCE COUNT  URL
-dev*  1 minute ago  5               https://app.pulumi.com/appleboy/demo/dev</code></pre>
+dev*  1 minute ago  5               https://app.pulumi.com/appleboy/demo/dev
+```
 
 建立 stack
 
-<pre><code class="language-sh">$ pulumi stack init prod
+```sh
+$ pulumi stack init prod
 Created stack 'prod'
 $ pulumi stack ls
 NAME   LAST UPDATE   RESOURCE COUNT  URL
 dev    1 minute ago  5               https://app.pulumi.com/appleboy/demo/dev
-prod*  n/a           n/a             https://app.pulumi.com/appleboy/demo/prod</code></pre>
+prod*  n/a           n/a             https://app.pulumi.com/appleboy/demo/prod
+```
 
 設定參數
 
-<pre><code class="language-sh">pulumi config set s3:siteDir www
+```sh
+pulumi config set s3:siteDir www
 pulumi config set aws:profile demo
-pulumi config set aws:region ap-northeast-1</code></pre>
+pulumi config set aws:region ap-northeast-1
+```
 
 ### 步驟二: 建立 www 內容
 
 建立 `content/www` 目錄，一樣放上 index.htm + about.html
 
-<pre><code class="language-html"><html>
+```html
+<html>
   <body>
     <h1>Hello Pulumi S3 Bucket From New Stack</h1>
   </body>
-</html></code></pre>
+</html>
+```
 
 about.html
 
-<pre><code class="language-html"><html>
+```html
+<html>
   <body>
     <h1>About us From New Stack</h1>
   </body>
-</html></code></pre>
+</html>
+```
 
 ### 步驟三: 部署 New Stack
 
 先看看 Preview 結果
 
-<pre><code class="language-sh">$ pulumi up
+```sh
+$ pulumi up
 Previewing update (prod)
 
 View Live: https://app.pulumi.com/appleboy/demo/prod/previews/3b85a340-0e71-455e-9b96-48dc38538d18
@@ -300,11 +327,13 @@ Do you want to perform this update? details
         contentType : "text/html; charset=utf-8"
         forceDestroy: false
         key         : "about.html"
-        source      : asset(file:376c42a) { www/about.html }</code></pre>
+        source      : asset(file:376c42a) { www/about.html }
+```
 
 如果看起來沒問題，就可以直接執行了
 
-<pre><code class="language-sh">Updating (prod)
+```sh
+Updating (prod)
 
 View Live: https://app.pulumi.com/appleboy/demo/prod/updates/1
 
@@ -322,11 +351,13 @@ Outputs:
 Resources:
     + 4 created
 
-Duration: 18s</code></pre>
+Duration: 18s
+```
 
 最後用 curl 執行看看
 
-<pre><code class="language-sh">$ curl -v $(pulumi stack output bucketEndpoint)
+```sh
+$ curl -v $(pulumi stack output bucketEndpoint)
 *   Trying 52.219.8.20...
 * TCP_NODELAY set
 * Connected to my-bucket-a7044ab.s3-website-ap-northeast-1.amazonaws.com (52.219.8.20) port 80 (#0)
@@ -351,7 +382,8 @@ Duration: 18s</code></pre>
   </body>
 </html>
 * Connection #0 to host my-bucket-a7044ab.s3-website-ap-northeast-1.amazonaws.com left intact
-* Closing connection 0</code></pre>
+* Closing connection 0
+```
 
 ## 刪除 Pulumi Stack 環境
 
@@ -361,7 +393,8 @@ Duration: 18s</code></pre>
 
 用 `pulumi destroy` 指令可以刪除全部資源
 
-<pre><code class="language-sh">Previewing destroy (prod)
+```sh
+Previewing destroy (prod)
 
 View Live: https://app.pulumi.com/appleboy/demo/prod/previews/92f9c4a4-f4a9-464d-be27-5040aff295ae
 
@@ -394,11 +427,13 @@ Do you want to perform this destroy? details
     --outputs:--
   - bucketEndpoint: "my-bucket-a7044ab.s3-website-ap-northeast-1.amazonaws.com"
   - bucketID      : "my-bucket-a7044ab"
-  - bucketName    : "my-bucket-a7044ab"</code></pre>
+  - bucketName    : "my-bucket-a7044ab"
+```
 
 選擇 `yse` 移除所以資源
 
-<pre><code class="language-sh">Destroying (prod)
+```sh
+Destroying (prod)
 
 View Live: https://app.pulumi.com/appleboy/demo/prod/updates/2
 
@@ -416,13 +451,15 @@ Outputs:
 Resources:
     - 4 deleted
 
-Duration: 7s</code></pre>
+Duration: 7s
+```
 
 ### 步驟二: 移除 Stack 設定
 
 上面步驟只是把所有資源移除，但是你還是保留了所以 stack history 操作，請看
 
-<pre><code class="language-sh">$ pulumi stack history
+```sh
+$ pulumi stack history
 Version: 2
 UpdateKind: destroy
 Status: succeeded
@@ -455,29 +492,38 @@ Message: chore(pulumi): 設定 Pulumi Stack 環境變數
     git.headName: refs/heads/main
     vcs.kind: github.com
     vcs.owner: go-training
-    vcs.repo: infrastructure-as-code-workshop</code></pre>
+    vcs.repo: infrastructure-as-code-workshop
+```
 
 要整個完整移除，請務必要執行底下指令
 
-<pre><code class="language-sh">pulumi stack rm</code></pre>
+```sh
+pulumi stack rm
+```
 
 最後的確認
 
-<pre><code class="language-sh">$ pulumi stack rm
+```sh
+$ pulumi stack rm
 This will permanently remove the 'prod' stack!
-Please confirm that this is what you'd like to do by typing ("prod"):</code></pre>
+Please confirm that this is what you'd like to do by typing ("prod"):
+```
 
 ### 移除其他的 Stack
 
 按照上面的步驟重新移除其他的 Stack，先使用底下指令列出還有哪些 Stack:
 
-<pre><code class="language-sh">$ pulumi stack ls
+```sh
+$ pulumi stack ls
 NAME  LAST UPDATE     RESOURCE COUNT  URL
-dev   24 minutes ago  5               https://app.pulumi.com/appleboy/demo/dev</code></pre>
+dev   24 minutes ago  5               https://app.pulumi.com/appleboy/demo/dev
+```
 
 選擇 Stack
 
-<pre><code class="language-sh">pulumi stack select dev</code></pre>
+```sh
+pulumi stack select dev
+```
 
 接著重複上面一跟二步驟即可
 

@@ -36,7 +36,8 @@ Gorush 是一套輕量級的 Push Notification 服務，此服務只做一件事
 
 在此之前 Gorush 只有支援 [REST API][6] 方式，也就是透過 JSON 方式來通知伺服器來發送訊息，新版了多了 [RPC][7] 方式，這邊我是使用 [gRPC][8] 來實作，Gorush 預設是不啟動 gRPC 服務，你必須要透過參數方式才可以啟動，詳細可以參考[此文件][9]，底下是 Go 語言客戶端範例:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "log"
@@ -69,7 +70,8 @@ func main() {
     }
     log.Printf("Success: %t\n", r.Success)
     log.Printf("Count: %d\n", r.Counts)
-}</code></pre>
+}
+```
 
 ## 支援 ARM64 Docker 映像檔
 
@@ -79,13 +81,16 @@ func main() {
 
 Gorush 本身支援 Yaml 設定檔，但是每次想要改設定，都要重新修改檔案，這不是很方便，所以我透過 [Viper][11] 套件來讓 Gorush 同時支援 Yaml 設定，或 Global 變數，也就是以後都可以透過變數方式來動態調整，有了這方式就可以讓 Docker 透過環境變數來設定。底下是範例讓開發者動態調整 HTTP 服務 Port。請注意所有變數的前置符號為 `GORUSH_`
 
-<pre><code class="language-bash">$ GORUSH_CORE_PORT=8089 gorush</code></pre>
+```bash
+$ GORUSH_CORE_PORT=8089 gorush
+```
 
 ## 支援 Kubernetes
 
 此版增加了 \[Kubernetes\]\[7\] 設定方式，有了上述的全域變數支援，這時候設定 Kubernetes 就更方便了，請直接參考 [k8s 目錄][12]，詳細安裝步驟請參考[此說明][13]，底下是透過 ENV 動態設定 Gorush
 
-<pre><code class="language-yml">env:
+```yml
+env:
 - name: GORUSH_STAT_ENGINE
   valueFrom:
     configMapKeyRef:
@@ -95,13 +100,15 @@ Gorush 本身支援 Yaml 設定檔，但是每次想要改設定，都要重新�
   valueFrom:
     configMapKeyRef:
       name: gorush-config
-      key: stat.redis.host</code></pre>
+      key: stat.redis.host
+```
 
 ## iOS 支援動態發送到開發或正式環境
 
 在此之前發送訊息到 iOS 手機，都必須在啟動伺服器前將 iOS 環境設定好，現在可以動態調整 JSON 參數。
 
-<pre><code class="language-json">{
+```json
+{
   "notifications": [
     {
       "tokens": ["token_a", "token_b"],
@@ -109,11 +116,13 @@ Gorush 本身支援 Yaml 設定檔，但是每次想要改設定，都要重新�
       "message": "Hello World iOS!"
     }
   ]
-}</code></pre>
+}
+```
 
 可以加上 `development` 或 `production` 布林參數，底下是將訊息傳給 iOS 開發伺服器
 
-<pre><code class="language-json">{
+```json
+{
   "notifications": [
     {
       "tokens": ["token_a", "token_b"],
@@ -122,7 +131,8 @@ Gorush 本身支援 Yaml 設定檔，但是每次想要改設定，都要重新�
       "message": "Hello World iOS!"
     }
   ]
-}</code></pre>
+}
+```
 
 ## 投影片
 

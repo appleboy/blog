@@ -25,7 +25,8 @@ tags:
 
 目前自己只有三個服務，其中一項就是現在的 Blog 是用 WordPress 架出來的，先來看看原先 Nginx 設定
 
-<pre><code class="language-bash">server {
+```bash
+server {
   # don't forget to tell on which port this server listens
   listen 80;
 
@@ -83,11 +84,13 @@ server {
   }
 
   include h5bp/basic.conf;
-  include h5bp/module/wordpress.conf;</code></pre>
+  include h5bp/module/wordpress.conf;
+```
 
 看到都頭昏眼花了。這還沒有附上 `wordpress.conf` 的設定呢。接著我們看一下 Caddy 的設定
 
-<pre><code class="language-bash">blog.wu-boy.com {
+```bash
+blog.wu-boy.com {
   root /home/www/blog/www
   gzip
   fastcgi / unix:/var/run/php5-fpm.sock php
@@ -95,7 +98,8 @@ server {
     if {path} not_match ^\/wp-admin
     to {path} {path}/ /index.php?{query}
   }
-}</code></pre>
+}
+```
 
 有沒有差異很大，Caddy 強調的就是簡單，而且會自動更新網站憑證。
 
@@ -103,7 +107,8 @@ server {
 
 [CodeIgniter][7] 跟 [Laravel][8] 架構一樣，所以設定方式也差不多
 
-<pre><code class="language-bash">codeigniter.org.tw {
+```bash
+codeigniter.org.tw {
   root /home/www/ci/www
   gzip
   fastcgi / unix:/var/run/php5-fpm.sock php
@@ -111,18 +116,21 @@ server {
     if {path} not_match ^\/(forum|user_guide|userguide3)
     to {path} {path}/ /index.php?{query}
   }
-}</code></pre>
+}
+```
 
 ## 透過 Proxy 設定其他服務
 
 如果你有啟動其他服務，可以透過 [proxy][9] 方式來設定
 
-<pre><code class="language-bash">xxxx.wu-boy.com {
+```bash
+xxxx.wu-boy.com {
   proxy / localhost:8081 {
     websocket
     transparent
   }
-}</code></pre>
+}
+```
 
 ## 感想
 

@@ -26,7 +26,8 @@ tags:
 
 但是透過 Drone 後台新增的 Secret 資料不是很安全，因為每個 Steps 都可以直接存取 Secret 資料。
 
-<pre><code class="language-yml">pipeline:
+```yml
+pipeline:
   test1:
     image: mhart/alpine-node:9.1.0
     group: testing
@@ -42,7 +43,8 @@ tags:
     commands:
       - echo "golang"
       - echo $TEST46
-      - echo $README</code></pre>
+      - echo $README
+```
 
 從上面可以得知，透過 `appleboy/golang-testing` 或 `mhart/alpine-node:9.1.0` 都可以存取 `test46` 變數，這樣哪裡不安全？答案是，假設今天服務的是開源專案，這樣別人是不是可以發個 PR，內容新增一個步驟，將變數內容直接印出來即可。當然你可以把 Drone 的頁面關閉，只有管理者可以存取，但是這樣就失去開源專案的意義，因為貢獻者總該需要看到哪裡編譯錯誤，或者是測試失敗的地方。
 
@@ -50,7 +52,8 @@ tags:
 
 要解決安全性問題，必須要將 Secret 變數綁定只有**特定 Image** 才可以存取。而要做到此功能只能透過 [drone cli][8] 工具才可以完成。該如何使用 drone secret 指令呢？其實不會很難，drone cli 可以做的比 Web UI 還強大。所以關於 Secret 部分，我幾乎都是用 cli 來管理
 
-<pre><code class="language-bash">$ drone secret -h
+```bash
+$ drone secret -h
 NAME:
    drone secret - manage secrets
 
@@ -65,23 +68,28 @@ COMMANDS:
      ls      list secrets
 
 OPTIONS:
-   --help, -h  show help</code></pre>
+   --help, -h  show help
+```
 
 先假設 `ssh-password` 變數需要綁定在 `appleboy/drone-ssh` 映像檔上面，該如何下指令:
 
-<pre><code class="language-bash">$ drone secret add \
+```bash
+$ drone secret add \
   --name ssh-password \
   --value 1234567890 \
   --image appleboy/drone-ssh \
-  --repository go-training/drone-workshop</code></pre>
+  --repository go-training/drone-workshop
+```
 
 上述例子可以用在存密碼欄位，如果是想存`檔案`類型呢？也就是把金鑰 `public.pem` 給存進變數。這邊可以透過 `@檔案路徑` 的方式來存取該檔案，並且直接寫入到 Drone 資料庫。注意只要是 `@` 開頭，後面就必須接實體檔案路徑。
 
-<pre><code class="language-bash">$ drone secret add \
+```bash
+$ drone secret add \
   --name ssh-key \
   --value @/etc/server.pem \
   --image appleboy/drone-ssh \
-  --repository go-training/drone-workshop</code></pre>
+  --repository go-training/drone-workshop
+```
 
 ## 心得
 

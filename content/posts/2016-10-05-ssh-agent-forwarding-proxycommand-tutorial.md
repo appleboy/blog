@@ -28,11 +28,15 @@ tags:
 
 透過 `ssh-add` 指令將 Private Key Pair 加入清單
 
-<pre><code class="language-bash">$ ssh-add ~/.ssh/keys/labs.pem</code></pre>
+```bash
+$ ssh-add ~/.ssh/keys/labs.pem
+```
 
 透過底下指令可以看到清單列表
 
-<pre><code class="language-bash">$ ssh-add -L</code></pre>
+```bash
+$ ssh-add -L
+```
 
 這邊注意可以將所有機器的 key pair 都放到 `~/.ssh/keys` 目錄，並且設定 `400` 權限
 
@@ -40,21 +44,26 @@ tags:
 
 **方法一**: 設定 `~/.ssh/config` 檔案，每個 Host 都加上 `ForwardAgent yes` 參數 (此方法並不安全，請參考 [SSH Agent Forwarding considered harmful][1])
 
-<pre><code class="language-bash">Host aws
+```bash
+Host aws
   HostName 10.130.xxx.xxx
   User ubuntu
   ServerAliveInterval 60
   ForwardAgent yes
   UseRoaming no
-  IdentityFile ~/.ssh/keys/aws.pem</code></pre>
+  IdentityFile ~/.ssh/keys/aws.pem
+```
 
 最後執行底下指令就可以直接跳到您要的 EC2 Server
 
-<pre><code class="language-bash">$ ssh -t aws 'ssh example.inc'</code></pre>
+```bash
+$ ssh -t aws 'ssh example.inc'
+```
 
 **方法二**: 也是設定 `~/.ssh/config`，但是透過 `ProxyCommand` 而不是 `ForwardAgent yes` (**建議使用此方法**)
 
-<pre><code class="language-bash">Host hosta
+```bash
+Host hosta
   User userfoo
   Hostname 123.123.123.123
 
@@ -63,11 +72,14 @@ Host hostb
   Hostname 192.168.1.1
   Port 22
   ProxyCommand ssh -q -W %h:%p hosta
-  IdentityFile ~/.ssh/keys/xxxx.pem</code></pre>
+  IdentityFile ~/.ssh/keys/xxxx.pem
+```
 
 ProxyCommand 也不用將 pem 透過 `ssh-add` 匯入，省下一步指令，接著執行底下指令就可以 ssh 到指定機器，跟方法一比起來更安全又快速
 
-<pre><code class="language-bash">$ ssh hostb</code></pre>
+```bash
+$ ssh hostb
+```
 
 不用再跳板機多下一個 SSH 登入指令，蠻方便又安全。內部 Host Name 可以透過設定 [AWS Private Hosted Zones][3]。
 

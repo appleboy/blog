@@ -40,7 +40,8 @@ tags:
 
 為什麼說是單一 Drone 服務呢，原因是在 Drone 1.0 開始支援在單一容器內就可以跑 server 跟 agent 同時啟動，降低大家入門門檻，本篇就是以單一容器來介紹，當然如果團隊比較大，建議還是把 server 跟 agent 拆開會比較適合。先建立 `docker-compose.yml`，相關代碼都可以在這邊[找到][9]。
 
-<pre><code class="language-yaml">version: '2'
+```yaml
+version: '2'
 
 services:
   drone-server:
@@ -75,18 +76,22 @@ services:
 
 networks:
   web:
-    external: true</code></pre>
+    external: true
+```
 
 接著建立 `.env`，並且寫入底下資料
 
-<pre><code class="language-sh">DRONE_SERVER_HOST=
+```sh
+DRONE_SERVER_HOST=
 DRONE_SERVER_PROTO=
 DRONE_GITHUB_CLIENT_ID=
-DRONE_GITHUB_CLIENT_SECRET=</code></pre>
+DRONE_GITHUB_CLIENT_SECRET=
+```
 
 其中 proto 預設是跑 http，這邊不用動，traefik 會自動接上 container port，drone 預設跑在 80 port，這邊跟前一版的 drone 有些差異，請在 `traefik.basic.port` 設定 `80` 喔，接著跑 `docker-compose up`
 
-<pre><code class="language-sh">$ docker-compose up
+```sh
+$ docker-compose up
 drone-server_1  | {
 drone-server_1  |   "acme": false,
 drone-server_1  |   "host": "drone.ggz.tw",
@@ -96,7 +101,8 @@ drone-server_1  |   "port": ":80",
 drone-server_1  |   "proto": "http",
 drone-server_1  |   "time": "2019-03-21T17:13:32Z",
 drone-server_1  |   "url": "http://drone.ggz.tw"
-drone-server_1  | }</code></pre>
+drone-server_1  | }
+```
 
 如果看到上面的訊息，代表已經架設完成。先假設各位已經都先安裝好 traefik，透過 docker label，traefik 會自動將流量 proxy 到對應的 container。
 

@@ -64,40 +64,54 @@ tags:
 
 直接由 develop 開出分支 myfeature，並且直接切換過去
 
-<pre><code class="language-bash">git checkout -b myfeature develop</code></pre>
+```bash
+git checkout -b myfeature develop
+```
 
 直接下 git branch 觀看目前位置
 
-<pre><code class="language-shell">develop
+```shell
+develop
   master
-* myfeature</code></pre>
+* myfeature
+```
 
 經過編輯修改並且 commit
 
-<pre><code class="language-bash">git add test.php
-git commit -a -m "Add: test.php"</code></pre>
+```bash
+git add test.php
+git commit -a -m "Add: test.php"
+```
 
 合併分支:先切換到 develop
 
-<pre><code class="language-bash">$ git checkout develop
-Switched to branch 'develop'</code></pre>
+```bash
+$ git checkout develop
+Switched to branch 'develop'
+```
 
 利用 --no-ff 合併分支(稍後說明為什麼使用 --no-ff)
 
-<pre><code class="language-bash">$ git merge --no-ff myfeature
+```bash
+$ git merge --no-ff myfeature
 Merge made by recursive.
  test.php |    3 +++
  1 files changed, 3 insertions(+), 0 deletions(-)
- create mode 100644 test.php</code></pre>
+ create mode 100644 test.php
+```
 
 刪除 myfeature 分支
 
-<pre><code class="language-bash">$ git branch -d myfeature
-Deleted branch myfeature (was dedf7ed).</code></pre>
+```bash
+$ git branch -d myfeature
+Deleted branch myfeature (was dedf7ed).
+```
 
 將資料上傳
 
-<pre><code class="language-bash">$ git push origin develop</code></pre>
+```bash
+$ git push origin develop
+```
 
 在說明 git merge --no-ff 之前，大家先看底下的圖。
 
@@ -115,45 +129,65 @@ Deleted branch myfeature (was dedf7ed).</code></pre>
 
 從 develop 開新分支 release-1.3
 
-<pre><code class="language-bash">git checkout -b release-1.3 develop</code></pre>
+```bash
+git checkout -b release-1.3 develop
+```
 
 經過一堆 commit message
 
-<pre><code class="language-bash">git commit -a -m "Update: release 1.3"</code></pre>
+```bash
+git commit -a -m "Update: release 1.3"
+```
 
 切回去主分支 master
 
-<pre><code class="language-bash">git checkout master</code></pre>
+```bash
+git checkout master
+```
 
 master 合併 release-1.3 分支
 
-<pre><code class="language-bash">git merge --no-ff release-1.3</code></pre>
+```bash
+git merge --no-ff release-1.3
+```
 
 在 master 上面加上新 tag
 
-<pre><code class="language-bash">git tag -a v1.3 -m "Release v1.3 Tag"</code></pre>
+```bash
+git tag -a v1.3 -m "Release v1.3 Tag"
+```
 
 切換到 develop 分支
 
-<pre><code class="language-bash">git checkout develop</code></pre>
+```bash
+git checkout develop
+```
 
 一樣是 merge release-1.3
 
-<pre><code class="language-bash">git merge --no-ff release-1.3</code></pre>
+```bash
+git merge --no-ff release-1.3
+```
 
 上傳資料
 
-<pre><code class="language-bash">git push</code></pre>
+```bash
+git push
+```
 
 將新 Tag v1.3 更新到 origin/master
 
-<pre><code class="language-bash">git push origin v1.3</code></pre>
+```bash
+git push origin v1.3
+```
 
 刪除 release-1.3 分支
 
-<pre><code class="language-bash">
+```bash
+
 $ git branch -d release-1.3
-Deleted branch release-1.3 (was 2c92042).</code></pre>
+Deleted branch release-1.3 (was 2c92042).
+```
 
 ## 重大 issue 分支 ( Hotfix branches )
 
@@ -169,43 +203,63 @@ Branch naming 命名方式: `hotfix-*`
 
 從 master 開新分支 hotfix-1.3.1
 
-<pre><code class="language-bash">git checkout -b hotfix-1.3.1 master</code></pre>
+```bash
+git checkout -b hotfix-1.3.1 master
+```
 
 修改檔案，並且 commit
 
-<pre><code class="language-bash">git commit -a -m "Hotfix: release 1.3.1"</code></pre>
+```bash
+git commit -a -m "Hotfix: release 1.3.1"
+```
 
 切換到 master
 
-<pre><code class="language-bash">git checkout master</code></pre>
+```bash
+git checkout master
+```
 
 merge hotfix-1.3.1 分支
 
-<pre><code class="language-bash">git merge --no-ff hotfix-1.3.1</code></pre>
+```bash
+git merge --no-ff hotfix-1.3.1
+```
 
 加上修正過後的 Tag
 
-<pre><code class="language-bash">git tag -a v1.3.1 -m "Hotfix v1.3.1 Tag"</code></pre>
+```bash
+git tag -a v1.3.1 -m "Hotfix v1.3.1 Tag"
+```
 
 切換到 develop 分支
 
-<pre><code class="language-bash">git checkout develop</code></pre>
+```bash
+git checkout develop
+```
 
 一樣是 merge hotfix-1.3.1 分支
 
-<pre><code class="language-bash">git merge --no-ff hotfix-1.3.1</code></pre>
+```bash
+git merge --no-ff hotfix-1.3.1
+```
 
 合併過後就刪除 hotfix-1.3.1 分支
 
-<pre><code class="language-bash">git branch -d hotfix-1.3.1</code></pre>
+```bash
+git branch -d hotfix-1.3.1
+```
 
 上傳資料
 
-<pre><code class="language-bash">git push</code></pre>
+```bash
+git push
+```
 
 將 Tag v1.3.1 上傳
 
-<pre><code class="language-bash">git push origin v1.3.1</code></pre>
+```bash
+git push origin v1.3.1
+```
 
 可以直接看看我的例子 [<https://github.com/appleboy/test/network>][4] 畫出來的 network 圖就是長那樣...
 

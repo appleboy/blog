@@ -29,7 +29,8 @@ tags:
 
 直接用 [Google 搜尋][4]，一定可以找到第一筆資料，透過『[joho/godotenv][5]』套件就可以快速完成此功能，底下來看看例子:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -51,11 +52,13 @@ func main() {
     fmt.Println(s3Bucket)
     fmt.Println(secretKey)
 }
-</code></pre>
+
+```
 
 從上面例子可以看到我們使用了『[joho/godotenv][5]』套件，並且在主程式開頭就判斷專案底下是否有 `.env` 檔案，如果沒有的話就直接抱錯『Error loading .env file』，這樣寫倒是沒有什麼問題，但是當工程師在 git clone 專案時預設沒有 `.env` 檔案，如果執行主程式，肯定就會出錯，這時候我們該如何修正略過此錯誤訊息呢？可以改成如下
 
-<pre><code class="language-go">func main() {
+```go
+func main() {
     godotenv.Load()
 
     s3Bucket := os.Getenv("S3_BUCKET")
@@ -63,11 +66,13 @@ func main() {
 
     fmt.Println(s3Bucket)
     fmt.Println(secretKey)
-}</code></pre>
+}
+```
 
 改完後你會發現 `godotenv.Load()` 其實很惱人，不知道能不能直接省略，答案是可以的，這邊我們透過 `_` 來 import 第三方套件
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -82,11 +87,13 @@ func main() {
 
     fmt.Println(s3Bucket)
     fmt.Println(secretKey)
-}</code></pre>
+}
+```
 
 大家都知道，如果專案內 import 了，但是沒用到，Go 在編譯時就會報錯，這時候可以透過 `_` 方式來略過此錯誤訊息，但是這邊的 `_` 又有不同的含義，就是可以讀取該套件底下的 `func init()`，我們看一下這 autolod 裡面做了什麼事情？
 
-<pre><code class="language-go">package autoload
+```go
+package autoload
 
 /*
     You can just read the .env file on import just by doing
@@ -98,12 +105,15 @@ import "github.com/joho/godotenv"
 
 func init() {
     godotenv.Load()
-}</code></pre>
+}
+```
 
 裡面只有定義了 `func init`，而透過 `_` import 就能讀取到 init 函式，此 init 會再進入 main 主程式前直接先讀取了。所以專案根本就是 import 了一行代碼，就可以達到讀取環境變數的功能，接著在專案底下建立 `.env` 檔案
 
-<pre><code class="language-yaml">S3_BUCKET=test
-SECRET_KEY=1234</code></pre>
+```yaml
+S3_BUCKET=test
+SECRET_KEY=1234
+```
 
 有了這功能就可以讓工程師自行調整環境變數，而不用再額外透過 command 方式設定，我覺得相當方便，有在寫 Go 的朋友們，務必 import 此[套件][5]。
 

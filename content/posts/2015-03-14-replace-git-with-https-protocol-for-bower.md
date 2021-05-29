@@ -21,7 +21,9 @@ tags:
 > Additional error details: fatal: unable to connect to github.com: github.com[0: 192.30.252.130]: errno=Connection timed out 
 切換方式很容易，請在 Console 鍵入底下指令
 
-<pre><code class="language-bash">$ git config --global url."https://".insteadOf git://</code></pre>
+```bash
+$ git config --global url."https://".insteadOf git://
+```
 
 遇到 `bower install` 卡卡的也可以用這招 ＸＤ
 

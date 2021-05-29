@@ -32,21 +32,27 @@ tags:
 
 由於 Gitea 還沒轉到 [Go module][7] (已經有另外一個 PR 再處理 Vendor)，所以請 clone 專案原始碼到 `GOPATH` 底下
 
-<pre><code class="language-bash">$ git clone https://github.com/go-gitea/gitea.git \
-  /go/src/code.gitea.io/gitea</code></pre>
+```bash
+$ git clone https://github.com/go-gitea/gitea.git \
+  /go/src/code.gitea.io/gitea
+```
 
 接著切換到專案目錄，編譯出 SQLite 的 Binary
 
-<pre><code class="language-bash">$ TAGS="sqlite sqlite_unlock_notify" make</code></pre>
+```bash
+$ TAGS="sqlite sqlite_unlock_notify" make
+```
 
 編譯完成後，直接執行
 
-<pre><code class="language-bash">$ ./gitea web
+```bash
+$ ./gitea web
 2019/03/09 12:26:03 [T] AppPath: /Users/appleboy/git/go/src/code.gitea.io/gitea/gitea
 2019/03/09 12:26:03 [T] AppWorkPath: /Users/appleboy/git/go/src/code.gitea.io/gitea
 2019/03/09 12:26:03 [T] Custom path: /Users/appleboy/git/go/src/code.gitea.io/gitea/custom
 2019/03/09 12:26:03 [T] Log path: /Users/appleboy/git/go/src/code.gitea.io/gitea/log
-2019/03/09 12:26:03 Serving [::]:3000 with pid 18284</code></pre>
+2019/03/09 12:26:03 Serving [::]:3000 with pid 18284
+```
 
 打開瀏覽器登入後，進入右上角使用者設定，就可以建立新的 Application。
 
@@ -58,24 +64,30 @@ tags:
 
 在上面有提到需要合併兩個 PR ([drone@go-login#3][10] 及 [drone@drone#2622][11]) 才能使用此功能，等不及的朋友們就自己先 Fork 來使用吧。先假設已經合併完成。
 
-<pre><code class="language-bash">$ cd $GOPAHT/drone
-$ go build ./cmd/drone-server</code></pre>
+```bash
+$ cd $GOPAHT/drone
+$ go build ./cmd/drone-server
+```
 
 然後建立 `server.sh` 將環境變數寫入
 
-<pre><code class="language-bash">#!/bin/sh
+```bash
+#!/bin/sh
 export DRONE_GITEA_SERVER=http://localhost:3000
 export DRONE_GITEA_CLIENT_ID=49de7c23-3bed-45a1-a78e-89c8ba4db07b
 export DRONE_GITEA_CLIENT_SECRET=8GhG9XvPJEpaOroVocmJPAQArO5Zz7KMLQ5df0eG91c=
-./drone-server</code></pre>
+./drone-server
+```
 
 啟動 drone 服務，會看到一些 Info 訊息:
 
-<pre><code class="language-bash">$ ./server.sh 
+```bash
+$ ./server.sh 
 {"level":"info","msg":"main: internal scheduler enabled","time":"2019-03-09T12:39:21+08:00"}
 {"level":"info","msg":"main: starting the local build runner","threads":2,"time":"2019-03-09T12:39:21+08:00"}
 {"acme":false,"host":"localhost:8080","level":"info","msg":"starting the http server","port":":8080","proto":"http","time":"2019-03-09T12:39:21+08:00","url":"http://localhost:8080"}
-{"interval":"30m0s","level":"info","msg":"starting the cron scheduler","time":"2019-03-09T12:39:21+08:00"}</code></pre>
+{"interval":"30m0s","level":"info","msg":"starting the cron scheduler","time":"2019-03-09T12:39:21+08:00"}
+```
 
 打開瀏覽器輸入 `http://localhost:8080` 就可以看到跳轉到 OAuth 頁面
 

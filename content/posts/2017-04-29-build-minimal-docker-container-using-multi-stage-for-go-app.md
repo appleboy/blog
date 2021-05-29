@@ -26,26 +26,32 @@ tags:
 
 底下是 Go 語言 Hello World 範例:
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import "fmt"
 
 func main() {
     fmt.Println("Hello World!")
-}</code></pre>
+}
+```
 
 接著用 [alpine][6] 的 Go 語言 Image 來編譯出執行檔。
 
-<pre><code class="language-bash">FROM golang:alpine
+```bash
+FROM golang:alpine
 WORKDIR /app
 ADD . /app
 RUN cd /app && go build -o app
-ENTRYPOINT ./app</code></pre>
+ENTRYPOINT ./app
+```
 
 接著執行底下編譯指令:
 
-<pre><code class="language-bash">$ docker build -t appleboy/go-app .
-$ docker run --rm appleboy/go-app</code></pre>
+```bash
+$ docker build -t appleboy/go-app .
+$ docker run --rm appleboy/go-app
+```
 
 最後檢查看看編譯出來的 Image 大小，使用 `docker images | grep go-app`，會發現 Image 大小為 **258 MB**
 
@@ -53,7 +59,8 @@ $ docker run --rm appleboy/go-app</code></pre>
 
 Multiple build 則是可以在 `Dockerfile` 使用多個不同的 Image 來源，請看看底下範例
 
-<pre><code class="language-bash"># build stage
+```bash
+# build stage
 FROM golang:alpine AS build-env
 ADD . /src
 RUN cd /src && go build -o app
@@ -62,12 +69,15 @@ RUN cd /src && go build -o app
 FROM alpine
 WORKDIR /app
 COPY --from=build-env /src/app /app/
-ENTRYPOINT ./app</code></pre>
+ENTRYPOINT ./app
+```
 
 從上面可以看到透過 `AS` 及 `--from` 互相溝通，以前需要寫兩個 Dockerfile，現在只要一個就可以搞定。最後一樣執行編譯指令:
 
-<pre><code class="language-bash">$ docker build -t appleboy/go-app .
-$ docker run --rm appleboy/go-app</code></pre>
+```bash
+$ docker build -t appleboy/go-app .
+$ docker run --rm appleboy/go-app
+```
 
 會發現最後大小為 **6.35 MB**，比上面是不是小了很多。
 
@@ -75,19 +85,24 @@ $ docker run --rm appleboy/go-app</code></pre>
 
 **6.35 MB** 是最小的 Image 了嗎？才單單一個 Hello World 執行檔，用 Docker 包起來竟然要 6.35，其實不用這麼大，我們可以透過 Dokcer 所提供的最小 Image: [scratch][7]，將執行檔直接包進去即可，在編譯執行檔需加入特定參數才可以:
 
-<pre><code class="language-bash">$ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app</code></pre>
+```bash
+$ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
+```
 
 再透過 Docker 包起來
 
-<pre><code class="language-bash">FROM centurylink/ca-certs
+```bash
+FROM centurylink/ca-certs
 
 ADD app /
 
-ENTRYPOINT ["/app"]</code></pre>
+ENTRYPOINT ["/app"]
+```
 
 編譯出來大小為: **1.81MB**，相信這是最小的 Image 了。最後用 Docker 來包
 
-<pre><code class="language-bash"># build stage
+```bash
+# build stage
 FROM golang:alpine AS build-env
 ADD . /src
 RUN cd /src && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
@@ -95,13 +110,15 @@ RUN cd /src && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
 # final stage
 FROM centurylink/ca-certs
 COPY --from=build-env /src/app /
-ENTRYPOINT ["/app"]</code></pre>
+ENTRYPOINT ["/app"]
+```
 
 ## 結論
 
 Multiple build 非常方便，這樣就可以將多個步驟全部合併在一個 Dockerfile 處理掉，像是底下例子
 
-<pre><code class="language-bash">from debian as build-essential
+```bash
+from debian as build-essential
 arg APT_MIRROR
 run apt-get update
 run apt-get install -y make gcc
@@ -118,7 +135,8 @@ run make
 from alpine
 copy --from=foo bin1 .
 copy --from=bar bin2 .
-cmd ...</code></pre>
+cmd ...
+```
 
 用一個 Dockerfile 產生多個執行檔，最後再用 alpine 打包成 Image。
 

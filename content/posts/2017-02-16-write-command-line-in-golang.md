@@ -24,7 +24,8 @@ tags:
 
 其實 Golang 本身就有支援 Command line 功能，只要 import `flag` 就可以直接使用了
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "flag"
@@ -44,7 +45,8 @@ func main() {
         fmt.Println("Version 1.0.0")
         os.Exit(0)
     }
-}</code></pre>
+}
+```
 
 存檔成 `main.go`，執行 `go build -o main` 就可以產生 main 執行檔，最後可以直接下 `./main -v` 畫面就會顯示 `Version 1.0.0`。但是如果 flag 非常多，寫起來就會相當長，也不支援讀取 Environment 環境變數，這時候我們可以透過 urfave/cli 來簡化此流程。上面的範例可以在底下連結找到
 
@@ -54,7 +56,8 @@ func main() {
 
 底下是一個簡單範例，可以從 command line 讀取使用者帳號密碼
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -106,7 +109,8 @@ func exec() error {
     fmt.Println("password:", config.password)
 
     return nil
-}</code></pre>
+}
+```
 
 從上面例子可以發現從 `Name` 就可以定義 Flag 名稱，用逗號分格，在命令列就可以使用 `-u` 或 `--username`，也會自動幫忙產生完整的 help 畫面
 
@@ -116,24 +120,29 @@ func exec() error {
 
 在 Golang 可以快速的將執行檔打包成 [Docker][18] Image
 
-<pre><code class="language-bash">FROM centurylink/ca-certs
-
-ADD main /
-
-ENTRYPOINT ["/main"]</code></pre>
-
-在 Dockerfile 內使用參數可以透過 `CMD` 會變成底下
-
-<pre><code class="language-bash">FROM centurylink/ca-certs
+```bash
+FROM centurylink/ca-certs
 
 ADD main /
 
 ENTRYPOINT ["/main"]
-CMD ["-u", "appleboy"]</code></pre>
+```
+
+在 Dockerfile 內使用參數可以透過 `CMD` 會變成底下
+
+```bash
+FROM centurylink/ca-certs
+
+ADD main /
+
+ENTRYPOINT ["/main"]
+CMD ["-u", "appleboy"]
+```
 
 這樣非常麻煩，這時候就要讓 CLI 也支援環境變數，將 `cli.StringFlag` 改成如下
 
-<pre><code class="language-diff">    app.Flags = []cli.Flag{
+```diff
+    app.Flags = []cli.Flag{
         cli.StringFlag{
             Name:   "username,u",
             Usage:  "user account",
@@ -144,19 +153,24 @@ CMD ["-u", "appleboy"]</code></pre>
             Usage:  "user password",
 +           EnvVar: "DOCKER_PASSWORD",
         },
-    }</code></pre>
+    }
+```
 
 直接在命令列執行 `DOCKER_USERNAME=appleboy ./main`，則就會抓到 `DOCKER_USERNAME` 環境變數，在 Docker 指令就可以補上 `-e` 參數來實現變數傳遞:
 
-<pre><code class="language-bash">$ docker run -e DOCKER_USERNAME=appleboy appleboy/cli</code></pre>
+```bash
+$ docker run -e DOCKER_USERNAME=appleboy appleboy/cli
+```
 
 ## 結論
 
 把 Golang 執行檔包進去 Docker Image，就可以再任意環境內執行，如果你不想使用 Docker Image 也沒關係，Golang 支援跨平台編譯，底下是支援 Windows, Linux, MacOS 編譯參數
 
-<pre><code class="language-bash">    GOOS=linux   GOARCH=amd64 CGO_ENABLED=0 go build -o bin/main-linux
+```bash
+    GOOS=linux   GOARCH=amd64 CGO_ENABLED=0 go build -o bin/main-linux
     GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -o bin/main.exe
-    GOOS=darwin  GOARCH=amd64 CGO_ENABLED=0 go build -o bin/main-darwin</code></pre>
+    GOOS=darwin  GOARCH=amd64 CGO_ENABLED=0 go build -o bin/main-darwin
+```
 
 自從學了 Golang，讓用 Windows 工作的同事，也可以享用 Golang 的好處。上述範例檔案可以參考底下連結
 

@@ -30,7 +30,8 @@ tags:
 
 請直接在專案內建立 `server.go`
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "flag"
@@ -71,7 +72,8 @@ func RunHTTPServer() error {
 
 func main() {
     RunHTTPServer()
-}</code></pre>
+}
+```
 
 存檔後，請直接透過 `go run` 進行測試。
 
@@ -79,7 +81,8 @@ func main() {
 
 接著要寫 Dockerfile 來進行編譯及測試
 
-<pre><code class="language-bash">FROM golang:1.9-alpine3.6
+```bash
+FROM golang:1.9-alpine3.6
 
 MAINTAINER Bo-Yi Wu <appleboy.tw@gmail.com>
 
@@ -88,21 +91,26 @@ ADD . /go/src/github.com/appleboy/go-hello
 RUN go install github.com/appleboy/go-hello
 
 EXPOSE 8000
-CMD ["/go/bin/go-hello"]</code></pre>
+CMD ["/go/bin/go-hello"]
+```
 
 請修改 `github.com/appleboy/go-hello` 路徑，接著透過底下指令來編譯 Docker，注意 `EXPOSE 8000` 代表需要將 docker 內的 8000 對外。
 
-<pre><code class="language-bash">$ docker build -t appleboy/go-hello -f Dockerfile .</code></pre>
+```bash
+$ docker build -t appleboy/go-hello -f Dockerfile .
+```
 
 編譯成功後，使用 docker run 執行
 
-<pre><code class="language-bash">$ docker run -p 8080:8000 appleboy/go-hello
+```bash
+$ docker run -p 8080:8000 appleboy/go-hello
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
  - using env:   export GIN_MODE=release
  - using code:  gin.SetMode(gin.ReleaseMode)
 
 [GIN-debug] GET    /                         --> main.rootHandler (1 handlers)
-[GIN-debug] Listening and serving HTTP on :8000</code></pre>
+[GIN-debug] Listening and serving HTTP on :8000
+```
 
 你可以發現成功執行了 app。
 

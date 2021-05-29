@@ -26,11 +26,15 @@ dep init 或 dep ensure 預設會先去掃 `$GOPATH` 底下是否存在您所需
 
 其他 Dependency tool 幾乎都有支援抓 sub package，像是 [govendor][6] 或 [glide][7]
 
-<pre><code class="language-bash">govendor fetch github.com/joho/godotenv/autoload</code></pre>
+```bash
+govendor fetch github.com/joho/godotenv/autoload
+```
 
 上面指令只會抓 [godotenv][8] 內的 [autoload package][9] 原始碼，跟 autoload 無關的一律不抓，但是在 dep 只能能抓 godotenv 全部資料，不支援底下寫法，會直接報錯
 
-<pre><code class="language-bash">dep ensure github.com/joho/godotenv/autoload</code></pre>
+```bash
+dep ensure github.com/joho/godotenv/autoload
+```
 
 ## dep 預設抓不相關的檔案到 vendor
 

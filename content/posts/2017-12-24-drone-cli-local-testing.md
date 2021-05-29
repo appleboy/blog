@@ -24,18 +24,23 @@ tags:
 
 請直到官方[下載頁面][4]下載相對應檔案，完成後請放到 `/usr/local/bin` 底下，目前支援 Windows, Linnx 及 MacOS。如果開發環境有 Go 語言，可以直接透過底下指令安裝
 
-<pre><code class="language-bash">$ go get -u github.com/drone/drone-cli/drone</code></pre>
+```bash
+$ go get -u github.com/drone/drone-cli/drone
+```
 
 或是透過 tarbal 方式安裝
 
-<pre><code class="language-bash">curl -L https://github.com/drone/drone-cli/releases/download/v0.8.0/drone_linux_amd64.tar.gz | tar zx
-sudo install -t /usr/local/bin drone</code></pre>
+```bash
+curl -L https://github.com/drone/drone-cli/releases/download/v0.8.0/drone_linux_amd64.tar.gz | tar zx
+sudo install -t /usr/local/bin drone
+```
 
 ## 撰寫 Yaml 檔案
 
 用編輯器打開專案，並且初始化 `.drone.yml` 檔案
 
-<pre><code class="language-yml">pipeline:
+```yml
+pipeline:
   backend:
     image: golang
     commands:
@@ -44,14 +49,17 @@ sudo install -t /usr/local/bin drone</code></pre>
   frontend:
     image: golang
     commands:
-      - echo "frontend testing"</code></pre>
+      - echo "frontend testing"
+```
 
 在命令列直接下 `drone exec` 畫面如下
 
-<pre><code class="language-bash">[backend:L0:0s] + echo "backend testing"
+```bash
+[backend:L0:0s] + echo "backend testing"
 [backend:L1:0s] backend testing
 [frontend:L0:0s] + echo "frontend testing"
-[frontend:L1:0s] frontend testing</code></pre>
+[frontend:L1:0s] frontend testing
+```
 
 可以發現今天就算沒有 drone server 團隊依然可以透過 drone exec 來完成測試。
 
@@ -59,7 +67,8 @@ sudo install -t /usr/local/bin drone</code></pre>
 
 在 drone 測試會需要使用 secret 來保存類似像 AWS API Key 隱秘資訊，但是這只能在 Drone server 上面跑才會自動帶入 secret。
 
-<pre><code class="language-yml">pipeline:
+```yml
+pipeline:
   backend:
     image: golang
     secrets: [ test ]
@@ -70,27 +79,32 @@ sudo install -t /usr/local/bin drone</code></pre>
   frontend:
     image: golang
     commands:
-      - echo "frontend testing"</code></pre>
+      - echo "frontend testing"
+```
 
 執行 `drone exec` 後會發現結果如下
 
-<pre><code class="language-bash">$ drone exec
+```bash
+$ drone exec
 [backend:L0:0s] + echo "backend testing"
 [backend:L1:0s] backend testing
 [backend:L2:0s] + echo $TEST
 [backend:L3:0s]
 [frontend:L0:0s] + echo "frontend testing"
-[frontend:L1:0s] frontend testing</code></pre>
+[frontend:L1:0s] frontend testing
+```
 
 可以得知 `$TEST` 輸出是沒有任何資料，但是如果在 Drone server 上面跑是有資料的。那該如何在個人電腦也拿到此資料呢？其實很簡單，透過環境變數即可
 
-<pre><code class="language-bash">$ TEST=appleboy drone exec
+```bash
+$ TEST=appleboy drone exec
 [backend:L0:0s] + echo "backend testing"
 [backend:L1:0s] backend testing
 [backend:L2:0s] + echo $TEST
 [backend:L3:0s] appleboy
 [frontend:L0:0s] + echo "frontend testing"
-[frontend:L1:0s] frontend testing</code></pre>
+[frontend:L1:0s] frontend testing
+```
 
 這樣我們就可以正確拿到 secret 資料了。
 
@@ -98,7 +112,8 @@ sudo install -t /usr/local/bin drone</code></pre>
 
 已經導入 drone 的團隊，一定會把很多部署的步驟都放在 `.drone.yml` 檔案內，但是在本機端只想跑前後端測試，後面的像是 Notification，或者是 SCP 及 SSH 步驟都需要忽略，這樣可以單純只跑測試，這時候該透過什麼方式才可以避免呢？很簡單只要在 `when` 條件子句加上 `local: false` 即可。假設原本 Yaml 寫法如下:
 
-<pre><code class="language-yml">pipeline:
+```yml
+pipeline:
   backend:
     image: golang
     commands:
@@ -112,11 +127,13 @@ sudo install -t /usr/local/bin drone</code></pre>
   deploy:
     image: golang
     commands:
-      - echo "deploy"</code></pre>
+      - echo "deploy"
+```
 
 這次我們想忽略掉 `deploy` 步驟，請改寫如下
 
-<pre><code class="language-yml">pipeline:
+```yml
+pipeline:
   backend:
     image: golang
     commands:
@@ -132,7 +149,8 @@ sudo install -t /usr/local/bin drone</code></pre>
     commands:
       - echo "deploy"
     when:
-      local: false</code></pre>
+      local: false
+```
 
 再執行 `drone exec`，大家可以發現，最後一個步驟 `deploy` 就被忽略不執行了，這在本機端測試非常有用，也不會影響到 drone server 上的執行。大家可以參考此 [Yaml 檔案範例][5]，大量使用了 `local: false` 方式。
 
