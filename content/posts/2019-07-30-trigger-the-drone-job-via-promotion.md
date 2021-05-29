@@ -20,8 +20,9 @@ tags:
 
 <!--more-->
 
-# 影片教學
+## 影片教學
 
+{{< youtube 4FnxAJLKaug >}}
 ## 如何使用
 
 首先你必須要先安裝好 Drone CLI，安裝方式可以直接參考[官方教學][6]即可，透過底下例子來了解怎麼使用 promotion

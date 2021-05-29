@@ -21,6 +21,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube rfkG6TfyWw0 >}}
+
 直接看影片比較快，五分鐘左右就可以初學了解 channel
 
   * 00:22 unbuffered channel

@@ -48,9 +48,7 @@ tags:
 
 ## 投影片
 
-<div style="margin-bottom:5px">
-  <strong> <a href="//www.slideshare.net/appleboy/golang-project-layout-and-practice-167597350" title="Golang Project Layout and Practice" target="_blank">Golang Project Layout and Practice</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong>
-</div>
+{{< speakerdeck id="b8d34a236aa6419f8790dab2a845d1d7" >}}
 
  [1]: https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080 "golang logo"
  [2]: https://modernweb.tw/

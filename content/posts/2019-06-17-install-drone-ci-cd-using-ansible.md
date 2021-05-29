@@ -24,6 +24,8 @@ tags:
 
 ## 影片教學
 
+{{< youtube GphMs8pfYiA >}}
+
 更多實戰影片可以參考我的 Udemy 教學系列
 
   * Go 語言實戰課程: <http://bit.ly/golang-2019>

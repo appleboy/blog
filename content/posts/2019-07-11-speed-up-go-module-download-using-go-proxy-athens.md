@@ -24,6 +24,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube 964fZJPVHDI >}}
+
   * Go 語言實戰課程: <http://bit.ly/golang-2019>
   * Drone CI/CD 自動化課程: <http://bit.ly/drone-2019>
 

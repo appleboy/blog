@@ -133,6 +133,8 @@ local Person(name='Alice') = {
 
 ## 影片教學
 
+{{< youtube ySqjSdeWzQw >}}
+
   * Go 語言實戰課程: <http://bit.ly/golang-2019>
   * Drone 自動化課程: <http://bit.ly/drone-2019>
 

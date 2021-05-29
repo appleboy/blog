@@ -93,11 +93,11 @@ func main() {
 
 ## 線上影片
 
+{{< youtube WXMUWMsRTjQ >}}
+
 * * *
 
-Go 語言線上課程目前特價 $1600，持續錄製中，每週都會有新的影片上架，歡迎大家參考看看，請點選底下購買連結:
-
-# [點我購買][7]
+Go 語言線上課程目前特價 $1600，持續錄製中，每週都會有新的影片上架，歡迎大家參考看看，請點選底下[購買連結][7]
 
  [1]: https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/ "Go-brown-side.sh"
  [2]: https://golang.org

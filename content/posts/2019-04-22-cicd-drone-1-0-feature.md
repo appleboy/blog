@@ -20,11 +20,15 @@ categories:
 
 ## 影片介紹
 
+https://www.youtube.com/watch?v=BVfy02zq8Mo
+
 我自己在台北分享後，又自己錄製了一段，歡迎大家參考
 
 如果喜歡 Drone 也可以參考 Udemy 影片: <http://bit.ly/drone-2019>
 
 ## 投影片
+
+{{< speakerdeck id="3a951f77855a42268c8a1d46abe50348" >}}
 
 ## 支援 Cloud 服務
 

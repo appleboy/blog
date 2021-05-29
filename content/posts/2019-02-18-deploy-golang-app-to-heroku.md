@@ -25,6 +25,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube PszIIP4gyRs >}}
+
 歡迎訂閱[我的 Youtube 頻道][11]
 
 ## 使用 Git 部署

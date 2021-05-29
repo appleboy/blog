@@ -26,6 +26,8 @@ tags:
 
 ## 影片教學
 
+{{< youtube Z2vp-L3bZwU >}}
+
 本系列影片不只有介紹 up 工具，還包含『設定 custom domain 在 API Gateway』及『用 drone 搭配 apex/up 自動化部署 AWS Lambda』。有興趣可以參考底下:
 
   * 使用 apex/up 工具部署 Go 專案到 AWS Lambda [Youtube][11], [Udemy][12]
@@ -184,7 +186,7 @@ pipeline:
  [8]: https://golang.org
  [9]: https://nodejs.org/en/
  [10]: https://www.python.org/
- [11]: https://www.youtube.com/watch?v=Z2vp-L3bZwU
+ [11]: {{< youtube Z2vp-L3bZwU >}}
  [12]: https://www.udemy.com/golang-fight/learn/v4/t/lecture/12246918
  [13]: https://www.udemy.com/golang-fight/learn/v4/t/lecture/12249324
  [14]: https://www.udemy.com/golang-fight/learn/v4/t/lecture/12270902

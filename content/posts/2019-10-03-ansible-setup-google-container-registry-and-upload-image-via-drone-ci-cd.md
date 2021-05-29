@@ -112,6 +112,8 @@ cloudbuild:
 
 底下是教您如何使用 docker cache 機制，如果你的 Image 特別大，像是有包含 Linux SDK 之類的，就真的用 cache 會比較快喔。
 
+{{< youtube Taa6QkStg78 >}}
+
 歡迎訂閱我的 Youtube 頻道: <http://bit.ly/youtube-boy>
 
 更多實戰影片可以參考我的 Udemy 教學系列

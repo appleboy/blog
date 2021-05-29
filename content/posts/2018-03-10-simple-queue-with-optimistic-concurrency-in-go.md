@@ -159,14 +159,14 @@ for i := range in {
     for {
       select {
       case account := <-*in:
-        out<em></em> <- Result{
+        out <- Result{
           Account: account,
           Result:  entry.Amount,
         }
       }
     }
 
-  }(&in<em></em>, i)
+  }(&in, i)
 }
 ```
 

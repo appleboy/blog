@@ -20,6 +20,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube 36X8uf7AxOg >}}
+
 ## 範例
 
 要區別 pointer 跟 value 可以透過下面的例子快速了解:

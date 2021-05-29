@@ -21,6 +21,8 @@ tags:
 
 ## 投影片及教學影片
 
+https://www.youtube.com/watch?v=wvdbobFiXNg&t=500s
+
 本篇的實作，也有錄製成教學影片，請參考如下:
 
 如果對於課程內容有興趣，可以參考底下課程。

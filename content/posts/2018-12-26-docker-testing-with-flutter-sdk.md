@@ -15,28 +15,37 @@ tags:
   - flutter
 
 ---
-[![][1]][2] [Flutter][3] 是一套以 [Dart][4] 語言為主體的手機 App 開發框架，讓開發者可以寫一種語言產生 iOS 及 Android，只要裝好 Flutter 框架，就可以在個人電腦上面同時測試 iOS 及 Android 流程，如果您需要 Docker 環境，可以直接參考[此開源專案][5]，裡面已經將 Flutter 1.0 SDK 包在容器，只要將專案目錄掛載到 Docker 內，就可以透過 `flutter test` 指令來完成測試，對於 CI/CD 流程使用 Docker 技術非常方便。 <!--more-->
+[![][1]][2] [Flutter][3] 是一套以 [Dart][4] 語言為主體的手機 App 開發框架，讓開發者可以寫一種語言產生 iOS 及 Android，只要裝好 Flutter 框架，就可以在個人電腦上面同時測試 iOS 及 Android 流程，如果您需要 Docker 環境，可以直接參考[此開源專案][5]，裡面已經將 Flutter 1.0 SDK 包在容器，只要將專案目錄掛載到 Docker 內，就可以透過 `flutter test` 指令來完成測試，對於 CI/CD 流程使用 Docker 技術非常方便。 
+
+<!--more-->
 
 ## 線上影片教學
 
-## Docker 使用方式 下載 Docker Image，檔案有點大，先下載好比較方便 
+{{< youtube niYHNT73wk0 >}}
 
-<pre class="brush: plain; title: ; notranslate" title="">$ docker pull appleboy/flutter-docker:1.0.0
-</pre> 下載
+## Docker 使用方式 
 
-[測試範例][6]，並執行測試 
+下載 Docker Image，檔案有點大，先下載好比較方便 
 
-<pre class="brush: plain; title: ; notranslate" title="">$ git clone https://github.com/appleboy/flutter-demo.git
+```bash
+$ docker pull appleboy/flutter-docker:1.0.0
+```
+
+下載[測試範例][6]，並執行測試
+
+```bash
+$ git clone https://github.com/appleboy/flutter-demo.git
 $ docker run -ti -v ${PWD}/flutter-demo:/flutter-demo -w /flutter-demo \
   appleboy/flutter-docker:1.0.0 \
   /bin/sh -c "flutter test"
-</pre>
+```
 
-## 使用 Drone 自動化測試 搭配 
+## 使用 Drone 自動化測試
 
-[Drone Cloud][7] 服務，在專案底下新增 [.drone.yml][8]，內容如下: 
+搭配 [Drone Cloud][7] 服務，在專案底下新增 [.drone.yml][8]，內容如下: 
 
-<pre class="brush: plain; title: ; notranslate" title="">kind: pipeline
+```bash
+kind: pipeline
 name: testing
 
 steps:
@@ -44,7 +53,7 @@ steps:
     image: appleboy/flutter-docker:1.0.0
     commands:
       - flutter test
-</pre>
+```
 
  [1]: https://lh3.googleusercontent.com/REguGdEy6qgmZyU7hNscYxXV1lGzSTioUb_cBe4uVLdBNUxL2Y9oNwx2J8w6VU8BMcZhBOJoAI091l9lCJuueumNEef7ub75Dvrbl2ZC1Ri9QholsnccGd6txg9rbXP5oZoNIQVl_Fk=w700
  [2]: https://photos.google.com/share/AF1QipPVsiQNMhQf-l7rJBe-Ki9RMxMVz0x-xSDpayq967sskqwi2bzqgHBQyc9xaby8eA?key=b0xKVW5oSlEwZEl2b0FESUNDVFRGV2dYbkVPRVVB&source=ctrlq.org

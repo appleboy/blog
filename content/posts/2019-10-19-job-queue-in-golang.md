@@ -44,9 +44,7 @@ tags:
 
 ## 投影片
 
-<div style="margin-bottom:5px">
-  <strong> <a href="//www.slideshare.net/appleboy/job-queue-in-golang-184064840" title="Job Queue in Golang" target="_blank">Job Queue in Golang</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong>
-</div>
+{{< speakerdeck id="401556cf9cc047b3ad9382e7aa8536e7" >}}
 
  [1]: https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080 "golang logo"
  [2]: https://mopcon.org/2019/

@@ -248,6 +248,8 @@ prepare:
 
 下面影片並無包含實作部分，會介紹我在團隊怎麼使用 [GitHub Flow][15] 部署，更多實作詳細細節，可以參考 Udemy 上面影片
 
+{{< youtube qLla47eJUQc >}}
+
 ## 心得
 
 作者我尚未深入玩過 [GitLab CI][16] 或者是 [Jenkins][17] 搭配 Kubernetes 來部署專案，但是我相信以複雜及學習難度來說，用 Drone CI 是比較簡單的，這部分就不多說了，大家實際操作比較過才知道。希望能帶給有在玩 Drone 的開發者有些幫助。另外我在 Udemy 上面開了兩門課程，一門 drone 另一門 golang 教學，如果對這兩門課有興趣的話，都可以購買，目前都是特價 $1800
@@ -261,9 +263,7 @@ prepare:
   * 富邦帳號: 746168268370
   * 匯款金額: 台幣 $3000 元
 
-匯款後請直接到 [FB 找我][20]，或者直接寫信給我也可以 **appleboy.tw AT gmail.com**。有任何問題都可以直接加我 FB，都是公開資訊。上面程式碼範例請參考如下
-
-# [線上程式碼][21]
+匯款後請直接到 [FB 找我][20]，或者直接寫信給我也可以 **appleboy.tw AT gmail.com**。有任何問題都可以直接加我 FB，都是公開資訊。上面程式碼範例請參考[此連結]][21]
 
  [1]: https://www.flickr.com/photos/appleboy/27678088297/in/dateposted-public/ "Screen Shot 2018-06-04 at 9.19.46 AM"
  [2]: https://blog.wu-boy.com/2017/10/upgrade-kubernetes-container-using-drone/

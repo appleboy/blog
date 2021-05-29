@@ -27,6 +27,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube a6tbQFajX28 >}}
+
   * 00:37 架設 Traefik 服務 Listen 80 及 443 port
   * 02:42 用 Docker 架設 Drone 並且透過 Label 跟 Traefik 串接
   * 04:11 在 GitHub 申請 App Client ID 及 Secret

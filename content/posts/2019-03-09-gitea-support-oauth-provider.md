@@ -23,6 +23,8 @@ tags:
 
 ## 影片教學
 
+{{< youtube OX7WpJ5X19g >}}
+
 有興趣可以參考線上教學
 
   * Go 語言實戰課程: <http://bit.ly/golang-2019>

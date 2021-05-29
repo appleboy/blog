@@ -26,6 +26,8 @@ tags:
 
 直接看 Youtube 影片
 
+{{< youtube fa5CRnLl5Xw >}}
+
 ## 安裝方式
 
 可以直接參考[官網安裝方式][3]

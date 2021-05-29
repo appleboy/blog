@@ -25,6 +25,8 @@ tags:
 
 ## 影片介紹
 
+{{< youtube n1CvIb2-D8s >}}
+
   1. 舊專案內 vendor 轉換成 go module 設定 (1:15)
   2. 新專案如何啟用 go module (6:20)
   3. 在 Travis CI 或 Drone 如何使用 go module (8:31)

@@ -28,6 +28,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube Eak_-_9E3Bc >}}
+
 更多實戰影片可以參考我的 Udemy 教學系列
 
   * Go 語言實戰課程: <http://bit.ly/golang-2019>

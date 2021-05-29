@@ -25,7 +25,7 @@ tags:
 
 當然作者最後不只介紹了 50 個小技巧，另外也展示了 Laravel 5.2 的新功能，像是可以在 Routing 內寫 Modle Binding，所以非常推薦大家看這 Slides。底下列出 Laravel 5.2 新功能
 
-### 在 Routing 內可以直接 binding Model
+## 在 Routing 內可以直接 binding Model
 
 <div>
   <pre class="brush: php; title: ; notranslate" title="">Route::get('/api/posts/{post}', function(Post $post) {
@@ -33,7 +33,7 @@ tags:
 });</pre>
 </div>
 
-### scheduled tasks 支援 log 連續寫入檔案
+## scheduled tasks 支援 log 連續寫入檔案
 
 <div>
   <pre class="brush: php; title: ; notranslate" title="">$schedule->command('emails:send')
@@ -41,7 +41,7 @@ tags:
     ->appendOutputTo($filePath);</pre>
 </div>
 
-### 支援 Array 驗證
+## 支援 Array 驗證
 
 html 寫法如下
 
@@ -65,7 +65,7 @@ html 寫法如下
 ]);</pre>
 </div>
 
-### Collection 支援 Wildcards 功能
+## Collection 支援 Wildcards 功能
 
 要讀取 posts 底下所有的 Title 可以寫成如下
 
@@ -73,11 +73,11 @@ html 寫法如下
   <pre class="brush: php; title: ; notranslate" title="">$posts->pluck('posts.*.title');</pre>
 </div>
 
-### Database Session Driver 多支援兩個欄位
+## Database Session Driver 多支援兩個欄位
 
 資料庫 Session Driver 多支援 `user_id` 及 `ip_address`，這樣就可以很快速的清除單一帳號的 Session。
 
-### MySQL 支援 JSON Type
+## MySQL 支援 JSON Type
 
 [MySQL][4] 5.7.8 之後支援 [JSON Type][5]，現在 Laravel 5.2 也會開始支援 JSON Type。
 

@@ -24,6 +24,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube Taa6QkStg78 >}}
+
 歡迎訂閱我的 Youtube 頻道: <http://bit.ly/youtube-boy>
 
 更多實戰影片可以參考我的 Udemy 教學系列

@@ -33,6 +33,8 @@ docker-compose up -d --scale app=2
 
 ## 教學影片
 
+https://www.youtube.com/watch?v=SWfaH1HDBqQ
+
 如果對於課程內容有興趣，可以參考底下課程。
 
   * [Go 語言基礎實戰 (開發, 測試及部署)][8]
@@ -164,6 +166,7 @@ services:
     command: --api.insecure=true --providers.docker
     ports:
       # The HTTP port
+
       - "8088:80"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"

@@ -30,6 +30,8 @@ tags:
 
 ## 影片介紹
 
+https://www.youtube.com/watch?v=JY9xapxBh28&t=9s
+
 同步放在 Udemy 平台上面，有興趣的可以直接參考底下:
 
   * [Go 語言基礎實戰 (開發, 測試及部署)][6]

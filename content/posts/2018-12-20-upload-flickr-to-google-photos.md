@@ -16,6 +16,8 @@ categories:
 
 ## 影片介紹
 
+{{< youtube wAjv_utI-Wo >}}
+
 底下影片會帶大家一步一步將 Flickr 檔案備份到 [Google Photos][7] 服務上。
 
  [1]: https://lh3.googleusercontent.com/D7QDeQ5CKOgRnQoFLn0_uuZ8sYyjsf7o2HedEWYnLYKLx0yUBhNL6FGRQD9UXyzENIpWqUpJPWvzeGxUr1WHi8LA6CJIUYsBF1JlnajNfHSTD6oI-jWthUL9F6ZdmJIEi_09adlnkSU=w2400

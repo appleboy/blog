@@ -34,15 +34,16 @@ tags:
 
 下面是在 GCPUG 分享的影片
 
+{{< youtube hjpY9HPfV9E >}}
 ## DevOps 線上讀書會影片
 
 下面是在 [DevOps 線上讀書會][8]分享的影片，此內容包含了線上操作
 
+{{< youtube SkTte8RmVMM >}}
+
 ## 投影片
 
-<div style="margin-bottom:5px">
-  <strong> <a href="//www.slideshare.net/appleboy/drone-continuous-integration-86316842" title="drone continuous Integration" target="_blank">drone continuous Integration</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong>
-</div>
+<iframe src="//www.slideshare.net/slideshow/embed_code/key/sM0yIMN9lQh6yn" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/appleboy/drone-continuous-integration-86316842" title="drone continuous Integration" target="_blank">drone continuous Integration</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong> </div>
 
  [1]: https://www.flickr.com/photos/appleboy/38854798135/in/dateposted-public/ "Screen Shot 2018-01-18 at 10.21.43 AM"
  [2]: https://www.facebook.com/groups/GCPUG.TW/
