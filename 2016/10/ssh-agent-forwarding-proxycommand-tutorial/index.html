@@ -27,7 +27,7 @@ SSH agent forwarding 可以讓開發者將 Local 端的 SSH Key Pair 帶到另�
   ServerAliveInterval 60
   ForwardAgent yes
   UseRoaming no
-  IdentityFile ~/.ssh/keys/aws.pem</code></pre><p>最後執行底下指令就可以直接跳到您要的 EC2 Server</p><pre><code class=language-bash>$ ssh -t aws &#039;ssh example.inc&#039;</code></pre><p><strong>方法二</strong>: 也是設定 <code>~/.ssh/config</code>，但是透過 <code>ProxyCommand</code> 而不是 <code>ForwardAgent yes</code> (<strong>建議使用此方法</strong>)</p><pre><code class=language-bash>Host hosta
+  IdentityFile ~/.ssh/keys/aws.pem</code></pre><p>最後執行底下指令就可以直接跳到您要的 EC2 Server</p><pre><code class=language-bash>$ ssh -t aws 'ssh example.inc'</code></pre><p><strong>方法二</strong>: 也是設定 <code>~/.ssh/config</code>，但是透過 <code>ProxyCommand</code> 而不是 <code>ForwardAgent yes</code> (<strong>建議使用此方法</strong>)</p><pre><code class=language-bash>Host hosta
   User userfoo
   Hostname 123.123.123.123
 

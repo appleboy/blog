@@ -13,28 +13,33 @@
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/4783335906/ title="Flickr 上 appleboy46 的 IMG_1290"><img src="https://i2.wp.com/farm5.static.flickr.com/4116/4783335906_6df8eacf93.jpg?resize=500%2C375&ssl=1" alt=IMG_1290 data-recalc-dims=1></a></div><p>我相信在高雄要吃到好吃的臭豆腐，無非就是豪記臭豆腐，大家可以參考<a href=http://blog.sina.com.tw/akane847/>懶喵兒滴窩</a>：『<a href="http://blog.sina.com.tw/akane847/article.php?pbgid=7423&entryid=612784">[高雄-三民]豪記臭豆腐王【港式臭豆腐專賣店】 (新址)</a>』，但是這次要來介紹也許在高雄比較少人知道的路邊攤臭豆腐，它位於高雄市武廟路上一間不起眼的臭豆腐，<a href=http://www.dmhs.kh.edu.tw/>道明中學</a>對面巷子走進去接到武廟路就可以吃到了，營業時間是下午15:30~19:40，時間不長，但是大排長龍阿，想要去吃的，最好不要挑晚餐時間，因為自己那個時間去吃，至少等了半小時。</p><a href=https://demo.gh.wu-boy.com/2010/07/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F%E9%81%93%E6%98%8E%E4%B8%AD%E5%AD%B8%E6%AD%A6%E5%BB%9F%E8%B7%AF%E5%A5%BD%E5%90%83%E8%87%AD%E8%B1%86%E8%85%90/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/%E8%87%AD%E8%B1%86%E8%85%90/>臭豆腐</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E6%92%B0%E5%AF%AB-hello-world-module-the-__init-and-__exit-macros-part-2/><h2 class=post-title>[Linux Kernel] 撰寫 Hello, World module: The __init and __exit Macros (part 2).</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 20, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;184&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;178&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>再看此篇之前，可以先閱讀作者先前寫的：『[Linux Kernel Driver] 撰寫簡單 Hello, World module (part 1).』，今天要介紹 Driver 的 init module 區別，在 Kernel 2.4 版本，您可以自行定義 init 跟 cleanup 函式，他們不再被個別稱為 init_module() 和 cleanup_module()，現在都使用 module_init() 和 module_exit() 兩大巨集，這兩函式被定義在 linux/init.h 檔案裡面，所以在寫程式務必將其 include 喔，另外一個核心模組(MODULE_LICENSE)，用於讓核心知道此模組遵守自由授權條款，若沒這項宣告，核心會跟您抱怨的喔，底下為範例：
-#include &lt;linux/kernel.h /* pr_info所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 需要檔案*/
-#include &lt;linux/version.h
+#include /* pr_info所需 include 檔案*/
+#include
+#include /* 所有 module 需要檔案*/
+#include
 MODULE_DESCRIPTION("Hello World !!");
-MODULE_AUTHOR("Bo-Yi Wu &lt;appleboy.tw AT gmail.com");
+MODULE_AUTHOR("Bo-Yi Wu ");
 MODULE_LICENSE("GPL");
 static int __init hello_init(void)
 {
 pr_info("Hello, world appleboy\n");
-pr_info("The process is \"%s\" (pid %i)\n"
+pr_info("The process is \"%s\" (pid %i)\n", current-comm, current-pid);
+return 0;
+}
+static void __exit hello_exit(void)
+{
+printk(KERN_INFO "
 <a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E6%92%B0%E5%AF%AB-hello-world-module-the-__init-and-__exit-macros-part-2/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/><h2 class=post-title>ProFTPD UseEncoding 繁體中文亂碼解決 Localization</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 7, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;69&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;68&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i0.wp.com/farm5.static.flickr.com/4096/4770121725_6a997912c6_o.png?w=840&ssl=1" alt=Proftpd data-recalc-dims=1> <a href=http://www.proftpd.org/>ProFTPD</a> 一直都是我最喜歡使用的 FTP 伺服器，設定方式簡單淺顯易懂，最近在用 <a href=http://www.pspad.com/>PSPad</a> 寫程式，發現使用內建 FTP 功能時候，連不上 <a href=http://www.freebsd.org>FreeBSD</a> 架設的 ProFTPD，連線過程出現許多亂碼，所以造成 PSPad 斷線出現錯誤，解決方式就是利用 <a href=http://www.proftpd.org/docs/modules/mod_lang.html>mod_lang</a> 模組，設定 <a href=http://www.proftpd.org/docs/modules/mod_lang.html#UseEncoding>UseEncoding</a> 讓系統可以顯示 Big5 中文編碼，FreeBSD Ports 請勾選</p><pre class="brush: bash; title: ; notranslate" title>[X] NLSUOTA Use nls (builds mod_lang)</pre>自行編譯請按照底下步驟<pre class="brush: bash; title: ; notranslate" title>./configure --enable-nls
 make
 make install </pre><h3 id=useencoding-設定>UseEncoding 設定</h3><pre class="brush: bash; title: ; notranslate" title>Syntax: UseEncoding on|off|local-charset client-charset
 Default: None
-Context: "server config", &lt;VirtualHost>, &lt;Global>
+Context: "server config", <virtualhost>, <global>
 Module: mod_lang
 Compatibility: 1.3.2rc1</pre>在 1.3.2rc1 版本之後才有支援，請複製底下設定，貼到 proftpd.conf<pre class="brush: bash; title: ; notranslate" title># 简体中文環境
 UseEncoding UTF-8 GBK
@@ -66,7 +71,7 @@ cd /usr/ports/databases/mysql51-server && make install 安裝 Apache 2.2.15 cd /
 <a href=https://demo.gh.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/><h2 class=post-title>[Linux Kernel] 撰寫簡單 Hello, World module (part 1).</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 21, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;152&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;143&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>來筆記如何在 Kernel 撰寫 hello world! module，在 Ubuntu Kernel 2.6.31-14 環境下撰寫，其實不難啦，首先先進入 Kernel 目錄，請在 /usr/src 底下看自己的系統版本，或者是利用 uname -r 來知道 Kernel 版本，底下是在 Ubuntu Kernel 2.6.31-14 Kernel 實做：
 進入 Kernel 目錄 #
 # cd Kernel directory
@@ -74,10 +79,10 @@ cd /usr/ports/databases/mysql51-server && make install 安裝 Apache 2.2.15 cd /
 cd /usr/src/linux-headers-2.6.31-14-generic-pae 建立 hello 目錄 #
 # mkdir directory
 #
-mkdir hello 建立 Makfile 以及 hello.c hello.c: #include &lt;linux/kernel.h /* pr_info 所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 需要檔案*/
-#include &lt;linux/version.h
+mkdir hello 建立 Makfile 以及 hello.c hello.c: #include /* pr_info 所需 include 檔案*/
+#include
+#include /* 所有 module 需要檔案*/
+#include
 MODULE_DESCRIPTION("Hello World !!");
 MODULE_AUTHOR("
 <a href=https://demo.gh.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;
@@ -107,7 +112,7 @@ if (($row['user_sig'] && $config['allow_sig'] && $user-optionget('viewsigs') && 
 <a href=https://demo.gh.wu-boy.com/2010/06/phpbb3-%E5%A4%96%E6%8E%9B-%E6%A0%B9%E6%93%9A%E4%BD%BF%E7%94%A8%E8%80%85%E6%96%87%E7%AB%A0%E6%95%B8%E7%9B%AE%E9%99%90%E5%88%B6%E7%B0%BD%E5%90%8D%E6%AA%94%E9%A1%AF%E7%A4%BA/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/><h2 class=post-title>[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 10, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;213&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;210&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>基於 Moztw 討論區 有大陸使用者註冊之後，在簽名檔加入一些廣告連結，為了降低 Google Page Rank，所以我們必須指示搜尋引擎「不要前往此網頁上的連結」或是「不要前往此連結」，可以參考 關於 rel=&ldquo;nofollow&rdquo;，phpBB3 編輯三個檔案就可以了，此修改不影響文章內容，只有針對簽名檔作用，底下是 patch 程式碼，可以參考看看 includes/bbcode.php
 --- phpBB3/includes/bbcode.php 2010-03-06 04:37:23.000000000 +0800
 +++ www/includes/bbcode.php 2010-06-10 20:58:02.000000000 +0800

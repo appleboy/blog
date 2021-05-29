@@ -35,9 +35,9 @@ sites: - map: homestead.app to: /home/vagrant/Code/Laravel/public hhvm: true 不
 &lt;/div>
 &lt;p>&lt;a href="http://laravel.com/">Laravel&lt;/a> 本來預設的 &lt;a href="http://laravel.com/docs/configuration#environment-configuration">Environment Configuration&lt;/a> 是透過 Domain Name 來區分，程式碼 &lt;code>bootstrap/start.php&lt;/code> 如下&lt;/p>
 &lt;div>
-&lt;pre class="brush: php; title: ; notranslate" title="">&amp;lt;?php
-$env = $app-&amp;gt;detectEnvironment(array(
-'local' =&amp;gt; array('your-machine-name'),
+&lt;pre class="brush: php; title: ; notranslate" title="">&lt;?php
+$env = $app->detectEnvironment(array(
+'local' => array('your-machine-name'),
 ));&lt;/pre>
 &lt;/div>
 &lt;p>我們可以根據上述程式碼產生不同的開發環境，像是 develop, production, staging… 等，根據不同的 Domain 給予不同的環境設定檔。但是根據使用 Domain Name 來區分各種不同的環境換產生兩種問題&lt;/p></description></item><item><title>升級 PHP Facebook SDK 到 4.0.x 版本</title><link>https://demo.gh.wu-boy.com/2014/07/upgrade-php-facebook-sdk-to-4-0-x/</link><pubDate>Thu, 24 Jul 2014 09:11:12 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2014/07/upgrade-php-facebook-sdk-to-4-0-x/</guid><description>&lt;div style="margin:0 auto; text-align:center">
@@ -55,14 +55,14 @@ user = nginx group = nginx ; Set permissions for unix socket, if one is used. In
 &lt;li>&lt;a href="http://tw1.php.net/manual/en/session.configuration.php#ini.session.cookie-domain">session.cookie_domain&lt;/a>&lt;/li>
 &lt;/ul></description></item><item><title>PHP The Right Way 出電子書</title><link>https://demo.gh.wu-boy.com/2014/02/php-the-right-way-best-practices/</link><pubDate>Mon, 03 Feb 2014 01:32:00 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2014/02/php-the-right-way-best-practices/</guid><description>最近看到前 CodeIgniter 及 FuelPHP 作者 Phil Sturgeon 和 PHP The Right Way 發起人 Josh Lockhart 合力推出電子書，目前一本定價為 4 塊美金，當然作者也不一定要使用者付錢，您可以直接線上看。這本線上 PDF 很適合丟給剛進來公司的新人，此新人當然對 PHP 有一定程度的了解，團隊內最重視的就是整個專案素質，也就是如果能達到多人維護同一個專案，讓其他人檢視的時候，不會覺得是好多人共同維護一個專案，也就是要求大家寫法一致 (Code Style Guide)。</description></item><item><title>增加 phpMyAdmin 登入時間</title><link>https://demo.gh.wu-boy.com/2013/12/increase-phpmyadmin-login-time/</link><pubDate>Tue, 31 Dec 2013 07:19:47 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/12/increase-phpmyadmin-login-time/</guid><description>phpMyAdmin 是一套管理 MySQL 資料庫的 UI 介面工具，預設登入時間為 1440 秒，這時間是定義在 libraries/config.default.php 內，phpMyAdmin 也是透過 gc-maxlifetime 來決定 Session 存在與否，所以如果要增加登入時間，比如說設定一年 (3600 * 24 * 365) 好了，請按照底下設定
 PHP 設定檔 如果是裝 php-fpm 請修改 /etc/php5/fpm/php.ini 路徑
-;After this number of seconds, stored data will be seen as \&amp;#039;garbage\&amp;#039; and ; cleaned up by the garbage collection process. ; http://php.net/session.gc-maxlifetime session.gc_maxlifetime = 315360000 重新啟動 php-fpm
+;After this number of seconds, stored data will be seen as \'garbage\' and ; cleaned up by the garbage collection process. ; http://php.net/session.gc-maxlifetime session.gc_maxlifetime = 315360000 重新啟動 php-fpm
 $ /etc/init.d/php5-fpm restart phpMyAdmin 設定檔 修改 config.inc.php 如果找不到此檔案，請複製 config.sample.inc.php 為 config.inc.php，接著增加底下設定即可
-$cfg[&amp;#039;LoginCookieValidity&amp;#039;] = 3600 * 24 * 365; 最後注意的是 gc_maxlifetime 設定值一定要超過 LoginCookieValidity 值，這樣才有作用</description></item><item><title>CodeIgniter 初始化 Library 流程</title><link>https://demo.gh.wu-boy.com/2013/12/codeigniter-load-library-process/</link><pubDate>Fri, 20 Dec 2013 15:52:13 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/12/codeigniter-load-library-process/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+$cfg['LoginCookieValidity'] = 3600 * 24 * 365; 最後注意的是 gc_maxlifetime 設定值一定要超過 LoginCookieValidity 值，這樣才有作用</description></item><item><title>CodeIgniter 初始化 Library 流程</title><link>https://demo.gh.wu-boy.com/2013/12/codeigniter-load-library-process/</link><pubDate>Fri, 20 Dec 2013 15:52:13 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/12/codeigniter-load-library-process/</guid><description>&lt;div style="margin:0 auto; text-align:center">
 &lt;img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&amp;#038;ssl=1" alt="CodeIgniter" data-recalc-dims="1" />
 &lt;/div>
 &lt;p>好久沒寫 &lt;a href="http://www.codeigniter.org.tw/" target="_blank">CodeIgniter&lt;/a> 相關文章，這次看到在論壇有人發問 &lt;a href="http://www.codeigniter.org.tw/forum/viewtopic.php?f=6&amp;t=3885" target="_blank">application/libraries 優先權&lt;/a>，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取&lt;/p>
 &lt;div>
-&lt;pre class="brush: php; title: ; notranslate" title="">$this-&amp;gt;load-&amp;gt;library('email');&lt;/pre>
+&lt;pre class="brush: php; title: ; notranslate" title="">$this->load->library('email');&lt;/pre>
 &lt;/div></description></item><item><title>2013 PHPConf Introduction to Gearman in PHP</title><link>https://demo.gh.wu-boy.com/2013/10/2013-phpconf-introduction-to-gearman-in-php/</link><pubDate>Sat, 05 Oct 2013 06:21:21 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/10/2013-phpconf-introduction-to-gearman-in-php/</guid><description>今天 PHPConf 簡報檔，介紹 Gearman in PHP 應用，歡迎自取，有問題可以留言</description></item><item><title>CodeIgniter 尋找新東家</title><link>https://demo.gh.wu-boy.com/2013/07/seeking-new-owner-for-codeigniter/</link><pubDate>Wed, 10 Jul 2013 07:13:47 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/07/seeking-new-owner-for-codeigniter/</guid><description>很高興看到 CodeIgniter 出了 2.1.4 版本了，距離上個版本大約 9 個月，但是這次的 Release 只針對 Security 做改善，可以參考 Change Log。然而在今天看到 Ellislab 宣佈找尋 CodeIgniter 新東家，也就是官網不再維護此 Project，希望有新的團隊或公司可以接手，繼續讓 CodeIgniter 發揚光大，在 GitHub 上的 PHP Language 排名上，CodeIgniter 幾乎榜上有名，討論活躍度也是非常高的，但是公司就是找不到任何 Business Model 來支撐整個 Project 維護成本。其實觀察幾年下來，本來寫 CodeIgniter 核心人物都漸漸不在了，像是 @Philsturgeon 自己創了 Fuel PHP Framework，現在似乎也沒在參與此 Project？CodeIgniter 最後都是由 @narfbg 來 maintain 以及開發新功能，世界各地的 Pull Request 也都是由他負責審核並且參與討論，但是一個人還是無法負擔這麼多事情阿，所以現在 CodeIgniter 3.0 還是生不出來。最後希望還是有人可以接手 CodeIgniter，很期待 3.0 出來的說，都已經做了一半以上了，不要放棄阿。</description></item><item><title>PHP 5.5.0 Release note: support Zend OPcache</title><link>https://demo.gh.wu-boy.com/2013/06/php-5-5-0-release-zend-opcache/</link><pubDate>Tue, 25 Jun 2013 06:53:45 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/06/php-5-5-0-release-zend-opcache/</guid><description>&lt;div style="margin: 0 auto; text-align: center;">
 &lt;a title="php-logo by appleboy46, on Flickr" href="https://www.flickr.com/photos/appleboy/6034284842/">&lt;img alt="php-logo" src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&amp;#038;ssl=1" data-recalc-dims="1" />&lt;/a>
 &lt;/div>
@@ -254,12 +254,11 @@ curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0); 可以參考 PHP 官方 curl_setop
 Ubunut 10.10 32 Desktop 版本 Apache/2.2.16 (Ubuntu) PHP 5.3.3-1ubuntu9.5 with Suhosin-Patch (cli) MySQL 5.1.49 1. 先下載 1.3.8 版本 2. 解壓縮到 /var/www 底下 3. 設定 apache virtual host 複製 virtual host 設定檔
 cp /etc/apache2/sites-available/default /etc/apache2/sites-available/cakephp 修改設定檔 ServerName cakephp.localhost
 DocumentRoot /var/www/cakephp/app/webroot
-&amp;lt;Directory /var/www/cakephp/app/webroot
 Options All
 AllowOverride All
 Order allow,deny
 allow from all
-&amp;lt;/Directory 4.</description></item><item><title>你不可不知的 JSON 基本介紹</title><link>https://demo.gh.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/</link><pubDate>Sun, 17 Apr 2011 06:56:53 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/</guid><description>&lt;p>還不知道 &lt;a href="http://www.json.org/">JSON&lt;/a> 是什麼嘛？本篇教學會帶您瞭解 JSON 在網站上的應用，以及運作流程跟使用 &lt;a href="http://www.php.net">PHP&lt;/a> 和 &lt;a href="http://zh.wikipedia.org/zh-hant/JavaScript">JavaScript&lt;/a> 來處理 JSON。假如您現在的工作就是網站設計師，相信一定聽過 JSON，但是什麼是 JSON，它能夠做什麼，及您能透過它在網站上做到哪些事情呢？&lt;/p>
+4.</description></item><item><title>你不可不知的 JSON 基本介紹</title><link>https://demo.gh.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/</link><pubDate>Sun, 17 Apr 2011 06:56:53 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/</guid><description>&lt;p>還不知道 &lt;a href="http://www.json.org/">JSON&lt;/a> 是什麼嘛？本篇教學會帶您瞭解 JSON 在網站上的應用，以及運作流程跟使用 &lt;a href="http://www.php.net">PHP&lt;/a> 和 &lt;a href="http://zh.wikipedia.org/zh-hant/JavaScript">JavaScript&lt;/a> 來處理 JSON。假如您現在的工作就是網站設計師，相信一定聽過 JSON，但是什麼是 JSON，它能夠做什麼，及您能透過它在網站上做到哪些事情呢？&lt;/p>
 &lt;p>透過本篇介紹您可以瞭解基本的 JSON，底下會列出本篇會提到的重點：&lt;/p>
 &lt;ul>
 &lt;li>什麼是 JSON&lt;/li>
@@ -545,12 +544,12 @@ define('Document_root',dirname(__FILE__));
 {
 function character_limiter($str, $n = 500, $end_char = '&amp;#8230;')
 {
-if (strlen($str) &amp;lt; $n)
+if (strlen($str) &lt; $n)
 {
 return $str;
 }
 $str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
-if (strlen($str) &amp;lt;= $n)
+if (strlen($str) &lt;= $n)
 {
 return $str;
 }
@@ -657,7 +656,7 @@ identify books.gif
 books.gif GIF 54x54 54x54+0+0 PseudoClass 256c 8-bit 1.66211kb</description></item><item><title>[PHP]製作類似 google 網頁認證碼</title><link>https://demo.gh.wu-boy.com/2009/01/php%E8%A3%BD%E4%BD%9C%E9%A1%9E%E4%BC%BC-google-%E7%B6%B2%E9%A0%81%E8%AA%8D%E8%AD%89%E7%A2%BC/</link><pubDate>Mon, 05 Jan 2009 15:36:25 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2009/01/php%E8%A3%BD%E4%BD%9C%E9%A1%9E%E4%BC%BC-google-%E7%B6%B2%E9%A0%81%E8%AA%8D%E8%AD%89%E7%A2%BC/</guid><description>&lt;p>我在 &lt;a href="http://blog.roodo.com/jaceju/">網站製作學習誌&lt;/a> 發現一篇 &lt;a href="http://blog.roodo.com/jaceju/archives/8015459.html">[Web] 連結分享&lt;/a> 裡面有一篇：&lt;a href="http://samsharehome.blogspot.com/2008/12/phpgoogle.html">用php做出類似Google的字詞驗證圖片&lt;/a>，這一篇寫的不錯，跟我之前寫的一篇：&lt;a href="http://blog.wu-boy.com/2008/10/28/572/">[PHP] 好用的留言板 驗證碼 功能&lt;/a>，驗證碼的強度還要更好，畢竟這樣比較不會被破解，然而這篇加上許多干擾的驗證，也選用了比較複雜的字型來提供給網站驗證部份，在 google 的登入系統部份，剛開始都是給使用者方便，不會跑出驗證碼的部份，可是只要輸入幾次錯誤的帳號密碼之後，google 的驗證碼就會跑出來了，而這個很類似 google 的驗證碼提供給大家使用，當然也感謝原作者，因為在Google字詞驗證與 &lt;a href="http://caca.zoy.org/wiki/PWNtcha">CAPTCHA&lt;/a> 都已經相繼被破解，這消息我不知道從哪裡來的，在 &lt;a href="http://samsharehome.blogspot.com/2008/12/phpgoogle.html">這裡&lt;/a> 有提到，詳細情祥可能要網路查查了 那在這個 php class 說明以及 code 如下，相信都寫的很清楚： html 認證部份：&lt;/p>
 &lt;pre class="brush: xml; title: ; notranslate" title="">
 Type the characters you see in the picture below. &lt;br />
-&amp;lt;img src="verify_image.php" alt="點此刷新驗證碼" name="verify_code" width="150" height="60" border="0" id="verify_code"
+&lt;img src="verify_image.php" alt="點此刷新驗證碼" name="verify_code" width="150" height="60" border="0" id="verify_code"
 onclick="document.getElementById('verify_code').src='verify_image.php?' + Math.random();" style="FILTER: wave(add=0,freq=3,lightstrength=50,phase=0,strength=3);cursor:pointer;" />&lt;br />
 &lt;/pre></description></item><item><title>[PHP] pear 模組 HTTP_Upload 多重檔案上傳 Multiple files upload</title><link>https://demo.gh.wu-boy.com/2009/01/php-pear-%E6%A8%A1%E7%B5%84-http_upload-%E5%A4%9A%E9%87%8D%E6%AA%94%E6%A1%88%E4%B8%8A%E5%82%B3-multiple-files-upload/</link><pubDate>Sat, 03 Jan 2009 10:10:23 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2009/01/php-pear-%E6%A8%A1%E7%B5%84-http_upload-%E5%A4%9A%E9%87%8D%E6%AA%94%E6%A1%88%E4%B8%8A%E5%82%B3-multiple-files-upload/</guid><description>&lt;p>自從上次介紹了 &lt;a href="http://blog.wu-boy.com/2008/10/24/563/">[PHP]好用的上傳 pear 模組 HTTP_Upload&lt;/a>，最近又要使用到多重的檔案上傳，就又去看了一下官網的 &lt;a href="http://pear.php.net/manual/en/package.http.http-upload.php#package.http.http-upload.examples.multiple">document&lt;/a> 寫的還蠻詳細的，大家去看看大概就知道我的作法了，底下是我的寫法： html 部份&lt;/p>
 &lt;pre class="brush: xml; title: ; notranslate" title="">
@@ -785,27 +784,7 @@ ignore_user_abort(true);
 http://tw2.php.net/manual/tw/function.ignore-user-abort.php 無名在上傳圖片的php檔案，肯定有加上這個函式，他的好處是使用者如果關掉瀏覽器，但是php還是會繼續執行，也就是無名可以把檔案上傳之後，重新導向到使用者的相簿，程式可以如下
 ignore_user_abort(true);
 set_time_limit(0);
-for($i = 1; $i &amp;lt; 6; $i++){
-if($_FILES['userfile' . $i]['size']){
-/*
-上傳圖檔寫在這裡
-*/
-}
-}
-//上傳好導向相簿
-if($_POST['mode'] == 'add'){
-header("Location:index.php");
-}
-/*
-然後這裡在進行縮圖，他就會在背景中執行
-*/
-if($_POST['mode'] == 'add'){
-for($i = 1; $i &amp;lt; 6; $i++){
-convert_sh($upload_floder,$file_name[$i],$small_size[$i]);
-}
-}
-?&amp;gt;
-其實 ignore\_user\_abort(true); 根本就是變相的 unix 底下的 crontab ，還蠻好用的，好處很多，不過用的地方要注意就是了，並不是每個php檔案都需要用這個函式。�</description></item><item><title>[PHP] header下載檔案 搭配資料庫</title><link>https://demo.gh.wu-boy.com/2007/05/php-header%E4%B8%8B%E8%BC%89%E6%AA%94%E6%A1%88-%E6%90%AD%E9%85%8D%E8%B3%87%E6%96%99%E5%BA%AB/</link><pubDate>Sat, 26 May 2007 04:28:11 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2007/05/php-header%E4%B8%8B%E8%BC%89%E6%AA%94%E6%A1%88-%E6%90%AD%E9%85%8D%E8%B3%87%E6%96%99%E5%BA%AB/</guid><description>剛剛在 ECstart 看到有人詢問 header檔案下載錯誤 發現網站義工有回答到這個function，所以就紀錄下來了
+for($i = 1; $i 其實 ignore\_user\_abort(true); 根本就是變相的 unix 底下的 crontab ，還蠻好用的，好處很多，不過用的地方要注意就是了，並不是每個php檔案都需要用這個函式。�</description></item><item><title>[PHP] header下載檔案 搭配資料庫</title><link>https://demo.gh.wu-boy.com/2007/05/php-header%E4%B8%8B%E8%BC%89%E6%AA%94%E6%A1%88-%E6%90%AD%E9%85%8D%E8%B3%87%E6%96%99%E5%BA%AB/</link><pubDate>Sat, 26 May 2007 04:28:11 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2007/05/php-header%E4%B8%8B%E8%BC%89%E6%AA%94%E6%A1%88-%E6%90%AD%E9%85%8D%E8%B3%87%E6%96%99%E5%BA%AB/</guid><description>剛剛在 ECstart 看到有人詢問 header檔案下載錯誤 發現網站義工有回答到這個function，所以就紀錄下來了
 function dl_file($file){
 //First, see if the file exists
 if (!is_file($file)) { die("404 File not found!"); }
@@ -823,7 +802,7 @@ case "xls": $ctype="application/vnd.ms-excel"; break;
 case "</description></item><item><title>[PHP] 如何切割中文標題</title><link>https://demo.gh.wu-boy.com/2007/05/php-%E5%A6%82%E4%BD%95%E5%88%87%E5%89%B2%E4%B8%AD%E6%96%87%E6%A8%99%E9%A1%8C/</link><pubDate>Sat, 19 May 2007 02:47:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2007/05/php-%E5%A6%82%E4%BD%95%E5%88%87%E5%89%B2%E4%B8%AD%E6%96%87%E6%A8%99%E9%A1%8C/</guid><description>&lt;p>今天看到酷！學園討論區，php版有人問說要如何切割中文字，結果我自己以前弄的一個function就貼了上去，如下&lt;/p>
 &lt;pre class="brush: php; title: ; notranslate" title="">function cut_word($text, $num){
 if(strlen($text) > $num) {
-for($i=0;$i&amp;lt;$num;$i++) {
+for($i=0;$i&lt;$num;$i++) {
 $ch=substr($text,$i,1);
 if(ord($ch)>127) $i++;
 }

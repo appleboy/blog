@@ -26,8 +26,8 @@ func main() {
 }</code></pre><p>將此專案放在 <code>$GOPATH/src/github.com/appleboy/test</code> 這是大家寫專案必定遵守的目錄規則，而 vendor 管理則會從 <a href=https://github.com/golang/go/wiki/PackageManagementTools>PackageManagementTools</a> 選擇一套。底下是用 <a href=https://github.com/kardianos/govendor>govendor</a> 來當作例子</p><pre><code class=language-shell>$ govendor init
 $ govendor fetch github.com/appleboy/com/random</code></pre><p>最後用 <code>go build</code> 產生 binary</p><pre><code class=language-shell>$ go build -v -o main .</code></pre><p>如果您不在 <code>GOPATH</code> 裡面工作，就會遇到底下錯誤訊息:</p><pre><code>Error: Package &quot;xxxx&quot; not a go package or not in GOPATH
 </code></pre><p>如果換到 Go 1.11 版本的 module 功能就能永久解決此問題</p><h2 id=使用-go-module>使用 go module</h2><p>用 go module 解決兩個問題，第一專案內不必再使用 vendor 管理套件，第二開發者可以任意 clone 專案到任何地方，直接下 go build 就可以拿到執行檔了。底下是使用方式</p><pre><code class=language-shell>project
---&gt; main.go
---&gt; main_test.go</code></pre><p>初始化專案，先啟動 <code>GO111MODULE</code> 變數，在 go 1.11 預設是 <code>auto</code></p><pre><code class=language-shell>$ export GO111MODULE=on
+--> main.go
+--> main_test.go</code></pre><p>初始化專案，先啟動 <code>GO111MODULE</code> 變數，在 go 1.11 預設是 <code>auto</code></p><pre><code class=language-shell>$ export GO111MODULE=on
 $ go mod init github.com/appleboy/project</code></pre><p>可以看到專案會多出一個 <code>go.mod</code> 檔案，用來記錄使用到的套件版本，如果本身已經在使用 vendor 管理，那麼 <code>mod init</code> 會自動將 vendor 紀錄的版本寫入到 <code>go.mod</code>。接著執行下載</p><pre><code class=language-shell>$ go mod download</code></pre><p>專案內會多出 <code>go.sum</code> 檔案，其實根本不用執行 <code>go mod download</code>，只要在專案內下任何 <code>go build|test|install</code> 指令，就會自動將 pkg 下載到 <code>GOPATH/pkg/mod</code> 內</p><pre><code class=language-shell>$ tree ~/go/pkg/mod/github.com/
 /Users/mtk10671/git/go/pkg/mod/github.com/
 └── appleboy

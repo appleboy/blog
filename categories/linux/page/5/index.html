@@ -9,7 +9,7 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=categories-heading><h1>Linux</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/03/ubuntu-debian-%E6%9E%B6%E8%A8%AD-apache-mpm-worker-mod_fcgid-%E7%AD%86%E8%A8%98/><h2 class=post-title>Ubuntu (Debian) 架設 apache mpm worker mod_fcgid 筆記</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 17, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;244&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;232&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近想架設 <a href=http://www.redmine.org/>Redmine</a> 在 <a href=http://www.ubuntu.com/>Ubuntu</a> 伺服器上面，架設之前要先搞定 apache 搭配 mpm worker 及 mod_fcgi module，安裝步驟其實不難，就搭配懶人指令 <a href=http://en.wikipedia.org/wiki/Advanced_Packaging_Tool>apt</a> 就可以了。</p><h3 id=安裝-apache-mpm-worker-由於怕安裝過程會叫你把-apache2-mpm-worker-移除改裝-apache2-mpm-prefork所以安裝順序上面有些變化請參考底下>安裝 apache mpm worker 由於怕安裝過程會叫你把 apache2-mpm-worker 移除，改裝 apache2-mpm-prefork，所以安裝順序上面有些變化，請參考底下:</h3><pre class="brush: bash; title: ; notranslate" title># 先安裝
 $ apt-get install apache2.2-bin apache2.2-common apache2-mpm-worker libapache2-mod-fcgid php5-cli php5-cgi php5-common
 #後安裝
@@ -19,12 +19,12 @@ $ apt-get install apache2 php5 php5-gd php5-curl</pre>至於 PHP 5 套件就看�
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/03/linux-kernel-%E8%AE%80%E5%8F%96-proc-%E5%BA%95%E4%B8%8B%E8%B3%87%E6%96%99%E6%9C%80%E4%BD%B3%E6%96%B9%E6%B3%95-seq_file-interface/><h2 class=post-title>[Linux Kernel] 讀取 /proc 底下資料最佳方法: seq_file interface</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 14, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;581&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><h3 id=前言-最近在整合公司內部>前言 最近在整合公司內部</h3><p><a href=http://www.atheros.com/>Atheros</a>(被<a href=http://www.qualcomm.com/>高通</a>買下) 晶片的 Router，從原本 2.6.15 升級到 2.6.34.7，升級過程遇到很多困難，其中一項升級 Wireless Driver 部份，發現在 Kernel Socket 與 User Space 溝通之間出了問題，利用 Ioctl 來取得目前在 AP 上面所有 Client 資料(包含 mac address, 處於 N or G mode&mldr;等)，在 User Space 上會掉資料，後來利用 /proc 底下檔案來跟 User 之間溝通，才沒有發生任何問題，由於輸出的檔案比較多，就偏向用 2.6 Kernel 提供的 <a href=http://lwn.net/Articles/22355/>seq_file 介面( interface )</a>建立虛擬檔案 (virtual file) 與 User Space 溝通(此方法為 Alexander Viro 所設計)，此功能其實在 2.4.15 已經實做了，只是在 2.6 版本才被大量使用。 程式設計師可以透過引入 <span style=color:green><strong>&lt;linux/seq_file.h></strong></span> 來實做 seq_file interface，seq_file 最大優勢就是讀取完全沒有4k boundry 的限制，也就是不用管會不會超出 output buffer。</p><h3 id=the-iterator-interface-為了能夠讓-iterator-正常運作我們必須實做-4-個-function-start-next-stop-show跑得過程為-start---show---next---show---next---stop為了方便講解參考>The iterator interface 為了能夠讓 iterator 正常運作，我們必須實做 4 個 function (start, next, stop, show)，跑得過程為 start -> show -> next -> show -> next -> stop，為了方便講解，參考</h3><p><a href=http://nano-chicken.blogspot.com/2009/12/linux-modulesiv-seqfile.html>Linux Kernel（4）- seq_file</a> 裡面範例如下：</p><pre class="brush: cpp; title: ; notranslate" title>#include &lt;linux/init.h>
-#include &lt;linux/module.h>
-#include &lt;linux/proc_fs.h> /* Necessary because we use proc fs */
-#include &lt;linux/seq_file.h> /* for seq_file */
-#include &lt;linux/uaccess.h>
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;576&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><h3 id=前言-最近在整合公司內部>前言 最近在整合公司內部</h3><p><a href=http://www.atheros.com/>Atheros</a>(被<a href=http://www.qualcomm.com/>高通</a>買下) 晶片的 Router，從原本 2.6.15 升級到 2.6.34.7，升級過程遇到很多困難，其中一項升級 Wireless Driver 部份，發現在 Kernel Socket 與 User Space 溝通之間出了問題，利用 Ioctl 來取得目前在 AP 上面所有 Client 資料(包含 mac address, 處於 N or G mode&mldr;等)，在 User Space 上會掉資料，後來利用 /proc 底下檔案來跟 User 之間溝通，才沒有發生任何問題，由於輸出的檔案比較多，就偏向用 2.6 Kernel 提供的 <a href=http://lwn.net/Articles/22355/>seq_file 介面( interface )</a>建立虛擬檔案 (virtual file) 與 User Space 溝通(此方法為 Alexander Viro 所設計)，此功能其實在 2.4.15 已經實做了，只是在 2.6 版本才被大量使用。 程式設計師可以透過引入 <span style=color:green><strong>&lt;linux/seq_file.h></strong></span> 來實做 seq_file interface，seq_file 最大優勢就是讀取完全沒有4k boundry 的限制，也就是不用管會不會超出 output buffer。</p><h3 id=the-iterator-interface-為了能夠讓-iterator-正常運作我們必須實做-4-個-function-start-next-stop-show跑得過程為-start---show---next---show---next---stop為了方便講解參考>The iterator interface 為了能夠讓 iterator 正常運作，我們必須實做 4 個 function (start, next, stop, show)，跑得過程為 start -> show -> next -> show -> next -> stop，為了方便講解，參考</h3><p><a href=http://nano-chicken.blogspot.com/2009/12/linux-modulesiv-seqfile.html>Linux Kernel（4）- seq_file</a> 裡面範例如下：</p><pre class="brush: cpp; title: ; notranslate" title>#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/proc_fs.h> /* Necessary because we use proc fs */
+#include <linux/seq_file.h> /* for seq_file */
+#include <linux/uaccess.h>
 
 MODULE_LICENSE("GPL");
 
@@ -138,8 +138,8 @@ $(MAKE) && $(MAKE) install ;\ --host, CC, CXX 請換上 Tool Chain 對應路徑�
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;41&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>Linux Kernel 2.6.16 之後加入了 drop caches 的機制，可以讓系統清出多餘的記憶體，這對於搞嵌入式系統相當重要阿，Memory 不夠就不能 upgrade firmware，我們只要利用讀寫 proc 檔案就可以清除 cache 記憶體檔案，底下是操作步驟:</p><h3 id=釋放-pagecache捨棄一般沒使用的-cache>釋放 pagecache:捨棄一般沒使用的 cache</h3><pre class="brush: bash; title: ; notranslate" title>echo 1 > /proc/sys/vm/drop_caches</pre><h3 id=釋放-dentries-and-inodes>釋放 dentries and inodes</h3><pre class="brush: bash; title: ; notranslate" title>echo 2 > /proc/sys/vm/drop_caches</pre><h3 id=釋放-pagecache-dentries-and-inodes>釋放 pagecache, dentries and inodes</h3><pre class="brush: bash; title: ; notranslate" title>echo 3 > /proc/sys/vm/drop_caches</pre><p>Reference: <a href=http://linux-mm.org/Drop_Caches>Drop Caches</a> <a href=http://blog.linux.org.tw/~jserv/archives/002039.html>觀察 Linux 的虛擬記憶體</a></p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/><h2 class=post-title>[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 26, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;697&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;612&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p><p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p><p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p><p>if_readlist_proc 函式裡面:</p><pre><code class=language-c>fh = fopen_or_warn(_PATH_PROCNET_DEV, "r");
 if (!fh) {
     return if_readconf();
@@ -173,25 +173,28 @@ jQuery Week Calendar Javascript: reference the parent window from a popup How to
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/><h2 class=post-title>[Linux Kernel] 簡單 hello world: License and Module 介紹(part 3)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 25, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;337&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;331&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在 Kernel 2.4 或以上版本，在編譯模組完成，要進行 load module 之前，你會發現底下訊息：
 # insmod hello-3.o
 Warning: loading hello-3.o will taint the kernel: no license
 See http://www.tux.org/lkml/#export-tainted for information about tainted modules 很顯然這訊息是要您在 kernel module 裡面加上版權宣告，例如："GPL"，"GPL v2"…等來宣告您的 module 並非 open source，利用 MODULE_LICENSE() 巨集來宣告程式 License，同樣的，可以用 MODULE_DESCRIPTION() 來描述此模組或者是 Driver 的功用跟簡介，以及用 MODULE_AUTHOR() 來定義此模組作者，這些巨集都可以在 linux/module.h 裡找到，但是這些並非用於 Kernel 本身，如果大家想看範例程式，可以到 drivers/ 資料夾底下觀看每一個 Driver 程式，底下是簡單 hello world 範例：
-#include &lt;linux/kernel.h /* pr_info所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 巨集需要檔案*/
-#include &lt;linux/version.
+#include /* pr_info所需 include 檔案*/
+#include
+#include /* 所有 module 巨集需要檔案*/
+#include
+static int __init hello_init(void)
+{
+pr_info("
 <a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/kernel/>Kernel</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/><h2 class=post-title>ProFTPD UseEncoding 繁體中文亂碼解決 Localization</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 7, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;69&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;68&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i0.wp.com/farm5.static.flickr.com/4096/4770121725_6a997912c6_o.png?w=840&ssl=1" alt=Proftpd data-recalc-dims=1> <a href=http://www.proftpd.org/>ProFTPD</a> 一直都是我最喜歡使用的 FTP 伺服器，設定方式簡單淺顯易懂，最近在用 <a href=http://www.pspad.com/>PSPad</a> 寫程式，發現使用內建 FTP 功能時候，連不上 <a href=http://www.freebsd.org>FreeBSD</a> 架設的 ProFTPD，連線過程出現許多亂碼，所以造成 PSPad 斷線出現錯誤，解決方式就是利用 <a href=http://www.proftpd.org/docs/modules/mod_lang.html>mod_lang</a> 模組，設定 <a href=http://www.proftpd.org/docs/modules/mod_lang.html#UseEncoding>UseEncoding</a> 讓系統可以顯示 Big5 中文編碼，FreeBSD Ports 請勾選</p><pre class="brush: bash; title: ; notranslate" title>[X] NLSUOTA Use nls (builds mod_lang)</pre>自行編譯請按照底下步驟<pre class="brush: bash; title: ; notranslate" title>./configure --enable-nls
 make
 make install </pre><h3 id=useencoding-設定>UseEncoding 設定</h3><pre class="brush: bash; title: ; notranslate" title>Syntax: UseEncoding on|off|local-charset client-charset
 Default: None
-Context: "server config", &lt;VirtualHost>, &lt;Global>
+Context: "server config", <virtualhost>, <global>
 Module: mod_lang
 Compatibility: 1.3.2rc1</pre>在 1.3.2rc1 版本之後才有支援，請複製底下設定，貼到 proftpd.conf<pre class="brush: bash; title: ; notranslate" title># 简体中文環境
 UseEncoding UTF-8 GBK
@@ -199,7 +202,7 @@ UseEncoding UTF-8 GBK
 UseEncoding UTF-8 Big5</pre>Reference:<p><a href=http://www.proftpd.org/docs/modules/mod_lang.html>ProFTPD module mod_lang</a> <a href=http://wanglq.blog.51cto.com/783560/340741>centos上解決proftp中文亂碼問題</a></p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/proftpd/>proftpd</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/><h2 class=post-title>[Linux Kernel] 撰寫簡單 Hello, World module (part 1).</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 21, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;152&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;143&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>來筆記如何在 Kernel 撰寫 hello world! module，在 Ubuntu Kernel 2.6.31-14 環境下撰寫，其實不難啦，首先先進入 Kernel 目錄，請在 /usr/src 底下看自己的系統版本，或者是利用 uname -r 來知道 Kernel 版本，底下是在 Ubuntu Kernel 2.6.31-14 Kernel 實做：
 進入 Kernel 目錄 #
 # cd Kernel directory
@@ -207,10 +210,10 @@ UseEncoding UTF-8 Big5</pre>Reference:<p><a href=http://www.proftpd.org/docs/mod
 cd /usr/src/linux-headers-2.6.31-14-generic-pae 建立 hello 目錄 #
 # mkdir directory
 #
-mkdir hello 建立 Makfile 以及 hello.c hello.c: #include &lt;linux/kernel.h /* pr_info 所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 需要檔案*/
-#include &lt;linux/version.h
+mkdir hello 建立 Makfile 以及 hello.c hello.c: #include /* pr_info 所需 include 檔案*/
+#include
+#include /* 所有 module 需要檔案*/
+#include
 MODULE_DESCRIPTION("Hello World !!");
 MODULE_AUTHOR("
 <a href=https://demo.gh.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;

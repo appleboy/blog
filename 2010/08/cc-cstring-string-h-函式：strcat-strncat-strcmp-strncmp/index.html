@@ -1,11 +1,11 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
-/* strcat example */ #include <stdio.h> #include <string.h> int main () { char str[80]; strcpy (str,&#34;these &#34;); strcat (str,&#34;strings &#34;); strcat (str,&#34;are &#34;); strcat (str,&#34;concatenated.&#34;); puts (str); return 0; } output:
+/* strcat example */ #include  #include  int main () { char str[80]; strcpy (str,&#34;these &#34;); strcat (str,&#34;strings &#34;); strcat (str,&#34;are &#34;); strcat (str,&#34;concatenated.&#34;); puts (str); return 0; } output:
 these strings are concatenated.  看一下 strcat 原始碼：
-char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp\/","name":"[ c c ] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[C\/C\u002b\u002b] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp","description":"串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：\n\/* strcat example *\/ #include \u0026lt;stdio.h\u0026gt; #include \u0026lt;string.h\u0026gt; int main () { char str[80]; strcpy (str,\u0022these \u0022); strcat (str,\u0022strings \u0022); strcat (str,\u0022are \u0022); strcat (str,\u0022concatenated.\u0022); puts (str); return 0; } output:\nthese strings are concatenated.  看一下 strcat 原始碼：\nchar * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; \u002b\u002bs); while ((*s\u002b\u002b = *append\u002b\u002b)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \\0 終止 while 迴圈，最後在將指標 *save 回傳即可。","inLanguage":"en","wordCount":418,"datePublished":"2010-08-04T07:29:46","dateModified":"2010-08-04T07:29:46","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["C\/C\u002b\u002b"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp"><meta property="og:description" content="串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
-/* strcat example */ #include <stdio.h> #include <string.h> int main () { char str[80]; strcpy (str,&#34;these &#34;); strcat (str,&#34;strings &#34;); strcat (str,&#34;are &#34;); strcat (str,&#34;concatenated.&#34;); puts (str); return 0; } output:
+char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp\/","name":"[ c c ] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[C\/C\u002b\u002b] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp","description":"串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：\n\/* strcat example *\/ #include  #include  int main () { char str[80]; strcpy (str,\u0022these \u0022); strcat (str,\u0022strings \u0022); strcat (str,\u0022are \u0022); strcat (str,\u0022concatenated.\u0022); puts (str); return 0; } output:\nthese strings are concatenated.  看一下 strcat 原始碼：\nchar * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; \u002b\u002bs); while ((*s\u002b\u002b = *append\u002b\u002b)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \\0 終止 while 迴圈，最後在將指標 *save 回傳即可。","inLanguage":"en","wordCount":392,"datePublished":"2010-08-04T07:29:46","dateModified":"2010-08-04T07:29:46","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["C\/C\u002b\u002b"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp"><meta property="og:description" content="串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
+/* strcat example */ #include  #include  int main () { char str[80]; strcpy (str,&#34;these &#34;); strcat (str,&#34;strings &#34;); strcat (str,&#34;are &#34;); strcat (str,&#34;concatenated.&#34;); puts (str); return 0; } output:
 these strings are concatenated.  看一下 strcat 原始碼：
 char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp"><meta name=twitter:description content="串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
-/* strcat example */ #include <stdio.h> #include <string.h> int main () { char str[80]; strcpy (str,&#34;these &#34;); strcat (str,&#34;strings &#34;); strcat …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+/* strcat example */ #include  #include  int main () { char str[80]; strcpy (str,&#34;these &#34;); strcat (str,&#34;strings &#34;); strcat (str,&#34;are &#34;); strcat …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
 <a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
@@ -16,10 +16,10 @@ char * strcat(char * __restrict s, const char * __restrict append) { char *save 
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 4, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;418&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;392&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#串接函式-strcat>串接函式 strcat</a></li><li><a href=#比較函式-strcmp>比較函式 strcmp</a></li><li><a href=#串接函式-strncat>串接函式 strncat</a></li><li><a href=#比較函式-strncmp>比較函式 strncmp</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><h2 id=串接函式-strcat>串接函式 strcat</h2><p><a href=http://www.cplusplus.com/reference/clibrary/cstring/strcat/>strcat</a> 此函式用來連接兩字串合併成單一字串，直接看底下範例：</p><pre><code class=language-c>/* strcat example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
@@ -39,8 +39,8 @@ strcat(char * __restrict s, const char * __restrict append)
     while ((*s++ = *append++));
     return(save);
 }</code></pre><p>設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。</p><h2 id=比較函式-strcmp>比較函式 strcmp</h2><p><a href=http://www.cplusplus.com/reference/clibrary/cstring/strcmp/>strcmp</a> 用來比較兩字串是否相同，相同回傳 0，不相同則回傳兩字串 ASCII 相減的值。底下範例：</p><pre><code class=language-c>/* strcmp example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
@@ -52,7 +52,7 @@ int main ()
   } while (strcmp (szKey,szInput) != 0);
   puts ("Correct answer!");
   return 0;
-}</code></pre><p>來看看 strcmp 原始碼</p><pre><code class=language-c>#include &lt;string.h&gt;
+}</code></pre><p>來看看 strcmp 原始碼</p><pre><code class=language-c>#include <string.h>
 
 /*
  * Compare strings.
@@ -66,8 +66,8 @@ strcmp(s1, s2)
             return (0);
     return (*(const unsigned char *)s1 - *(const unsigned char *)(s2 - 1));
 }</code></pre><p>大家可以看到，比對字串會依序比對，直到 s1 最後字元 \0 則會回傳 0 代表比對成功，如果中途有字元比對不同，則會將兩個字元相減回傳。</p><h2 id=串接函式-strncat>串接函式 strncat</h2><p><a href=http://www.cplusplus.com/reference/clibrary/cstring/strncat/>strncat</a> 用來串接指定多少字元，底下範例：</p><pre><code class=language-c>/* strncat example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
@@ -78,7 +78,7 @@ int main ()
   strncat (str1, str2, 6);
   printf("%s\n", str1);
   return 0;
-}</code></pre><p>strncat 原始碼</p><pre><code class=language-c>#include &lt;string.h&gt;
+}</code></pre><p>strncat 原始碼</p><pre><code class=language-c>#include <string.h>
 
 /*
  * Concatenate src on the end of dst.  At most strlen(dst)+n+1 bytes
@@ -102,21 +102,21 @@ strncat(char * __restrict dst, const char * __restrict src, size_t n)
     }
     return (dst);
 }</code></pre><p>一樣是先將 dst 指標指向最後一個字元+1，再根據需要串接的大小來決定 dst 最後的指標。</p><h2 id=比較函式-strncmp>比較函式 strncmp</h2><p>直接看範例，比較字串前兩個字元是否相同，如果相同則印出</p><pre><code class=language-c>/* strncmp example */
-#include &lt;stdio.h&gt;
-#include &lt;string.h&gt;
+#include <stdio.h>
+#include <string.h>
 
 int main ()
 {
   char str[][5] = { "R2D2" , "C3PO" , "R2A6" };
   int n;
   puts ("Looking for R2 astromech droids...");
-  for (n=0 ; n&lt;3 ; n++)
+  for (n=0 ; n<3 ; n++)
     if (strncmp (str[n],"R2xx",2) == 0)
     {
       printf ("found %s\n",str[n]);
     }
   return 0;
-}</code></pre><p><a href=http://www.cplusplus.com/reference/clibrary/cstring/strncmp/>strncmp</a> 原始碼</p><pre><code class=language-c>#include &lt;string.h&gt;
+}</code></pre><p><a href=http://www.cplusplus.com/reference/clibrary/cstring/strncmp/>strncmp</a> 原始碼</p><pre><code class=language-c>#include <string.h>
 
 int
 strncmp(s1, s2, n)

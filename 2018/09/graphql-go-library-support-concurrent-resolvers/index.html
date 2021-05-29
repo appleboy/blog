@@ -1,6 +1,8 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
-&#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests. ch <- pullRequests }() return func() interface{} { return <-ch }, nil }, }, 使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","name":"Go 語言的 graph ql go 套件正式支援 concurrent resolvers"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers","description":"要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單\n\u0022pullRequests\u0022: \u0026graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) \/\/ Concurrent work via Goroutines. go func() { \/\/ Async work to obtain pullRequests. ch \u0026lt;- pullRequests }() return func() interface{} { return \u0026lt;-ch }, nil }, }, 使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式","inLanguage":"en","wordCount":436,"datePublished":"2018-09-16T03:35:36","dateModified":"2018-09-16T03:35:36","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, GraphQL"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta property="og:description" content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
-&#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests. ch <- pullRequests }() return func() interface{} { return <-ch }, nil }, }, 使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta name=twitter:description content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+&#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests. ch  使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式
+package main import ( &#34;encoding/json&#34; &#34;fmt&#34; &#34;log&#34; &#34;time&#34; &#34;github.com/graphql-go/graphql&#34; ) type Foo struct { Name string } var FieldFooType = graphql."><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","name":"Go 語言的 graph ql go 套件正式支援 concurrent resolvers"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers","description":"要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單\n\u0022pullRequests\u0022: \u0026graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) \/\/ Concurrent work via Goroutines. go func() { \/\/ Async work to obtain pullRequests. ch  使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式\npackage main import ( \u0022encoding\/json\u0022 \u0022fmt\u0022 \u0022log\u0022 \u0022time\u0022 \u0022github.com\/graphql-go\/graphql\u0022 ) type Foo struct { Name string } var FieldFooType = graphql.","inLanguage":"en","wordCount":276,"datePublished":"2018-09-16T03:35:36","dateModified":"2018-09-16T03:35:36","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, GraphQL"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2018\/09\/graphql-go-library-support-concurrent-resolvers\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta property="og:description" content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
+&#34;pullRequests&#34;: &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests. ch  使用方式 先用一個簡單例子來解釋之前的寫法會是什麼形式
+package main import ( &#34;encoding/json&#34; &#34;fmt&#34; &#34;log&#34; &#34;time&#34; &#34;github.com/graphql-go/graphql&#34; ) type Foo struct { Name string } var FieldFooType = graphql."><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers"><meta name=twitter:description content="要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" rel=icon type=image/x-icon><meta name=generator content="Hugo 0.83.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://demo.gh.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
 <a class=navbar-brand href=https://demo.gh.wu-boy.com>小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
@@ -10,8 +12,8 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 16, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;436&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;276&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#使用方式>使用方式</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p>要在 <a href=https://golang.org>Go 語言</a>寫 graphQL，大家一定對 <a href=https://github.com/graphql-go/graphql>graphql-go</a> 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此<a href=https://github.com/appleboy/golang-graphql-benchmark>專案</a>，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 <a href=https://github.com/graphql-go/graphql/issues/389>Issue 來討論</a>，最終採用了 <a href=https://github.com/graphql-go/graphql/pull/388>Resolver returns a Thunk</a> 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單</p><pre><code class=language-go>"pullRequests": &graphql.Field{
     Type: graphql.NewList(PullRequestType),
     Resolve: func(p graphql.ResolveParams) (interface{}, error) {
@@ -19,10 +21,10 @@
         // Concurrent work via Goroutines.
         go func() {
             // Async work to obtain pullRequests.
-            ch &lt;- pullRequests
+            ch <- pullRequests
         }()
         return func() interface{} {
-            return &lt;-ch
+            return <-ch
         }, nil
     },
 },</code></pre><h2 id=使用方式>使用方式</h2><p>先用一個簡單例子來解釋之前的寫法會是什麼形式</p><pre><code class=language-go>package main
@@ -75,10 +77,10 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
                 go func() {
                     defer close(ch)
                     time.Sleep(1 * time.Second)
-                    foo := &Foo{Name: "Foo&#039;s name"}
-                    ch &lt;- &result{data: foo, err: nil}
+                    foo := &Foo{Name: "Foo's name"}
+                    ch <- &result{data: foo, err: nil}
                 }()
-                r := &lt;-ch
+                r := <-ch
                 return r.data, r.err
             },
         },
@@ -93,10 +95,10 @@ var QueryType = graphql.NewObject(graphql.ObjectConfig{
                 go func() {
                     defer close(ch)
                     time.Sleep(1 * time.Second)
-                    bar := &Bar{Name: "Bar&#039;s name"}
-                    ch &lt;- &result{data: bar, err: nil}
+                    bar := &Bar{Name: "Bar's name"}
+                    ch <- &result{data: bar, err: nil}
                 }()
-                r := &lt;-ch
+                r := <-ch
                 return r.data, r.err
             },
         },
@@ -133,10 +135,10 @@ func main() {
         {
           "data": {
             "concurrentFieldBar": {
-              "name": "Bar&#039;s name"
+              "name": "Bar's name"
             },
             "concurrentFieldFoo": {
-              "name": "Foo&#039;s name"
+              "name": "Foo's name"
             }
           }
         }
@@ -145,10 +147,10 @@ func main() {
 {
   "data": {
     "concurrentFieldBar": {
-      "name": "Bar&#039;s name"
+      "name": "Bar's name"
     },
     "concurrentFieldFoo": {
-      "name": "Foo&#039;s name"
+      "name": "Foo's name"
     }
   }
 }
@@ -156,16 +158,16 @@ func main() {
 real    0m4.186s
 user    0m0.508s
 sys     0m0.925s</code></pre><p>總共花費了四秒，原因是每個 resolver 都是依序執行，所以都需要等每個 goroutines 執行完成才能進入到下一個 resolver，上面例子該如何改成 Concurrent 呢，很簡單，只要將 return 的部分換成</p><pre><code class=language-go>return func() (interface{}, error) {
-    r := &lt;-ch
+    r := <-ch
     return r.data, r.err
 }, nil</code></pre><p>執行時間如下</p><pre><code class=language-shell>$ time go run examples/concurrent-resolvers/main.go | jq
 {
   "data": {
     "concurrentFieldBar": {
-      "name": "Bar&#039;s name"
+      "name": "Bar's name"
     },
     "concurrentFieldFoo": {
-      "name": "Foo&#039;s name"
+      "name": "Foo's name"
     }
   }
 }

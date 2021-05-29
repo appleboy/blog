@@ -79,20 +79,20 @@ steps:
     channel: general
   depends_on:
   - backend
-  - frontend</code></pre><h2 id=用程式寫-yaml-設定>用程式寫 yaml 設定</h2><p>之前寫過一篇『<a href=https://blog.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/>有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔</a>』，現在遇到相同的 YAML 設定都可以透過寫程式的方式來自動產生 YAML 設定了</p><pre><code class=language-shell>local pipeline = import &#039;pipeline.libsonnet&#039;;
-local name = &#039;drone-ssh&#039;;
+  - frontend</code></pre><h2 id=用程式寫-yaml-設定>用程式寫 yaml 設定</h2><p>之前寫過一篇『<a href=https://blog.wu-boy.com/2019/01/converts-a-jsonnet-configuration-file-to-a-yaml-in-drone/>有效率的用 jsonnet 撰寫 Drone CI/CD 設定檔</a>』，現在遇到相同的 YAML 設定都可以透過寫程式的方式來自動產生 YAML 設定了</p><pre><code class=language-shell>local pipeline = import 'pipeline.libsonnet';
+local name = 'drone-ssh';
 
 [
   pipeline.test,
-  pipeline.build(name, &#039;linux&#039;, &#039;amd64&#039;),
-  pipeline.build(name, &#039;linux&#039;, &#039;arm64&#039;),
-  pipeline.build(name, &#039;linux&#039;, &#039;arm&#039;),
+  pipeline.build(name, 'linux', 'amd64'),
+  pipeline.build(name, 'linux', 'arm64'),
+  pipeline.build(name, 'linux', 'arm'),
   pipeline.release,
   pipeline.notifications(depends_on=[
-    &#039;linux-amd64&#039;,
-    &#039;linux-arm64&#039;,
-    &#039;linux-arm&#039;,
-    &#039;release-binary&#039;,
+    'linux-amd64',
+    'linux-arm64',
+    'linux-arm',
+    'release-binary',
   ]),
 ]</code></pre><h2 id=支援外部-secret-管理>支援外部 Secret 管理</h2><p>Drone 正式支援 <a href=https://www.vaultproject.io/>Vault</a>, <a href=https://kubernetes.io/docs/concepts/configuration/secret/>Kubernetes Secret</a> 或 <a href=https://aws.amazon.com/secrets-manager>AWS Secret</a>，團隊可以將 Drone 安裝在 k8s 或 AWS 容器內，並且使用期 Secret 管理工具，當然也可以整合大家喜歡的 Vault。</p><pre><code class=language-yaml>---
 kind: secret

@@ -17,7 +17,7 @@
 
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash &amp;&amp; \
   echo &quot;&quot; &gt;&gt; ~/.bashrc &amp;&amp; \
-  echo &amp;#039;export PATH=&quot;$HOME/.yarn/bin:$PATH&quot;&amp;#039; &gt;&gt; ~/.bashrc
+  echo 'export PATH=&quot;$HOME/.yarn/bin:$PATH&quot;' &gt;&gt; ~/.bashrc
 
 CMD /bin/bash
 </code></pre><p>請準備好底下版本</p><ul><li>node version: v6.7.0</li><li>npm verison: 3.10.3</li><li>yarn verison: 0.15.1</li></ul><p>可以自己拿任何專案的 <code>package.json</code> 或是下載我放在 <a href=https://github.com/appleboy/npm-vs-yarn/blob/master/package.json>Github 的 package.json</a> 來做測試。</p><h3 id=測試-package-安裝速度>測試 package 安裝速度</h3><p>第一階段就是沒有任何 Cache 之下來測試安裝速度</p><pre><code class=language-bash>$ npm cache clean

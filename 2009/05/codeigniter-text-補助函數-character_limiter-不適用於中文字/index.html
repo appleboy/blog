@@ -27,7 +27,7 @@ if ( ! function_exists('character_limiter'))
 			}		
 		}
 	}
-}"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2009\/05\/codeigniter-text-%E8%A3%9C%E5%8A%A9%E5%87%BD%E6%95%B8-character_limiter-%E4%B8%8D%E9%81%A9%E7%94%A8%E6%96%BC%E4%B8%AD%E6%96%87%E5%AD%97\/","name":"[ code igniter] text 補助函數 character limiter 不適用於中文字"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[CodeIgniter] Text 補助函數 character_limiter 不適用於中文字","description":"在 CodeIgniter 裡面的 Text 補助函數，目前只適用於英文字體，不支援 utf-8 或者是簡體字體，bite 數超過2的都會出問題，當然是因為這是國外的 mvc 所以也沒有考慮到這麼週到就是了，也不是沒有辦法解決，之前就用了PHP官方網站所提供的一個函式來正確切割中文字串，就是要利用 ord 判斷 ASCII 編碼範圍，或者是可以使用 mb_substr 函式正確切割，之前寫一篇可以參考看看：[PHP] 如何切割中文標題。 底下是原本 CodeIgniter 所提供的 Text 函數\nif ( ! function_exists(\u0027character_limiter\u0027))\r{\rfunction character_limiter($str, $n = 500, $end_char = \u0027\u0026#8230;\u0027)\r{\rif (strlen($str) \u0026lt; $n)\r{\rreturn $str;\r}\r$str = preg_replace(\u0022\/\\s\u002b\/\u0022, \u0027 \u0027, str_replace(array(\u0022\\r\\n\u0022, \u0022\\r\u0022, \u0022\\n\u0022), \u0027 \u0027, $str));\rif (strlen($str) \u0026lt;= $n)\r{\rreturn $str;\r}\r$out = \u0022\u0022;\rforeach (explode(\u0027 \u0027, trim($str)) as $val)\r{\r$out .= $val.\u0027 \u0027;\rif (strlen($out) = $n)\r{\r$out = trim($out);\rreturn (strlen($out) == strlen($str)) ? $out : $out.$end_char;\r}\t}\r}\r}","inLanguage":"en","wordCount":192,"datePublished":"2009-05-29T07:43:11","dateModified":"2009-05-29T07:43:11","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, php"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2009\/05\/codeigniter-text-%E8%A3%9C%E5%8A%A9%E5%87%BD%E6%95%B8-character_limiter-%E4%B8%8D%E9%81%A9%E7%94%A8%E6%96%BC%E4%B8%AD%E6%96%87%E5%AD%97\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[CodeIgniter] Text 補助函數 character_limiter 不適用於中文字"><meta property="og:description" content="在 CodeIgniter 裡面的 Text 補助函數，目前只適用於英文字體，不支援 utf-8 或者是簡體字體，bite 數超過2的都會出問題，當然是因為這是國外的 mvc 所以也沒有考慮到這麼週到就是了，也不是沒有辦法解決，之前就用了PHP官方網站所提供的一個函式來正確切割中文字串，就是要利用 ord 判斷 ASCII 編碼範圍，或者是可以使用 mb_substr 函式正確切割，之前寫一篇可以參考看看：[PHP] 如何切割中文標題。 底下是原本 CodeIgniter 所提供的 Text 函數
+}"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2009\/05\/codeigniter-text-%E8%A3%9C%E5%8A%A9%E5%87%BD%E6%95%B8-character_limiter-%E4%B8%8D%E9%81%A9%E7%94%A8%E6%96%BC%E4%B8%AD%E6%96%87%E5%AD%97\/","name":"[ code igniter] text 補助函數 character limiter 不適用於中文字"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[CodeIgniter] Text 補助函數 character_limiter 不適用於中文字","description":"在 CodeIgniter 裡面的 Text 補助函數，目前只適用於英文字體，不支援 utf-8 或者是簡體字體，bite 數超過2的都會出問題，當然是因為這是國外的 mvc 所以也沒有考慮到這麼週到就是了，也不是沒有辦法解決，之前就用了PHP官方網站所提供的一個函式來正確切割中文字串，就是要利用 ord 判斷 ASCII 編碼範圍，或者是可以使用 mb_substr 函式正確切割，之前寫一篇可以參考看看：[PHP] 如何切割中文標題。 底下是原本 CodeIgniter 所提供的 Text 函數\nif ( ! function_exists(\u0027character_limiter\u0027))\r{\rfunction character_limiter($str, $n = 500, $end_char = \u0027\u0026#8230;\u0027)\r{\rif (strlen($str) = $n)\r{\r$out = trim($out);\rreturn (strlen($out) == strlen($str)) ? $out : $out.$end_char;\r}\t}\r}\r}","inLanguage":"en","wordCount":124,"datePublished":"2009-05-29T07:43:11","dateModified":"2009-05-29T07:43:11","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, php"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2009\/05\/codeigniter-text-%E8%A3%9C%E5%8A%A9%E5%87%BD%E6%95%B8-character_limiter-%E4%B8%8D%E9%81%A9%E7%94%A8%E6%96%BC%E4%B8%AD%E6%96%87%E5%AD%97\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[CodeIgniter] Text 補助函數 character_limiter 不適用於中文字"><meta property="og:description" content="在 CodeIgniter 裡面的 Text 補助函數，目前只適用於英文字體，不支援 utf-8 或者是簡體字體，bite 數超過2的都會出問題，當然是因為這是國外的 mvc 所以也沒有考慮到這麼週到就是了，也不是沒有辦法解決，之前就用了PHP官方網站所提供的一個函式來正確切割中文字串，就是要利用 ord 判斷 ASCII 編碼範圍，或者是可以使用 mb_substr 函式正確切割，之前寫一篇可以參考看看：[PHP] 如何切割中文標題。 底下是原本 CodeIgniter 所提供的 Text 函數
 if ( ! function_exists('character_limiter'))
 {
 	function character_limiter($str, $n = 500, $end_char = '&#8230;')
@@ -67,19 +67,19 @@ if ( ! function_exists('character_limiter'))
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[CodeIgniter] Text 補助函數 character_limiter 不適用於中文字</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 29, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;192&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;124&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>在 <a href=http://www.codeigniter.com.tw/>CodeIgniter</a> 裡面的 <a href=http://www.codeigniter.com.tw/user_guide/helpers/text_helper.html>Text 補助函數</a>，目前只適用於英文字體，不支援 utf-8 或者是簡體字體，bite 數超過2的都會出問題，當然是因為這是國外的 mvc 所以也沒有考慮到這麼週到就是了，也不是沒有辦法解決，之前就用了PHP官方網站所提供的一個函式來正確切割中文字串，就是要利用 <a href=http://tw.php.net/ord>ord</a> 判斷 ASCII 編碼範圍，或者是可以使用 <a href=http://tw.php.net/mb_substr>mb_substr</a> 函式正確切割，之前寫一篇可以參考看看：<a href=http://blog.wu-boy.com/2007/05/18/104/>[PHP] 如何切割中文標題</a>。 底下是原本 CodeIgniter 所提供的 Text 函數</p><pre class="brush: php; title: ; notranslate" title>if ( ! function_exists('character_limiter'))
 {
 	function character_limiter($str, $n = 500, $end_char = '&#8230;')
 	{
-		if (strlen($str) &lt; $n)
+		if (strlen($str) < $n)
 		{
 			return $str;
 		}
 		
 		$str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
     
-		if (strlen($str) &lt;= $n)
+		if (strlen($str) <= $n)
 		{
 			return $str;
 		}
@@ -99,12 +99,12 @@ if ( ! function_exists('character_limiter'))
 }</pre><p>character_limiter 不能用在中文切割字串，只能用於英文切割，所以自己就要加上切割的函數才可以正確使用喔，利用簡單的 mb_substr 就可以做到了，這算是 CodeIgniter 的 bug 嗎？好像也不是，不過自己有找到函數來使用，那就沒差了，自己可以定義函數在 libraries/ 底下：</p><pre class="brush: php; title: ; notranslate" title>$len) {
           $str  .= "...";
           break;
-      } elseif ((ord(substr($string,$i,1)) &lt;= 128) && ($count &lt; $start)) {
+      } elseif ((ord(substr($string,$i,1)) <= 128) && ($count < $start)) {
           $count++;
-      } elseif ((ord(substr($string,$i,1)) > 128) && ($count &lt; $start)) {
+      } elseif ((ord(substr($string,$i,1)) > 128) && ($count < $start)) {
           $count = $count+2;
           $i     = $i+$byte-1;
-      } elseif ((ord(substr($string,$i,1)) &lt;= 128) && ($count >= $start)) {
+      } elseif ((ord(substr($string,$i,1)) <= 128) && ($count >= $start)) {
           $str  .= substr($string,$i,1);
           $count++;
       } elseif ((ord(substr($string,$i,1)) > 128) && ($count >= $start)) {

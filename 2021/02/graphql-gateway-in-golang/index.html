@@ -39,18 +39,18 @@ func Check() gin.HandlerFunc {
             case string:
                 i, err := strconv.ParseInt(v, 10, 64)
                 if err != nil {
-                    log.Error().Err(err).Msg("can&#039;t convert user id to int64")
+                    log.Error().Err(err).Msg("can't convert user id to int64")
                 }
                 userID = i
             case float64:
                 userID = int64(v)
             default:
-                log.Info().Msgf("I don&#039;t know about user id type %T from token!", v)
+                log.Info().Msgf("I don't know about user id type %T from token!", v)
             }
 
             user, err := model.GetUserByID(userID)
             if err != nil {
-                log.Error().Err(err).Msg("can&#039;t get user data")
+                log.Error().Err(err).Msg("can't get user data")
             }
 
             ctx := context.WithValue(
@@ -111,7 +111,7 @@ func withUserInfo(handler http.HandlerFunc) http.HandlerFunc {
         w.Header().Set("Access-Control-Allow-Headers", "authorization, origin, content-type, accept")
         w.Header().Set("Allow", "HEAD,GET,POST,PUT,PATCH,DELETE,OPTIONS")
         // here is where you would perform some kind of validation on the token
-        // but we&#039;re going to skip that for this example and just save it as the
+        // but we're going to skip that for this example and just save it as the
         // id directly. PLEASE, DO NOT DO THIS IN PRODUCTION.
 
         // invoke the handler with the new context

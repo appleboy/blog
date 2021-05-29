@@ -57,7 +57,7 @@ $ dmidecode --type 17 | more 輸出結果為
 &lt;div>
 &lt;pre class="brush: bash; title: ; notranslate" title="">$ aptitude -y install openjdk-7-jre openjdk-7-jdk
 $ wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
-$ sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ &amp;gt; /etc/apt/sources.list.d/jenkins.list'
+$ sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
 $ aptitude -y update
 $ aptitude -y install jenkins&lt;/pre>
 &lt;/div></description></item><item><title>Gitlab CE + Gitlab CI 打造版本控制及自動測試流程</title><link>https://demo.gh.wu-boy.com/2013/11/intergrate-work-flow-with-gitlab/</link><pubDate>Fri, 01 Nov 2013 09:00:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/11/intergrate-work-flow-with-gitlab/</guid><description>&lt;div style="margin:0 auto; text-align:center">
@@ -91,7 +91,7 @@ $ ln -s libperl.so.5.14.2 libperl.so 接著可以正確編譯了，底下安裝�
 &lt;p>&lt;a href="http://nginx.com/" target="_blank">Nginx&lt;/a> 搭配 &lt;a href="http://php-fpm.org/" target="_blank">PHP-FPM&lt;/a> 用起來效能還不錯，這次來筆記如何設定 Nginx 去除 PHP MVC Framework 討厭的 index.php 字串，不管是 &lt;a href="http://laravel.com/" target="_blank">Laravel&lt;/a> 或 &lt;a href="http://codeigniter.org.tw" target="_blank">CodeIgniter&lt;/a> 教學文件都是在 &lt;a href="http://www.apache.org/" target="_blank">Apache&lt;/a> 設定 &lt;a href="http://en.wikipedia.org/wiki/Htaccess" target="_blank">.htaccess&lt;/a> 來達成 Cleaner URL，Apache 最大好處支援 .htaccess，但是 Nginx 也有強大的效能，此篇紀錄如何設定 Nginx 達成 &lt;a href="http://httpd.apache.org/docs/2.2/mod/mod_rewrite.html" target="_blank">mod_rewrite&lt;/a> 效果。&lt;/p></description></item><item><title>Ubuntu 停止使用 GUI 介面 12.04 LTS</title><link>https://demo.gh.wu-boy.com/2012/08/how-to-disabled-gui-on-ubuntu-12-04-lts/</link><pubDate>Mon, 06 Aug 2012 06:28:12 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2012/08/how-to-disabled-gui-on-ubuntu-12-04-lts/</guid><description>今天又拿到同事一台電腦來搞 Web Server，原先安裝 Ubuntu Desktop 要把它關閉，避免佔用太多資源，12.04 採用 LightDM 來管理 X Display，輕量級及高效能管理工具，直接停止 LightDM 可以直接用底下 command line。
 $ service lightdm stop 如果開機直接不執行 X Display，可以透過底下步驟，
 編輯 /etc/default/grub 用您個人喜歡的編輯器打開 /etc/default/grub 並且找到底下字串
-GRUB_CMDLINE_LINUX_DEFAULT="&amp;lt;no matter what's you find here&amp;gt;" 改成
+GRUB_CMDLINE_LINUX_DEFAULT="" 改成
 GRUB_CMDLINE_LINUX_DEFAULT="text" 重新產生 Grub 只要有修改 /etc/default/grub，請務必重執行
 $ sudo update-grub 接著重新開機即可。
 參考資料:

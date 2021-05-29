@@ -25,7 +25,7 @@ https://github.com/bcit-ci/CodeIgniter</description></item><item><title>實戰 C
 &lt;/div>
 &lt;p>好久沒寫 &lt;a href="http://www.codeigniter.org.tw/" target="_blank">CodeIgniter&lt;/a> 相關文章，這次看到在論壇有人發問 &lt;a href="http://www.codeigniter.org.tw/forum/viewtopic.php?f=6&amp;t=3885" target="_blank">application/libraries 優先權&lt;/a>，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取&lt;/p>
 &lt;div>
-&lt;pre class="brush: php; title: ; notranslate" title="">$this-&amp;gt;load-&amp;gt;library('email');&lt;/pre>
+&lt;pre class="brush: php; title: ; notranslate" title="">$this->load->library('email');&lt;/pre>
 &lt;/div></description></item><item><title>HAProxy 搭配 CodeIgniter 取使用者真實 IP</title><link>https://demo.gh.wu-boy.com/2013/10/haproxy-get-user-real-ip-using-codeigniter/</link><pubDate>Wed, 09 Oct 2013 02:57:24 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/10/haproxy-get-user-real-ip-using-codeigniter/</guid><description>&lt;p>前端 Load Balance 首選就是 &lt;a href="http://haproxy.1wt.eu/" target="_blank">HAProxy&lt;/a>，後端架設 &lt;a href="http://nginx.org/" target="_blank">Nginx&lt;/a> 搭配 &lt;a href="http://www.codeigniter.org.tw/" target="_blank">CodeIgniter&lt;/a>，紀錄使用者 IP 時，Nginx 總是只有抓到內部 IP 192.168.x.x，而無法抓到真實 Public IP，要抓到 Public IP 必須修改 HAProxy + Nginx 設定檔，HAProxy 只要在 Backend 地方加入 &lt;a href="http://code.google.com/p/haproxy-docs/wiki/forwardfor" target="_blank">forward&lt;/a> 選項，這樣 HAProxy 會送 X-Forwarded-For header 給後端 Nginx。&lt;/p>
 &lt;pre class="brush: bash; title: ; notranslate" title="">option forwardfor&lt;/pre></description></item><item><title>2013 PHPConf Introduction to Gearman in PHP</title><link>https://demo.gh.wu-boy.com/2013/10/2013-phpconf-introduction-to-gearman-in-php/</link><pubDate>Sat, 05 Oct 2013 06:21:21 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/10/2013-phpconf-introduction-to-gearman-in-php/</guid><description>今天 PHPConf 簡報檔，介紹 Gearman in PHP 應用，歡迎自取，有問題可以留言</description></item><item><title>CodeIgniter REST Server with Backbone.js Issue</title><link>https://demo.gh.wu-boy.com/2013/09/codeigniter-rest-server-with-backbone-js-issue/</link><pubDate>Fri, 20 Sep 2013 04:20:20 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2013/09/codeigniter-rest-server-with-backbone-js-issue/</guid><description>&lt;div style="margin:0 auto; text-align:center">
 &lt;img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&amp;#038;ssl=1" alt="CodeIgniter" data-recalc-dims="1" />
@@ -291,12 +291,12 @@ define('Document_root',dirname(__FILE__));
 {
 function character_limiter($str, $n = 500, $end_char = '&amp;#8230;')
 {
-if (strlen($str) &amp;lt; $n)
+if (strlen($str) &lt; $n)
 {
 return $str;
 }
 $str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
-if (strlen($str) &amp;lt;= $n)
+if (strlen($str) &lt;= $n)
 {
 return $str;
 }

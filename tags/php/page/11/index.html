@@ -9,19 +9,19 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>php</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://demo.gh.wu-boy.com/2009/05/codeigniter-text-%E8%A3%9C%E5%8A%A9%E5%87%BD%E6%95%B8-character_limiter-%E4%B8%8D%E9%81%A9%E7%94%A8%E6%96%BC%E4%B8%AD%E6%96%87%E5%AD%97/><h2 class=post-title>[CodeIgniter] Text 補助函數 character_limiter 不適用於中文字</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 29, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;192&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;124&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>在 <a href=http://www.codeigniter.com.tw/>CodeIgniter</a> 裡面的 <a href=http://www.codeigniter.com.tw/user_guide/helpers/text_helper.html>Text 補助函數</a>，目前只適用於英文字體，不支援 utf-8 或者是簡體字體，bite 數超過2的都會出問題，當然是因為這是國外的 mvc 所以也沒有考慮到這麼週到就是了，也不是沒有辦法解決，之前就用了PHP官方網站所提供的一個函式來正確切割中文字串，就是要利用 <a href=http://tw.php.net/ord>ord</a> 判斷 ASCII 編碼範圍，或者是可以使用 <a href=http://tw.php.net/mb_substr>mb_substr</a> 函式正確切割，之前寫一篇可以參考看看：<a href=http://blog.wu-boy.com/2007/05/18/104/>[PHP] 如何切割中文標題</a>。 底下是原本 CodeIgniter 所提供的 Text 函數</p><pre class="brush: php; title: ; notranslate" title>if ( ! function_exists('character_limiter'))
 {
 	function character_limiter($str, $n = 500, $end_char = '&#8230;')
 	{
-		if (strlen($str) &lt; $n)
+		if (strlen($str) < $n)
 		{
 			return $str;
 		}
 		
 		$str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
     
-		if (strlen($str) &lt;= $n)
+		if (strlen($str) <= $n)
 		{
 			return $str;
 		}
@@ -81,7 +81,7 @@ $this->db->where('news_id', $id); </pre><a href=https://demo.gh.wu-boy.com/2009/
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/phpbb/>PHPBB</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E6%96%B0%E5%A2%9E%E3%80%81%E5%88%AA%E9%99%A4%E4%BA%8B%E4%BB%B6-end/><h2 class=post-title>[PHP] Zend 使用 Google Calendar API – 新增、刪除事件 – END</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 29, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;332&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;331&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>這篇算是 <a href=http://code.google.com/apis/calendar/>Google Calendar API</a> 的結尾文章了，只剩下新增、刪除兩個功能尚未說明，那這兩個功能野蠻簡單的，底下就來介紹如何新增單一事件功能，看看是否要增另外新檔案放 form 的表單，我是把表單放入 index.php 再把資料傳送到 news.php 此檔案，先介紹 form 表單：</p><pre class="brush: xml; title: ; notranslate" title></pre><a href=https://demo.gh.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E6%96%B0%E5%A2%9E%E3%80%81%E5%88%AA%E9%99%A4%E4%BA%8B%E4%BB%B6-end/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/zend-framework/>Zend Framework</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%B7%A8%E8%BC%AF%E4%BA%8B%E4%BB%B6/><h2 class=post-title>[PHP] Zend 使用 Google Calendar API – 編輯事件</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 28, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
@@ -92,7 +92,7 @@ $this->db->where('news_id', $id); </pre><a href=https://demo.gh.wu-boy.com/2009/
 ?></pre><a href=https://demo.gh.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%B7%A8%E8%BC%AF%E4%BA%8B%E4%BB%B6/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/zend-framework/>Zend Framework</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%80%8F%E8%A6%BD%E4%BA%8B%E4%BB%B6/><h2 class=post-title>[PHP] Zend 使用 Google Calendar API – 瀏覽事件</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 27, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;244&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;243&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>昨天寫了一篇 <a href=http://blog.wu-boy.com/2009/03/26/1075/>[PHP] Zend 使用 Google Calendar API - 環境建立架設</a>，相信應該是非常簡單才對，那今天來介紹一下實做 Google Calendar API 的瀏覽、新增、刪除、修改事件的功能，在官方網站都有詳細的 API 功能介紹，我只不過把功能整合完整一點，詳細請看 <a href=http://code.google.com/apis/calendar/docs/1.0/developers_guide_php.html>Google Calendar API With PHP</a>。 1. 瀏覽功能：建立 index.php</p><pre class="brush: php; title: ; notranslate" title>/*
 * include 昨天新增的config.inc.php 檔案
 */

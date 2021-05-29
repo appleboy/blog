@@ -6,7 +6,7 @@
 使用 finishChan 通知全部 JOB 已經完成
 設定 Timeout 機制 (1 秒之內要完成所有 job)
 
-在看此文章之前，也許可以先理解什麼是『buffer vs unbuffer channel』。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/05\/handle-multiple-channel-in-15-minutes\/","name":"15 分鐘學習 go 語言如何處理多個 channel 通道"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"15 分鐘學習 Go 語言如何處理多個 Channel 通道","description":"\n大家在初學 Go 語言時，肯定很少用到 Go Channel，也不太確定使用的時機點，其實在官方 Blog 有提供一篇不錯的文章『Go Concurrency Patterns: Pipelines and cancellation』，相信大家剛跨入學習新語言時，不會馬上看 Go Channel，底下我來用一個簡單的例子來說明如何使用 Go Channel，使用情境非常簡單，就是假設今天要同時處理 20 個背景工作，一定想到要使用 Goroutines，但是又想要收到這 20 個 JOB 處理的結果，並顯示在畫面上，如果其中一個 Job 失敗，就跳出 main 函式，當然又會希望這 20 個 JOB 預期在一分鐘內執行結束，如果超過一分鐘，也是一樣跳出 main 函式。針對這個問題，我們可以整理需要三個 Channel \u002b 一個 Timeout 機制。\n 使用 outChan 顯示各個 JOB 完成狀況 使用 errChan 顯示 JOB 發生錯誤並且跳出 main 主程式 使用 finishChan 通知全部 JOB 已經完成 設定 Timeout 機制 (1 秒之內要完成所有 job)  在看此文章之前，也許可以先理解什麼是『buffer vs unbuffer channel』。\n","inLanguage":"en","wordCount":450,"datePublished":"2019-05-13T02:37:51","dateModified":"2019-05-13T02:37:51","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, Goroutines"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/05\/handle-multiple-channel-in-15-minutes\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="15 分鐘學習 Go 語言如何處理多個 Channel 通道"><meta property="og:description" content="
+在看此文章之前，也許可以先理解什麼是『buffer vs unbuffer channel』。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2019\/05\/handle-multiple-channel-in-15-minutes\/","name":"15 分鐘學習 go 語言如何處理多個 channel 通道"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"15 分鐘學習 Go 語言如何處理多個 Channel 通道","description":"\n大家在初學 Go 語言時，肯定很少用到 Go Channel，也不太確定使用的時機點，其實在官方 Blog 有提供一篇不錯的文章『Go Concurrency Patterns: Pipelines and cancellation』，相信大家剛跨入學習新語言時，不會馬上看 Go Channel，底下我來用一個簡單的例子來說明如何使用 Go Channel，使用情境非常簡單，就是假設今天要同時處理 20 個背景工作，一定想到要使用 Goroutines，但是又想要收到這 20 個 JOB 處理的結果，並顯示在畫面上，如果其中一個 Job 失敗，就跳出 main 函式，當然又會希望這 20 個 JOB 預期在一分鐘內執行結束，如果超過一分鐘，也是一樣跳出 main 函式。針對這個問題，我們可以整理需要三個 Channel \u002b 一個 Timeout 機制。\n 使用 outChan 顯示各個 JOB 完成狀況 使用 errChan 顯示 JOB 發生錯誤並且跳出 main 主程式 使用 finishChan 通知全部 JOB 已經完成 設定 Timeout 機制 (1 秒之內要完成所有 job)  在看此文章之前，也許可以先理解什麼是『buffer vs unbuffer channel』。\n","inLanguage":"en","wordCount":258,"datePublished":"2019-05-13T02:37:51","dateModified":"2019-05-13T02:37:51","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, Goroutines"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2019\/05\/handle-multiple-channel-in-15-minutes\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="15 分鐘學習 Go 語言如何處理多個 Channel 通道"><meta property="og:description" content="
 大家在初學 Go 語言時，肯定很少用到 Go Channel，也不太確定使用的時機點，其實在官方 Blog 有提供一篇不錯的文章『Go Concurrency Patterns: Pipelines and cancellation』，相信大家剛跨入學習新語言時，不會馬上看 Go Channel，底下我來用一個簡單的例子來說明如何使用 Go Channel，使用情境非常簡單，就是假設今天要同時處理 20 個背景工作，一定想到要使用 Goroutines，但是又想要收到這 20 個 JOB 處理的結果，並顯示在畫面上，如果其中一個 Job 失敗，就跳出 main 函式，當然又會希望這 20 個 JOB 預期在一分鐘內執行結束，如果超過一分鐘，也是一樣跳出 main 函式。針對這個問題，我們可以整理需要三個 Channel + 一個 Timeout 機制。
 
 使用 outChan 顯示各個 JOB 完成狀況
@@ -25,8 +25,8 @@
 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>15 分鐘學習 Go 語言如何處理多個 Channel 通道</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 13, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;450&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;258&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#實戰範例>實戰範例</a></li><li><a href=#處理多個-channel-通道>處理多個 Channel 通道</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>大家在初學 <a href=https://golang.org>Go 語言</a>時，肯定很少用到 Go Channel，也不太確定使用的時機點，其實在官方 Blog 有提供一篇不錯的文章『<a href=https://blog.golang.org/pipelines>Go Concurrency Patterns: Pipelines and cancellation</a>』，相信大家剛跨入學習新語言時，不會馬上看 Go Channel，底下我來用一個簡單的例子來說明如何使用 Go Channel，使用情境非常簡單，就是假設今天要同時處理 20 個背景工作，一定想到要使用 <a href=https://tour.golang.org/concurrency/1>Goroutines</a>，但是又想要收到這 20 個 JOB 處理的結果，並顯示在畫面上，如果其中一個 Job 失敗，就跳出 main 函式，當然又會希望這 20 個 JOB 預期在一分鐘內執行結束，如果超過一分鐘，也是一樣跳出 main 函式。針對這個問題，我們可以整理需要三個 Channel + 一個 Timeout 機制。</p><ul><li>使用 outChan 顯示各個 JOB 完成狀況</li><li>使用 errChan 顯示 JOB 發生錯誤並且跳出 main 主程式</li><li>使用 finishChan 通知全部 JOB 已經完成</li><li>設定 Timeout 機制 (1 秒之內要完成所有 job)</li></ul><p>在看此文章之前，也許可以先理解什麼是『<a href=https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/>buffer vs unbuffer channel</a>』。</p><h2 id=教學影片>教學影片</h2><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=實戰範例>實戰範例</h2><p>針對上述的問題，先透過 Sync 套件的 WaitGroup 來確保 20 個 JOB 處理完成後才結束 main 函式。</p><pre><code class=language-go>package main
 
 import (
@@ -39,7 +39,7 @@ import (
 func main() {
     wg := sync.WaitGroup{}
     wg.Add(100)
-    for i := 0; i &lt; 100; i++ {
+    for i := 0; i < 100; i++ {
         go func(val int, wg *sync.WaitGroup) {
             time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
             fmt.Println("finished job id:", val)
@@ -53,12 +53,12 @@ func main() {
     finishChan := make(chan struct{})</code></pre><p>接著要在最後直接讀取這三個 Channel 值，可以透過 Select，由於 outChan 會傳入 20 個值，所以需要搭配 for 迴圈方式來讀取多個值</p><pre><code class=language-go>Loop:
     for {
         select {
-        case val := &lt;-outChan:
+        case val := <-outChan:
             fmt.Println("finished:", val)
-        case err := &lt;-errChan:
+        case err := <-errChan:
             fmt.Println("error:", err)
             break Loop
-        case &lt;-finishChan:
+        case <-finishChan:
             break Loop
         }
     }</code></pre><p>這邊我們看到需要加上 <code>Loop</code> 自定義 Tag，來達到 break for 迴圈，而不是 break select 函式。但是有沒有發現程式碼會一直卡在 <code>wg.Wait()</code>，不會進入到 for 迴圈內，這時候就必須將 <code>wg.Wait()</code> 丟到背景。</p><pre><code class=language-go>    go func() {
@@ -68,24 +68,24 @@ func main() {
     }()</code></pre><p>也就是當 20 個 job 都完成後，會觸發 <code>close(finishChan)</code>，就可以在 for 迴圈內結束整個 main 函式。最後需要設定 timout 機制，請把 select 多補上一個 <code>time.After()</code></p><pre><code class=language-go>Loop:
     for {
         select {
-        case val := &lt;-outChan:
+        case val := <-outChan:
             fmt.Println("finished:", val)
-        case err := &lt;-errChan:
+        case err := <-errChan:
             fmt.Println("error:", err)
             break Loop
-        case &lt;-finishChan:
+        case <-finishChan:
             break Loop
-        case &lt;-time.After(100000 * time.Millisecond):
+        case <-time.After(100000 * time.Millisecond):
             break Loop
         }
-    }</code></pre><p>來看看 go func 內怎麼將值丟到 Channel</p><pre><code class=language-go>    for i := 0; i &lt; 20; i++ {
-        go func(outChan chan&lt;- int, errChan chan&lt;- error, val int, wg *sync.WaitGroup) {
+    }</code></pre><p>來看看 go func 內怎麼將值丟到 Channel</p><pre><code class=language-go>    for i := 0; i < 20; i++ {
+        go func(outChan chan<- int, errChan chan<- error, val int, wg *sync.WaitGroup) {
             defer wg.Done()
             time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
             fmt.Println("finished job id:", val)
-            outChan &lt;- val
+            outChan <- val
             if val == 11 {
-                errChan &lt;- errors.New("error in 60")
+                errChan <- errors.New("error in 60")
             }
 
         }(outChan, errChan, i, &wg)
@@ -105,14 +105,14 @@ func main() {
     finishChan := make(chan struct{})
     wg := sync.WaitGroup{}
     wg.Add(100)
-    for i := 0; i &lt; 100; i++ {
-        go func(outChan chan&lt;- int, errChan chan&lt;- error, val int, wg *sync.WaitGroup) {
+    for i := 0; i < 100; i++ {
+        go func(outChan chan<- int, errChan chan<- error, val int, wg *sync.WaitGroup) {
             defer wg.Done()
             time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
             fmt.Println("finished job id:", val)
-            outChan &lt;- val
+            outChan <- val
             if val == 60 {
-                errChan &lt;- errors.New("error in 60")
+                errChan <- errors.New("error in 60")
             }
 
         }(outChan, errChan, i, &wg)
@@ -127,14 +127,14 @@ func main() {
 Loop:
     for {
         select {
-        case val := &lt;-outChan:
+        case val := <-outChan:
             fmt.Println("finished:", val)
-        case err := &lt;-errChan:
+        case err := <-errChan:
             fmt.Println("error:", err)
             break Loop
-        case &lt;-finishChan:
+        case <-finishChan:
             break Loop
-        case &lt;-time.After(100000 * time.Millisecond):
+        case <-time.After(100000 * time.Millisecond):
             break Loop
         }
     }

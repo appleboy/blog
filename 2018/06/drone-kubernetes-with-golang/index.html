@@ -75,7 +75,7 @@ ENTRYPOINT ["/bin/hello"]</code></pre><p>其中 <code>plugins/base:multiarch</co
   default_tags: true
   when:
     event: [ push, tag ]</code></pre><p>其中 <code>default_tags</code> 會自動將 <code>master</code> 分支上傳到 <code>latest</code> 標籤，而假設上傳 <code>1.1.1</code> 版本時，drone 則會幫忙編譯出三個不同的 tag 標籤，分別是 <code>1</code>, <code>1.1</code>, <code>1.1.1</code> 這是完全符合 <a href=https://semver.org/>Semantic Versioning</a>，如果有在開源專案打滾的朋友們，一定知道版本的重要性。而 Drone 在這地方提供了很簡單的設定讓開發者可以上傳一次 tag 做到三種不同的 image 標籤。</p><h2 id=部署更新-kubernetes>部署更新 Kubernetes</h2><p>這邊推薦大家使用 <a href=https://github.com/Sh4d1/drone-kubernetes>Sh4d1/drone-kubernetes</a> 外掛，使用之前請先設定好三個參數:</p><ol><li>KUBERNETES_SERVER</li><li>KUBERNETES_CERT</li><li>KUBERNETES_TOKEN</li></ol><p><code>KUBERNETES_SERVER</code> 可以打開家目錄底下的 <code>~/.kube/config</code> 檔案直接找到，cert 及 token 請先透過 pod 找到 secret token name:</p><pre><code class=language-shell>$ kubectl describe po/frontend-9f5ccc8d4-8n9xq | grep SecretName | grep token
-    SecretName:  default-token-r5xdx</code></pre><p>拿到 secret name 之後，再透過底下指令找到 <code>ca.crt</code> 及 <code>token</code></p><pre><code class=language-shell>$ kubectl get secret default-token-r5xdx -o yaml | egrep &#039;ca.crt:|token:&#039;</code></pre><p>其中 token 還需要透過 base64 decode 過，才可以設定到 drone secret。完成上述步驟後，可以來設定 drone 部署:</p><pre><code class=language-yaml>deploy:
+    SecretName:  default-token-r5xdx</code></pre><p>拿到 secret name 之後，再透過底下指令找到 <code>ca.crt</code> 及 <code>token</code></p><pre><code class=language-shell>$ kubectl get secret default-token-r5xdx -o yaml | egrep 'ca.crt:|token:'</code></pre><p>其中 token 還需要透過 base64 decode 過，才可以設定到 drone secret。完成上述步驟後，可以來設定 drone 部署:</p><pre><code class=language-yaml>deploy:
   image: sh4d1/drone-kubernetes
   kubernetes_template: example19-deploy-with-kubernetes/deployment.yml
   kubernetes_namespace: default
@@ -121,7 +121,7 @@ spec:
         - containerPort: 8080
         env:
         - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-          value: &#039;THIS_STRING_IS_REPLACED_DURING_BUILD&#039;</code></pre><p>大家可以找到 <code>image: appleboy/golang-http:VERSION</code>，這邊需要寫個 sed 指令來取代 <code>VERSION</code>，部署到 staging 則是 <code>latest</code>，如果是 tag 則取代為 <code>DRONE_TAG</code></p><pre><code class=language-makefile>ifneq ($(DRONE_TAG),)
+          value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'</code></pre><p>大家可以找到 <code>image: appleboy/golang-http:VERSION</code>，這邊需要寫個 sed 指令來取代 <code>VERSION</code>，部署到 staging 則是 <code>latest</code>，如果是 tag 則取代為 <code>DRONE_TAG</code></p><pre><code class=language-makefile>ifneq ($(DRONE_TAG),)
     VERSION ?= $(DRONE_TAG)
 else
     VERSION ?= latest
@@ -130,7 +130,7 @@ endif
 prepare:
     sed -ie "s/VERSION/$(VERSION)/g" deployment.yml</code></pre><p>這邊有個問題就是，我們怎麼讓在同一個 image:latest 下，也可以保持更新 App 呢，首先必須設定 <code>imagePullPolicy</code> 為 <code>Always</code>，以及設定一個 env 讓 drone 可以動態修改 template 檔案</p><pre><code class=language-yaml>env:
 - name: FOR_GODS_SAKE_PLEASE_REDEPLOY
-  value: &#039;THIS_STRING_IS_REPLACED_DURING_BUILD&#039;</code></pre><p>目的是讓每次 kubernetes 都可以讀取不一樣的 template 確保 image 都可以即時更新，假設少了上述步驟，是無法讓 staging 保持更新狀態。畢竟使用 kubectl apply 時，如果 yaml 檔案是沒有更動過的，就不會更新。</p><pre><code class=language-makefile>prepare:
+  value: 'THIS_STRING_IS_REPLACED_DURING_BUILD'</code></pre><p>目的是讓每次 kubernetes 都可以讀取不一樣的 template 確保 image 都可以即時更新，假設少了上述步驟，是無法讓 staging 保持更新狀態。畢竟使用 kubectl apply 時，如果 yaml 檔案是沒有更動過的，就不會更新。</p><pre><code class=language-makefile>prepare:
     sed -ie "s/VERSION/$(VERSION)/g" deployment.yml
     sed -ie "s/THIS_STRING_IS_REPLACED_DURING_BUILD/$(shell date)/g" deployment.yml
     cat deployment.yml</code></pre><p>而 Tag 就不用擔心，原因就是 <code>VERSION</code> 就會改變不一樣的值，所以肯定會即時更新，那假設團隊想要上傳相同 tag (這是不好的做法，請盡量不要使用)，這時候動態修改 env 的作法就發揮功效了。從上面的教學，現在我們看安新的透過 GitHub Flow 來完成部署 Staging 及 Production 了。</p><h2 id=影片簡介>影片簡介</h2><p>下面影片並無包含實作部分，會介紹我在團隊怎麼使用 <a href=https://guides.github.com/introduction/flow/>GitHub Flow</a> 部署，更多實作詳細細節，可以參考 Udemy 上面影片</p><h2 id=心得>心得</h2><p>作者我尚未深入玩過 <a href=https://about.gitlab.com/features/gitlab-ci-cd/>GitLab CI</a> 或者是 <a href=https://jenkins.io/>Jenkins</a> 搭配 Kubernetes 來部署專案，但是我相信以複雜及學習難度來說，用 Drone CI 是比較簡單的，這部分就不多說了，大家實際操作比較過才知道。希望能帶給有在玩 Drone 的開發者有些幫助。另外我在 Udemy 上面開了兩門課程，一門 drone 另一門 golang 教學，如果對這兩門課有興趣的話，都可以購買，目前都是特價 $1800</p><ul><li><a href="https://www.udemy.com/golang-fight/?couponCode=GOLANG-TOP">Go 語言實戰</a> $1800</li><li><a href="https://www.udemy.com/devops-oneday/?couponCode=DRONE-DEVOPS">一天學會 DEVOPS 自動化流程</a> $1800</li></ul><p>如果兩們都有興趣想一起合買，請直接匯款到下面帳戶，特價 <strong>$3000</strong></p><ul><li>富邦銀行: 012</li><li>富邦帳號: 746168268370</li><li>匯款金額: 台幣 $3000 元</li></ul><p>匯款後請直接到 <a href=http://facebook.com/appleboy46>FB 找我</a>，或者直接寫信給我也可以 <strong>appleboy.tw AT gmail.com</strong>。有任何問題都可以直接加我 FB，都是公開資訊。上面程式碼範例請參考如下</p><h1 id=線上程式碼21><a href=https://github.com/go-training/training/tree/master/example19-deploy-with-kubernetes>線上程式碼</a></h1><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/drone/>drone</a>&nbsp;

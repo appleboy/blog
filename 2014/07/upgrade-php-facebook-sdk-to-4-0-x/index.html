@@ -1,7 +1,7 @@
 <!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>升級 PHP Facebook SDK 到 4.0.x 版本 - 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><meta name=description content="
   
 
-最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","name":"升級 php facebook sdk 到 4.0.x 版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"升級 PHP Facebook SDK 到 4.0.x 版本","description":" 最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。\n","inLanguage":"en","wordCount":469,"datePublished":"2014-07-24T09:11:12","dateModified":"2014-07-24T09:11:12","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, Composer, Facebook, Facebook SDK, php"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="升級 PHP Facebook SDK 到 4.0.x 版本"><meta property="og:description" content="
+最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","name":"升級 php facebook sdk 到 4.0.x 版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"升級 PHP Facebook SDK 到 4.0.x 版本","description":" 最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。\n","inLanguage":"en","wordCount":450,"datePublished":"2014-07-24T09:11:12","dateModified":"2014-07-24T09:11:12","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, Composer, Facebook, Facebook SDK, php"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="升級 PHP Facebook SDK 到 4.0.x 版本"><meta property="og:description" content="
   
 
 最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2014/07/upgrade-php-facebook-sdk-to-4-0-x/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="升級 PHP Facebook SDK 到 4.0.x 版本"><meta name=twitter:description content="
@@ -18,13 +18,12 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>升級 PHP Facebook SDK 到 4.0.x 版本</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 24, 2014
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;469&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;450&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1></div><p>最近幫公司建立 Staging 環境，申請了新的 <a href=https://developers.facebook.com>FB App</a> 來，用原本 <a href=https://github.com/facebook/facebook-php-sdk>Facebook v3.2.3 SDK</a> 發現已經不能 work 了，去翻了 <a href=https://developers.facebook.com/docs/apps/changelog>Facebook Platform Changelog</a>，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考<a href=https://developers.facebook.com/docs/php/gettingstarted/4.0.0>官方 4.0.0 的教學</a>，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 <a href=https://getcomposer.org/>Composer</a> 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。</p><p>先在根目錄建立 <code>composer.json</code> 內容填入</p><div><pre class="brush: bash; title: ; notranslate" title>{
   "require" : {
     "facebook/php-sdk-v4" : "4.0.*"
   }
-}</pre></div><p>接著執行 <code>composer install</code>，系統會自動建立 vendor 目錄。在 <code>application/libraries</code> 建立 <code>lib_login.php</code> 檔案，並且寫入底下程式碼</p><div><pre class="brush: php; title: ; notranslate" title>&lt;?php  if (! defined('BASEPATH')) exit('No direct script access allowed');
-<p>/**</p>
+}</pre></div><p>接著執行 <code>composer install</code>，系統會自動建立 vendor 目錄。在 <code>application/libraries</code> 建立 <code>lib_login.php</code> 檔案，並且寫入底下程式碼</p><div><pre class="brush: php; title: ; notranslate" title>/**</p>
 <ul>
 <li>Name: Facebook Login Library</li>
 <li></li>
@@ -54,9 +53,9 @@ protected $ci;</p>
  **/
 public function __construct()
 {
-    $this-&amp;gt;ci =&amp; get_instance();
-    $this-&amp;gt;ci-&amp;gt;load-&amp;gt;library('session');
-    $this-&amp;gt;ci-&amp;gt;config-&amp;gt;load('facebook');
+    $this-&gt;ci =&amp; get_instance();
+    $this-&gt;ci-&gt;load-&gt;library('session');
+    $this-&gt;ci-&gt;config-&gt;load('facebook');
 
     if (! isset($_SESSION)) {
         session_start();
@@ -65,9 +64,9 @@ public function __construct()
 
 public function facebook()
 {
-    $facebook_default_scope = explode(',', $this-&amp;gt;ci-&amp;gt;config-&amp;gt;item(&quot;facebook_default_scope&quot;));
-    $facebook_app_id = $this-&amp;gt;ci-&amp;gt;config-&amp;gt;item(&quot;facebook_app_id&quot;);
-    $facebook_api_secret = $this-&amp;gt;ci-&amp;gt;config-&amp;gt;item(&quot;facebook_api_secret&quot;);
+    $facebook_default_scope = explode(',', $this-&gt;ci-&gt;config-&gt;item(&quot;facebook_default_scope&quot;));
+    $facebook_app_id = $this-&gt;ci-&gt;config-&gt;item(&quot;facebook_app_id&quot;);
+    $facebook_api_secret = $this-&gt;ci-&gt;config-&gt;item(&quot;facebook_api_secret&quot;);
 
     // init app with app id and secret
     FacebookSession::setDefaultApplication($facebook_app_id, $facebook_api_secret);
@@ -81,7 +80,7 @@ public function facebook()
 
         // validate the access_token to make sure it's still valid
         try {
-            if (!$session-&amp;gt;validate()) {
+            if (!$session-&gt;validate()) {
                 $session = null;
             }
         } catch (Exception $e) {
@@ -94,7 +93,7 @@ public function facebook()
         // no session exists
 
         try {
-            $session = $helper-&amp;gt;getSessionFromRedirect();
+            $session = $helper-&gt;getSessionFromRedirect();
         } catch(FacebookRequestException $ex) {
             // When Facebook returns an error
             // handle this better in production code
@@ -109,33 +108,32 @@ public function facebook()
     // see if we have a session
     if (isset($session)) {
         // save the session
-        $_SESSION['fb_token'] = $session-&amp;gt;getToken();
+        $_SESSION['fb_token'] = $session-&gt;getToken();
         // create a session using saved token or the new one we generated at login
-        $session = new FacebookSession($session-&amp;gt;getToken());
+        $session = new FacebookSession($session-&gt;getToken());
 
         // graph api request for user data
         $request = new FacebookRequest($session, 'GET', '/me');
-        $response = $request-&amp;gt;execute();
+        $response = $request-&gt;execute();
         // get response
-        $graphObject = $response-&amp;gt;getGraphObject()-&amp;gt;asArray();
+        $graphObject = $response-&gt;getGraphObject()-&gt;asArray();
         $fb_data = array(
-            'me' =&amp;gt; $graphObject,
-            'loginUrl' =&amp;gt; $helper-&amp;gt;getLoginUrl($facebook_default_scope)
+            'me' =&gt; $graphObject,
+            'loginUrl' =&gt; $helper-&gt;getLoginUrl($facebook_default_scope)
        );
-        $this-&amp;gt;ci-&amp;gt;session-&amp;gt;set_userdata('fb_data', $fb_data);
+        $this-&gt;ci-&gt;session-&gt;set_userdata('fb_data', $fb_data);
 
     } else {
         $fb_data = array(
-            'me' =&amp;gt; null,
-            'loginUrl' =&amp;gt; $helper-&amp;gt;getLoginUrl($facebook_default_scope)
+            'me' =&gt; null,
+            'loginUrl' =&gt; $helper-&gt;getLoginUrl($facebook_default_scope)
        );
-        $this-&amp;gt;ci-&amp;gt;session-&amp;gt;set_userdata('fb_data', $fb_data);
+        $this-&gt;ci-&gt;session-&gt;set_userdata('fb_data', $fb_data);
     }
 
     return $fb_data;
 }
-</code></pre><p>}</pre></p></div><p>最後寫簡單 controller</p><div><pre class="brush: php; title: ; notranslate" title>&lt;?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-<p>class Login extends CI_Controller
+</code></pre><p>}</pre></p></div><p>最後寫簡單 controller</p><div><pre class="brush: php; title: ; notranslate" title>class Login extends CI_Controller
 {
 public function __construct()
 {
@@ -150,13 +148,13 @@ $this-&gt;load-&gt;library(array(&lsquo;session&rsquo;, &lsquo;lib_login&rsquo;)
  **/
 public function facebook()
 {
-    $fb_data = $this-&amp;gt;lib_login-&amp;gt;facebook();
+    $fb_data = $this-&gt;lib_login-&gt;facebook();
 
     // check login data
     if (isset($fb_data['me'])) {
         var_dump($fb_data);
     } else {
-        echo '&amp;lt;a href=&quot;' . $fb_data['loginUrl'] . '&quot;&amp;gt;Login&amp;lt;/a&amp;gt;';
+        echo '&lt;a href=&quot;' . $fb_data['loginUrl'] . '&quot;&gt;Login&lt;/a&gt;';
     }
 }
 </code></pre><p>}</p><p>/* End of file login.php */

@@ -106,7 +106,7 @@ allow {
   permissions := role_permissions[r]
   # for each permission
   p := permissions[_]
-  # check if the permission granted to r matches the user&#039;s request
+  # check if the permission granted to r matches the user's request
   p == {"action": input.action, "object": input.object}
 }</code></pre><p>大家可以看到其中 <code>input</code> 就是上面第一點 Query 條件，可以是任意的 JSON 格式，接著在 allow 裡面開始處理整個政策流程，第一就是拿到 User 是屬於哪些角色，第二就是找到這些角色相對應得權限，最後就是拿 Query 的條件進行比對，最後可以輸出結果 <code>true</code> 或 <code>false</code>。寫完上面 Rego 檔案後，開發者可以下 OPA 執行檔，並且撰寫測試文件，進行驗證，跟 Go 語言一樣，直接檔名加上 <code>_test</code> 即可</p><pre><code class="language-go=">test_design_group_kpi_editor {
   allow with input as {"user": ["design_group_kpi_editor"], "action": "view_all", "object": "design"}

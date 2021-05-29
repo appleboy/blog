@@ -15,7 +15,7 @@
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;289&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#如何使用-github-action-上傳-image>如何使用 GitHub Action 上傳 Image</a></li><li><a href=#用-drone-上傳-docker-image>用 Drone 上傳 Docker Image</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" title=cover><img src="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" alt=cover title=cover></a></p><p>去年 <a href=https://github.com>GitHub</a> 推出 <a href=https://github.com/features/actions>Actions</a>，就有不少開發者相繼把 CI/CD 流程內會使用到的 Plugin 都丟到 <a href="https://github.com/marketplace?type=actions">Marktetplace</a>，而在這 <a href=https://docker.com>Docker</a> 容器時代，肯定是需要用自動化上傳容器到 Docker Registry，而官方也在<a href=https://www.docker.com/blog/first-docker-github-action-is-here/>上週正式釋出第一版 GitHub Actions</a>，雖然在 Marktet 尚有不少開發者已經有實現了此功能，但是官方既然推出了，就採用官方的套件會比較適合。底下我們來看看如何使用 Docker 推出的 GitHub Aciton 來自動化上傳 Docker Image。除了介紹如何使用 GitHub Action 上傳 Image 外，我也會拿 <a href=https://drone.io/>Drone</a> 的 <a href=http://plugins.drone.io/drone-plugins/drone-docker/>Docker Plugin</a> 來進行比較。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/lEkDdIkqHwI style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href=https://www.udemy.com/course/golang-fight/?coupon>Go 語言基礎實戰 (開發, 測試及部署)</a></li><li>[一天學會 DevOps 自動化測試及部署][10]</li><li>[DOCKER 容器開發部署實戰][11] (課程剛啟動，限時特價 $900 TWD)</li></ul><p>如果需要搭配購買請直接透過 [FB 聯絡我][12]，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=如何使用-github-action-上傳-image>如何使用 GitHub Action 上傳 Image</h2><p>首先準備用 Go 語言服務來當作範例，底下是 Dockerfile 設定，本篇的程式碼的都可以在[這邊找到][13]。</p><pre><code class=language-dockerfile>FROM golang:1.14-alpine
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
 RUN apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
@@ -28,7 +28,7 @@ COPY main.go .
 
 ENV GOOS=linux
 ENV GOARCH=amd64
-RUN go build -o /app -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .
+RUN go build -o /app -tags netgo -ldflags '-w -extldflags "-static"' .
 
 CMD ["/app"]</code></pre><p>Docker 詳細的設定方式可以參考[此文件][14]</p><pre><code class=language-yml>- name: build and push image
   uses: docker/build-push-action@v1
@@ -46,7 +46,7 @@ CMD ["/app"]</code></pre><p>Docker 詳細的設定方式可以參考[此文件][
     repository: appleboy/gin-docker-demo
     dockerfile: Dockerfile
     tag_with_ref: true
-    push: ${{ startsWith(github.ref, &#039;refs/tags/&#039;) }}</code></pre><p>其實設定不難，整個過程的 Log 可以看[這邊][15]。底下來介紹 Drone 的使用方式</p><h2 id=用-drone-上傳-docker-image>用 Drone 上傳 Docker Image</h2><p>GitHub Actions 的版本跟 Drone 的 Plugin 共通點都是用 CLI 完成全部指令，也全都用 Go 語言打造，所以設定方式其實蠻雷同的。</p><pre><code class=language-yaml>- name: publish
+    push: ${{ startsWith(github.ref, 'refs/tags/') }}</code></pre><p>其實設定不難，整個過程的 Log 可以看[這邊][15]。底下來介紹 Drone 的使用方式</p><h2 id=用-drone-上傳-docker-image>用 Drone 上傳 Docker Image</h2><p>GitHub Actions 的版本跟 Drone 的 Plugin 共通點都是用 CLI 完成全部指令，也全都用 Go 語言打造，所以設定方式其實蠻雷同的。</p><pre><code class=language-yaml>- name: publish
   pull: always
   image: plugins/docker:linux-amd64
   settings:

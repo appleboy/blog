@@ -167,11 +167,11 @@ $ apt-get install apache2 php5 php5-gd php5-curl&lt;/pre> 至於 PHP 5 套件就
 &lt;p>&lt;a href="http://www.atheros.com/">Atheros&lt;/a>(被&lt;a href="http://www.qualcomm.com/">高通&lt;/a>買下) 晶片的 Router，從原本 2.6.15 升級到 2.6.34.7，升級過程遇到很多困難，其中一項升級 Wireless Driver 部份，發現在 Kernel Socket 與 User Space 溝通之間出了問題，利用 Ioctl 來取得目前在 AP 上面所有 Client 資料(包含 mac address, 處於 N or G mode&amp;hellip;等)，在 User Space 上會掉資料，後來利用 /proc 底下檔案來跟 User 之間溝通，才沒有發生任何問題，由於輸出的檔案比較多，就偏向用 2.6 Kernel 提供的 &lt;a href="http://lwn.net/Articles/22355/">seq_file 介面( interface )&lt;/a>建立虛擬檔案 (virtual file) 與 User Space 溝通(此方法為 Alexander Viro 所設計)，此功能其實在 2.4.15 已經實做了，只是在 2.6 版本才被大量使用。 程式設計師可以透過引入 &lt;span style="color:green">&lt;strong>&amp;lt;linux/seq_file.h&amp;gt;&lt;/strong>&lt;/span> 來實做 seq_file interface，seq_file 最大優勢就是讀取完全沒有4k boundry 的限制，也就是不用管會不會超出 output buffer。&lt;/p>
 &lt;h3 id="the-iterator-interface-為了能夠讓-iterator-正常運作我們必須實做-4-個-function-start-next-stop-show跑得過程為-start---show---next---show---next---stop為了方便講解參考">The iterator interface 為了能夠讓 iterator 正常運作，我們必須實做 4 個 function (start, next, stop, show)，跑得過程為 start -&amp;gt; show -&amp;gt; next -&amp;gt; show -&amp;gt; next -&amp;gt; stop，為了方便講解，參考&lt;/h3>
 &lt;p>&lt;a href="http://nano-chicken.blogspot.com/2009/12/linux-modulesiv-seqfile.html">Linux Kernel（4）- seq_file&lt;/a> 裡面範例如下：&lt;/p>
-&lt;pre class="brush: cpp; title: ; notranslate" title="">#include &amp;lt;linux/init.h>
-#include &amp;lt;linux/module.h>
-#include &amp;lt;linux/proc_fs.h> /* Necessary because we use proc fs */
-#include &amp;lt;linux/seq_file.h> /* for seq_file */
-#include &amp;lt;linux/uaccess.h>
+&lt;pre class="brush: cpp; title: ; notranslate" title="">#include &lt;linux/init.h>
+#include &lt;linux/module.h>
+#include &lt;linux/proc_fs.h> /* Necessary because we use proc fs */
+#include &lt;linux/seq_file.h> /* for seq_file */
+#include &lt;linux/uaccess.h>
 MODULE_LICENSE("GPL");
 #define MAX_LINE 1000
 static uint32_t *lines;
@@ -280,15 +280,18 @@ jQuery Week Calendar Javascript: reference the parent window from a popup How to
 # insmod hello-3.o
 Warning: loading hello-3.o will taint the kernel: no license
 See http://www.tux.org/lkml/#export-tainted for information about tainted modules 很顯然這訊息是要您在 kernel module 裡面加上版權宣告，例如："GPL"，"GPL v2"…等來宣告您的 module 並非 open source，利用 MODULE_LICENSE() 巨集來宣告程式 License，同樣的，可以用 MODULE_DESCRIPTION() 來描述此模組或者是 Driver 的功用跟簡介，以及用 MODULE_AUTHOR() 來定義此模組作者，這些巨集都可以在 linux/module.h 裡找到，但是這些並非用於 Kernel 本身，如果大家想看範例程式，可以到 drivers/ 資料夾底下觀看每一個 Driver 程式，底下是簡單 hello world 範例：
-#include &amp;lt;linux/kernel.h /* pr_info所需 include 檔案*/
-#include &amp;lt;linux/init.h
-#include &amp;lt;linux/module.h /* 所有 module 巨集需要檔案*/
-#include &amp;lt;linux/version.</description></item><item><title>ProFTPD UseEncoding 繁體中文亂碼解決 Localization</title><link>https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/</link><pubDate>Wed, 07 Jul 2010 08:07:13 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/</guid><description>ProFTPD 一直都是我最喜歡使用的 FTP 伺服器，設定方式簡單淺顯易懂，最近在用 PSPad 寫程式，發現使用內建 FTP 功能時候，連不上 FreeBSD 架設的 ProFTPD，連線過程出現許多亂碼，所以造成 PSPad 斷線出現錯誤，解決方式就是利用 mod_lang 模組，設定 UseEncoding 讓系統可以顯示 Big5 中文編碼，FreeBSD Ports 請勾選
+#include /* pr_info所需 include 檔案*/
+#include
+#include /* 所有 module 巨集需要檔案*/
+#include
+static int __init hello_init(void)
+{
+pr_info("</description></item><item><title>ProFTPD UseEncoding 繁體中文亂碼解決 Localization</title><link>https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/</link><pubDate>Wed, 07 Jul 2010 08:07:13 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/07/proftpd-useencoding-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E4%BA%82%E7%A2%BC%E8%A7%A3%E6%B1%BA-localization/</guid><description>ProFTPD 一直都是我最喜歡使用的 FTP 伺服器，設定方式簡單淺顯易懂，最近在用 PSPad 寫程式，發現使用內建 FTP 功能時候，連不上 FreeBSD 架設的 ProFTPD，連線過程出現許多亂碼，所以造成 PSPad 斷線出現錯誤，解決方式就是利用 mod_lang 模組，設定 UseEncoding 讓系統可以顯示 Big5 中文編碼，FreeBSD Ports 請勾選
 [X] NLSUOTA Use nls (builds mod_lang) 自行編譯請按照底下步驟 ./configure --enable-nls
 make
 make install UseEncoding 設定 Syntax: UseEncoding on|off|local-charset client-charset
 Default: None
-Context: "server config", &amp;lt;VirtualHost, &amp;lt;Global
+Context: "server config", ,
 Module: mod_lang
 Compatibility: 1.3.2rc1 在 1.3.2rc1 版本之後才有支援，請複製底下設定，貼到 proftpd.conf # 简体中文環境
 UseEncoding UTF-8 GBK
@@ -300,10 +303,10 @@ UseEncoding UTF-8 Big5 Reference: ProFTPD module mod_lang centos上解決proftp�
 cd /usr/src/linux-headers-2.6.31-14-generic-pae 建立 hello 目錄 #
 # mkdir directory
 #
-mkdir hello 建立 Makfile 以及 hello.c hello.c: #include &amp;lt;linux/kernel.h /* pr_info 所需 include 檔案*/
-#include &amp;lt;linux/init.h
-#include &amp;lt;linux/module.h /* 所有 module 需要檔案*/
-#include &amp;lt;linux/version.h
+mkdir hello 建立 Makfile 以及 hello.c hello.c: #include /* pr_info 所需 include 檔案*/
+#include
+#include /* 所有 module 需要檔案*/
+#include
 MODULE_DESCRIPTION("Hello World !!");
 MODULE_AUTHOR("</description></item><item><title>Apache 取得透過 Reverse Proxy (Varnish) 的 Client 真正 IP (mod_rpaf)</title><link>https://demo.gh.wu-boy.com/2010/03/apache-%E5%8F%96%E5%BE%97%E9%80%8F%E9%81%8E-reverse-proxy-varnish-%E7%9A%84-client-%E7%9C%9F%E6%AD%A3-ip-mod_rpaf/</link><pubDate>Thu, 25 Mar 2010 17:21:51 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/03/apache-%E5%8F%96%E5%BE%97%E9%80%8F%E9%81%8E-reverse-proxy-varnish-%E7%9A%84-client-%E7%9C%9F%E6%AD%A3-ip-mod_rpaf/</guid><description>之前介紹 [FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇) 來當 Web 前端 Reverse Proxy，也有 load balance 的功能，不過碰到這樣的環境，後端 Apache Server 只會抓到 Reverse Proxy IP 來當作 log 紀錄，而無法正確取得 Client 端 IP，Varnish 官網 FAQ 有提到 log 檔案得的解決方法，不過在程式方面，要大量的修改，假設今天 Apache 跑10個 Virtual Host ，不就要去改10個網站程式，背後或許是一些大型 open source 的 Project，改起來相當不容易，也很費工夫。Darkhero 提供了 reverse proxy add forward module for Apache (mod_rpaf) 模組，只要裝上這模組，Apache 就不必動到其它設定就可以正確紀錄 log 檔案，且程式都不必修改，就可以得到正確 IP 了。 FreeBSD Ports 安裝方式：
 cd /usr/ports/www/mod_rpaf2/

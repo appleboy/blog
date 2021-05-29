@@ -19,7 +19,7 @@ func main() {
     s := <-c
     fmt.Println(&#34;Got signal:&#34;, s)
 }
-上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/03\/why-use-buffered-channel-in-signal-notify\/","name":"為什麼 signal. notify 要使用 buffered channel"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"為什麼 signal.Notify 要使用 buffered channel","description":"\n如果不了解什麼是 buffer 或 unbuffer channel 的朋友們，可以參考這篇文章先做初步了解，本文要跟大家介紹為什麼 signal.Notify 要使用 buffered channel 才可以，底下先來看看如何使用 signal.Notify，當我們要做 graceful shutdown 都會使用到這功能，想要正常關閉服務或連線，透過 signal 可以偵測訊號來源，執行後續相關工作 (關閉 DB 連線，檢查 Job 是否結束 \u0026hellip; 等)。\npackage main import ( \u0022fmt\u0022 \u0022os\u0022 \u0022os\/signal\u0022 ) func main() { \/\/ Set up channel on which to send signal notifications. \/\/ We must use a buffered channel or risk missing the signal \/\/ if we\u0026#039;re not ready to receive when the signal is sent. c := make(chan os.Signal, 1) signal.Notify(c, os.Interrupt) \/\/ Block until a signal is received. s := \u0026lt;-c fmt.Println(\u0022Got signal:\u0022, s) } 上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。\n","inLanguage":"en","wordCount":236,"datePublished":"2021-03-30T03:19:16","dateModified":"2021-03-30T03:19:16","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":[""],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/03\/why-use-buffered-channel-in-signal-notify\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="為什麼 signal.Notify 要使用 buffered channel"><meta property="og:description" content="
+上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/03\/why-use-buffered-channel-in-signal-notify\/","name":"為什麼 signal. notify 要使用 buffered channel"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"為什麼 signal.Notify 要使用 buffered channel","description":"\n如果不了解什麼是 buffer 或 unbuffer channel 的朋友們，可以參考這篇文章先做初步了解，本文要跟大家介紹為什麼 signal.Notify 要使用 buffered channel 才可以，底下先來看看如何使用 signal.Notify，當我們要做 graceful shutdown 都會使用到這功能，想要正常關閉服務或連線，透過 signal 可以偵測訊號來源，執行後續相關工作 (關閉 DB 連線，檢查 Job 是否結束 \u0026hellip; 等)。\npackage main import ( \u0022fmt\u0022 \u0022os\u0022 \u0022os\/signal\u0022 ) func main() { \/\/ Set up channel on which to send signal notifications. \/\/ We must use a buffered channel or risk missing the signal \/\/ if we\u0027re not ready to receive when the signal is sent. c := make(chan os.Signal, 1) signal.Notify(c, os.Interrupt) \/\/ Block until a signal is received. s :=  上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。\n","inLanguage":"en","wordCount":215,"datePublished":"2021-03-30T03:19:16","dateModified":"2021-03-30T03:19:16","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":[""],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/03\/why-use-buffered-channel-in-signal-notify\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="為什麼 signal.Notify 要使用 buffered channel"><meta property="og:description" content="
 如果不了解什麼是 buffer 或 unbuffer channel 的朋友們，可以參考這篇文章先做初步了解，本文要跟大家介紹為什麼 signal.Notify 要使用 buffered channel 才可以，底下先來看看如何使用 signal.Notify，當我們要做 graceful shutdown 都會使用到這功能，想要正常關閉服務或連線，透過 signal 可以偵測訊號來源，執行後續相關工作 (關閉 DB 連線，檢查 Job 是否結束 &mldr; 等)。
 package main
 
@@ -52,7 +52,7 @@ func main() {
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>為什麼 signal.Notify 要使用 buffered channel</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 30, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;236&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;215&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#使用-unbuffered-channel>使用 unbuffered channel</a></li><li><a href=#形成原因>形成原因</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>如果不了解什麼是 buffer 或 unbuffer <a href=https://tour.golang.org/concurrency/2>channel</a> 的朋友們，可以參考<a href=https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/>這篇文章</a>先做初步了解，本文要跟大家介紹為什麼 signal.Notify 要使用 buffered channel 才可以，底下先來看看如何使用 signal.Notify，當我們要做 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>graceful shutdown</a> 都會使用到這功能，想要正常關閉服務或連線，透過 signal 可以偵測訊號來源，執行後續相關工作 (關閉 DB 連線，檢查 Job 是否結束 &mldr; 等)。</p><pre><code class=language-go>package main
 
 import (
@@ -64,12 +64,12 @@ import (
 func main() {
     // Set up channel on which to send signal notifications.
     // We must use a buffered channel or risk missing the signal
-    // if we&#039;re not ready to receive when the signal is sent.
+    // if we're not ready to receive when the signal is sent.
     c := make(chan os.Signal, 1)
     signal.Notify(c, os.Interrupt)
 
     // Block until a signal is received.
-    s := &lt;-c
+    s := <-c
     fmt.Println("Got signal:", s)
 }</code></pre><p>上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/uMDmImCZNI4 style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><h2 id=使用-unbuffered-channel>使用 unbuffered channel</h2><p>將程式碼改成如下:</p><pre><code class=language-go>package main
 
@@ -84,7 +84,7 @@ func main() {
     signal.Notify(c, os.Interrupt)
 
     // Block until a signal is received.
-    s := &lt;-c
+    s := <-c
     fmt.Println("Got signal:", s)
 }</code></pre><p>執行上述程式碼，然後按下 ctrl + c，沒意外你會看到 <code>Got signal: interrupt</code>，那接著我們在接受 channle 前面有處理一些很複雜的工作，先用 <code>time.Sleep</code> 來測試</p><pre><code class=language-go>package main
 
@@ -101,13 +101,13 @@ func main() {
     time.Sleep(5 * time.Second)
 
     // Block until a signal is received.
-    s := &lt;-c
+    s := <-c
     fmt.Println("Got signal:", s)
 }</code></pre><p>一樣執行程式，然後按下 ctrl + c，你會發現在這五秒內，怎麼按都不會停止，等到五秒後，整個程式也不會終止，需要再按下一次 ctrl + c，這時候程式才會終止，我們預期的是，在前五秒內，按下任何一次 ctrl + c，理論上五秒後要能正常接受到第一次傳來的訊號，底下來看看原因</p><h2 id=形成原因>形成原因</h2><p>我們打開 Golang 的 <code>singal.go</code> 檔案，找到 <code>process</code> func，可以看到部分程式碼</p><pre><code class=language-go>    for c, h := range handlers.m {
         if h.want(n) {
             // send but do not block for it
             select {
-            case c &lt;- sig:
+            case c <- sig:
             default:
             }
         }

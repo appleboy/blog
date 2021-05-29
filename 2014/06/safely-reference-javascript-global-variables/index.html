@@ -67,15 +67,15 @@ addToBlockList …"><meta name=twitter:image content="https://lh3.googleusercont
   };
 <p>addToBlockList(&ldquo;127.0.0.1&rdquo;);
 console.log(block_list);</p>
-<p>})();</pre></p></div><p>這樣可以避免渲染 window Global Variable。如果你是用 <a href=http://coffeescript.org/>CoffeeScript</a> 來寫，可以寫成底下</p><div><pre class="brush: jscript; title: ; notranslate" title>(-&gt;
+<p>})();</pre></p></div><p>這樣可以避免渲染 window Global Variable。如果你是用 <a href=http://coffeescript.org/>CoffeeScript</a> 來寫，可以寫成底下</p><div><pre class="brush: jscript; title: ; notranslate" title>(->
   block_list = []
-  addToBlockList = (item) -&gt;
+  addToBlockList = (item) ->
     block_list.push item  if block_list
     return
 <p>return
-)()</pre></p></div><p>但是我建議可以使用 <code>block_list?</code> 寫法</p><div><pre class="brush: jscript; title: ; notranslate" title>(-&gt;
+)()</pre></p></div><p>但是我建議可以使用 <code>block_list?</code> 寫法</p><div><pre class="brush: jscript; title: ; notranslate" title>(->
   block_list = []
-  addToBlockList = (item) -&gt;
+  addToBlockList = (item) ->
     block_List?.push item
     return
 <p>return

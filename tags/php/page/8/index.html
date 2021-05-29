@@ -92,7 +92,7 @@ if (($row['user_sig'] && $config['allow_sig'] && $user-optionget('viewsigs') && 
 <a href=https://demo.gh.wu-boy.com/2010/06/phpbb3-%E5%A4%96%E6%8E%9B-%E6%A0%B9%E6%93%9A%E4%BD%BF%E7%94%A8%E8%80%85%E6%96%87%E7%AB%A0%E6%95%B8%E7%9B%AE%E9%99%90%E5%88%B6%E7%B0%BD%E5%90%8D%E6%AA%94%E9%A1%AF%E7%A4%BA/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/><h2 class=post-title>[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 10, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;213&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;210&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>基於 Moztw 討論區 有大陸使用者註冊之後，在簽名檔加入一些廣告連結，為了降低 Google Page Rank，所以我們必須指示搜尋引擎「不要前往此網頁上的連結」或是「不要前往此連結」，可以參考 關於 rel=&ldquo;nofollow&rdquo;，phpBB3 編輯三個檔案就可以了，此修改不影響文章內容，只有針對簽名檔作用，底下是 patch 程式碼，可以參考看看 includes/bbcode.php
 --- phpBB3/includes/bbcode.php 2010-03-06 04:37:23.000000000 +0800
 +++ www/includes/bbcode.php 2010-06-10 20:58:02.000000000 +0800
@@ -136,7 +136,7 @@ Install FirePHP 安裝 Ref : http://www.firephp.org/HQ/Install.htm 在 Zend Fram
 <a href=https://demo.gh.wu-boy.com/tags/firephp/>FirePHP</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it/><h2 class=post-title>[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 20, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;395&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;381&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：
 <a href=https://demo.gh.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;

@@ -9,12 +9,12 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>Linux Kernel</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/03/linux-kernel-%E8%AE%80%E5%8F%96-proc-%E5%BA%95%E4%B8%8B%E8%B3%87%E6%96%99%E6%9C%80%E4%BD%B3%E6%96%B9%E6%B3%95-seq_file-interface/><h2 class=post-title>[Linux Kernel] 讀取 /proc 底下資料最佳方法: seq_file interface</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 14, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;581&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><h3 id=前言-最近在整合公司內部>前言 最近在整合公司內部</h3><p><a href=http://www.atheros.com/>Atheros</a>(被<a href=http://www.qualcomm.com/>高通</a>買下) 晶片的 Router，從原本 2.6.15 升級到 2.6.34.7，升級過程遇到很多困難，其中一項升級 Wireless Driver 部份，發現在 Kernel Socket 與 User Space 溝通之間出了問題，利用 Ioctl 來取得目前在 AP 上面所有 Client 資料(包含 mac address, 處於 N or G mode&mldr;等)，在 User Space 上會掉資料，後來利用 /proc 底下檔案來跟 User 之間溝通，才沒有發生任何問題，由於輸出的檔案比較多，就偏向用 2.6 Kernel 提供的 <a href=http://lwn.net/Articles/22355/>seq_file 介面( interface )</a>建立虛擬檔案 (virtual file) 與 User Space 溝通(此方法為 Alexander Viro 所設計)，此功能其實在 2.4.15 已經實做了，只是在 2.6 版本才被大量使用。 程式設計師可以透過引入 <span style=color:green><strong>&lt;linux/seq_file.h></strong></span> 來實做 seq_file interface，seq_file 最大優勢就是讀取完全沒有4k boundry 的限制，也就是不用管會不會超出 output buffer。</p><h3 id=the-iterator-interface-為了能夠讓-iterator-正常運作我們必須實做-4-個-function-start-next-stop-show跑得過程為-start---show---next---show---next---stop為了方便講解參考>The iterator interface 為了能夠讓 iterator 正常運作，我們必須實做 4 個 function (start, next, stop, show)，跑得過程為 start -> show -> next -> show -> next -> stop，為了方便講解，參考</h3><p><a href=http://nano-chicken.blogspot.com/2009/12/linux-modulesiv-seqfile.html>Linux Kernel（4）- seq_file</a> 裡面範例如下：</p><pre class="brush: cpp; title: ; notranslate" title>#include &lt;linux/init.h>
-#include &lt;linux/module.h>
-#include &lt;linux/proc_fs.h> /* Necessary because we use proc fs */
-#include &lt;linux/seq_file.h> /* for seq_file */
-#include &lt;linux/uaccess.h>
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;576&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><h3 id=前言-最近在整合公司內部>前言 最近在整合公司內部</h3><p><a href=http://www.atheros.com/>Atheros</a>(被<a href=http://www.qualcomm.com/>高通</a>買下) 晶片的 Router，從原本 2.6.15 升級到 2.6.34.7，升級過程遇到很多困難，其中一項升級 Wireless Driver 部份，發現在 Kernel Socket 與 User Space 溝通之間出了問題，利用 Ioctl 來取得目前在 AP 上面所有 Client 資料(包含 mac address, 處於 N or G mode&mldr;等)，在 User Space 上會掉資料，後來利用 /proc 底下檔案來跟 User 之間溝通，才沒有發生任何問題，由於輸出的檔案比較多，就偏向用 2.6 Kernel 提供的 <a href=http://lwn.net/Articles/22355/>seq_file 介面( interface )</a>建立虛擬檔案 (virtual file) 與 User Space 溝通(此方法為 Alexander Viro 所設計)，此功能其實在 2.4.15 已經實做了，只是在 2.6 版本才被大量使用。 程式設計師可以透過引入 <span style=color:green><strong>&lt;linux/seq_file.h></strong></span> 來實做 seq_file interface，seq_file 最大優勢就是讀取完全沒有4k boundry 的限制，也就是不用管會不會超出 output buffer。</p><h3 id=the-iterator-interface-為了能夠讓-iterator-正常運作我們必須實做-4-個-function-start-next-stop-show跑得過程為-start---show---next---show---next---stop為了方便講解參考>The iterator interface 為了能夠讓 iterator 正常運作，我們必須實做 4 個 function (start, next, stop, show)，跑得過程為 start -> show -> next -> show -> next -> stop，為了方便講解，參考</h3><p><a href=http://nano-chicken.blogspot.com/2009/12/linux-modulesiv-seqfile.html>Linux Kernel（4）- seq_file</a> 裡面範例如下：</p><pre class="brush: cpp; title: ; notranslate" title>#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/proc_fs.h> /* Necessary because we use proc fs */
+#include <linux/seq_file.h> /* for seq_file */
+#include <linux/uaccess.h>
 
 MODULE_LICENSE("GPL");
 
@@ -120,10 +120,10 @@ module_exit(exit_modules);</pre><a href=https://demo.gh.wu-boy.com/2011/03/linux
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>Linux Kernel 2.6.16 之後加入了 drop caches 的機制，可以讓系統清出多餘的記憶體，這對於搞嵌入式系統相當重要阿，Memory 不夠就不能 upgrade firmware，我們只要利用讀寫 proc 檔案就可以清除 cache 記憶體檔案，底下是操作步驟:</p><h3 id=釋放-pagecache捨棄一般沒使用的-cache>釋放 pagecache:捨棄一般沒使用的 cache</h3><pre class="brush: bash; title: ; notranslate" title>echo 1 > /proc/sys/vm/drop_caches</pre><h3 id=釋放-dentries-and-inodes>釋放 dentries and inodes</h3><pre class="brush: bash; title: ; notranslate" title>echo 2 > /proc/sys/vm/drop_caches</pre><h3 id=釋放-pagecache-dentries-and-inodes>釋放 pagecache, dentries and inodes</h3><pre class="brush: bash; title: ; notranslate" title>echo 3 > /proc/sys/vm/drop_caches</pre><p>Reference: <a href=http://linux-mm.org/Drop_Caches>Drop Caches</a> <a href=http://blog.linux.org.tw/~jserv/archives/002039.html>觀察 Linux 的虛擬記憶體</a></p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E6%98%93-timer-%E6%A9%9F%E5%88%B6/><h2 class=post-title>[Kernel Driver] 撰寫簡易 Timer 機制</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 27, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;207&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;205&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在底層 Linux Kernel 提供了時序(timing)機制，方便驅動程式設計者所使用，核心是依據硬體發出的『計時器中斷』來追蹤時間的流動狀況。我們可以依據 HZ 的值來設計 Delay 機制，讓驅動程式可以每隔固定一段時間啟動或者是發出訊號，也可以利用 Timer 來讓 LED 閃爍變化，在介紹 Timer API 之前，可以先參考 Linux Kernel: 簡介HZ, tick and jiffies 這篇文章，瞭解一些相關名詞，舉例：如果想知道一秒後的 jiffies 時間，可以寫成底下：
 #ifdef CONFIG_BMA150_TIMER
-#include &lt;linux/timer.h
+#include
 #endif
 j = jiffies;
 /* 一秒之後 */
@@ -135,36 +135,44 @@ stamp_1 = j + 20*HZ; Timer API 用法 筆記一下自己在寫 BOSCH Sensortec �
 <a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/><h2 class=post-title>[Linux Kernel] 簡單 hello world: License and Module 介紹(part 3)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 25, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;337&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;331&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在 Kernel 2.4 或以上版本，在編譯模組完成，要進行 load module 之前，你會發現底下訊息：
 # insmod hello-3.o
 Warning: loading hello-3.o will taint the kernel: no license
 See http://www.tux.org/lkml/#export-tainted for information about tainted modules 很顯然這訊息是要您在 kernel module 裡面加上版權宣告，例如："GPL"，"GPL v2"…等來宣告您的 module 並非 open source，利用 MODULE_LICENSE() 巨集來宣告程式 License，同樣的，可以用 MODULE_DESCRIPTION() 來描述此模組或者是 Driver 的功用跟簡介，以及用 MODULE_AUTHOR() 來定義此模組作者，這些巨集都可以在 linux/module.h 裡找到，但是這些並非用於 Kernel 本身，如果大家想看範例程式，可以到 drivers/ 資料夾底下觀看每一個 Driver 程式，底下是簡單 hello world 範例：
-#include &lt;linux/kernel.h /* pr_info所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 巨集需要檔案*/
-#include &lt;linux/version.
+#include /* pr_info所需 include 檔案*/
+#include
+#include /* 所有 module 巨集需要檔案*/
+#include
+static int __init hello_init(void)
+{
+pr_info("
 <a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/kernel/>Kernel</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E6%92%B0%E5%AF%AB-hello-world-module-the-__init-and-__exit-macros-part-2/><h2 class=post-title>[Linux Kernel] 撰寫 Hello, World module: The __init and __exit Macros (part 2).</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 20, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;184&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;178&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>再看此篇之前，可以先閱讀作者先前寫的：『[Linux Kernel Driver] 撰寫簡單 Hello, World module (part 1).』，今天要介紹 Driver 的 init module 區別，在 Kernel 2.4 版本，您可以自行定義 init 跟 cleanup 函式，他們不再被個別稱為 init_module() 和 cleanup_module()，現在都使用 module_init() 和 module_exit() 兩大巨集，這兩函式被定義在 linux/init.h 檔案裡面，所以在寫程式務必將其 include 喔，另外一個核心模組(MODULE_LICENSE)，用於讓核心知道此模組遵守自由授權條款，若沒這項宣告，核心會跟您抱怨的喔，底下為範例：
-#include &lt;linux/kernel.h /* pr_info所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 需要檔案*/
-#include &lt;linux/version.h
+#include /* pr_info所需 include 檔案*/
+#include
+#include /* 所有 module 需要檔案*/
+#include
 MODULE_DESCRIPTION("Hello World !!");
-MODULE_AUTHOR("Bo-Yi Wu &lt;appleboy.tw AT gmail.com");
+MODULE_AUTHOR("Bo-Yi Wu ");
 MODULE_LICENSE("GPL");
 static int __init hello_init(void)
 {
 pr_info("Hello, world appleboy\n");
-pr_info("The process is \"%s\" (pid %i)\n"
+pr_info("The process is \"%s\" (pid %i)\n", current-comm, current-pid);
+return 0;
+}
+static void __exit hello_exit(void)
+{
+printk(KERN_INFO "
 <a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E6%92%B0%E5%AF%AB-hello-world-module-the-__init-and-__exit-macros-part-2/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/><h2 class=post-title>[Linux Kernel] 撰寫簡單 Hello, World module (part 1).</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 21, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;152&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;143&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>來筆記如何在 Kernel 撰寫 hello world! module，在 Ubuntu Kernel 2.6.31-14 環境下撰寫，其實不難啦，首先先進入 Kernel 目錄，請在 /usr/src 底下看自己的系統版本，或者是利用 uname -r 來知道 Kernel 版本，底下是在 Ubuntu Kernel 2.6.31-14 Kernel 實做：
 進入 Kernel 目錄 #
 # cd Kernel directory
@@ -172,10 +180,10 @@ pr_info("The process is \"%s\" (pid %i)\n"
 cd /usr/src/linux-headers-2.6.31-14-generic-pae 建立 hello 目錄 #
 # mkdir directory
 #
-mkdir hello 建立 Makfile 以及 hello.c hello.c: #include &lt;linux/kernel.h /* pr_info 所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 需要檔案*/
-#include &lt;linux/version.h
+mkdir hello 建立 Makfile 以及 hello.c hello.c: #include /* pr_info 所需 include 檔案*/
+#include
+#include /* 所有 module 需要檔案*/
+#include
 MODULE_DESCRIPTION("Hello World !!");
 MODULE_AUTHOR("
 <a href=https://demo.gh.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;

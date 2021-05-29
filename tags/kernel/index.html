@@ -9,15 +9,18 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>Kernel</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/><h2 class=post-title>[Linux Kernel] 簡單 hello world: License and Module 介紹(part 3)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 25, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;337&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;331&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在 Kernel 2.4 或以上版本，在編譯模組完成，要進行 load module 之前，你會發現底下訊息：
 # insmod hello-3.o
 Warning: loading hello-3.o will taint the kernel: no license
 See http://www.tux.org/lkml/#export-tainted for information about tainted modules 很顯然這訊息是要您在 kernel module 裡面加上版權宣告，例如："GPL"，"GPL v2"…等來宣告您的 module 並非 open source，利用 MODULE_LICENSE() 巨集來宣告程式 License，同樣的，可以用 MODULE_DESCRIPTION() 來描述此模組或者是 Driver 的功用跟簡介，以及用 MODULE_AUTHOR() 來定義此模組作者，這些巨集都可以在 linux/module.h 裡找到，但是這些並非用於 Kernel 本身，如果大家想看範例程式，可以到 drivers/ 資料夾底下觀看每一個 Driver 程式，底下是簡單 hello world 範例：
-#include &lt;linux/kernel.h /* pr_info所需 include 檔案*/
-#include &lt;linux/init.h
-#include &lt;linux/module.h /* 所有 module 巨集需要檔案*/
-#include &lt;linux/version.
+#include /* pr_info所需 include 檔案*/
+#include
+#include /* 所有 module 巨集需要檔案*/
+#include
+static int __init hello_init(void)
+{
+pr_info("
 <a href=https://demo.gh.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/driver/>Driver</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/kernel/>Kernel</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

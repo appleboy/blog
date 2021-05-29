@@ -19,10 +19,10 @@
 &lt;p>&lt;a href="http://httpd.apache.org/" target="_blank">Apache&lt;/a> 可以透過 &lt;a href="http://httpd.apache.org/docs/current/mod/mod_mime.html" target="_blank">mod_mime&lt;/a> 模組且根據使用者定義的副檔名來 response data 給 Client 端，此功能可以應用在前台搭配 Template Library，例如 &lt;a href="http://mustache.github.com/" target="_blank">Mustache Logic-less templates&lt;/a>，透過此 Apache 模組 可以在 html 檔案將定義好全部 Template，一次讀取進來，底下舉個例子:&lt;/p>
 &lt;pre class="brush: jscript; title: ; notranslate" title="">&lt;/pre> 我們希望 apache 能夠讀取 assets/templates/test1.mustache，並且將檔案內容放到 script 裡面，這時候就必須在 apache httpd.conf 定義
 &lt;p>&lt;strong>&lt;span style="color:green">text/x-mustache-template&lt;/span>&lt;/strong>&lt;/p>
-&lt;pre class="brush: bash; title: ; notranslate" title="">&amp;lt;IfModule mime_module>
+&lt;pre class="brush: bash; title: ; notranslate" title="">&lt;IfModule mime_module>
 AddType text/x-mustache-template .mustache
 AddOutputFilter INCLUDES .mustache
-&amp;lt;/IfModule>
+&lt;/IfModule>
 &lt;/pre></description></item><item><title>Ubuntu (Debian) 架設 apache mpm worker mod_fcgid 筆記</title><link>https://demo.gh.wu-boy.com/2011/03/ubuntu-debian-%E6%9E%B6%E8%A8%AD-apache-mpm-worker-mod_fcgid-%E7%AD%86%E8%A8%98/</link><pubDate>Thu, 17 Mar 2011 03:55:54 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/03/ubuntu-debian-%E6%9E%B6%E8%A8%AD-apache-mpm-worker-mod_fcgid-%E7%AD%86%E8%A8%98/</guid><description>&lt;p>最近想架設 &lt;a href="http://www.redmine.org/">Redmine&lt;/a> 在 &lt;a href="http://www.ubuntu.com/">Ubuntu&lt;/a> 伺服器上面，架設之前要先搞定 apache 搭配 mpm worker 及 mod_fcgi module，安裝步驟其實不難，就搭配懶人指令 &lt;a href="http://en.wikipedia.org/wiki/Advanced_Packaging_Tool">apt&lt;/a> 就可以了。&lt;/p>
 &lt;h3 id="安裝-apache-mpm-worker-由於怕安裝過程會叫你把-apache2-mpm-worker-移除改裝-apache2-mpm-prefork所以安裝順序上面有些變化請參考底下">安裝 apache mpm worker 由於怕安裝過程會叫你把 apache2-mpm-worker 移除，改裝 apache2-mpm-prefork，所以安裝順序上面有些變化，請參考底下:&lt;/h3>
 &lt;pre class="brush: bash; title: ; notranslate" title=""># 先安裝

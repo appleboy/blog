@@ -51,10 +51,10 @@ public 目錄: /home/git/laravel_2/public
 to: /home/vagrant/laravel.tw/public
 - map: b.tw
 to: /home/vagrant/laravel.tw/public</pre></p></div><h3 id=步驟四-設定主機名稱>步驟四: 設定主機名稱</h3><p>設定連接虛擬目錄的網域名稱，請打開 <code>/etc/hosts</code> 加入兩行設定</p><div><pre class="brush: bash; title: ; notranslate" title>127.0.0.1 a.tw
-127.0.0.1 b.tw</pre></div><p>之後就可以透過這兩個虛擬網域來開發了</p><h3 id=步驟五-啟動-vagrant-up>步驟五: 啟動 Vagrant up</h3><p>最後請在 Homestead 目錄下執行 <code>vagrant up</code> 啟動訊息可以發現底下 port mapping</p><div><pre class="brush: bash; title: ; notranslate" title>default: 80 =&gt; 8088 (adapter 1)
-default: 3306 =&gt; 33060 (adapter 1)
-default: 5432 =&gt; 54320 (adapter 1)
-default: 22 =&gt; 2222 (adapter 1)</pre></div><p>如果 port 已經被佔用，請修改 <code>scripts/homestead.rb</code></p><div><pre class="brush: ruby; title: ; notranslate" title># Configure Port Forwarding To The Box
+127.0.0.1 b.tw</pre></div><p>之後就可以透過這兩個虛擬網域來開發了</p><h3 id=步驟五-啟動-vagrant-up>步驟五: 啟動 Vagrant up</h3><p>最後請在 Homestead 目錄下執行 <code>vagrant up</code> 啟動訊息可以發現底下 port mapping</p><div><pre class="brush: bash; title: ; notranslate" title>default: 80 => 8088 (adapter 1)
+default: 3306 => 33060 (adapter 1)
+default: 5432 => 54320 (adapter 1)
+default: 22 => 2222 (adapter 1)</pre></div><p>如果 port 已經被佔用，請修改 <code>scripts/homestead.rb</code></p><div><pre class="brush: ruby; title: ; notranslate" title># Configure Port Forwarding To The Box
 config.vm.network "forwarded_port", guest: 80, host: 8088
 config.vm.network "forwarded_port", guest: 3306, host: 33060
 config.vm.network "forwarded_port", guest: 5432, host: 54320

@@ -44,7 +44,7 @@ var x = 1;
 isNaN(a);
 !isNaN(a);
 var q = 0.25;</pre></div><p>透過命令列可以直接轉換 JavaScript 檔案</p><div><pre class="brush: bash; title: ; notranslate" title>$ npm install fixmyjs -g
-$ fixmyjs app.js</pre></div><p>另外如果有使用 <a href=http://www.sublimetext.com/>Sublime Text</a> 編輯器可以直接找 <a href=https://sublime.wbond.net/packages/FixMyJS>sublime-fixmyjs</a>，當然也可以透過 <a href=https://github.com/kirjs/gulp-fixmyjs>gulp-fixmyjs</a> 來導入自動修復流程。<a href=http://gulpjs.com/>gulp</a> 可以參考底下</p><div><pre class="brush: jscript; title: ; notranslate" title>gulp.task 'jshint', -&gt;
+$ fixmyjs app.js</pre></div><p>另外如果有使用 <a href=http://www.sublimetext.com/>Sublime Text</a> 編輯器可以直接找 <a href=https://sublime.wbond.net/packages/FixMyJS>sublime-fixmyjs</a>，當然也可以透過 <a href=https://github.com/kirjs/gulp-fixmyjs>gulp-fixmyjs</a> 來導入自動修復流程。<a href=http://gulpjs.com/>gulp</a> 可以參考底下</p><div><pre class="brush: jscript; title: ; notranslate" title>gulp.task 'jshint', ->
   gulp.src 'app/assets/js/**/*.js'
     .pipe $.fixmyjs
       legacy: true

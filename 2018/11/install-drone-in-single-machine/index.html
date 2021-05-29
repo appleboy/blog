@@ -28,7 +28,7 @@
   --restart=always \
   --detach=true \
   --name=drone \
-  drone/drone:1.0.0-rc.1</code></pre><p>上述是用單行指令就可以架設好 drone，可以注意兩個地方。</p><ol><li>設定 <code>DRONE_RUNNER_CAPACITY</code> 為非零值，一次可以執行幾個 JOB</li><li>將 docker socket 掛載到 container 內</li></ol><p>如果你喜歡用 docker-compose 請參考底下，或直接到 <a href=https://github.com/go-training/drone-tutorial/blob/307c80ebf8e5e1bc4bb485afa06dd06071f0dcf0/1.0.x/docker-compose.single.yml#L1>GitHub 上面看看</a></p><pre><code class=language-yml>version: &#039;2&#039;
+  drone/drone:1.0.0-rc.1</code></pre><p>上述是用單行指令就可以架設好 drone，可以注意兩個地方。</p><ol><li>設定 <code>DRONE_RUNNER_CAPACITY</code> 為非零值，一次可以執行幾個 JOB</li><li>將 docker socket 掛載到 container 內</li></ol><p>如果你喜歡用 docker-compose 請參考底下，或直接到 <a href=https://github.com/go-training/drone-tutorial/blob/307c80ebf8e5e1bc4bb485afa06dd06071f0dcf0/1.0.x/docker-compose.single.yml#L1>GitHub 上面看看</a></p><pre><code class=language-yml>version: '2'
 
 services:
   drone-server:

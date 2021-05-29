@@ -23,27 +23,27 @@
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;702&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#事前準備>事前準備</a></li><li><a href=#不使用-buildkit-編譯>不使用 BuildKit 編譯</a></li><li><a href=#使用-buildkit-編譯>使用 BuildKit 編譯</a></li><li><a href=#心得>心得</a></li></ul></li><li><a href=#程式碼範例請看這邊2><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></a></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" title="docker buildkit"><img src="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" alt="docker buildkit" title="docker buildkit"></a></p><blockquote><p><a href=https://github.com/go-training/docker-buildkit-demo>程式碼範例請看這邊</a></p></blockquote><p>之前就有看到 <a href=https://docker.com>Docker</a> 推出 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a> 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a>，原始碼可以<a href=https://github.com/moby/buildkit>參考這邊</a>，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 <code>--cache-from</code> 機制，可以適用在任何 CI/CD 流程，詳細說明可以參考這篇『<a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</a>』，下面使用到的程式碼都可以直接參考<a href=https://github.com/go-training/docker-buildkit-demo>此 Repository</a>，我還是使用 <a href=https://golang.org>Go 語言</a>當作參考範例。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/ZSUw4UvnRWI style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202004">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202004">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202004">DOCKER 容器開發部署實戰</a> (課程剛啟動，限時特價 $900 TWD)</li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=事前準備>事前準備</h2><p>由於 <a href=https://docs.docker.com/develop/develop-images/build_enhancements/>BuildKit</a> 是實驗性的功能，預設安裝好 Docker 是不會啟動這功能。目前只有支援編譯 Linux 容器。請透過底下方式來啟動:</p><pre><code class="language-shell=">DOCKER_BUILDKIT=1 docker build .</code></pre><p>下完指令後，你會發現整個 output 結果不太一樣了，介面變得比較好看，也看到每個 Layer 編譯的時間</p><pre><code class="language-shell=">[+] Building 0.1s (15/15) FINISHED                                                                                     
- =&gt; [internal] load .dockerignore                                                                                 0.0s
- =&gt; =&gt; transferring context: 2B                                                                                   0.0s
- =&gt; [internal] load build definition from Dockerfile                                                              0.0s
- =&gt; =&gt; transferring dockerfile: 545B                                                                              0.0s
- =&gt; [internal] load metadata for docker.io/library/golang:1.14-alpine                                             0.0s
- =&gt; [1/10] FROM docker.io/library/golang:1.14-alpine                                                              0.0s
- =&gt; [internal] load build context                                                                                 0.0s
- =&gt; =&gt; transferring context: 184B                                                                                 0.0s
- =&gt; CACHED [2/10] RUN apk add bash ca-certificates git gcc g++ libc-dev                                           0.0s
- =&gt; CACHED [3/10] WORKDIR /app                                                                                    0.0s
- =&gt; CACHED [4/10] COPY go.mod .                                                                                   0.0s
- =&gt; CACHED [5/10] COPY go.sum .                                                                                   0.0s
- =&gt; CACHED [6/10] RUN go mod download                                                                             0.0s
- =&gt; CACHED [7/10] COPY main.go .                                                                                  0.0s
- =&gt; CACHED [8/10] COPY foo/foo.go foo/                                                                            0.0s
- =&gt; CACHED [9/10] COPY bar/bar.go bar/                                                                            0.0s
- =&gt; CACHED [10/10] RUN go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .                      0.0s
- =&gt; exporting to image                                                                                            0.0s
- =&gt; =&gt; exporting layers                                                                                           0.0s
- =&gt; =&gt; writing image sha256:6cc56539b3191d5efd87fb4d05181993d013411299b5cefb74047d2447b4d0c9                      0.0s
- =&gt; =&gt; naming to docker.io/appleboy/demo                                                                          0.0s</code></pre><p>如果要詳細的編譯步驟，請加上 <code>--progress=plain</code>，就可以看到詳細的過程。其實我覺得重點在每個步驟都實際追加了時間，對於在開發上或者是 CI/CD 的流程上都相當有幫助。另外可以在 docker daemon 加上 config 就可以不用加上 <code>DOCKER_BUILDKIT</code> 環境變數</p><pre><code class=language-json>{
+ => [internal] load .dockerignore                                                                                 0.0s
+ => => transferring context: 2B                                                                                   0.0s
+ => [internal] load build definition from Dockerfile                                                              0.0s
+ => => transferring dockerfile: 545B                                                                              0.0s
+ => [internal] load metadata for docker.io/library/golang:1.14-alpine                                             0.0s
+ => [1/10] FROM docker.io/library/golang:1.14-alpine                                                              0.0s
+ => [internal] load build context                                                                                 0.0s
+ => => transferring context: 184B                                                                                 0.0s
+ => CACHED [2/10] RUN apk add bash ca-certificates git gcc g++ libc-dev                                           0.0s
+ => CACHED [3/10] WORKDIR /app                                                                                    0.0s
+ => CACHED [4/10] COPY go.mod .                                                                                   0.0s
+ => CACHED [5/10] COPY go.sum .                                                                                   0.0s
+ => CACHED [6/10] RUN go mod download                                                                             0.0s
+ => CACHED [7/10] COPY main.go .                                                                                  0.0s
+ => CACHED [8/10] COPY foo/foo.go foo/                                                                            0.0s
+ => CACHED [9/10] COPY bar/bar.go bar/                                                                            0.0s
+ => CACHED [10/10] RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .                      0.0s
+ => exporting to image                                                                                            0.0s
+ => => exporting layers                                                                                           0.0s
+ => => writing image sha256:6cc56539b3191d5efd87fb4d05181993d013411299b5cefb74047d2447b4d0c9                      0.0s
+ => => naming to docker.io/appleboy/demo                                                                          0.0s</code></pre><p>如果要詳細的編譯步驟，請加上 <code>--progress=plain</code>，就可以看到詳細的過程。其實我覺得重點在每個步驟都實際追加了時間，對於在開發上或者是 CI/CD 的流程上都相當有幫助。另外可以在 docker daemon 加上 config 就可以不用加上 <code>DOCKER_BUILDKIT</code> 環境變數</p><pre><code class=language-json>{
   "debug": true,
   "experimental": true,
   "features": {
@@ -85,7 +85,7 @@ func main() {
     r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }</code></pre><p>接著撰寫 Dockerfile</p><pre><code class=language-dockerfile>FROM golang:1.14-alpine
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
 RUN apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
@@ -101,10 +101,10 @@ COPY bar/bar.go bar/
 
 ENV GOOS=linux
 ENV GOARCH=amd64
-RUN go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .
+RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
 
 CMD ["/app"]</code></pre><p>可以看到如果 go.mode 跟 go.sum 如果沒有任何變動，基本上 go module 檔案自然就可以透過 docker cache layer 處理。但是每次只要程式碼有任何異動，最後的 go build 會從無到有編譯，請看底下結果:</p><pre><code class=language-sh>docker build --progress=plain -t appleboy/docker-demo -f Dockerfile .
-#14 [10/10] RUN go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-s...
+#14 [10/10] RUN go build -o /app -v -tags netgo -ldflags '-w -extldflags "-s...
 #14 0.391 gin/foo
 #14 0.403 gin/bar
 #14 0.412 github.com/go-playground/locales/currency
@@ -137,7 +137,7 @@ CMD ["/app"]</code></pre><p>可以看到如果 go.mode 跟 go.sum 如果沒有�
 #14 DONE 7.8s</code></pre><p>總共花了 7.8 秒，但是各位想想，在自己電腦開發時，不會這麼久，而是會根據修正過的 Go 檔案才會進行編譯，但是在 CI/CD 流程怎麼做到呢？其實可以發現在電腦裡面都有 Cache 過已經編譯過的檔案。在 Linux 環境會是 <code>/root/.cache/go-build</code>。那我們該如何透過 buildKit 加速編譯？</p><h2 id=使用-buildkit-編譯>使用 BuildKit 編譯</h2><p>先來看看在 Dockerfile 該如何改進才可以讓編譯加速？底下看看</p><pre><code class=language-dockerfile># syntax = docker/dockerfile:experimental
 FROM golang:1.14-alpine
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>"
 
 RUN --mount=type=cache,target=/var/cache/apk apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
@@ -154,7 +154,7 @@ COPY bar/bar.go bar/
 
 ENV GOOS=linux
 ENV GOARCH=amd64
-RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build go build -o /app -v -tags netgo -ldflags &#039;-w -extldflags "-static"&#039; .
+RUN --mount=type=cache,target=/go/pkg/mod --mount=type=cache,target=/root/.cache/go-build go build -o /app -v -tags netgo -ldflags '-w -extldflags "-static"' .
 
 CMD ["/app"]</code></pre><p>首先看到第一行是務必要填寫</p><pre><code class=language-dockerfile># syntax = docker/dockerfile:experimental</code></pre><p>接著使用 <code>--mount</code> 方式進行檔案 cache，可以在任何 <code>RUN</code> 的步驟進行。所以可以看到在 go build 地方使用了:</p><pre><code class=language-dockerfile>RUN --mount=type=cache,target=/go/pkg/mod \
   --mount=type=cache,target=/root/.cache/go-build</code></pre><p>可以看到此步驟將 go module 及 build 後的檔案全部 cache 下來，這樣下次編譯的時候，就會自動將檔案預設放在對應的位置，加速編譯流程</p><pre><code class=language-sh>docker build --progress=plain -t appleboy/docker-buildkit -f Dockerfile.buildkit .

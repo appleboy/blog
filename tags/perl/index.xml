@@ -38,7 +38,7 @@ use utf8;
 binmode(STDIN, ':encoding(utf8)');
 binmode(STDOUT, ':encoding(utf8)');
 binmode(STDERR, ':encoding(utf8)');
-if($_ =~ m/\s*&amp;lt;div\s*class="title"&amp;lt;a\s*href=".+"(.+)&amp;lt;\/a&amp;lt;\/div\s*/)
+if($_ =~ m/\s*(.+)\s*/)
 {
 $pic_desc = $1;
 print "desc: " . $1 . " \n"</description></item><item><title>[MySQL] 利用 perl 單行印出 my.cnf</title><link>https://demo.gh.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/</link><pubDate>Wed, 17 Jun 2009 13:36:21 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/</guid><description>在 MySQL Performance Blog 裡面發現這篇：How to pretty-print my.cnf with a one-liner，利用一行 perl 指令把 my.cnf 的註解拿掉：

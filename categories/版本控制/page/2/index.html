@@ -55,7 +55,7 @@ A svn-ds/branches/develop/changelog.
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>公司採用 svn 當作版本控制，而我最近在整理 svn 上面全部的 source code。基本上我都會將 git 跟 svn 也一起搭配著用，因為個人比較熟悉 git 的操作方式，然而跟同事討論了專案目錄的架構，進而要把一些目錄轉換大小寫，本來的 App 就改成 app，這個在 git 底下(OS: Linux)操作非常容易，直接 git mv App app，之後看 git status 可以發現底下輸出：
 # On branch develop
 # Changes to be committed:
-# (use "git reset HEAD &lt;file..." to unstage)
+# (use "git reset HEAD ..." to unstage)
 #
 # renamed: nav/hacks.txt - Nav/hacks.txt
 # renamed: nav/moo.fx.js - Nav/moo.fx.js
@@ -72,7 +72,7 @@ A svn-ds/branches/develop/changelog.
 svn resolve --accept working lib/logs/logDB.txt</pre></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/svn/>svn</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/><h2 class=post-title>[Git] 版本控制: 如何使用標籤(Tag)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on November 18, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;309&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;302&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=http://git-scm.com/>Git</a> Tag 功能就如同 Cvs Tag 是一樣的，您可以在專案裡面隨意新增 Tag，方便您紀錄訊息，底下一些基本的操作來學習如何使用標籤(Tag)功能(新增標籤、以及各種不同類型標籤之間的差別)。</p><h3 id=列出既有標籤-直接使用-git-tag-即可>列出既有標籤 直接使用 git tag 即可</h3><pre class="brush: bash; title: ; notranslate" title>$ git tag -l
 v0.1
 v1.3</pre>如果整個專案過多 Tag 也可以透過底下方式搜尋出來<pre class="brush: bash; title: ; notranslate" title>$ git tag -l 'v1.4.2.*'

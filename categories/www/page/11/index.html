@@ -58,11 +58,11 @@ MYSQL：SELECT * FROM Table ORDER BY RAND() LIMIT 1
 
 </pre>上面的可以看，下面這個連結<p><a href=http://blog.wu-boy.com/wp-content/uploads/2007/08/calendar.txt title=calendar.txt>calendar.txt</a> 如果要看結果，可以去官網看 <a href=http://www.geocities.com/bazillyo/spiffy/calendar/index.htm>http://www.geocities.com/bazillyo/spiffy/calendar/index.htm</a> 或者是我寫好的，可以看看 <a href=http://blog.wu-boy.com/wp-content/Calendar.php>線上測試</a></p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/javascript/>javascript</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2007/06/php-%E5%96%84%E7%94%A8-ignore_user_abort-%E5%87%BD%E5%BC%8F/><h2 class=post-title>[PHP] 善用 ignore_user_abort() 函式</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 22, 2007
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;51&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;17&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>話說最近在為了上傳圖片經過縮圖的時間來煩惱，只不過我在想，為甚麼我上傳圖片還要等待縮圖時間才可以，然而無名小站，只需要上傳時間，縮圖是在它機器背景執行，後來發現一個函式非常好用，那就是</p><pre class="brush: php; title: ; notranslate" title>ignore_user_abort(true);
 </pre><p><a href=http://tw2.php.net/manual/tw/function.ignore-user-abort.php>http://tw2.php.net/manual/tw/function.ignore-user-abort.php</a> 無名在上傳圖片的php檔案，肯定有加上這個函式，他的好處是使用者如果關掉瀏覽器，但是php還是會繼續執行，也就是無名可以把檔案上傳之後，重新導向到使用者的相簿，程式可以如下</p><pre class="brush: php; title: ; notranslate" title>ignore_user_abort(true);
 set_time_limit(0);
-for($i = 1; $i &lt; 6; $i++){
+for($i = 1; $i < 6; $i++){
 if($_FILES['userfile' . $i]['size']){
 /*
 上傳圖檔寫在這裡
@@ -77,11 +77,11 @@ header("Location:index.php");
 然後這裡在進行縮圖，他就會在背景中執行
 */
 if($_POST['mode'] == 'add'){
-for($i = 1; $i &lt; 6; $i++){
+for($i = 1; $i < 6; $i++){
 convert_sh($upload_floder,$file_name[$i],$small_size[$i]);
 }
 }
-?&gt;
+?>
 </pre>其實 ignore\_user\_abort(true); 根本就是變相的 unix 底下的 crontab ，還蠻好用的，好處很多，不過用的地方要注意就是了，並不是每個php檔案都需要用這個函式。<p>�</p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2007/06/%E5%A6%82%E4%BD%95%E6%93%8B%E6%8E%89-google-%E5%A4%A7%E9%99%B8%E7%99%BE%E5%BA%A6-%E6%90%9C%E5%B0%8B%E5%BC%95%E6%93%8E/><h2 class=post-title>如何擋掉 google, 大陸百度 搜尋引擎</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 20, 2007
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;88&nbsp;words

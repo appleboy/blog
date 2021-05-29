@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>版本控制 on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</title><link>https://demo.gh.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/</link><description>Recent content in 版本控制 on 小惡魔 - 電腦技術 - 工作筆記 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Tue, 04 Oct 2011 02:30:16 +0000</lastBuildDate><atom:link href="https://demo.gh.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/index.xml" rel="self" type="application/rss+xml"/><item><title>Bitbucket 開始支援 Git Repository</title><link>https://demo.gh.wu-boy.com/2011/10/bitbucket-support-git-repository-now/</link><pubDate>Tue, 04 Oct 2011 02:30:16 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/10/bitbucket-support-git-repository-now/</guid><description>很高興剛剛收到 Bitbucket 寄來一封會員信，標題非常吸引大家的注意，那就是 Bitbucket now rocks Git.，是的，你沒看錯，Bitbucket 現在開始支援 Git repository，不再只有 Mercurial 可以使用，這還不算什麼，Bitbucket 更是推出**無限制免費 private repos for free **，這樣的推出，不知道會有多少 Github 用戶轉移到 Bitbucket 上面，還有另一項主因就是 **Unlimited disk space 無限制硬碟容量**，不過也許不用高興的太早，Bitbucket 在使用者人數上面有些限制，可以參考 Plans &amp;amp; Pricing，免費方案每個 Repository 只能有5個 User，反觀 Github 並沒有這限制，不過我想這也不是問題，大家可以 Fork 到自己的專案，在 Pull Request 即可。 補充官方網站提供了轉換各大 Source Hosting 工具，目前支援 Github、SourceForge、Google Code、Subversion、Mercurial…等。</description></item><item><title>版本控制 svn move 移動或更名</title><link>https://demo.gh.wu-boy.com/2011/09/svn-mv-vs-git-mv/</link><pubDate>Tue, 27 Sep 2011 06:06:25 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2011/09/svn-mv-vs-git-mv/</guid><description>公司採用 svn 當作版本控制，而我最近在整理 svn 上面全部的 source code。基本上我都會將 git 跟 svn 也一起搭配著用，因為個人比較熟悉 git 的操作方式，然而跟同事討論了專案目錄的架構，進而要把一些目錄轉換大小寫，本來的 App 就改成 app，這個在 git 底下(OS: Linux)操作非常容易，直接 git mv App app，之後看 git status 可以發現底下輸出：
 # On branch develop
 # Changes to be committed:
-# (use "git reset HEAD &amp;lt;file..." to unstage)
+# (use "git reset HEAD ..." to unstage)
 #
 # renamed: nav/hacks.txt - Nav/hacks.txt
 # renamed: nav/moo.fx.js - Nav/moo.fx.js
@@ -33,7 +33,7 @@ fatal: index file corrupt&lt;/pre> 解決此問題非常簡單，要先刪除 in
 &lt;h3 id="取消已經暫存的檔案-假如我們有兩個檔案需要-commit但是不小心按到-git-add--全部加入到暫存區那該怎麼恢復呢">取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？&lt;/h3>
 &lt;pre class="brush: bash; title: ; notranslate" title=""># On branch master
 # Changes to be committed:
-# (use "git reset HEAD &amp;lt;file>..." to unstage)
+# (use "git reset HEAD &lt;file>..." to unstage)
 #
 # modified: Makefile
 # modified: user/easy_setup/easysetup.h
@@ -43,12 +43,12 @@ fatal: index file corrupt&lt;/pre> 解決此問題非常簡單，要先刪除 in
 &lt;p>&lt;span style="color:red">user/easy_setup/easysetup.h: locally modified&lt;/span>』此訊息，這時候在用 git status 看狀態&lt;/p>
 &lt;pre class="brush: bash; title: ; notranslate" title=""># On branch master
 # Changes to be committed:
-# (use "git reset HEAD &amp;lt;file>..." to unstage)
+# (use "git reset HEAD &lt;file>..." to unstage)
 #
 # modified: Makefile
 #
 # Changed but not updated:
-# (use "git add &amp;lt;file>..." to update what will be committed)
+# (use "git add &lt;file>..." to update what will be committed)
 #
 # modified: user/easy_setup/easysetup.h
 #&lt;/pre></description></item><item><title>Git 版本控制: 「You have some suspicious patch lines」</title><link>https://demo.gh.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E3%80%8Cyou-have-some-suspicious-patch-lines%E3%80%8D/</link><pubDate>Wed, 18 Aug 2010 06:18:11 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E3%80%8Cyou-have-some-suspicious-patch-lines%E3%80%8D/</guid><description>相信大家對 Git 並不陌生，這次在升級 Moztw 的討論區，從 3.0.5 升級到 3.0.7 p1，過程由其他 Moztw 成員升級，我在將最後程式 commit 到 github，因為兩個版本差異性很大，所以有新增多個檔案，commit 過程出現了錯誤訊息：「You have some suspicious patch lines」，這是因為 git 會檢查每行程式碼最後是否有多餘空白或者是 Tab 按鍵，為瞭解決此問題，可以去修改 .git/hooks/pre-commit，將底下程式碼：
@@ -61,7 +61,7 @@ bad_line("trailing whitespace", $_);
 if (/^\s* \t/) {
 bad_line("indent SP followed by a TAB", $_);
 }
-if (/^([&amp;lt;])\1{6} |^={7}$/) {
+if (/^([])\1{6} |^={7}$/) {
 bad_line("unresolved merge conflict", $_);
 }
 } 改成： if (s/^\+//) {
@@ -72,17 +72,15 @@ chomp;
 R&amp;ndash;A&amp;ndash;B&amp;ndash;C&amp;ndash;D&amp;ndash;E&amp;ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成
 R&amp;ndash;A&amp;ndash;D'&amp;ndash;E&amp;ndash;HEAD 有兩種方式可以移除 B &amp;amp; C
 # detach head and move to D commit
-git checkout &amp;lt;SHA1-for-D
+git checkout
 # move HEAD to A, but leave the index and working tree as for D
-git reset --soft &amp;lt;SHA1-for-A
+git reset --soft
 # Redo the D commit re-using the commit message, but now on top of A
-git commit -C &amp;lt;SHA1-for-D
-# Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD &amp;lt;SHA1-for-D master
+git commit -C
+# Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD master
 # push it
 git push --force
-另一種方法是利用 cherry-pick 方式 git rebase --hard &amp;lt;SHA1 of A
-git cherry-pick &amp;lt;SHA1 of D
-git cherry-pick &amp;lt;SHA1 of E 這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !</description></item><item><title>[FreeBSD] 簡易架設 git Server，git 使用教學</title><link>https://demo.gh.wu-boy.com/2009/10/freebsd-%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-git-server%EF%BC%8Cgit-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/</link><pubDate>Mon, 05 Oct 2009 06:18:51 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2009/10/freebsd-%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-git-server%EF%BC%8Cgit-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/</guid><description>&lt;p>&lt;a href="http://git-scm.com/">Git&lt;/a> 是一套免費 open source 的版本控制軟體，另外還有很多套版本控制軟體，如：&lt;a href="http://mercurial.selenic.com/wiki/">Mercurial&lt;/a>, &lt;a href="http://bazaar-vcs.org/">Bazaar&lt;/a>, &lt;a href="http://subversion.tigris.org/">Subversion&lt;/a>, &lt;a href="http://www.nongnu.org/cvs/">CVS&lt;/a>, &lt;a href="http://www.perforce.com/">Perforce&lt;/a>, and &lt;a href="http://msdn.microsoft.com/en-us/vstudio/aa718670.aspx">Visual SourceSafe&lt;/a>，其中 Mercurial 又是 &lt;a href="http://googlecode.blogspot.com/2009/04/mercurial-support-for-project-hosting.html">Google Code Project Hosting 採用的版本控制系統&lt;/a>，當然 google 也支援原本的 &lt;a href="http://subversion.tigris.org/">Subversion&lt;/a>，Git 為現在很紅的一套版本控制 Software，底下紀錄在 &lt;a href="http://www.freebsd.org/">FreeBSD&lt;/a> 如何架設簡易 Git Server。 1. 利用 FreeBSD ports 安裝：&lt;/p>
+另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick 這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !</description></item><item><title>[FreeBSD] 簡易架設 git Server，git 使用教學</title><link>https://demo.gh.wu-boy.com/2009/10/freebsd-%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-git-server%EF%BC%8Cgit-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/</link><pubDate>Mon, 05 Oct 2009 06:18:51 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://demo.gh.wu-boy.com/2009/10/freebsd-%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-git-server%EF%BC%8Cgit-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/</guid><description>&lt;p>&lt;a href="http://git-scm.com/">Git&lt;/a> 是一套免費 open source 的版本控制軟體，另外還有很多套版本控制軟體，如：&lt;a href="http://mercurial.selenic.com/wiki/">Mercurial&lt;/a>, &lt;a href="http://bazaar-vcs.org/">Bazaar&lt;/a>, &lt;a href="http://subversion.tigris.org/">Subversion&lt;/a>, &lt;a href="http://www.nongnu.org/cvs/">CVS&lt;/a>, &lt;a href="http://www.perforce.com/">Perforce&lt;/a>, and &lt;a href="http://msdn.microsoft.com/en-us/vstudio/aa718670.aspx">Visual SourceSafe&lt;/a>，其中 Mercurial 又是 &lt;a href="http://googlecode.blogspot.com/2009/04/mercurial-support-for-project-hosting.html">Google Code Project Hosting 採用的版本控制系統&lt;/a>，當然 google 也支援原本的 &lt;a href="http://subversion.tigris.org/">Subversion&lt;/a>，Git 為現在很紅的一套版本控制 Software，底下紀錄在 &lt;a href="http://www.freebsd.org/">FreeBSD&lt;/a> 如何架設簡易 Git Server。 1. 利用 FreeBSD ports 安裝：&lt;/p>
 &lt;pre class="brush: bash; title: ; notranslate" title="">cd /usr/ports/devel/git; make install clean&lt;/pre> 2. 修改 /etc/rc.conf
 &lt;pre class="brush: bash; title: ; notranslate" title="">git_daemon_enable="YES"
 git_daemon_directory="/path/git/repo"

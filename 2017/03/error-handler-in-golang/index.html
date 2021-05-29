@@ -22,7 +22,7 @@ import (
 
 func isEnable(enable bool) (bool, error) {
     if enable {
-        return false, errors.New("You can&#039;t enable this setting")
+        return false, errors.New("You can't enable this setting")
     }
 
     return true, nil
@@ -50,7 +50,7 @@ func (e *errorString) Error() string {
     Error() string
 }</code></pre><p>只要任何 <code>stuct</code> 有實作 <code>Error()</code> 接口，就可以變成 error 物件。這在下面的自訂錯誤訊息會在提到。除了上面使用 errors 套件外，還可以使用 fmt 套件，將上述程式碼改成:</p><pre><code class=language-go>func isEnable(enable bool) (bool, error) {
     if enable {
-        return false, fmt.Errorf("You can&#039;t enable this setting")
+        return false, fmt.Errorf("You can't enable this setting")
     }
 
     return true, nil
@@ -69,7 +69,7 @@ func TestIsMyError(t *testing.T) {
         t.Fatal("should be false")
     }
 
-    if err.Error() != "You can&#039;t enable this setting" {
+    if err.Error() != "You can't enable this setting" {
         t.Fatal("message error")
     }
 }</code></pre><p>另外 Go 語言最常用的測試套件 <a href=https://github.com/stretchr/testify>Testify</a>，可以改寫如下:</p><pre><code class=language-go>package error
@@ -84,7 +84,7 @@ func TestIsEnable(t *testing.T) {
     ok, err := isEnable(true)
     assert.False(t, ok)
     assert.NotNil(t, err)
-    assert.Equal(t, "You can&#039;t enable this setting", err.Error())
+    assert.Equal(t, "You can't enable this setting", err.Error())
 }</code></pre><h2 id=go-自訂錯誤訊息>Go 自訂錯誤訊息</h2><p>從上面的例子可以看到，錯誤訊息都是固定的，如果我們要動態改動錯誤訊息，就必須帶變數進去。底下我們來看看如何實現自訂錯誤訊息:</p><pre><code class=language-go>package main
 
 import (

@@ -9,22 +9,21 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>php</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/05/%E5%9C%A8-ubuntu-%E5%BA%95%E4%B8%8B%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%9D-cakephp-framework-%E7%92%B0%E5%A2%83/><h2 class=post-title>在 Ubuntu 底下快速安裝 CakePHP Framework 環境</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 11, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;100&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;97&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>最近因為別的專案用到 CakePHP 這套 PHP Framwork，剛好有這機會來學習 CakePHP，目前已經 Release 到 1.3.8 & 1.2.10 Stable，本篇紀錄如何在 Ubuntu 10.10 安裝 1.3.8 版本，本人不推薦用 2.0， 因為踩到很多雷阿，大家可以到 CakePHP GitHub 找尋自己想要的版本，安裝環境如下:
 Ubunut 10.10 32 Desktop 版本 Apache/2.2.16 (Ubuntu) PHP 5.3.3-1ubuntu9.5 with Suhosin-Patch (cli) MySQL 5.1.49 1. 先下載 1.3.8 版本 2. 解壓縮到 /var/www 底下 3. 設定 apache virtual host 複製 virtual host 設定檔
 cp /etc/apache2/sites-available/default /etc/apache2/sites-available/cakephp 修改設定檔 ServerName cakephp.localhost
 DocumentRoot /var/www/cakephp/app/webroot
-&lt;Directory /var/www/cakephp/app/webroot
 Options All
 AllowOverride All
 Order allow,deny
 allow from all
-&lt;/Directory 4.
+4.
 <a href=https://demo.gh.wu-boy.com/2011/05/%E5%9C%A8-ubuntu-%E5%BA%95%E4%B8%8B%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%9D-cakephp-framework-%E7%92%B0%E5%A2%83/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/cakephp/>CakePHP</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/><h2 class=post-title>你不可不知的 JSON 基本介紹</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 17, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;612&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;584&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>還不知道 <a href=http://www.json.org/>JSON</a> 是什麼嘛？本篇教學會帶您瞭解 JSON 在網站上的應用，以及運作流程跟使用 <a href=http://www.php.net>PHP</a> 和 <a href=http://zh.wikipedia.org/zh-hant/JavaScript>JavaScript</a> 來處理 JSON。假如您現在的工作就是網站設計師，相信一定聽過 JSON，但是什麼是 JSON，它能夠做什麼，及您能透過它在網站上做到哪些事情呢？</p><p>透過本篇介紹您可以瞭解基本的 JSON，底下會列出本篇會提到的重點：</p><ul><li>什麼是 JSON</li><li>JSON 應用在哪些地方</li><li>如何建立 JSON 字串</li><li>一個簡單的 JSON 範例</li><li>JSON vs XML</li><li>如何透過 PHP 及 JavaScript 使用 JSON</li></ul><h2 id=什麼是-json>什麼是 JSON</h2><p>JSON 是個以純文字為基底去儲存和傳送簡單結構資料，你可以透過特定的格式去儲存任何資料(字串,數字,陣列,物件)，也可以透過物件或陣列來傳送較複雜的資料。一旦建立了您的 JSON 資料，就可以非常簡單的跟其他程式溝通或交換資料，因為 JSON 就只是個純文字格式。</p><p>JSON 的優點如下:</p><ul><li>相容性高</li><li>格式容易瞭解，閱讀及修改方便</li><li>支援許多資料格式 (number,string,booleans,nulls,array,associative array)</li><li>許多程式都支援函式庫讀取或修改 JSON 資料</li></ul><a href=https://demo.gh.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/javascrpt/>JavaScrpt</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/json/>JSON</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/04/codeigniter-2-0-x-mvc-%E6%9E%B6%E6%A7%8B%E4%BB%8B%E7%B4%B9/><h2 class=post-title>CodeIgniter 2.0.X MVC 架構介紹</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 16, 2011
@@ -41,7 +40,7 @@ allow from all
 define('ENVIRONMENT', 'production');</pre>當您設定為 production，表示網站不需要任意輸出錯誤訊息，如果調整成 development，系統就會打開全部錯誤訊息，這對開發者相當重要。如果想瞭解更多，請參考<p><a href=http://codeigniter.org.tw/user_guide/general/environments.html>Handling Multiple Environments</a>。 歡迎大家下載最新版本: <a href=http://www.codeigniter.org.tw/downloads>http://www.codeigniter.org.tw/downloads</a> 如果想加入翻譯團隊，可以參考這裡: <a href=https://github.com/appleboy/PHP-CodeIgniter-Framework-Taiwan>https://github.com/appleboy/PHP-CodeIgniter-Framework-Taiwan</a></p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2011/03/ubuntu-debian-%E6%9E%B6%E8%A8%AD-apache-mpm-worker-mod_fcgid-%E7%AD%86%E8%A8%98/><h2 class=post-title>Ubuntu (Debian) 架設 apache mpm worker mod_fcgid 筆記</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 17, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;244&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;232&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近想架設 <a href=http://www.redmine.org/>Redmine</a> 在 <a href=http://www.ubuntu.com/>Ubuntu</a> 伺服器上面，架設之前要先搞定 apache 搭配 mpm worker 及 mod_fcgi module，安裝步驟其實不難，就搭配懶人指令 <a href=http://en.wikipedia.org/wiki/Advanced_Packaging_Tool>apt</a> 就可以了。</p><h3 id=安裝-apache-mpm-worker-由於怕安裝過程會叫你把-apache2-mpm-worker-移除改裝-apache2-mpm-prefork所以安裝順序上面有些變化請參考底下>安裝 apache mpm worker 由於怕安裝過程會叫你把 apache2-mpm-worker 移除，改裝 apache2-mpm-prefork，所以安裝順序上面有些變化，請參考底下:</h3><pre class="brush: bash; title: ; notranslate" title># 先安裝
 $ apt-get install apache2.2-bin apache2.2-common apache2-mpm-worker libapache2-mod-fcgid php5-cli php5-cgi php5-common
 #後安裝

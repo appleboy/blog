@@ -34,8 +34,8 @@ Templeate: 這搭配 Facebook api 可以直接做個人頁面，請參考這裡 
 <a href=https://demo.gh.wu-boy.com/tags/osdc/>OSDC</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/perl/>Perl</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/python/>Python</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/><h2 class=post-title>[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 26, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;697&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;612&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p><p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p><p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p><p>if_readlist_proc 函式裡面:</p><pre><code class=language-c>fh = fopen_or_warn(_PATH_PROCNET_DEV, "r");
 if (!fh) {
     return if_readconf();
@@ -46,12 +46,8 @@ if (!fh) {
 <a href=https://demo.gh.wu-boy.com/tags/embedded-system/>Embedded System</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/linux/>Linux</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/><h2 class=post-title>[C/C++] 判斷檔案是否存在 file_exists</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 8, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;92&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:</p><pre><code class=language-php>&lt;?php
-if(file_exists("files/appleboy.c")) {
-    echo "File found!";
-}
-?&gt;</code></pre><p>在 C 裡面該如何實做？有兩種方式如下:</p><h3 id=1-直接開檔>1. 直接開檔</h3><pre><code class=language-C>bool file_exists(const char * filename)
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;77&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:</p><pre><code class=language-php></code></pre><p>在 C 裡面該如何實做？有兩種方式如下:</p><h3 id=1-直接開檔>1. 直接開檔</h3><pre><code class=language-C>bool file_exists(const char * filename)
 {
     if (FILE * file = fopen(filename, "r"))
     {
@@ -64,9 +60,9 @@ if(file_exists("files/appleboy.c")) {
 foo.open("bar");
 
 if(foo.is_open() == true)
-     std::cout &lt;&lt; "Exist";
+     std::cout << "Exist";
 else 
-     std::cout &lt;&lt; "Doesn&#039;t Exist";</code></pre><h3 id=2-讀取檔案狀態>2. 讀取檔案狀態</h3><pre><code class=language-C>#include&lt;sys/stat.h&gt;
+     std::cout << "Doesn't Exist";</code></pre><h3 id=2-讀取檔案狀態>2. 讀取檔案狀態</h3><pre><code class=language-C>#include<sys/stat.h>
 int file_exists (char * fileName)
 {
    struct stat buf;
@@ -80,21 +76,22 @@ int file_exists (char * fileName)
 
 }</code></pre><blockquote></blockquote></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/><h2 class=post-title>[C/C++] 將字串轉成 16 進位</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 13, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;212&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;109&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>最近在碰嵌入式系統遇到一個還蠻常見的問題，我要將16進位的字串(例如 AAC2) test 轉成16進位的 unsigned int，讓我可以進行 & | not 一些二進位運算，底下是轉換程式，大家參考看看
-int power(int x,int n) { int i; int num = 1; for(i=1;i&lt;=n;i++) num*=x; return num; } int transfer_string_to_hex(unsigned char *str_name) { char string[]="0123456789ABCDEF"; int number[]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}; int i = 0; int j = 0; int str_number = 0; for(i=0; i&lt;sizeof(str_name); i++) { for(j=0; j&lt;sizeof(string); j++) { if(toupper(str_name&lt;em&lt;/em) == string[j]) { str_number += power(16, (sizeof(str_name)-1-i))* number[j]; break; } } } return str_number; } 由於嵌入式並沒有 pow 這個函式可以使用，所以自己寫了 power 來取代，我用在偵測網路線是否有插上：
+int power(int x,int n) { int i; int num = 1; for(i=1;i) == string[j]) { str_number += power(16, (sizeof(str_name)-1-i))* number[j]; break; } } } return str_number; } 由於嵌入式並沒有 pow 這個函式可以使用，所以自己寫了 power 來取代，我用在偵測網路線是否有插上：
+int detect_wan_wire() { FILE *fp = NULL; unsigned char *pch; unsigned char buf[128] = {0}; unsigned int mask = 0x0004; int retry = 3; int res = 0; int i = 0; unsigned int a; unsigned int b; sprintf(buf, "
 <a href=https://demo.gh.wu-boy.com/2010/09/cc-%E5%B0%87%E5%AD%97%E4%B8%B2%E8%BD%89%E6%88%90-16-%E9%80%B2%E4%BD%8D/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/><h2 class=post-title>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 4, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;418&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;392&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
-/* strcat example */ #include &lt;stdio.h> #include &lt;string.h> int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
+/* strcat example */ #include #include int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
 these strings are concatenated. 看一下 strcat 原始碼：
 char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。
 <a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/><h2 class=post-title>[C/C++] cstring (string.h) 搜尋函式：strstr, strchr</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 3, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;232&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>這次介紹 C 語言常用 string 函式：strstr，主要是針對兩個輸入參數做比對，Parameters 1 是輸入字串，Parameters 2 是找尋字串，strstr 會先將頭一次比對成功的 pointer 回傳，也就是如果要找尋 appleboyappleboy 字串中的 boy，函式會回傳第一次比對成功的 boy pointer，而並非回傳最後一個比對到的，底下是一個參考範例：
-strstr /* strstr example */ #include &lt;stdio.h> #include &lt;string.h> int main () { char str[] ="This is a simple string"; char * pch; /* 找尋 simple 字串 */ pch = strstr (str,"simple"); /* 將 simple 換成 sample */ strncpy (pch,"sample",6); puts (str); return 0; } 看一下 Kernel 原始檔案，strstr 函式：
+strstr /* strstr example */ #include #include int main () { char str[] ="This is a simple string"; char * pch; /* 找尋 simple 字串 */ pch = strstr (str,"simple"); /* 將 simple 換成 sample */ strncpy (pch,"sample",6); puts (str); return 0; } 看一下 Kernel 原始檔案，strstr 函式：
 /* * Find the first occurrence of find in s.
 <a href=https://demo.gh.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/><h2 class=post-title>[網站] 好站連結 (七) Android, javascript, Css, PHP, Perl, FreeBSD, Linux</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 30, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
@@ -116,9 +113,9 @@ jQuery Week Calendar Javascript: reference the parent window from a popup How to
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/05/cc-count-1-bits-of-input-value-by-shifting/><h2 class=post-title>[C/C++] count 1 bits of input value by shifting.</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 18, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;78&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>之前寫了一篇：『<a href=http://blog.wu-boy.com/2010/02/24/2036/>[C/C++] 計算二進位任意數含有多少個位元為1?</a>』，裡面用 n &= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：</p><pre><code class=language-C>#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;76&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>之前寫了一篇：『<a href=http://blog.wu-boy.com/2010/02/24/2036/>[C/C++] 計算二進位任意數含有多少個位元為1?</a>』，裡面用 n &= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：</p><pre><code class=language-C>#include <stdio.h>
+#include <stdlib.h>
 int count_1_bit_count(unsigned int);
 int main(){
     int count = 0, a;
@@ -131,7 +128,7 @@ int main(){
 int count_1_bit_count(unsigned int n)
 {
     int count = 0;
-    for(count = 0; n != 0; n &gt;&gt;= 1L)
+    for(count = 0; n != 0; n >>= 1L)
     {    
         if(n & 0x01)
             count++;

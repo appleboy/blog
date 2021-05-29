@@ -29,10 +29,10 @@ GitHub 提供一個非常方便的功能，就是可以將靜態檔案部署在 
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
 </span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-js data-lang=js>module.exports = {
-  assetsDir: &amp;<span style=color:#a61717;background-color:#e3d2d2>#</span><span style=color:#b452cd>039</span>;assets&amp;<span style=color:#a61717;background-color:#e3d2d2>#</span><span style=color:#b452cd>039</span>;,
-  publicPath: process.env.NODE_ENV === &amp;<span style=color:#a61717;background-color:#e3d2d2>#</span><span style=color:#b452cd>039</span>;production&amp;<span style=color:#a61717;background-color:#e3d2d2>#</span><span style=color:#b452cd>039</span>;
-  ? &amp;<span style=color:#a61717;background-color:#e3d2d2>#</span><span style=color:#b452cd>039</span>;<span style=color:#1c7e71>/vue-gh-pages-demo/</span>&amp;<span style=color:#a61717;background-color:#e3d2d2>#</span><span style=color:#b452cd>039</span>;
-  : &amp;<span style=color:#a61717;background-color:#e3d2d2>#</span><span style=color:#b452cd>039</span>;<span style=color:#a61717;background-color:#e3d2d2>/&amp;#039;,</span>
+  assetsDir: <span style=color:#cd5555>&#39;assets&#39;</span>,
+  publicPath: process.env.NODE_ENV === <span style=color:#cd5555>&#39;production&#39;</span>
+  ? <span style=color:#cd5555>&#39;/vue-gh-pages-demo/&#39;</span>
+  : <span style=color:#cd5555>&#39;/&#39;</span>,
 };
 </code></pre></td></tr></table></div></div><p>從上面可以看到當開發者需要部署到 GitHub 時，就可以動態將 index.html 內的靜態檔案路徑換成 sub folder 方式，而不影響本機端開發。<strong>完整程式範例可以<a href=https://github.com/go-training/vue-gh-pages-demo>參考這邊</a></strong>。</p><h2 id=搭配-drone-自動化部署>搭配 Drone 自動化部署</h2><p>由於 GitHub Page 預設是讀 <code>gh-pages</code> 分支，故需要先將此分支建立起來，後續才可以正常部署，請參照底下 <code>.drone.yml</code> 內容</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>

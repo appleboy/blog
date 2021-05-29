@@ -57,7 +57,7 @@ jQuery Week Calendar Javascript: reference the parent window from a popup How to
 <a href=https://demo.gh.wu-boy.com/tags/perl/>Perl</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2009/08/freebsd-%E5%8F%96%E5%BE%97-freebsd-cvsup-%E7%9A%84%E6%9B%B4%E6%96%B0%E7%8B%80%E6%85%8B/><h2 class=post-title>[FreeBSD] 取得 FreeBSD CVSUP 的更新狀態</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 31, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;572&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;542&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=https://www.flickr.com/photos/appleboy/3873839724/ title="FreeBSD CVS Site_1251699923593 (by appleboy46)"><img src="https://i1.wp.com/farm3.static.flickr.com/2548/3873839724_f8dbe78179.jpg?resize=500%2C306&ssl=1" title="FreeBSD CVS Site_1251699923593 (by appleboy46)" alt="FreeBSD CVS Site_1251699923593 (by appleboy46)" data-recalc-dims=1></a> 在 Sayya Joehorn 個人版看到有人實做出偵測台灣 CVSUP Server 更新狀態，以及更新的時間，也有程式碼的釋出，參考這篇：<a href=http://blog.urdada.net/2007/12/24/69/>Script: 取得 FreeBSD CVSUP 的更新狀態</a>，這篇寫的蠻清楚的，只需要 perl 跟 php 就可以完成，不過在使用過程有些事項必須要注意，在 FreeBSD 6.2 R 之後，已經內建了 <a href=http://www.freshports.org/net/csup/>csup</a> 指令來更新 ports 或者是核心，所以要在另外安裝上 <a href=http://www.freshports.org/net/cvsup/>cvsup</a> ports 套件，在 Perl 方面，也先裝 <a href=http://www.freshports.org/net/p5-Net-Rendezvous/>net/p5-Net-Rendezvous</a> 才可以正確使用。</p><pre class="brush: bash; title: ; notranslate" title># 安裝必備軟體
 cd /usr/ports/net/p5-Net-Rendezvous/ && make install clean
 cd /usr/ports/net/cvsup-without-gui && make install clean</pre><a href=https://demo.gh.wu-boy.com/2009/08/freebsd-%E5%8F%96%E5%BE%97-freebsd-cvsup-%E7%9A%84%E6%9B%B4%E6%96%B0%E7%8B%80%E6%85%8B/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
@@ -82,7 +82,7 @@ use utf8;
 binmode(STDIN, ':encoding(utf8)');
 binmode(STDOUT, ':encoding(utf8)');
 binmode(STDERR, ':encoding(utf8)');
-if($_ =~ m/\s*&lt;div\s*class="title"&lt;a\s*href=".+"(.+)&lt;\/a&lt;\/div\s*/)
+if($_ =~ m/\s*(.+)\s*/)
 {
 $pic_desc = $1;
 print "desc: " . $1 . " \n"
@@ -110,8 +110,8 @@ thread_concurrency = 8
 log-slow-queries = /var/log/mysql/mysql-slow.
 <a href=https://demo.gh.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/perl/>Perl</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2008/03/freebsd-%E5%88%A9%E7%94%A8-perl-and-shell-script-%E5%A4%A7%E9%87%8F%E5%BB%BA%E5%88%B6%E5%B8%B3%E8%99%9F%E5%8F%8A-quota/><h2 class=post-title>[FreeBSD] 利用 perl and shell script 大量建制帳號及 Quota</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 28, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;298&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;179&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近幫繫上處理 <a href=http://www.freebsd.org/>FreeBSD</a> 機器，要碰到大量建制帳號跟 quota，所以上網找了一下教學，網路上就很多教學了，只不過要懂一些 <a href=http://cpan.perl.org/>perl</a> 跟 <a href=http://linux.vbird.org/linux_basic/0340bashshell-scripts.php>shell script</a> 的基本觀念，在弄起來會比較方便，時間也會縮短許多。 首先開帳號的話，就是利用 <a href="http://www.freebsd.org/cgi/man.cgi?query=pw&apropos=0&sektion=0&manpath=FreeBSD+7.0-RELEASE&format=html">pw</a> 這個指令了，這個裡指令非常強大，可以新增使用者，或者是修改使用者的特性，如登入的 shell，comment….等等 先產生一個 passwd.txt 裡面內容格式就是 “帳號,密碼”，這樣的格式</p><pre class="brush: bash; title: ; notranslate" title>biomat,"xxxx"
 biomed,"xxxx"
 surface,"xxxx"

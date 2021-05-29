@@ -76,10 +76,10 @@ metadata:
 secrets:
 - name: drone-deploy-token-2xzqw</code></pre><p>可以看到 <code>drone-deploy-token-2xzqw</code> 此 secret name，接著從這名稱取得 <code>ca.cert</code> 跟 <code>token</code>:</p><pre><code class=language-bash>$ kubectl -n demo get \
   secret/drone-deploy-token-2xzqw \
-  -o yaml | egrep &#039;ca.crt:|token:&#039;</code></pre><p>由於 token 是透過 <code>base64</code> encode 輸出的。那也是要用 base64 decode 解出</p><pre><code class=language-bash># linux:
-$ echo token | base64 -d && echo&#039;&#039;
+  -o yaml | egrep 'ca.crt:|token:'</code></pre><p>由於 token 是透過 <code>base64</code> encode 輸出的。那也是要用 base64 decode 解出</p><pre><code class=language-bash># linux:
+$ echo token | base64 -d && echo''
 # macOS:
-$ echo token | base64 -D && echo&#039;&#039;</code></pre><h3 id=建立-k8s-deployment>建立 K8S Deployment</h3><p>在這邊我們需要先建立第一次 K8S 環境。</p><pre><code class=language-yml>apiVersion: extensions/v1beta1
+$ echo token | base64 -D && echo''</code></pre><h3 id=建立-k8s-deployment>建立 K8S Deployment</h3><p>在這邊我們需要先建立第一次 K8S 環境。</p><pre><code class=language-yml>apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: k8s-node-demo
@@ -133,7 +133,7 @@ k8s-node-demo   100.67.24.253   a4fba848aadbc...   80:30664/TCP   11h</code></pr
       target: docker_username
     - source: demo_password
       target: docker_password
-  tags: [ &#039;${DRONE_TAG}&#039; ]
+  tags: [ '${DRONE_TAG}' ]
   when:
     event: tag</code></pre><p>請先到 Drone 專案後台的 Secrets 設定 <code>demo_username</code> 及 <code>demo_password</code> 內容。並採用 GitHub 流程透過 Git Tag 方式進行。接著設定 K8S Deploy:</p><pre><code class=language-yml>deploy:
   image: quay.io/honestbee/drone-kubernetes

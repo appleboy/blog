@@ -14,14 +14,14 @@
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;275&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片教學>影片教學</a></li><li><a href=#工具特點及優勢>工具特點及優勢</a></li><li><a href=#使用方式>使用方式</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src="https://lh3.googleusercontent.com/VHlioiLpLfqBnh5PnGjYhU6l7dZ2V3PURxz5RfulFL74xYYr4kL5EgkOa-OfLQyIALLgmRIcKlLHnbIENFe0cyv82XQW5ia0HgeNwm4u2ijNsjSQQjkrY4JJjloB_pHTOT-EtxzxOlw=w1920-h1080" alt=croc></p><p>兩台電腦之間該如何傳送檔案，其實方法有超多種的，像是 FTP 或透過 SSH 方式來傳送檔案，但是這些方法步驟都有點複雜，FTP 需要架設 FTP 服務，SSH 要學習 SCP 指令，那有沒有更好的方式從單一電腦點對點傳送檔案到另一台呢？傳送過程需要快速又要安全，本篇介紹一套用 <a href=https://golang.org>Go 語言</a>寫的工具叫 <a href=https://github.com/schollz/croc>croc</a>，詳細的介紹可以參考看看<a href=https://schollz.com/blog/croc6/>作者的 Blog 介紹</a>，此工具有底下功能及優勢。</p><h2 id=影片教學>影片教學</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/lq9SRsxse4o style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><ul><li>00:00​ 兩台電腦該如何傳送檔案?</li><li>01:40​ 介紹 croc 工具優勢跟特點</li><li>03:24​ 如何使用 croc 工具</li><li>05:34​ 自行產生 secret code 方式</li><li>06:36​ croc relay server 介紹</li><li>07:11​ 自行架設 relay server</li><li>10:25​ 心得 (簡單, 快速, 安全)</li></ul><h2 id=工具特點及優勢>工具特點及優勢</h2><ol><li>用 relay 方式讓任意兩台電腦傳送檔案</li><li>點對點加密 (使用 <a href=https://en.wikipedia.org/wiki/Password-authenticated_key_agreement>PAKE</a>)</li><li>跨平台傳送檔案 (Windows, Linux, Mac)</li><li>一次可以傳送多個檔案或整個目錄</li><li>支援續傳</li><li>不需要自行架設服務或使用 port-forwarding 相關技術</li><li>優先使用 ipv6，而 ipv4 當作備援</li><li>可以使用 socks5 proxy</li></ol><h2 id=使用方式>使用方式</h2><p>使用方式如同底下這張圖所表示</p><p><img src="https://lh3.googleusercontent.com/VHlioiLpLfqBnh5PnGjYhU6l7dZ2V3PURxz5RfulFL74xYYr4kL5EgkOa-OfLQyIALLgmRIcKlLHnbIENFe0cyv82XQW5ia0HgeNwm4u2ijNsjSQQjkrY4JJjloB_pHTOT-EtxzxOlw=w1920-h1080" alt=croc></p><p>傳送端只需要執行 <code>croc send file.txt</code> 即可</p><pre><code class=language-sh>$ croc send ~/Downloads/data.csv
-Sending &#039;data.csv&#039; (632.9 kB)
+Sending 'data.csv' (632.9 kB)
 Code is: cabinet-rodeo-mayday
 On the other computer run
 
 croc cabinet-rodeo-mayday</code></pre><p>上面可以看到會自動產生一個 <code>secret code</code>，接著在另外一台電腦執行底下指令</p><pre><code class=language-sh>$ croc cabinet-rodeo-mayday
-Accept &#039;data.csv&#039; (632.9 kB)? (y/n) y
+Accept 'data.csv' (632.9 kB)? (y/n) y
 
-Receiving (&lt;-111.243.108.9:51032)</code></pre><p>當然你可以自訂 <code>secret code</code></p><pre><code class=language-sh>croc send --code appleboy ~/Downloads/data.csv</code></pre><p>由於此工具是透過 relay server 方式來進行傳送，所以指令會預設連到官方所架設的服務器</p><pre><code class=language-go>// DEFAULT_RELAY is the default relay used (can be set using --relay)
+Receiving (<-111.243.108.9:51032)</code></pre><p>當然你可以自訂 <code>secret code</code></p><pre><code class=language-sh>croc send --code appleboy ~/Downloads/data.csv</code></pre><p>由於此工具是透過 relay server 方式來進行傳送，所以指令會預設連到官方所架設的服務器</p><pre><code class=language-go>// DEFAULT_RELAY is the default relay used (can be set using --relay)
 var (
     DEFAULT_RELAY      = "croc.schollz.com"
     DEFAULT_RELAY6     = "croc6.schollz.com"
@@ -36,7 +36,7 @@ var (
 [info]  2021/02/16 11:38:59 starting TCP server on 9011</code></pre><p>可以指定單一 port:</p><pre><code class=language-sh>$ croc relay --ports 3001
 [info]  2021/02/16 11:39:22 starting croc relay version v8.6.7-05640cd
 [info]  2021/02/16 11:39:22 starting TCP server on 3001</code></pre><p>接著在傳送檔案也要跟著換掉 relay server</p><pre><code class=language-sh>$ croc --relay 127.0.0.1:3001 send ~/Downloads/data.csv
-Sending &#039;data.csv&#039; (632.9 kB)
+Sending 'data.csv' (632.9 kB)
 Code is: saddle-origin-horizon
 On the other computer run
 

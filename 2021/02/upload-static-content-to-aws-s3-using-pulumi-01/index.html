@@ -8,7 +8,7 @@
 設定 Pulumi Stack 環境變數 (教學二)
 建立第二個 Pulumi Stack 環境 (教學二)
 刪除 Pulumi Stack 環境 (教學二)
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","name":"初探 pulumi 上傳靜態網站到 aws s3 (一)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 Pulumi 上傳靜態網站到 AWS S3 (一)","description":"\n上一篇作者提到了兩套 Infrastructure as Code 工具，分別是 Terraform 跟 Pulumi，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 GitHub 上面瀏覽及下載。教學會拆成七個章節:\n 建立 Pulumi 新專案 設定 AWS 環境 初始化 Pulumi 架構 (建立 S3 Bucket) 更新 AWS 架構 (S3 Hosting) 設定 Pulumi Stack 環境變數 (教學二) 建立第二個 Pulumi Stack 環境 (教學二) 刪除 Pulumi Stack 環境 (教學二) ","inLanguage":"en","wordCount":1467,"datePublished":"2021-02-11T07:29:56","dateModified":"2021-02-11T07:29:56","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, pulumi"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="初探 Pulumi 上傳靜態網站到 AWS S3 (一)"><meta property="og:description" content="
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","name":"初探 pulumi 上傳靜態網站到 aws s3 (一)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 Pulumi 上傳靜態網站到 AWS S3 (一)","description":"\n上一篇作者提到了兩套 Infrastructure as Code 工具，分別是 Terraform 跟 Pulumi，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 GitHub 上面瀏覽及下載。教學會拆成七個章節:\n 建立 Pulumi 新專案 設定 AWS 環境 初始化 Pulumi 架構 (建立 S3 Bucket) 更新 AWS 架構 (S3 Hosting) 設定 Pulumi Stack 環境變數 (教學二) 建立第二個 Pulumi Stack 環境 (教學二) 刪除 Pulumi Stack 環境 (教學二) ","inLanguage":"en","wordCount":1419,"datePublished":"2021-02-11T07:29:56","dateModified":"2021-02-11T07:29:56","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, pulumi"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2021\/02\/upload-static-content-to-aws-s3-using-pulumi-01\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="初探 Pulumi 上傳靜態網站到 AWS S3 (一)"><meta property="og:description" content="
 上一篇作者提到了兩套 Infrastructure as Code 工具，分別是 Terraform 跟 Pulumi，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 GitHub 上面瀏覽及下載。教學會拆成七個章節:
 
 建立 Pulumi 新專案
@@ -33,7 +33,7 @@
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;7&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1467&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1419&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#用-pulumi-建立新專案>用 Pulumi 建立新專案</a><ul><li><a href=#步驟一-安裝-pulumi-cli-工具>步驟一: 安裝 Pulumi CLI 工具</a></li><li><a href=#步驟二-初始化專案>步驟二: 初始化專案</a></li><li><a href=#步驟三-檢查專案目錄結構>步驟三: 檢查專案目錄結構</a></li></ul></li><li><a href=#設定-aws-環境>設定 AWS 環境</a><ul><li><a href=#前置作業>前置作業</a></li><li><a href=#步驟一-設定-aws-region>步驟一: 設定 AWS Region</a></li><li><a href=#步驟二-設定-aws-profile>步驟二: 設定 AWS Profile</a></li></ul></li><li><a href=#初始化-pulumi-架構-建立-s3-bucket>初始化 Pulumi 架構 (建立 S3 Bucket)</a><ul><li><a href=#步驟一-建立新的-s3-bucket>步驟一: 建立新的 S3 Bucket</a></li><li><a href=#步驟二-執行-pulumi-cli-預覽>步驟二: 執行 Pulumi CLI 預覽</a></li><li><a href=#步驟三-執行部署>步驟三: 執行部署</a></li><li><a href=#步驟四-顯示更多-bucket-詳細資訊>步驟四: 顯示更多 Bucket 詳細資訊</a></li><li><a href=#步驟五-更新-bucket-名稱>步驟五: 更新 Bucket 名稱</a></li></ul></li><li><a href=#更新-aws-架構-s3-hosting>更新 AWS 架構 (S3 Hosting)</a><ul><li><a href=#步驟一-建立-indexhtml-放入-s3-內>步驟一: 建立 index.html 放入 S3 內</a></li><li><a href=#步驟二-設定-s3-為-web-hosting>步驟二: 設定 S3 為 Web Hosting</a></li><li><a href=#步驟三-測試-url>步驟三: 測試 URL</a></li></ul></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" title=cover><img src="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" alt=cover title=cover></a></p><p>上一篇作者提到了兩套 <a href=https://www.pulumi.com/docs/get-started/install/>Infrastructure as Code</a> 工具，分別是 <a href=https://www.terraform.io/>Terraform</a> 跟 <a href=https://www.pulumi.com/>Pulumi</a>，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 <a href=https://github.com/go-training/infrastructure-as-code-workshop/tree/main/pulumi/labs/lab01-modern-infrastructure-as-code>GitHub 上面瀏覽及下載</a>。教學會拆成七個章節:</p><ol><li>建立 Pulumi 新專案</li><li>設定 AWS 環境</li><li>初始化 Pulumi 架構 (建立 S3 Bucket)</li><li>更新 AWS 架構 (S3 Hosting)</li><li>設定 Pulumi Stack 環境變數 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>建立第二個 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>刪除 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li></ol><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/ujkXfPsU3Is style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><ul><li>00:00​ Pulumi 應用實作簡介</li><li>01:30​ 章節一: 用 Pulumi 建立新專案</li><li>02:39​ 用 Pulumi CLI 初始化專案</li><li>04:47​ 介紹 Pulumi 產生的 AWS Go 目錄結構內容</li><li>06:10​ 章節二: 設定 AWS 環境</li><li>08:36​ 章節三: 建立 AWS S3 Bucket</li><li>13:44​ 指定 S3 Bucket 名稱</li><li>16:09​ 章節四: 將 S3 Bucket 變成 Web Host</li><li>16:25​ 上傳 index.html 到 S3 Bucket 內</li><li>18:22​ 設定 S3 Bucket 為 Web Host 讀取 index.html</li><li>19:17​ 取得 AWS S3 的 Web URL</li><li>20:55​ 修改 S3 Object 的 Permission (ACL)</li><li>22:45​ 心得感想</li></ul><h2 id=用-pulumi-建立新專案>用 Pulumi 建立新專案</h2><h3 id=步驟一-安裝-pulumi-cli-工具>步驟一: 安裝 Pulumi CLI 工具</h3><p>首先你要在自己電腦安裝上 Pulumi CLI 工具，請參考<a href=https://www.pulumi.com/docs/get-started/install/>官方網站</a>，根據您的作業環境有不同的安裝方式，底下以 Mac 環境為主</p><pre><code class=language-sh>brew install pulumi</code></pre><p>透過 brew 即可安裝成功，那升級工具透過底下即可</p><pre><code class=language-sh>brew upgrade pulumi</code></pre><p>或者您沒有使用 brew，也可以透過 curl 安裝</p><pre><code class=language-sh>curl -fsSL https://get.pulumi.com | sh</code></pre><p>測試 CLI 指令</p><pre><code class=language-sh>$ pulumi version
 v2.20.0</code></pre><p>有看到版本資訊就是安裝成功了</p><h3 id=步驟二-初始化專案>步驟二: 初始化專案</h3><p>透過 <code>pulumi new -h</code> 可以看到說明</p><pre><code class=language-sh>Usage:
   pulumi new [template|url] [flags]
@@ -53,17 +53,17 @@ Flags:
   -y, --yes                       Skip prompts and proceed with default values</code></pre><p>可以選擇的 Template 超多，那我們這次用 AWS 搭配 Go 語言的 Temaplate 當作範例</p><pre><code class=language-sh>$ pulumi new aws-go --dir demo
 This command will walk you through creating a new Pulumi project.
 
-Enter a value or leave blank to accept the (default), and press &lt;ENTER&gt;.
+Enter a value or leave blank to accept the (default), and press <enter>.
 Press ^C at any time to quit.
 
 project name: (demo)
 project description: (A minimal AWS Go Pulumi program)
-Created project &#039;demo&#039;
+Created project 'demo'
 
 Please enter your desired stack name.
-To create a stack in an organization, use the format &lt;org-name&gt;/&lt;stack-name&gt; (e.g. `acmecorp/dev`).
+To create a stack in an organization, use the format <org-name>/<stack-name> (e.g. `acmecorp/dev`).
 stack name: (dev)
-Created stack &#039;dev&#039;
+Created stack 'dev'
 
 aws:region: The AWS region to deploy into: (us-east-1) ap-northeast-1
 Saved config
@@ -74,7 +74,7 @@ Finished installing dependencies
 
 Your new project is ready to go! ✨
 
-To perform an initial deployment, run &#039;cd demo&#039;, then, run &#039;pulumi up&#039;</code></pre><h3 id=步驟三-檢查專案目錄結構>步驟三: 檢查專案目錄結構</h3><pre><code class=language-sh>└── demo
+To perform an initial deployment, run 'cd demo', then, run 'pulumi up'</code></pre><h3 id=步驟三-檢查專案目錄結構>步驟三: 檢查專案目錄結構</h3><pre><code class=language-sh>└── demo
     ├── Pulumi.dev.yaml
     ├── Pulumi.yaml
     ├── go.mod
@@ -177,8 +177,8 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/previews/7180c121-235c-40cc-
  +-  └─ aws:s3:Bucket     my-bucket  replace     [diff: ~bucket]
 
 Outputs:
-  ~ bucketID  : "my-bucket-9dd3052" =&gt; output&lt;string&gt;
-  ~ bucketName: "my-bucket-9dd3052" =&gt; "foobar-1234"
+  ~ bucketID  : "my-bucket-9dd3052" => output<string>
+  ~ bucketName: "my-bucket-9dd3052" => "foobar-1234"
 
 Resources:
     +-1 to replace
@@ -193,18 +193,18 @@ Do you want to perform this update? details
     +-aws:s3/bucket:Bucket: (replace)
         [id=my-bucket-9dd3052]
         [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
-      ~ bucket: "my-bucket-9dd3052" =&gt; "foobar-1234"
+      ~ bucket: "my-bucket-9dd3052" => "foobar-1234"
     ++aws:s3/bucket:Bucket: (create-replacement)
         [id=my-bucket-9dd3052]
         [urn=urn:pulumi:dev::demo::aws:s3/bucket:Bucket::my-bucket]
-      ~ bucket: "my-bucket-9dd3052" =&gt; "foobar-1234"
+      ~ bucket: "my-bucket-9dd3052" => "foobar-1234"
     --outputs:--
-  ~ bucketID  : "my-bucket-9dd3052" =&gt; output&lt;string&gt;
-  ~ bucketName: "my-bucket-9dd3052" =&gt; "foobar-1234"</code></pre><p>可以看到系統會砍掉舊的，在建立一個新的 bucket</p><h2 id=更新-aws-架構-s3-hosting>更新 AWS 架構 (S3 Hosting)</h2><p>上個步驟教大家如何建立 Infra 架構，那這單元教大家如何將使用 S3 當一個簡單的 Web Hosting。</p><ol><li>將 index.html 放入 S3 內</li><li>設定 S3 當作 Web Hosting</li><li>測試 S3 Hosting</li></ol><h3 id=步驟一-建立-indexhtml-放入-s3-內>步驟一: 建立 index.html 放入 S3 內</h3><p>建立 <code>content/index.html</code> 檔案，內容如下</p><pre><code class=language-html>&lt;html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello Pulumi S3 Bucket&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;</code></pre><p>修改 <code>main.go</code>，將 <code>index.html</code> 加入到 S3 bucket 內</p><pre><code class=language-go>        index := path.Join("content", "index.html")
+  ~ bucketID  : "my-bucket-9dd3052" => output<string>
+  ~ bucketName: "my-bucket-9dd3052" => "foobar-1234"</code></pre><p>可以看到系統會砍掉舊的，在建立一個新的 bucket</p><h2 id=更新-aws-架構-s3-hosting>更新 AWS 架構 (S3 Hosting)</h2><p>上個步驟教大家如何建立 Infra 架構，那這單元教大家如何將使用 S3 當一個簡單的 Web Hosting。</p><ol><li>將 index.html 放入 S3 內</li><li>設定 S3 當作 Web Hosting</li><li>測試 S3 Hosting</li></ol><h3 id=步驟一-建立-indexhtml-放入-s3-內>步驟一: 建立 index.html 放入 S3 內</h3><p>建立 <code>content/index.html</code> 檔案，內容如下</p><pre><code class=language-html><html>
+  <body>
+    <h1>Hello Pulumi S3 Bucket</h1>
+  </body>
+</html></code></pre><p>修改 <code>main.go</code>，將 <code>index.html</code> 加入到 S3 bucket 內</p><pre><code class=language-go>        index := path.Join("content", "index.html")
         _, err = s3.NewBucketObject(ctx, "index.html", &s3.BucketObjectArgs{
             Bucket: bucket.Bucket,
             Source: pulumi.NewFileAsset(index),
@@ -306,7 +306,7 @@ View Live: https://app.pulumi.com/appleboy/demo/dev/previews/edbaefca-f723-4ac5-
  ~   └─ aws:s3:BucketObject  index.html  update     [diff: ~acl,contentType]
 
 Outputs:
-  + bucketEndpoint: output&lt;string&gt;
+  + bucketEndpoint: output<string>
 
 Resources:
     ~ 2 to update
@@ -322,12 +322,12 @@ Do you want to perform this update? details
           + indexDocument: "index.html"
         }
     --outputs:--
-  + bucketEndpoint: output&lt;string&gt;
+  + bucketEndpoint: output<string>
     ~ aws:s3/bucketObject:BucketObject: (update)
         [id=index.html]
         [urn=urn:pulumi:dev::demo::aws:s3/bucketObject:BucketObject::index.html]
-      ~ acl        : "private" =&gt; "public-read"
-      ~ contentType: "binary/octet-stream" =&gt; "text/html; charset=utf-8"
+      ~ acl        : "private" => "public-read"
+      ~ contentType: "binary/octet-stream" => "text/html; charset=utf-8"
 Do you want to perform this update? yes
 Updating (dev)
 
@@ -356,21 +356,21 @@ Duration: 13s</code></pre><h3 id=步驟三-測試-url>步驟三: 測試 URL</h3>
 > User-Agent: curl/7.64.1
 > Accept: */*
 >
-&lt; HTTP/1.1 200 OK
-&lt; x-amz-id-2: 0NrZfFxZNOs+toz0/86FiASG+MyQE6f+KbKNi4wzcDtmn5mTnQoxupVybR464X8Oi6HDMjSU+i8=
-&lt; x-amz-request-id: A55BD2534EDC94A9
-&lt; Date: Thu, 11 Feb 2021 03:30:42 GMT
-&lt; Last-Modified: Thu, 11 Feb 2021 03:29:14 GMT
-&lt; ETag: "46e94ba24774d0c4a768f9461e6b9806"
-&lt; Content-Type: text/html; charset=utf-8
-&lt; Content-Length: 70
-&lt; Server: AmazonS3
-&lt;
-&lt;html&gt;
-  &lt;body&gt;
-    &lt;h1&gt;Hello Pulumi S3 Bucket&lt;/h1&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+< HTTP/1.1 200 OK
+< x-amz-id-2: 0NrZfFxZNOs+toz0/86FiASG+MyQE6f+KbKNi4wzcDtmn5mTnQoxupVybR464X8Oi6HDMjSU+i8=
+< x-amz-request-id: A55BD2534EDC94A9
+< Date: Thu, 11 Feb 2021 03:30:42 GMT
+< Last-Modified: Thu, 11 Feb 2021 03:29:14 GMT
+< ETag: "46e94ba24774d0c4a768f9461e6b9806"
+< Content-Type: text/html; charset=utf-8
+< Content-Length: 70
+< Server: AmazonS3
+<
+<html>
+  <body>
+    <h1>Hello Pulumi S3 Bucket</h1>
+  </body>
+</html>
 * Connection #0 to host foobar-1234.s3-website-ap-northeast-1.amazonaws.com left intact</code></pre><h2 id=心得>心得</h2><p>上述已經可以將靜態網站放在 AWS S3 上面了，<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>下一篇</a>會教大家底下三個章節</p><ol><li>設定 Pulumi Stack 環境變數</li><li>建立第二個 Pulumi Stack 環境</li><li>刪除 Pulumi Stack 環境</li></ol><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/pulumi/>pulumi</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&text=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&title=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fdemo.gh.wu-boy.com%2f2021%2f02%2fupload-static-content-to-aws-s3-using-pulumi-01%2f&description=%e5%88%9d%e6%8e%a2%20Pulumi%20%e4%b8%8a%e5%82%b3%e9%9d%9c%e6%85%8b%e7%b6%b2%e7%ab%99%e5%88%b0%20AWS%20S3%20%28%e4%b8%80%29" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li><li><a href=/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/>初探 Infrastructure as Code 工具 Terraform vs Pulumi</a></li><li><a href=/2021/02/graphql-gateway-in-golang/>使用 GraphQL Gateway 串接多個 Data Schema</a></li><li><a href=/2020/12/write-the-simple-cli-tool-in-golang/>用 Go 語言撰寫簡單的 Command Line 工具</a></li><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/ data-toggle=tooltip data-placement=top title="初探 Infrastructure as Code 工具 Terraform vs Pulumi">&larr; Previous Post</a></li><li class=next><a href=https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/ data-toggle=tooltip data-placement=top title="初探 Pulumi 上傳靜態網站到 AWS S3 (二)">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://demo.gh.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

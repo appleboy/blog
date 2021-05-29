@@ -49,7 +49,7 @@ pip install fabric</pre>安裝 capistrano 可以透過 Ruby gem。<pre class="br
 Hello world!
 
 Done.
-</pre>如果不透過 fabfile.py 檔案的話，你直接打 fab 會得到 Couldn't find any fabfiles!，看到這訊息沒關係，一樣可以用指令方式來達成上面的結果。學習 fabric 前，有一個很必要的條件，就是必需熟悉 Linux command 及 Shell script 用法，個人推薦<p><a href=http://linux.vbird.org/ target=_blank>鳥哥的網站</a>，把基礎文件都看過後，就沒有任何 Linux 系統可以難倒你。如何用 fab command 直接得到上述的結果呢？</p><pre class="brush: bash; title: ; notranslate" title>$ fab -p xxxx -H localhost -- 'echo "Hello world!";'</pre>上述指令會產生下面結果<pre class="brush: bash; title: ; notranslate" title>[localhost] Executing task '&lt;remainder>'
+</pre>如果不透過 fabfile.py 檔案的話，你直接打 fab 會得到 Couldn't find any fabfiles!，看到這訊息沒關係，一樣可以用指令方式來達成上面的結果。學習 fabric 前，有一個很必要的條件，就是必需熟悉 Linux command 及 Shell script 用法，個人推薦<p><a href=http://linux.vbird.org/ target=_blank>鳥哥的網站</a>，把基礎文件都看過後，就沒有任何 Linux 系統可以難倒你。如何用 fab command 直接得到上述的結果呢？</p><pre class="brush: bash; title: ; notranslate" title>$ fab -p xxxx -H localhost -- 'echo "Hello world!";'</pre>上述指令會產生下面結果<pre class="brush: bash; title: ; notranslate" title>[localhost] Executing task '<remainder>'
 [localhost] run: echo "Hello world!";
 [localhost] out: Hello world!
 [localhost] out: 

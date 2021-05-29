@@ -66,10 +66,10 @@ case "
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>今天有人問我，blog留言版被灌爆，都是廣告信，我想說 wordpress 不是有內建一個外掛 <a href=http://akismet.com/>Akismet</a> 這個外掛可以擋掉很多spam，讓你的留言版不至於有廣告信，不過還是可以加上留言版的驗證圖形，這樣會更安全一點。 今天找到一個國人改寫的 WordPress plugin – <a href=http://blog.chweng.idv.tw/wordpress/wp-imgcode-mod/>WP-ImgCode mod</a> 這個還不錯用，安裝方式如下</p><h5 id=安裝啟用>安裝啟用</h5><ol><li>將解壓縮出來的 wp-imgcode 資料夾放到 WordPress 的 plugin 資料夾，預設為 wp-content/plugins。</li><li>在控制台中啟用這個 plugin。</li></ol><h5 id=加入驗證碼>加入驗證碼</h5><ol><li>開啟目前使用佈景的相關檔案，例如 comments.php。</li><li>在要顯示驗證碼的地方，加上這個程式碼：</li></ol><pre class="brush: php; title: ; notranslate" title>ID); ?>
 </pre>明天在去搞定別人的網站吧~ 先紀錄一下~</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2007/05/php-%E5%A6%82%E4%BD%95%E5%88%87%E5%89%B2%E4%B8%AD%E6%96%87%E6%A8%99%E9%A1%8C/><h2 class=post-title>[PHP] 如何切割中文標題</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 19, 2007
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;163&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;129&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>今天看到酷！學園討論區，php版有人問說要如何切割中文字，結果我自己以前弄的一個function就貼了上去，如下</p><pre class="brush: php; title: ; notranslate" title>function cut_word($text, $num){
 if(strlen($text) > $num) {
-   for($i=0;$i&lt;$num;$i++) {
+   for($i=0;$i<$num;$i++) {
       $ch=substr($text,$i,1);
       if(ord($ch)>127) $i++;
       }

@@ -8,7 +8,7 @@ git reset &ndash;mixed HEAD，或者是可以用 git read-tree 來取代 git res
 取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？
 # On branch master
 # Changes to be committed:
-#   (use &#34;git reset HEAD <file>...&#34; to unstage)
+#   (use &#34;git reset HEAD ...&#34; to unstage)
 #
 #       modified:   Makefile
 #       modified:   user/easy_setup/easysetup.h
@@ -18,15 +18,15 @@ git reset HEAD user/easy_setup/easysetup.h 之後會看到 『
 user/easy_setup/easysetup.h: locally modified』此訊息，這時候在用 git status 看狀態
 # On branch master
 # Changes to be committed:
-#   (use &#34;git reset HEAD <file>...&#34; to unstage)
+#   (use &#34;git reset HEAD ...&#34; to unstage)
 #
 #       modified:   Makefile
 #
 # Changed but not updated:
-#   (use &#34;git add <file>...&#34; to update what will be committed)
+#   (use &#34;git add ...&#34; to update what will be committed)
 #
 #       modified:   user/easy_setup/easysetup.h
-#"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF\/","name":"Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息","description":"這次來介紹一下 git reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：\n$ git status\rerror: bad index file sha1 signature\rfatal: index file corrupt 解決此問題非常簡單，要先刪除 index 檔案，請先砍掉 .git\/index，恢復此 index 請用\ngit reset 這行指令相當於 git reset \u0026ndash;mixed HEAD，或者是可以用 git read-tree 來取代 git reset，當然 git reset 不只是有這功能而已，假如您已經建立了 commit 訊息，也可以將此訊息拿掉，重新在 commit，或者是您修改過的檔案在暫存區，git 也可以幫您恢復到未暫存，或者是不想要這次的修改，也可以恢復到未修改的檔案喔。\n取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？ # On branch master\r# Changes to be committed:\r# (use \u0022git reset HEAD \u0026lt;file...\u0022 to unstage)\r#\r# modified: Makefile\r# modified: user\/easy_setup\/easysetup.h\r# 上面是以經在暫存區裡面等待被 commit 檔案( Changes to be committed)，大家可以看到括號裡面有提示如何拿掉 (use \u0026ldquo;git reset HEAD \u0026hellip;\u0026rdquo; to unstage)，所以我們下：\ngit reset HEAD user\/easy_setup\/easysetup.h 之後會看到 『 user\/easy_setup\/easysetup.h: locally modified』此訊息，這時候在用 git status 看狀態\n# On branch master\r# Changes to be committed:\r# (use \u0022git reset HEAD \u0026lt;file...\u0022 to unstage)\r#\r# modified: Makefile\r#\r# Changed but not updated:\r# (use \u0022git add \u0026lt;file...\u0022 to update what will be committed)\r#\r# modified: user\/easy_setup\/easysetup.h\r#","inLanguage":"en","wordCount":323,"datePublished":"2010-08-20T12:15:50","dateModified":"2010-08-20T12:15:50","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["git, 版本控制"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息"><meta property="og:description" content="這次來介紹一下 git reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：
+#"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - 電腦技術 - 工作筆記 - AppleBOY","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/demo.gh.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/demo.gh.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF\/","name":"Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息","description":"這次來介紹一下 git reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：\n$ git status\rerror: bad index file sha1 signature\rfatal: index file corrupt 解決此問題非常簡單，要先刪除 index 檔案，請先砍掉 .git\/index，恢復此 index 請用\ngit reset 這行指令相當於 git reset \u0026ndash;mixed HEAD，或者是可以用 git read-tree 來取代 git reset，當然 git reset 不只是有這功能而已，假如您已經建立了 commit 訊息，也可以將此訊息拿掉，重新在 commit，或者是您修改過的檔案在暫存區，git 也可以幫您恢復到未暫存，或者是不想要這次的修改，也可以恢復到未修改的檔案喔。\n取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？ # On branch master\r# Changes to be committed:\r# (use \u0022git reset HEAD ...\u0022 to unstage)\r#\r# modified: Makefile\r# modified: user\/easy_setup\/easysetup.h\r# 上面是以經在暫存區裡面等待被 commit 檔案( Changes to be committed)，大家可以看到括號裡面有提示如何拿掉 (use \u0026ldquo;git reset HEAD \u0026hellip;\u0026rdquo; to unstage)，所以我們下：\ngit reset HEAD user\/easy_setup\/easysetup.h 之後會看到 『 user\/easy_setup\/easysetup.h: locally modified』此訊息，這時候在用 git status 看狀態\n# On branch master\r# Changes to be committed:\r# (use \u0022git reset HEAD ...\u0022 to unstage)\r#\r# modified: Makefile\r#\r# Changed but not updated:\r# (use \u0022git add ...\u0022 to update what will be committed)\r#\r# modified: user\/easy_setup\/easysetup.h\r#","inLanguage":"en","wordCount":320,"datePublished":"2010-08-20T12:15:50","dateModified":"2010-08-20T12:15:50","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["git, 版本控制"],"mainEntityOfPage":"https:\/\/demo.gh.wu-boy.com\/2010\/08\/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF\/","publisher":{"@type":"Organization","name":"https:\/\/demo.gh.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息"><meta property="og:description" content="這次來介紹一下 git reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：
 $ git status
 error: bad index file sha1 signature
 fatal: index file corrupt 解決此問題非常簡單，要先刪除 index 檔案，請先砍掉 
@@ -36,7 +36,7 @@ git reset &ndash;mixed HEAD，或者是可以用 git read-tree 來取代 git res
 取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？
 # On branch master
 # Changes to be committed:
-#   (use &#34;git reset HEAD <file>...&#34; to unstage)
+#   (use &#34;git reset HEAD ...&#34; to unstage)
 #
 #       modified:   Makefile
 #       modified:   user/easy_setup/easysetup.h
@@ -46,12 +46,12 @@ git reset HEAD user/easy_setup/easysetup.h 之後會看到 『
 user/easy_setup/easysetup.h: locally modified』此訊息，這時候在用 git status 看狀態
 # On branch master
 # Changes to be committed:
-#   (use &#34;git reset HEAD <file>...&#34; to unstage)
+#   (use &#34;git reset HEAD ...&#34; to unstage)
 #
 #       modified:   Makefile
 #
 # Changed but not updated:
-#   (use &#34;git add <file>...&#34; to update what will be committed)
+#   (use &#34;git add ...&#34; to update what will be committed)
 #
 #       modified:   user/easy_setup/easysetup.h
 #"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://demo.gh.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - 電腦技術 - 工作筆記 - AppleBOY"><meta name=twitter:title content="Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息"><meta name=twitter:description content="這次來介紹一下 git reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：
@@ -69,40 +69,40 @@ fatal: index file corrupt 解決此問題非常簡單，要先刪除 index 檔�
 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
 <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 20, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;323&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;320&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#取消已經暫存的檔案-假如我們有兩個檔案需要-commit但是不小心按到-git-add--全部加入到暫存區那該怎麼恢復呢>取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？</a></li><li><a href=#取消對檔案的修改-如果剛剛針對-makefile-的修改覺得不需要該如何取消修改以及恢復檔案狀態呢尚未恢復之前的狀態如下>取消對檔案的修改 如果剛剛針對 Makefile 的修改覺得不需要，該如何取消修改，以及恢復檔案狀態呢？尚未恢復之前的狀態如下：</a></li><li><a href=#恢復-commit重新提交-commit-假如今天您修改了兩個檔案並且新增到暫存區了狀態如下>恢復 Commit，重新提交 Commit 假如今天您修改了兩個檔案，並且新增到暫存區了，狀態如下：</a></li><li><a href=#強制恢復到上一版本-上面是介紹恢復-commit-訊息之前修改過的檔案還會存在底下會使用-reset-hard-的方式恢復到上一版本上一版本跟此版本之間所修改的檔案將不會存檔git-reset-參數之一>強制恢復到上一版本 上面是介紹恢復 commit 訊息，之前修改過的檔案還會存在，底下會使用 reset hard 的方式恢復到上一版本，上一版本跟此版本之間所修改的檔案，將不會存檔，git reset 參數之一</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p>這次來介紹一下 <a href=http://git-scm.com/>git</a> reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：</p><pre class="brush: bash; title: ; notranslate" title>$ git status
 error: bad index file sha1 signature
 fatal: index file corrupt</pre>解決此問題非常簡單，要先刪除 index 檔案，請先砍掉<p><span style=color:green><strong>.git/index</strong></span>，恢復此 index 請用</p><pre class="brush: bash; title: ; notranslate" title>git reset</pre>這行指令相當於<p><span style=color:red><strong>git reset &ndash;mixed HEAD</strong></span>，或者是可以用 <span style=color:red><strong>git read-tree</strong></span> 來取代 git reset，當然 git reset 不只是有這功能而已，假如您已經建立了 commit 訊息，也可以將此訊息拿掉，重新在 commit，或者是您修改過的檔案在暫存區，git 也可以幫您恢復到未暫存，或者是不想要這次的修改，也可以恢復到未修改的檔案喔。</p><h3 id=取消已經暫存的檔案-假如我們有兩個檔案需要-commit但是不小心按到-git-add--全部加入到暫存區那該怎麼恢復呢>取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？</h3><pre class="brush: bash; title: ; notranslate" title># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       modified:   Makefile
 #       modified:   user/easy_setup/easysetup.h
 #</pre>上面是以經在暫存區裡面等待被 commit 檔案(<p><span style=color:green>Changes to be committed</span>)，大家可以看到括號裡面有提示如何拿掉 (use &ldquo;git reset HEAD <file>&mldr;&rdquo; to unstage)，所以我們下：</p><pre class="brush: bash; title: ; notranslate" title>git reset HEAD user/easy_setup/easysetup.h</pre>之後會看到 『<p><span style=color:red>user/easy_setup/easysetup.h: locally modified</span>』此訊息，這時候在用 git status 看狀態</p><pre class="brush: bash; title: ; notranslate" title># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       modified:   Makefile
 #
 # Changed but not updated:
-#   (use "git add &lt;file>..." to update what will be committed)
+#   (use "git add <file>..." to update what will be committed)
 #
 #       modified:   user/easy_setup/easysetup.h
 #</pre><h3 id=取消對檔案的修改-如果剛剛針對-makefile-的修改覺得不需要該如何取消修改以及恢復檔案狀態呢尚未恢復之前的狀態如下>取消對檔案的修改 如果剛剛針對 Makefile 的修改覺得不需要，該如何取消修改，以及恢復檔案狀態呢？尚未恢復之前的狀態如下：</h3><pre class="brush: bash; title: ; notranslate" title># On branch master
 # Changed but not updated:
-#   (use "git add &lt;file>..." to update what will be committed)
+#   (use "git add <file>..." to update what will be committed)
 #
 #       modified:   Makefile
 #</pre>然後恢復檔案指令：<pre class="brush: bash; title: ; notranslate" title>git checkout -- Makefile</pre>接下來用 git status 看看狀態：<pre class="brush: bash; title: ; notranslate" title># On branch master
 nothing to commit (working directory clean)</pre>可以看到，該檔案已經恢復到修改前的版本。請<p><strong>注意</strong>：這指令有些危險，針對該檔案的修改都沒有了，因為我們剛剛把之前版本的檔案複製過來覆蓋了此檔案。所以在用這指令前，請務必確定真的不再需要剛剛的修改。</p><h3 id=恢復-commit重新提交-commit-假如今天您修改了兩個檔案並且新增到暫存區了狀態如下>恢復 Commit，重新提交 Commit 假如今天您修改了兩個檔案，並且新增到暫存區了，狀態如下：</h3><pre class="brush: bash; title: ; notranslate" title># On branch master
 # Changes to be committed:
-#   (use "git reset HEAD &lt;file>..." to unstage)
+#   (use "git reset HEAD <file>..." to unstage)
 #
 #       modified:   Makefile
 #       modified:   user/easy_setup/easysetup.h
 #
 </pre>並且已經執行了<p><span style=color:green>git commit -m &ldquo;first commit&rdquo;</span>，發現訊息寫錯想要修改，可以透過 reset 方式來做，請先用 <span style=color:green><strong>git log</strong></span> 方式查看訊息</p><pre class="brush: bash; title: ; notranslate" title>git log --stat</pre><pre class="brush: bash; title: ; notranslate" title>commit c13eb41110a38ef7145bb8815560641697800659
-Author: appleboy &lt;appleboy.tw at gmail.com>
+Author: appleboy <appleboy.tw at gmail.com>
 Date:   Fri Aug 20 20:02:55 2010 +0800
 
     first commit

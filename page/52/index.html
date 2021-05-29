@@ -20,9 +20,9 @@ export ftp_proxy=http://username:password@proxyserver.netport/</pre>寫入 ~/.ba
 系統\偏好設定\代理伺服器</pre>reference:<p><a href=http://blog.mypapit.net/2006/02/how-to-use-apt-get-behind-proxy-server-ubuntudebian.html>How to use apt-get behind proxy server (Ubuntu/Debian)</a> <a href=http://goo.gl/SZYH>Ubuntu Proxy的設定</a></p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/proxy/>proxy</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/05/cc-count-1-bits-of-input-value-by-shifting/><h2 class=post-title>[C/C++] count 1 bits of input value by shifting.</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 18, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;78&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>之前寫了一篇：『<a href=http://blog.wu-boy.com/2010/02/24/2036/>[C/C++] 計算二進位任意數含有多少個位元為1?</a>』，裡面用 n &= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：</p><pre><code class=language-C>#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;76&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>之前寫了一篇：『<a href=http://blog.wu-boy.com/2010/02/24/2036/>[C/C++] 計算二進位任意數含有多少個位元為1?</a>』，裡面用 n &= (n - 1); 的方式來計算二進位數字總共會得到多少 bit，這次來紀錄利用 shift 方式也可以得到總共含有多少 bit 數目，函式如下：</p><pre><code class=language-C>#include <stdio.h>
+#include <stdlib.h>
 int count_1_bit_count(unsigned int);
 int main(){
     int count = 0, a;
@@ -35,7 +35,7 @@ int main(){
 int count_1_bit_count(unsigned int n)
 {
     int count = 0;
-    for(count = 0; n != 0; n &gt;&gt;= 1L)
+    for(count = 0; n != 0; n >>= 1L)
     {    
         if(n & 0x01)
             count++;
@@ -51,7 +51,7 @@ document.getElementById('ifr').contentWindow.formSubmit();
 </pre>子頁(iframe)呼叫父頁(主視窗)函式：<pre class="brush: jscript; title: ; notranslate" title>parent.formSubmit();</pre>如果有兩層<pre class="brush: jscript; title: ; notranslate" title>parent.parent.formSubmit();</pre>注意 timing issue，等 iframe 視窗 load 完之後才可以呼叫 iframe function。至於如果取主視窗跟 iframe 的變數 value，可以利用 jQuery $("#ID") 方式來得到。 reference:<p><a href=http://blog.xuite.net/chingwei/blog/22953175>【程式】JS : parent , iframe function call</a> <a href="http://www.codingforums.com/showthread.php?t=136737">Access child function from iframe</a></p></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/html/>html</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/javascript/>javascript</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/05/jquery-%E8%A7%A3%E6%B1%BA-ie6-png-%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-supersleight-jquery-plugin-for-transparent-pngs-in-ie6/><h2 class=post-title>[jQuery] 解決 IE6 PNG 透明背景 (Supersleight jQuery Plugin for Transparent PNGs in IE6)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 2, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;410&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;407&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>今天無意間看到 Drew McLellan 在 2007 年寫了這篇 Transparent PNGs in Internet Explorer 6，真的是太晚發現這篇了，之前自己寫到一篇：『[CSS] IE 6, 7, 8 FireFox hack 支援透明背景圖 background or img javascript』，雖然 Google 官方網站宣佈完全不支援 IE6 瀏覽器，打算只支援 Microsoft Internet Explorer 7.0+, Mozilla Firefox 3.0+, Google Chrome 4.0+, Safari 3.0+，可是我們這些 Web Developer 還是需要考慮客戶的瀏覽器阿，因為客戶才是最大的，尤其是在一些學術機構，安裝好 XP，預設就是 IE6，從 Google 分析裡面，IE6 也是網站的客戶大群。
 先來介紹 Drew McLellan 寫的一支好用 js 來改善所有 png 透明圖檔，最主要是修正 background-image 跟 img tag 所包含的 png 圖檔
 先下載：Download SuperSleight，解壓縮放到 js 資料夾
@@ -61,8 +61,8 @@ document.getElementById('ifr').contentWindow.formSubmit();
 <a href=https://demo.gh.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
 <a href=https://demo.gh.wu-boy.com/tags/png/>png</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/04/cc-c%E8%AA%9E%E8%A8%80%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E5%BC%8F-strsep%EF%BC%8C%E5%88%86%E6%9E%90-url-get-%E5%8F%83%E6%95%B8/><h2 class=post-title>[C/C++] C語言切割字串函式 strsep，分析 URL GET 參數</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 28, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;463&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;396&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>今天來簡介 UNIX 內建的 <a href=http://linux.about.com/library/cmd/blcmdl3_strsep.htm>strsep</a> 函式，這在 Windows <a href=http://www.bloodshed.net/dev/devcpp.html>Dev-C++</a> 是沒有支援的，在寫 UNIX 分析字串常常需要利用到此函式，大家可以 man strsep 來看如何使用 strsep，假設我們要分析 URL Get 字串：<span style=color:green>user_command=appleboy&test=1&test2=2</span>，就可以利用兩次 strsep 函式，將字串全部分離，取的個別的 name, value。strsep(stringp, delim) 第一個參數傳入需要分析的字串，第二個參數傳入 delim 符號，假設 stringp 為 NULL 字串，則函式會回傳 NULL，換句話說，strsep 會找到 stringp 字串<span style=color:red><strong>第一個出現 delim 符號</strong></span>，並將其取代為 \0 符號，然後將 stringp <span style=color:red><strong>更新</strong></span>指向到 \0 符號的下一個字串，strsep() function 回傳原來的 stringp 指標。看上面文字敘述，好像不太瞭解，沒關係，底下是 UNIX strsep.c 的原始碼：</p><pre><code class=language-c>/*
  * Get next token from string *stringp, where tokens are possibly-empty
  * strings separated by characters from delim.
@@ -137,7 +137,7 @@ $.
 #include "string.h" #include "stdlib.h" #include "stdio.h" int main () { char str[] = "This is a sample string"; char key[] = "aeiou"; char * pch; printf ("Vowels in '%s': ",str); pch = strpbrk (str, key); while (pch != NULL) { printf ("%c " , *pch); /* 也可以直接輸出字串 */ printf("\noutput=%s\n", pch); pch = strpbrk (pch+1,key); } printf ("\n"); system("pause"); return 0; } 輸出結果：
 <a href=https://demo.gh.wu-boy.com/2010/04/cc-strpbrk-%E5%9C%A8%E5%AD%97%E4%B8%B2%E4%B8%AD%E6%89%BE%E5%B0%8B%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AC%A6%E8%99%9F%E6%88%96%E5%AD%97%E6%AF%8D/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article><article class=post-preview><a href=https://demo.gh.wu-boy.com/2010/04/cc-%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E6%95%B8%EF%BC%9Astrtok-network-mac-address-%E5%88%86%E5%89%B2/><h2 class=post-title>[C/C++] 切割字串函數：strtok, Network mac address 分割</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 1, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;468&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;467&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>今天寫了 strtok 的範例：『如何分離網路 mac address』程式碼如下，大家一定會有疑問 strtok 第一次呼叫，第一參數輸入愈分離的字串，在 while 迴圈，則是輸入 NULL 呢？底下就來解析 strtok.c 的程式碼。
 /* * * Author : appleboy * Date : 2010.04.01 * Filename : strtok.c * */ #include "string.h" #include "stdlib.h" #include "stdio.h" int main() { char str[]="00:22:33:4B:55:5A"; char *delim = ":"; char * pch; printf ("Splitting string \"%s\" into tokens:\n",str); pch = strtok(str,delim); while (pch != NULL) { printf ("%s\n",pch); pch = strtok (NULL, delim); } system("pause"); return 0; } 執行結果如下圖：
 <a href=https://demo.gh.wu-boy.com/2010/04/cc-%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E6%95%B8%EF%BC%9Astrtok-network-mac-address-%E5%88%86%E5%89%B2/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://demo.gh.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://demo.gh.wu-boy.com/page/51/>&larr; Newer Posts</a></li><li class=next><a href=https://demo.gh.wu-boy.com/page/53/>Older Posts &rarr;</a></li></ul></div></div></div><div class=page-meta></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

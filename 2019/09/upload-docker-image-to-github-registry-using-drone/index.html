@@ -17,7 +17,7 @@
   -u USERNAME \
   -p PASSWORD/TOKEN</code></pre><p>要登入 GitHub 的 Docker Registry，最快的方式就是用個人的帳號及密碼就可以直接登入，而 Registry 設定則是 <code>docker.pkg.github.com</code>，這邊請注意，雖然官方有寫可以用個人的 Password 登入，如果你有使用 OTP 方式登入，這個方式就不適用，也不安全，我個人強烈建議去後台建立一把專屬的 Token。</p><p><a href="https://lh3.googleusercontent.com/wLdNdGGODCbl1RKxsIg4SANzxrivIIH-IJA2zKd4FfWhtFRoVykQD4qs0GbxbOrZJuKooRhmI6R8WM0r41rDo0Asv7NdObXfGorcORR7YhYPlko91P22kXHgIMlRL1-WdnOkxtGxOo0=w1920-h1080" title="Personal Token"><img src="https://lh3.googleusercontent.com/wLdNdGGODCbl1RKxsIg4SANzxrivIIH-IJA2zKd4FfWhtFRoVykQD4qs0GbxbOrZJuKooRhmI6R8WM0r41rDo0Asv7NdObXfGorcORR7YhYPlko91P22kXHgIMlRL1-WdnOkxtGxOo0=w1920-h1080" alt="Personal Token" title="Personal Token"></a></p><p>其中 <code>read:packages</code> and <code>write:packages</code> 兩個 scope 請務必勾選，如果是 private 的 repo，再把 <code>repo</code> 選項打勾，這樣就可以拿到一把 token 當作是密碼，你可以透過 <code>docker login</code> 來登入試試看</p><h2 id=串接-drone-cicd>串接 Drone CI/CD</h2><p>從 commit 到自動化上傳 Docker Image 可以透過 Drone 快速完成，底下我們先建立 <code>Dockerfile</code></p><pre><code class=language-dockerfile>FROM plugins/base:multiarch
 
-LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;" \
+LABEL maintainer="Bo-Yi Wu <appleboy.tw@gmail.com>" \
   org.label-schema.name="Drone Workshop" \
   org.label-schema.vendor="Bo-Yi Wu" \
   org.label-schema.schema-version="1.0"
