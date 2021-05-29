@@ -22,7 +22,9 @@ tags:
 
 <!--more-->
 
-# 教學影片
+## 教學影片
+
+{{< youtube L4kMIkRE9DA >}}
 
 如果對於課程內容有興趣，可以參考底下課程。
 
@@ -46,12 +48,14 @@ tags:
 
 可以看出來會有一個 sub folder 跑出來，因為在同一個 Org 或 User 底下會有很多 repo，故一定要這樣區分。這時候在編譯 Vue.js 專案時就需要使用不同的設定，請打開 `vue.config.js`
 
-<pre><code class="language-js">module.exports = {
+```js
+module.exports = {
   assetsDir: &#039;assets&#039;,
   publicPath: process.env.NODE_ENV === &#039;production&#039;
   ? &#039;/vue-gh-pages-demo/&#039;
   : &#039;/&#039;,
-};</code></pre>
+};
+```
 
 從上面可以看到當開發者需要部署到 GitHub 時，就可以動態將 index.html 內的靜態檔案路徑換成 sub folder 方式，而不影響本機端開發。**完整程式範例可以[參考這邊][10]**。
 
@@ -59,7 +63,8 @@ tags:
 
 由於 GitHub Page 預設是讀 `gh-pages` 分支，故需要先將此分支建立起來，後續才可以正常部署，請參照底下 `.drone.yml` 內容
 
-<pre><code class="language-yaml">---
+```yaml
+---
 kind: pipeline
 name: testing
 
@@ -83,7 +88,8 @@ steps:
       from_secret: username
     password:
       from_secret: password
-    pages_directory: dist</code></pre>
+    pages_directory: dist
+```
 
 其中 username 跟 password 會是 GitHub 的帳號密碼，但是密碼部分可以透過 GitHub 的 [Personal Access token][11] 來產生，這樣就不用給真的密碼了。
 

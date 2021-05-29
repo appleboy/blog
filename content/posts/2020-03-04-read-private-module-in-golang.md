@@ -19,16 +19,22 @@ tags:
 
 [Golang][2] 在 [1.14][3] 正式說明可以將 [Go Modules][4] 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移
 
-<pre><code class="language-shell=">go mod init project_path
-go mod tidy</code></pre>
+```bash
+go mod init project_path
+go mod tidy
+```
 
 假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 `proxy.golang.org` 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:
 
-<pre><code class="language-shell=">go env -w GOPRIVATE=github.com/appleboy</code></pre>
+```bash
+go env -w GOPRIVATE=github.com/appleboy
+```
 
 上面代表告訴 go 指令，只要遇到 `github.com/appleboy` 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 [Personal Access Token][5]，接著設定 Git
 
-<pre><code class="language-shell=">git config --global url."https://$USERNAME:$ACCESS_TOKEN@github.com".insteadOf "https://github.com"</code></pre>
+```bash
+git config --global url."https://$USERNAME:$ACCESS_TOKEN@github.com".insteadOf "https://github.com"
+```
 
 其中 Username 就是 GitHub 帳號，Access token 就是上面的 [Personal Access Token][5]。
 
@@ -48,7 +54,8 @@ go mod tidy</code></pre>
 
 在串 CI/CD 的流程第一步就是下載 Go 套件，這時候也需要將上述步驟重新操作一次。首先撰寫 main.go
 
-<pre><code class="language-go">package main
+```go
+package main
 
 import (
     "fmt"
@@ -59,11 +66,13 @@ import (
 func main() {
     fmt.Println("get private module")
     fmt.Println("foo:", hello.Foo())
-}</code></pre>
+}
+```
 
 其中 `golang-private` 是一個私有 repository。接著按照本機版的做法，複製到 [Drone][10] 的 YAML 檔案。
 
-<pre><code class="language-yaml=">steps:
+```yaml
+steps:
 - name: build
   image: golang:1.14
   environment:
@@ -75,13 +84,15 @@ func main() {
   - go env -w GOPRIVATE=github.com/$USERNAME
   - git config --global url."https://$USERNAME:$ACCESS_TOKEN@github.com".insteadOf "https://github.com"
   - go mod tidy
-  - go build -o main .</code></pre>
+  - go build -o main .
+```
 
 ## 使用 Dockerfile 編譯
 
 現在 Docker 支援 Multiple Stage，基本上很多部署方式都朝向一個 Dockerfile 解決，當然 Go 語言也不例外，先看看傳統寫法:
 
-<pre><code class="language-dockerfile"># Start from the latest golang base image
+```dockerfile
+# Start from the latest golang base image
 FROM golang:1.14 as Builder
 
 RUN GOCACHE=OFF
@@ -102,26 +113,34 @@ RUN git config --global url."https://appleboy:${ACCESS_TOKEN}@github.com".instea
 # Build the Go app
 RUN go build -o main .
 
-CMD ["/app/main"]</code></pre>
+CMD ["/app/main"]
+```
 
 從上面可以看到一樣在 Docker 使用 git 方式讀取 Private Repository，但是你會發現上面編譯出來的 Image 有兩個問題，第一個就是檔案大小特別大，當然你會說那就用 alpine 也可以啊，是沒錯，但是還是很大。另一個最重要的問題就是暴露了 `ACCESS_TOKEN`，先在本機端直接執行 docker build。
 
-<pre><code class="language-shell=">docker build \
+```bash
+docker build \
   --build-arg ACCESS_TOKEN=test1234 \
-  -t appleboy/golang-module-private .</code></pre>
+  -t appleboy/golang-module-private .
+```
 
 接著使用底下指令可以直接查到每個 Layer 的下了什麼指令以及帶入什麼參數？
 
-<pre><code class="language-shell=">docker history --no-trunc \
-  appleboy/golang-module-private</code></pre>
+```bash
+docker history --no-trunc \
+  appleboy/golang-module-private
+```
 
 會發現有一行可以看到您申請的 `ACCESS_TOKEN`
 
-<pre><code class="language-shell=">/bin/sh -c #(nop)  ENV ACCESS_TOKEN=xxxxxxx</code></pre>
+```bash
+/bin/sh -c #(nop)  ENV ACCESS_TOKEN=xxxxxxx
+```
 
 如果您的 docker image 放在 docker hub 上面並且是公開的，就會直接被拿走，至於拿走做啥就不用說了吧，等於你的 GitHub 帳號被盜用一樣。要用什麼方式才可以解決這問題呢？很簡單就是透過 multiple stage
 
-<pre><code class="language-dockerfile"># Start from the latest golang base image
+```dockerfile
+# Start from the latest golang base image
 FROM golang:1.14 as Builder
 
 RUN GOCACHE=OFF
@@ -146,13 +165,15 @@ FROM scratch
 
 COPY --from=Builder /app/main /
 
-CMD ["/main"]</code></pre>
+CMD ["/main"]
+```
 
 用 multiple stage 不但可以將 Image size 減到最小，還可以防禦特定 ARGS 被看到破解。透過上述方式就可以成功讀取私有 git repository，並且達到最佳的安全性。
 
 ## 整合 Drone 自動化上傳 Docker Image
 
-<pre><code class="language-yml">- name: build-image
+```yml
+- name: build-image
   image: plugins/docker
   environment:
     ACCESS_TOKEN:
@@ -164,7 +185,8 @@ CMD ["/main"]</code></pre>
       from_secret: password
     repo: appleboy/golang-module-private
     build_args_from_env:
-      - ACCESS_TOKEN</code></pre>
+      - ACCESS_TOKEN
+```
 
 上面簡單的透過 `environment` 傳遞 ACCESS_TOKEN 進到 ARGS 設定。用 Drone 其實就很方便自動編譯並且上傳到 Docker Hub 或是自家的 Private Registry。
 
