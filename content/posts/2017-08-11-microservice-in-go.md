@@ -1,0 +1,77 @@
+---
+title: 用 Go 語言打造微服務架構
+author: appleboy
+type: post
+date: 2017-08-11T08:17:18+00:00
+url: /2017/08/microservice-in-go/
+dsq_thread_id:
+  - 6057597408
+categories:
+  - DevOps
+  - Docker
+  - Golang
+tags:
+  - devops
+  - golang
+  - microservice
+  - Monolithic
+
+---
+[![][1]][1]
+
+今年在 \[ModernWeb\]\[1\] 講『用 Go 語言打造微服務架構』，蠻開心看到底下很多 \[Go\]\[2\] 開發者，希望未來能有更多公司導入 Go 語言，底下是會議大綱:
+
+* * *
+
+  * Microservices vs. Monolithic 差異
+  * 微服務核心架構 (Go 工具專案)
+  * Go 語言核心高並發
+  * 為什麼選用 Go 語言
+  * 微服務代價跟準備
+
+<!--more-->
+
+## 有像 AWS 雲端，為什麼要自己搭建微服務?
+
+我在現場介紹了很多用 Go 語言搭建的工具跟服務，讓開發者可以不依靠任何雲端產品來架構微服務系統，但是相信大家一頭霧水，為什麼需要這些服務工具，不是已經有 AWS 或 GCP 了嗎？這邊我的回答是，很多客戶都有自己的機房，如果服務都擺到雲端，客戶的資料都是機密，不可能全部的客戶都想要把服務搭建但現有雲端平台，所以我會準備一套完全不需要雲端的方案，方便讓客戶可以在自己的機房搭建。
+
+## 如何拆分微服務
+
+會後有朋友問到，現在全部的功能都寫在一起，怎麼知道哪些功能可以拆出來當作微服務。在會議上我提到了底下幾點給大家參考:
+
+* * *
+
+  * 依照業務區分 
+  * 自動化部署
+  * 高度容錯
+  * 快速置換
+  * 獨立開發
+  * 易擴充
+
+而我自己在團隊內拆分的標準是：如果很多專案都需要共用一個功能或需求，那就是可以拆出來，舉例來說，每個專案都需要後端伺服器串接 Google FCM 或 Apple 來發送手機訊息，這部分就可以直接拆成一個微服務，專門發送手機訊息。只要寫一次，就可以讓多個專案同時支援，當然服務跟服務之間的溝通方式要事先定好。
+
+## 導入微服務代價
+
+  * 系統複雜度提升
+  * 系統資料一致性
+  * 維運工作複雜化
+
+導入微服務並不是只有優點，也是有很多代價的，除非有強大的 DevOps 團隊，否則當服務越來越多，系統複雜度提高，維運工作只會越來越複雜的。
+
+## 微服務事前準備
+
+  * 快速建置 (Develop)
+  * 監控機制 (Monitor)
+  * 快速部署 (Deploy)
+
+準備微服務前，請先有內部系統監控機制，以及 CI/CD 的串接，讓開發者可以專心開發，不用擔心部署問題，另外由於微服務肯定會越來越多，所以一定要監控每個服務，達到機器管理機器，而不是增加人力去管理越多台服務，而在導入初期肯定無法完全做到，還是需要一些人為操作，但最終還是要全部自動化。
+
+## 後記
+
+微服務架構並不適合每個團隊，請依照團隊目前狀況以及業務需求，再來拆微服務，而不是聽到別人說微服務很潮，就開始建議主管或者是導入。最後附上投影片:
+
+<div style="margin-bottom:5px">
+  <strong> <a href="//www.slideshare.net/appleboy/go-78757166" title="用 Go 語言 打造微服務架構" target="_blank">用 Go 語言 打造微服務架構</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong>
+</div> [1]:http://modernweb.tw/ [2]:https://golang.org [3]:https://aws.amazon.com/ [4]:https://cloud.google.com/
+
+ [1]: https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080

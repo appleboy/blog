@@ -1,0 +1,25 @@
+
+httpd.conf
+
+#
+# Directives to allow use of AWStats as a CGI
+#
+Alias /awstatsclasses "/usr/local/www/awstats/classes/"
+Alias /awstatscss "/usr/local/www/awstats/css/"
+Alias /awstatsicons "/usr/local/www/awstats/icons/"
+ScriptAlias /awstats/ "/usr/local/www/awstats/cgi-bin/"
+
+
+lighttpd.conf
+
+#
+# Directives to allow use of AWStats as a CGI
+#
+alias.url = ( "/awstatsclasses/" => "/usr/local/www/awstats/css/" )
+alias.url += ( "/awstatscss/" => "/usr/local/www/awstats/css/" )
+alias.url += ( "/awstatsicons/" => "/usr/local/www/awstats/icon/" )
+alias.url += ( "/awstats/" => "/usr/local/www/awstats/cgi-bin/" )
+
+
+
+

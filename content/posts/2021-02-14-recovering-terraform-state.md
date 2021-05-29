@@ -32,17 +32,14 @@ tags:
 
 先用 [terraform refresh][4] 將所有 tf 檔案內的 `data` 框架內容讀取進來，像是底下格式:
 
-```tf
-data "aws_acm_certificate" "example_com" {
+<pre><code class="language-tf">data "aws_acm_certificate" "example_com" {
   domain = "*.example.com"
   types  = ["IMPORTED"]
-}
-```
+}</code></pre>
 
 或是
 
-```yaml
-data "aws_ami" "ubuntu_16_04" {
+<pre><code class="language-yaml">data "aws_ami" "ubuntu_16_04" {
   filter {
     name   = "name"
     values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
@@ -59,8 +56,7 @@ data "aws_ami" "ubuntu_16_04" {
   }
 
   owners = ["099720109477"] # Canonical
-}
-```
+}</code></pre>
 
 這時候你可以看到專案底下多了 `terraform.tfstate` 檔案，記錄了這些檔案資料。
 
@@ -68,12 +64,10 @@ data "aws_ami" "ubuntu_16_04" {
 
 這邊沒啥技巧，就是使用 terraform import 將剩下的 resource 慢慢匯入進來，此步驟需要花蠻多時間的，請大家慢慢操作跟使用，後續搭配 terraform plan 方式來看看有哪些資源還沒匯入，最重要的是一些機器的資源匯入，像是 EC2, RDS 等.. 這些是非常重要的部分。像是我這邊遇到，原本建立 RDS 的密碼都是透過 `random_string`
 
-```yaml
-resource "random_string" "db_password" {
+<pre><code class="language-yaml">resource "random_string" "db_password" {
   special = false
   length  = 20
-}
-```
+}</code></pre>
 
 這邊你就需要把這邊整段拿掉，並且在 RDS 那邊把密碼欄位拿掉，否則你會發現密碼會被重新產生。只要是有產生動態密碼的地方，請務必小心，該拿掉的地方還是要拿掉，最後請務必把 `terraform plan` 檢查清楚，最後才下 `terraform apply`。
 
@@ -81,15 +75,13 @@ resource "random_string" "db_password" {
 
 有了這次經驗，上述完成步驟二，整個更新 infra 也沒問題後，就需要把本機端的 state 上傳到 AWS S3 進行備份，並且做版本控制啊。打開 `main.tf`
 
-```yaml
-terraform {
+<pre><code class="language-yaml">terraform {
   backend "s3" {
     bucket = "xxxxx.backup"
     key    = "terraform/terraform.tfstate"
     region = "ap-southeast-1"
   }
-}
-```
+}</code></pre>
 
 存檔後，直接下 terraform init 就會將檔案直接轉到 AWS S3 上了。
 

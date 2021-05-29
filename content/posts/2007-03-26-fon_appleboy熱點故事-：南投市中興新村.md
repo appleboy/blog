@@ -1,0 +1,23 @@
+---
+title: '[FON_Appleboy]熱點故事 ：南投市中興新村'
+author: appleboy
+type: post
+date: 2007-03-27T02:11:01+00:00
+url: /2007/03/fon_appleboy熱點故事-：南投市中興新村/
+views:
+  - 2665
+bot_views:
+  - 1008
+dsq_thread_id:
+  - 249170116
+categories:
+  - life
+  - Network
+  - th.gov.tw
+
+---
+a. 安裝時間：2007-01-09 b. 地點 : 南投市中興新村光明一路252號 國史館台灣文獻館
+
+<a> c. FON AP名稱(FON_Appleboy) 跟我的id相同啦 d.FON熱點故事： 說到熱典故事，我來介紹一下這裡好了，我目前是在國史館台灣文獻館擔任替代役 但是我今年5月底就退伍了，當然我就要把fon帶回我的故鄉 高雄啦，所以這裡是暫時性的喔 我在這個單位擔任程式設計師，做數位話的工作，這裡相當漂亮，因為有3棟很特別的建築物 <a href="http://www.th.gov.tw/exhibition/exhibition.htm">文獻大樓<a>：文獻大樓各樓層介紹 <a href="http://www.th.gov.tw/exhibition/exhibition_2.htm">文物大樓<a>：文物大樓各樓層介紹 <a href="http://www.th.gov.tw/exhibition/exhibition_3.htm">史蹟大樓<a>：史蹟大樓各樓層介紹 <!--more--> 文獻大樓： 這是辦公大樓，我辦公室的地方，有看到3樓有拉開一個窗簾，那就是我工作的地方 很不錯冬天很熱，夏天很冷，哈哈 
+
+<img src="https://i1.wp.com/farm1.static.flickr.com/177/364117794_376dce0f76.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 一樓的大門 <img src="https://i2.wp.com/farm1.static.flickr.com/98/364117958_1fb6b89ef7.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 文物大樓： <img src="https://i1.wp.com/farm1.static.flickr.com/165/361178225_18d81b969f.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i2.wp.com/farm1.static.flickr.com/184/364112918_fbb3c500db.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 史跡大樓： <img src="https://i2.wp.com/farm1.static.flickr.com/147/361178416_b6b1870d3e.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i1.wp.com/farm1.static.flickr.com/108/364114561_4f2f675b51.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 還有砲台：這個是我們文獻館可以抽煙的地方，旁邊有一個煙蒂筒，讓大家把煙蒂丟進去的 不要丟到砲塔裏面阿 <img src="https://i0.wp.com/farm1.static.flickr.com/121/364113510_edaaffa440.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 文獻館前面的一條道路，還蠻小的，會走這條道路的，都是要來參觀的 <img src="https://i1.wp.com/farm1.static.flickr.com/106/364109297_ab52e1e070.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 說這裡是蠻好的地方，因為歷史古跡，很多歷史檔案都會放在我們這裡 而我的工作就是把那些歷史檔案，掃描之後，放到網路上，將來開放給世界各地觀看 在這裡擔任替代役很不錯，除上班很開心之外，我還在宿舍養了很多隻小狗跟小貓 這隻小貓從來不怕人，也被我們寵壞了，每天早上6點就會叫我們起床，因為他餓了 <img src="https://i0.wp.com/farm1.static.flickr.com/124/356428936_63192a8547.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 在來這隻，他叫小白，不過他在這禮拜2過世了，我們替代役很難過 畢竟他是我們養的第２隻寵物，因為腸胃炎死掉了 <img src="https://i2.wp.com/farm1.static.flickr.com/146/356430457_b32dca2267.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 在來這隻，他叫做小卡，他很好動，每次我要出去運動，他都要跟 <img src="https://i2.wp.com/farm1.static.flickr.com/135/356434539_35b64ae30d.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 再來這又是小白，新來的狗狗，哈哈跟我們處的不錯，不過他出車禍腳受傷，所以把他綁起來 <img src="https://i2.wp.com/farm1.static.flickr.com/151/356427265_e3b2f36137.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 替代役宿舍：2樓是洗衣服的地方 <img src="https://i2.wp.com/farm1.static.flickr.com/124/356427022_13a2a3a3e4.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i1.wp.com/farm1.static.flickr.com/157/356430198_fabee0bdcc.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i2.wp.com/farm1.static.flickr.com/126/356432448_cfdf31fede.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i0.wp.com/farm1.static.flickr.com/130/356430123_ce0d97b4ee.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 這棟宿舍，有2個房間分別住上6個人，總共12個替代役，我們這批替代役，將在5月的時候陸續退伍 如果將來有替代役的機會，大家可以選這裡，來這裡，就像是小型社會一樣 可以學到很多東西，風景又漂亮 我把fon放在我的辦公室裏面，然而我的辦公室在文獻大樓3樓 <img src="https://i1.wp.com/farm1.static.flickr.com/163/351428878_bbe3d12f51.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i2.wp.com/farm1.static.flickr.com/140/351428674_0808841b3b.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i2.wp.com/farm1.static.flickr.com/153/351430925_e4d49e0b65.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 下面這張是我的架構圖，我桌上擺很多東西4台機器在我的身邊，一台d-link switch hub 還有 4port kvm跟一台外接式硬碟250g <img src="https://i1.wp.com/farm1.static.flickr.com/132/351430676_56c3552b7f.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> fon ap 跟 skype phone整合 <img src="https://i2.wp.com/farm1.static.flickr.com/163/352314428_e69d0145de.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 我從我的辦公室照出去，可以看到我的宿舍，停車場，超級多人，都是來參觀的人，左邊就是我們的宿舍啦 超級多人 <img src="https://i1.wp.com/farm1.static.flickr.com/123/361176752_fc5deb3d76.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> <img src="https://i1.wp.com/farm1.static.flickr.com/165/361176627_9c585196a3.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 在來下面就是我們的地點了 <img src="https://i1.wp.com/farm1.static.flickr.com/132/363392500_25e00fbc9a_o.jpg?w=840&#038;ssl=1" data-recalc-dims="1" /> 歡迎各位來我們館內參觀，不過我5月就退伍了喔，哈 這裡空氣很好，還有草屯鎮可以去，那邊的話就比較熱鬧了~ 😆

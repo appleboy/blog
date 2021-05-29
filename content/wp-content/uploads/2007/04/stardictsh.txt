@@ -1,0 +1,46 @@
+#!/bin/bash
+
+if [ `id -u` != "0" ] ; then
+    echo "you are not root"
+    exit
+fi
+
+apt-get install stardict -y --force-yes
+
+dir=~/stardict
+stardict_dic=/usr/share/stardict/dic/
+
+if [ `id -u` != "0" ] ; then
+    echo "You are not root"
+    exit
+fi
+
+if [ ! -d $stardict_dic ] ; then
+    echo "You don't have Stardict"
+    exit;
+fi
+
+
+mkdir $dir
+cd $dir
+
+url=http://ftp2.tnc.edu.tw/pub/stardict/dicts/
+wget -c $url -O -|grep -Po '\/.*?.bz2' > tmp
+base=`echo $url|grep -Po '(http|ftp):\/\/.*?\/'`
+echo $base
+cat tmp | while read line ; do
+    wget 'http://ftp2.tnc.edu.tw'$line
+done
+rm tmp
+
+#install
+for file in *.bz2 ; do 
+    tar xf $file
+    rm $file
+done
+
+mv ./* $stardict_dic
+
+cd ..
+#rm -rf $dir
+ 
