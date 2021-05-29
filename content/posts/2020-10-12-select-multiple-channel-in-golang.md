@@ -22,11 +22,13 @@ tags:
 
 ## 影片介紹
 
-<pre><code class="language-bash">00:00 簡介程式碼
-01:03 NewTicker 跟 Channel 同時執行狀況
-03:29 解決方案一以及限制 (多個 Channel 就不適用了)
-05:06 多個一樣的 case 提供優先權
-07:28 用 Kubernetes Client 案例來講解</code></pre>
+{{< youtube Zh34igf1TjU >}}
+
+* 00:00 簡介程式碼
+* 01:03 NewTicker 跟 Channel 同時執行狀況
+* 03:29 解決方案一以及限制 (多個 Channel 就不適用了)
+* 05:06 多個一樣的 case 提供優先權
+* 07:28 用 Kubernetes Client 案例來講解
 
 其中 Kubernetes Client 範例來自[這邊][2]
 

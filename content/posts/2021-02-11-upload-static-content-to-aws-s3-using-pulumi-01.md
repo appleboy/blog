@@ -30,6 +30,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube ujkXfPsU3Is >}}
+
   * 00:00​ Pulumi 應用實作簡介
   * 01:30​ 章節一: 用 Pulumi 建立新專案
   * 02:39​ 用 Pulumi CLI 初始化專案

@@ -23,6 +23,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube I0fZIvQmWgE >}}
+
   * 00:00 為什麼需要搶救 Terraform state 檔案
   * 02:10 步驟一: 使用 Terraform refres 指令
   * 04:00 步驟二: 使用 Terraform import 指令

@@ -20,6 +20,8 @@ tags:
 
 ## 影片介紹
 
+{{< youtube errwTiYqljY >}}
+
   * 00:00 backup 資料庫工具簡介
   * 01:29 專案目錄分層介紹
   * 03:16 介紹 pkg/storage interface

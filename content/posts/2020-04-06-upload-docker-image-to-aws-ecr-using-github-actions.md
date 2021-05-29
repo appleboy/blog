@@ -24,7 +24,8 @@ tags:
 
 <!--more-->
 
-<pre><code class="language-yaml">    - name: Login to Amazon ECR
+```yml
+    - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
@@ -39,11 +40,14 @@ tags:
 
     - name: Logout of Amazon ECR
       if: always()
-      run: docker logout ${{ steps.login-ecr.outputs.registry }}</code></pre>
+      run: docker logout ${{ steps.login-ecr.outputs.registry }}
+```
 
 覺得蠻神奇的是為什麼不把 Plugin 寫更完整些，讓使用者不用再執行 docker 指令，所以我直接把 [Drone 官方套件][8]直接改寫支援 GitHub Actions 服務，詳細的操作文件可以[參考這邊][9]
 
 ## 教學影片
+
+{{< youtube DtxREakn1XI >}}
 
 如果對於課程內容有興趣，可以參考底下課程。
 

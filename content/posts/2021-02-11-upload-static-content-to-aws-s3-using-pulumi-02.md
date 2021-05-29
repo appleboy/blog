@@ -28,6 +28,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube pMonecsbMOc >}}
+
   * 00:00​ Pulumi 教學內容簡介 (Stack 介紹)
   * 01:04​ 設定 Pulumi Stack 環境變數
   * 05:04​ 用 Go 語言讀取多個檔案上傳到 AWS S3

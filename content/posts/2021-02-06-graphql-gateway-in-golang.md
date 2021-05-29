@@ -22,6 +22,8 @@ tags:
 
 ## 線上影片
 
+{{< youtube f4KM3RFx8ro >}}
+
   * 00:00​ 為什麼有 GraphQL Gateway 需求?
   * 02:16​ 用兩個 Routing 來區分 graphql-go 跟 gqlgen
   * 03:00​ 用 jwt token check

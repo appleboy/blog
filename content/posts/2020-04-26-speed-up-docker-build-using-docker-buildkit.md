@@ -17,13 +17,15 @@ tags:
 ---
 [![docker buildkit][1]][1]
 
-# [程式碼範例請看這邊][2]
+> [程式碼範例請看這邊][2]
 
 之前就有看到 [Docker][3] 推出 [BuildKit][4] 功能，這次跟大家介紹什麼是 BuildKit。現在部署編譯流程肯定都會用到 Docker，不管測試及部署都盡量在 Docker 內實現，來做到環境隔離，但是要怎麼縮短 Docker 在編譯 Image 時間，這又是另外的議題，本篇跟大家介紹一個實驗性的功能就是 [BuildKit][4]，原始碼可以[參考這邊][5]，希望未來這實驗性的功能可以正式納入 Docker 官方，網路上其實可以找到很多方式來做 Docker Layer 的 Cache，我個人最常用的就是 `--cache-from` 機制，可以適用在任何 CI/CD 流程，詳細說明可以參考這篇『[在 docker-in-docker 環境中使用 cache-from 提升編譯速度][6]』，下面使用到的程式碼都可以直接參考[此 Repository][2]，我還是使用 [Go 語言][7]當作參考範例。
 
 <!--more-->
 
 ## 教學影片
+
+{{< youtube ZSUw4UvnRWI >}}
 
 如果對於課程內容有興趣，可以參考底下課程。
 
@@ -188,6 +190,7 @@ LABEL maintainer="Bo-Yi Wu &lt;appleboy.tw@gmail.com&gt;"
 
 RUN --mount=type=cache,target=/var/cache/apk apk add bash ca-certificates git gcc g++ libc-dev
 WORKDIR /app
+
 # Force the go compiler to use modules
 ENV GO111MODULE=on
 # We want to populate the module cache based on the go.{mod,sum} files.

@@ -25,6 +25,8 @@ tags:
 
 ## 教學影片
 
+{{< youtube lEkDdIkqHwI >}}
+
 如果對於課程內容有興趣，可以參考底下課程。
 
   * [Go 語言基礎實戰 (開發, 測試及部署)][9]
@@ -114,7 +116,8 @@ GitHub Actions 的版本跟 Drone 的 Plugin 共通點都是用 CLI 完成全部
  [6]: https://www.docker.com/blog/first-docker-github-action-is-here/
  [7]: https://drone.io/
  [8]: http://plugins.drone.io/drone-plugins/drone-docker/
- [9]: https://www.udemy.com/course/golang-fight/?couponCode=202003
+ [9]: https://www.udemy.com/course/golang-fight/?coupon
+Code=202003
  [10]: https://www.udemy.com/course/devops-oneday/?couponCode=202003
  [11]: https://www.udemy.com/course/docker-practice/?couponCode=202003
  [12]: http://facebook.com/appleboy46

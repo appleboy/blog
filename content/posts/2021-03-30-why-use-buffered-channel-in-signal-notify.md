@@ -40,6 +40,8 @@ func main() {
 
 ## 教學影片
 
+{{< youtube uMDmImCZNI4 >}}
+
 ## 使用 unbuffered channel
 
 將程式碼改成如下:
