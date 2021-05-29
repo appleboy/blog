@@ -30,31 +30,31 @@ container 放大架構圖
 下載映像檔
 
 ```bash
-$ docker pull image\_name
+$ docker pull image_name
 ```
 
 啟動或關閉 container
 
 ```bash
-$ docker \[start|stop\] container\_name
+$ docker [start|stop] container_name
 ```
 
 建立 -> 啟動 -> 執行指令 (`-ti` 參數)
 
 ```bash
-$ docker run -ti --name container\_name image\_name command
+$ docker run -ti --name container_name image_name command
 ```
 
 建立 -> 啟動 -> 執行指令 -> 刪除 container (`-rm` 參數)
 
 ```bash
-$ docker run --rm -ti image\_name command
+$ docker run --rm -ti image_name command
 ```
 
 file system 及 port 對應 (`-v` 及 `-p` 參數)
 
 ```bash
-$ docker run -ti --rm -p 80:80 -v /your\_path:/container\_path -e PASSWORD=1234 image\_name
+$ docker run -ti --rm -p 80:80 -v /your_path:/container_path -e PASSWORD=1234 image_name
 ```
 
 ### Docker 清除 (cleanup) 指令
@@ -82,13 +82,13 @@ docker rm $(docker ps -a -q)
 啟動 machine
 
 ```bash
-$ docker-machine start machine\_name
+$ docker-machine start machine_name
 ```
 
 指定 machine 來設定 docker
 
 ```bash
-$ eval "$(docker-machine env machine\_name)"
+$ eval "$(docker-machine env machine_name)"
 ```
 
 ### 與 container 互動指令
@@ -96,19 +96,19 @@ $ eval "$(docker-machine env machine\_name)"
 在 container 內執行指令
 
 ```bash
-$ docker exec -ti container\_name command
+$ docker exec -ti container_name command
 ```
 
 線上觀看 container logs
 
 ```bash
-$ docker logs -ft container\_name
+$ docker logs -ft container_name
 ```
 
 儲存正在執行的 container 成 image 檔案
 
 ```bash
-$ docker commit -m "message" -a "author" container\_name username/image\_name:tag
+$ docker commit -m "message" -a "author" container_name username/image_name:tag
 ```
 
 ### docker compose 格式
