@@ -15,9 +15,7 @@ tags:
   - php
 
 ---
-<div style="margin:0 auto; text-align:center">
   <a data-flickr-embed="true"  href="https://www.flickr.com/photos/appleboy/23207680879/in/dateposted-public/" title="laravel"><img src="https://i1.wp.com/farm6.staticflickr.com/5765/23207680879_9c86233e9b.jpg?resize=300%2C300&#038;ssl=1" alt="laravel" data-recalc-dims="1" /></a>
-</div>
 
 在學習 [Laravel][1] 階段，一定會天天看 [Laravel Documentation][2]，但是有很多小技巧是在文件內沒寫出來的，網路上找到這篇 [50 Laravel Tricks in 50 Minutes][3]，寫了 50 個 Laravel 小技巧，包含了 IoC Container, Blade, Eloquent, Middleware, Routing, Commands, Queues, Events, Caching 等模組。
 
@@ -27,51 +25,51 @@ tags:
 
 ## 在 Routing 內可以直接 binding Model
 
-<div>
-  <pre class="brush: php; title: ; notranslate" title="">Route::get('/api/posts/{post}', function(Post $post) {
+```php
+Route::get('/api/posts/{post}', function(Post $post) {
     return $post;
-});</pre>
-</div>
+});
+```
 
 ## scheduled tasks 支援 log 連續寫入檔案
 
-<div>
-  <pre class="brush: php; title: ; notranslate" title="">$schedule->command('emails:send')
+```php
+  $schedule->command('emails:send')
     ->hourly()
-    ->appendOutputTo($filePath);</pre>
-</div>
+    ->appendOutputTo($filePath);
+```
 
 ## 支援 Array 驗證
 
 html 寫法如下
 
-<div>
-  <pre class="brush: xml; title: ; notranslate" title=""><p>
+```html
+<p>
   <input type="text" name="person[1][id]">
   <input type="text" name="person[1][name]">
 </p>
 <p>
   <input type="text" name="person[2][id]">
   <input type="text" name="person[2][name]">
-</p></pre>
-</div>
+</p>
+```
 
 在 Laravel 5.1 要用 loop 方式驗證，但是 5.2 可以改寫如下
 
-<div>
-  <pre class="brush: php; title: ; notranslate" title="">$v = Validator::make($request->all(), [
+```php
+$v = Validator::make($request->all(), [
   'person.*.id' => 'exists:users.id',
   'person.*.name' => 'required:string',
-]);</pre>
-</div>
+]);
+```
 
 ## Collection 支援 Wildcards 功能
 
 要讀取 posts 底下所有的 Title 可以寫成如下
 
-<div>
-  <pre class="brush: php; title: ; notranslate" title="">$posts->pluck('posts.*.title');</pre>
-</div>
+```php
+$posts->pluck('posts.*.title');
+```
 
 ## Database Session Driver 多支援兩個欄位
 
