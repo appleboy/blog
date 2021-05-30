@@ -161,16 +161,39 @@ Templeate: 這搭配 Facebook api 可以直接做個人頁面，請參考這裡 
 &lt;a href="https://www.flickr.com/photos/appleboy/5488984404/" title="git-flow by appleboy46, on Flickr">&lt;img src="https://i0.wp.com/farm6.static.flickr.com/5293/5488984404_4f693eec32_z.jpg?resize=480%2C640&amp;#038;ssl=1" alt="git-flow" data-recalc-dims="1" />&lt;/a>
 &lt;/div>
 &lt;p>看到這張圖其實就說明了 branch 最重要的精神:『無限建立分支』，大家也不用害怕看不懂這張圖，底下說明 branch 分支狀況&lt;/p></description></item><item><title>[Git] 版本控制: 如何使用標籤(Tag)</title><link>https://blog.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/</link><pubDate>Thu, 18 Nov 2010 14:45:52 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/</guid><description>&lt;p>&lt;a href="http://git-scm.com/">Git&lt;/a> Tag 功能就如同 Cvs Tag 是一樣的，您可以在專案裡面隨意新增 Tag，方便您紀錄訊息，底下一些基本的操作來學習如何使用標籤(Tag)功能(新增標籤、以及各種不同類型標籤之間的差別)。&lt;/p>
-&lt;h3 id="列出既有標籤-直接使用-git-tag-即可">列出既有標籤 直接使用 git tag 即可&lt;/h3>
-&lt;pre class="brush: bash; title: ; notranslate" title="">$ git tag -l
+&lt;h2 id="列出既有標籤">列出既有標籤&lt;/h2>
+&lt;p>直接使用 git tag 即可&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">$ git tag -l
 v0.1
-v1.3&lt;/pre> 如果整個專案過多 Tag 也可以透過底下方式搜尋出來
-&lt;pre class="brush: bash; title: ; notranslate" title="">$ git tag -l 'v1.4.2.*'
+v1.3
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果整個專案過多 Tag 也可以透過底下方式搜尋出來&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5">5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6">6&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">$ git tag -l &lt;span style="color:#cd5555">&amp;#39;v1.4.2.*&amp;#39;&lt;/span>
 v1.4.2.1
 v1.4.2.2
 v1.4.2.3
 v1.4.2.4
-&lt;/pre></description></item><item><title>Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息</title><link>https://blog.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF/</link><pubDate>Fri, 20 Aug 2010 12:15:50 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF/</guid><description>&lt;p>這次來介紹一下 &lt;a href="http://git-scm.com/">git&lt;/a> reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：&lt;/p>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息</title><link>https://blog.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF/</link><pubDate>Fri, 20 Aug 2010 12:15:50 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF/</guid><description>&lt;p>這次來介紹一下 &lt;a href="http://git-scm.com/">git&lt;/a> reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：&lt;/p>
 &lt;pre class="brush: bash; title: ; notranslate" title="">$ git status
 error: bad index file sha1 signature
 fatal: index file corrupt&lt;/pre> 解決此問題非常簡單，要先刪除 index 檔案，請先砍掉

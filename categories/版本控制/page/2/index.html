@@ -72,16 +72,27 @@ A svn-ds/branches/develop/changelog.
 svn resolve --accept working lib/logs/logDB.txt</pre></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/svn/>svn</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/><h2 class=post-title>[Git] 版本控制: 如何使用標籤(Tag)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on November 18, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;302&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=http://git-scm.com/>Git</a> Tag 功能就如同 Cvs Tag 是一樣的，您可以在專案裡面隨意新增 Tag，方便您紀錄訊息，底下一些基本的操作來學習如何使用標籤(Tag)功能(新增標籤、以及各種不同類型標籤之間的差別)。</p><h3 id=列出既有標籤-直接使用-git-tag-即可>列出既有標籤 直接使用 git tag 即可</h3><pre class="brush: bash; title: ; notranslate" title>$ git tag -l
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;362&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=http://git-scm.com/>Git</a> Tag 功能就如同 Cvs Tag 是一樣的，您可以在專案裡面隨意新增 Tag，方便您紀錄訊息，底下一些基本的操作來學習如何使用標籤(Tag)功能(新增標籤、以及各種不同類型標籤之間的差別)。</p><h2 id=列出既有標籤>列出既有標籤</h2><p>直接使用 git tag 即可</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ git tag -l
 v0.1
-v1.3</pre>如果整個專案過多 Tag 也可以透過底下方式搜尋出來<pre class="brush: bash; title: ; notranslate" title>$ git tag -l 'v1.4.2.*'
+v1.3
+</code></pre></td></tr></table></div></div><p>如果整個專案過多 Tag 也可以透過底下方式搜尋出來</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ git tag -l <span style=color:#cd5555>&#39;v1.4.2.*&#39;</span>
 v1.4.2.1
 v1.4.2.2
 v1.4.2.3
 v1.4.2.4
-</pre><a href=https://blog.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://blog.wu-boy.com/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/page/1/>&larr; Newer Posts</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+
+</code></pre></td></tr></table></div></div><a href=https://blog.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github/>github</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://blog.wu-boy.com/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/page/1/>&larr; Newer Posts</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>

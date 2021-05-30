@@ -2304,16 +2304,39 @@ Arch Linux 2010.05 (i386 and x86_64) CentOS 5.5 (i386 and x86_64) Debian 5.0 (i3
 1 2 3 4 5 6 7 8 std::fstream foo; foo.</description></item><item><title>[新聞] PHP Framework Codeigniter 1.7.3 釋出 Release</title><link>https://blog.wu-boy.com/2010/12/%E6%96%B0%E8%81%9E-php-framework-codeigniter-1-7-3-%E9%87%8B%E5%87%BA-release/</link><pubDate>Tue, 07 Dec 2010 03:25:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/12/%E6%96%B0%E8%81%9E-php-framework-codeigniter-1-7-3-%E9%87%8B%E5%87%BA-release/</guid><description> 剛出爐的新聞: CodeIgniter 1.7.3 Released，1.7.3 版本的出來，最主要是修正了 Upload class 的安全性，在上一次公告就有 Upload Class Patch，只是 1.7.3 就把它納入進來，還有修正在某些情況下可能出現所有檔案，除此之外沒有其他重大修正了，看起來是為了過不久的 2.0 所準備，目前團隊都朝 2.0 發展了。 原文:
 Version 1.7.3 is a security maintenance release, including a previously patched file Upload class, and a new security fix to prevent possible directory traversal in certain circumstances (back ported from a fix made to CodeIgniter 2.0 at BitBucket). There are no other significant changes. 搶先版: 下載 Codeigniter 1.7.3</description></item><item><title>[Linux] VirtualBox + Ubuntu 10.10 編譯嵌入式系統</title><link>https://blog.wu-boy.com/2010/12/linux-virtualbox-ubuntu-10-10-%E7%B7%A8%E8%AD%AF%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1/</link><pubDate>Sat, 04 Dec 2010 08:45:35 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/12/linux-virtualbox-ubuntu-10-10-%E7%B7%A8%E8%AD%AF%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1/</guid><description>最近使用 Ubuntu 來編譯嵌入式的環境，由於個人比較不喜歡 Fedora 的系統，所以自己用了 VirtualBox 來搭配 10.10 的 Ubuntu 系統，在這裡提醒一下，請安裝最新版的 VirtualBox 3.2.12 for Windows hosts，否則在安裝 Ubuntu 之後，繼續安裝 Guest Addition 的時候會當機喔，重開機之後可以看到桌面多出一個光碟，是要您繼續安裝 Additions 切換到該光碟目錄
 cd /media/VBOXADDITIONS_3.2.12_68302/ 直接執行 sh VBoxLinuxAdditions-x86.run 重新開機就完成了，可以直接切換視窗大小...等，編譯 gcc 必須要一些 Cross tool，利用 apt-get 方式安裝: apt-get install build-essential 安裝額外 USB 裝置: 視窗上面 Devices - USB Devices 選擇你要的外接硬碟，會跳出 Windows 安裝額外 Driver 直接按 Continue Anyway 完成 補上 Ubuntu 畫面</description></item><item><title>[Git] 版本控制: 如何使用標籤(Tag)</title><link>https://blog.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/</link><pubDate>Thu, 18 Nov 2010 14:45:52 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/11/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E6%A8%99%E7%B1%A4tag/</guid><description>&lt;p>&lt;a href="http://git-scm.com/">Git&lt;/a> Tag 功能就如同 Cvs Tag 是一樣的，您可以在專案裡面隨意新增 Tag，方便您紀錄訊息，底下一些基本的操作來學習如何使用標籤(Tag)功能(新增標籤、以及各種不同類型標籤之間的差別)。&lt;/p>
-&lt;h3 id="列出既有標籤-直接使用-git-tag-即可">列出既有標籤 直接使用 git tag 即可&lt;/h3>
-&lt;pre class="brush: bash; title: ; notranslate" title="">$ git tag -l
+&lt;h2 id="列出既有標籤">列出既有標籤&lt;/h2>
+&lt;p>直接使用 git tag 即可&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">$ git tag -l
 v0.1
-v1.3&lt;/pre> 如果整個專案過多 Tag 也可以透過底下方式搜尋出來
-&lt;pre class="brush: bash; title: ; notranslate" title="">$ git tag -l 'v1.4.2.*'
+v1.3
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>如果整個專案過多 Tag 也可以透過底下方式搜尋出來&lt;/p>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5">5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6">6&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">$ git tag -l &lt;span style="color:#cd5555">&amp;#39;v1.4.2.*&amp;#39;&lt;/span>
 v1.4.2.1
 v1.4.2.2
 v1.4.2.3
 v1.4.2.4
-&lt;/pre></description></item><item><title>CodeIgniter 2.0 發展狀況(現在更棒了) 不再支援 PHP4</title><link>https://blog.wu-boy.com/2010/11/codeigniter-2-0-%E7%99%BC%E5%B1%95%E7%8B%80%E6%B3%81%E7%8F%BE%E5%9C%A8%E6%9B%B4%E6%A3%92%E4%BA%86-%E4%B8%8D%E5%86%8D%E6%94%AF%E6%8F%B4-php4/</link><pubDate>Sat, 13 Nov 2010 10:54:15 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/11/codeigniter-2-0-%E7%99%BC%E5%B1%95%E7%8B%80%E6%B3%81%E7%8F%BE%E5%9C%A8%E6%9B%B4%E6%A3%92%E4%BA%86-%E4%B8%8D%E5%86%8D%E6%94%AF%E6%8F%B4-php4/</guid><description>CodeIgniter 在官網正式公告了一篇 2.0 目前的狀況及改善 CodeIgniter 2.0 - Now with more Awesome，該篇重點莫過於 CI 2.0 將不再支援 PHP 4.0 版本了，這是一項重大改變，官方給目前版本取了一個名稱：CodeIgniterNoPhp4，看到這名字大概就可以知道官方要捨棄 PHP4 了。 自從 CodeIgniter 將所有程式碼搬到 Bitbucket 上面時，就已經宣稱不再 support PHP4，運行了好幾個月，現在以 PHP 5.1.6 來當作開發重點，底下是官方說明 CI 2.0 該注意的地方(其實還有很多地方要注意): 1. 所有類別將以 CI_ 當作前置符號 2. 因為不支援 PHP4 了，所以建構子一律改成 __construct 3. CI_Base 已經被移除，取而代之的是 CI_Controller 4. 之前有提供 Compatibility 輔助函數，目前已經支援 PHP5 了，故將此移除 開始支援 Email and Validation chaining，看一下範例：
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>CodeIgniter 2.0 發展狀況(現在更棒了) 不再支援 PHP4</title><link>https://blog.wu-boy.com/2010/11/codeigniter-2-0-%E7%99%BC%E5%B1%95%E7%8B%80%E6%B3%81%E7%8F%BE%E5%9C%A8%E6%9B%B4%E6%A3%92%E4%BA%86-%E4%B8%8D%E5%86%8D%E6%94%AF%E6%8F%B4-php4/</link><pubDate>Sat, 13 Nov 2010 10:54:15 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/11/codeigniter-2-0-%E7%99%BC%E5%B1%95%E7%8B%80%E6%B3%81%E7%8F%BE%E5%9C%A8%E6%9B%B4%E6%A3%92%E4%BA%86-%E4%B8%8D%E5%86%8D%E6%94%AF%E6%8F%B4-php4/</guid><description>CodeIgniter 在官網正式公告了一篇 2.0 目前的狀況及改善 CodeIgniter 2.0 - Now with more Awesome，該篇重點莫過於 CI 2.0 將不再支援 PHP 4.0 版本了，這是一項重大改變，官方給目前版本取了一個名稱：CodeIgniterNoPhp4，看到這名字大概就可以知道官方要捨棄 PHP4 了。 自從 CodeIgniter 將所有程式碼搬到 Bitbucket 上面時，就已經宣稱不再 support PHP4，運行了好幾個月，現在以 PHP 5.1.6 來當作開發重點，底下是官方說明 CI 2.0 該注意的地方(其實還有很多地方要注意): 1. 所有類別將以 CI_ 當作前置符號 2. 因為不支援 PHP4 了，所以建構子一律改成 __construct 3. CI_Base 已經被移除，取而代之的是 CI_Controller 4. 之前有提供 Compatibility 輔助函數，目前已經支援 PHP5 了，故將此移除 開始支援 Email and Validation chaining，看一下範例：
 $this-email-from('your@example.com', 'Your Name')
 -to('someone@example.com')
 -cc('another@another-example.com')
