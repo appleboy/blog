@@ -2066,53 +2066,120 @@ U+2000 - U+FF60 = 2
 U+FF61 - U+FF9F = 1
 U+FFA0 - = 2 PS: 測試環境 PHP 5.2.6</description></item><item><title>切換 Ubuntu apt 的 mirror site</title><link>https://blog.wu-boy.com/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/</link><pubDate>Tue, 22 Feb 2011 14:30:09 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/</guid><description>Update: 國網內部員工建議用 http://ftp.twaren.net 這台
 最近常常會發生 apt-get update 指令失敗，台大這台 tw.archive.ubuntu.com 似乎常常掛點，所以網路上找一下其他的 mirror site，看到似乎很多人都在用國網的 Server ( http://free.nchc.org.tw )，要換的話，請更改 /etc/apt/sources.list，將全部 tw.archive.ubuntu.com 都取代成 free.nchc.org.tw，其實還有另一個 domain 就是 opensource.nchc.org.tw，這些都可以用，沒有 apt 的 Ubuntu 或 Debian 簡直就不是 Server 了&amp;hellip;XD</description></item><item><title>WordPress plugin 加強網址 SEO</title><link>https://blog.wu-boy.com/2011/02/wordpress-plugin-seo/</link><pubDate>Mon, 21 Feb 2011 04:42:34 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/02/wordpress-plugin-seo/</guid><description>&lt;p>由於網站 &lt;a href="http://en.wikipedia.org/wiki/Search_engine_optimization">SEO&lt;/a> 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 &lt;span style="color:green">&lt;strong>blog.wu-boy.com/2011/02/17/2542&lt;/strong>&lt;/span>，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 &lt;strong>&lt;span style="color:green">blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/&lt;/span>&lt;/strong>，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 &lt;span style="color:red">&lt;strong>/%year%/%monthnum%/%postname%/&lt;/strong>&lt;/span>，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 &lt;strong>&lt;span style="color:red">404 NOT Found&lt;/span>&lt;/strong>，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 &lt;a href="http://blog.roga.tw">Roga Blog&lt;/a> 找到一篇 &lt;a href="http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/">加強部落格的 SEO&lt;/a>，提供了轉換的 plugin，底下是該程式碼:&lt;/p>
-&lt;pre class="brush: php; title: ; notranslate" title="">&lt;?php
-/*
-Plugin Name: roga's url hotfix
-Plugin URI: http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/
-Description: redirect http requests.
-Version: 0.1
-Author: roga
-Author URI: http://blog.roga.tw
-License: GPL v2
-*/
-function roga_wrap()
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#18">18&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#19">19&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#20">20&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#21">21&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#22">22&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#23">23&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#24">24&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#25">25&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#26">26&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#27">27&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#28">28&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#29">29&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#30">30&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="31">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#31">31&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="32">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#32">32&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="33">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#33">33&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="34">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#34">34&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="35">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#35">35&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="36">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#36">36&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="37">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#37">37&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="38">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#38">38&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="39">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#39">39&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="40">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#40">40&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="41">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#41">41&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="42">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#42">42&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="43">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#43">43&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="44">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#44">44&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="45">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#45">45&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="46">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#46">46&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="47">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#47">47&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="48">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#48">48&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="49">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#49">49&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="50">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#50">50&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="51">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#51">51&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="52">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#52">52&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="53">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#53">53&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="54">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#54">54&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="55">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#55">55&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="56">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#56">56&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="57">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#57">57&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="58">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#58">58&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="59">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#59">59&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="60">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#60">60&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-php" data-lang="php">&amp;lt;?php
+&lt;span style="color:#228b22">/*
+&lt;/span>&lt;span style="color:#228b22">Plugin Name: roga&amp;#39;s url hotfix
+&lt;/span>&lt;span style="color:#228b22">Plugin URI: http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/
+&lt;/span>&lt;span style="color:#228b22">Description: redirect http requests.
+&lt;/span>&lt;span style="color:#228b22">Version: 0.1
+&lt;/span>&lt;span style="color:#228b22">Author: roga
+&lt;/span>&lt;span style="color:#228b22">Author URI: http://blog.roga.tw
+&lt;/span>&lt;span style="color:#228b22">License: GPL v2
+&lt;/span>&lt;span style="color:#228b22">*/&lt;/span>
+&lt;span style="color:#8b008b;font-weight:bold">function&lt;/span> &lt;span style="color:#008b45">roga_wrap&lt;/span>()
 {
-GLOBAL $wpdb;
-$request_uri = getenv('REQUEST_URI');
-$array = explode('/', $request_uri);
-$status = TRUE;
-foreach($array as $row)
+&lt;span style="color:#8b008b;font-weight:bold">GLOBAL&lt;/span> &lt;span style="color:#00688b">$wpdb&lt;/span>;
+&lt;span style="color:#00688b">$request_uri&lt;/span> = getenv(&lt;span style="color:#cd5555">&amp;#39;REQUEST_URI&amp;#39;&lt;/span>);
+&lt;span style="color:#00688b">$array&lt;/span> = explode(&lt;span style="color:#cd5555">&amp;#39;/&amp;#39;&lt;/span>, &lt;span style="color:#00688b">$request_uri&lt;/span>);
+&lt;span style="color:#00688b">$status&lt;/span> = &lt;span style="color:#8b008b;font-weight:bold">TRUE&lt;/span>;
+&lt;span style="color:#8b008b;font-weight:bold">foreach&lt;/span>(&lt;span style="color:#00688b">$array&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">as&lt;/span> &lt;span style="color:#00688b">$row&lt;/span>)
 {
-if( ! is_numeric($row) &amp;&amp; ! empty($row)) $status = FALSE;
+&lt;span style="color:#8b008b;font-weight:bold">if&lt;/span>( ! is_numeric(&lt;span style="color:#00688b">$row&lt;/span>) &amp;amp;&amp;amp; ! &lt;span style="color:#8b008b;font-weight:bold">empty&lt;/span>(&lt;span style="color:#00688b">$row&lt;/span>)) &lt;span style="color:#00688b">$status&lt;/span> = &lt;span style="color:#8b008b;font-weight:bold">FALSE&lt;/span>;
 }
-if(count($array) != 5 || $status != TRUE)
-return NULL;
-$post_id = (int) $array[4]; // http://blog.roga.tw/2011/02/16/2484
-$wp_result = $wpdb->get_row("SELECT `post_type`, `post_name`, `post_date` FROM `$wpdb->posts` WHERE `ID` = $post_id ");
-if( ! isset($wp_result))
-return NULL;
-$post_type = $wp_result->post_type;
-$post_name = $wp_result->post_name;
-$post_date = $wp_result->post_date;
-if($post_type == 'revision')
-return NULL;
-$time = strtotime($post_date);
-$year = date('Y', $time);
-$month = date('m', $time);
-// old: /%year%/%monthnum%/%day%/%post_id%
-// new: /%year%/%monthnum%/%postname%/
-$new_request_uri = "/$year/$month/$post_name";
-$http_host = getenv('HTTP_HOST');
-$logfile = WP_CONTENT_DIR . "/cache/wp-roga-redirect.log";
-if(file_exists($logfile))
-file_put_contents($logfile, sprintf("[%s] %s -> %s / %s " . PHP_EOL, date_i18n("Y-m-d H:i:s"), $request_uri, urldecode($new_request_uri), getenv('HTTP_USER_AGENT')), FILE_APPEND);
-header("Status: 301 Moved Permanently");
-header("Location: http:/$http_host$new_request_uri");
-exit();
+&lt;span style="color:#8b008b;font-weight:bold">if&lt;/span>(count(&lt;span style="color:#00688b">$array&lt;/span>) != &lt;span style="color:#b452cd">5&lt;/span> || &lt;span style="color:#00688b">$status&lt;/span> != &lt;span style="color:#8b008b;font-weight:bold">TRUE&lt;/span>)
+&lt;span style="color:#8b008b;font-weight:bold">return&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">NULL&lt;/span>;
+&lt;span style="color:#00688b">$post_id&lt;/span> = (int) &lt;span style="color:#00688b">$array&lt;/span>[&lt;span style="color:#b452cd">4&lt;/span>]; &lt;span style="color:#228b22">// http://blog.roga.tw/2011/02/16/2484
+&lt;/span>&lt;span style="color:#228b22">&lt;/span>
+&lt;span style="color:#00688b">$wp_result&lt;/span> = &lt;span style="color:#00688b">$wpdb&lt;/span>-&amp;gt;&lt;span style="color:#658b00">get_row&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;SELECT `post_type`, `post_name`, `post_date` FROM `&lt;/span>&lt;span style="color:#cd5555">$wpdb-&amp;gt;posts&lt;/span>&lt;span style="color:#cd5555">` WHERE `ID` = &lt;/span>&lt;span style="color:#cd5555">$post_id&lt;/span>&lt;span style="color:#cd5555"> &amp;#34;&lt;/span>);
+&lt;span style="color:#8b008b;font-weight:bold">if&lt;/span>( ! isset(&lt;span style="color:#00688b">$wp_result&lt;/span>))
+&lt;span style="color:#8b008b;font-weight:bold">return&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">NULL&lt;/span>;
+&lt;span style="color:#00688b">$post_type&lt;/span> = &lt;span style="color:#00688b">$wp_result&lt;/span>-&amp;gt;&lt;span style="color:#658b00">post_type&lt;/span>;
+&lt;span style="color:#00688b">$post_name&lt;/span> = &lt;span style="color:#00688b">$wp_result&lt;/span>-&amp;gt;&lt;span style="color:#658b00">post_name&lt;/span>;
+&lt;span style="color:#00688b">$post_date&lt;/span> = &lt;span style="color:#00688b">$wp_result&lt;/span>-&amp;gt;&lt;span style="color:#658b00">post_date&lt;/span>;
+&lt;span style="color:#8b008b;font-weight:bold">if&lt;/span>(&lt;span style="color:#00688b">$post_type&lt;/span> == &lt;span style="color:#cd5555">&amp;#39;revision&amp;#39;&lt;/span>)
+&lt;span style="color:#8b008b;font-weight:bold">return&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">NULL&lt;/span>;
+&lt;span style="color:#00688b">$time&lt;/span> = strtotime(&lt;span style="color:#00688b">$post_date&lt;/span>);
+&lt;span style="color:#00688b">$year&lt;/span> = date(&lt;span style="color:#cd5555">&amp;#39;Y&amp;#39;&lt;/span>, &lt;span style="color:#00688b">$time&lt;/span>);
+&lt;span style="color:#00688b">$month&lt;/span> = date(&lt;span style="color:#cd5555">&amp;#39;m&amp;#39;&lt;/span>, &lt;span style="color:#00688b">$time&lt;/span>);
+&lt;span style="color:#228b22">// old: /%year%/%monthnum%/%day%/%post_id%
+&lt;/span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#228b22">// new: /%year%/%monthnum%/%postname%/
+&lt;/span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#00688b">$new_request_uri&lt;/span> = &lt;span style="color:#cd5555">&amp;#34;/&lt;/span>&lt;span style="color:#cd5555">$year&lt;/span>&lt;span style="color:#cd5555">/&lt;/span>&lt;span style="color:#cd5555">$month&lt;/span>&lt;span style="color:#cd5555">/&lt;/span>&lt;span style="color:#cd5555">$post_name&lt;/span>&lt;span style="color:#cd5555">&amp;#34;&lt;/span>;
+&lt;span style="color:#00688b">$http_host&lt;/span> = getenv(&lt;span style="color:#cd5555">&amp;#39;HTTP_HOST&amp;#39;&lt;/span>);
+&lt;span style="color:#00688b">$logfile&lt;/span> = WP_CONTENT_DIR . &lt;span style="color:#cd5555">&amp;#34;/cache/wp-roga-redirect.log&amp;#34;&lt;/span>;
+&lt;span style="color:#8b008b;font-weight:bold">if&lt;/span>(file_exists(&lt;span style="color:#00688b">$logfile&lt;/span>))
+file_put_contents(&lt;span style="color:#00688b">$logfile&lt;/span>, sprintf(&lt;span style="color:#cd5555">&amp;#34;[%s] %s -&amp;gt; %s / %s &amp;#34;&lt;/span> . PHP_EOL, date_i18n(&lt;span style="color:#cd5555">&amp;#34;Y-m-d H:i:s&amp;#34;&lt;/span>), &lt;span style="color:#00688b">$request_uri&lt;/span>, urldecode(&lt;span style="color:#00688b">$new_request_uri&lt;/span>), getenv(&lt;span style="color:#cd5555">&amp;#39;HTTP_USER_AGENT&amp;#39;&lt;/span>)), FILE_APPEND);
+header(&lt;span style="color:#cd5555">&amp;#34;Status: 301 Moved Permanently&amp;#34;&lt;/span>);
+header(&lt;span style="color:#cd5555">&amp;#34;Location: http:/&lt;/span>&lt;span style="color:#cd5555">$http_host$new_request_uri&lt;/span>&lt;span style="color:#cd5555">&amp;#34;&lt;/span>);
+&lt;span style="color:#8b008b;font-weight:bold">exit&lt;/span>();
 }
-add_action('init', 'roga_wrap');
-&lt;/pre></description></item><item><title>PHP CodeIgniter Google URL Shortener API Library</title><link>https://blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/</link><pubDate>Thu, 17 Feb 2011 05:38:24 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/</guid><description>&lt;div style="margin: 0 auto; text-align: center;">
+add_action(&lt;span style="color:#cd5555">&amp;#39;init&amp;#39;&lt;/span>, &lt;span style="color:#cd5555">&amp;#39;roga_wrap&amp;#39;&lt;/span>);
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>PHP CodeIgniter Google URL Shortener API Library</title><link>https://blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/</link><pubDate>Thu, 17 Feb 2011 05:38:24 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/</guid><description>&lt;div style="margin: 0 auto; text-align: center;">
 &lt;img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&amp;#038;ssl=1" alt="CodeIgniter" data-recalc-dims="1" />
 &lt;/div>
 &lt;h3 id="原由-由於-bbs-的盛行從最早的">&lt;strong>原由&lt;/strong> 由於 bbs 的盛行，從最早的&lt;/h3>
