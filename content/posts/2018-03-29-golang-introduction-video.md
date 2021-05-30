@@ -41,14 +41,13 @@ Go 語言 (又稱 Golang) 是 Google 推出新一代的強大語言，2018 年 1
 
 ## 投影片 
 
-大家可以先參考這份投影片，讓您可以清楚了解 Go 語言的基礎，以及 Go 語言的由來。 
+大家可以先參考這份投影片，讓您可以清楚了解 Go 語言的基礎，以及 Go 語言的由來。
 
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/3lLax38EDTQqW5" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+{{< speakerdeck id="ea27c084464644f68eaa08d844e06ef0" >}}
 
-## 購買 
+## 課程購買 
 
 目前特價 **$1600**，課程還正在錄製中，每週都會有新的影片上架，歡迎大家參考看看，請點選底下購買連結: [Go 語言基礎實戰教學][2] 
-
 
 ## 心得
 
@@ -56,7 +55,7 @@ Go 語言 (又稱 Golang) 是 Google 推出新一代的強大語言，2018 年 1
 
   * 富邦銀行: 012
   * 富邦帳號: 746168268370
-  * 匯款金額: 台幣 $3000 元 匯款後請直接到 
+  * 匯款金額: 台幣 $3000 元 匯款後請直接到
 
 [FB 找我][10]，或者直接寫信給我也可以 `appleboy.tw AT gmail.com`。有任何問題都可以直接加我 FB，都是公開資訊。
 

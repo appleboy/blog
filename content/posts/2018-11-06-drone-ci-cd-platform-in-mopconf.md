@@ -22,7 +22,7 @@ tags:
 
 ## 投影片
 
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/z47uI70IZxgu5a" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+{{< speakerdeck id="58badd4fe6f448dfa0c2d406a8cd32da" >}}
 
 很高興 Drone 在今年宣佈支援 [ARM][5] 及 Windows 兩大平台，而我也正在把一些 drone 的 plugin 支援 ARM 及 Windows，相信在 Drone 0.9 版正式推出後，就可以讓 Windows 使用者架設在 [Microsoft Azure][6]。
 

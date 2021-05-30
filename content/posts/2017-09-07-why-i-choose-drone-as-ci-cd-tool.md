@@ -84,7 +84,7 @@ ___
 
 底下是我的投影片，歡迎大家參考:
 
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/aM3SFokdjfULaI" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/secret/aM3SFokdjfULaI" title="用 Drone 打造 輕量級容器持續交付平台" target="_blank">用 Drone 打造 輕量級容器持續交付平台</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong> </div>
+{{< speakerdeck id="ded39b90a7fe4e3187650ab20d3bce6a" >}}
 
 [1]:https://github.com/drone/drone
 [2]:https://jenkins.io/

@@ -153,7 +153,7 @@ env:
 
 底下是議程投影片，有興趣的參考看看
 
-<iframe src="//www.slideshare.net/slideshow/embed_code/key/fowmGWilFpEYMP" width="595" height="485" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe> <div style="margin-bottom:5px"> <strong> <a href="//www.slideshare.net/appleboy/gorush-a-push-notification-server-written-in-go" title="Gorush: A push notification server written in Go" target="_blank">Gorush: A push notification server written in Go</a> </strong> from <strong><a href="https://www.slideshare.net/appleboy" target="_blank">Bo-Yi Wu</a></strong> </div>
+{{< speakerdeck id="68d94e3c39ed4142bfd69399d0d1f3ad" >}}
 
 最後有講到如何部署及測試 Go 語言，這邊講了一下 Drone 這套自動化測試工具。如果大家有興趣可以參考我在 [Udemy 開設的課程][31]，目前特價 1600 元。Drone 幫忙開發者自動化測試，部署到 Docker Hub 或編譯出執行檔，這些在 Drone 裡面都可以透過 `YAML` 來設定，開發者只需要專注於寫程式就可以了。
 
