@@ -8,7 +8,7 @@ share_img: https://i.imgur.com/hJRgySS.png
 categories:
   - Golang
   - Blog
-  - Word
+  - Wordpress
 tags:
   - golang
   - hugo
