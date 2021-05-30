@@ -265,4 +265,9 @@ hugo server -D
 
 希望這次的改變可以讓大家更加喜歡。
 
+## 參考資料
+
+* [A step-by-step guide on migrating from WordPress to Hugo](https://ma.ttias.be/step-by-step-guide-migrating-wordpress-to-hugo/)
+* [Migrate to Hugo](https://gohugo.io/tools/migrations/)
+
 [31]:https://github.com/
