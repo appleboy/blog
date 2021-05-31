@@ -1290,24 +1290,42 @@ port_in_redirect off;</description></item><item><title>CodeIgniter 尋找新東�
 &amp;lt;/&lt;span style="color:#8b008b;font-weight:bold">html&lt;/span>&amp;gt;
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div></description></item><item><title>PHP 5.5.0 Release note: support Zend OPcache</title><link>https://blog.wu-boy.com/2013/06/php-5-5-0-release-zend-opcache/</link><pubDate>Tue, 25 Jun 2013 06:53:45 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/06/php-5-5-0-release-zend-opcache/</guid><description>&lt;div style="margin: 0 auto; text-align: center;">
-&lt;a title="php-logo by appleboy46, on Flickr" href="https://www.flickr.com/photos/appleboy/6034284842/">&lt;img alt="php-logo" src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&amp;#038;ssl=1" data-recalc-dims="1" />&lt;/a>
-&lt;/div>
+&lt;/div></description></item><item><title>PHP 5.5.0 Release note: support Zend OPcache</title><link>https://blog.wu-boy.com/2013/06/php-5-5-0-release-zend-opcache/</link><pubDate>Tue, 25 Jun 2013 06:53:45 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/06/php-5-5-0-release-zend-opcache/</guid><description>&lt;p>&lt;a title="php-logo by appleboy46, on Flickr" href="https://www.flickr.com/photos/appleboy/6034284842/">&lt;img alt="php-logo" src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&amp;#038;ssl=1" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>&lt;a href="http://www.php.net/" target="_blank">PHP&lt;/a> 5.5.0 在上週 20 號正式 Release，也看到 PHP 官網終於改版了，新的版面看起來比較清爽，想嘗試新版面的朋友們，可以點選官網最上面鎖提示的 Bar，如果覺得新版面不是很好看，也可以切回去舊版。本篇來介紹 PHP 5.5.0 有哪些新 Feature。&lt;/p>
-&lt;h3 id="新增-generators-and-coroutines-功能">新增 generators and coroutines 功能&lt;/h3>
+&lt;h2 id="新增-generators-and-coroutines-功能">新增 generators and coroutines 功能&lt;/h2>
 &lt;p>&lt;a href="http://php.net/generators" target="_blank">Generators&lt;/a> 提供了最簡單的寫法來實做 iterators，而不需要實做 Class 去實做 Iterator 介面，generators function 就跟一般的 PHP function 一樣，只是多了 yield 這 keyword，簡單舉個例子&lt;/p>
-&lt;pre class="brush: php; title: ; notranslate" title="">&lt;?php
-function gen_one_to_three() {
-for ($i = 1; $i &lt;= 3; $i++) {
-// Note that $i is preserved between yields.
-yield $i;
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
+&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-php" data-lang="php">&amp;lt;?php
+&lt;span style="color:#8b008b;font-weight:bold">function&lt;/span> &lt;span style="color:#008b45">gen_one_to_three&lt;/span>() {
+&lt;span style="color:#8b008b;font-weight:bold">for&lt;/span> (&lt;span style="color:#00688b">$i&lt;/span> = &lt;span style="color:#b452cd">1&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span> &amp;lt;= &lt;span style="color:#b452cd">3&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span>++) {
+&lt;span style="color:#228b22">// Note that $i is preserved between yields.
+&lt;/span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">yield&lt;/span> &lt;span style="color:#00688b">$i&lt;/span>;
 }
 }
-$generator = gen_one_to_three();
-foreach ($generator as $value) {
-echo "$value\n";
+&lt;span style="color:#00688b">$generator&lt;/span> = gen_one_to_three();
+&lt;span style="color:#8b008b;font-weight:bold">foreach&lt;/span> (&lt;span style="color:#00688b">$generator&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">as&lt;/span> &lt;span style="color:#00688b">$value&lt;/span>) {
+&lt;span style="color:#8b008b;font-weight:bold">echo&lt;/span> &lt;span style="color:#cd5555">&amp;#34;&lt;/span>&lt;span style="color:#cd5555">$value\n&lt;/span>&lt;span style="color:#cd5555">&amp;#34;&lt;/span>;
 }
-?>&lt;/pre></description></item><item><title>How to install Gearman on Ubuntu or Debian with MySQL 安裝測試篇</title><link>https://blog.wu-boy.com/2013/06/how-to-install-gearman-on-ubuntu-or-debian-with-mysql/</link><pubDate>Thu, 13 Jun 2013 09:31:40 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/06/how-to-install-gearman-on-ubuntu-or-debian-with-mysql/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+&lt;span style="color:#1e889b">?&amp;gt;&lt;/span>&lt;span style="color:#a61717;background-color:#e3d2d2">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>How to install Gearman on Ubuntu or Debian with MySQL 安裝測試篇</title><link>https://blog.wu-boy.com/2013/06/how-to-install-gearman-on-ubuntu-or-debian-with-mysql/</link><pubDate>Thu, 13 Jun 2013 09:31:40 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/06/how-to-install-gearman-on-ubuntu-or-debian-with-mysql/</guid><description>&lt;div style="margin:0 auto; text-align:center">
 &lt;img src="https://i2.wp.com/gearman.org/_media/:wiki:logo.png?w=840" alt="" data-recalc-dims="1" />
 &lt;/div>
 &lt;p>&lt;a href="http://gearman.org/" target="_blank">Gearman&lt;/a> 可以在背景幫忙處理繁瑣的工作，例如壓縮影片、處理縮圖、發送認證信…等，這次不會提到太多 Gearman 介紹，如果想瞭解 Gearman 可以參考&lt;a href="http://www.jaceju.net/" target="_blank">小鐵兄&lt;/a>寫的 &lt;a href="http://www.jaceju.net/blog/archives/1211/" target="_blank">Gearman 心得&lt;/a>，此篇會筆記如何在 Ubuntu or Debian 安裝 Gearman 搭配 MySQL 服務，當然如果你不是使用 MySQL，也可以另外搭配 &lt;a href="http://memcached.org/" target="_blank">Memcached&lt;/a> 或 &lt;a href="http://www.sqlite.org/" target="_blank">SQLite&lt;/a> 都可以&lt;/p></description></item><item><title>JSDC 和 KSDG 影音紀錄 (淺談 GruntJS 整合開發工具)</title><link>https://blog.wu-boy.com/2013/06/jsdc-ksdg-gruntjs-tool/</link><pubDate>Tue, 11 Jun 2013 02:38:38 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/06/jsdc-ksdg-gruntjs-tool/</guid><description>&lt;div style="margin: 0 auto; text-align: center;">
