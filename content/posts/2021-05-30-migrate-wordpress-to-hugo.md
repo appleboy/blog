@@ -113,7 +113,7 @@ hugo server -D
 
 ### 支援 Archive 頁面
 
-由於該 Theme 預設沒有 archive 頁面，故我們直接新增此 Template，在 `_default` 目錄內新增 `archives.html` 檔案
+由於此 Theme 預設沒有 `archive` 頁面，故我們直接新增此 Template，在 `_default` 目錄內新增 `archives.html` 檔案
 
 ```html
 {{ define "main" }}
