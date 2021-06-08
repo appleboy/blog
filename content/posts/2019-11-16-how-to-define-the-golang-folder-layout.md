@@ -24,6 +24,8 @@ tags:
 
 本次教學會著重在投影片 P5 ~ P20。
 
+<script async class="speakerdeck-embed" data-slide="5" data-id="b8d34a236aa6419f8790dab2a845d1d7" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
 ## 教學影片
 
 {{< youtube jApleGS2hQY >}}
