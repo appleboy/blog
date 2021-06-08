@@ -12,10 +12,13 @@ tags:
   - golang
 
 ---
+## 演講投影片
+
 底下是 2020 的 [Cloud Summit][1] 演講投影片，歡迎大家參考看看
 
-<!--more-->
+{{< speakerdeck id="cf53a56cdf324a57bd8ab6b1437c10ed" >}}
 
+<!--more-->
 ## 工商教學影片
 
 如果對於課程內容有興趣，可以參考底下課程。
