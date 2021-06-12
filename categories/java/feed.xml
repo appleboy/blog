@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Java on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/categories/java/</link><description>Recent content in Java on 小惡魔 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Thu, 11 Dec 2008 07:18:18 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/categories/java/feed.xml" rel="self" type="application/rss+xml"/><item><title>[Java] 使用java模擬ping和telnet的實現</title><link>https://blog.wu-boy.com/2008/12/java-%E4%BD%BF%E7%94%A8java%E6%A8%A1%E6%93%ACping%E5%92%8Ctelnet%E7%9A%84%E5%AF%A6%E7%8F%BE/</link><pubDate>Thu, 11 Dec 2008 07:18:18 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/12/java-%E4%BD%BF%E7%94%A8java%E6%A8%A1%E6%93%ACping%E5%92%8Ctelnet%E7%9A%84%E5%AF%A6%E7%8F%BE/</guid><description>&lt;p>今天在寫 Java 的時候，遇到問題跑去問 TonyQ 兄，他丟了一個網址給我，剛剛測試過了，還漫好用的,紀錄一下 模擬 ping 的實現&lt;/p>
+&lt;pre class="brush: java; title: ; notranslate" title="">import java.io.*;
+import java.net.*;
+public class PseudoPing {
+public static void main(String args[]) {
+try {
+InetAddress address = InetAddress.getByName(args[0]);
+System.out.println(address.isReachable(5000));
+} catch (UnknownHostException e) {
+e.printStackTrace();
+} catch (IOException e) {
+e.printStackTrace();
+}
+}
+}&lt;/pre></description></item><item><title>[Ubuntu &amp; java] java JDBC and MySQL</title><link>https://blog.wu-boy.com/2008/11/ubuntu-java-java-jdbc-and-mysql/</link><pubDate>Sat, 15 Nov 2008 12:34:10 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/11/ubuntu-java-java-jdbc-and-mysql/</guid><description>&lt;p>最近開始要摸 &lt;a href="http://zh.wikipedia.org/wiki/Java">java&lt;/a> 了，目前大概先實做 java with &lt;a href="http://java.sun.com/javase/technologies/database/">JDBC&lt;/a> 連接 MySQL，所以在 &lt;a href="http://www.javaworld.com.tw">JavaWorld@TW&lt;/a> 這裡找了一些相關的文件，目前我在 Linux 底下實做，還沒找到一套很適合的 IDE Tool 來撰寫程式碼，大家好像都很推 &lt;a href="http://www.netbeans.org/">netbeans&lt;/a> 跟 &lt;a href="http://www.eclipse.org/">eclipse&lt;/a>，不過我目前還是使用 &lt;a href="http://www.pspad.com/">PSPad&lt;/a> 來撰寫 java 程式碼，然後透過 FTP 的方式編輯，這不是重點，重點是要透過 jdbc 來連接 MySQL，目前是在 &lt;a href="http://www.ubuntu-tw.org/">Ubuntu&lt;/a> 7.04 這一版本上面實做，底下是實做方法： 1. 首先先安裝 deb 檔案：透過 apt-get 的方式&lt;/p>
+&lt;pre class="brush: bash; title: ; notranslate" title="">#
+# 首先尋找 java lib with mysql
+apt-get install libmysql-java
+&lt;/pre> 2. 安裝好之後尋找 jar 檔案，加入到 class path 裡面
+&lt;pre class="brush: bash; title: ; notranslate" title="">#
+# 首先 echo $CLASSPAT
+#
+# java mysql jar 檔案如下
+/usr/share/java/mysql.jar
+# 加入 CLASSPATH，修改 /etc/bash.bashrc
+export CLASSPATH=$CLASSPATH:/usr/share/java/mysql.jar
+# 然後在
+source /etc/bash.bashrc&lt;/pre></description></item><item><title>[Java] 正規取代表示法</title><link>https://blog.wu-boy.com/2008/03/java-%E6%AD%A3%E8%A6%8F%E5%8F%96%E4%BB%A3%E8%A1%A8%E7%A4%BA%E6%B3%95/</link><pubDate>Mon, 10 Mar 2008 04:21:42 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/03/java-%E6%AD%A3%E8%A6%8F%E5%8F%96%E4%BB%A3%E8%A1%A8%E7%A4%BA%E6%B3%95/</guid><description>&lt;p>最近弄國科會計畫，所以都在碰 java 的東西，都在弄 &lt;a href="http://www.w3.org/TR/rdf-sparql-query/">sparql&lt;/a> 跟 &lt;a href="http://www.w3.org/TR/rdf-schema/">rdf&lt;/a> 的東西，昨天弄懂一些基本的 &lt;a href="http://www.w3.org/TR/rdf-sparql-query/">sparql&lt;/a>，然而利用 sarql 語法取出來的數值不是我想要的，所以利用正規表示，把字串取代了。 我想取代的字串如下：&lt;/p>
+&lt;blockquote>
+&lt;p>( ?url = “LAB221″^^xsd:string ) 我只想要中間的 LAB221 的部份，然後我上網找了方法，總共可以使用兩種方法 第一種&lt;/p>
+&lt;/blockquote>
+&lt;pre class="brush: java; title: ; notranslate" title="">String result = "( ?url = \"LAB221\"^^xsd:string )";
+// compile pattern
+Pattern p = Pattern.compile("[^\"]+\"([^\"]+)\"[^\"]+");
+// get matcher
+Matcher m = p.matcher(result.replaceAll("[
+&lt;li>
+&lt;/li>]",""));
+// test if match
+if (m.matches()) {
+System.out.println(m.group(1));
+}
+else
+{
+System.out.println("error");
+}
+/* 正規比對 */
+&lt;/pre> 上面感謝 ptt qrtt1 給我的一點啟示</description></item><item><title>[Java] 判斷字串是否是整數</title><link>https://blog.wu-boy.com/2008/03/java-%E5%88%A4%E6%96%B7%E5%AD%97%E4%B8%B2%E6%98%AF%E5%90%A6%E6%98%AF%E6%95%B4%E6%95%B8/</link><pubDate>Wed, 05 Mar 2008 13:53:25 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/03/java-%E5%88%A4%E6%96%B7%E5%AD%97%E4%B8%B2%E6%98%AF%E5%90%A6%E6%98%AF%E6%95%B4%E6%95%B8/</guid><description>&lt;p>有時候必須知道輸入的字串是否是整數，如果不是的話，就要重新輸入，這有兩種作法 第一種是使用 try … catch … finally 的方法，如下&lt;/p>
+&lt;pre class="brush: java; title: ; notranslate" title="">public class test
+{
+public static void main(String args[])
+{
+BufferedReader buf = new BufferedReader(new InputStreamReader(System.in));
+try{
+System.out.print("請輸入你要的數字:");
+int test = Integer.parseInt(buf.readLine());
+}
+catch(ArrayIndexOutOfBoundsException e)
+{
+System.out.println(e.toString() + "陣列程式發生錯誤");
+}
+catch(ArithmeticException e)
+{
+System.out.println(e.toString() + "數學發生錯誤");
+}
+catch(Exception e)
+{
+System.out.println(e.toString() + "程式發生錯誤");
+}
+finally
+{
+System.out.println("執行成功");
+}
+}
+}
+&lt;/pre> 另外一種方法，是利用 while 然後利用 Character.isDigit 的方法</description></item><item><title>[java] 在 linux 底下使用 java 來執行 Linux 指令</title><link>https://blog.wu-boy.com/2008/03/java-%E5%9C%A8-linux-%E5%BA%95%E4%B8%8B%E4%BD%BF%E7%94%A8-java-%E4%BE%86%E5%9F%B7%E8%A1%8C-linux-%E6%8C%87%E4%BB%A4/</link><pubDate>Sat, 01 Mar 2008 14:14:04 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/03/java-%E5%9C%A8-linux-%E5%BA%95%E4%B8%8B%E4%BD%BF%E7%94%A8-java-%E4%BE%86%E5%9F%B7%E8%A1%8C-linux-%E6%8C%87%E4%BB%A4/</guid><description>其實可以在 linux 底下去寫 shell script 然後去執行 java 程式，而並非用 java 去執行 Linux 指令，不過java也是可以做到執行 shell command，底下就是我寫的 java 測試 code，去列出自己所在的目錄底下的檔案 ls 這個指令
+import java.io.*;
+import java.net.*;
+import java.util.*;
+public class runstart{
+public static void main(String a[]) throws Exception{
+Process pl = Runtime.getRuntime().exec("/bin/ls");
+String line = "";
+BufferedReader p_in = new BufferedReader(new InputStreamReader(pl.getInputStream()));
+while((line = p_in.readLine()) != null){
+System.out.println(line);
+}
+p_in.close();
+}
+}
+參考 http://debut.cis.nctu.edu.tw/~ching/Course/JavaCourse/05_input_output/02_input_output.htm</description></item><item><title>[Java] 安裝好 Jdk 設定 path 跟 classpath 路徑</title><link>https://blog.wu-boy.com/2008/02/java-%E5%AE%89%E8%A3%9D%E5%A5%BD-jdk-%E8%A8%AD%E5%AE%9A-path-%E8%B7%AF%E5%BE%91/</link><pubDate>Wed, 27 Feb 2008 10:40:39 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/02/java-%E5%AE%89%E8%A3%9D%E5%A5%BD-jdk-%E8%A8%AD%E5%AE%9A-path-%E8%B7%AF%E5%BE%91/</guid><description>&lt;p>今天剛裝好 jdk 新版 jdk1.6.0_04，如要下載請到 &lt;a href="http://java.sun.com/javase/downloads/index.jsp">這裡&lt;/a> 下載，裝好之後當然底下要找編譯檔案，就是要去 bin 這個資料夾，然後找到 javac 跟 java 執行檔就可以了，不過如果你要在任何地方都要使用這個執行檔，就要去修改 path，設定方法如下 &lt;a href="https://www.flickr.com/photos/appleboy/2296039572/" title="java_1 by appleboy46, on Flickr">&lt;img src="https://i2.wp.com/farm4.static.flickr.com/3283/2296039572_21e85b77f0_o.jpg?resize=419%2C479&amp;#038;ssl=1" alt="java_1" border="0" data-recalc-dims="1" />&lt;/a> 我的電腦右鍵-&amp;gt;內容 k&lt;/p></description></item></channel></rss>

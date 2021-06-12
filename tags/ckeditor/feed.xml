@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CKeditor on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/tags/ckeditor/</link><description>Recent content in CKeditor on 小惡魔 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Wed, 25 Sep 2013 02:20:42 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/tags/ckeditor/feed.xml" rel="self" type="application/rss+xml"/><item><title>RequireJS 搭配 CKEditor</title><link>https://blog.wu-boy.com/2013/09/load-ckeditor-using-requirejs/</link><pubDate>Wed, 25 Sep 2013 02:20:42 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/09/load-ckeditor-using-requirejs/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+&lt;a href="https://www.flickr.com/photos/appleboy/9911959726/" title="requirejs-logo by appleboy46, on Flickr">&lt;img src="https://i0.wp.com/farm4.staticflickr.com/3677/9911959726_a40988a62d_o.png?resize=200%2C200&amp;#038;ssl=1" alt="requirejs-logo" data-recalc-dims="1" />&lt;/a>
+&lt;/div> 網頁編輯器大家推薦的就
+&lt;p>&lt;a href="http://ckeditor.com/" target="_blank">CKEditor&lt;/a> 或 &lt;a href="http://www.tinymce.com/" target="_blank">TinyMCE&lt;/a>，兩套各有優缺點，CKEditor 雖然功能最完整，也是最肥了，雖然官網可以自己挑選 plugin 來簡化肥肥的 source code。如果是單純用在後台管理，我還是推薦 CKEditor，給前端使用者的話，就推薦 TinyMCE 了，畢竟前台還是要以輕量為主。&lt;/p></description></item><item><title>[編輯器] CKeditor 更換 background-color and font-size</title><link>https://blog.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/</link><pubDate>Tue, 30 Mar 2010 12:21:52 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/</guid><description>相信大家在製作 Web 過程，一定會用到編輯器，然而 CKeditor 前身 FCKeditor 非常有名，FCKeditor 運行了六年之久，在去年2009年的時候，轉換成了 CKeditor，目前開發團隊也專注於此版本，現在已經推出到 CKEditor 3.2 released!，可以參考 CKEditor 3.x - Developer&amp;rsquo;s Guide，裡面也整合了 jQuery，替很多開發者想到更多管道去整合網站，然而今天設計網站，需要改變編輯器的背景顏色，預設是白色背景，但是並非所有網站都是白色呈現，所以才需要動到背景顏色，這樣好讓使用者可以融入整個背景，在 Plurk 發表了這問題，也找了官方論壇，都沒有發現正確解答，官方論壇有篇類似問題：Change the background color of the CKEditor text area，這篇自己試過是沒有用的，正確解法可以參考 CKeditor 的 API:contentsCss。 1. 首先在 CKeditor 根目錄建立新檔案：mysitestyles.css
+body
+{
+/* Font */
+font-family: Arial, Verdana, sans-serif;
+font-size: 12px;
+/* Text color */
+color: #f0f0f0;
+/* Remove the background color to make it transparent */
+background-color: #353c42;
+}
+html
+{
+/* #3658: [IE6] Editor document has horizontal scrollbar on long lines
+To prevent this misbehavior, we show the scrollbar always */
+_overflow-y: scroll
+}
+img:-moz-broken
+{
+-moz-force-broken-image-icon : 1;
+width : 24px;
+height : 24px;
+}
+img, input, textarea
+{
+cursor: default;
+} 2.</description></item></channel></rss>

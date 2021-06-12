@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Perocna XtraDB Cluster on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/tags/perocna-xtradb-cluster/</link><description>Recent content in Perocna XtraDB Cluster on 小惡魔 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Sun, 09 Feb 2014 12:55:55 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/tags/perocna-xtradb-cluster/feed.xml" rel="self" type="application/rss+xml"/><item><title>Percona XtraDB Cluster 5.6 找合適 IST Donor</title><link>https://blog.wu-boy.com/2014/02/percona-xtradb-cluster-5-6-ist-and-sst/</link><pubDate>Sun, 09 Feb 2014 12:55:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2014/02/percona-xtradb-cluster-5-6-ist-and-sst/</guid><description>&lt;div style="margin:0 auto; text-align:center">
+&lt;a href="https://www.flickr.com/photos/appleboy/12023069753/" title="percona by appleboy46, on Flickr">&lt;img src="https://i1.wp.com/farm4.staticflickr.com/3820/12023069753_de60d0c86d_m.jpg?resize=240%2C234&amp;#038;ssl=1" alt="percona" data-recalc-dims="1" />&lt;/a>
+&lt;/div>
+&lt;p>Gcache 是用來紀錄 &lt;a href="http://www.mysql.com/">MySQL&lt;/a> 最近所使用的 SQL Command，其本身是佔用記憶體空間，大小可以由 &lt;code>wsrep_provider_options&lt;/code> 定義，如果有任何 MySQL Node 重新啟動，那麼可以經由 Live Node 內的 Gcache 將尚未同步的資料補上，同步資料的方式分為兩種一種為 IST(Incremental State Transfer) 另一種為 SST(State Snapshot Transfer)，但是同步資料時，管理者無法決定同步方式。先來看看 Gcache 一些特性&lt;/p>
+&lt;ul>
+&lt;li>node 重新啟動，Gcache 資料會全部消失&lt;/li>
+&lt;li>Gcache 大小為固定，如果超過大小，則回刪除最早資料&lt;/li>
+&lt;li>選擇 Donor node 會直接忽略 Gcache 狀態&lt;/li>
+&lt;li>Node 重新啟動，需要同步的資料並非在指定 Node Gcahe 內，則會啟動 SST 同步&lt;/li>
+&lt;li>到目前版本為止，沒有任何方式可以知道 Gcache 狀態&lt;/li>
+&lt;/ul>
+&lt;p>根據以上特性可以知道，當 Node 重新啟動，很容易就執行 SST 模式，舉例子來說，當有 Node crashed 超過一個晚上，你要如何知道其他 Node 內的 Gcache 資料大於需要同步的資料量？或者是當 Cluster 內只有兩台機器，那重新啟動任何一台 Node 都會是跑 SST 同步。&lt;/p></description></item></channel></rss>

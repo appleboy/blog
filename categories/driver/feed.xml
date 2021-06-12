@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Driver on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/categories/driver/</link><description>Recent content in Driver on 小惡魔 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Sun, 26 Jun 2011 15:00:19 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/categories/driver/feed.xml" rel="self" type="application/rss+xml"/><item><title>How to write Platform Devices and Drivers with FPGA via GPMC</title><link>https://blog.wu-boy.com/2011/06/how-to-write-platform-devices-and-drivers-with-fpga-via-gpmc/</link><pubDate>Sun, 26 Jun 2011 15:00:19 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/06/how-to-write-platform-devices-and-drivers-with-fpga-via-gpmc/</guid><description>How to write Platform Devices and Drivers with FPGA via GPMC from Bo-Yi Wu 這投影片是我在接手公司其中一個專案，所做的 Slide，當然最主要是深入了解 GPMC (General Purpose Memory Control)，GPMC 本來是ARM 用來跟 Memory 溝通的 interface，現在用來跟 FPGA 溝通，目前我只有看到
+TI 的線上文件有看到相關說明，以及解釋 GPMC 的 Program Model，在寫 GPMC 之前請先注意 Platform Device 跟 Platform Driver 的關係，之後才會開始設定 GPMC Config(1~7) 的設定檔，這樣拿示波器就可以看到 GPMC Chip Select 訊號，每個 ARM 只能接 8 個 Chip Select，這點大家必須注意，Flash 會用掉一個，在這專案學到蠻多東西，畢竟 Driver 這塊非常大，之前寫 G-Sensor 的 i2c Driver 也是如此。此 Slide 只是初步介紹，更詳細的就要實際撰寫程式碼了。</description></item><item><title>[Linux Kernel] 讀取 /proc 底下資料最佳方法: seq_file interface</title><link>https://blog.wu-boy.com/2011/03/linux-kernel-%E8%AE%80%E5%8F%96-proc-%E5%BA%95%E4%B8%8B%E8%B3%87%E6%96%99%E6%9C%80%E4%BD%B3%E6%96%B9%E6%B3%95-seq_file-interface/</link><pubDate>Mon, 14 Mar 2011 11:38:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/03/linux-kernel-%E8%AE%80%E5%8F%96-proc-%E5%BA%95%E4%B8%8B%E8%B3%87%E6%96%99%E6%9C%80%E4%BD%B3%E6%96%B9%E6%B3%95-seq_file-interface/</guid><description>&lt;h3 id="前言-最近在整合公司內部">前言 最近在整合公司內部&lt;/h3>
+&lt;p>&lt;a href="http://www.atheros.com/">Atheros&lt;/a>(被&lt;a href="http://www.qualcomm.com/">高通&lt;/a>買下) 晶片的 Router，從原本 2.6.15 升級到 2.6.34.7，升級過程遇到很多困難，其中一項升級 Wireless Driver 部份，發現在 Kernel Socket 與 User Space 溝通之間出了問題，利用 Ioctl 來取得目前在 AP 上面所有 Client 資料(包含 mac address, 處於 N or G mode&amp;hellip;等)，在 User Space 上會掉資料，後來利用 /proc 底下檔案來跟 User 之間溝通，才沒有發生任何問題，由於輸出的檔案比較多，就偏向用 2.6 Kernel 提供的 &lt;a href="http://lwn.net/Articles/22355/">seq_file 介面( interface )&lt;/a>建立虛擬檔案 (virtual file) 與 User Space 溝通(此方法為 Alexander Viro 所設計)，此功能其實在 2.4.15 已經實做了，只是在 2.6 版本才被大量使用。 程式設計師可以透過引入 &lt;span style="color:green">&lt;strong>&amp;lt;linux/seq_file.h&amp;gt;&lt;/strong>&lt;/span> 來實做 seq_file interface，seq_file 最大優勢就是讀取完全沒有4k boundry 的限制，也就是不用管會不會超出 output buffer。&lt;/p>
+&lt;h3 id="the-iterator-interface-為了能夠讓-iterator-正常運作我們必須實做-4-個-function-start-next-stop-show跑得過程為-start---show---next---show---next---stop為了方便講解參考">The iterator interface 為了能夠讓 iterator 正常運作，我們必須實做 4 個 function (start, next, stop, show)，跑得過程為 start -&amp;gt; show -&amp;gt; next -&amp;gt; show -&amp;gt; next -&amp;gt; stop，為了方便講解，參考&lt;/h3>
+&lt;p>&lt;a href="http://nano-chicken.blogspot.com/2009/12/linux-modulesiv-seqfile.html">Linux Kernel（4）- seq_file&lt;/a> 裡面範例如下：&lt;/p>
+&lt;pre class="brush: cpp; title: ; notranslate" title="">#include &lt;linux/init.h>
+#include &lt;linux/module.h>
+#include &lt;linux/proc_fs.h> /* Necessary because we use proc fs */
+#include &lt;linux/seq_file.h> /* for seq_file */
+#include &lt;linux/uaccess.h>
+MODULE_LICENSE("GPL");
+#define MAX_LINE 1000
+static uint32_t *lines;
+/**
+* seq_start() takes a position as an argument and returns an iterator which
+* will start reading at that position.
+*/
+static void* seq_start(struct seq_file *s, loff_t *pos)
+{
+uint32_t *lines;
+if (*pos >= MAX_LINE) {
+return NULL; // no more data to read
+}
+lines = kzalloc(sizeof(uint32_t), GFP_KERNEL);
+if (!lines) {
+return NULL;
+}
+*lines = *pos + 1;
+return lines;
+}
+/**
+* move the iterator forward to the next position in the sequence
+*/
+static void* seq_next(struct seq_file *s, void *v, loff_t *pos)
+{
+uint32_t *lines = v;
+*pos = ++(*lines);
+if (*pos >= MAX_LINE) {
+return NULL; // no more data to read
+}
+return lines;
+}
+/**
+* stop() is called when iteration is complete (clean up)
+*/
+static void seq_stop(struct seq_file *s, void *v)
+{
+kfree(v);
+}
+/**
+* success return 0, otherwise return error code
+*/
+static int seq_show(struct seq_file *s, void *v)
+{
+seq_printf(s, "Line #%d: This is Brook's demo\n", *((uint32_t*)v));
+return 0;
+}
+static struct seq_operations seq_ops = {
+.start = seq_start,
+.next = seq_next,
+.stop = seq_stop,
+.show = seq_show
+};
+static int proc_open(struct inode *inode, struct file *file)
+{
+return seq_open(file, &amp;seq_ops);
+}
+static struct file_operations proc_ops = {
+.owner = THIS_MODULE, // system
+.open = proc_open,
+.read = seq_read, // system
+.llseek = seq_lseek, // system
+.release = seq_release // system
+};
+static int __init init_modules(void)
+{
+struct proc_dir_entry *ent;
+ent = create_proc_entry("brook", 0, NULL);
+if (ent) {
+ent->proc_fops = &amp;proc_ops;
+}
+return 0;
+}
+static void __exit exit_modules(void)
+{
+if (lines) {
+kfree(lines);
+}
+remove_proc_entry("brook", NULL);
+}
+module_init(init_modules);
+module_exit(exit_modules);&lt;/pre></description></item><item><title>[網站] 好站連結 (七) Android, javascript, Css, PHP, Perl, FreeBSD, Linux</title><link>https://blog.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/</link><pubDate>Fri, 30 Jul 2010 14:53:46 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/</guid><description>Windows C#
+C# 比較字串 MSDN 比較字串 Request.Form Collection Request Query String / Form Parametrs ASP.NET QueryString Usage Using include files with ASP.NET html
+[將所有 的內容包到一個
+中][7] apache
+Fixing mod_rewrite and .htaccess on GoDaddy Hosting javascript
+jQuery Week Calendar Javascript: reference the parent window from a popup How to get and set form element values with jQuery How to check and uncheck a checkbox with jQuery Loop through parameters passed to a Javascript function perl-completion.</description></item><item><title>[Kernel Driver] 撰寫簡易 Timer 機制</title><link>https://blog.wu-boy.com/2010/07/kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E6%98%93-timer-%E6%A9%9F%E5%88%B6/</link><pubDate>Tue, 27 Jul 2010 14:04:30 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/07/kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E6%98%93-timer-%E6%A9%9F%E5%88%B6/</guid><description>在底層 Linux Kernel 提供了時序(timing)機制，方便驅動程式設計者所使用，核心是依據硬體發出的『計時器中斷』來追蹤時間的流動狀況。我們可以依據 HZ 的值來設計 Delay 機制，讓驅動程式可以每隔固定一段時間啟動或者是發出訊號，也可以利用 Timer 來讓 LED 閃爍變化，在介紹 Timer API 之前，可以先參考 Linux Kernel: 簡介HZ, tick and jiffies 這篇文章，瞭解一些相關名詞，舉例：如果想知道一秒後的 jiffies 時間，可以寫成底下：
+#ifdef CONFIG_BMA150_TIMER
+#include
+#endif
+j = jiffies;
+/* 一秒之後 */
+stamp_1 = j + HZ;
+/* 半秒之後 */
+stamp_1 = j + HZ/2; /* 20秒之後 */
+stamp_1 = j + 20*HZ; Timer API 用法 筆記一下自己在寫 BOSCH Sensortec 三軸加速偵測器(BMA150 Sensor) Driver 的時候，遇到底層要回報 input event X,Y,Z 到 Android HAL(Hardware abstraction layer)，所以利用 Timer 的機制定時 report 給 Android。 首先宣告：</description></item></channel></rss>
