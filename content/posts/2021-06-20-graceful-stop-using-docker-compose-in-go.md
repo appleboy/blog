@@ -287,7 +287,20 @@ CMD ["/app/main"]
 
 另外如果在 `CMD` 或 `ENTRYPOINT` 請用 `["program", "arg1", "arg2"]` 方式，而不是 `program arg1 arg2`，後者對於 docker 來說會再包一層 bash 在前面，但是 bash 基本上沒有處理 Signal 訊號，這樣也會造成無法正常關閉服務。
 
-如果想要從 bash 處理 Signal 訊號，可以參考此篇文章『[Trapping signals in Docker containers](https://medium.com/@gchudnov/trapping-signals-in-docker-containers-7a57fdda7d86)』。
+如果想要從 bash 處理 Signal 訊號，可以參考此篇文章『[Trapping signals in Docker containers](https://medium.com/@gchudnov/trapping-signals-in-docker-containers-7a57fdda7d86)』。請看看底下[官網 docker-compose 範例](https://github.com/docker/compose/blob/c81046aac0ce1360f1bab64368f9a318c593d82a/tests/fixtures/stop-signal-composefile/docker-compose.yml#L1-L10)
+
+```yml
+simple:
+  image: busybox:1.31.0-uclibc
+  command:
+    - sh
+    - '-c'
+    - |
+        trap 'exit 0' SIGINT
+        trap 'exit 1' SIGTERM
+        while true; do :; done
+  stop_signal: SIGINT
+```
 
 ## 後記心得
 
