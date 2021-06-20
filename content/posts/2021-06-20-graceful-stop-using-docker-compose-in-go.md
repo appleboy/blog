@@ -28,6 +28,8 @@ tags:
 [3]:https://docs.docker.com/compose/compose-file/
 [4]:https://www.docker.com/
 
+<!--more-->
+
 ## 環境資訊
 
 目前跑在 [Mac M1 晶片][11]系統，底下是 docker 版本:
