@@ -18,7 +18,7 @@ tags:
 
 ![logo](https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080)
 
-大家應該遇過如果服務還有工作還沒處理完，服務要進行更新，肯定需要等到全部工作處理完成才可以將服務的停止，而當服務收到關閉通知信號時，第一要先停止接受 Job 任務，接著等待 Worker 將手上 Job 處理完畢後，才停止服務，接著更新再上線。而這狀況怎麼透過 docker-compose 來處理停止服務，這就是本篇的重點。文章內會用 [Go 語言][5]當教學範例，如何接受 [Docker][4] 傳來的 Signal 訊號，接受訊號後該如何處理，及如何設定 docker-compose 的 YAML 檔案確保所有的工作都可以正常執行完畢。
+大家應該遇過如果服務還有工作還沒處理完，服務要進行更新，需要等到全部工作處理完成才可以將服務的停止，而當服務收到關閉通知信號時，第一要先停止接受 Job 任務，接著等待 Worker 將手上 Job 處理完畢後，才停止服務，接著更新再上線。而這狀況怎麼透過 docker-compose 來處理停止服務，這就是本篇的重點。文章內會用 [Go 語言][5]當教學範例，如何接受 [Docker][4] 傳來的 Signal 訊號，接受訊號後該如何處理，及如何設定 docker-compose 的 YAML 檔案確保所有的工作都可以正常執行完畢。
 
 之前已經有寫過幾篇關於 Graceful Shutdown 教學文章，大家有興趣可以先閱讀底下教學連結資訊，而本篇最主要是紀錄在如何用 docker 指令優雅關閉容器服務，尤其是關閉服務前，可以讓原本服務內的工作可以正常做完，才正式關閉。在本文開始前，先將 [docker][4] 及 [docker-compose][3] 版本資訊貼出來，避免有資訊的落差，畢竟 docker-compose 在不同版本之間有不同的設定方式。
 
