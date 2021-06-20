@@ -283,3 +283,17 @@ CMD ["/app/main"]
 ## 後記心得
 
 除了 Docker 信號處理之外，還需要透過 `docker-compose up --scale` 方式來完成服務擴展。如果服務是需要處理大量工作，工作時間長久，就需要透過此方式來更新服務，不然工作突然被中斷，要怎麼恢復工作又是另一個議題需要解決。
+
+## 參考文章
+
+* [Trapping signals in Docker containers][31]
+* [Docker Frequently asked questions][32]
+* [Compose file version 3 reference][33]
+* [Gracefully Stopping Docker Containers][34]
+* [Can't trap SIGINT in Docker container][35]
+
+[31]:https://medium.com/@gchudnov/trapping-signals-in-docker-containers-7a57fdda7d86
+[32]:https://docs.docker.com/compose/faq/
+[33]:https://docs.docker.com/compose/compose-file/compose-file-v3/
+[34]:https://www.ctl.io/developers/blog/post/gracefully-stopping-docker-containers/
+[35]:https://stackoverflow.com/questions/45407283/cant-trap-sigint-in-docker-container
