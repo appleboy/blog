@@ -211,7 +211,7 @@ Options:
 像是執行底下
 
 ```bash
-docker-stop -t 600 app
+docker-compose stop -t 600 app
 ```
 
 ## docker-compose 設定
