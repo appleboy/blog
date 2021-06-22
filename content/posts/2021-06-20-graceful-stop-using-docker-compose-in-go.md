@@ -35,6 +35,8 @@ tags:
 
 ## 影片視頻
 
+{{< youtube scD_rC4jt_4 >}}
+
 之後會把影片視頻放到底下 Udemy 課程內
 
 * [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
