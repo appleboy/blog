@@ -292,7 +292,7 @@ func main() {
 [24]:https://aws.amazon.com/cloudwatch/
 [25]:https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html
 
-接著透過 `AlgorithmSpecification` 指定用哪個演算法來進行訓練，`TrainingImage` 可以指定預先包好的容器名稱。更多詳細設定也可以[參考官方文件](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AlgorithmSpecification.html)
+接著透過 `AlgorithmSpecification` 指定用哪個演算法來進行訓練，`TrainingImage` 可以指定預先包好的容器名稱。更多詳細設定請看[參考官方文件](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AlgorithmSpecification.html)
 
 ```go
 		AlgorithmSpecification: &sagemaker.AlgorithmSpecification{
@@ -301,7 +301,7 @@ func main() {
 		},
 ```
 
-當模型完成時，會有很多資料需要給使用者查閱或下載，這時候可以將檔案都丟到 `/opt/ml/output/data` 內，而 SageMaker 會將裡面的檔案全部壓縮成 `.tar.gz` 格式放到 `OutputDataConfig` 所指定的 S3 路徑內。
+當模型完成時，會有很多資料需要給使用者查閱或下載，可以將檔案都丟到 `/opt/ml/output/data` 內，而 SageMaker 會將裡面的檔案全部壓縮成 `.tar.gz` 格式放到 `OutputDataConfig` 指定的 S3 路徑內。
 
 如果有寫成 Wrapper 包在外層，在呼叫 Python 的話，你一定需要 `Environment` 將而外的資訊帶入容器內，這樣就可以在容器拿到此變數進行處理。另外 AI 團隊需要的參數可以透過 `HyperParameters` 方式傳入，SageMaker 會將全部參數放到 `/opt/ml/input/config/hyperparameters.json` 內，透過 Python 讀取此檔案就可以拿到參數資料。而這邊為了讓 AI 團隊可以專心在演算法，後端會將全部參數，包含所以 Input Data 的路徑，全部寫進單一個 `JSON` 檔案，而容器內 Python 只要接受這個 JSON 路徑，裡面就可以看到所以參數集合，讓演算法團隊，不需要了解整個容器結構，完成訓練模型，並將結果產生在指定的目錄底下。
 
