@@ -1,5 +1,5 @@
 ---
-title: "用 Go 語言 SDK 整合 AWS SageMaker 流程"
+title: "AI 團隊整合導入 AWS SageMaker 流程"
 date: 2021-06-27T11:35:53+08:00
 author: appleboy
 type: post
