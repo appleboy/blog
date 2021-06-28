@@ -269,7 +269,7 @@ func main() {
 }
 ```
 
-注意務必要打開 [CloudWatch][24] 跟 logs 的權限，不然跑完無法看到正常的 Log 訊息。接著 `InputDataConfig` 參數可以指定在 S3 上面任何檔案，透過 `Prefix` 設定來下載多個檔案，而設定 `ChannelName` 來當作目錄分類。像是底下設定:
+注意務必要打開 [CloudWatch][24] 跟 logs 的權限，不然跑完無法看到正常的 Log 訊息。接著 `InputDataConfig` 參數可以指定在 S3 上面任何檔案，透過 `Prefix` 設定來下載多個檔案，而 `ChannelName` 當作目錄分類。像是底下設定:
 
 ```go
 			{
@@ -284,7 +284,7 @@ func main() {
 			},
 ```
 
-就可以在 `/opt/ml/data/input` 底下找到 `checkpoint` 目錄，更多詳細設定可以參考 [S3DataSource][25]。
+可以在 `/opt/ml/data/input` 底下找到 `checkpoint` 目錄，更多詳細設定可以參考 [S3DataSource][25]。
 
 [21]:https://docs.aws.amazon.com/sagemaker/latest/dg/adapt-training-container.html
 [22]:https://golang.org
@@ -292,7 +292,7 @@ func main() {
 [24]:https://aws.amazon.com/cloudwatch/
 [25]:https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html
 
-接著可以透過 `AlgorithmSpecification` 指定要用哪個演算法來進行訓練，這邊也可以指定預先包好的容器名稱。更多詳細設定也可以[參考官方文件](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AlgorithmSpecification.html)
+接著透過 `AlgorithmSpecification` 指定用哪個演算法來進行訓練，`TrainingImage` 可以指定預先包好的容器名稱。更多詳細設定也可以[參考官方文件](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AlgorithmSpecification.html)
 
 ```go
 		AlgorithmSpecification: &sagemaker.AlgorithmSpecification{
