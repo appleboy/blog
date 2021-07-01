@@ -38,7 +38,7 @@ tags:
    - Learning Rate
    - Training Iteration
    - Batch Size
-3. 進行 Model Taining
+3. 進行 Model Training
 4. 檔案下載
    - Training Log
    - Prediction Result
