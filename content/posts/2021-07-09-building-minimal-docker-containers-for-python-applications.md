@@ -26,7 +26,7 @@ tags:
 
 ## 撰寫 Flask 服務
 
-不多說直接寫簡單 Flask 服務當作範例，並且將檔案存放在 `src/server.py`
+不多說直接用 Flask 服務當作範例，並且將檔案存放在 `src/server.py` 位置
 
 ```python
 from flask import Flask
