@@ -15,7 +15,7 @@ tags:
 
 ![cover](https://i.imgur.com/p8LKFhI.png)
 
-在這容器的時代，團隊之間合作肯定要打包統一的 [Docker][2] Image 來解決環境不一致的問題，但是容器的大小決定了部署微服務的時間，本篇來介紹如何打造最小的 [Python][1] 容器。如果你需要跨部門合作，Docker 絕對是最棒的工具，讓大家不用為了環境煩惱。底下透過 [Flask][3] Application 來介紹如何撰寫 [Dockerfile][4]。
+現在已經是容器 (container) 的時代，團隊之間合作肯定要打包統一的 [Docker][2] Image 來解決環境不一致的問題，但是容器的大小決定了部署微服務的時間，本篇來介紹如何打造最小的 [Python][1] 容器。如果你需要跨部門合作，Docker 絕對是最棒的工具，讓大家不用為了環境煩惱。底下透過 [Flask][3] Application 來介紹如何撰寫 [Dockerfile][4]。
 
 [1]:https://www.python.org/
 [2]:https://www.docker.com/
