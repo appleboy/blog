@@ -56,7 +56,7 @@ pip freeze > requirements.txt
 
 ## 撰寫 Dockerfile
 
-首先找到官方 [Python Docker Image][11]，裡面有個範例教你如何撰寫 `Dockerfile`。
+找到官方 [Python Docker Image][11] 頁面，裡面有個範例教你如何撰寫 `Dockerfile`。
 
 ```dockerfile
 FROM python:3.9
@@ -71,7 +71,7 @@ COPY src /app
 CMD [ "python", "server.py" ]
 ```
 
-如果沒有很在意 Image 大小，這樣寫並沒有什麼問題，要打造小一點的 Image，可以先從 `FROM` 下手，官方其實有提到，如果是要拿來當 Production 的話，建議使用 `python:<version>-slim`，這裡面把一些不必要的套件全部清除了，只留下最基本要跑的 Python 套件，開發者可以透過這個 Image 再去疊加要用的套件，這樣 Image 會是最小的。來把上面的 `python:3.9` 換成 `python:3.9-slim`。
+如果沒有很在意 Image 大小，這樣寫並沒有什麼問題。要打造小一點的 Image，可以先從 `FROM` 下手，官方其實有提到，如果是要拿來當 Production 的話，建議使用 `python:<version>-slim`，這裡面把一些不必要的套件全部清除了，只留下最基本要跑的 Python 套件，開發者可以透過這個 Image 再去疊加要用的套件，這樣 Image 會是最小的。來把上面的 `python:3.9` 換成 `python:3.9-slim`。
 
 除了 `slim` 之外，我個人會推薦用 `alpine` 版本 (之前[介紹文章][22])，此版本整個 Base Image 只有 5MB 大小，Alpine 版本為了將系統縮成這麼小，移除了大部分軟體，包含 `git` 或 `bash` 這種大型套件，所以基本上登入系統之後，幾乎都是空的，要什麼套件全都要自己裝，這非常適合用在微服務上，可以達到快速部署。
 
