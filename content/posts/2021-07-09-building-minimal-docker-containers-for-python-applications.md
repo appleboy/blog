@@ -24,6 +24,15 @@ tags:
 
 <!--more-->
 
+## 影片視頻
+
+{{< youtube EMKlhtHvUlQ >}}
+
+之後會把影片視頻放到底下 Udemy 課程內
+
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+
 ## 撰寫 Flask 服務
 
 不多說直接用 Flask 服務當作範例，並且將檔案存放在 `src/server.py` 位置
