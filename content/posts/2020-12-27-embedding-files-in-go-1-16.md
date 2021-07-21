@@ -38,22 +38,24 @@ tags:
 ```go
 package main
 
-import "embed"
+import (
+	"embed"
+)
+
+//go:embed hello.txt
+var s string
+
+//go:embed hello.txt
+var b []byte
+
+//go:embed hello.txt
+var f embed.FS
 
 func main() {
-    //go:embed hello.txt
-    var s string
-    print(s)
-
-    //go:embed hello.txt
-    var b []byte
-    print(string(b))
-
-    //go:embed hello.txt
-    var f embed.FS
-    data, _ := f.ReadFile("hello.txt")
-    print(string(data))
-
+	print(s)
+	print(string(b))
+	data, _ := f.ReadFile("hello.txt")
+	print(string(data))
 }
 ```
 
@@ -77,13 +79,14 @@ package main
 
 import _ "embed"
 
-func main() {
-    //go:embed hello.txt
-    var s string
-    print(s)
+//go:embed hello.txt
+var s string
 
-    //go:embed hello.txt
-    var b []byte
+//go:embed hello.txt
+var b []byte
+
+func main() {
+    print(s)
     print(string(b))
 }
 ```
@@ -121,10 +124,10 @@ import (
     "github.com/gin-gonic/gin"
 )
 
-func main() {
-    //go:embed assets/* templates/*
-    var f embed.FS
+//go:embed assets/* templates/*
+var f embed.FS
 
+func main() {
     router := gin.Default()
     templ := template.Must(template.New("").ParseFS(f, "templates/*.tmpl", "templates/foo/*.tmpl"))
     router.SetHTMLTemplate(templ)
