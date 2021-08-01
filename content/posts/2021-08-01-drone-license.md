@@ -7,7 +7,7 @@ url: /2021/08/drone-license/
 share_img: https://i.imgur.com/2P2MVNK.png
 categories:
   - Drone
-tags
+tags:
   - drone
 ---
 
