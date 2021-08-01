@@ -1,5 +1,5 @@
 ---
-title: "開源專案 Drone License 介紹"
+title: "開源專案 Drone CI/CD 平台真的免費嗎？"
 date: 2021-08-01T09:57:19+08:00
 author: appleboy
 type: post
@@ -21,6 +21,8 @@ tags
 <!--more-->
 
 ## 影片介紹
+
+{{< youtube RZoVReQYGog >}}
 
 影片視頻會同步放到底下課程內
 
