@@ -7,7 +7,7 @@
 <meta name=description content="
 自己推行 Drone CI/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","name":"開源專案 drone ci cd 平台真的免費嗎？"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"開源專案 Drone CI\/CD 平台真的免費嗎？","description":"自己推行 Drone CI\/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。\n","inLanguage":"en","wordCount":132,"datePublished":"2021-08-01T09:57:19","dateModified":"2021-08-01T09:57:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","name":"開源專案 drone ci cd 平台真的免費嗎？"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"開源專案 Drone CI\/CD 平台真的免費嗎？","description":"自己推行 Drone CI\/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。\n","inLanguage":"en","wordCount":144,"datePublished":"2021-08-01T09:57:19","dateModified":"2021-08-01T09:57:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone, golang, git, gitea"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="開源專案 Drone CI/CD 平台真的免費嗎？">
 <meta property="og:description" content="
 自己推行 Drone CI/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。">
@@ -100,7 +100,7 @@
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on August 1, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;132&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;144&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -149,7 +149,7 @@
 <h3 id=如何選擇開源或企業版本>如何選擇開源或企業版本？</h3>
 <p>這邊其實很簡單可以區分，只要公司或組織的營業額小於 $1 million US dollars (台幣算 3000 萬)，都可以免費使用，裝企業或是開源版本都是可以的，所以不管你的身份是如何，只要營業額超過這數字，你就要開始付費的意思。那該如何試用企業版本呢？很簡單只需要按照<a href=https://docs.drone.io/server/overview/>官方教學</a>即可，不過這邊有個限制，免費使用只能有 <strong>5000</strong> builds，這個限制一到，整個系統就不給試用了。</p>
 <h3 id=免費使用開源或企業版本>免費使用開源或企業版本</h3>
-<p>上一點有提到官方安裝步驟預設是安裝試用企業版本的，所以都有 <strong>5000</strong> builds 次數限制，要預設免除這個限制有兩種做法，第一種就是如果您用的是 <a href=https://gitea.io/en-us/>Gitea</a> 或 <a href=https://gogs.io/>Gogs</a>，就不會有這限制，否則用在開源上面，請用底下方式來 build 出新的 binary (底下是解除開源版本限制)</p>
+<p>上一點有提到官方安裝步驟預設是安裝試用企業版本的，所以都有 <strong>5000</strong> builds 次數限制，要預設免除這個限制有兩種做法，第一種就是請使用 <a href=https://gitea.io/en-us/>Gitea</a> 或 <a href=https://gogs.io/>Gogs</a> 這兩套其中一套來當作 Git 服務，就不會有這限制，算是 Drone 給開源的福利，也算是幫忙推廣同樣是用 <a href=https://golang.org>Go 語言</a>開發的開源專案。第二種就是透過 Go 語言 go build 方式，而開源跟企業版·本請用底下方式來 build 出新的 binary (底下是解除開源版本限制)</p>
 <div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -187,6 +187,9 @@
 <p>也就是不支援 Postgres 或 MySQL 資料庫，也只能架設在單台機器上面。其他重要功能全都一樣，如果不是很介意這兩點，其實開源版本已經很夠用了。</p>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitea/>gitea</a>&nbsp;
 </div>
 <hr>
 <section id=social-share>
@@ -229,16 +232,16 @@
 </section>
 <h4 class=see-also>See also</h4>
 <ul>
-<li><a href=/2020/06/go-module-cache-variable-gomodcache/>Go 1.15 新增 Module cache 環境變數</a></li>
-<li><a href=/2020/03/docker-release-github-actions-plugin/>Docker 推出官方 GitHub Actions 套件</a></li>
-<li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li>
-<li><a href=/2020/02/deploy-static-files-to-github-using-drone/>用 Drone 部署靜態檔案到 GitHub Pages</a></li>
-<li><a href=/2019/10/auto-cancellation-in-drone-ci-cd/>Drone CI/CD 支援 Auto cancellation 機制</a></li>
-<li><a href=/2019/10/ansible-setup-google-container-registry-and-upload-image-via-drone-ci-cd/>Ansible 設定 Google Container Registry 搭配 Drone 自動上傳</a></li>
-<li><a href=/2019/09/upload-docker-image-to-github-registry-using-drone/>用 Drone 自動化上傳 Docker Image 到 GitHub Docker Registry</a></li>
-<li><a href=/2019/08/install-drone-with-gitlab-in-10-minutes/>用 10 分鐘安裝好 Drone 搭配 GitLab</a></li>
-<li><a href=/2019/08/drone-multiple-machine/>[Drone] 將單一 Job 分配到多台機器，降低部署執行時間</a></li>
-<li><a href=/2019/07/trigger-the-drone-job-via-promotion/>透過 Drone CLI 手動觸發 CI/CD 流程</a></li>
+<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
+<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
+<li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li>
+<li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li>
+<li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li>
+<li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li>
+<li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li>
+<li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li>
+<li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li>
+<li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li>
 </ul>
 </article>
 <ul class="pager blog-pager">

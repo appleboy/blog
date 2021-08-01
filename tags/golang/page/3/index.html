@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/>
+<h2 class=post-title>Go 1.15 新增 Module cache 環境變數</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 13, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;218&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>相信各位開發者在寫 <a href=https://golang.org>Go 語言</a>專案，現在肯定都是使用 <a href=https://blog.golang.org/using-go-modules>Go module</a> 了，而 Go Module 檔案預設寫在 <code>/go/pkg/mod</code> 目錄內，要串 CI/CD 流程時，由於不在專案路徑底下，所以每一個 Container 無法共用 <code>/go/pkg/mod</code> 路徑，造成重複下載第三方套件，其實跨容器的解決方式可以透過 <a href=https://cloud.drone.io>Drone</a> 的 <a href=https://docs.drone.io/pipeline/docker/syntax/volumes/temporary/>Temporary Volumes</a> 方式解決，但是最終希望跑完編譯流程時，可以將最後的 mod 目錄打包留到下次的 CI/CD 部署流程使用，這時候如果可以改變 <code>/go/pkg/mod</code> 路徑，就可以動態調整目錄結構了。底下是針對 Drone 這套部署工具進行解說。</p>
+<a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/06/golang-benchmark-pprof/>
 <h2 class=post-title>Go 語言用 pprof 找出程式碼效能瓶頸</h2>
 </a>
@@ -345,32 +367,6 @@ go mod tidy
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/channel/>channel</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine/>
-<h2 class=post-title>使用 Go Channel 及 Goroutine 時機</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 18, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;481&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>相信不少開發者肯定聽過 Go 語言之所以讓人非常喜歡，就是因為 Go concurrency，如果您對於 concurrency 不了解的朋友們，可以直接參考<a href=https://tour.golang.org/concurrency/1>官網的範例</a>開始了解，範例會帶您一步一步了解什麼是 Channel 什麼是 Go concurrency？本篇會介紹 Channel 使用時機，在大部分寫 application 時，老實說很少用到 Channel，所以很多人其實不知道該在哪種場景需要使用 Channel，底下這句名言大家肯定聽過:</p>
-<blockquote>
-<p>Do not communicate by sharing memory; instead, share memory by communicating.</p>
-</blockquote>
-<p>本篇會用簡單的例子來帶大家理解上述名言。</p>
-<a href=https://blog.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
 </div>
 </article>
 </div>

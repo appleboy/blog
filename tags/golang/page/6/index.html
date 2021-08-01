@@ -103,6 +103,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/10/go-1-11-support-go-module/>
+<h2 class=post-title>Go 語言 1.11 版本推出 go module</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 16, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;304&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/40093179410/in/dateposted-public/ title=Go-Logo_Blue><img src="https://i1.wp.com/farm1.staticflickr.com/908/40093179410_53df4bb9e8_z.jpg?w=840&ssl=1" alt=Go-Logo_Blue data-recalc-dims=1></a></p>
+<p>本篇來聊聊 <a href=https://golang.org>Go 語言</a>在 1.11 版本推出的 <a href=https://github.com/golang/go/wiki/Modules>新功能</a>，相信大家也許還不知道此功能是做什麼用的，我們來回顧看看在初學 Go 語言的時候，最令人困擾的就是 <code>GOPATH</code>，所有的專案都必須要在 GOPATH 底下開發，然而在更久前還沒有 Vendor 時候，兩個專案用不同版本的同一個 Package 就必須要使用多個 GOPATH 來解決，但是隨著 Vendor 在 1.5 版的推出，解決了這問題，所以現在只要把專案放在 GOPATH 底下，剩下的 Package 管理都透過 Vendor 目錄來控管，在很多大型開源專案都可以看到把 Vendor 目錄放入版本控制已經是基本的 Best Practice，而 go module 推出最大功能用來解決 GOPATH 問題，也就是未來開發專案，<strong>隨意讓開發者 clone 專案到任何地方都可以</strong>，另外也統一個 Package 套件管理，不再需要 <code>Vendor</code> 目錄，底下舉個實際例子來說明。</p>
+<a href=https://blog.wu-boy.com/2018/10/go-1-11-support-go-module/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing/>
 <h2 class=post-title>gofight 支援多個檔案上傳測試</h2>
 </a>
@@ -315,68 +336,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/04/init-func-in-golang/>
-<h2 class=post-title>Go 語言的 init 函式</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 19, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;204&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/ title=Go-brown-side.sh><img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&ssl=1" alt=Go-brown-side.sh data-recalc-dims=1></a></p>
-<p>本篇會帶大家認識 <a href=https://golang.org>Go 語言</a>的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看<a href=https://play.golang.org/p/AN-6MK4qVVL>例子</a>，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;fmt&#34;</span>
-)
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>init</span>() {
-    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;init 1&#34;</span>)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>init</span>() {
-    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;init 2&#34;</span>)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Hello, playground&#34;</span>)
-}
-</code></pre></td></tr></table>
-</div>
-</div>
-<a href=https://blog.wu-boy.com/2018/04/init-func-in-golang/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

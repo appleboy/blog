@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/>
+<h2 class=post-title>[Go 教學] graceful shutdown with multiple workers</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 2, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;7&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1360&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>在閱讀本文章之前請先預習『<a href=https://blog.wu-boy.com/2019/11/implement-job-queue-using-buffer-channel-in-golang/>用 Go 語言 buffered channel 實作 Job Queue</a>』，本篇會針對<a href=https://www.slideshare.net/appleboy/job-queue-in-golang-184064840>投影片</a> p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。</p>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/channel/>channel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine/>
 <h2 class=post-title>使用 Go Channel 及 Goroutine 時機</h2>
 </a>
@@ -302,37 +324,6 @@
 <p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
 <p><a href=https://golang.org>Go 語言</a>在 1.11 推出 go module 來統一市面上不同管理 Go 套件的工具，像是 <a href=https://github.com/golang/dep>dep</a> 或 govendor 等，還不知道如何使用 go module，可以參考之前寫的一篇文章『<a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</a>』，在團隊內如果每個人在開發專案時，都透過網路去下載專案使用到的套件，這樣 10 個人就會浪費 10 個人的下載時間，並且佔用公司網路頻寬，所以我建議在公司內部架設一台 Go Proxy 服務，減少團隊在初始化專案所需要的時間，也可以減少在跑 CI/CD 流程時，所需要花費的時間，測試過公司 CI/CD 流程，有架設 Go Proxy，一般來說可以省下 1 ~ 2 分鐘時間，根據專案使用到的相依性套件用量來決定花費時間。本篇來介紹如何架設 <a href=https://github.com/gomods/athens>ATHENS</a> 這套開源 Go Proxy 專案。</p>
 <a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/>
-<h2 class=post-title>Go Module 如何發佈 v2 以上版本</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;216&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p><a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Go Module</a> 是 <a href=https://golang.org>Golang</a> 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 <code>GOPATH</code> 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇<a href=https://blog.golang.org/using-go-modules>教學部落格</a>，底下是教學會涵蓋的範圍</p>
-<ul>
-<li>Creating a new module.</li>
-<li>Adding a dependency.</li>
-<li>Upgrading dependencies.</li>
-<li>Adding a dependency on a new major version.</li>
-<li>Upgrading a dependency to a new major version.</li>
-<li>Removing unused dependencies.</li>
-</ul>
-<p>而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。</p>
-<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
