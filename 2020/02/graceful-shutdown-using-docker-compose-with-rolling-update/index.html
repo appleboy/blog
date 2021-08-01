@@ -1,26 +1,172 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update - 小惡魔 - AppleBOY</title><meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update - 小惡魔 - AppleBOY</title>
+<meta name=description content="
 線上課程:『Go 語言實戰』目前特價 $2100 TWD，優惠代碼『202003』，也可以直接匯款（價格再減 100），如果想搭配另外兩門課程合購可以透過 FB 聯絡我
 
 
-上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 kubernetes 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2020\/02\/graceful-shutdown-using-docker-compose-with-rolling-update\/","name":"[ go 教學] graceful shutdown 搭配 docker compose 實現 rolling update"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update","description":" 線上課程:『Go 語言實戰』目前特價 $2100 TWD，優惠代碼『202003』，也可以直接匯款（價格再減 100），如果想搭配另外兩門課程合購可以透過 FB 聯絡我\n \n上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 kubernetes 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。\n","inLanguage":"en","wordCount":672,"datePublished":"2020-02-08T14:50:33","dateModified":"2020-02-08T14:50:33","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, Docker compose, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2020\/02\/graceful-shutdown-using-docker-compose-with-rolling-update\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update"><meta property="og:description" content="
+上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 kubernetes 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2020\/02\/graceful-shutdown-using-docker-compose-with-rolling-update\/","name":"[ go 教學] graceful shutdown 搭配 docker compose 實現 rolling update"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update","description":" 線上課程:『Go 語言實戰』目前特價 $2100 TWD，優惠代碼『202003』，也可以直接匯款（價格再減 100），如果想搭配另外兩門課程合購可以透過 FB 聯絡我\n \n上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 kubernetes 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。\n","inLanguage":"en","wordCount":672,"datePublished":"2020-02-08T14:50:33","dateModified":"2020-02-08T14:50:33","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker, Docker compose, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2020\/02\/graceful-shutdown-using-docker-compose-with-rolling-update\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update">
+<meta property="og:description" content="
 線上課程:『Go 語言實戰』目前特價 $2100 TWD，優惠代碼『202003』，也可以直接匯款（價格再減 100），如果想搭配另外兩門課程合購可以透過 FB 聯絡我
 
 
-上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 kubernetes 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update"><meta name=twitter:description content="
+上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 kubernetes 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update">
+<meta name=twitter:description content="
 線上課程:『Go 語言實戰』目前特價 $2100 TWD，優惠代碼『202003』，也可以直接匯款（價格再減 100），如果想搭配另外兩門課程合購可以透過 FB 聯絡我
 
 
-上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+上一篇作者有提到『什麼是 graceful shutdown?』，本篇透過 docker-compose 方式來驗證 Go 語言的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 Docker 本 …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2020
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;672&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#graceful-shutdown-範例>graceful shutdown 範例</a></li><li><a href=#準備-docker-環境>準備 docker 環境</a></li><li><a href=#驗證-graceful-shutdown>驗證 graceful shutdown</a></li><li><a href=#用-docker-compose-執行-rolling-update>用 docker-compose 執行 rolling update</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><blockquote><p>線上課程:『<a href="https://www.udemy.com/course/golang-fight/?couponCode=202002" title="Docker 容器實用實戰">Go 語言實戰</a>』目前特價 <strong>$2100 TWD</strong>，優惠代碼『<strong>202003</strong>』，也可以直接匯款（價格再減 <strong>100</strong>），如果想搭配另外兩門課程合購可以透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a></p></blockquote><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>上一篇作者有提到『<a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>什麼是 graceful shutdown?</a>』，本篇透過 docker-compose 方式來驗證 <a href=https://golang.org>Go 語言</a>的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 <a href=https://docker.com>Docker</a> 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 <a href=https://kubernetes.io/>kubernetes</a> 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。</p><p>假設您有一個 App 服務，需要在單機版上面透過 docker-compose 同時啟動兩個容器，可以透過底下指令一次完成：</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
-</code></pre></td></tr></table></div></div><p>其中 <code>app</code> 就是在 YAML 裡面的服務名稱。這時候可以看到背景就跑了兩個容器，接著要升級 App 服務，您會發現在下一次上述指令，可以看到 docker 會先把兩個容器先停止，但是容器被停止前會透過 graceful shutdown 確認背景的服務或工作需要完成結束，才可以正確停止容器並且移除，最後再啟動新的 App 容器。這時候你會發現 App 服務被終止了幾分鐘時間完全無法運作。底下來介紹該如何解決此問題，以及驗證 graceful shutdown 是否可以正常運作</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/SWfaH1HDBqQ style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202003">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202003">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=20200222">DOCKER 容器開發部署實戰</a> (課程剛啟動，限時特價 $800 TWD)</li></ul><h2 id=graceful-shutdown-範例>graceful shutdown 範例</h2><p>先簡單寫個 Go 範例:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#教學影片>教學影片</a></li>
+<li><a href=#graceful-shutdown-範例>graceful shutdown 範例</a></li>
+<li><a href=#準備-docker-環境>準備 docker 環境</a></li>
+<li><a href=#驗證-graceful-shutdown>驗證 graceful shutdown</a></li>
+<li><a href=#用-docker-compose-執行-rolling-update>用 docker-compose 執行 rolling update</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<blockquote>
+<p>線上課程:『<a href="https://www.udemy.com/course/golang-fight/?couponCode=202002" title="Docker 容器實用實戰">Go 語言實戰</a>』目前特價 <strong>$2100 TWD</strong>，優惠代碼『<strong>202003</strong>』，也可以直接匯款（價格再減 <strong>100</strong>），如果想搭配另外兩門課程合購可以透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a></p>
+</blockquote>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>上一篇作者有提到『<a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>什麼是 graceful shutdown?</a>』，本篇透過 docker-compose 方式來驗證 <a href=https://golang.org>Go 語言</a>的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 <a href=https://docker.com>Docker</a> 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 <a href=https://kubernetes.io/>kubernetes</a> 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。</p>
+<p>假設您有一個 App 服務，需要在單機版上面透過 docker-compose 同時啟動兩個容器，可以透過底下指令一次完成：</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>app</code> 就是在 YAML 裡面的服務名稱。這時候可以看到背景就跑了兩個容器，接著要升級 App 服務，您會發現在下一次上述指令，可以看到 docker 會先把兩個容器先停止，但是容器被停止前會透過 graceful shutdown 確認背景的服務或工作需要完成結束，才可以正確停止容器並且移除，最後再啟動新的 App 容器。這時候你會發現 App 服務被終止了幾分鐘時間完全無法運作。底下來介紹該如何解決此問題，以及驗證 graceful shutdown 是否可以正常運作</p>
+<h2 id=教學影片>教學影片</h2>
+<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
+<iframe src=https://www.youtube.com/embed/SWfaH1HDBqQ style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+</div>
+<p>如果對於課程內容有興趣，可以參考底下課程。</p>
+<ul>
+<li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202003">Go 語言基礎實戰 (開發, 測試及部署)</a></li>
+<li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=202003">一天學會 DevOps 自動化測試及部署</a></li>
+<li><a href="https://www.udemy.com/course/docker-practice/?couponCode=20200222">DOCKER 容器開發部署實戰</a> (課程剛啟動，限時特價 $800 TWD)</li>
+</ul>
+<h2 id=graceful-shutdown-範例>graceful shutdown 範例</h2>
+<p>先簡單寫個 Go 範例:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -90,7 +236,9 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=68><a style=outline:none;text-decoration:none;color:inherit href=#68>68</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=69><a style=outline:none;text-decoration:none;color:inherit href=#69>69</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=70><a style=outline:none;text-decoration:none;color:inherit href=#70>70</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
 <span style=color:#8b008b;font-weight:700>import</span> (
     <span style=color:#cd5555>&#34;context&#34;</span>
@@ -160,9 +308,22 @@
     &lt;-done
     logger.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Server stopped&#34;</span>)
 }
-</code></pre></td></tr></table></div></div><p>上面程式可以知道，直接打 <code>/</code> 就會等待 15 秒後才能拿到回應</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>curl -v -H Host:app.docker.localhost http://127.0.0.1:8088
-</code></pre></td></tr></table></div></div><h2 id=準備-docker-環境>準備 docker 環境</h2><p>準備 dockerfile</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面程式可以知道，直接打 <code>/</code> 就會等待 15 秒後才能拿到回應</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>curl -v -H Host:app.docker.localhost http://127.0.0.1:8088
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=準備-docker-環境>準備 docker 環境</h2>
+<p>準備 dockerfile</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -174,7 +335,9 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback># build stage
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback># build stage
 FROM golang:alpine AS build-env
 ADD . /src
 RUN cd /src &amp;&amp; CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o app
@@ -186,7 +349,12 @@ COPY --from=build-env /src/app /
 EXPOSE 8080
 
 ENTRYPOINT [&#34;/app&#34;]
-</code></pre></td></tr></table></div></div><p>準備 docker-compose.yml，使用 <a href=https://containo.us/traefik/>Traefik</a> v2 版本來做 Load balancer。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>準備 docker-compose.yml，使用 <a href=https://containo.us/traefik/>Traefik</a> v2 版本來做 Load balancer。</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -213,7 +381,9 @@ ENTRYPOINT [&#34;/app&#34;]
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>version</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#39;3&#39;</span><span style=color:#bbb>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>version</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#39;3&#39;</span><span style=color:#bbb>
 </span><span style=color:#bbb>
 </span><span style=color:#bbb></span><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
 </span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>app</span>:<span style=color:#bbb>
@@ -240,53 +410,284 @@ ENTRYPOINT [&#34;/app&#34;]
 </span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>volumes</span>:<span style=color:#bbb>
 </span><span style=color:#bbb>      </span><span style=color:#228b22># So that Traefik can listen to the Docker events</span><span style=color:#bbb>
 </span><span style=color:#bbb>      </span>- /var/run/docker.sock:/var/run/docker.sock<span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><p>可以看到 <code>8088</code> port 會是入口，<code>app.docker.localhost</code> 會是 app 網域名稱。</p><h2 id=驗證-graceful-shutdown>驗證 graceful shutdown</h2><p>啟動全部服務，App 及 Traefik 都有被正式啟動</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
-</code></pre></td></tr></table></div></div><p>接下來先修改原本的 Go 範例，在編譯一次把 Image 先產生好。另外開兩個 console 頁面直接下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>curl -v -H Host:app.docker.localhost http://127.0.0.1:8088
-</code></pre></td></tr></table></div></div><p>會發現 curl 會等待 15 秒才能拿到回應，這時候直接下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
-</code></pre></td></tr></table></div></div><p>就可以看到</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>可以看到 <code>8088</code> port 會是入口，<code>app.docker.localhost</code> 會是 app 網域名稱。</p>
+<h2 id=驗證-graceful-shutdown>驗證 graceful shutdown</h2>
+<p>啟動全部服務，App 及 Traefik 都有被正式啟動</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
+</code></pre></td></tr></table>
+</div>
+</div><p>接下來先修改原本的 Go 範例，在編譯一次把 Image 先產生好。另外開兩個 console 頁面直接下</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>curl -v -H Host:app.docker.localhost http://127.0.0.1:8088
+</code></pre></td></tr></table>
+</div>
+</div><p>會發現 curl 會等待 15 秒才能拿到回應，這時候直接下</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
+</code></pre></td></tr></table>
+</div>
+</div><p>就可以看到</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>app_2   | http: 2020/02/08 14:06:20 Server is shutting down... 
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>app_2   | http: 2020/02/08 14:06:20 Server is shutting down... 
 app_2   | http: 2020/02/08 14:06:20 Server stopped
 app_1   | http: 2020/02/08 14:06:20 Server is shutting down...
 app_1   | http: 2020/02/08 14:06:20 Server stopped
-</code></pre></td></tr></table></div></div><p>這代表 graceful shutdown 可以正常運作，確保 app 連線及後續處理的動作可以正常被執行。</p><h2 id=用-docker-compose-執行-rolling-update>用 docker-compose 執行 rolling update</h2><p>從上面可以看到，當執行了</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
-</code></pre></td></tr></table></div></div><p>docker 會把目前的容器都全部停止，假設這時候都有重要的工作需要繼續執行，但是 graceful shutdown 已經將連接埠停止，造成使用者已經無法連線，這問題該如何解決呢？其實不難，只需要修正幾個指令就可以做到。由於 <code>docker-compose up -d</code> 會先將所有容器先停止，造成無法連線，這時候需要使用 <code>--no-recreate</code> flag 來避免這問題</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=3 --no-recreate
-</code></pre></td></tr></table></div></div><p>將數量 + 1 的意思就是先啟動一個新的容器用來接受新的連線，接著將舊的容器移除:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>這代表 graceful shutdown 可以正常運作，確保 app 連線及後續處理的動作可以正常被執行。</p>
+<h2 id=用-docker-compose-執行-rolling-update>用 docker-compose 執行 rolling update</h2>
+<p>從上面可以看到，當執行了</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2
+</code></pre></td></tr></table>
+</div>
+</div><p>docker 會把目前的容器都全部停止，假設這時候都有重要的工作需要繼續執行，但是 graceful shutdown 已經將連接埠停止，造成使用者已經無法連線，這問題該如何解決呢？其實不難，只需要修正幾個指令就可以做到。由於 <code>docker-compose up -d</code> 會先將所有容器先停止，造成無法連線，這時候需要使用 <code>--no-recreate</code> flag 來避免這問題</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=3 --no-recreate
+</code></pre></td></tr></table>
+</div>
+</div><p>將數量 + 1 的意思就是先啟動一個新的容器用來接受新的連線，接著將舊的容器移除:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker stop -t 30 \
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker stop -t 30 \
   $(docker ps --format &#34;table {{.ID}} {{.Names}} {{.CreatedAt}}&#34; | \
   grep app | \
   awk -F  &#34; &#34; &#39;{print $1 &#34; &#34; $3 &#34;T&#34; $4}&#39; ｜\
   sort -k2 | \
   awk -F  &#34;  &#34; &#39;{print $1}&#39; | head -2)
-</code></pre></td></tr></table></div></div><p>其中 <code>-t 30</code> 一定要設定，預設會是 10 秒相當短，也就是 10 秒容器沒結束就自動 kill 了，後面的 <code>head -2</code> 代表移除舊的容器，原本是開兩台，就需要停止兩台。接著將已經停止的容器砍掉:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker container prune -f
-</code></pre></td></tr></table></div></div><p>現在正在執行的容器只剩下一台，故還需要透過 scale 將不足的容器補上:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2 --no-recreate
-</code></pre></td></tr></table></div></div><p>完成上述步驟後，就可以確保服務不會中斷。如果有更好的解法歡迎大家提供。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>-t 30</code> 一定要設定，預設會是 10 秒相當短，也就是 10 秒容器沒結束就自動 kill 了，後面的 <code>head -2</code> 代表移除舊的容器，原本是開兩台，就需要停止兩台。接著將已經停止的容器砍掉:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker container prune -f
+</code></pre></td></tr></table>
+</div>
+</div><p>現在正在執行的容器只剩下一台，故還需要透過 scale 將不足的容器補上:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>docker-compose up -d --scale app=2 --no-recreate
+</code></pre></td></tr></table>
+</div>
+</div><p>完成上述步驟後，就可以確保服務不會中斷。如果有更好的解法歡迎大家提供。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/docker-compose/>Docker compose</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&text=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&description=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li><li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li><li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/ data-toggle=tooltip data-placement=top title="[Go 教學] 什麼是 graceful shutdown?">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2020/02/install-gitea-using-docker/ data-toggle=tooltip data-placement=top title="使用 Docker 五分鐘安裝好 Gitea (自架 Git Hosting 最佳選擇)">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&text=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&title=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f02%2fgraceful-shutdown-using-docker-compose-with-rolling-update%2f&description=%5bGo%20%e6%95%99%e5%ad%b8%5d%20graceful%20shutdown%20%e6%90%ad%e9%85%8d%20docker-compose%20%e5%af%a6%e7%8f%be%20rolling%20update" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
+<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
+<li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li>
+<li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li>
+<li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li>
+<li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li>
+<li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li>
+<li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li>
+<li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li>
+<li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/ data-toggle=tooltip data-placement=top title="[Go 教學] 什麼是 graceful shutdown?">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2020/02/install-gitea-using-docker/ data-toggle=tooltip data-placement=top title="使用 Docker 五分鐘安裝好 Gitea (自架 Git Hosting 最佳選擇)">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

@@ -53,10 +53,10 @@
 &lt;p>&lt;a href="https://golang.org">Go 語言&lt;/a>除了內建強大的測試工具 (&lt;a href="https://golang.org/pkg/testing/">go test&lt;/a>) 之外，也提供了效能評估的工具 (&lt;a href="https://blog.golang.org/pprof">go tool pprof&lt;/a>)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go &lt;span style="color:#658b00">test&lt;/span> -bench=. -benchtime=3s ./lexer/
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go &lt;span style="color:#658b00">test&lt;/span> -bench=. -benchtime=3s ./lexer/
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>用 10 分鐘了解 Go 語言 context package 使用場景及介紹</title><link>https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</link><pubDate>Sun, 03 May 2020 02:45:07 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
@@ -71,30 +71,30 @@
 &lt;p>&lt;a href="https://golang.org/">Golang&lt;/a> 在 &lt;a href="https://golang.org/doc/go1.14#introduction">1.14&lt;/a> 正式說明可以將 &lt;a href="https://github.com/golang/go/wiki/Modules">Go Modules&lt;/a> 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go mod init project_path
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go mod init project_path
 go mod tidy
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 &lt;code>proxy.golang.org&lt;/code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go env -w &lt;span style="color:#00688b">GOPRIVATE&lt;/span>=github.com/appleboy
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go env -w &lt;span style="color:#00688b">GOPRIVATE&lt;/span>=github.com/appleboy
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>上面代表告訴 go 指令，只要遇到 &lt;code>github.com/appleboy&lt;/code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>，接著設定 Git&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">git config --global url.&lt;span style="color:#cd5555">&amp;#34;https://&lt;/span>&lt;span style="color:#00688b">$USERNAME&lt;/span>&lt;span style="color:#cd5555">:&lt;/span>&lt;span style="color:#00688b">$ACCESS_TOKEN&lt;/span>&lt;span style="color:#cd5555">@github.com&amp;#34;&lt;/span>.insteadOf &lt;span style="color:#cd5555">&amp;#34;https://github.com&amp;#34;&lt;/span>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">git config --global url.&lt;span style="color:#cd5555">&amp;#34;https://&lt;/span>&lt;span style="color:#00688b">$USERNAME&lt;/span>&lt;span style="color:#cd5555">:&lt;/span>&lt;span style="color:#00688b">$ACCESS_TOKEN&lt;/span>&lt;span style="color:#cd5555">@github.com&amp;#34;&lt;/span>.insteadOf &lt;span style="color:#cd5555">&amp;#34;https://github.com&amp;#34;&lt;/span>
 &lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>。&lt;/p></description></item><item><title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</title><link>https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</link><pubDate>Sat, 08 Feb 2020 14:50:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</guid><description>&lt;blockquote>
@@ -148,7 +148,7 @@ go mod tidy
 &lt;p>&lt;a href="https://github.com/drone/drone">Drone&lt;/a> 在 1.0 版本推出了用 &lt;a href="https://jsonnet.org">jsonnet&lt;/a> 來撰寫 &lt;a href="https://en.wikipedia.org/wiki/YAML">YAML&lt;/a> 設定檔，方便開發者可以維護多個專案設定。不知道大家有無遇過在啟動新的專案後，需要從舊的專案複製設定到新專案，或者是在 &lt;code>.drone.yml&lt;/code> 內有非常多重複性的設定，假設 &lt;a href="https://golang.org" title="Go 語言">Go 語言&lt;/a>的開源專案需要將執行檔包成 ARM64 及 AMD64 的映像檔，並且上傳到 &lt;a href="https://hub.docker.com/" title="Docker Hub">Docker Hub&lt;/a>，底下是 AMD64 的設定檔範例。剛好在 &lt;a href="https://www.udemy.com/devops-oneday" title="Udemy 課程">Udemy 課程&lt;/a>內有學員詢問到&lt;a href="https://www.udemy.com/devops-oneday/learn/v4/questions/6162884">相關問題&lt;/a>。&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
@@ -226,7 +226,7 @@ go mod tidy
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="76">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#76">76&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="color:#008b45;text-decoration:underline">---&lt;/span>&lt;span style="color:#bbb">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-yaml" data-lang="yaml">&lt;span style="color:#008b45;text-decoration:underline">---&lt;/span>&lt;span style="color:#bbb">
 &lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">kind&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>pipeline&lt;span style="color:#bbb">
 &lt;/span>&lt;span style="color:#bbb">&lt;/span>&lt;span style="color:#8b008b;font-weight:bold">name&lt;/span>:&lt;span style="color:#bbb"> &lt;/span>linux-arm64&lt;span style="color:#bbb">
 &lt;/span>&lt;span style="color:#bbb">
@@ -340,7 +340,7 @@ go mod tidy
 &lt;p>本篇會帶大家認識 &lt;a href="https://golang.org">Go 語言&lt;/a>的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看&lt;a href="https://play.golang.org/p/AN-6MK4qVVL">例子&lt;/a>，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
@@ -359,7 +359,7 @@ go mod tidy
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
 &lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
 &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
 )
@@ -404,7 +404,7 @@ fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd55
 &lt;p>上週末在台北講『&lt;a href="http://learning.ithome.com.tw/course/JjojzNh9P1N9H">Go 語言基礎課程&lt;/a>』，其中一段介紹 Struct 的使用，發現有幾個學員對於在 Method 內要放 Pointer 或 Value 感到困惑，而我自己平時在寫 Go 語言也沒有注意到這點。好在強者學員 &lt;a href="https://www.facebook.com/YinChenLiao?fref=nf">Dboy Liao&lt;/a> 找到一篇說明:『&lt;a href="https://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/">Don&amp;rsquo;t Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang&lt;/a>』，在 Go 語言如何區分 &lt;code>func (s *MyStruct)&lt;/code> 及 &lt;code>func (s MyStruct)&lt;/code>，底下我們先來看看簡單的 Struct 例子&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
@@ -423,7 +423,7 @@ fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd55
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
 &lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
 &lt;span style="color:#8b008b;font-weight:bold">type&lt;/span> Cart &lt;span style="color:#8b008b;font-weight:bold">struct&lt;/span> {
 Name &lt;span style="color:#00688b;font-weight:bold">string&lt;/span>
@@ -458,7 +458,7 @@ c.&lt;span style="color:#008b45">GetPrice&lt;/span>()
 &lt;p>&lt;a href="http://manpages.ubuntu.com/manpages/precise/man8/update-rc.d.8.html">update-rc.d&lt;/a> 是在 &lt;a href="https://www.debian.org/">Debian&lt;/a> 或 &lt;a href="https://www.ubuntu.com/">Ubuntu&lt;/a> 內用來管理 &lt;code>/etc/init.d&lt;/code> 目錄內的 scripts 工具。不管是 Nginx 或 Mysql 等相關服務，都可以在 &lt;code>/etc/init.d&lt;/code> 目錄內找到相對應的 script 檔案，隨便打開一個 script 檔案就可以看到標頭有固定的格式寫法:&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
@@ -469,7 +469,7 @@ c.&lt;span style="color:#008b45">GetPrice&lt;/span>()
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9">9&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">&lt;span style="color:#228b22">### BEGIN INIT INFO&lt;/span>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">&lt;span style="color:#228b22">### BEGIN INIT INFO&lt;/span>
 &lt;span style="color:#228b22"># Provides: gorush&lt;/span>
 &lt;span style="color:#228b22"># Required-Start: $syslog $network&lt;/span>
 &lt;span style="color:#228b22"># Required-Stop: $syslog $network&lt;/span>

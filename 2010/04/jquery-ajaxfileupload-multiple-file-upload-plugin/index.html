@@ -1,14 +1,138 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[jQuery] AjaxFileUpload : Multiple File Upload plugin - 小惡魔 - AppleBOY</title><meta name=description content="最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=&ldquo;file&rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。
-單一檔案上傳 先 include AjaxFileUpload javascript  html:  jQuery code: function ajaxFileUpload(){//這部份可以省略，或者是撰寫當 ajax 開始啟動需讀取圖片，完成之後移除圖片$(&#34;#loading&#34;).ajaxStart(function(){$(this).show();}).ajaxComplete(function(){$(this).hide();});/*prepareing ajax file uploadurl: the url of script file handling the uploaded filesfileElementId: the file type of input element id and it will be the index of $_FILES Array()dataType: it support json, xmlsecureuri:use secure protocolsuccess: call back function when the ajax completeerror: callback function when the ajax failed*/$."><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2010\/04\/jquery-ajaxfileupload-multiple-file-upload-plugin\/","name":"[J query] ajax file upload multiple file upload plugin"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[jQuery] AjaxFileUpload : Multiple File Upload plugin","description":"最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=\u0026ldquo;file\u0026rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。\n單一檔案上傳 先 include AjaxFileUpload javascript  html:  jQuery code: function ajaxFileUpload()\r{\r\/\/這部份可以省略，或者是撰寫當 ajax 開始啟動需讀取圖片，完成之後移除圖片\r$(\u0022#loading\u0022)\r.ajaxStart(function(){\r$(this).show();\r})\r.ajaxComplete(function(){\r$(this).hide();\r});\r\/*\rprepareing ajax file upload\rurl: the url of script file handling the uploaded files\rfileElementId: the file type of input element id and it will be the index of $_FILES Array()\rdataType: it support json, xml\rsecureuri:use secure protocol\rsuccess: call back function when the ajax complete\rerror: callback function when the ajax failed\r*\/\r$.","inLanguage":"en","wordCount":228,"datePublished":"2010-04-13T06:42:48","dateModified":"2010-04-13T06:42:48","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["javascript, jQuery"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2010\/04\/jquery-ajaxfileupload-multiple-file-upload-plugin\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[jQuery] AjaxFileUpload : Multiple File Upload plugin"><meta property="og:description" content="最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=&ldquo;file&rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。
-單一檔案上傳 先 include AjaxFileUpload javascript  html:  jQuery code: function ajaxFileUpload(){//這部份可以省略，或者是撰寫當 ajax 開始啟動需讀取圖片，完成之後移除圖片$(&#34;#loading&#34;).ajaxStart(function(){$(this).show();}).ajaxComplete(function(){$(this).hide();});/*prepareing ajax file uploadurl: the url of script file handling the uploaded filesfileElementId: the file type of input element id and it will be the index of $_FILES Array()dataType: it support json, xmlsecureuri:use secure protocolsuccess: call back function when the ajax completeerror: callback function when the ajax failed*/$."><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2010/04/jquery-ajaxfileupload-multiple-file-upload-plugin/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="[jQuery] AjaxFileUpload : Multiple File Upload plugin"><meta name=twitter:description content="最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>[jQuery] AjaxFileUpload : Multiple File Upload plugin - 小惡魔 - AppleBOY</title>
+<meta name=description content="最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=&ldquo;file&rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。
+單一檔案上傳 先 include AjaxFileUpload javascript  html:  jQuery code: function ajaxFileUpload(){//這部份可以省略，或者是撰寫當 ajax 開始啟動需讀取圖片，完成之後移除圖片$(&#34;#loading&#34;).ajaxStart(function(){$(this).show();}).ajaxComplete(function(){$(this).hide();});/*prepareing ajax file uploadurl: the url of script file handling the uploaded filesfileElementId: the file type of input element id and it will be the index of $_FILES Array()dataType: it support json, xmlsecureuri:use secure protocolsuccess: call back function when the ajax completeerror: callback function when the ajax failed*/$.">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2010\/04\/jquery-ajaxfileupload-multiple-file-upload-plugin\/","name":"[J query] ajax file upload multiple file upload plugin"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[jQuery] AjaxFileUpload : Multiple File Upload plugin","description":"最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=\u0026ldquo;file\u0026rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。\n單一檔案上傳 先 include AjaxFileUpload javascript  html:  jQuery code: function ajaxFileUpload()\r{\r\/\/這部份可以省略，或者是撰寫當 ajax 開始啟動需讀取圖片，完成之後移除圖片\r$(\u0022#loading\u0022)\r.ajaxStart(function(){\r$(this).show();\r})\r.ajaxComplete(function(){\r$(this).hide();\r});\r\/*\rprepareing ajax file upload\rurl: the url of script file handling the uploaded files\rfileElementId: the file type of input element id and it will be the index of $_FILES Array()\rdataType: it support json, xml\rsecureuri:use secure protocol\rsuccess: call back function when the ajax complete\rerror: callback function when the ajax failed\r*\/\r$.","inLanguage":"en","wordCount":228,"datePublished":"2010-04-13T06:42:48","dateModified":"2010-04-13T06:42:48","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["javascript, jQuery"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2010\/04\/jquery-ajaxfileupload-multiple-file-upload-plugin\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="[jQuery] AjaxFileUpload : Multiple File Upload plugin">
+<meta property="og:description" content="最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=&ldquo;file&rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。
+單一檔案上傳 先 include AjaxFileUpload javascript  html:  jQuery code: function ajaxFileUpload(){//這部份可以省略，或者是撰寫當 ajax 開始啟動需讀取圖片，完成之後移除圖片$(&#34;#loading&#34;).ajaxStart(function(){$(this).show();}).ajaxComplete(function(){$(this).hide();});/*prepareing ajax file uploadurl: the url of script file handling the uploaded filesfileElementId: the file type of input element id and it will be the index of $_FILES Array()dataType: it support json, xmlsecureuri:use secure protocolsuccess: call back function when the ajax completeerror: callback function when the ajax failed*/$.">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2010/04/jquery-ajaxfileupload-multiple-file-upload-plugin/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="[jQuery] AjaxFileUpload : Multiple File Upload plugin">
+<meta name=twitter:description content="最近 survey 一些 AJAX upload plugin by jQuery，或者是一些網路知名 upload opensource: SWFUpload, 以及目前很強大的 Plupload，先來說明 AjaxFileUpload 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一 …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[jQuery] AjaxFileUpload : Multiple File Upload plugin</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 13, 2010
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>[jQuery] AjaxFileUpload : Multiple File Upload plugin</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 13, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#單一檔案上傳-先-include-ajaxfileupload-javascript>單一檔案上傳 先 include AjaxFileUpload javascript</a></li><li><a href=#多重檔案上傳>多重檔案上傳</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p>最近 survey 一些 AJAX upload plugin by <a href=http://jquery.com/>jQuery</a>，或者是一些網路知名 upload opensource: <a href=http://www.swfupload.org/>SWFUpload</a>, 以及目前很強大的 <a href=http://www.plupload.com/index.php>Plupload</a>，先來說明 <a href=http://www.phpletter.com/Demo/AjaxFileUpload-Demo/ target=_blank>AjaxFileUpload</a> 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=&ldquo;file&rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。</p><h3 id=單一檔案上傳-先-include-ajaxfileupload-javascript>單一檔案上傳 先 include AjaxFileUpload javascript</h3><pre class="brush: xml; title: ; notranslate" title></pre>html:<pre class="brush: xml; title: ; notranslate" title></pre>jQuery code:<pre class="brush: jscript; title: ; notranslate" title>function ajaxFileUpload()
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href=#單一檔案上傳-先-include-ajaxfileupload-javascript>單一檔案上傳 先 include AjaxFileUpload javascript</a></li>
+<li><a href=#多重檔案上傳>多重檔案上傳</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<p>最近 survey 一些 AJAX upload plugin by <a href=http://jquery.com/>jQuery</a>，或者是一些網路知名 upload opensource: <a href=http://www.swfupload.org/>SWFUpload</a>, 以及目前很強大的 <a href=http://www.plupload.com/index.php>Plupload</a>，先來說明 <a href=http://www.phpletter.com/Demo/AjaxFileUpload-Demo/ target=_blank>AjaxFileUpload</a> 這個 jQuery Plugin 單一檔案上傳，如果想要簡單方便的單一上傳，我很推薦這個，搭配回傳的 json type 吐出錯誤訊息還蠻好用的，雖然作者給單一上傳的說明，不過還是可以將它改成多檔上傳，也就是多增加 input type=&ldquo;file&rdquo; 就可以了，底下介紹一下怎麼實作單一檔案或者是多檔案上傳。</p>
+<h3 id=單一檔案上傳-先-include-ajaxfileupload-javascript>單一檔案上傳 先 include AjaxFileUpload javascript</h3>
+<pre class="brush: xml; title: ; notranslate" title></pre> html:
+<pre class="brush: xml; title: ; notranslate" title></pre> jQuery code:
+<pre class="brush: jscript; title: ; notranslate" title>function ajaxFileUpload()
 {
 	//這部份可以省略，或者是撰寫當 ajax 開始啟動需讀取圖片，完成之後移除圖片
 	$("#loading")
@@ -57,10 +181,14 @@
 	
 	return false;
 
-}</pre>注意 fileElementId 對應到 input file 裡面的 ID 值，取 name 是後端程式需要用到，例如 PHP $_FILES，後端處理回傳 json Type 給 jQuery 處理，json 格式：<pre class="brush: jscript; title: ; notranslate" title>{
+}</pre> 注意 fileElementId 對應到 input file 裡面的 ID 值，取 name 是後端程式需要用到，例如 PHP $_FILES，後端處理回傳 json Type 給 jQuery 處理，json 格式：
+<pre class="brush: jscript; title: ; notranslate" title>{
   "error" : 'test',
   "msg" : 'upload completed'
-}</pre>這樣大致上ok了。如果要多檔案上傳，其實就是改 jQuery 部份：html 部份請加上多個 input file<h3 id=多重檔案上傳>多重檔案上傳</h3><pre class="brush: xml; title: ; notranslate" title></pre>jQuery 部份改成：<pre class="brush: jscript; title: ; notranslate" title>$().ready(function() {  
+}</pre> 這樣大致上ok了。如果要多檔案上傳，其實就是改 jQuery 部份：html 部份請加上多個 input file
+<h3 id=多重檔案上傳>多重檔案上傳</h3>
+<pre class="brush: xml; title: ; notranslate" title></pre> jQuery 部份改成：
+<pre class="brush: jscript; title: ; notranslate" title>$().ready(function() {  
     $('#uploadfile').click(function(){      
       $('input:file').each(function(){		  
         $.ajaxFileUpload
@@ -90,18 +218,181 @@
      
     });
   });
-</pre>另外也可以參考 jQuery Plugin:<p><a href=http://www.fyneworks.com/jquery/multiple-file-upload/>jQuery Multiple File Upload Plugin v1.47</a></p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&text=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&title=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&title=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&title=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&description=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/10/replcae-npm-with-yarn-package-management/>用 Yarn 取代 Npm 管理 JavaScript 套件版本</a></li><li><a href=/2016/07/speed-up-npm-install-command/>用一行指令加速 npm install</a></li><li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li><li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li><li><a href=/2015/09/javascript-in-2015/>JavaScript in 2015</a></li><li><a href=/2015/06/learning-javascript-in-one-pic/>用一張圖學習 JavaScript</a></li><li><a href=/2015/06/getting-started-with-javascript-es6-destructuring/>簡介 JavaScript ES6 物件及陣列</a></li><li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li><li><a href=/2015/02/getting-to-know-io-js/>您不可不知的 io.js</a></li><li><a href=/2015/01/replace-coffeescript-with-es6/>CoffeeScript 轉 ES6</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2010/04/css-ie-6-7-8-firefox-hack-%E6%94%AF%E6%8F%B4%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E5%9C%96-background-or-img-javascript/ data-toggle=tooltip data-placement=top title="[CSS] IE 6, 7, 8 FireFox hack 支援透明背景圖 background or img javascript">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2010/04/cc-c%E8%AA%9E%E8%A8%80%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E5%BC%8F-strsep%EF%BC%8C%E5%88%86%E6%9E%90-url-get-%E5%8F%83%E6%95%B8/ data-toggle=tooltip data-placement=top title="[C/C++] C語言切割字串函式 strsep，分析 URL GET 參數">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2010/04/jquery-ajaxfileupload-multiple-file-upload-plugin>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2010/04/jquery-ajaxfileupload-multiple-file-upload-plugin'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+</pre> 另外也可以參考 jQuery Plugin:
+<p><a href=http://www.fyneworks.com/jquery/multiple-file-upload/>jQuery Multiple File Upload Plugin v1.47</a></p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&text=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&title=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&title=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&title=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f04%2fjquery-ajaxfileupload-multiple-file-upload-plugin%2f&description=%5bjQuery%5d%20AjaxFileUpload%20%3a%20Multiple%20File%20Upload%20plugin" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2016/10/replcae-npm-with-yarn-package-management/>用 Yarn 取代 Npm 管理 JavaScript 套件版本</a></li>
+<li><a href=/2016/07/speed-up-npm-install-command/>用一行指令加速 npm install</a></li>
+<li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li>
+<li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li>
+<li><a href=/2015/09/javascript-in-2015/>JavaScript in 2015</a></li>
+<li><a href=/2015/06/learning-javascript-in-one-pic/>用一張圖學習 JavaScript</a></li>
+<li><a href=/2015/06/getting-started-with-javascript-es6-destructuring/>簡介 JavaScript ES6 物件及陣列</a></li>
+<li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li>
+<li><a href=/2015/02/getting-to-know-io-js/>您不可不知的 io.js</a></li>
+<li><a href=/2015/01/replace-coffeescript-with-es6/>CoffeeScript 轉 ES6</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2010/04/css-ie-6-7-8-firefox-hack-%E6%94%AF%E6%8F%B4%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E5%9C%96-background-or-img-javascript/ data-toggle=tooltip data-placement=top title="[CSS] IE 6, 7, 8 FireFox hack 支援透明背景圖 background or img javascript">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2010/04/cc-c%E8%AA%9E%E8%A8%80%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E5%BC%8F-strsep%EF%BC%8C%E5%88%86%E6%9E%90-url-get-%E5%8F%83%E6%95%B8/ data-toggle=tooltip data-placement=top title="[C/C++] C語言切割字串函式 strsep，分析 URL GET 參數">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2010/04/jquery-ajaxfileupload-multiple-file-upload-plugin>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2010/04/jquery-ajaxfileupload-multiple-file-upload-plugin'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

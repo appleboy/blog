@@ -1,37 +1,199 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>在 Docker 內設定使用者及群組權限的三種方式 - 小惡魔 - AppleBOY</title><meta name=description content="
-如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2019\/10\/three-ways-to-setup-docker-user-and-group\/","name":"在 docker 內設定使用者及群組權限的三種方式"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 Docker 內設定使用者及群組權限的三種方式","description":"\n如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。\n","inLanguage":"en","wordCount":138,"datePublished":"2019-10-10T23:04:08","dateModified":"2019-10-10T23:04:08","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2019\/10\/three-ways-to-setup-docker-user-and-group\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="在 Docker 內設定使用者及群組權限的三種方式"><meta property="og:description" content="
-如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="在 Docker 內設定使用者及群組權限的三種方式"><meta name=twitter:description content="
-如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>在 Docker 內設定使用者及群組權限的三種方式 - 小惡魔 - AppleBOY</title>
+<meta name=description content="
+如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2019\/10\/three-ways-to-setup-docker-user-and-group\/","name":"在 docker 內設定使用者及群組權限的三種方式"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 Docker 內設定使用者及群組權限的三種方式","description":"\n如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。\n","inLanguage":"en","wordCount":138,"datePublished":"2019-10-10T23:04:08","dateModified":"2019-10-10T23:04:08","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Docker"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2019\/10\/three-ways-to-setup-docker-user-and-group\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="在 Docker 內設定使用者及群組權限的三種方式">
+<meta property="og:description" content="
+如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="在 Docker 內設定使用者及群組權限的三種方式">
+<meta name=twitter:description content="
+如果平常本身有在玩 Docker 的開發者肯定知道透過 docker command 啟動的容器預設是使用 root 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設 …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>在 Docker 內設定使用者及群組權限的三種方式</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 10, 2019
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>在 Docker 內設定使用者及群組權限的三種方式</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 10, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;138&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#使用-docker-指令時指定使用者>使用 docker 指令時指定使用者</a></li><li><a href=#使用-dockerfile-指定使用者>使用 Dockerfile 指定使用者</a></li><li><a href=#透過-docker-compose-指定權限>透過 docker-compose 指定權限</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/CDrKX9nVEAkUnrVNX26Mf0HY1iW73gM6z8WCITgo5QUWx3yXZPOzAI6op59p-YxKYgPkBQalH-rWUb2gElpc2gwjZ3M5jgKeHQ4MI88DkMXjxzkAhQX-zgIqjbGpRrlV38uXLFDxcMU=w1920-h1080" title=docker><img src="https://lh3.googleusercontent.com/CDrKX9nVEAkUnrVNX26Mf0HY1iW73gM6z8WCITgo5QUWx3yXZPOzAI6op59p-YxKYgPkBQalH-rWUb2gElpc2gwjZ3M5jgKeHQ4MI88DkMXjxzkAhQX-zgIqjbGpRrlV38uXLFDxcMU=w1920-h1080" alt=docker title=docker></a></p><p>如果平常本身有在玩 <a href=https://www.docker.com/>Docker</a> 的開發者肯定知道透過 docker command 啟動的容器預設是使用 <code>root</code> 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。</p><h2 id=使用-docker-指令時指定使用者>使用 docker 指令時指定使用者</h2><p>進入 Ubuntu 容器會透過底下指令:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>docker run -ti ubuntu /bin/bash
-</code></pre></td></tr></table></div></div><p>這時候可以透過 <code>-u</code> 方式將使用者 uid 及群組 gid 傳入容器內。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#使用-docker-指令時指定使用者>使用 docker 指令時指定使用者</a></li>
+<li><a href=#使用-dockerfile-指定使用者>使用 Dockerfile 指定使用者</a></li>
+<li><a href=#透過-docker-compose-指定權限>透過 docker-compose 指定權限</a></li>
+<li><a href=#心得>心得</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<p><a href="https://lh3.googleusercontent.com/CDrKX9nVEAkUnrVNX26Mf0HY1iW73gM6z8WCITgo5QUWx3yXZPOzAI6op59p-YxKYgPkBQalH-rWUb2gElpc2gwjZ3M5jgKeHQ4MI88DkMXjxzkAhQX-zgIqjbGpRrlV38uXLFDxcMU=w1920-h1080" title=docker><img src="https://lh3.googleusercontent.com/CDrKX9nVEAkUnrVNX26Mf0HY1iW73gM6z8WCITgo5QUWx3yXZPOzAI6op59p-YxKYgPkBQalH-rWUb2gElpc2gwjZ3M5jgKeHQ4MI88DkMXjxzkAhQX-zgIqjbGpRrlV38uXLFDxcMU=w1920-h1080" alt=docker title=docker></a></p>
+<p>如果平常本身有在玩 <a href=https://www.docker.com/>Docker</a> 的開發者肯定知道透過 docker command 啟動的容器預設是使用 <code>root</code> 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。</p>
+<h2 id=使用-docker-指令時指定使用者>使用 docker 指令時指定使用者</h2>
+<p>進入 Ubuntu 容器會透過底下指令:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>docker run -ti ubuntu /bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><p>這時候可以透過 <code>-u</code> 方式將使用者 uid 及群組 gid 傳入容器內。</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>mkdir tmp
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>mkdir tmp
 docker run -ti -v <span style=color:#00688b>$PWD</span>/tmp:/test <span style=color:#cd5555>\
 </span><span style=color:#cd5555></span>  -u uid:gid ubuntu /bin/bash
-</code></pre></td></tr></table></div></div><p>如何找到目前使用者 uid 及 gid 呢，可以透過底下方式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>如何找到目前使用者 uid 及 gid 呢，可以透過底下方式</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>id -u
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>id -u
 id -g
-</code></pre></td></tr></table></div></div><p>上述指令可以改成:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>上述指令可以改成:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>docker run -ti -v <span style=color:#00688b>$PWD</span>/tmp:/test <span style=color:#cd5555>\
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>docker run -ti -v <span style=color:#00688b>$PWD</span>/tmp:/test <span style=color:#cd5555>\
 </span><span style=color:#cd5555></span>  -u <span style=color:#8b008b;font-weight:700>$(</span>id -u<span style=color:#8b008b;font-weight:700>)</span>:<span style=color:#8b008b;font-weight:700>$(</span>id -g<span style=color:#8b008b;font-weight:700>)</span> ubuntu /bin/bash
-</code></pre></td></tr></table></div></div><h2 id=使用-dockerfile-指定使用者>使用 Dockerfile 指定使用者</h2><p>也可以直接在 <a href=https://docs.docker.com/engine/reference/builder/>dockerfile</a> 內直接指定使用者:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=使用-dockerfile-指定使用者>使用 Dockerfile 指定使用者</h2>
+<p>也可以直接在 <a href=https://docs.docker.com/engine/reference/builder/>dockerfile</a> 內直接指定使用者:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#228b22># Dockerfile</span>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#228b22># Dockerfile</span>
 
 USER 1000:1000
-</code></pre></td></tr></table></div></div><p>我個人不是很推薦這方式，除非是在 container 內獨立建立使用者，並且指定權限。</p><h2 id=透過-docker-compose-指定權限>透過 docker-compose 指定權限</h2><p>透過 <a href=https://docs.docker.com/compose/>docker-compose</a> 可以一次啟動多個服務。用 <code>user</code> 可以指定使用者權限來寫入特定的 volume</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>我個人不是很推薦這方式，除非是在 container 內獨立建立使用者，並且指定權限。</p>
+<h2 id=透過-docker-compose-指定權限>透過 docker-compose 指定權限</h2>
+<p>透過 <a href=https://docs.docker.com/compose/>docker-compose</a> 可以一次啟動多個服務。用 <code>user</code> 可以指定使用者權限來寫入特定的 volume</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -44,7 +206,9 @@ USER 1000:1000
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#8b008b;font-weight:700>services</span>:<span style=color:#bbb>
 </span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>agent</span>:<span style=color:#bbb>
 </span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>xxxxxxxx<span style=color:#bbb>
 </span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
@@ -57,21 +221,193 @@ USER 1000:1000
 </span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>volumes</span>:<span style=color:#bbb>
 </span><span style=color:#bbb>      </span>- ${STORAGE_PATH}:/data<span style=color:#bbb>
 </span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>user</span>:<span style=color:#bbb> </span>${CURRENT_UID}<span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><p>接著可以透過 <code>.env</code> 來指定變數值</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>接著可以透過 <code>.env</code> 來指定變數值</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#00688b>STORAGE_PATH</span>=/home/deploy/xxxx
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#00688b>STORAGE_PATH</span>=/home/deploy/xxxx
 <span style=color:#00688b>CURRENT_UID</span>=1001:1001
-</code></pre></td></tr></table></div></div><h2 id=心得>心得</h2><p>會指定使用者權限通常都是有掛載 Host volume 進入容器內，但是您又沒有 root 權限，如果沒有這樣做，這樣產生出來的檔案都會是 root 權限，一般使用者無法寫入，只能讀取，這時就需要用到此方法。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&text=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&title=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&title=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&title=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&description=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li><li><a href=/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a></li><li><a href=/2020/07/how-to-create-docker-image-in-reactjs-or-vuejs/>如何將前端網站打包成 Docker Image</a></li><li><a href=/2020/04/speed-up-docker-build-using-docker-buildkit/>使用 Docker BuildKit 加速編譯 Image</a></li><li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li><li><a href=/2020/03/docker-release-github-actions-plugin/>Docker 推出官方 GitHub Actions 套件</a></li><li><a href=/2020/03/read-private-module-in-golang/>Go Modules 處理私有 GIT Repository 流程</a></li><li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li><li><a href=/2020/02/install-gitea-using-docker/>使用 Docker 五分鐘安裝好 Gitea (自架 Git Hosting 最佳選擇)</a></li><li><a href=/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2019/10/ansible-setup-google-container-registry-and-upload-image-via-drone-ci-cd/ data-toggle=tooltip data-placement=top title="Ansible 設定 Google Container Registry 搭配 Drone 自動上傳">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2019/10/job-queue-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言實作 Job Queue 機制">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=心得>心得</h2>
+<p>會指定使用者權限通常都是有掛載 Host volume 進入容器內，但是您又沒有 root 權限，如果沒有這樣做，這樣產生出來的檔案都會是 root 權限，一般使用者無法寫入，只能讀取，這時就需要用到此方法。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&text=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&title=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&title=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&title=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fthree-ways-to-setup-docker-user-and-group%2f&description=%e5%9c%a8%20Docker%20%e5%85%a7%e8%a8%ad%e5%ae%9a%e4%bd%bf%e7%94%a8%e8%80%85%e5%8f%8a%e7%be%a4%e7%b5%84%e6%ac%8a%e9%99%90%e7%9a%84%e4%b8%89%e7%a8%ae%e6%96%b9%e5%bc%8f" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2020/12/embedding-files-in-go-1-16/>Go 1.16 推出 Embedding Files</a></li>
+<li><a href=/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a></li>
+<li><a href=/2020/07/how-to-create-docker-image-in-reactjs-or-vuejs/>如何將前端網站打包成 Docker Image</a></li>
+<li><a href=/2020/04/speed-up-docker-build-using-docker-buildkit/>使用 Docker BuildKit 加速編譯 Image</a></li>
+<li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li>
+<li><a href=/2020/03/docker-release-github-actions-plugin/>Docker 推出官方 GitHub Actions 套件</a></li>
+<li><a href=/2020/03/read-private-module-in-golang/>Go Modules 處理私有 GIT Repository 流程</a></li>
+<li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li>
+<li><a href=/2020/02/install-gitea-using-docker/>使用 Docker 五分鐘安裝好 Gitea (自架 Git Hosting 最佳選擇)</a></li>
+<li><a href=/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2019/10/ansible-setup-google-container-registry-and-upload-image-via-drone-ci-cd/ data-toggle=tooltip data-placement=top title="Ansible 設定 Google Container Registry 搭配 Drone 自動上傳">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2019/10/job-queue-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言實作 Job Queue 機制">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

@@ -1,35 +1,151 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>gulp-imagemin 在 Ubuntu 出現錯誤 - 小惡魔 - AppleBOY</title><meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>gulp-imagemin 在 Ubuntu 出現錯誤 - 小惡魔 - AppleBOY</title>
+<meta name=description content="
   
 
 在 deploy 程式碼到 production server 前，透過 gulp-imagemin 工具將全部圖片優化，上傳到 Amazon S3，Windows 底下正常運作，到了 Ubuntu 環境之下噴出底下錯誤訊息
 
 Error: Lossy operations are not currently supported
 後來在 grunt-contrib-imagemin@issues/180 有提人出此問題，解決方案就是升級 OptiPNG，因為 Ubuntu 的 apt 套件只有支援到 0.6.4 版本，請到 OptiPNG 官網下載最新 tar 檔，編譯重新安裝
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/04\/gulp-imagemin-lossy-operations-are-not-currently-supported\/","name":"Gulp imagemin 在 ubuntu 出現錯誤"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"gulp-imagemin 在 Ubuntu 出現錯誤","description":"  在 deploy 程式碼到 production server 前，透過 gulp-imagemin 工具將全部圖片優化，上傳到 Amazon S3，Windows 底下正常運作，到了 Ubuntu 環境之下噴出底下錯誤訊息\n Error: Lossy operations are not currently supported 後來在 grunt-contrib-imagemin@issues\/180 有提人出此問題，解決方案就是升級 OptiPNG，因為 Ubuntu 的 apt 套件只有支援到 0.6.4 版本，請到 OptiPNG 官網下載最新 tar 檔，編譯重新安裝\n","inLanguage":"en","wordCount":68,"datePublished":"2014-04-29T06:55:47","dateModified":"2014-04-29T06:55:47","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["gulp, gulp-imagemin, OptiPNG, Ubuntu"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/04\/gulp-imagemin-lossy-operations-are-not-currently-supported\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="gulp-imagemin 在 Ubuntu 出現錯誤"><meta property="og:description" content="
+">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/04\/gulp-imagemin-lossy-operations-are-not-currently-supported\/","name":"Gulp imagemin 在 ubuntu 出現錯誤"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"gulp-imagemin 在 Ubuntu 出現錯誤","description":"  在 deploy 程式碼到 production server 前，透過 gulp-imagemin 工具將全部圖片優化，上傳到 Amazon S3，Windows 底下正常運作，到了 Ubuntu 環境之下噴出底下錯誤訊息\n Error: Lossy operations are not currently supported 後來在 grunt-contrib-imagemin@issues\/180 有提人出此問題，解決方案就是升級 OptiPNG，因為 Ubuntu 的 apt 套件只有支援到 0.6.4 版本，請到 OptiPNG 官網下載最新 tar 檔，編譯重新安裝\n","inLanguage":"en","wordCount":68,"datePublished":"2014-04-29T06:55:47","dateModified":"2014-04-29T06:55:47","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["gulp, gulp-imagemin, OptiPNG, Ubuntu"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/04\/gulp-imagemin-lossy-operations-are-not-currently-supported\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="gulp-imagemin 在 Ubuntu 出現錯誤">
+<meta property="og:description" content="
   
 
 在 deploy 程式碼到 production server 前，透過 gulp-imagemin 工具將全部圖片優化，上傳到 Amazon S3，Windows 底下正常運作，到了 Ubuntu 環境之下噴出底下錯誤訊息
 
 Error: Lossy operations are not currently supported
 後來在 grunt-contrib-imagemin@issues/180 有提人出此問題，解決方案就是升級 OptiPNG，因為 Ubuntu 的 apt 套件只有支援到 0.6.4 版本，請到 OptiPNG 官網下載最新 tar 檔，編譯重新安裝
-"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="gulp-imagemin 在 Ubuntu 出現錯誤"><meta name=twitter:description content="
+">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="gulp-imagemin 在 Ubuntu 出現錯誤">
+<meta name=twitter:description content="
   
 
 在 deploy 程式碼到 production server 前，透過 gulp-imagemin 工具將全部圖片優化，上傳到 Amazon S3，Windows 底下正常運作，到了 Ubuntu 環境之下噴出底下錯誤訊息
 
-Error: Lossy operations are not currently supported …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+Error: Lossy operations are not currently supported …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>gulp-imagemin 在 Ubuntu 出現錯誤</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 29, 2014
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>gulp-imagemin 在 Ubuntu 出現錯誤</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 29, 2014
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;68&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/11616755494/ title="gulp by appleboy46, on Flickr"><img src="https://i0.wp.com/farm8.staticflickr.com/7354/11616755494_06ef5c0fa5.jpg?resize=197%2C388&ssl=1" alt=gulp data-recalc-dims=1></a></div><p>在 deploy 程式碼到 production server 前，透過 <a href=https://www.npmjs.org/package/gulp-imagemin>gulp-imagemin</a> 工具將全部圖片優化，上傳到 <a href=http://aws.amazon.com/s3/>Amazon S3</a>，Windows 底下正常運作，到了 Ubuntu 環境之下噴出底下錯誤訊息</p><blockquote><p>Error: Lossy operations are not currently supported
-後來在 <a href=https://github.com/gruntjs/grunt-contrib-imagemin/issues/180>grunt-contrib-imagemin@issues/180</a> 有提人出此問題，解決方案就是升級 <a href=http://optipng.sourceforge.net/>OptiPNG</a>，因為 Ubuntu 的 apt 套件只有支援到 0.6.4 版本，請到 OptiPNG 官網下載最新 tar 檔，編譯重新安裝</p></blockquote><div><pre class="brush: bash; title: ; notranslate" title>$ wget http://downloads.sourceforge.net/project/optipng/OptiPNG/optipng-0.7.5/optipng-0.7.5.tar.gz
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<article role=main class=blog-post>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/11616755494/ title="gulp by appleboy46, on Flickr"><img src="https://i0.wp.com/farm8.staticflickr.com/7354/11616755494_06ef5c0fa5.jpg?resize=197%2C388&ssl=1" alt=gulp data-recalc-dims=1></a>
+</div>
+<p>在 deploy 程式碼到 production server 前，透過 <a href=https://www.npmjs.org/package/gulp-imagemin>gulp-imagemin</a> 工具將全部圖片優化，上傳到 <a href=http://aws.amazon.com/s3/>Amazon S3</a>，Windows 底下正常運作，到了 Ubuntu 環境之下噴出底下錯誤訊息</p>
+<blockquote>
+<p>Error: Lossy operations are not currently supported
+後來在 <a href=https://github.com/gruntjs/grunt-contrib-imagemin/issues/180>grunt-contrib-imagemin@issues/180</a> 有提人出此問題，解決方案就是升級 <a href=http://optipng.sourceforge.net/>OptiPNG</a>，因為 Ubuntu 的 apt 套件只有支援到 0.6.4 版本，請到 OptiPNG 官網下載最新 tar 檔，編譯重新安裝</p>
+</blockquote>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ wget http://downloads.sourceforge.net/project/optipng/OptiPNG/optipng-0.7.5/optipng-0.7.5.tar.gz
 $ tar -zxvf optipng-0.7.5.tar.gz
 $ cd optipng-0.7.5.tar
-$ ./configure && make && make install</pre></div><p>附上 gulp-imagemin 設定方式</p><div><pre class="brush: jscript; title: ; notranslate" title>gulp.task('images', function() {
+$ ./configure && make && make install</pre>
+</div>
+<p>附上 gulp-imagemin 設定方式</p>
+<div>
+<pre class="brush: jscript; title: ; notranslate" title>gulp.task('images', function() {
   return gulp.src('app/images/**/*.{jpg,jpeg,png,gif}')
     .pipe(imagemin({
       progressive: true,
@@ -37,20 +153,183 @@ $ ./configure && make && make install</pre></div><p>附上 gulp-imagemin 設定�
     }))
     .pipe(gulp.dest('dist/images'))
     .pipe(size());
-});</pre></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/gulp/>gulp</a>&nbsp;
+});</pre>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/gulp/>gulp</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gulp-imagemin/>gulp-imagemin</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/optipng/>OptiPNG</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&text=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&title=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&title=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&title=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&description=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2017/04/update-rc-in-debian-or-ubuntu/>Debian/Ubuntu 的 update-rc.d 使用教學</a></li><li><a href=/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</a></li><li><a href=/2015/01/install-php-5-6-or-5-5-on-debian/>Debian 7.x Install PHP 5.5 或 5.6 版本</a></li><li><a href=/2014/12/chrome-unreadable-character-on-ubuntu/>解決在 Ubuntu 系統下 Chrome 瀏覽器亂碼</a></li><li><a href=/2014/11/fix-javascript-linting-errors-tool-fixmyjs/>自動修復 JavaScript Linting-errors 好工具 Fixmyjs</a></li><li><a href=/2014/07/automating-your-workflow-with-gulp-js/>Automating your workflow with Gulp.js</a></li><li><a href=/2014/07/openwrt-build-environment-on-ubuntu/>在 Ubuntu 建置 OpenWrt 編譯環境</a></li><li><a href=/2014/06/pagespeed-insights-with-reporting/>用 Google PageSpeed Insights 計算 Desktop 或 Mobile 網站分數</a></li><li><a href=/2014/05/gui-tool-for-gulp/>Gulp.js 工具包</a></li><li><a href=/2014/05/fixed-boot-loader-on-ubuntu/>修復 Ubuntu 開機 boot loader</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2014/04/linode-vps-double-ram-and-ssd/ data-toggle=tooltip data-placement=top title="Linode VPS 全面升級 Double RAM & SSD">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2014/05/check-ram-speed-on-ubuntu/ data-toggle=tooltip data-placement=top title="在 Ubuntu 底下查詢記憶時脈體資訊">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&text=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&title=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&title=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&title=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f04%2fgulp-imagemin-lossy-operations-are-not-currently-supported%2f&description=gulp-imagemin%20%e5%9c%a8%20Ubuntu%20%e5%87%ba%e7%8f%be%e9%8c%af%e8%aa%a4" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2017/04/update-rc-in-debian-or-ubuntu/>Debian/Ubuntu 的 update-rc.d 使用教學</a></li>
+<li><a href=/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</a></li>
+<li><a href=/2015/01/install-php-5-6-or-5-5-on-debian/>Debian 7.x Install PHP 5.5 或 5.6 版本</a></li>
+<li><a href=/2014/12/chrome-unreadable-character-on-ubuntu/>解決在 Ubuntu 系統下 Chrome 瀏覽器亂碼</a></li>
+<li><a href=/2014/11/fix-javascript-linting-errors-tool-fixmyjs/>自動修復 JavaScript Linting-errors 好工具 Fixmyjs</a></li>
+<li><a href=/2014/07/automating-your-workflow-with-gulp-js/>Automating your workflow with Gulp.js</a></li>
+<li><a href=/2014/07/openwrt-build-environment-on-ubuntu/>在 Ubuntu 建置 OpenWrt 編譯環境</a></li>
+<li><a href=/2014/06/pagespeed-insights-with-reporting/>用 Google PageSpeed Insights 計算 Desktop 或 Mobile 網站分數</a></li>
+<li><a href=/2014/05/gui-tool-for-gulp/>Gulp.js 工具包</a></li>
+<li><a href=/2014/05/fixed-boot-loader-on-ubuntu/>修復 Ubuntu 開機 boot loader</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2014/04/linode-vps-double-ram-and-ssd/ data-toggle=tooltip data-placement=top title="Linode VPS 全面升級 Double RAM & SSD">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2014/05/check-ram-speed-on-ubuntu/ data-toggle=tooltip data-placement=top title="在 Ubuntu 底下查詢記憶時脈體資訊">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

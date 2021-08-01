@@ -1,18 +1,143 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>停止 Go 服務前先處理完 Worker 內的 Job - 小惡魔 - AppleBOY</title><meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>停止 Go 服務前先處理完 Worker 內的 Job - 小惡魔 - AppleBOY</title>
+<meta name=description content="
 在閱讀本文章之前，作者有寫過一篇『graceful shutdown with multiple workers』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 Docker) 呢？底下是整個運作流程:
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2020\/03\/shutdown-the-service-after-job-completely\/","name":"停止 go 服務前先處理完 worker 內的 job"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"停止 Go 服務前先處理完 Worker 內的 Job","description":"\n在閱讀本文章之前，作者有寫過一篇『graceful shutdown with multiple workers』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 Docker) 呢？底下是整個運作流程:\n","inLanguage":"en","wordCount":287,"datePublished":"2020-03-28T05:40:25","dateModified":"2020-03-28T05:40:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, golang channel"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2020\/03\/shutdown-the-service-after-job-completely\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="停止 Go 服務前先處理完 Worker 內的 Job"><meta property="og:description" content="
+">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2020\/03\/shutdown-the-service-after-job-completely\/","name":"停止 go 服務前先處理完 worker 內的 job"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"停止 Go 服務前先處理完 Worker 內的 Job","description":"\n在閱讀本文章之前，作者有寫過一篇『graceful shutdown with multiple workers』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 Docker) 呢？底下是整個運作流程:\n","inLanguage":"en","wordCount":287,"datePublished":"2020-03-28T05:40:25","dateModified":"2020-03-28T05:40:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, golang channel"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2020\/03\/shutdown-the-service-after-job-completely\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="停止 Go 服務前先處理完 Worker 內的 Job">
+<meta property="og:description" content="
 在閱讀本文章之前，作者有寫過一篇『graceful shutdown with multiple workers』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 Docker) 呢？底下是整個運作流程:
-"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="停止 Go 服務前先處理完 Worker 內的 Job"><meta name=twitter:description content="
+">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="停止 Go 服務前先處理完 Worker 內的 Job">
+<meta name=twitter:description content="
 在閱讀本文章之前，作者有寫過一篇『graceful shutdown with multiple workers』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 Docker) 呢？底下是整個運作流程:
-"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>停止 Go 服務前先處理完 Worker 內的 Job</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 28, 2020
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>停止 Go 服務前先處理完 Worker 內的 Job</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 28, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;287&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#遇到問題>遇到問題</a></li><li><a href=#改寫-worker>改寫 worker</a></li><li><a href=#心得>心得</a></li><li><a href=#影片分享>影片分享</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>在閱讀本文章之前，作者有寫過一篇『<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/>graceful shutdown with multiple workers</a>』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 <a href=https://docker.com>Docker</a>) 呢？底下是整個運作流程:</p><p><img src="https://lh3.googleusercontent.com/bsmMhN5bVzpyDy-741CsS8s_wTyPfRpbLeZvJ0u7hOmCkXhBmS0qmVwkky4zveLxtNqQgGTUufWeNi2OVvOyXwx6QrADvt5n_6tAJlSzmRJK27U9C1EgOhzziZmLqNp_FTyqf4NAits=w1920-h1080" alt></p><h2 id=遇到問題>遇到問題</h2><p>當服務被關閉或者強制使用 ctrl + c 停止，則應該等到所有的 worker 都完成全部 Job 才停止服務。先來看看之前第一版的寫法有什麼問題，當開發者按下 ctrl + c 就會送出 cancel() 訊號，接著看看 worker 原先是怎麼寫的？完整程式碼請<a href=https://github.com/go-training/training/blob/080ba925d85ff527598ddda9a8eec0b808f6f847/example34-graceful-shutdown-with-worker/graceful-shutdown/answer-shutdown-worker-immediately/main.go#L76-L92>參考這邊</a>。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#遇到問題>遇到問題</a></li>
+<li><a href=#改寫-worker>改寫 worker</a></li>
+<li><a href=#心得>心得</a></li>
+<li><a href=#影片分享>影片分享</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>在閱讀本文章之前，作者有寫過一篇『<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/>graceful shutdown with multiple workers</a>』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 <a href=https://docker.com>Docker</a>) 呢？底下是整個運作流程:</p>
+<p><img src="https://lh3.googleusercontent.com/bsmMhN5bVzpyDy-741CsS8s_wTyPfRpbLeZvJ0u7hOmCkXhBmS0qmVwkky4zveLxtNqQgGTUufWeNi2OVvOyXwx6QrADvt5n_6tAJlSzmRJK27U9C1EgOhzziZmLqNp_FTyqf4NAits=w1920-h1080" alt></p>
+<h2 id=遇到問題>遇到問題</h2>
+<p>當服務被關閉或者強制使用 ctrl + c 停止，則應該等到所有的 worker 都完成全部 Job 才停止服務。先來看看之前第一版的寫法有什麼問題，當開發者按下 ctrl + c 就會送出 cancel() 訊號，接著看看 worker 原先是怎麼寫的？完整程式碼請<a href=https://github.com/go-training/training/blob/080ba925d85ff527598ddda9a8eec0b808f6f847/example34-graceful-shutdown-with-worker/graceful-shutdown/answer-shutdown-worker-immediately/main.go#L76-L92>參考這邊</a>。</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -29,7 +154,9 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(ctx context.Context, num <span style=color:#00688b;font-weight:700>int</span>, wg *sync.WaitGroup) {
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(ctx context.Context, num <span style=color:#00688b;font-weight:700>int</span>, wg *sync.WaitGroup) {
     <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
     log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;start the worker&#34;</span>, num)
     <span style=color:#8b008b;font-weight:700>for</span> {
@@ -46,7 +173,14 @@
         }
     }
 }
-</code></pre></td></tr></table></div></div><p>假設現在有 10 個 job 同時進來，有四個 worker 同時處理，接著按下 ctrl + c 後，就會觸發 ctx.Done() channel，因為 Select 接受兩個 channel，開發者不能預期哪一個先觸發，但是假設 jobsChan 還有其他 job 需要處理，就會被程式終止。該如何解決此問題呢？繼續往下看</p><h2 id=改寫-worker>改寫 worker</h2><p>其實很簡單只要將 worker 部分重新改寫即可，不要使用 select 方式 (程式碼請<a href=https://github.com/go-training/training/blob/080ba925d85ff527598ddda9a8eec0b808f6f847/example34-graceful-shutdown-with-worker/graceful-shutdown/answer-shutdown-after-job-completely/main.go#L80-L89>參考這邊</a>)</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>假設現在有 10 個 job 同時進來，有四個 worker 同時處理，接著按下 ctrl + c 後，就會觸發 ctx.Done() channel，因為 Select 接受兩個 channel，開發者不能預期哪一個先觸發，但是假設 jobsChan 還有其他 job 需要處理，就會被程式終止。該如何解決此問題呢？繼續往下看</p>
+<h2 id=改寫-worker>改寫 worker</h2>
+<p>其實很簡單只要將 worker 部分重新改寫即可，不要使用 select 方式 (程式碼請<a href=https://github.com/go-training/training/blob/080ba925d85ff527598ddda9a8eec0b808f6f847/example34-graceful-shutdown-with-worker/graceful-shutdown/answer-shutdown-after-job-completely/main.go#L80-L89>參考這邊</a>)</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
@@ -54,7 +188,9 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(num <span style=color:#00688b;font-weight:700>int</span>, wg *sync.WaitGroup) {
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c *Consumer) <span style=color:#008b45>worker</span>(num <span style=color:#00688b;font-weight:700>int</span>, wg *sync.WaitGroup) {
     <span style=color:#8b008b;font-weight:700>defer</span> wg.<span style=color:#008b45>Done</span>()
     log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;start the worker&#34;</span>, num)
 
@@ -62,7 +198,12 @@
         c.<span style=color:#008b45>process</span>(num, job)
     }
 }
-</code></pre></td></tr></table></div></div><p>使用 for 方式來讀取 jobsChan，這邊就會等到 channle 完全為空的時候才會結束 for 迴圈，所以有多個 worker 同時讀取 jobsChan。for 結束後，才會觸發 wg.Done() 告訴主程式此 worker 已經完成，主程式可以進行關閉動作了。這邊要注意的是在 Consumer 會先收到 cancel() 觸發，接著關閉 jobsChan 通道，但是關閉通道還是可以透過 for 方式將剩下的 job 從 channel 內讀取出來。可以看看 consumer 寫法 (完整程式碼請<a href=https://github.com/go-training/training/blob/080ba925d85ff527598ddda9a8eec0b808f6f847/example34-graceful-shutdown-with-worker/graceful-shutdown/answer-shutdown-after-job-completely/main.go#L53-L71>參考這邊</a>):</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 for 方式來讀取 jobsChan，這邊就會等到 channle 完全為空的時候才會結束 for 迴圈，所以有多個 worker 同時讀取 jobsChan。for 結束後，才會觸發 wg.Done() 告訴主程式此 worker 已經完成，主程式可以進行關閉動作了。這邊要注意的是在 Consumer 會先收到 cancel() 觸發，接著關閉 jobsChan 通道，但是關閉通道還是可以透過 for 方式將剩下的 job 從 channel 內讀取出來。可以看看 consumer 寫法 (完整程式碼請<a href=https://github.com/go-training/training/blob/080ba925d85ff527598ddda9a8eec0b808f6f847/example34-graceful-shutdown-with-worker/graceful-shutdown/answer-shutdown-after-job-completely/main.go#L53-L71>參考這邊</a>):</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -81,7 +222,9 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c Consumer) <span style=color:#008b45>startConsumer</span>(ctx context.Context) {
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> (c Consumer) <span style=color:#008b45>startConsumer</span>(ctx context.Context) {
     <span style=color:#8b008b;font-weight:700>for</span> {
         <span style=color:#8b008b;font-weight:700>select</span> {
         <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-c.inputChan:
@@ -100,18 +243,190 @@
         }
     }
 }
-</code></pre></td></tr></table></div></div><h2 id=心得>心得</h2><p>看專案的需求來決定是要立即停止 worker 還是要等到所有的 Job 都處理完畢才結束。兩種方式寫法不同，差異點就在前者需要再 worker 裡面處理兩個 channel，後者只需要透過 for 迴圈方式來將 job channel 全部讀出後才結束。</p><h2 id=影片分享>影片分享</h2><p>如果對於課程內容有興趣，可以參考底下課程。要合購多個課程，請直接<a href=http://facebook.com/appleboy46>私訊 FB</a>。直接匯款可以享受 100 元折扣。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202003">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/devops-oneday/?couponCode=202003">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202003">DOCKER 容器開發部署實戰</a></li></ul><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&text=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&title=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&title=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&title=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&description=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li><li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li><li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/ data-toggle=tooltip data-placement=top title="Go Modules 處理私有 GIT Repository 流程">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/ data-toggle=tooltip data-placement=top title="Docker 推出官方 GitHub Actions 套件">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=心得>心得</h2>
+<p>看專案的需求來決定是要立即停止 worker 還是要等到所有的 Job 都處理完畢才結束。兩種方式寫法不同，差異點就在前者需要再 worker 裡面處理兩個 channel，後者只需要透過 for 迴圈方式來將 job channel 全部讀出後才結束。</p>
+<h2 id=影片分享>影片分享</h2>
+<p>如果對於課程內容有興趣，可以參考底下課程。要合購多個課程，請直接<a href=http://facebook.com/appleboy46>私訊 FB</a>。直接匯款可以享受 100 元折扣。</p>
+<ul>
+<li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202003">Go 語言基礎實戰 (開發, 測試及部署)</a></li>
+<li><a href="https://www.udemy.com/devops-oneday/?couponCode=202003">一天學會 DevOps 自動化測試及部署</a></li>
+<li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202003">DOCKER 容器開發部署實戰</a></li>
+</ul>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&text=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&title=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&title=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&title=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f03%2fshutdown-the-service-after-job-completely%2f&description=%e5%81%9c%e6%ad%a2%20Go%20%e6%9c%8d%e5%8b%99%e5%89%8d%e5%85%88%e8%99%95%e7%90%86%e5%ae%8c%20Worker%20%e5%85%a7%e7%9a%84%20Job" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
+<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
+<li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li>
+<li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li>
+<li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li>
+<li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li>
+<li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li>
+<li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li>
+<li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li>
+<li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/ data-toggle=tooltip data-placement=top title="Go Modules 處理私有 GIT Repository 流程">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/ data-toggle=tooltip data-placement=top title="Docker 推出官方 GitHub Actions 套件">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

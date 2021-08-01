@@ -66,7 +66,7 @@ PHP 設定檔 如果是裝 php-fpm 請修改 /etc/php5/fpm/php.ini 路徑
 &lt;p>&lt;a href="http://php.net/generators" target="_blank">Generators&lt;/a> 提供了最簡單的寫法來實做 iterators，而不需要實做 Class 去實做 Iterator 介面，generators function 就跟一般的 PHP function 一樣，只是多了 yield 這 keyword，簡單舉個例子&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
@@ -81,7 +81,7 @@ PHP 設定檔 如果是裝 php-fpm 請修改 /etc/php5/fpm/php.ini 路徑
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-php" data-lang="php">&amp;lt;?php
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-php" data-lang="php">&amp;lt;?php
 &lt;span style="color:#8b008b;font-weight:bold">function&lt;/span> &lt;span style="color:#008b45">gen_one_to_three&lt;/span>() {
 &lt;span style="color:#8b008b;font-weight:bold">for&lt;/span> (&lt;span style="color:#00688b">$i&lt;/span> = &lt;span style="color:#b452cd">1&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span> &amp;lt;= &lt;span style="color:#b452cd">3&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span>++) {
 &lt;span style="color:#228b22">// Note that $i is preserved between yields.
@@ -319,7 +319,7 @@ U+FF61 - U+FF9F = 1
 U+FFA0 - = 2 PS: 測試環境 PHP 5.2.6</description></item><item><title>WordPress plugin 加強網址 SEO</title><link>https://blog.wu-boy.com/2011/02/wordpress-plugin-seo/</link><pubDate>Mon, 21 Feb 2011 04:42:34 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/02/wordpress-plugin-seo/</guid><description>&lt;p>由於網站 &lt;a href="http://en.wikipedia.org/wiki/Search_engine_optimization">SEO&lt;/a> 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 &lt;span style="color:green">&lt;strong>blog.wu-boy.com/2011/02/17/2542&lt;/strong>&lt;/span>，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 &lt;strong>&lt;span style="color:green">blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/&lt;/span>&lt;/strong>，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 &lt;span style="color:red">&lt;strong>/%year%/%monthnum%/%postname%/&lt;/strong>&lt;/span>，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 &lt;strong>&lt;span style="color:red">404 NOT Found&lt;/span>&lt;/strong>，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 &lt;a href="http://blog.roga.tw">Roga Blog&lt;/a> 找到一篇 &lt;a href="http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/">加強部落格的 SEO&lt;/a>，提供了轉換的 plugin，底下是該程式碼:&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
@@ -381,7 +381,7 @@ U+FFA0 - = 2 PS: 測試環境 PHP 5.2.6</description></item><item><title>WordPre
 &lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="60">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#60">60&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-php" data-lang="php">&amp;lt;?php
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-php" data-lang="php">&amp;lt;?php
 &lt;span style="color:#228b22">/*
 &lt;/span>&lt;span style="color:#228b22">Plugin Name: roga&amp;#39;s url hotfix
 &lt;/span>&lt;span style="color:#228b22">Plugin URI: http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/

@@ -1,32 +1,140 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[FreeBSD & Linux] 架設時間伺服器 ntpd - 小惡魔 - AppleBOY</title><meta name=description content="最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -> CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>[FreeBSD & Linux] 架設時間伺服器 ntpd - 小惡魔 - AppleBOY</title>
+<meta name=description content="最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -> CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄
 #
 # 建立目錄
 #
 mkdir /etc/ntp
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2008\/04\/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd\/","name":"[ free bsd \u0026 linux] 架設時間伺服器 ntpd"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[FreeBSD \u0026 Linux] 架設時間伺服器 ntpd","description":"最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -\u0026gt; CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 \/etc\/ntp 這個目錄\n#\r# 建立目錄\r#\rmkdir \/etc\/ntp\r","inLanguage":"en","wordCount":101,"datePublished":"2008-04-22T01:36:53","dateModified":"2008-04-22T01:36:53","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["ntpd"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2008\/04\/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[FreeBSD & Linux] 架設時間伺服器 ntpd"><meta property="og:description" content="最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -> CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄
+">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2008\/04\/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd\/","name":"[ free bsd \u0026 linux] 架設時間伺服器 ntpd"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[FreeBSD \u0026 Linux] 架設時間伺服器 ntpd","description":"最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -\u0026gt; CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 \/etc\/ntp 這個目錄\n#\r# 建立目錄\r#\rmkdir \/etc\/ntp\r","inLanguage":"en","wordCount":101,"datePublished":"2008-04-22T01:36:53","dateModified":"2008-04-22T01:36:53","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["ntpd"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2008\/04\/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="[FreeBSD & Linux] 架設時間伺服器 ntpd">
+<meta property="og:description" content="最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -> CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄
 #
 # 建立目錄
 #
 mkdir /etc/ntp
-"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2008/04/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="[FreeBSD & Linux] 架設時間伺服器 ntpd"><meta name=twitter:description content="最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -> CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄
+">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2008/04/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="[FreeBSD & Linux] 架設時間伺服器 ntpd">
+<meta name=twitter:description content="最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：[FreeBSD] 修改系統時間 UTC -> CST，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄
 #
-# 建 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+# 建 …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[FreeBSD & Linux] 架設時間伺服器 ntpd</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 22, 2008
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>[FreeBSD & Linux] 架設時間伺服器 ntpd</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 22, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;101&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：<a href=http://blog.wu-boy.com/2007/06/22/112/>[FreeBSD] 修改系統時間 UTC -> CST</a>，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄</p><pre class="brush: bash; title: ; notranslate" title>#
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<article role=main class=blog-post>
+<p>最近在調整系統時間，所以我利用了 Ntpd 伺服器，來微調系統時間，如果不利用這個方式，那可以利用我之前寫的調整系統時間：<a href=http://blog.wu-boy.com/2007/06/22/112/>[FreeBSD] 修改系統時間 UTC -> CST</a>，然而 Ntpd 會用一份時間伺服器的清單來間歇的檢查系統時間，它會取得這些時間伺服器的平均值，然後漸漸的調整系統時間。 FreeBSD 啟用 Ntpd 的方式： 步驟一：建立 /etc/ntp 這個目錄</p>
+<pre class="brush: bash; title: ; notranslate" title>#
 # 建立目錄
 #
 mkdir /etc/ntp
-</pre><p>步驟二：在 /etc 目錄底下建立 ntp.conf 的檔案</p><pre class="brush: bash; title: ; notranslate" title>#
+</pre>
+<p>步驟二：在 /etc 目錄底下建立 ntp.conf 的檔案</p>
+<pre class="brush: bash; title: ; notranslate" title>#
 # 建立檔案
 #
 touch /etc/ntp/ntp.conf 
-</pre>步驟三： 請在 ntp.conf 下加入<pre class="brush: bash; title: ; notranslate" title>#
+</pre> 步驟三： 請在 ntp.conf 下加入
+<pre class="brush: bash; title: ; notranslate" title>#
 # 把底下加入檔案
 # driftfile 後面接的檔案需要使用完整路徑檔名
 driftfile /etc/ntp/drift
@@ -43,7 +151,8 @@ restrict default ignore
 # 只准許特定ip機器連上
 #
 restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
-</pre>步驟四：鍵入馬上啟動 Ntpd<pre class="brush: bash; title: ; notranslate" title>#
+</pre> 步驟四：鍵入馬上啟動 Ntpd
+<pre class="brush: bash; title: ; notranslate" title>#
 # FreeBSD 啟動 ntpd
 #
 /etc/rc.d/ntpd start
@@ -51,21 +160,171 @@ restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap
 # Linux 啟動 
 #
 /etc/init.d/ntpd start
-</pre>步驟五：於 /etc/rc.conf 加入<pre class="brush: bash; title: ; notranslate" title>#
+</pre> 步驟五：於 /etc/rc.conf 加入
+<pre class="brush: bash; title: ; notranslate" title>#
 # 讓系統於開機或重開機後自動執行 Ntpd
 #
 xntpd_enable="YES"
-</pre>參考： http://linux.vbird.org/linux\_server/0440ntp.php http://www.freebsd.org/doc/zh\_TW/books/handbook/network-ntp.html<div class=blog-tags><a href=https://blog.wu-boy.com/tags/ntpd/>ntpd</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&text=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&title=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&title=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&title=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&description=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2008/04/wordpress-%E5%A5%BD%E7%94%A8%E7%9A%84%E7%B6%B2%E7%AB%99%E4%BA%BA%E6%95%B8%E8%A8%88%E6%95%B8%E5%99%A8%E5%96%94-histats/ data-toggle=tooltip data-placement=top title="[WordPress] 好用的網站人數計數器喔 histats">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2008/04/%E7%94%B3%E8%AB%8B%E6%95%99%E5%AD%B8-hinet-%E7%94%A8%E6%88%B6%E7%B6%B2%E8%B7%AF%E7%A9%BA%E9%96%93%E7%94%B3%E8%AB%8B%E6%95%99%E5%AD%B8/ data-toggle=tooltip data-placement=top title="[申請教學] hinet 用戶網路空間申請教學，email 申請">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2008/04/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2008/04/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+</pre> 參考： http://linux.vbird.org/linux\_server/0440ntp.php http://www.freebsd.org/doc/zh\_TW/books/handbook/network-ntp.html
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/ntpd/>ntpd</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&text=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&title=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&title=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&title=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f04%2ffreebsd-linux-%25E6%259E%25B6%25E8%25A8%25AD%25E6%2599%2582%25E9%2596%2593%25E4%25BC%25BA%25E6%259C%258D%25E5%2599%25A8-ntpd%2f&description=%5bFreeBSD%20%26%20Linux%5d%20%e6%9e%b6%e8%a8%ad%e6%99%82%e9%96%93%e4%bc%ba%e6%9c%8d%e5%99%a8%20ntpd" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2008/04/wordpress-%E5%A5%BD%E7%94%A8%E7%9A%84%E7%B6%B2%E7%AB%99%E4%BA%BA%E6%95%B8%E8%A8%88%E6%95%B8%E5%99%A8%E5%96%94-histats/ data-toggle=tooltip data-placement=top title="[WordPress] 好用的網站人數計數器喔 histats">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2008/04/%E7%94%B3%E8%AB%8B%E6%95%99%E5%AD%B8-hinet-%E7%94%A8%E6%88%B6%E7%B6%B2%E8%B7%AF%E7%A9%BA%E9%96%93%E7%94%B3%E8%AB%8B%E6%95%99%E5%AD%B8/ data-toggle=tooltip data-placement=top title="[申請教學] hinet 用戶網路空間申請教學，email 申請">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2008/04/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2008/04/freebsd-linux-%E6%9E%B6%E8%A8%AD%E6%99%82%E9%96%93%E4%BC%BA%E6%9C%8D%E5%99%A8-ntpd'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

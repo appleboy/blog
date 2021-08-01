@@ -1,43 +1,588 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>在 PostgreSQL 時區轉換及計算時間 - 小惡魔 - AppleBOY</title><meta name=description content="
-通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC+0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 Gitea 開源專案保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2018\/09\/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres\/","name":"在 postgre SQL 時區轉換及計算時間"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 PostgreSQL 時區轉換及計算時間","description":"\n通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC\u002b0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 Gitea 開源專案保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。\n","inLanguage":"en","wordCount":312,"datePublished":"2018-09-02T07:51:57","dateModified":"2018-09-02T07:51:57","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["database, Postgres, PostgreSQL"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2018\/09\/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="在 PostgreSQL 時區轉換及計算時間"><meta property="og:description" content="
-通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC+0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 Gitea 開源專案保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="在 PostgreSQL 時區轉換及計算時間"><meta name=twitter:description content="
-通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC+0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>在 PostgreSQL 時區轉換及計算時間 - 小惡魔 - AppleBOY</title>
+<meta name=description content="
+通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC+0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 Gitea 開源專案保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2018\/09\/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres\/","name":"在 postgre SQL 時區轉換及計算時間"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 PostgreSQL 時區轉換及計算時間","description":"\n通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC\u002b0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 Gitea 開源專案保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。\n","inLanguage":"en","wordCount":312,"datePublished":"2018-09-02T07:51:57","dateModified":"2018-09-02T07:51:57","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["database, Postgres, PostgreSQL"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2018\/09\/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="在 PostgreSQL 時區轉換及計算時間">
+<meta property="og:description" content="
+通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC+0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 Gitea 開源專案保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="在 PostgreSQL 時區轉換及計算時間">
+<meta name=twitter:description content="
+通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 UTC+0 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變 …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>在 PostgreSQL 時區轉換及計算時間</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 2, 2018
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>在 PostgreSQL 時區轉換及計算時間</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 2, 2018
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;312&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#計算時區問題>計算時區問題</a></li><li><a href=#後記>後記</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w1920-h1080" title=postgres><img src="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w400" alt=postgres title=postgres></a></p><p>通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 <code>UTC+0</code> 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 <a href=https://gitea.io>Gitea 開源專案</a>保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。</p><h2 id=計算時區問題>計算時區問題</h2><p>針對底下兩個問題來看看該如何在 <a href=https://www.postgresql.org/>PostgreSQL</a> 內計算時區，首先我們先定義在系統存放的時間都是統一 <code>UTC+0</code> 時區，而使用者查詢時的瀏覽器為台灣時間 <code>Asia/Taipei</code> 時區為 <code>UTC+08:00</code>，底下是第一個問題</p><blockquote><p>查詢條件為當下時間過去 24 小時的全部紀錄</p></blockquote><p>也就是說現在時間為 <code>2018-09-02 15:00</code> 那就是請抓取 <code>2018-09-01 15:00</code> 到 <code>2018-09-02 15:00</code> 區間內所有記錄，這個問題其實不難，跟時區也沒有任何關係，不管系統是存 UTC+0 或 UTC+8 都不影響。只要我們抓 <code>now()</code> 往前推算 24 小時即可。假設資料表有一個欄位為 <code>created_at</code> 存的是 timestamp 格式。底下就是解法:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#計算時區問題>計算時區問題</a></li>
+<li><a href=#後記>後記</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<p><a href="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w1920-h1080" title=postgres><img src="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w400" alt=postgres title=postgres></a></p>
+<p>通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 <code>UTC+0</code> 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 <a href=https://gitea.io>Gitea 開源專案</a>保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。</p>
+<h2 id=計算時區問題>計算時區問題</h2>
+<p>針對底下兩個問題來看看該如何在 <a href=https://www.postgresql.org/>PostgreSQL</a> 內計算時區，首先我們先定義在系統存放的時間都是統一 <code>UTC+0</code> 時區，而使用者查詢時的瀏覽器為台灣時間 <code>Asia/Taipei</code> 時區為 <code>UTC+08:00</code>，底下是第一個問題</p>
+<blockquote>
+<p>查詢條件為當下時間過去 24 小時的全部紀錄</p>
+</blockquote>
+<p>也就是說現在時間為 <code>2018-09-02 15:00</code> 那就是請抓取 <code>2018-09-01 15:00</code> 到 <code>2018-09-02 15:00</code> 區間內所有記錄，這個問題其實不難，跟時區也沒有任何關係，不管系統是存 UTC+0 或 UTC+8 都不影響。只要我們抓 <code>now()</code> 往前推算 24 小時即可。假設資料表有一個欄位為 <code>created_at</code> 存的是 timestamp 格式。底下就是解法:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>select</span><span style=color:#bbb> </span>title,<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>desc</span><span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>from</span><span style=color:#bbb> </span>users<span style=color:#bbb> </span><span style=color:#a61717;background-color:#e3d2d2>\</span><span style=color:#bbb>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>select</span><span style=color:#bbb> </span>title,<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>desc</span><span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>from</span><span style=color:#bbb> </span>users<span style=color:#bbb> </span><span style=color:#a61717;background-color:#e3d2d2>\</span><span style=color:#bbb>
 </span><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>where</span><span style=color:#bbb> </span>created_at<span style=color:#bbb> </span>&gt;<span style=color:#bbb> </span>now()<span style=color:#bbb> </span>-<span style=color:#bbb> </span><span style=color:#658b00>interval</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;1 day&#39;</span><span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><p>其中 <code>now() - interval '1 day'</code> 代表著現在時間去減掉 1 天的時間。這邊沒有時區的問題，假設另一個問題如下:</p><blockquote><p>請查詢過去 7 天的記錄 (含當下當天資料)</p></blockquote><p>假設現在時間為 2018-09-02 16:00+08:00 (台灣時間星期天)，這時候我們預設的查詢時間範圍會是 <code>2018-08-27 00:00+0800</code> 到 <code>2018-09-02 16:00+08:00</code> 時間區間內所有資料，底下是目前資料庫的資料:</p><table><thead><tr><th>id</th><th>created_at (utc+0)</th></tr></thead><tbody><tr><td>1231</td><td>2018-08-26 18:25:35.624</td></tr><tr><td>1225</td><td>2018-08-26 19:15:19.187</td></tr><tr><td>1220</td><td>2018-08-27 04:24:59.306</td></tr><tr><td>1222</td><td>2018-08-27 05:38:57.174</td></tr><tr><td>1230</td><td>2018-08-27 07:21:35.897</td></tr><tr><td>1239</td><td>2018-08-28 07:37:52.345</td></tr><tr><td>1264</td><td>2018-08-30 05:21:17.157</td></tr><tr><td>1290</td><td>2018-08-31 12:05:04.764</td></tr><tr><td>1356</td><td>2018-08-31 20:51:29.784</td></tr><tr><td>1358</td><td>2018-09-01 12:14:13.118</td></tr><tr><td>1355</td><td>2018-09-01 19:21:36.482</td></tr><tr><td>1354</td><td>2018-09-02 03:18:38.626</td></tr><tr><td>1361</td><td>2018-09-02 03:37:05.171</td></tr></tbody></table><p>這時候使用上面的解法試試看:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>where</span><span style=color:#bbb> </span>created_at<span style=color:#bbb>  </span>&gt;<span style=color:#bbb> </span>now()<span style=color:#bbb> </span>-<span style=color:#bbb> </span><span style=color:#658b00>interval</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;6 day&#39;</span><span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><p>拿到底下資料</p><table><thead><tr><th>id</th><th>created_at (utc+0)</th></tr></thead><tbody><tr><td>1239</td><td>2018-08-28 07:37:52.345</td></tr><tr><td>1264</td><td>2018-08-30 05:21:17.157</td></tr><tr><td>1290</td><td>2018-08-31 12:05:04.764</td></tr><tr><td>1356</td><td>2018-08-31 20:51:29.784</td></tr><tr><td>1358</td><td>2018-09-01 12:14:13.118</td></tr><tr><td>1355</td><td>2018-09-01 19:21:36.482</td></tr><tr><td>1354</td><td>2018-09-02 03:18:38.626</td></tr><tr><td>1361</td><td>2018-09-02 03:37:05.171</td></tr></tbody></table><p>這時候你會發，怎麼 27 號的資料都沒有進來呢？原因出在 <code>now() - interval '6 day'</code> 計算出來的結果會是讀取時間大於 <code>2018-08-27 16:00+08:00</code>，那換算 UTC 時間則為 <code>2018-08-27 08:00+00:00</code>，這樣是不對的，那 8/27 該天的 00:00 ~ 08:00 的時間也沒被算進去，這時候需要時間的轉換</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>where</span><span style=color:#bbb> </span>created_at<span style=color:#bbb>  </span>&gt;<span style=color:#bbb> </span>(now()<span style=color:#bbb> </span>-<span style=color:#bbb> </span><span style=color:#658b00>interval</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;6 day&#39;</span>)::<span style=color:#658b00>date</span><span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><p><code>(now() - interval '6 day')::date</code> 就可以把時間調整為當天 00:00 開始計算。這樣我們找出來的資料便是:</p><table><thead><tr><th>id</th><th>created_at (utc+0)</th></tr></thead><tbody><tr><td>1220</td><td>2018-08-27 04:24:59.306</td></tr><tr><td>1222</td><td>2018-08-27 05:38:57.174</td></tr><tr><td>1230</td><td>2018-08-27 07:21:35.897</td></tr><tr><td>1239</td><td>2018-08-28 07:37:52.345</td></tr><tr><td>1264</td><td>2018-08-30 05:21:17.157</td></tr><tr><td>1290</td><td>2018-08-31 12:05:04.764</td></tr><tr><td>1356</td><td>2018-08-31 20:51:29.784</td></tr><tr><td>1358</td><td>2018-09-01 12:14:13.118</td></tr><tr><td>1355</td><td>2018-09-01 19:21:36.482</td></tr><tr><td>1354</td><td>2018-09-02 03:18:38.626</td></tr><tr><td>1361</td><td>2018-09-02 03:37:05.171</td></tr></tbody></table><p>可以正確抓到 2018-08-27 的資料，但是看到這邊是不是又覺得怪怪的，最前面兩筆應該也要被算進來，我們先把上面的時區全部 +08:00</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>now() - interval '1 day'</code> 代表著現在時間去減掉 1 天的時間。這邊沒有時區的問題，假設另一個問題如下:</p>
+<blockquote>
+<p>請查詢過去 7 天的記錄 (含當下當天資料)</p>
+</blockquote>
+<p>假設現在時間為 2018-09-02 16:00+08:00 (台灣時間星期天)，這時候我們預設的查詢時間範圍會是 <code>2018-08-27 00:00+0800</code> 到 <code>2018-09-02 16:00+08:00</code> 時間區間內所有資料，底下是目前資料庫的資料:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>created_at (utc+0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1231</td>
+<td>2018-08-26 18:25:35.624</td>
+</tr>
+<tr>
+<td>1225</td>
+<td>2018-08-26 19:15:19.187</td>
+</tr>
+<tr>
+<td>1220</td>
+<td>2018-08-27 04:24:59.306</td>
+</tr>
+<tr>
+<td>1222</td>
+<td>2018-08-27 05:38:57.174</td>
+</tr>
+<tr>
+<td>1230</td>
+<td>2018-08-27 07:21:35.897</td>
+</tr>
+<tr>
+<td>1239</td>
+<td>2018-08-28 07:37:52.345</td>
+</tr>
+<tr>
+<td>1264</td>
+<td>2018-08-30 05:21:17.157</td>
+</tr>
+<tr>
+<td>1290</td>
+<td>2018-08-31 12:05:04.764</td>
+</tr>
+<tr>
+<td>1356</td>
+<td>2018-08-31 20:51:29.784</td>
+</tr>
+<tr>
+<td>1358</td>
+<td>2018-09-01 12:14:13.118</td>
+</tr>
+<tr>
+<td>1355</td>
+<td>2018-09-01 19:21:36.482</td>
+</tr>
+<tr>
+<td>1354</td>
+<td>2018-09-02 03:18:38.626</td>
+</tr>
+<tr>
+<td>1361</td>
+<td>2018-09-02 03:37:05.171</td>
+</tr>
+</tbody>
+</table>
+<p>這時候使用上面的解法試試看:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>where</span><span style=color:#bbb> </span>created_at<span style=color:#bbb>  </span>&gt;<span style=color:#bbb> </span>now()<span style=color:#bbb> </span>-<span style=color:#bbb> </span><span style=color:#658b00>interval</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;6 day&#39;</span><span style=color:#bbb>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>拿到底下資料</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>created_at (utc+0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1239</td>
+<td>2018-08-28 07:37:52.345</td>
+</tr>
+<tr>
+<td>1264</td>
+<td>2018-08-30 05:21:17.157</td>
+</tr>
+<tr>
+<td>1290</td>
+<td>2018-08-31 12:05:04.764</td>
+</tr>
+<tr>
+<td>1356</td>
+<td>2018-08-31 20:51:29.784</td>
+</tr>
+<tr>
+<td>1358</td>
+<td>2018-09-01 12:14:13.118</td>
+</tr>
+<tr>
+<td>1355</td>
+<td>2018-09-01 19:21:36.482</td>
+</tr>
+<tr>
+<td>1354</td>
+<td>2018-09-02 03:18:38.626</td>
+</tr>
+<tr>
+<td>1361</td>
+<td>2018-09-02 03:37:05.171</td>
+</tr>
+</tbody>
+</table>
+<p>這時候你會發，怎麼 27 號的資料都沒有進來呢？原因出在 <code>now() - interval '6 day'</code> 計算出來的結果會是讀取時間大於 <code>2018-08-27 16:00+08:00</code>，那換算 UTC 時間則為 <code>2018-08-27 08:00+00:00</code>，這樣是不對的，那 8/27 該天的 00:00 ~ 08:00 的時間也沒被算進去，這時候需要時間的轉換</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>where</span><span style=color:#bbb> </span>created_at<span style=color:#bbb>  </span>&gt;<span style=color:#bbb> </span>(now()<span style=color:#bbb> </span>-<span style=color:#bbb> </span><span style=color:#658b00>interval</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;6 day&#39;</span>)::<span style=color:#658b00>date</span><span style=color:#bbb>
+</span></code></pre></td></tr></table>
+</div>
+</div><p><code>(now() - interval '6 day')::date</code> 就可以把時間調整為當天 00:00 開始計算。這樣我們找出來的資料便是:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>created_at (utc+0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1220</td>
+<td>2018-08-27 04:24:59.306</td>
+</tr>
+<tr>
+<td>1222</td>
+<td>2018-08-27 05:38:57.174</td>
+</tr>
+<tr>
+<td>1230</td>
+<td>2018-08-27 07:21:35.897</td>
+</tr>
+<tr>
+<td>1239</td>
+<td>2018-08-28 07:37:52.345</td>
+</tr>
+<tr>
+<td>1264</td>
+<td>2018-08-30 05:21:17.157</td>
+</tr>
+<tr>
+<td>1290</td>
+<td>2018-08-31 12:05:04.764</td>
+</tr>
+<tr>
+<td>1356</td>
+<td>2018-08-31 20:51:29.784</td>
+</tr>
+<tr>
+<td>1358</td>
+<td>2018-09-01 12:14:13.118</td>
+</tr>
+<tr>
+<td>1355</td>
+<td>2018-09-01 19:21:36.482</td>
+</tr>
+<tr>
+<td>1354</td>
+<td>2018-09-02 03:18:38.626</td>
+</tr>
+<tr>
+<td>1361</td>
+<td>2018-09-02 03:37:05.171</td>
+</tr>
+</tbody>
+</table>
+<p>可以正確抓到 2018-08-27 的資料，但是看到這邊是不是又覺得怪怪的，最前面兩筆應該也要被算進來，我們先把上面的時區全部 +08:00</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>select</span><span style=color:#bbb> </span>created_at,<span style=color:#bbb> </span><span style=color:#a61717;background-color:#e3d2d2>\</span><span style=color:#bbb>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql><span style=color:#8b008b;font-weight:700>select</span><span style=color:#bbb> </span>created_at,<span style=color:#bbb> </span><span style=color:#a61717;background-color:#e3d2d2>\</span><span style=color:#bbb>
 </span><span style=color:#bbb>  </span>created_at<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>at</span><span style=color:#bbb> </span>time<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>zone</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;UTC&#39;</span><span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>at</span><span style=color:#bbb> </span>time<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>zone</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;Asia/Taipei&#39;</span><span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><table><thead><tr><th>created_at (utc+0)</th><th>created_at (utc+8)</th></tr></thead><tbody><tr><td>2018-08-26 18:25:35.624</td><td>2018-08-27 02:25:35.624</td></tr><tr><td>2018-08-26 19:15:19.187</td><td>2018-08-27 03:15:19.187</td></tr><tr><td>2018-08-27 04:24:59.306</td><td>2018-08-27 12:24:59.306</td></tr><tr><td>2018-08-27 05:38:57.174</td><td>2018-08-27 13:38:57.174</td></tr><tr><td>2018-08-27 07:21:35.897</td><td>2018-08-27 15:21:35.897</td></tr><tr><td>2018-08-28 07:37:52.345</td><td>2018-08-28 15:37:52.345</td></tr><tr><td>2018-08-30 05:21:17.157</td><td>2018-08-30 13:21:17.157</td></tr><tr><td>2018-08-31 12:05:04.764</td><td>2018-08-31 20:05:04.764</td></tr><tr><td>2018-08-31 20:51:29.784</td><td>2018-09-01 04:51:29.784</td></tr><tr><td>2018-09-01 12:14:13.118</td><td>2018-09-01 20:14:13.118</td></tr><tr><td>2018-09-01 19:21:36.482</td><td>2018-09-02 03:21:36.482</td></tr><tr><td>2018-09-02 03:18:38.626</td><td>2018-09-02 11:18:38.626</td></tr><tr><td>2018-09-02 03:37:05.171</td><td>2018-09-02 11:37:05.171</td></tr></tbody></table><p>有沒有發現第一筆跟第二筆，在台灣時間是在 08-27 號，所以理論上應該要是我們的查詢範圍之間，但是沒有被查到。解決方式就是將欄位都先轉成使用者時區再去做計算</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td></tr></table>
+</div>
+</div><table>
+<thead>
+<tr>
+<th>created_at (utc+0)</th>
+<th>created_at (utc+8)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2018-08-26 18:25:35.624</td>
+<td>2018-08-27 02:25:35.624</td>
+</tr>
+<tr>
+<td>2018-08-26 19:15:19.187</td>
+<td>2018-08-27 03:15:19.187</td>
+</tr>
+<tr>
+<td>2018-08-27 04:24:59.306</td>
+<td>2018-08-27 12:24:59.306</td>
+</tr>
+<tr>
+<td>2018-08-27 05:38:57.174</td>
+<td>2018-08-27 13:38:57.174</td>
+</tr>
+<tr>
+<td>2018-08-27 07:21:35.897</td>
+<td>2018-08-27 15:21:35.897</td>
+</tr>
+<tr>
+<td>2018-08-28 07:37:52.345</td>
+<td>2018-08-28 15:37:52.345</td>
+</tr>
+<tr>
+<td>2018-08-30 05:21:17.157</td>
+<td>2018-08-30 13:21:17.157</td>
+</tr>
+<tr>
+<td>2018-08-31 12:05:04.764</td>
+<td>2018-08-31 20:05:04.764</td>
+</tr>
+<tr>
+<td>2018-08-31 20:51:29.784</td>
+<td>2018-09-01 04:51:29.784</td>
+</tr>
+<tr>
+<td>2018-09-01 12:14:13.118</td>
+<td>2018-09-01 20:14:13.118</td>
+</tr>
+<tr>
+<td>2018-09-01 19:21:36.482</td>
+<td>2018-09-02 03:21:36.482</td>
+</tr>
+<tr>
+<td>2018-09-02 03:18:38.626</td>
+<td>2018-09-02 11:18:38.626</td>
+</tr>
+<tr>
+<td>2018-09-02 03:37:05.171</td>
+<td>2018-09-02 11:37:05.171</td>
+</tr>
+</tbody>
+</table>
+<p>有沒有發現第一筆跟第二筆，在台灣時間是在 08-27 號，所以理論上應該要是我們的查詢範圍之間，但是沒有被查到。解決方式就是將欄位都先轉成使用者時區再去做計算</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql>created_at<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>at</span><span style=color:#bbb> </span>time<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>zone</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;utc&#39;</span><span style=color:#bbb> </span>time<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>zone</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;Asia/Taipei&#39;</span><span style=color:#bbb> </span>&gt;<span style=color:#bbb> </span><span style=color:#a61717;background-color:#e3d2d2>\</span><span style=color:#bbb>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sql data-lang=sql>created_at<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>at</span><span style=color:#bbb> </span>time<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>zone</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;utc&#39;</span><span style=color:#bbb> </span>time<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>zone</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;Asia/Taipei&#39;</span><span style=color:#bbb> </span>&gt;<span style=color:#bbb> </span><span style=color:#a61717;background-color:#e3d2d2>\</span><span style=color:#bbb>
 </span><span style=color:#bbb> </span>(now()<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>at</span><span style=color:#bbb> </span>time<span style=color:#bbb> </span><span style=color:#8b008b;font-weight:700>zone</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;Asia/Taipei1&#39;</span><span style=color:#bbb> </span>-<span style=color:#bbb> </span><span style=color:#658b00>interval</span><span style=color:#bbb> </span><span style=color:#cd5555>&#39;6 day&#39;</span>)::<span style=color:#658b00>date</span><span style=color:#bbb>
-</span></code></pre></td></tr></table></div></div><p>其中關鍵點就在把 <code>created_at</code> 先轉 utc+0 再轉 utc+8 最後才做比較。</p><h2 id=後記>後記</h2><p>使用者時區會隨在手機的所在地點做轉換，所以這邊的最好的作法就是，在資料庫統一存放 UTC+0 的時區，接著在 App 端登入帳號時，將使用者時區字串帶入到 Token 內，這樣使用者從台灣飛到美國時，登入 App 就能即時看到美國時區的資料。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/database/>database</a>&nbsp;
+</span></code></pre></td></tr></table>
+</div>
+</div><p>其中關鍵點就在把 <code>created_at</code> 先轉 utc+0 再轉 utc+8 最後才做比較。</p>
+<h2 id=後記>後記</h2>
+<p>使用者時區會隨在手機的所在地點做轉換，所以這邊的最好的作法就是，在資料庫統一存放 UTC+0 的時區，接著在 App 端登入帳號時，將使用者時區字串帶入到 Token 內，這樣使用者從台灣飛到美國時，登入 App 就能即時看到美國時區的資料。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/database/>database</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/postgres/>Postgres</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/postgresql/>PostgreSQL</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&text=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&title=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&title=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&title=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&description=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/mongodb-performance-tunning/>MongoDB 效能調校紀錄</a></li><li><a href=/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a></li><li><a href=/2020/07/count-employee-punch-in-out-with-postgres/>用 Postgres 計算員工上下班紀錄</a></li><li><a href=/2020/06/convert-postgres-data-to-csv-file/>將 Postgres 資料轉換到 CSV 格式</a></li><li><a href=/2020/02/how-to-select-top-n-rows-from-each-key-in-sql/>[SQL] 如何從單一資料表取得每個 key 前 n 筆資料</a></li><li><a href=/2016/06/server-monitoring-mysql-postgres-daemon-in-docker/>在 Docker 偵測 MySQL 或 Postgres 是否啟動</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2018/08/escape-url-rawquery-on-parse-in-golang/ data-toggle=tooltip data-placement=top title="在 Go 語言內的 URL RawQuery 的改變">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/ data-toggle=tooltip data-placement=top title="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/postgresql/>PostgreSQL</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&text=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&title=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&title=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&title=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fconverting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres%2f&description=%e5%9c%a8%20PostgreSQL%20%e6%99%82%e5%8d%80%e8%bd%89%e6%8f%9b%e5%8f%8a%e8%a8%88%e7%ae%97%e6%99%82%e9%96%93" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2021/05/mongodb-performance-tunning/>MongoDB 效能調校紀錄</a></li>
+<li><a href=/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a></li>
+<li><a href=/2020/07/count-employee-punch-in-out-with-postgres/>用 Postgres 計算員工上下班紀錄</a></li>
+<li><a href=/2020/06/convert-postgres-data-to-csv-file/>將 Postgres 資料轉換到 CSV 格式</a></li>
+<li><a href=/2020/02/how-to-select-top-n-rows-from-each-key-in-sql/>[SQL] 如何從單一資料表取得每個 key 前 n 筆資料</a></li>
+<li><a href=/2016/06/server-monitoring-mysql-postgres-daemon-in-docker/>在 Docker 偵測 MySQL 或 Postgres 是否啟動</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2018/08/escape-url-rawquery-on-parse-in-golang/ data-toggle=tooltip data-placement=top title="在 Go 語言內的 URL RawQuery 的改變">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/ data-toggle=tooltip data-placement=top title="Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2018/09/converting-timestamp-to-timestamp-in-a-specific-time-zone-in-postgres'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

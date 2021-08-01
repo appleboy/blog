@@ -1,23 +1,162 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>在 Local 端處理 Github 專案 Pull Request - 小惡魔 - AppleBOY</title><meta name=description content="
-這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests locally，底下紀錄操作步驟。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/03\/checkout-github-pull-request\/","name":"在 local 端處理 github 專案 pull request"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 Local 端處理 Github 專案 Pull Request","description":"\n這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests locally，底下紀錄操作步驟。\n","inLanguage":"en","wordCount":328,"datePublished":"2014-03-15T03:00:27","dateModified":"2014-03-15T03:00:27","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["git, Github"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/03\/checkout-github-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="在 Local 端處理 Github 專案 Pull Request"><meta property="og:description" content="
-這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests locally，底下紀錄操作步驟。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2014/03/checkout-github-pull-request/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="在 Local 端處理 Github 專案 Pull Request"><meta name=twitter:description content="
-這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>在 Local 端處理 Github 專案 Pull Request - 小惡魔 - AppleBOY</title>
+<meta name=description content="
+這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests locally，底下紀錄操作步驟。">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/03\/checkout-github-pull-request\/","name":"在 local 端處理 github 專案 pull request"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 Local 端處理 Github 專案 Pull Request","description":"\n這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests locally，底下紀錄操作步驟。\n","inLanguage":"en","wordCount":328,"datePublished":"2014-03-15T03:00:27","dateModified":"2014-03-15T03:00:27","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["git, Github"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/03\/checkout-github-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="在 Local 端處理 Github 專案 Pull Request">
+<meta property="og:description" content="
+這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests locally，底下紀錄操作步驟。">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2014/03/checkout-github-pull-request/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="在 Local 端處理 Github 專案 Pull Request">
+<meta name=twitter:description content="
+這篇會筆記如何將 Github 上專案內的 Pull Request 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 Travis CI 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 Checking out pull requests …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>在 Local 端處理 Github 專案 Pull Request</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 15, 2014
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>在 Local 端處理 Github 專案 Pull Request</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 15, 2014
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;328&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#clone-新專案修改設定檔>clone 新專案，修改設定檔</a></li><li><a href=#抓取遠端-pull-request>抓取遠端 Pull request</a></li><li><a href=#讀取特定-pull-request>讀取特定 pull request</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/13158675193/ title=github-logo><img src="https://i2.wp.com/farm3.staticflickr.com/2238/13158675193_2892abac95.jpg?resize=500%2C198&ssl=1" alt=github-logo data-recalc-dims=1></a></p><p>這篇會筆記如何將 <a href=https://github.com/>Github</a> 上專案內的 <a href=https://help.github.com/articles/using-pull-requests>Pull Request</a> 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 <a href=https://travis-ci.org/>Travis CI</a> 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 <a href=https://help.github.com/articles/checking-out-pull-requests-locally>Checking out pull requests locally</a>，底下紀錄操作步驟。</p><h3 id=clone-新專案修改設定檔>clone 新專案，修改設定檔</h3><p>拿 <a href=https://github.com/appleboy/gulp-compass>gulp-compass</a> 專案來測試</p><div><pre class="brush: bash; title: ; notranslate" title>$ git clone https://github.com/appleboy/gulp-compass.git</pre></div><p>接著打開 <code>.git/config</code> 可以看到底下設定檔</p><div><pre class="brush: bash; title: ; notranslate" title>[remote "origin"]
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href=#clone-新專案修改設定檔>clone 新專案，修改設定檔</a></li>
+<li><a href=#抓取遠端-pull-request>抓取遠端 Pull request</a></li>
+<li><a href=#讀取特定-pull-request>讀取特定 pull request</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/13158675193/ title=github-logo><img src="https://i2.wp.com/farm3.staticflickr.com/2238/13158675193_2892abac95.jpg?resize=500%2C198&ssl=1" alt=github-logo data-recalc-dims=1></a></p>
+<p>這篇會筆記如何將 <a href=https://github.com/>Github</a> 上專案內的 <a href=https://help.github.com/articles/using-pull-requests>Pull Request</a> 拉到 Local 端電腦，雖然現在大部分的 Open Source 都會寫 Unit Test 並且搭配免費的 <a href=https://travis-ci.org/>Travis CI</a> 自動化測試，但是有時候也是需要把別人的 Pull Request 拉下來測試後再進行 Merge，而 Github 官方有提供一篇說明文件 <a href=https://help.github.com/articles/checking-out-pull-requests-locally>Checking out pull requests locally</a>，底下紀錄操作步驟。</p>
+<h3 id=clone-新專案修改設定檔>clone 新專案，修改設定檔</h3>
+<p>拿 <a href=https://github.com/appleboy/gulp-compass>gulp-compass</a> 專案來測試</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ git clone https://github.com/appleboy/gulp-compass.git</pre>
+</div>
+<p>接著打開 <code>.git/config</code> 可以看到底下設定檔</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>[remote "origin"]
         fetch = +refs/heads/*:refs/remotes/origin/*
         url = https://github.com/appleboy/gulp-compass.git
 [branch "master"]
         remote = origin
-        merge = refs/heads/master</pre></div><p>請增加一行 refspec 紀錄，修改狀態後為底下</p><div><pre class="brush: bash; title: ; notranslate" title>[remote "origin"]
+        merge = refs/heads/master</pre>
+</div>
+<p>請增加一行 refspec 紀錄，修改狀態後為底下</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>[remote "origin"]
         fetch = +refs/heads/*:refs/remotes/origin/*
         url = https://github.com/appleboy/gulp-compass.git
-        fetch = +refs/pull/*/head:refs/pull/origin/*</pre></div><h3 id=抓取遠端-pull-request>抓取遠端 Pull request</h3><p>接著請執行 <code>git fetch origin</code>，可以看到底下結果</p><div><pre class="brush: bash; title: ; notranslate" title>$ git fetch origin
+        fetch = +refs/pull/*/head:refs/pull/origin/*</pre>
+</div>
+<h3 id=抓取遠端-pull-request>抓取遠端 Pull request</h3>
+<p>接著請執行 <code>git fetch origin</code>，可以看到底下結果</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ git fetch origin
 remote: Counting objects: 79, done.
 remote: Compressing objects: 100% (46/46), done.
 remote: Total 79 (delta 38), reused 59 (delta 28)
@@ -35,8 +174,18 @@ From https://github.com/appleboy/gulp-compass
  * [new branch]      refs/pull/6/head -> refs/pull/origin/6
  * [new branch]      refs/pull/7/head -> refs/pull/origin/7
  * [new branch]      refs/pull/8/head -> refs/pull/origin/8
- * [new branch]      refs/pull/9/head -> refs/pull/origin/9</pre></div><p>請注意 <code>refs/pull/</code> 是唯讀狀態，你無法 commit 任何程式碼上去</p><h3 id=讀取特定-pull-request>讀取特定 pull request</h3><p>上述步驟完成後，可以直接執行底下指令，來讀取特定的 Pull request</p><div><pre class="brush: bash; title: ; notranslate" title>$ git checkout -b 28 pull/origin/28
-Switched to a new branch '28'</pre></div><p>最後我們來看看線圖</p><div><pre class="brush: bash; title: ; notranslate" title>*  d0b3fc1 clear css folder before testing. (origin/master, origin/HEAD, master)
+ * [new branch]      refs/pull/9/head -> refs/pull/origin/9</pre>
+</div>
+<p>請注意 <code>refs/pull/</code> 是唯讀狀態，你無法 commit 任何程式碼上去</p>
+<h3 id=讀取特定-pull-request>讀取特定 pull request</h3>
+<p>上述步驟完成後，可以直接執行底下指令，來讀取特定的 Pull request</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ git checkout -b 28 pull/origin/28
+Switched to a new branch '28'</pre>
+</div>
+<p>最後我們來看看線圖</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>*  d0b3fc1 clear css folder before testing. (origin/master, origin/HEAD, master)
 |  
 *  22b6362 update readme.
 |  
@@ -54,20 +203,188 @@ Switched to a new branch '28'</pre></div><p>最後我們來看看線圖</p><div>
 * |  c3d8c18 update jshin to 1.5.0 and remove default parameter ".jshintrc".
 |/  
 |    
-*    0e87ccf Merge pull request #26 from theblacksmith/multiple-import-paths</pre></div><p>我們可以看到現在專案內的 HEAD 已經指向 #28 的 Pull request，請注意 <code>(HEAD, refs/pull/origin/28, 28)</code>，如果測試沒問題，就可以透過 git merge 回 master 分支</p><div><pre class="brush: bash; title: ; notranslate" title>$ git checkout master
+*    0e87ccf Merge pull request #26 from theblacksmith/multiple-import-paths</pre>
+</div>
+<p>我們可以看到現在專案內的 HEAD 已經指向 #28 的 Pull request，請注意 <code>(HEAD, refs/pull/origin/28, 28)</code>，如果測試沒問題，就可以透過 git merge 回 master 分支</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ git checkout master
 $ git merge pull/origin/28
-$ git push origin master</pre></div><p>Github 上面預設是使用 git merge，當然你自己也可以用 <a href=http://git-scm.com/book/en/Git-Branching-Rebasing>git rebase</a> 方式讓分支不要這麼亂。完成後上傳回 Github，你會發現該 pull request 就會被關閉並且 merge 完成。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&text=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&title=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&title=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&title=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&description=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li><li><a href=/2020/02/deploy-static-files-to-github-using-drone/>用 Drone 部署靜態檔案到 GitHub Pages</a></li><li><a href=/2019/12/deploy-golang-app-using-github-actions/>用 GitHub Actions 部署 Go 語言服務</a></li><li><a href=/2019/05/introduction-to-github-actions/>GitHub 推出 CI/CD 服務 Actions 之踩雷經驗</a></li><li><a href=/2017/12/github-flow-vs-git-flow/>GitHub Flow 及 Git Flow 流程使用時機</a></li><li><a href=/2017/01/new-git-code-hosting-option-gitea/>開發者另類的自架 Git 服務選擇: Gitea</a></li><li><a href=/2016/07/upgrade-docker-and-docker-compose-on-travis/>在 Travis 升級 Docker 和 docker-compose 版本</a></li><li><a href=/2016/07/new-coverage-service-codecov-io/>新的 code coverage 線上服務 codecov.io</a></li><li><a href=/2016/07/docker-team-work/>用 Docker 改善團隊合作模式</a></li><li><a href=/2016/05/sourcegraph-chrome-extension-for-github/>在 Github 專案內搜尋 Golang 函式，Golang 開發者必裝 Chrome Extension</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2014/03/ruby-compass-and-sass-auto-testing-environment/ data-toggle=tooltip data-placement=top title="Ruby Compass and Sass Auto Testing Environment">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2014/03/using-capistrano-to-deploy-current-branch/ data-toggle=tooltip data-placement=top title="Using Capistrano to deploy current branch">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2014/03/checkout-github-pull-request>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2014/03/checkout-github-pull-request'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+$ git push origin master</pre>
+</div>
+<p>Github 上面預設是使用 git merge，當然你自己也可以用 <a href=http://git-scm.com/book/en/Git-Branching-Rebasing>git rebase</a> 方式讓分支不要這麼亂。完成後上傳回 Github，你會發現該 pull request 就會被關閉並且 merge 完成。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&text=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&title=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&title=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&title=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f03%2fcheckout-github-pull-request%2f&description=%e5%9c%a8%20Local%20%e7%ab%af%e8%99%95%e7%90%86%20Github%20%e5%b0%88%e6%a1%88%20Pull%20Request" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li>
+<li><a href=/2020/02/deploy-static-files-to-github-using-drone/>用 Drone 部署靜態檔案到 GitHub Pages</a></li>
+<li><a href=/2019/12/deploy-golang-app-using-github-actions/>用 GitHub Actions 部署 Go 語言服務</a></li>
+<li><a href=/2019/05/introduction-to-github-actions/>GitHub 推出 CI/CD 服務 Actions 之踩雷經驗</a></li>
+<li><a href=/2017/12/github-flow-vs-git-flow/>GitHub Flow 及 Git Flow 流程使用時機</a></li>
+<li><a href=/2017/01/new-git-code-hosting-option-gitea/>開發者另類的自架 Git 服務選擇: Gitea</a></li>
+<li><a href=/2016/07/upgrade-docker-and-docker-compose-on-travis/>在 Travis 升級 Docker 和 docker-compose 版本</a></li>
+<li><a href=/2016/07/new-coverage-service-codecov-io/>新的 code coverage 線上服務 codecov.io</a></li>
+<li><a href=/2016/07/docker-team-work/>用 Docker 改善團隊合作模式</a></li>
+<li><a href=/2016/05/sourcegraph-chrome-extension-for-github/>在 Github 專案內搜尋 Golang 函式，Golang 開發者必裝 Chrome Extension</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2014/03/ruby-compass-and-sass-auto-testing-environment/ data-toggle=tooltip data-placement=top title="Ruby Compass and Sass Auto Testing Environment">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2014/03/using-capistrano-to-deploy-current-branch/ data-toggle=tooltip data-placement=top title="Using Capistrano to deploy current branch">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2014/03/checkout-github-pull-request>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2014/03/checkout-github-pull-request'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

@@ -1,75 +1,332 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>FreeBSD - 小惡魔 - AppleBOY</title><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><meta property="og:title" content="FreeBSD"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/categories/freebsd/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="FreeBSD"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/categories/freebsd/feed.xml title="小惡魔 - AppleBOY"><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/categories/freebsd/feed.xml title="小惡魔 - AppleBOY"><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>FreeBSD - 小惡魔 - AppleBOY</title>
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<meta property="og:title" content="FreeBSD">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/categories/freebsd/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="FreeBSD">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/categories/freebsd/feed.xml title="小惡魔 - AppleBOY">
+<link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/categories/freebsd/feed.xml title="小惡魔 - AppleBOY">
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=categories-heading><h1>FreeBSD</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2008/07/%E8%BD%89%E8%B2%BC-ror%EF%BC%9Aruby-on-rails%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88%E9%81%B8%E6%93%87/><h2 class=post-title>[轉貼] RoR：Ruby on Rails的部署方案選擇</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 10, 2008
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=categories-heading>
+<h1>FreeBSD</h1>
+<hr class=small>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/07/%E8%BD%89%E8%B2%BC-ror%EF%BC%9Aruby-on-rails%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88%E9%81%B8%E6%93%87/>
+<h2 class=post-title>[轉貼] RoR：Ruby on Rails的部署方案選擇</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 10, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;86&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>我沒在玩 Ruby on Rails，但是底下這一篇我覺得寫的不錯，可以參考看看，裡面有介紹一下目前當紅 web daemon 的一些基本知識
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+我沒在玩 Ruby on Rails，但是底下這一篇我覺得寫的不錯，可以參考看看，裡面有介紹一下目前當紅 web daemon 的一些基本知識
 RoR的部署方式從架構上來說分為前端和後端： 一、前端 前端的作用就是處理靜態資源，將動態請求分發到後端，有時候也帶有一些額外的功能，例如對特定URL進行rewrite和redirect，對HTTP輸出進行gzip壓縮等等。 前端目前已知的可以選擇apache, lighttpd, litespeed, nginx, haproxy 1、apache2.2 apache是全球市場佔有率最高的web server，超過全球互聯網網站50%的網站都用apache。apache2.2 + mod_proxy_balancer是一個非常流行，非常穩定的方案。 使用apache2.2唯一的問題就是apache的性能和後面那些輕量級web server相比，差太遠了。一方面在處理靜態請求方面apache要比lighttpd慢3-5倍，內存消耗和CPU消耗也高出一個數量級，另一方面 mod_proxy_balancer的分發性能也不高，比haproxy差很遠。 2、lighttpd lighttpd 是一個輕量級高性能web server，一個在MySQL Inc工作的德國人寫的。性能很好，內存和CPU資源消耗很低，支持絕大多數apache的功能，是apache的絕好替代者。目前lighttpd已經上升到全球互聯網第四大web server，市場佔有率僅此於apache，IIS和Sun。 lighttpd唯一的問題是proxy功能不完善，因此不適合搭配mongrel來使用。lighttpd下一個版本1.5.0的proxy模塊重寫過了，將會解決這個問題。 3、litespeed 和 lighttpd差不多，商業產品，收費的。比lighttpd來說，多一個web管理界面，不用寫配置文件了。litespeed專門為單機運行的 RoR開發了一個lsapi協議，號稱性能最好，比httpd和fcgi都要好。他的proxy功能比lighttpd完善。 litespeed 的缺點我卻認為恰恰是這個lsapi。因為lsapi不是web server啟動的時候啟動固定數目的ruby進程，而是根據請求繁忙程度，動態創建和銷毀ruby進程，貌似節省資源，實則和apache2.2進程模型一樣，留下很大的黑客攻擊漏洞。只要黑客瞬時發起大量動態請求，就會讓服務器忙於創建ruby進程而導致CPU資源耗盡，失去響應。 當然，litespeed也支持httpd和fcgi，這個和lighttpd用法一樣的，到沒有這種問題。 4、nginx 一個俄國人開發的輕量級高性能web server，特點是做proxy性能很好，因此被推薦取代apache2.2的mod_proxy_balancer，來和mongrel cluster搭配。其他方面和lighttpd到差不多。 要說缺點，可能就是發展的時間比較短，至今沒有正式版本，還是beta版。沒有經過足夠網站的驗證。 5、haproxy 就是一個純粹的高性能proxy，不處理靜態資源的，所有請求統統分發到後端。 二、後端 後端就是跑ruby進程，處理RoR動態請求了。運行後端ruby進程有兩種方式： 1、fcgi方式 準確的說，不能叫做fcgi方式，其實就是啟動一個ruby進程，讓這個ruby進程監聽一個tcp/unix socket，以fcgi協議和前端通訊。所以fcgi不是指ruby進程的運行方式，而是ruby進程使用的通訊協議。這就好比你tomcat可以用 http也可以使用ajp通訊一樣，tomcat自己的運行方式都一樣的，只是通訊方式不一樣。 fcgi方式啟動ruby進程，可以使用lighttpd帶的一個spawn-fcgi工具來啟動(JavaEye目前採用這種方式)。 值得一提的是，apache2.2的mod_fastcgi的方式和上面還不太一樣，由apache動態創建fcgi進程和管理fcgi進程，這種方式和 litespeed的lsapi面臨的問題是一樣的，此外apache的mod_fastcgi自己也有很多嚴重的bug，是一種很糟糕的部署方式。這種糟糕的部署方式也敗壞了fcgi的名聲。 fastcgi只是一種協議，雖然古老，但並不是不好用，http協議也很古老。沒有必要因為 apache的mod_fastcgi的運行方式的問題而連帶把fastcgi都一同否定了。fastcgi只是一個協議(程序之間的語言)，是 apache的mod_fastcgi這個模塊有問題。打個比方，有個人英語水平很差，和你用英語對話，總是結結巴巴的，那你說是英語(fastcgi) 這種語言有問題呢？還是和你對話的這個人 (mod_fastcgi)有問題呢？ 2、http方式 也就是用mongrel去跑ruby進程，由於mongrel實際上已經是一個簡單的http server，所以也可以單獨作為web server使用。mongrel現在越來越受歡迎了。 用fcgi方式還是http方式，我個人覺得區別不大，關鍵還是看應用的場合，一般而言，推薦的搭配是： lighttpd ＋ fcgi 或者 nginx ＋mongrel，而apache因為性能差距，而不被推薦。 JavaEye為什麼用lighttpd ＋ fcgi呢？原因如下： 1) lighttpd發展了好幾年了，市場佔有率也相當高，是一個經過實踐檢驗的server，它的文檔也很全；而nginx還沒有經過足夠的市場檢驗，文檔也很缺乏 2) JavaEye的ruby進程和web server在一台機器上面跑，通過unix socket使用fcgi協議通訊可以避免tcp的網絡開銷，其通訊速度比使用tcp socket使用http協議通訊要快一些。 什麼場合使用haproxy？ 大規模部署，例如你的RoR應用到十幾台服務器上面去，你用haproxy會更好，可以方便的添加刪除應用服務器節點，proxy性能更好。 資料來源： Csdn – http://news.
-<a href=https://blog.wu-boy.com/2008/07/%E8%BD%89%E8%B2%BC-ror%EF%BC%9Aruby-on-rails%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88%E9%81%B8%E6%93%87/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/2008/07/%E8%BD%89%E8%B2%BC-ror%EF%BC%9Aruby-on-rails%E7%9A%84%E9%83%A8%E7%BD%B2%E6%96%B9%E6%A1%88%E9%81%B8%E6%93%87/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/litespeed/>litespeed</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/07/freebsd%E8%A7%A3%E6%B1%BA-lighttpd-log-permission-denied-%E5%95%8F%E9%A1%8C/><h2 class=post-title>[FreeBSD]解決 lighttpd log Permission denied 問題</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2008
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/07/freebsd%E8%A7%A3%E6%B1%BA-lighttpd-log-permission-denied-%E5%95%8F%E9%A1%8C/>
+<h2 class=post-title>[FreeBSD]解決 lighttpd log Permission denied 問題</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;128&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>今天早上伺服器 lighttpd 沒有跑起來，發現是因為沒有寫入 lighttpd.access.log 的權限，所以造成不能啟動</p><blockquote><p>2008-07-04 08:37:15: (mod_accesslog.c.535) opening access-log failed: Permission denied /var/log/lighttpd/lighttpd.access.log 目前的解法大概就是不能去改 /var/log 這個資料夾權限，所以我在 /var/log 底下新增 lighttpd 這個資料夾</p></blockquote><a href=https://blog.wu-boy.com/2008/07/freebsd%E8%A7%A3%E6%B1%BA-lighttpd-log-permission-denied-%E5%95%8F%E9%A1%8C/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/log/>log</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/07/freebsdlighttpd-php5-%E8%A7%A3%E6%B1%BA-wordpress-permalinks-mod_write/><h2 class=post-title>[FreeBSD]Lighttpd + php5 + 解決 wordpress Permalinks mod_write</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 3, 2008
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天早上伺服器 lighttpd 沒有跑起來，發現是因為沒有寫入 lighttpd.access.log 的權限，所以造成不能啟動</p>
+<blockquote>
+<p>2008-07-04 08:37:15: (mod_accesslog.c.535) opening access-log failed: Permission denied /var/log/lighttpd/lighttpd.access.log 目前的解法大概就是不能去改 /var/log 這個資料夾權限，所以我在 /var/log 底下新增 lighttpd 這個資料夾</p>
+</blockquote>
+<a href=https://blog.wu-boy.com/2008/07/freebsd%E8%A7%A3%E6%B1%BA-lighttpd-log-permission-denied-%E5%95%8F%E9%A1%8C/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/log/>log</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/07/freebsdlighttpd-php5-%E8%A7%A3%E6%B1%BA-wordpress-permalinks-mod_write/>
+<h2 class=post-title>[FreeBSD]Lighttpd + php5 + 解決 wordpress Permalinks mod_write</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 3, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;278&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>今天轉換跑道了，最近玩 Apache 玩的很不順，因為只要線上人數一多，就會吃很多記憶體，導致必須重新開 Apache，所以今天來玩看看 <a href=http://www.lighttpd.net/>lighttpd</a>試試看，看看結果如何，其實轉換到 <a href=http://www.lighttpd.net/>lighttpd</a> 需要注意很多事情，那就是 Lighttpd 並不支援 .htaccess 檔案，所以 mode_rewrite 功能要設定到 Lighttpd.conf 裡面，然後也去找看看 Lighttpd 的 virtual host 的寫法，然後還有一點就是 wordpress 的 Permalinks 的問題，算是今天都解決了，底下來寫一下作法：</p><a href=https://blog.wu-boy.com/2008/07/freebsdlighttpd-php5-%E8%A7%A3%E6%B1%BA-wordpress-permalinks-mod_write/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天轉換跑道了，最近玩 Apache 玩的很不順，因為只要線上人數一多，就會吃很多記憶體，導致必須重新開 Apache，所以今天來玩看看 <a href=http://www.lighttpd.net/>lighttpd</a>試試看，看看結果如何，其實轉換到 <a href=http://www.lighttpd.net/>lighttpd</a> 需要注意很多事情，那就是 Lighttpd 並不支援 .htaccess 檔案，所以 mode_rewrite 功能要設定到 Lighttpd.conf 裡面，然後也去找看看 Lighttpd 的 virtual host 的寫法，然後還有一點就是 wordpress 的 Permalinks 的問題，算是今天都解決了，底下來寫一下作法：</p>
+<a href=https://blog.wu-boy.com/2008/07/freebsdlighttpd-php5-%E8%A7%A3%E6%B1%BA-wordpress-permalinks-mod_write/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/wordpress/>wordpress</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/07/freebsdapache-%E5%99%B4%E5%87%BA-signal-segmentation-fault-11/><h2 class=post-title>[FreeBSD]Apache 噴出 signal Segmentation fault (11)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 1, 2008
+<a href=https://blog.wu-boy.com/tags/wordpress/>wordpress</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/07/freebsdapache-%E5%99%B4%E5%87%BA-signal-segmentation-fault-11/>
+<h2 class=post-title>[FreeBSD]Apache 噴出 signal Segmentation fault (11)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 1, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;241&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近在玩 FreeBSD 伺服器的加強效能，其實我自己試了很多套：<a href=http://eaccelerator.net/>eAccelerator</a>，<a href=http://pecl.php.net/package/APC>Pear APC</a>，跟 <a href=http://www.zend.com/en/products/guard/optimizer/>Zend Optimizer</a>，這三套都是可以加速php的速度，當你的 apache 效能遇到瓶頸，就可以選用這三個來改善網頁瀏覽速度，不過應該沒有人三個都用吧，畢竟三個東西，感覺都是cache幫助，所以達成我們所想要的要求，有時候並不是全部安裝就是代表你的伺服器一定會超快，因為我的經驗是三個不能同時裝，只要裝了兩個都會出問題，這是我這幾天測試的結果，只要裝了Pear APC，就不能裝Zend Optimizer跟eAccelerator了，因為我的 httpd 的 log 會噴出底下訊息：</p><blockquote><p>signal Segmentation fault (11) 跟 pid 15879 (httpd), uid 80: exited on signal 11</p></blockquote><a href=https://blog.wu-boy.com/2008/07/freebsdapache-%E5%99%B4%E5%87%BA-signal-segmentation-fault-11/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在玩 FreeBSD 伺服器的加強效能，其實我自己試了很多套：<a href=http://eaccelerator.net/>eAccelerator</a>，<a href=http://pecl.php.net/package/APC>Pear APC</a>，跟 <a href=http://www.zend.com/en/products/guard/optimizer/>Zend Optimizer</a>，這三套都是可以加速php的速度，當你的 apache 效能遇到瓶頸，就可以選用這三個來改善網頁瀏覽速度，不過應該沒有人三個都用吧，畢竟三個東西，感覺都是cache幫助，所以達成我們所想要的要求，有時候並不是全部安裝就是代表你的伺服器一定會超快，因為我的經驗是三個不能同時裝，只要裝了兩個都會出問題，這是我這幾天測試的結果，只要裝了Pear APC，就不能裝Zend Optimizer跟eAccelerator了，因為我的 httpd 的 log 會噴出底下訊息：</p>
+<blockquote>
+<p>signal Segmentation fault (11) 跟 pid 15879 (httpd), uid 80: exited on signal 11</p>
+</blockquote>
+<a href=https://blog.wu-boy.com/2008/07/freebsdapache-%E5%99%B4%E5%87%BA-signal-segmentation-fault-11/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/06/freebsd-linux%E7%B6%B2%E7%AB%99%E5%88%86%E6%B5%81%EF%BC%9A%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-haproxy-%E4%BC%BA%E6%9C%8D%E5%99%A8/><h2 class=post-title>[FreeBSD & Linux]網站分流：簡易架設 HAProxy 伺服器</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 23, 2008
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/06/freebsd-linux%E7%B6%B2%E7%AB%99%E5%88%86%E6%B5%81%EF%BC%9A%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-haproxy-%E4%BC%BA%E6%9C%8D%E5%99%A8/>
+<h2 class=post-title>[FreeBSD & Linux]網站分流：簡易架設 HAProxy 伺服器</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 23, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;170&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近在玩這套 Web 的 Load Balance 軟體，其實這是之前我寫的一篇：<a href=http://blog.wu-boy.com/2008/06/01/274/>[筆記] FreeBSD 一張網卡多重 ip 實現 Round Robin DNS Load Balancing</a>，有網友留言給我說可以玩看看 <a href=http://haproxy.1wt.eu/>HAProxy</a>，這樣的確改善了很多效能，而且也是正確達到 load balance 的效果，不然用 DNS Robin DNS Load Balancing 的方式的卻沒辦法做的很好，關於 HAProxy 在 google 了一下，好像國內很少人在寫這方面的教學，我自己來寫一下筆記好了，其實我還不是對設定很熟悉，只是大概知道他的原理罷了，底下我們來看看官網的一張圖 <a href=https://www.flickr.com/photos/appleboy/2603471691/ title="haproxy-pmode by appleboy46, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3211/2603471691_6d083bbeed.jpg?resize=363%2C290&ssl=1" alt=haproxy-pmode data-recalc-dims=1></a></p><a href=https://blog.wu-boy.com/2008/06/freebsd-linux%E7%B6%B2%E7%AB%99%E5%88%86%E6%B5%81%EF%BC%9A%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-haproxy-%E4%BC%BA%E6%9C%8D%E5%99%A8/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在玩這套 Web 的 Load Balance 軟體，其實這是之前我寫的一篇：<a href=http://blog.wu-boy.com/2008/06/01/274/>[筆記] FreeBSD 一張網卡多重 ip 實現 Round Robin DNS Load Balancing</a>，有網友留言給我說可以玩看看 <a href=http://haproxy.1wt.eu/>HAProxy</a>，這樣的確改善了很多效能，而且也是正確達到 load balance 的效果，不然用 DNS Robin DNS Load Balancing 的方式的卻沒辦法做的很好，關於 HAProxy 在 google 了一下，好像國內很少人在寫這方面的教學，我自己來寫一下筆記好了，其實我還不是對設定很熟悉，只是大概知道他的原理罷了，底下我們來看看官網的一張圖 <a href=https://www.flickr.com/photos/appleboy/2603471691/ title="haproxy-pmode by appleboy46, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3211/2603471691_6d083bbeed.jpg?resize=363%2C290&ssl=1" alt=haproxy-pmode data-recalc-dims=1></a></p>
+<a href=https://blog.wu-boy.com/2008/06/freebsd-linux%E7%B6%B2%E7%AB%99%E5%88%86%E6%B5%81%EF%BC%9A%E7%B0%A1%E6%98%93%E6%9E%B6%E8%A8%AD-haproxy-%E4%BC%BA%E6%9C%8D%E5%99%A8/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/06/freebsd%E8%A7%A3%E6%B1%BAswap%E4%B8%8D%E5%A4%A0%E7%9A%84%E6%83%85%E6%B3%81%EF%BC%9Aadd-swap-space/><h2 class=post-title>[FreeBSD]解決swap不夠的情況：Add Swap Space</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 21, 2008
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/06/freebsd%E8%A7%A3%E6%B1%BAswap%E4%B8%8D%E5%A4%A0%E7%9A%84%E6%83%85%E6%B3%81%EF%BC%9Aadd-swap-space/>
+<h2 class=post-title>[FreeBSD]解決swap不夠的情況：Add Swap Space</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 21, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;138&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近在使用 FreeBSD 架站，apache + MySQL + PHP，但是最近常常會吐出來 swap 不夠的情形，然後系統就會吐出下面訊息</p><blockquote><p>Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(7): failed Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(16): failed Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(2): failed Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(5): failed 目前上網看到的解決方法，都是增加 swap 的容量，那底下是在 FreeBSD 下面得作法：</p></blockquote><a href=https://blog.wu-boy.com/2008/06/freebsd%E8%A7%A3%E6%B1%BAswap%E4%B8%8D%E5%A4%A0%E7%9A%84%E6%83%85%E6%B3%81%EF%BC%9Aadd-swap-space/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/swap/>swap</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/06/%E5%9F%BA%E6%9C%AC%E5%84%AA%E5%8C%96-tuning-apache-%E8%B7%9F-tuning-mysql-%E6%95%88%E8%83%BD/><h2 class=post-title>基本優化 tuning apache 跟 tuning mysql 跟 php 效能</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 18, 2008
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在使用 FreeBSD 架站，apache + MySQL + PHP，但是最近常常會吐出來 swap 不夠的情形，然後系統就會吐出下面訊息</p>
+<blockquote>
+<p>Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(7): failed Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(16): failed Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(2): failed Jun 19 20:59:57 backup kernel: swap_pager_getswapspace(5): failed 目前上網看到的解決方法，都是增加 swap 的容量，那底下是在 FreeBSD 下面得作法：</p>
+</blockquote>
+<a href=https://blog.wu-boy.com/2008/06/freebsd%E8%A7%A3%E6%B1%BAswap%E4%B8%8D%E5%A4%A0%E7%9A%84%E6%83%85%E6%B3%81%EF%BC%9Aadd-swap-space/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/swap/>swap</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/06/%E5%9F%BA%E6%9C%AC%E5%84%AA%E5%8C%96-tuning-apache-%E8%B7%9F-tuning-mysql-%E6%95%88%E8%83%BD/>
+<h2 class=post-title>基本優化 tuning apache 跟 tuning mysql 跟 php 效能</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 18, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;352&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近在玩優化 Apache 跟 MySQL 部份，然後就在 google 上面找一些資料，當然對我自己的網站當然改變不少，速度有增快許多，所以來紀錄一下，其實都是還蠻基本的改 config 檔案就可以了 1. apache 部份 for FreeBSD</p><pre class="brush: bash; title: ; notranslate" title>#
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在玩優化 Apache 跟 MySQL 部份，然後就在 google 上面找一些資料，當然對我自己的網站當然改變不少，速度有增快許多，所以來紀錄一下，其實都是還蠻基本的改 config 檔案就可以了 1. apache 部份 for FreeBSD</p>
+<pre class="brush: bash; title: ; notranslate" title>#
 # 利用 ports 安裝
 # 在安裝 Apache 時，加入此參數 WITH_MPM=XXXX 即可。 
 #
-cd /usr/ports/www/apache22 ; make WITH_MPM=worker install clean</pre>如果是要裝在 Linux 機器的話，可能要自己編譯，在 Apache 2.0 有很多效能上得改變，所以原本預設是 prefork<pre class="brush: bash; title: ; notranslate" title>#
+cd /usr/ports/www/apache22 ; make WITH_MPM=worker install clean</pre> 如果是要裝在 Linux 機器的話，可能要自己編譯，在 Apache 2.0 有很多效能上得改變，所以原本預設是 prefork
+<pre class="brush: bash; title: ; notranslate" title>#
 # 編譯加上 
 # 
-./configure --with-mpm=worker</pre>在 Ubuntu 底下作法很奇怪，利用 apt-get 方式不能安裝 mpm worker，因為你安裝 php 的時候他會幫你移除，然後裝上 prefork，所以很奇怪，這部份我還不知道怎麼解決。
-<a href=https://blog.wu-boy.com/2008/06/%E5%9F%BA%E6%9C%AC%E5%84%AA%E5%8C%96-tuning-apache-%E8%B7%9F-tuning-mysql-%E6%95%88%E8%83%BD/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+./configure --with-mpm=worker</pre> 在 Ubuntu 底下作法很奇怪，利用 apt-get 方式不能安裝 mpm worker，因為你安裝 php 的時候他會幫你移除，然後裝上 prefork，所以很奇怪，這部份我還不知道怎麼解決。
+<a href=https://blog.wu-boy.com/2008/06/%E5%9F%BA%E6%9C%AC%E5%84%AA%E5%8C%96-tuning-apache-%E8%B7%9F-tuning-mysql-%E6%95%88%E8%83%BD/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/06/freebsd-%E5%AE%89%E8%A3%9D-php-apc-%E5%8A%A0%E9%80%9F%E7%B6%B2%E9%A0%81%E9%80%9F%E5%BA%A6/><h2 class=post-title>[FreeBSD] 安裝 PHP APC 加速網頁速度</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 5, 2008
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/06/freebsd-%E5%AE%89%E8%A3%9D-php-apc-%E5%8A%A0%E9%80%9F%E7%B6%B2%E9%A0%81%E9%80%9F%E5%BA%A6/>
+<h2 class=post-title>[FreeBSD] 安裝 PHP APC 加速網頁速度</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 5, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;159&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>最近在維護自己的機器，發現網站每秒 request 只要10幾次就會感覺吃很多資源，然後莫名 CPU 飆高到100%，後來只好去找怎麼去 tuning Apache，MySQL，PHP，至於改善 apache 跟 MySQL 我先不講了，我之後會在寫，我先處理了加速 PHP 的部份，我是安裝了 <a href=http://pecl.php.net/package/APC>APC</a>（Alternative PHP Cache），來改善執行 PHP 的速度，這個程式必須先安裝好 <a href=http://pecl.php.net/>PECL</a>(PHP Extension Community Library)，再來安裝 APC 就沒問題了。 1. 首先安裝 APC</p><pre class="brush: bash; title: ; notranslate" title>#
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在維護自己的機器，發現網站每秒 request 只要10幾次就會感覺吃很多資源，然後莫名 CPU 飆高到100%，後來只好去找怎麼去 tuning Apache，MySQL，PHP，至於改善 apache 跟 MySQL 我先不講了，我之後會在寫，我先處理了加速 PHP 的部份，我是安裝了 <a href=http://pecl.php.net/package/APC>APC</a>（Alternative PHP Cache），來改善執行 PHP 的速度，這個程式必須先安裝好 <a href=http://pecl.php.net/>PECL</a>(PHP Extension Community Library)，再來安裝 APC 就沒問題了。 1. 首先安裝 APC</p>
+<pre class="brush: bash; title: ; notranslate" title>#
 # 先切換到該軟體下面
 #
 cd /usr/ports/www/pecl-APC/; make install clean
-</pre><a href=https://blog.wu-boy.com/2008/06/freebsd-%E5%AE%89%E8%A3%9D-php-apc-%E5%8A%A0%E9%80%9F%E7%B6%B2%E9%A0%81%E9%80%9F%E5%BA%A6/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+</pre>
+<a href=https://blog.wu-boy.com/2008/06/freebsd-%E5%AE%89%E8%A3%9D-php-apc-%E5%8A%A0%E9%80%9F%E7%B6%B2%E9%A0%81%E9%80%9F%E5%BA%A6/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/apc/>APC</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/06/%E7%AD%86%E8%A8%98-freebsd-%E4%B8%80%E5%BC%B5%E7%B6%B2%E5%8D%A1%E5%A4%9A%E9%87%8D-ip-%E5%AF%A6%E7%8F%BE-round-robin-dns-load-balancing/><h2 class=post-title>[筆記] FreeBSD 一張網卡多重 ip 實現 Round Robin DNS Load Balancing</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 1, 2008
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/06/%E7%AD%86%E8%A8%98-freebsd-%E4%B8%80%E5%BC%B5%E7%B6%B2%E5%8D%A1%E5%A4%9A%E9%87%8D-ip-%E5%AF%A6%E7%8F%BE-round-robin-dns-load-balancing/>
+<h2 class=post-title>[筆記] FreeBSD 一張網卡多重 ip 實現 Round Robin DNS Load Balancing</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 1, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;176&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>來紀錄一下好了，其實這兩年前，我自己就試過了，當時在弄 web 系統 Load Balancing，因為找不到更好的方法，所以使用 Round Robin DNS Load Balancing 技術來達到這功能，可是當然這不是很準確的做到 load balance，只是能解決暫時性的問題，真正要做到 Load Balancing 可能要靠硬體的技術了。 我自己是在 FreeBSD 系統上面實做的，當然弄 Load Balancing 一定要在網卡上面綁定多重ip，Linux 作法跟 FreeBSD 不大相同</p><pre class="brush: bash; title: ; notranslate" title>#
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>來紀錄一下好了，其實這兩年前，我自己就試過了，當時在弄 web 系統 Load Balancing，因為找不到更好的方法，所以使用 Round Robin DNS Load Balancing 技術來達到這功能，可是當然這不是很準確的做到 load balance，只是能解決暫時性的問題，真正要做到 Load Balancing 可能要靠硬體的技術了。 我自己是在 FreeBSD 系統上面實做的，當然弄 Load Balancing 一定要在網卡上面綁定多重ip，Linux 作法跟 FreeBSD 不大相同</p>
+<pre class="brush: bash; title: ; notranslate" title>#
 # Linux 作法
 #
-ifconfig eth0:0 inet xxx.xxx.xxx.xx(1~9) netmask 255.255.255.0 broadcast xxx.xxx.xxx.255</pre><pre class="brush: bash; title: ; notranslate" title>#
+ifconfig eth0:0 inet xxx.xxx.xxx.xx(1~9) netmask 255.255.255.0 broadcast xxx.xxx.xxx.255</pre>
+<pre class="brush: bash; title: ; notranslate" title>#
 # FreeBSD 作法
 #
 # /etc/rc.conf - add a new IP address to the NIC
@@ -79,31 +336,157 @@ ifconfig_rl0_alias0="192.168.0.57 netmask 0xffffffff"
 # 指令
 #
 ifconfig rl0 alias 192.168.0.57 netmask 0xffffffff
- </pre><a href=https://blog.wu-boy.com/2008/06/%E7%AD%86%E8%A8%98-freebsd-%E4%B8%80%E5%BC%B5%E7%B6%B2%E5%8D%A1%E5%A4%9A%E9%87%8D-ip-%E5%AF%A6%E7%8F%BE-round-robin-dns-load-balancing/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/dns/>DNS</a>&nbsp;
+ </pre>
+<a href=https://blog.wu-boy.com/2008/06/%E7%AD%86%E8%A8%98-freebsd-%E4%B8%80%E5%BC%B5%E7%B6%B2%E5%8D%A1%E5%A4%9A%E9%87%8D-ip-%E5%AF%A6%E7%8F%BE-round-robin-dns-load-balancing/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/dns/>DNS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ip/>ip</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/load-balancing/>Load Balancing</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2008/05/freebsdlinux-%E5%A6%82%E4%BD%95%E7%94%A8-mount-%E5%8F%96%E4%BB%A3-ln-%E5%8E%BB%E5%AF%A6%E7%8F%BE%E9%80%A3%E7%B5%90%E6%AA%94symbolic-link/><h2 class=post-title>[FreeBSD&Linux] 如何用 mount 取代 ln 去實現連結檔(Symbolic Link)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 28, 2008
+<a href=https://blog.wu-boy.com/tags/load-balancing/>Load Balancing</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/05/freebsdlinux-%E5%A6%82%E4%BD%95%E7%94%A8-mount-%E5%8F%96%E4%BB%A3-ln-%E5%8E%BB%E5%AF%A6%E7%8F%BE%E9%80%A3%E7%B5%90%E6%AA%94symbolic-link/>
+<h2 class=post-title>[FreeBSD&Linux] 如何用 mount 取代 ln 去實現連結檔(Symbolic Link)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 28, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;63&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>我們在 Linux 或者是 FreeBSD 底下如何建立連結檔(Symbolic Link) ，也就是在 Windows 底下的捷徑啦，這個在鳥哥的網站都有寫的很清楚：<a href=http://linux.vbird.org/linux_basic/0230filesystem.php#ln>連結檔的介紹： ln</a>，最重要搞清楚 hard link 跟 soft link 就可以了，簡單來說，hard link 只可以針對檔案，不可以對目錄，但是 soft link 就是可以對目錄了，因為她就像 Windows 底下的捷徑，那在 Linux 底下，大家常常在玩 FTP，一定會碰到需要利用 Link 的方式，但是如果你利用 ln 的方式的話，連接ftp，會沒辦法回到上一層目錄，就是有 chroot 的問題，那底下是我發現可以解決的方法，其實這算是月經題了，只是我想記錄下來。 在 Linux 底下，就是利用 mount 的指令：</p><pre class="brush: bash; title: ; notranslate" title>#
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>我們在 Linux 或者是 FreeBSD 底下如何建立連結檔(Symbolic Link) ，也就是在 Windows 底下的捷徑啦，這個在鳥哥的網站都有寫的很清楚：<a href=http://linux.vbird.org/linux_basic/0230filesystem.php#ln>連結檔的介紹： ln</a>，最重要搞清楚 hard link 跟 soft link 就可以了，簡單來說，hard link 只可以針對檔案，不可以對目錄，但是 soft link 就是可以對目錄了，因為她就像 Windows 底下的捷徑，那在 Linux 底下，大家常常在玩 FTP，一定會碰到需要利用 Link 的方式，但是如果你利用 ln 的方式的話，連接ftp，會沒辦法回到上一層目錄，就是有 chroot 的問題，那底下是我發現可以解決的方法，其實這算是月經題了，只是我想記錄下來。 在 Linux 底下，就是利用 mount 的指令：</p>
+<pre class="brush: bash; title: ; notranslate" title>#
 # 就是利用 mount --bind
 #
-mount --bind olddir newdir</pre>在 FreeBSD 底下，利用 mount_nulls 指令<pre class="brush: bash; title: ; notranslate" title>#
+mount --bind olddir newdir</pre> 在 FreeBSD 底下，利用 mount_nulls 指令
+<pre class="brush: bash; title: ; notranslate" title>#
 #  mount_nullfs olddir newdir
 #
-mount_nullfs olddir newdir</pre>很簡單吧，大概是這樣，FTP 就不會出現不能回到上一層目錄的問題了</div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+mount_nullfs olddir newdir</pre> 很簡單吧，大概是這樣，FTP 就不會出現不能回到上一層目錄的問題了
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mount/>mount</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://blog.wu-boy.com/categories/freebsd/page/5/>&larr; Newer Posts</a></li><li class=next><a href=https://blog.wu-boy.com/categories/freebsd/page/7/>Older Posts &rarr;</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href=/categories/freebsd/feed.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/mount/>mount</a>&nbsp;
+</div>
+</article>
+</div>
+<ul class="pager main-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/categories/freebsd/page/5/>&larr; Newer Posts</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/categories/freebsd/page/7/>Older Posts &rarr;</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=/categories/freebsd/feed.xml title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

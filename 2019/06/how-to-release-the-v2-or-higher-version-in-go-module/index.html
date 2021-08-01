@@ -1,4 +1,10 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Go Module 如何發佈 v2 以上版本 - 小惡魔 - AppleBOY</title><meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Go Module 如何發佈 v2 以上版本 - 小惡魔 - AppleBOY</title>
+<meta name=description content="
 Go Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 GOPATH 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇教學部落格，底下是教學會涵蓋的範圍
 
 Creating a new module.
@@ -8,7 +14,11 @@ Adding a dependency on a new major version.
 Upgrading a dependency to a new major version.
 Removing unused dependencies.
 
-而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2019\/06\/how-to-release-the-v2-or-higher-version-in-go-module\/","name":"Go module 如何發佈 v2 以上版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go Module 如何發佈 v2 以上版本","description":"\nGo Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 GOPATH 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇教學部落格，底下是教學會涵蓋的範圍\n Creating a new module. Adding a dependency. Upgrading dependencies. Adding a dependency on a new major version. Upgrading a dependency to a new major version. Removing unused dependencies.  而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。\n","inLanguage":"en","wordCount":216,"datePublished":"2019-06-07T02:54:51","dateModified":"2019-06-07T02:54:51","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["go module, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2019\/06\/how-to-release-the-v2-or-higher-version-in-go-module\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go Module 如何發佈 v2 以上版本"><meta property="og:description" content="
+而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2019\/06\/how-to-release-the-v2-or-higher-version-in-go-module\/","name":"Go module 如何發佈 v2 以上版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go Module 如何發佈 v2 以上版本","description":"\nGo Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 GOPATH 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇教學部落格，底下是教學會涵蓋的範圍\n Creating a new module. Adding a dependency. Upgrading dependencies. Adding a dependency on a new major version. Upgrading a dependency to a new major version. Removing unused dependencies.  而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。\n","inLanguage":"en","wordCount":216,"datePublished":"2019-06-07T02:54:51","dateModified":"2019-06-07T02:54:51","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["go module, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2019\/06\/how-to-release-the-v2-or-higher-version-in-go-module\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="Go Module 如何發佈 v2 以上版本">
+<meta property="og:description" content="
 Go Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 GOPATH 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇教學部落格，底下是教學會涵蓋的範圍
 
 Creating a new module.
@@ -18,16 +28,147 @@ Adding a dependency on a new major version.
 Upgrading a dependency to a new major version.
 Removing unused dependencies.
 
-而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Go Module 如何發佈 v2 以上版本"><meta name=twitter:description content="
-Go Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 GOPATH 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇教學部落格，底下是教學會 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="Go Module 如何發佈 v2 以上版本">
+<meta name=twitter:description content="
+Go Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 GOPATH 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇教學部落格，底下是教學會 …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Go Module 如何發佈 v2 以上版本</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2019
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>Go Module 如何發佈 v2 以上版本</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;216&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#gomod-版本管理>go.mod 版本管理</a></li><li><a href=#發佈-v2-以上版本方式>發佈 v2 以上版本方式</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p><a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Go Module</a> 是 <a href=https://golang.org>Golang</a> 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 <code>GOPATH</code> 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇<a href=https://blog.golang.org/using-go-modules>教學部落格</a>，底下是教學會涵蓋的範圍</p><ul><li>Creating a new module.</li><li>Adding a dependency.</li><li>Upgrading dependencies.</li><li>Adding a dependency on a new major version.</li><li>Upgrading a dependency to a new major version.</li><li>Removing unused dependencies.</li></ul><p>而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。</p><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/50NJEXIo2Mo style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=gomod-版本管理>go.mod 版本管理</h2><p>使用 <code>go mod init</code> 之後會在專案目錄產生 go.mod 檔案，裡面可以看到像是底下的訊息</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#教學影片>教學影片</a></li>
+<li><a href=#gomod-版本管理>go.mod 版本管理</a></li>
+<li><a href=#發佈-v2-以上版本方式>發佈 v2 以上版本方式</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p><a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Go Module</a> 是 <a href=https://golang.org>Golang</a> 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 <code>GOPATH</code> 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇<a href=https://blog.golang.org/using-go-modules>教學部落格</a>，底下是教學會涵蓋的範圍</p>
+<ul>
+<li>Creating a new module.</li>
+<li>Adding a dependency.</li>
+<li>Upgrading dependencies.</li>
+<li>Adding a dependency on a new major version.</li>
+<li>Upgrading a dependency to a new major version.</li>
+<li>Removing unused dependencies.</li>
+</ul>
+<p>而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。</p>
+<h2 id=教學影片>教學影片</h2>
+<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
+<iframe src=https://www.youtube.com/embed/50NJEXIo2Mo style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+</div>
+<p>更多實戰影片可以參考我的 Udemy 教學系列</p>
+<ul>
+<li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li>
+<li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li>
+</ul>
+<h2 id=gomod-版本管理>go.mod 版本管理</h2>
+<p>使用 <code>go mod init</code> 之後會在專案目錄產生 go.mod 檔案，裡面可以看到像是底下的訊息</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -39,7 +180,9 @@ Go Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，�
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>module github.com/<span style=color:#8b008b;font-weight:700>go</span>-ggz/ggz
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>module github.com/<span style=color:#8b008b;font-weight:700>go</span>-ggz/ggz
 
 <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#b452cd>1.12</span>
 
@@ -51,34 +194,241 @@ Go Module 是 Golang 推出的一套件管理系統，在 Go 1.11 推出後，�
     gopkg.in/testfixtures.v2 v2<span style=color:#b452cd>.5.3</span>
     gopkg.in/urfave/cli.v2 v2<span style=color:#b452cd>.0.0</span>-<span style=color:#b452cd>20180128182452</span>-d3ae77c26ac8
 )
-</code></pre></td></tr></table></div></div><p>Go module 版本發佈請遵守 <a href=https://semver.org/>semver.org</a> 規範，當然不只有 Go 語言，發佈其他語言的套件也請務必遵守。而在 Go module 內有說明『<a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Semantic Import Versioning</a>』裡面大意大致上是說，如果你的套件版本是 v1 以下，像是 <code>v1.2.3</code>，可以直接透過 <code>go get xxxx</code> 方式將套件版本寫入 <code>go.mod</code>，但是看上面的例子，可以發現有些奇怪的字眼，像是 <code>+incompatible</code> 等。如果是看到像底下的套件</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>firebase.google.com/<span style=color:#8b008b;font-weight:700>go</span> v3<span style=color:#b452cd>.8.0</span>+incompatible
-</code></pre></td></tr></table></div></div><p>表示使用此套件版本大於 <code>v1</code> 這時候是不可以直接下 <code>go get firebase.google.com/go</code>，而要在最後補上 <code>v4</code>，不過這也要看該套件是否有支援 v2, v3, v4 等版本號套件，像 <code>firebase</code> 就不支援 <code>v2, v3</code> 直接跳到 v4 去了。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#a61717;background-color:#e3d2d2>$</span> <span style=color:#8b008b;font-weight:700>go</span> get firebase.google.com/<span style=color:#8b008b;font-weight:700>go</span>/v4
-</code></pre></td></tr></table></div></div><p>就如同上面的</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>Go module 版本發佈請遵守 <a href=https://semver.org/>semver.org</a> 規範，當然不只有 Go 語言，發佈其他語言的套件也請務必遵守。而在 Go module 內有說明『<a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Semantic Import Versioning</a>』裡面大意大致上是說，如果你的套件版本是 v1 以下，像是 <code>v1.2.3</code>，可以直接透過 <code>go get xxxx</code> 方式將套件版本寫入 <code>go.mod</code>，但是看上面的例子，可以發現有些奇怪的字眼，像是 <code>+incompatible</code> 等。如果是看到像底下的套件</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>firebase.google.com/<span style=color:#8b008b;font-weight:700>go</span> v3<span style=color:#b452cd>.8.0</span>+incompatible
+</code></pre></td></tr></table>
+</div>
+</div><p>表示使用此套件版本大於 <code>v1</code> 這時候是不可以直接下 <code>go get firebase.google.com/go</code>，而要在最後補上 <code>v4</code>，不過這也要看該套件是否有支援 v2, v3, v4 等版本號套件，像 <code>firebase</code> 就不支援 <code>v2, v3</code> 直接跳到 v4 去了。</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#a61717;background-color:#e3d2d2>$</span> <span style=color:#8b008b;font-weight:700>go</span> get firebase.google.com/<span style=color:#8b008b;font-weight:700>go</span>/v4
+</code></pre></td></tr></table>
+</div>
+</div><p>就如同上面的</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    github.com/appleboy/gofight/v2 v2<span style=color:#b452cd>.0.0</span>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    github.com/appleboy/gofight/v2 v2<span style=color:#b452cd>.0.0</span>
     gopkg.in/nicksrandall/dataloader.v5 v5<span style=color:#b452cd>.0.0</span>
     gopkg.in/testfixtures.v2 v2<span style=color:#b452cd>.5.3</span>
-</code></pre></td></tr></table></div></div><p>而可以發現 gopkg.in 服務已經符合 semver 的需求在做後面補上了 <code>.v2</code> 或 <code>.v5</code> 所以並不會出現 <code>+incompatible</code> 字眼，另外在看 Go Module 也支援直接抓 Git 單個 Commit ID，相當方便。指令如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go get github.com/appleboy/gorush@36a2e18
-</code></pre></td></tr></table></div></div><p>可以看到在 <code>go.mod</code> 出現如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>github.com/appleboy/gorush v1<span style=color:#b452cd>.12.1</span>-<span style=color:#b452cd>0.20200623031759</span>-<span style=color:#b452cd>36</span>a2e181aa9b
-</code></pre></td></tr></table></div></div><h2 id=發佈-v2-以上版本方式>發佈 v2 以上版本方式</h2><p>官方提供了兩種做法讓開發者可以發佈 v2 以上版本，一種是透過主 branch，另一種是建立版本目錄，底下來一一說明，第一種是直接在主 branch，像是 <code>master</code> 內的 <code>go.mod</code> 內補上版本，底下是範例:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>module github.com/appleboy/gofight/v2
-</code></pre></td></tr></table></div></div><p>這時候你就可以陸續發佈 v2 版本的 Tag。大家可以發現這個方式，是不需要建立任何 sub folder，而另外一種方式是不需要改動 <code>go.mod</code>，直接在專案目錄內放置 <code>v2</code> 目錄，然後把所有程式碼複製一份到該目錄底下，接著繼續開發，這方式我個人不太建議，原因檔案容量會增加很快，也不好維護。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&text=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&title=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&title=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&title=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&description=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li><li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li><li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li><li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li><li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li><li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2019/05/introduction-to-github-actions/ data-toggle=tooltip data-placement=top title="GitHub 推出 CI/CD 服務 Actions 之踩雷經驗">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2019/06/install-drone-ci-cd-using-ansible/ data-toggle=tooltip data-placement=top title="用 Ansible 安裝 Drone CI/CD 開源專案">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>而可以發現 gopkg.in 服務已經符合 semver 的需求在做後面補上了 <code>.v2</code> 或 <code>.v5</code> 所以並不會出現 <code>+incompatible</code> 字眼，另外在看 Go Module 也支援直接抓 Git 單個 Commit ID，相當方便。指令如下</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go get github.com/appleboy/gorush@36a2e18
+</code></pre></td></tr></table>
+</div>
+</div><p>可以看到在 <code>go.mod</code> 出現如下:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>github.com/appleboy/gorush v1<span style=color:#b452cd>.12.1</span>-<span style=color:#b452cd>0.20200623031759</span>-<span style=color:#b452cd>36</span>a2e181aa9b
+</code></pre></td></tr></table>
+</div>
+</div><h2 id=發佈-v2-以上版本方式>發佈 v2 以上版本方式</h2>
+<p>官方提供了兩種做法讓開發者可以發佈 v2 以上版本，一種是透過主 branch，另一種是建立版本目錄，底下來一一說明，第一種是直接在主 branch，像是 <code>master</code> 內的 <code>go.mod</code> 內補上版本，底下是範例:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>module github.com/appleboy/gofight/v2
+</code></pre></td></tr></table>
+</div>
+</div><p>這時候你就可以陸續發佈 v2 版本的 Tag。大家可以發現這個方式，是不需要建立任何 sub folder，而另外一種方式是不需要改動 <code>go.mod</code>，直接在專案目錄內放置 <code>v2</code> 目錄，然後把所有程式碼複製一份到該目錄底下，接著繼續開發，這方式我個人不太建議，原因檔案容量會增加很快，也不好維護。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&text=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&title=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&title=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&title=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f06%2fhow-to-release-the-v2-or-higher-version-in-go-module%2f&description=Go%20Module%20%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%20v2%20%e4%bb%a5%e4%b8%8a%e7%89%88%e6%9c%ac" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
+<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
+<li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li>
+<li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li>
+<li><a href=/2021/05/graceful-shutdown-with-progress-bar-in-golang/>如何取得上傳進度條 progress bar 相關數據及實作 Graceful Shutdown</a></li>
+<li><a href=/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li>
+<li><a href=/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li>
+<li><a href=/2021/03/debug-performance-issues-using-pyroscope/>即時效能分析工具 Pyroscope</a></li>
+<li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li>
+<li><a href=/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2019/05/introduction-to-github-actions/ data-toggle=tooltip data-placement=top title="GitHub 推出 CI/CD 服務 Actions 之踩雷經驗">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2019/06/install-drone-ci-cd-using-ansible/ data-toggle=tooltip data-placement=top title="用 Ansible 安裝 Drone CI/CD 開源專案">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

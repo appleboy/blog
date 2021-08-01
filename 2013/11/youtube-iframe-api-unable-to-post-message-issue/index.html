@@ -1,43 +1,320 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Youtube IFrame API Unable to post message Issue - 小惡魔 - AppleBOY</title><meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Youtube IFrame API Unable to post message Issue - 小惡魔 - AppleBOY</title>
+<meta name=description content="
   
 
 YouTube IFrame Player API 提供了簡單的介面及方法，讓網站可以快速整合 Youtube 影片，但是不得不說 Google 針對 Youtube API 時常改版，所以就會常常碰道友時候可以動，有時後不可以動。Youtube 在 2011 公告開始支援 https protocol，所以現在很多網站存取 Youtube API 時，都會使用底下寫法
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/11\/youtube-iframe-api-unable-to-post-message-issue\/","name":"Youtube iframe API unable to post message issue"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Youtube IFrame API Unable to post message Issue","description":"  YouTube IFrame Player API 提供了簡單的介面及方法，讓網站可以快速整合 Youtube 影片，但是不得不說 Google 針對 Youtube API 時常改版，所以就會常常碰道友時候可以動，有時後不可以動。Youtube 在 2011 公告開始支援 https protocol，所以現在很多網站存取 Youtube API 時，都會使用底下寫法\n","inLanguage":"en","wordCount":93,"datePublished":"2013-11-29T08:43:31","dateModified":"2013-11-29T08:43:31","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["API, google, IFrame, javascript, Youtube API"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/11\/youtube-iframe-api-unable-to-post-message-issue\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Youtube IFrame API Unable to post message Issue"><meta property="og:description" content="
+">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/11\/youtube-iframe-api-unable-to-post-message-issue\/","name":"Youtube iframe API unable to post message issue"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Youtube IFrame API Unable to post message Issue","description":"  YouTube IFrame Player API 提供了簡單的介面及方法，讓網站可以快速整合 Youtube 影片，但是不得不說 Google 針對 Youtube API 時常改版，所以就會常常碰道友時候可以動，有時後不可以動。Youtube 在 2011 公告開始支援 https protocol，所以現在很多網站存取 Youtube API 時，都會使用底下寫法\n","inLanguage":"en","wordCount":93,"datePublished":"2013-11-29T08:43:31","dateModified":"2013-11-29T08:43:31","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["API, google, IFrame, javascript, Youtube API"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/11\/youtube-iframe-api-unable-to-post-message-issue\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="Youtube IFrame API Unable to post message Issue">
+<meta property="og:description" content="
   
 
 YouTube IFrame Player API 提供了簡單的介面及方法，讓網站可以快速整合 Youtube 影片，但是不得不說 Google 針對 Youtube API 時常改版，所以就會常常碰道友時候可以動，有時後不可以動。Youtube 在 2011 公告開始支援 https protocol，所以現在很多網站存取 Youtube API 時，都會使用底下寫法
-"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2013/11/youtube-iframe-api-unable-to-post-message-issue/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Youtube IFrame API Unable to post message Issue"><meta name=twitter:description content="
+">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2013/11/youtube-iframe-api-unable-to-post-message-issue/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="Youtube IFrame API Unable to post message Issue">
+<meta name=twitter:description content="
   
 
 YouTube IFrame Player API 提供了簡單的介面及方法，讓網站可以快速整合 Youtube 影片，但是不得不說 Google 針對 Youtube API 時常改版，所以就會常常碰道友時候可以動，有時後不可以動。Youtube 在 2011 公告開始支援 https protocol，所以現在很多網站存取 Youtube API 時，都會使用底下寫法
-"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Youtube IFrame API Unable to post message Issue</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on November 29, 2013
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>Youtube IFrame API Unable to post message Issue</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 29, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;93&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/11113610676/ title="Solid_color_You_Tube_logo by appleboy46, on Flickr"><img src="https://i1.wp.com/farm6.staticflickr.com/5474/11113610676_bcbbbe5164_n.jpg?resize=320%2C128&ssl=1" alt=Solid_color_You_Tube_logo data-recalc-dims=1></a></div><p><a href=https://developers.google.com/youtube/iframe_api_reference target=_blank>YouTube IFrame Player API</a> 提供了簡單的介面及方法，讓網站可以快速整合 Youtube 影片，但是不得不說 Google 針對 Youtube API 時常改版，所以就會常常碰道友時候可以動，有時後不可以動。<a href=http://apiblog.youtube.com/2011/02/https-support-for-youtube-embeds.html target=_blank>Youtube 在 2011 公告開始支援 https protocol</a>，所以現在很多網站存取 Youtube API 時，都會使用底下寫法</p><pre class="brush: jscript; title: ; notranslate" title></pre><p>也就是你的網站只支援</p><p><strong><span style=color:green>http://</span></strong> 時，就會去讀取 <strong><span style=color:green><a href=http://www.youtube.com/iframe_api>http://www.youtube.com/iframe_api</a></span></strong>，但是透過 YT.Player 物件來產生多個 Youtube 影音時，就會出現底下錯誤訊息，導致 Javascript API 無法控制 Youtube 影片</p><blockquote><p>Unable to post message to <a href=http://www.youtube.com>http://www.youtube.com</a> Recipient has origin: <a href=https://www.youtube.com/>https://www.youtube.com/</a> 這問題在 <a href=http://stackoverflow.com target=_blank>Stackoverflow</a> 被提出來多次，我自己針對 Youtube API 產生下面的解法，只要按照底下方式操作，就不會產生任何錯誤訊息了 1. load iframe api <a href=https://www.youtube.com/player_api target=_blank><a href=https://www.youtube.com/player_api>https://www.youtube.com/player_api</a></a> 2. load iframe src path: <a href="https://www.youtube.com/embed/0GN2kpBoFs4?rel=0" target=_blank><a href="https://www.youtube.com/embed/0GN2kpBoFs4?rel=0">https://www.youtube.com/embed/0GN2kpBoFs4?rel=0</a></a> 如果有使用 YT.Player 動態產生 Youtube 元件，請務必檢查 src 的 protocol</p></blockquote><pre class="brush: jscript; title: ; notranslate" title>setTimeout(function(){
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<article role=main class=blog-post>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/11113610676/ title="Solid_color_You_Tube_logo by appleboy46, on Flickr"><img src="https://i1.wp.com/farm6.staticflickr.com/5474/11113610676_bcbbbe5164_n.jpg?resize=320%2C128&ssl=1" alt=Solid_color_You_Tube_logo data-recalc-dims=1></a>
+</div>
+<p><a href=https://developers.google.com/youtube/iframe_api_reference target=_blank>YouTube IFrame Player API</a> 提供了簡單的介面及方法，讓網站可以快速整合 Youtube 影片，但是不得不說 Google 針對 Youtube API 時常改版，所以就會常常碰道友時候可以動，有時後不可以動。<a href=http://apiblog.youtube.com/2011/02/https-support-for-youtube-embeds.html target=_blank>Youtube 在 2011 公告開始支援 https protocol</a>，所以現在很多網站存取 Youtube API 時，都會使用底下寫法</p>
+<pre class="brush: jscript; title: ; notranslate" title></pre>
+<p>也就是你的網站只支援</p>
+<p><strong><span style=color:green>http://</span></strong> 時，就會去讀取 <strong><span style=color:green><a href=http://www.youtube.com/iframe_api>http://www.youtube.com/iframe_api</a></span></strong>，但是透過 YT.Player 物件來產生多個 Youtube 影音時，就會出現底下錯誤訊息，導致 Javascript API 無法控制 Youtube 影片</p>
+<blockquote>
+<p>Unable to post message to <a href=http://www.youtube.com>http://www.youtube.com</a> Recipient has origin: <a href=https://www.youtube.com/>https://www.youtube.com/</a> 這問題在 <a href=http://stackoverflow.com target=_blank>Stackoverflow</a> 被提出來多次，我自己針對 Youtube API 產生下面的解法，只要按照底下方式操作，就不會產生任何錯誤訊息了 1. load iframe api <a href=https://www.youtube.com/player_api target=_blank><a href=https://www.youtube.com/player_api>https://www.youtube.com/player_api</a></a> 2. load iframe src path: <a href="https://www.youtube.com/embed/0GN2kpBoFs4?rel=0" target=_blank><a href="https://www.youtube.com/embed/0GN2kpBoFs4?rel=0">https://www.youtube.com/embed/0GN2kpBoFs4?rel=0</a></a> 如果有使用 YT.Player 動態產生 Youtube 元件，請務必檢查 src 的 protocol</p>
+</blockquote>
+<pre class="brush: jscript; title: ; notranslate" title>setTimeout(function(){
     var url = $('#iframe_youtube').prop('src');
     if (url.match('^http://') {
         $('#iframe_youtube').prop('src', url.replace(/^http:\/\//i, 'https://'));
     }
-}, 500);</pre>如果確定都是透過 https:// 來跟 Youtube 溝通，那就不會產生 postMessage 無法收到的問題，這解法我也有更新在<p><a href="https://code.google.com/p/gdata-issues/issues/detail?id=4697#c13" target=_blank>Google 論壇上</a>，另外原發問者也有將我提供的解法，轉到 <a href=http://stackoverflow.com/questions/20063255/unable-to-post-message-to-http-www-youtube-com-recipient-has-origin-https-w target=_blank>Stackoverflow 解答區</a>，大致上是這樣。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/api/>API</a>&nbsp;
+}, 500);</pre> 如果確定都是透過 https:// 來跟 Youtube 溝通，那就不會產生 postMessage 無法收到的問題，這解法我也有更新在
+<p><a href="https://code.google.com/p/gdata-issues/issues/detail?id=4697#c13" target=_blank>Google 論壇上</a>，另外原發問者也有將我提供的解法，轉到 <a href=http://stackoverflow.com/questions/20063255/unable-to-post-message-to-http-www-youtube-com-recipient-has-origin-https-w target=_blank>Stackoverflow 解答區</a>，大致上是這樣。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/api/>API</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/iframe/>IFrame</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/youtube-api/>Youtube API</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&text=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&title=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&title=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&title=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&description=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/10/replcae-npm-with-yarn-package-management/>用 Yarn 取代 Npm 管理 JavaScript 套件版本</a></li><li><a href=/2016/07/speed-up-npm-install-command/>用一行指令加速 npm install</a></li><li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li><li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li><li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li><li><a href=/2015/09/javascript-in-2015/>JavaScript in 2015</a></li><li><a href=/2015/06/learning-javascript-in-one-pic/>用一張圖學習 JavaScript</a></li><li><a href=/2015/06/getting-started-with-javascript-es6-destructuring/>簡介 JavaScript ES6 物件及陣列</a></li><li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li><li><a href=/2015/03/amazon-unlimited-everything-cloud-storage/>Amazon 推出無限儲存空間方案 一年只要 60 美元</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2013/11/jquery-serialize-object-no-support-ie7-8-browser/ data-toggle=tooltip data-placement=top title="jquery-serialize-object 不支援 IE7,8 瀏覽器?">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2013/12/fast-furious-star-paul-walker-dead-at-40-in-fiery-car-crash/ data-toggle=tooltip data-placement=top title="玩命關頭主角 Paul Walker 享年 40 歲">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/11/youtube-iframe-api-unable-to-post-message-issue>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/11/youtube-iframe-api-unable-to-post-message-issue'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/youtube-api/>Youtube API</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&text=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&title=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&title=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&title=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f11%2fyoutube-iframe-api-unable-to-post-message-issue%2f&description=Youtube%20IFrame%20API%20Unable%20to%20post%20message%20Issue" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2016/10/replcae-npm-with-yarn-package-management/>用 Yarn 取代 Npm 管理 JavaScript 套件版本</a></li>
+<li><a href=/2016/07/speed-up-npm-install-command/>用一行指令加速 npm install</a></li>
+<li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li>
+<li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li>
+<li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li>
+<li><a href=/2015/09/javascript-in-2015/>JavaScript in 2015</a></li>
+<li><a href=/2015/06/learning-javascript-in-one-pic/>用一張圖學習 JavaScript</a></li>
+<li><a href=/2015/06/getting-started-with-javascript-es6-destructuring/>簡介 JavaScript ES6 物件及陣列</a></li>
+<li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li>
+<li><a href=/2015/03/amazon-unlimited-everything-cloud-storage/>Amazon 推出無限儲存空間方案 一年只要 60 美元</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2013/11/jquery-serialize-object-no-support-ie7-8-browser/ data-toggle=tooltip data-placement=top title="jquery-serialize-object 不支援 IE7,8 瀏覽器?">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2013/12/fast-furious-star-paul-walker-dead-at-40-in-fiery-car-crash/ data-toggle=tooltip data-placement=top title="玩命關頭主角 Paul Walker 享年 40 歲">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/11/youtube-iframe-api-unable-to-post-message-issue>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/11/youtube-iframe-api-unable-to-post-message-issue'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

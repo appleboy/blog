@@ -1,15 +1,147 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Drone CI/CD 支援 Auto cancellation 機制 - 小惡魔 - AppleBOY</title><meta name=description content="
-大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 Penging 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2019\/10\/auto-cancellation-in-drone-ci-cd\/","name":"Drone ci cd 支援 auto cancellation 機制"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Drone CI\/CD 支援 Auto cancellation 機制","description":"\n大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI\/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI\/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 Penging 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。\n","inLanguage":"en","wordCount":116,"datePublished":"2019-10-20T02:27:53","dateModified":"2019-10-20T02:27:53","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone, Travis"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2019\/10\/auto-cancellation-in-drone-ci-cd\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Drone CI/CD 支援 Auto cancellation 機制"><meta property="og:description" content="
-大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 Penging 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Drone CI/CD 支援 Auto cancellation 機制"><meta name=twitter:description content="
-大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Drone CI/CD 支援 Auto cancellation 機制 - 小惡魔 - AppleBOY</title>
+<meta name=description content="
+大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 Penging 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2019\/10\/auto-cancellation-in-drone-ci-cd\/","name":"Drone ci cd 支援 auto cancellation 機制"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Drone CI\/CD 支援 Auto cancellation 機制","description":"\n大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI\/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI\/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 Penging 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。\n","inLanguage":"en","wordCount":116,"datePublished":"2019-10-20T02:27:53","dateModified":"2019-10-20T02:27:53","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone, Travis"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2019\/10\/auto-cancellation-in-drone-ci-cd\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="Drone CI/CD 支援 Auto cancellation 機制">
+<meta property="og:description" content="
+大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 Penging 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="Drone CI/CD 支援 Auto cancellation 機制">
+<meta name=twitter:description content="
+大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動， …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Drone CI/CD 支援 Auto cancellation 機制</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 20, 2019
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>Drone CI/CD 支援 Auto cancellation 機制</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 20, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;116&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片教學>影片教學</a></li><li><a href=#設定-drone>設定 Drone</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/RK0neP9RNsD1P5N5zGL0BqgvUFnDDb1YuzyIUKLlD01ejmM87JNaU29bweqw_CyD0v39FYfi5wAh6wCls1CIxaMMiOdHX6WQ4p7hFU5Qlt052uya0NZ6pjJJAA24rfhbpDFDwKmivfU=w1920-h1080"><img src="https://lh3.googleusercontent.com/RK0neP9RNsD1P5N5zGL0BqgvUFnDDb1YuzyIUKLlD01ejmM87JNaU29bweqw_CyD0v39FYfi5wAh6wCls1CIxaMMiOdHX6WQ4p7hFU5Qlt052uya0NZ6pjJJAA24rfhbpDFDwKmivfU=w1920-h1080" alt></a></p><p>大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 <code>Penging</code> 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。</p><p>這邊就會有個問題出現，假設後續團隊又 commit 了 10 個 job，這樣 Pending 狀態則會越來越多，不會越來越少，這時候開發者一定會想，有沒有辦法只保留最新的 Job，而舊有的 Pending Job 系統幫忙取消呢？這個功能在 <a href=https://travis-ci.org/>Travis CI</a> 已經有後台可以啟動，新專案也是預設啟動的，也就是假設現在有一個 job 正在執行，有九個 job 正在 pending 時，新的 job 一進來後，CI/CD 服務就會自動幫忙取消舊有的九個 Job，只保留最新的，確保系統不會浪費時間在跑舊的 Job。Drone 在 1.6 也支持了此功能，底下來看看如何設定 <a href=https://drone.io/ title=Drone>Drone</a> 達到此需求。</p><h2 id=影片教學>影片教學</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/wV9NH-g7La4 style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>更多實戰影片可以參考我的 Udemy 教學系列</p><ul><li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li><li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li></ul><h2 id=設定-drone>設定 Drone</h2><p>Drone 在 1.6 版才正式支援『Auto cancellation』，而且每個專案預設是不啟動的，需要透過 <a href=https://docs.drone.io/cli/install/ title="Drone CLI">Drone CLI</a> 才能正確啟動。底下來看看如何透過 CLI 啟動：</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li><a href=#影片教學>影片教學</a></li>
+<li><a href=#設定-drone>設定 Drone</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<p><a href="https://lh3.googleusercontent.com/RK0neP9RNsD1P5N5zGL0BqgvUFnDDb1YuzyIUKLlD01ejmM87JNaU29bweqw_CyD0v39FYfi5wAh6wCls1CIxaMMiOdHX6WQ4p7hFU5Qlt052uya0NZ6pjJJAA24rfhbpDFDwKmivfU=w1920-h1080"><img src="https://lh3.googleusercontent.com/RK0neP9RNsD1P5N5zGL0BqgvUFnDDb1YuzyIUKLlD01ejmM87JNaU29bweqw_CyD0v39FYfi5wAh6wCls1CIxaMMiOdHX6WQ4p7hFU5Qlt052uya0NZ6pjJJAA24rfhbpDFDwKmivfU=w1920-h1080" alt></a></p>
+<p>大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 <code>Penging</code> 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。</p>
+<p>這邊就會有個問題出現，假設後續團隊又 commit 了 10 個 job，這樣 Pending 狀態則會越來越多，不會越來越少，這時候開發者一定會想，有沒有辦法只保留最新的 Job，而舊有的 Pending Job 系統幫忙取消呢？這個功能在 <a href=https://travis-ci.org/>Travis CI</a> 已經有後台可以啟動，新專案也是預設啟動的，也就是假設現在有一個 job 正在執行，有九個 job 正在 pending 時，新的 job 一進來後，CI/CD 服務就會自動幫忙取消舊有的九個 Job，只保留最新的，確保系統不會浪費時間在跑舊的 Job。Drone 在 1.6 也支持了此功能，底下來看看如何設定 <a href=https://drone.io/ title=Drone>Drone</a> 達到此需求。</p>
+<h2 id=影片教學>影片教學</h2>
+<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
+<iframe src=https://www.youtube.com/embed/wV9NH-g7La4 style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+</div>
+<p>更多實戰影片可以參考我的 Udemy 教學系列</p>
+<ul>
+<li>Go 語言實戰課程: <a href=http://bit.ly/golang-2019>http://bit.ly/golang-2019</a></li>
+<li>Drone CI/CD 自動化課程: <a href=http://bit.ly/drone-2019>http://bit.ly/drone-2019</a></li>
+</ul>
+<h2 id=設定-drone>設定 Drone</h2>
+<p>Drone 在 1.6 版才正式支援『Auto cancellation』，而且每個專案預設是不啟動的，需要透過 <a href=https://docs.drone.io/cli/install/ title="Drone CLI">Drone CLI</a> 才能正確啟動。底下來看看如何透過 CLI 啟動：</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
@@ -17,7 +149,9 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#228b22># 啟用 pull request</span>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#228b22># 啟用 pull request</span>
 drone repo update <span style=color:#cd5555>\
 </span><span style=color:#cd5555></span>  --auto-cancel-pull-requests=<span style=color:#658b00>true</span> 
   appleboy/go-hello
@@ -25,18 +159,182 @@ drone repo update <span style=color:#cd5555>\
 drone repo update <span style=color:#cd5555>\
 </span><span style=color:#cd5555></span>  --auto-cancel-pushes=<span style=color:#658b00>true</span> <span style=color:#cd5555>\
 </span><span style=color:#cd5555></span>  appleboy/go-hello
-</code></pre></td></tr></table></div></div><p>目前還沒有辦法透過後台 UI 介面啟用，請大家使用上述指令來開啟 Auto Cancellation 功能。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/travis/>Travis</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&text=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&title=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&title=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&title=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&description=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/06/go-module-cache-variable-gomodcache/>Go 1.15 新增 Module cache 環境變數</a></li><li><a href=/2020/03/docker-release-github-actions-plugin/>Docker 推出官方 GitHub Actions 套件</a></li><li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li><li><a href=/2020/02/deploy-static-files-to-github-using-drone/>用 Drone 部署靜態檔案到 GitHub Pages</a></li><li><a href=/2019/10/ansible-setup-google-container-registry-and-upload-image-via-drone-ci-cd/>Ansible 設定 Google Container Registry 搭配 Drone 自動上傳</a></li><li><a href=/2019/09/upload-docker-image-to-github-registry-using-drone/>用 Drone 自動化上傳 Docker Image 到 GitHub Docker Registry</a></li><li><a href=/2019/08/install-drone-with-gitlab-in-10-minutes/>用 10 分鐘安裝好 Drone 搭配 GitLab</a></li><li><a href=/2019/08/drone-multiple-machine/>[Drone] 將單一 Job 分配到多台機器，降低部署執行時間</a></li><li><a href=/2019/07/trigger-the-drone-job-via-promotion/>透過 Drone CLI 手動觸發 CI/CD 流程</a></li><li><a href=/2019/06/install-drone-ci-cd-using-ansible/>用 Ansible 安裝 Drone CI/CD 開源專案</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2019/10/job-queue-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言實作 Job Queue 機制">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2019/11/implement-job-queue-using-buffer-channel-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言 buffered channel 實作 Job Queue">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>目前還沒有辦法透過後台 UI 介面啟用，請大家使用上述指令來開啟 Auto Cancellation 功能。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/travis/>Travis</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&text=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&title=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&title=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&title=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2019%2f10%2fauto-cancellation-in-drone-ci-cd%2f&description=Drone%20CI%2fCD%20%e6%94%af%e6%8f%b4%20Auto%20cancellation%20%e6%a9%9f%e5%88%b6" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
+<li><a href=/2020/06/go-module-cache-variable-gomodcache/>Go 1.15 新增 Module cache 環境變數</a></li>
+<li><a href=/2020/03/docker-release-github-actions-plugin/>Docker 推出官方 GitHub Actions 套件</a></li>
+<li><a href=/2020/02/install-drone-with-github-in-five-minutes/>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</a></li>
+<li><a href=/2020/02/deploy-static-files-to-github-using-drone/>用 Drone 部署靜態檔案到 GitHub Pages</a></li>
+<li><a href=/2019/10/ansible-setup-google-container-registry-and-upload-image-via-drone-ci-cd/>Ansible 設定 Google Container Registry 搭配 Drone 自動上傳</a></li>
+<li><a href=/2019/09/upload-docker-image-to-github-registry-using-drone/>用 Drone 自動化上傳 Docker Image 到 GitHub Docker Registry</a></li>
+<li><a href=/2019/08/install-drone-with-gitlab-in-10-minutes/>用 10 分鐘安裝好 Drone 搭配 GitLab</a></li>
+<li><a href=/2019/08/drone-multiple-machine/>[Drone] 將單一 Job 分配到多台機器，降低部署執行時間</a></li>
+<li><a href=/2019/07/trigger-the-drone-job-via-promotion/>透過 Drone CLI 手動觸發 CI/CD 流程</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2019/10/job-queue-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言實作 Job Queue 機制">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2019/11/implement-job-queue-using-buffer-channel-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言 buffered channel 實作 Job Queue">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

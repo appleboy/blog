@@ -1,47 +1,322 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>RequireJs - 小惡魔 - AppleBOY</title><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><meta property="og:title" content="RequireJs"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/tags/requirejs/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="RequireJs"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/requirejs/feed.xml title="小惡魔 - AppleBOY"><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/requirejs/feed.xml title="小惡魔 - AppleBOY"><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>RequireJs - 小惡魔 - AppleBOY</title>
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<meta property="og:title" content="RequireJs">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/tags/requirejs/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="RequireJs">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/requirejs/feed.xml title="小惡魔 - AppleBOY">
+<link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/requirejs/feed.xml title="小惡魔 - AppleBOY">
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>RequireJs</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2013/09/load-ckeditor-using-requirejs/><h2 class=post-title>RequireJS 搭配 CKEditor</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 25, 2013
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=tags-heading>
+<h1>RequireJs</h1>
+<hr class=small>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/09/load-ckeditor-using-requirejs/>
+<h2 class=post-title>RequireJS 搭配 CKEditor</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 25, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;105&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/9911959726/ title="requirejs-logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm4.staticflickr.com/3677/9911959726_a40988a62d_o.png?resize=200%2C200&ssl=1" alt=requirejs-logo data-recalc-dims=1></a></div>網頁編輯器大家推薦的就<p><a href=http://ckeditor.com/ target=_blank>CKEditor</a> 或 <a href=http://www.tinymce.com/ target=_blank>TinyMCE</a>，兩套各有優缺點，CKEditor 雖然功能最完整，也是最肥了，雖然官網可以自己挑選 plugin 來簡化肥肥的 source code。如果是單純用在後台管理，我還是推薦 CKEditor，給前端使用者的話，就推薦 TinyMCE 了，畢竟前台還是要以輕量為主。</p><a href=https://blog.wu-boy.com/2013/09/load-ckeditor-using-requirejs/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/ckeditor/>CKeditor</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/9911959726/ title="requirejs-logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm4.staticflickr.com/3677/9911959726_a40988a62d_o.png?resize=200%2C200&ssl=1" alt=requirejs-logo data-recalc-dims=1></a>
+</div> 網頁編輯器大家推薦的就
+<p><a href=http://ckeditor.com/ target=_blank>CKEditor</a> 或 <a href=http://www.tinymce.com/ target=_blank>TinyMCE</a>，兩套各有優缺點，CKEditor 雖然功能最完整，也是最肥了，雖然官網可以自己挑選 plugin 來簡化肥肥的 source code。如果是單純用在後台管理，我還是推薦 CKEditor，給前端使用者的話，就推薦 TinyMCE 了，畢竟前台還是要以輕量為主。</p>
+<a href=https://blog.wu-boy.com/2013/09/load-ckeditor-using-requirejs/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/ckeditor/>CKeditor</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools/><h2 class=post-title>Coding on workspace of Chrome Developer tools</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 21, 2013
+<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools/>
+<h2 class=post-title>Coding on workspace of Chrome Developer tools</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 21, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;107&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><div style="margin:0 auto;text-align:center"><img src="https://i2.wp.com/farm8.staticflickr.com/7350/9333443162_20e7e5d5f2_m.jpg?w=840&ssl=1" alt="Google Chrome" data-recalc-dims=1></div><p>相信網頁設計師並不陌生 <a href=https://developers.google.com/chrome-developer-tools/ target=_blank>Chrome DevTools</a>，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 <a href=https://www.google.com/intl/zh-TW/chrome/browser/ target=_blank>Chrome 瀏覽器</a>上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 <code>線上編輯檔案</code>，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 <a href="https://developers.google.com/chrome-developer-tools/docs/settings?hl=en#workspace" target=_blank>Chrome workspace</a>。</p><a href=https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/backbone.js/>Backbone.js</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<img src="https://i2.wp.com/farm8.staticflickr.com/7350/9333443162_20e7e5d5f2_m.jpg?w=840&ssl=1" alt="Google Chrome" data-recalc-dims=1>
+</div>
+<p>相信網頁設計師並不陌生 <a href=https://developers.google.com/chrome-developer-tools/ target=_blank>Chrome DevTools</a>，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 <a href=https://www.google.com/intl/zh-TW/chrome/browser/ target=_blank>Chrome 瀏覽器</a>上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 <code>線上編輯檔案</code>，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 <a href="https://developers.google.com/chrome-developer-tools/docs/settings?hl=en#workspace" target=_blank>Chrome workspace</a>。</p>
+<a href=https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/backbone.js/>Backbone.js</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/chrome/>Chrome</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/chrome-developer-tool/>Chrome Developer Tool</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gruntjs/>GruntJS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/livereload/>LiveReload</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2013/03/remove-google-cdn-reference-for-jquery/><h2 class=post-title>Remove Google CDN reference for jQuery?</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 7, 2013
+<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/03/remove-google-cdn-reference-for-jquery/>
+<h2 class=post-title>Remove Google CDN reference for jQuery?</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 7, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;69&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/8442641115/ title="OQAAAI1PPrJY0nBALB7mkvju3mkQXqLmzMhxEjeb4gp8aujEUQcLfLyy-Sn4gZdkAas6-k8eYbQlGDE-GCjKfF5gIrUA15jOjFfLRv77VBd5t-WfZURdP9V3PdmT by appleboy46, on Flickr"><img src="https://i0.wp.com/farm9.staticflickr.com/8378/8442641115_8564013cea.jpg?resize=500%2C123&ssl=1" alt="jquery logo" data-recalc-dims=1></a></div>在<p><a href=http://html5boilerplate.com/ target=_blank>html5-boilerplate</a> 看到有人發 <a href=https://github.com/h5bp/html5-boilerplate/pull/1327 target=_blank>Remove Google CDN reference for jQuery</a> 的 pull request，發現國外鄉民其實蠻有趣的，也很會表達自己的想法，根據 <a href=http://statichtml.com/about.html target=_blank>Steve Webster</a> 在 2011/11/21 寫了一篇 <a href=http://statichtml.com/2011/google-ajax-libraries-caching.html target=_blank>Caching and the Google AJAX Libraries</a> 裡面的結論是: 使用 <a href="https://developers.google.com/speed/libraries/devguide?hl=zh-TW" target=_blank>Google CDN Library</a> 對於第一次訪問網站並沒有很大的幫助，其實這句話非常有疑問，如果網站不想 host 一些 static file 又想要用 CDN 的話，Google 絕對是最好的選擇，<a href=https://github.com/h5bp/html5-boilerplate/pull/1327#issuecomment-14537298 target=_blank>底下就有人反駁</a> Google CDN 還是比自己 host 檔案快很多，所以此 pull request 好像沒有啥意義。</p><a href=https://blog.wu-boy.com/2013/03/remove-google-cdn-reference-for-jquery/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/amd/>AMD</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/8442641115/ title="OQAAAI1PPrJY0nBALB7mkvju3mkQXqLmzMhxEjeb4gp8aujEUQcLfLyy-Sn4gZdkAas6-k8eYbQlGDE-GCjKfF5gIrUA15jOjFfLRv77VBd5t-WfZURdP9V3PdmT by appleboy46, on Flickr"><img src="https://i0.wp.com/farm9.staticflickr.com/8378/8442641115_8564013cea.jpg?resize=500%2C123&ssl=1" alt="jquery logo" data-recalc-dims=1></a>
+</div> 在
+<p><a href=http://html5boilerplate.com/ target=_blank>html5-boilerplate</a> 看到有人發 <a href=https://github.com/h5bp/html5-boilerplate/pull/1327 target=_blank>Remove Google CDN reference for jQuery</a> 的 pull request，發現國外鄉民其實蠻有趣的，也很會表達自己的想法，根據 <a href=http://statichtml.com/about.html target=_blank>Steve Webster</a> 在 2011/11/21 寫了一篇 <a href=http://statichtml.com/2011/google-ajax-libraries-caching.html target=_blank>Caching and the Google AJAX Libraries</a> 裡面的結論是: 使用 <a href="https://developers.google.com/speed/libraries/devguide?hl=zh-TW" target=_blank>Google CDN Library</a> 對於第一次訪問網站並沒有很大的幫助，其實這句話非常有疑問，如果網站不想 host 一些 static file 又想要用 CDN 的話，Google 絕對是最好的選擇，<a href=https://github.com/h5bp/html5-boilerplate/pull/1327#issuecomment-14537298 target=_blank>底下就有人反駁</a> Google CDN 還是比自己 host 檔案快很多，所以此 pull request 好像沒有啥意義。</p>
+<a href=https://blog.wu-boy.com/2013/03/remove-google-cdn-reference-for-jquery/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/amd/>AMD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/bower/>Bower</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2012/05/how-to-use-apache-module-mod_mime/><h2 class=post-title>如何使用 Apache Module mod_mime</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 10, 2012
+<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/05/how-to-use-apache-module-mod_mime/>
+<h2 class=post-title>如何使用 Apache Module mod_mime</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 10, 2012
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;63&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/7168729996/ title="apache_software_foundation_logo_3074 by appleboy46, on Flickr"><img src="https://i2.wp.com/farm9.staticflickr.com/8151/7168729996_452646f0f2_n.jpg?resize=320%2C169&ssl=1" alt=apache_software_foundation_logo_3074 data-recalc-dims=1></a></div><p><a href=http://httpd.apache.org/ target=_blank>Apache</a> 可以透過 <a href=http://httpd.apache.org/docs/current/mod/mod_mime.html target=_blank>mod_mime</a> 模組且根據使用者定義的副檔名來 response data 給 Client 端，此功能可以應用在前台搭配 Template Library，例如 <a href=http://mustache.github.com/ target=_blank>Mustache Logic-less templates</a>，透過此 Apache 模組 可以在 html 檔案將定義好全部 Template，一次讀取進來，底下舉個例子:</p><pre class="brush: jscript; title: ; notranslate" title></pre>我們希望 apache 能夠讀取 assets/templates/test1.mustache，並且將檔案內容放到 script 裡面，這時候就必須在 apache httpd.conf 定義<p><strong><span style=color:green>text/x-mustache-template</span></strong></p><pre class="brush: bash; title: ; notranslate" title><ifmodule mime_module>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/7168729996/ title="apache_software_foundation_logo_3074 by appleboy46, on Flickr"><img src="https://i2.wp.com/farm9.staticflickr.com/8151/7168729996_452646f0f2_n.jpg?resize=320%2C169&ssl=1" alt=apache_software_foundation_logo_3074 data-recalc-dims=1></a>
+</div>
+<p><a href=http://httpd.apache.org/ target=_blank>Apache</a> 可以透過 <a href=http://httpd.apache.org/docs/current/mod/mod_mime.html target=_blank>mod_mime</a> 模組且根據使用者定義的副檔名來 response data 給 Client 端，此功能可以應用在前台搭配 Template Library，例如 <a href=http://mustache.github.com/ target=_blank>Mustache Logic-less templates</a>，透過此 Apache 模組 可以在 html 檔案將定義好全部 Template，一次讀取進來，底下舉個例子:</p>
+<pre class="brush: jscript; title: ; notranslate" title></pre> 我們希望 apache 能夠讀取 assets/templates/test1.mustache，並且將檔案內容放到 script 裡面，這時候就必須在 apache httpd.conf 定義
+<p><strong><span style=color:green>text/x-mustache-template</span></strong></p>
+<pre class="brush: bash; title: ; notranslate" title><ifmodule mime_module>
     AddType text/x-mustache-template .mustache
     AddOutputFilter INCLUDES .mustache
 </ifmodule>
-</pre><a href=https://blog.wu-boy.com/2012/05/how-to-use-apache-module-mod_mime/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+</pre>
+<a href=https://blog.wu-boy.com/2012/05/how-to-use-apache-module-mod_mime/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;</div></article></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href=/tags/requirejs/feed.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;
+</div>
+</article>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=/tags/requirejs/feed.xml title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

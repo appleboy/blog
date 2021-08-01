@@ -1,27 +1,161 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>The streaming build system Gulp - 小惡魔 - AppleBOY</title><meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>The streaming build system Gulp - 小惡魔 - AppleBOY</title>
+<meta name=description content="
   
 
-看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 Gulp。也有考慮如何將 Gulp 整合到 Yeoman 專案。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/12\/streaming-build-system-gulp\/","name":"The streaming build system gulp"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"The streaming build system Gulp","description":"  看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 Gulp。也有考慮如何將 Gulp 整合到 Yeoman 專案。\n","inLanguage":"en","wordCount":236,"datePublished":"2013-12-29T08:25:22","dateModified":"2013-12-29T08:25:22","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CoffeeScript, Compass, GruntJS, gulp, LiveReload"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/12\/streaming-build-system-gulp\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="The streaming build system Gulp"><meta property="og:description" content="
+看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 Gulp。也有考慮如何將 Gulp 整合到 Yeoman 專案。">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/12\/streaming-build-system-gulp\/","name":"The streaming build system gulp"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"The streaming build system Gulp","description":"  看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 Gulp。也有考慮如何將 Gulp 整合到 Yeoman 專案。\n","inLanguage":"en","wordCount":236,"datePublished":"2013-12-29T08:25:22","dateModified":"2013-12-29T08:25:22","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CoffeeScript, Compass, GruntJS, gulp, LiveReload"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/12\/streaming-build-system-gulp\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="The streaming build system Gulp">
+<meta property="og:description" content="
   
 
-看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 Gulp。也有考慮如何將 Gulp 整合到 Yeoman 專案。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2013/12/streaming-build-system-gulp/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="The streaming build system Gulp"><meta name=twitter:description content="
+看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 Gulp。也有考慮如何將 Gulp 整合到 Yeoman 專案。">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2013/12/streaming-build-system-gulp/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="The streaming build system Gulp">
+<meta name=twitter:description content="
   
 
-看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+看到 Yeoman 作者之一 Addy Osmani 開始 review Gulp build system，由於 Yeoman framework 跟 GruntJS 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 Nodejs GruntJS 時，每當存檔的 …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>The streaming build system Gulp</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 29, 2013
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>The streaming build system Gulp</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 29, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;236&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#gulp-簡介>Gulp 簡介</a></li><li><a href=#gulp-用法>Gulp 用法</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/11616755494/ title="gulp by appleboy46, on Flickr"><img src="https://i0.wp.com/farm8.staticflickr.com/7354/11616755494_06ef5c0fa5.jpg?resize=197%2C388&ssl=1" alt=gulp data-recalc-dims=1></a></div><p>看到 <a href=https://github.com/yeoman target=_blank>Yeoman</a> 作者之一 <a href=https://github.com/addyosmani target=_blank>Addy Osmani</a> 開始 <a href=https://github.com/yeoman/yeoman/issues/1232 target=_blank>review Gulp build system</a>，由於 Yeoman framework 跟 <a href=http://gruntjs.com/ target=_blank>GruntJS</a> 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 <a href=http://nodejs.org/>Nodejs</a> GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 <a href=https://github.com/gulpjs/gulp target=_blank>Gulp</a>。也有考慮如何將 Gulp 整合到 Yeoman 專案。</p><h3 id=gulp-簡介>Gulp 簡介</h3><p>大家可以把 Gulp 跟 Grunt 用途想成一樣，只是處理 Task 的原理不相同。Grunt 是透過 Task 的概念下去實作，JS 程式存檔後，Grunt 會依序處理使用者定義的 task，例如執行 jslint task 接著 uglify task，最後將檔案搬到您想的目錄。而 Gulp 則是平行處理，假設有5個 js 檔案，Gulp 則是透過 pipeline 方式處理檔案，所以 Gulp 會加速處理結果。</p><p>Grunt 原理:</p><pre class="brush: bash; title: ; notranslate" title>Grunt jslint task -> Grunt uglify task -> Grunt copy task
-  ---處理5個檔案--- ->  ---處理5個檔案---   -> ---處理5個檔案---</pre><p>Gulp 原理</p><pre class="brush: bash; title: ; notranslate" title>Grunt jslint task -> Grunt uglify task -> Grunt copy task
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<aside class=toc-article>
+<nav id=TableOfContents>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href=#gulp-簡介>Gulp 簡介</a></li>
+<li><a href=#gulp-用法>Gulp 用法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<article role=main class=blog-post>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/11616755494/ title="gulp by appleboy46, on Flickr"><img src="https://i0.wp.com/farm8.staticflickr.com/7354/11616755494_06ef5c0fa5.jpg?resize=197%2C388&ssl=1" alt=gulp data-recalc-dims=1></a>
+</div>
+<p>看到 <a href=https://github.com/yeoman target=_blank>Yeoman</a> 作者之一 <a href=https://github.com/addyosmani target=_blank>Addy Osmani</a> 開始 <a href=https://github.com/yeoman/yeoman/issues/1232 target=_blank>review Gulp build system</a>，由於 Yeoman framework 跟 <a href=http://gruntjs.com/ target=_blank>GruntJS</a> 是很緊密結合的，但是 GruntJS 套件愈來愈多，漸漸的執行 GruntJS 後，開始吃了系統 CPU 及記憶體，這對於開發環境而言，會是一大負擔阿，大家不知道有無發現，跑 <a href=http://nodejs.org/>Nodejs</a> GruntJS 時，每當存檔的時候，CPU 就開始哀嚎了，我自己是有這方面的體會，加上團隊內並不是每位同仁的電腦都是很 powerful，原本是好意讓團隊開發更遵守 coding style 及統一開發環境，但是 Grunt 的肥大，讓整個 Client 環境 Loading 飆高。所以 Yeoman 看到了 <a href=https://github.com/gulpjs/gulp target=_blank>Gulp</a>。也有考慮如何將 Gulp 整合到 Yeoman 專案。</p>
+<h3 id=gulp-簡介>Gulp 簡介</h3>
+<p>大家可以把 Gulp 跟 Grunt 用途想成一樣，只是處理 Task 的原理不相同。Grunt 是透過 Task 的概念下去實作，JS 程式存檔後，Grunt 會依序處理使用者定義的 task，例如執行 jslint task 接著 uglify task，最後將檔案搬到您想的目錄。而 Gulp 則是平行處理，假設有5個 js 檔案，Gulp 則是透過 pipeline 方式處理檔案，所以 Gulp 會加速處理結果。</p>
+<p>Grunt 原理:</p>
+<pre class="brush: bash; title: ; notranslate" title>Grunt jslint task -> Grunt uglify task -> Grunt copy task
+  ---處理5個檔案--- ->  ---處理5個檔案---   -> ---處理5個檔案---</pre>
+<p>Gulp 原理</p>
+<pre class="brush: bash; title: ; notranslate" title>Grunt jslint task -> Grunt uglify task -> Grunt copy task
   ---處理檔案(1)--- ->  ---處理檔案(1)---  -> ---處理檔案(1)---
   ---處理檔案(2)--- ->  ---處理檔案(2)---  -> ---處理檔案(2)---
   ---處理檔案(3)--- ->  ---處理檔案(3)---  -> ---處理檔案(3)---
   ---處理檔案(4)--- ->  ---處理檔案(4)---  -> ---處理檔案(4)---
-  ---處理檔案(5)--- ->  ---處理檔案(5)---  -> ---處理檔案(5)---</pre><h3 id=gulp-用法>Gulp 用法</h3><p>我們假設寫 <a href=http://coffeescript.org/ target=_blank>Coffeescript</a> 程式，通常寫完會經過 <a href=http://www.coffeelint.org/ target=_blank>coffeelint</a> 檢查 coffee script 的 Coding style 語法，最後才透過 coffee command 轉換成 javascript 檔案。</p><p>在 Grunt 套件，我們會這樣寫</p><div><pre class="brush: jscript; title: ; notranslate" title>
+  ---處理檔案(5)--- ->  ---處理檔案(5)---  -> ---處理檔案(5)---</pre>
+<h3 id=gulp-用法>Gulp 用法</h3>
+<p>我們假設寫 <a href=http://coffeescript.org/ target=_blank>Coffeescript</a> 程式，通常寫完會經過 <a href=http://www.coffeelint.org/ target=_blank>coffeelint</a> 檢查 coffee script 的 Coding style 語法，最後才透過 coffee command 轉換成 javascript 檔案。</p>
+<p>在 Grunt 套件，我們會這樣寫</p>
+<div>
+<pre class="brush: jscript; title: ; notranslate" title>
 coffeelint:
     options:
         'force': true
@@ -37,7 +171,10 @@ watch:
     coffee:
         files: ['**/*.coffee', '!**/node_modules/**', '!**/vendor/**'],
         tasks: ['coffeelint']
-</pre></div><p>如果是用 Gulp 寫法會非常簡單</p><pre class="brush: jscript; title: ; notranslate" title>gulp.task('coffee', function() {
+</pre>
+</div>
+<p>如果是用 Gulp 寫法會非常簡單</p>
+<pre class="brush: jscript; title: ; notranslate" title>gulp.task('coffee', function() {
     gulp.src('app/assets/coffeescript/**/*.coffee')
         .pipe(coffeelint({"indentation": {
             "name": "indentation",
@@ -48,21 +185,193 @@ watch:
         .pipe(coffee({bare: true}))
         .pipe(gulp.dest('app/assets/js/'))
         .pipe(refresh(server));
-});</pre><p>有沒有變得很容易閱讀？設定方式也變得很容易，執行速度更不用說了，不會吃太多記憶體及 CPU 了，但是我覺得要取代 Grunt 實在很困難，Grunt 能處理大部分的事情，包含 Deploy 及驗證等等，我覺得 Gulp 就專門用在 RD 開發環境的建置，RD 平時會用到哪些套件？<code>Coffscript</code>，<code>Compass or sass</code>，<code>livereload</code>，<code>watch event</code>，大致上這些就已經很足夠了。</p><ul><li><a href=https://npmjs.org/package/gulp-coffee target=_blank>Coffscript</a></li><li><a href=https://npmjs.org/package/gulp-compass target=_blank>Compass</a> by <a href=https://github.com/appleboy target=_blank>appleboy</a></li><li><a href=https://npmjs.org/package/gulp-sass target=_blank>sass</a></li><li><a href=https://npmjs.org/package/gulp-livereload target=_blank>livereload</a></li></ul><p>由於沒找到 Compass Gulp plugin，只看到 sass plugin，所以我寫了簡易的 Gulp plugin，有用 compass 務必安裝</p><pre class="brush: bash; title: install command; notranslate" title="install command">$ npm install gulp-compass --save-dev</pre><p>使用方式可以參考 <a href=https://github.com/appleboy/gulp-compass/blob/master/README.md target=_blank>Readme</a>。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/coffeescript/>CoffeeScript</a>&nbsp;
+});</pre>
+<p>有沒有變得很容易閱讀？設定方式也變得很容易，執行速度更不用說了，不會吃太多記憶體及 CPU 了，但是我覺得要取代 Grunt 實在很困難，Grunt 能處理大部分的事情，包含 Deploy 及驗證等等，我覺得 Gulp 就專門用在 RD 開發環境的建置，RD 平時會用到哪些套件？<code>Coffscript</code>，<code>Compass or sass</code>，<code>livereload</code>，<code>watch event</code>，大致上這些就已經很足夠了。</p>
+<ul>
+<li><a href=https://npmjs.org/package/gulp-coffee target=_blank>Coffscript</a></li>
+<li><a href=https://npmjs.org/package/gulp-compass target=_blank>Compass</a> by <a href=https://github.com/appleboy target=_blank>appleboy</a></li>
+<li><a href=https://npmjs.org/package/gulp-sass target=_blank>sass</a></li>
+<li><a href=https://npmjs.org/package/gulp-livereload target=_blank>livereload</a></li>
+</ul>
+<p>由於沒找到 Compass Gulp plugin，只看到 sass plugin，所以我寫了簡易的 Gulp plugin，有用 compass 務必安裝</p>
+<pre class="brush: bash; title: install command; notranslate" title="install command">$ npm install gulp-compass --save-dev</pre>
+<p>使用方式可以參考 <a href=https://github.com/appleboy/gulp-compass/blob/master/README.md target=_blank>Readme</a>。</p>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/coffeescript/>CoffeeScript</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/compass/>Compass</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gruntjs/>GruntJS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gulp/>gulp</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/livereload/>LiveReload</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&text=The%20streaming%20build%20system%20Gulp&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&title=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&title=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&title=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&description=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2014/11/fix-javascript-linting-errors-tool-fixmyjs/>自動修復 JavaScript Linting-errors 好工具 Fixmyjs</a></li><li><a href=/2014/07/automating-your-workflow-with-gulp-js/>Automating your workflow with Gulp.js</a></li><li><a href=/2014/06/pagespeed-insights-with-reporting/>用 Google PageSpeed Insights 計算 Desktop 或 Mobile 網站分數</a></li><li><a href=/2014/06/safely-reference-javascript-global-variables/>安全使用 JavaScript Global Variables</a></li><li><a href=/2014/05/gui-tool-for-gulp/>Gulp.js 工具包</a></li><li><a href=/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported/>gulp-imagemin 在 Ubuntu 出現錯誤</a></li><li><a href=/2014/03/ruby-compass-and-sass-auto-testing-environment/>Ruby Compass and Sass Auto Testing Environment</a></li><li><a href=/2014/01/10-great-css-tips-for-every-web-developer/>前端工程師必看: 十大 CSS 技巧</a></li><li><a href=/2013/10/drone-io-with-runy-compass-setup/>Drone.io 搭配 Ruby 環境測試</a></li><li><a href=/2013/07/coding-on-workspace-of-chrome-developer-tools/>Coding on workspace of Chrome Developer tools</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2013/12/codeigniter-load-library-process/ data-toggle=tooltip data-placement=top title="CodeIgniter 初始化 Library 流程">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2013/12/increase-phpmyadmin-login-time/ data-toggle=tooltip data-placement=top title="增加 phpMyAdmin 登入時間">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/12/streaming-build-system-gulp>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/12/streaming-build-system-gulp'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/livereload/>LiveReload</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&text=The%20streaming%20build%20system%20Gulp&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&title=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&title=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&title=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fstreaming-build-system-gulp%2f&description=The%20streaming%20build%20system%20Gulp" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2014/11/fix-javascript-linting-errors-tool-fixmyjs/>自動修復 JavaScript Linting-errors 好工具 Fixmyjs</a></li>
+<li><a href=/2014/07/automating-your-workflow-with-gulp-js/>Automating your workflow with Gulp.js</a></li>
+<li><a href=/2014/06/pagespeed-insights-with-reporting/>用 Google PageSpeed Insights 計算 Desktop 或 Mobile 網站分數</a></li>
+<li><a href=/2014/06/safely-reference-javascript-global-variables/>安全使用 JavaScript Global Variables</a></li>
+<li><a href=/2014/05/gui-tool-for-gulp/>Gulp.js 工具包</a></li>
+<li><a href=/2014/04/gulp-imagemin-lossy-operations-are-not-currently-supported/>gulp-imagemin 在 Ubuntu 出現錯誤</a></li>
+<li><a href=/2014/03/ruby-compass-and-sass-auto-testing-environment/>Ruby Compass and Sass Auto Testing Environment</a></li>
+<li><a href=/2014/01/10-great-css-tips-for-every-web-developer/>前端工程師必看: 十大 CSS 技巧</a></li>
+<li><a href=/2013/10/drone-io-with-runy-compass-setup/>Drone.io 搭配 Ruby 環境測試</a></li>
+<li><a href=/2013/07/coding-on-workspace-of-chrome-developer-tools/>Coding on workspace of Chrome Developer tools</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2013/12/codeigniter-load-library-process/ data-toggle=tooltip data-placement=top title="CodeIgniter 初始化 Library 流程">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2013/12/increase-phpmyadmin-login-time/ data-toggle=tooltip data-placement=top title="增加 phpMyAdmin 登入時間">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/12/streaming-build-system-gulp>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/12/streaming-build-system-gulp'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

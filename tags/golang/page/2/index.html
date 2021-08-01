@@ -1,57 +1,447 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>golang - 小惡魔 - AppleBOY</title><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><meta property="og:title" content="golang"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/tags/golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="golang"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/golang/feed.xml title="小惡魔 - AppleBOY"><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/golang/feed.xml title="小惡魔 - AppleBOY"><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>golang - 小惡魔 - AppleBOY</title>
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<meta property="og:title" content="golang">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/tags/golang/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="golang">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/golang/feed.xml title="小惡魔 - AppleBOY">
+<link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/golang/feed.xml title="小惡魔 - AppleBOY">
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>golang</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/><h2 class=post-title>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2021
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=tags-heading>
+<h1>golang</h1>
+<hr class=small>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>
+<h2 class=post-title>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;9&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1840&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" title=cover><img src="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" alt=cover title=cover></a></p><p>上一篇作者提到了兩套 <a href=https://www.pulumi.com/docs/get-started/install/>Infrastructure as Code</a> 工具，分別是 <a href=https://www.terraform.io/>Terraform</a> 跟 <a href=https://www.pulumi.com/>Pulumi</a>，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 <a href=https://github.com/go-training/infrastructure-as-code-workshop/tree/main/pulumi/labs/lab01-modern-infrastructure-as-code>GitHub 上面瀏覽及下載</a>。教學會拆成七個章節:</p><ol><li>建立 Pulumi 新專案</li><li>設定 AWS 環境</li><li>初始化 Pulumi 架構 (建立 S3 Bucket)</li><li>更新 AWS 架構 (S3 Hosting)</li><li>設定 Pulumi Stack 環境變數 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>建立第二個 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li><li>刪除 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li></ol><a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/pulumi/>pulumi</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2021/02/graphql-gateway-in-golang/><h2 class=post-title>使用 GraphQL Gateway 串接多個 Data Schema</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 6, 2021
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" title=cover><img src="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" alt=cover title=cover></a></p>
+<p>上一篇作者提到了兩套 <a href=https://www.pulumi.com/docs/get-started/install/>Infrastructure as Code</a> 工具，分別是 <a href=https://www.terraform.io/>Terraform</a> 跟 <a href=https://www.pulumi.com/>Pulumi</a>，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 <a href=https://github.com/go-training/infrastructure-as-code-workshop/tree/main/pulumi/labs/lab01-modern-infrastructure-as-code>GitHub 上面瀏覽及下載</a>。教學會拆成七個章節:</p>
+<ol>
+<li>建立 Pulumi 新專案</li>
+<li>設定 AWS 環境</li>
+<li>初始化 Pulumi 架構 (建立 S3 Bucket)</li>
+<li>更新 AWS 架構 (S3 Hosting)</li>
+<li>設定 Pulumi Stack 環境變數 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li>
+<li>建立第二個 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li>
+<li>刪除 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li>
+</ol>
+<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/pulumi/>pulumi</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/02/graphql-gateway-in-golang/>
+<h2 class=post-title>使用 GraphQL Gateway 串接多個 Data Schema</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 6, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;745&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" title=infra><img src="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" alt=infra title=infra></a></p><p>不久之前寫過一篇『<a href=https://blog.wu-boy.com/2020/04/switch-graphql-go-to-gqlgen-in-golang/>從 graphql-go 轉換到 gqlgen</a>』，目前團隊舊有的專案還是繼續用 <a href=https://github.com/graphql-go/graphql>graphql-go</a> 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 <a href=https://gqlgen.com/>gqlgen</a> 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 <a href=https://principledgraphql.com/integrity#1-one-graph>single data graph</a>。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 <a href=https://www.apollographql.com/docs/federation/gateway/>@apollo/gateway</a>，但是由於個人比較偏好 <a href=https://golang.org>Go 語言</a>的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 <a href=https://github.com/nautilus/gateway>nautilus/gateway</a>，官方有<a href=https://gateway.nautilus.dev/>提供文件</a>以及<a href=https://medium.com/@aaivazis/a-guide-to-schema-federation-part-1-995b639ac035>教學 Blog</a> 可以供開發者參考。底下會教大家使用 nautilus/gateway 將兩個不同的服務串接在一起。</p><a href=https://blog.wu-boy.com/2021/02/graphql-gateway-in-golang/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/graphql/>GraphQL</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/12/write-the-simple-cli-tool-in-golang/><h2 class=post-title>用 Go 語言撰寫簡單的 Command Line 工具</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 27, 2020
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" title=infra><img src="https://lh3.googleusercontent.com/eWR5fi9ipIuscey-E940I6fhwU5ZySehbItzPLyPVchJxBlq8N1uXT-psLHdX_wV6xojac3_EeCFZH6vs6C1R910vzDV1mY2uOo33so6QqpWgNqbDjGZPB6ar2NwspITQ7paTfjqSo8=w1920-h1080" alt=infra title=infra></a></p>
+<p>不久之前寫過一篇『<a href=https://blog.wu-boy.com/2020/04/switch-graphql-go-to-gqlgen-in-golang/>從 graphql-go 轉換到 gqlgen</a>』，目前團隊舊有的專案還是繼續用 <a href=https://github.com/graphql-go/graphql>graphql-go</a> 來撰寫，不過之後需求量越來越大，維護 graphql-go 就越來越困難，故有在想怎麼把 <a href=https://gqlgen.com/>gqlgen</a> 跟 graphql-go 相容在一起，那就是把這兩個套件想成不同的服務，再透過 Gateway 方式完成 <a href=https://principledgraphql.com/integrity#1-one-graph>single data graph</a>。至於怎麼選擇 GraphQL Gateway 套件，最容易的方式就是使用 <a href=https://www.apollographql.com/docs/federation/gateway/>@apollo/gateway</a>，但是由於個人比較偏好 <a href=https://golang.org>Go 語言</a>的解決方案，就稍微找看看有無人用 Go 實現了 Gateway，後來找到 <a href=https://github.com/nautilus/gateway>nautilus/gateway</a>，官方有<a href=https://gateway.nautilus.dev/>提供文件</a>以及<a href=https://medium.com/@aaivazis/a-guide-to-schema-federation-part-1-995b639ac035>教學 Blog</a> 可以供開發者參考。底下會教大家使用 nautilus/gateway 將兩個不同的服務串接在一起。</p>
+<a href=https://blog.wu-boy.com/2021/02/graphql-gateway-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/graphql/>GraphQL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/12/write-the-simple-cli-tool-in-golang/>
+<h2 class=post-title>用 Go 語言撰寫簡單的 Command Line 工具</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 27, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;755&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>之前介紹了一個開源工具『<a href=https://blog.wu-boy.com/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a>』，讓開發者可以快速透過 Docker 方式來備份資料庫，而本篇要介紹我如何用 Go 語言來撰寫 CLI 並且整合 Docker 來實現備份。此工具都是透過各大資料庫官方提供的 CLI 指令 (<a href=https://docs.postgresql.tw/reference/client-applications/pg_dump>pg_dump</a>, <a href=https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html>mysqldump</a> &mldr; 等)，故大家不用猜想是什麼神奇的技巧。底下來依序介紹整個目錄結構，及我如何實現。</p><a href=https://blog.wu-boy.com/2020/12/write-the-simple-cli-tool-in-golang/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/12/embedding-files-in-go-1-16/><h2 class=post-title>Go 1.16 推出 Embedding Files</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 27, 2020
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>之前介紹了一個開源工具『<a href=https://blog.wu-boy.com/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</a>』，讓開發者可以快速透過 Docker 方式來備份資料庫，而本篇要介紹我如何用 Go 語言來撰寫 CLI 並且整合 Docker 來實現備份。此工具都是透過各大資料庫官方提供的 CLI 指令 (<a href=https://docs.postgresql.tw/reference/client-applications/pg_dump>pg_dump</a>, <a href=https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html>mysqldump</a> &mldr; 等)，故大家不用猜想是什麼神奇的技巧。底下來依序介紹整個目錄結構，及我如何實現。</p>
+<a href=https://blog.wu-boy.com/2020/12/write-the-simple-cli-tool-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/12/embedding-files-in-go-1-16/>
+<h2 class=post-title>Go 1.16 推出 Embedding Files</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 27, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;397&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p><a href=https://golang.org>Go 語言</a>官方維護團隊 rsc 之前在 <a href=https://github.com/golang/go/issues/41191>GitHub Issue</a> 上面提出要在 go command line 直接支援 Embedding Files，沒想到過沒幾個月，就直接實現出來了，並且預計在 2021 的 <a href=https://tip.golang.org/doc/go1.16>go 1.16</a> 版本直接支援 <a href=https://tip.golang.org/pkg/embed/>embed 套件</a>。有了這個功能，就可以將靜態檔案或專案設定檔直接包起來，這樣部署就更方便了。底下來看看官方怎麼使用。</p><a href=https://blog.wu-boy.com/2020/12/embedding-files-in-go-1-16/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/><h2 class=post-title>善用 Go 語言效能測試工具來提升執行效率</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on November 2, 2020
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p><a href=https://golang.org>Go 語言</a>官方維護團隊 rsc 之前在 <a href=https://github.com/golang/go/issues/41191>GitHub Issue</a> 上面提出要在 go command line 直接支援 Embedding Files，沒想到過沒幾個月，就直接實現出來了，並且預計在 2021 的 <a href=https://tip.golang.org/doc/go1.16>go 1.16</a> 版本直接支援 <a href=https://tip.golang.org/pkg/embed/>embed 套件</a>。有了這個功能，就可以將靜態檔案或專案設定檔直接包起來，這樣部署就更方便了。底下來看看官方怎麼使用。</p>
+<a href=https://blog.wu-boy.com/2020/12/embedding-files-in-go-1-16/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/>
+<h2 class=post-title>善用 Go 語言效能測試工具來提升執行效率</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 2, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;95&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>在 AI 訓練模型前，都需要經過大量的資料處理，而資料處理的速度在整個流程內扮演很重要的角色，寫出高效能的 Parser 能降低整體處理時間，那如何評估程式效能如何，以及如何快速找到效能瓶頸？本議程會帶大家了解 <a href=https://golang.org>Go 語言</a>內建的效能測試工具，透過 <a href=https://blog.wu-boy.com/2018/06/how-to-write-benchmark-in-go/>Benchmark</a> 來找出程式效能瓶頸的地方，快速改善及優化，讓整個系統流程更順暢。也會順道分享 Go 在字串處理優化的一些小技巧。聽過此議程相信您對 Go 語言會有更深入的了解，如果你想寫出有效率的程式碼，本議程一定不能錯過。</p><a href=https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/benchmark/>benchmark</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/10/select-multiple-channel-in-golang/><h2 class=post-title>Go 語言 Select Multiple Channel 注意事項</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 12, 2020
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>在 AI 訓練模型前，都需要經過大量的資料處理，而資料處理的速度在整個流程內扮演很重要的角色，寫出高效能的 Parser 能降低整體處理時間，那如何評估程式效能如何，以及如何快速找到效能瓶頸？本議程會帶大家了解 <a href=https://golang.org>Go 語言</a>內建的效能測試工具，透過 <a href=https://blog.wu-boy.com/2018/06/how-to-write-benchmark-in-go/>Benchmark</a> 來找出程式效能瓶頸的地方，快速改善及優化，讓整個系統流程更順暢。也會順道分享 Go 在字串處理優化的一些小技巧。聽過此議程相信您對 Go 語言會有更深入的了解，如果你想寫出有效率的程式碼，本議程一定不能錯過。</p>
+<a href=https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/benchmark/>benchmark</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/10/select-multiple-channel-in-golang/>
+<h2 class=post-title>Go 語言 Select Multiple Channel 注意事項</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 12, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;325&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>相信大家都知道 Select 可以用來處理多個 Channel，但是大家有沒有想過一個情境，如果是 for 搭配 select 時，肯定會用一個 Timer 或 context 來處理 Timeout 或手動 Cancel，假設如果跟其他 Channel 同時到達時，官方說法是 Select 會隨機選擇一個狀況來執行，如果並非選到我們所要的 case 那就會造成情境或流程上的錯誤，而本影片就是講解該如何解決此問題，請大家務必詳細了解業務的需求，來決定程式碼架構該如何寫。</p><a href=https://blog.wu-boy.com/2020/10/select-multiple-channel-in-golang/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/channel/>channel</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>相信大家都知道 Select 可以用來處理多個 Channel，但是大家有沒有想過一個情境，如果是 for 搭配 select 時，肯定會用一個 Timer 或 context 來處理 Timeout 或手動 Cancel，假設如果跟其他 Channel 同時到達時，官方說法是 Select 會隨機選擇一個狀況來執行，如果並非選到我們所要的 case 那就會造成情境或流程上的錯誤，而本影片就是講解該如何解決此問題，請大家務必詳細了解業務的需求，來決定程式碼架構該如何寫。</p>
+<a href=https://blog.wu-boy.com/2020/10/select-multiple-channel-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/channel/>channel</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/09/golang-scale-in-cloud-summit-taiwan/><h2 class=post-title>用 Go 語言打造多台機器 Scale 架構</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 10, 2020
+<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/09/golang-scale-in-cloud-summit-taiwan/>
+<h2 class=post-title>用 Go 語言打造多台機器 Scale 架構</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 10, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;22&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><h2 id=演講投影片>演講投影片</h2><p>底下是 2020 的 <a href=https://cloudsummit.ithome.com.tw/>Cloud Summit</a> 演講投影片，歡迎大家參考看看</p><script async class=speakerdeck-embed data-id=cf53a56cdf324a57bd8ab6b1437c10ed data-ratio=1.33333333333 src=//speakerdeck.com/assets/embed.js></script><a href=https://blog.wu-boy.com/2020/09/golang-scale-in-cloud-summit-taiwan/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/09/limit-concurrency-in-golang/><h2 class=post-title>用 Go 語言實戰 Limit Concurrency 方法</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 6, 2020
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<h2 id=演講投影片>演講投影片</h2>
+<p>底下是 2020 的 <a href=https://cloudsummit.ithome.com.tw/>Cloud Summit</a> 演講投影片，歡迎大家參考看看</p>
+<script async class=speakerdeck-embed data-id=cf53a56cdf324a57bd8ab6b1437c10ed data-ratio=1.33333333333 src=//speakerdeck.com/assets/embed.js></script>
+<a href=https://blog.wu-boy.com/2020/09/golang-scale-in-cloud-summit-taiwan/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/09/limit-concurrency-in-golang/>
+<h2 class=post-title>用 Go 語言實戰 Limit Concurrency 方法</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 6, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;800&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>最近看到一篇文章討論的非常熱烈，就是『<a href=https://utcc.utoronto.ca/~cks/space/blog/programming/GoConcurrencyStillNotEasy>concurrency is still not easy</a>』這篇文章甚至上了 <a href="https://news.ycombinator.com/item?id=24359650">Hack News</a>，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 <a href=https://golang.org>Go 語言</a>內，要寫 Concurrency 只要透過一個關鍵字 <code>go</code> 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 <a href=https://github.com/google/gops>gops</a> 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。</p><a href=https://blog.wu-boy.com/2020/09/limit-concurrency-in-golang/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/concurrency/>concurrency</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/08/three-ways-to-manage-concurrency-in-go/><h2 class=post-title>在 Go 語言內管理 Concurrency 的三種方式</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 9, 2020
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>最近看到一篇文章討論的非常熱烈，就是『<a href=https://utcc.utoronto.ca/~cks/space/blog/programming/GoConcurrencyStillNotEasy>concurrency is still not easy</a>』這篇文章甚至上了 <a href="https://news.ycombinator.com/item?id=24359650">Hack News</a>，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 <a href=https://golang.org>Go 語言</a>內，要寫 Concurrency 只要透過一個關鍵字 <code>go</code> 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 <a href=https://github.com/google/gops>gops</a> 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。</p>
+<a href=https://blog.wu-boy.com/2020/09/limit-concurrency-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/concurrency/>concurrency</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/08/three-ways-to-manage-concurrency-in-go/>
+<h2 class=post-title>在 Go 語言內管理 Concurrency 的三種方式</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 9, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;463&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>相信大家踏入 <a href=https://golang.org/>Go 語言</a>的世界，肯定是被強大的 Concurrency 所吸引，Go 語言用最簡單的關鍵字 <code>go</code> 就可以將任務丟到背景處理，但是怎麼有效率的控制 Concurrency，這是入門 Go 語言必學的項目，本篇會介紹三種方式來帶大家認識 Concurrency，而這三種方式分別對應到三個不同的名詞: <a href=https://gobyexample.com/waitgroups>WaitGroup</a>, <a href=https://tour.golang.org/concurrency/2>Channel</a>, 及 <a href=https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/>Context</a>，底下用簡單的範例帶大家了解。</p><a href=https://blog.wu-boy.com/2020/08/three-ways-to-manage-concurrency-in-go/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/><h2 class=post-title>Go 1.15 新增 Module cache 環境變數</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 13, 2020
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>相信大家踏入 <a href=https://golang.org/>Go 語言</a>的世界，肯定是被強大的 Concurrency 所吸引，Go 語言用最簡單的關鍵字 <code>go</code> 就可以將任務丟到背景處理，但是怎麼有效率的控制 Concurrency，這是入門 Go 語言必學的項目，本篇會介紹三種方式來帶大家認識 Concurrency，而這三種方式分別對應到三個不同的名詞: <a href=https://gobyexample.com/waitgroups>WaitGroup</a>, <a href=https://tour.golang.org/concurrency/2>Channel</a>, 及 <a href=https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/>Context</a>，底下用簡單的範例帶大家了解。</p>
+<a href=https://blog.wu-boy.com/2020/08/three-ways-to-manage-concurrency-in-go/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/>
+<h2 class=post-title>Go 1.15 新增 Module cache 環境變數</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 13, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;218&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p>相信各位開發者在寫 <a href=https://golang.org>Go 語言</a>專案，現在肯定都是使用 <a href=https://blog.golang.org/using-go-modules>Go module</a> 了，而 Go Module 檔案預設寫在 <code>/go/pkg/mod</code> 目錄內，要串 CI/CD 流程時，由於不在專案路徑底下，所以每一個 Container 無法共用 <code>/go/pkg/mod</code> 路徑，造成重複下載第三方套件，其實跨容器的解決方式可以透過 <a href=https://cloud.drone.io>Drone</a> 的 <a href=https://docs.drone.io/pipeline/docker/syntax/volumes/temporary/>Temporary Volumes</a> 方式解決，但是最終希望跑完編譯流程時，可以將最後的 mod 目錄打包留到下次的 CI/CD 部署流程使用，這時候如果可以改變 <code>/go/pkg/mod</code> 路徑，就可以動態調整目錄結構了。底下是針對 Drone 這套部署工具進行解說。</p><a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://blog.wu-boy.com/tags/golang/page/1/>&larr; Newer Posts</a></li><li class=next><a href=https://blog.wu-boy.com/tags/golang/page/3/>Older Posts &rarr;</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href=/tags/golang/feed.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>相信各位開發者在寫 <a href=https://golang.org>Go 語言</a>專案，現在肯定都是使用 <a href=https://blog.golang.org/using-go-modules>Go module</a> 了，而 Go Module 檔案預設寫在 <code>/go/pkg/mod</code> 目錄內，要串 CI/CD 流程時，由於不在專案路徑底下，所以每一個 Container 無法共用 <code>/go/pkg/mod</code> 路徑，造成重複下載第三方套件，其實跨容器的解決方式可以透過 <a href=https://cloud.drone.io>Drone</a> 的 <a href=https://docs.drone.io/pipeline/docker/syntax/volumes/temporary/>Temporary Volumes</a> 方式解決，但是最終希望跑完編譯流程時，可以將最後的 mod 目錄打包留到下次的 CI/CD 部署流程使用，這時候如果可以改變 <code>/go/pkg/mod</code> 路徑，就可以動態調整目錄結構了。底下是針對 Drone 這套部署工具進行解說。</p>
+<a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+</div>
+<ul class="pager main-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/tags/golang/page/1/>&larr; Newer Posts</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/tags/golang/page/3/>Older Posts &rarr;</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=/tags/golang/feed.xml title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

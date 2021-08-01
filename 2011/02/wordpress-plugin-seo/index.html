@@ -1,4 +1,10 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>WordPress plugin 加強網址 SEO - 小惡魔 - AppleBOY</title><meta name=description content="由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com/2011/02/17/2542，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 /%year%/%monthnum%/%postname%/，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 404 NOT Found，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 Roga Blog 找到一篇 加強部落格的 SEO，提供了轉換的 plugin，底下是該程式碼:
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>WordPress plugin 加強網址 SEO - 小惡魔 - AppleBOY</title>
+<meta name=description content="由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com/2011/02/17/2542，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 /%year%/%monthnum%/%postname%/，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 404 NOT Found，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 Roga Blog 找到一篇 加強部落格的 SEO，提供了轉換的 plugin，底下是該程式碼:
 
 
  1
@@ -125,7 +131,11 @@ function roga_wrap()
 add_action('init', 'roga_wrap');
 
 
-"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2011\/02\/wordpress-plugin-seo\/","name":"Word press plugin 加強網址 seo"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"WordPress plugin 加強網址 SEO","description":"由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com\/2011\/02\/17\/2542，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 blog.wu-boy.com\/2011\/02\/php-codeigniter-google-url-shortener-api-library\/，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 \/%year%\/%monthnum%\/%postname%\/，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 404 NOT Found，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 Roga Blog 找到一篇 加強部落格的 SEO，提供了轉換的 plugin，底下是該程式碼:\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60  \u0026lt;?php \/* Plugin Name: roga\u0026#39;s url hotfix Plugin URI: http:\/\/blog.roga.tw\/2011\/02\/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo\/ Description: redirect http requests. Version: 0.1 Author: roga Author URI: http:\/\/blog.roga.tw License: GPL v2 *\/ function roga_wrap() { GLOBAL $wpdb; $request_uri = getenv(\u0026#39;REQUEST_URI\u0026#39;); $array = explode(\u0026#39;\/\u0026#39;, $request_uri); $status = TRUE; foreach($array as $row) { if( ! is_numeric($row) \u0026amp;\u0026amp; ! empty($row)) $status = FALSE; } if(count($array) != 5 || $status != TRUE) return NULL; $post_id = (int) $array[4]; \/\/ http:\/\/blog.roga.tw\/2011\/02\/16\/2484  $wp_result = $wpdb-\u0026gt;get_row(\u0026#34;SELECT `post_type`, `post_name`, `post_date` FROM `$wpdb-\u0026gt;posts` WHERE `ID` = $post_id\u0026#34;); if( ! isset($wp_result)) return NULL; $post_type = $wp_result-\u0026gt;post_type; $post_name = $wp_result-\u0026gt;post_name; $post_date = $wp_result-\u0026gt;post_date; if($post_type == \u0026#39;revision\u0026#39;) return NULL; $time = strtotime($post_date); $year = date(\u0026#39;Y\u0026#39;, $time); $month = date(\u0026#39;m\u0026#39;, $time); \/\/ old: \/%year%\/%monthnum%\/%day%\/%post_id% \t\/\/ new: \/%year%\/%monthnum%\/%postname%\/ \t$new_request_uri = \u0026#34;\/$year\/$month\/$post_name\u0026#34;; $http_host = getenv(\u0026#39;HTTP_HOST\u0026#39;); $logfile = WP_CONTENT_DIR . \u0026#34;\/cache\/wp-roga-redirect.log\u0026#34;; if(file_exists($logfile)) file_put_contents($logfile, sprintf(\u0026#34;[%s] %s -\u0026gt; %s \/ %s \u0026#34; . PHP_EOL, date_i18n(\u0026#34;Y-m-d H:i:s\u0026#34;), $request_uri, urldecode($new_request_uri), getenv(\u0026#39;HTTP_USER_AGENT\u0026#39;)), FILE_APPEND); header(\u0026#34;Status: 301 Moved Permanently\u0026#34;); header(\u0026#34;Location: http:\/$http_host$new_request_uri\u0026#34;); exit(); } add_action(\u0026#39;init\u0026#39;, \u0026#39;roga_wrap\u0026#39;);   ","inLanguage":"en","wordCount":449,"datePublished":"2011-02-21T04:42:34","dateModified":"2011-02-21T04:42:34","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["php, wordpress"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2011\/02\/wordpress-plugin-seo\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="WordPress plugin 加強網址 SEO"><meta property="og:description" content="由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com/2011/02/17/2542，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 /%year%/%monthnum%/%postname%/，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 404 NOT Found，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 Roga Blog 找到一篇 加強部落格的 SEO，提供了轉換的 plugin，底下是該程式碼:
+">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2011\/02\/wordpress-plugin-seo\/","name":"Word press plugin 加強網址 seo"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"WordPress plugin 加強網址 SEO","description":"由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com\/2011\/02\/17\/2542，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 blog.wu-boy.com\/2011\/02\/php-codeigniter-google-url-shortener-api-library\/，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 \/%year%\/%monthnum%\/%postname%\/，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 404 NOT Found，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 Roga Blog 找到一篇 加強部落格的 SEO，提供了轉換的 plugin，底下是該程式碼:\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60  \u0026lt;?php \/* Plugin Name: roga\u0026#39;s url hotfix Plugin URI: http:\/\/blog.roga.tw\/2011\/02\/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo\/ Description: redirect http requests. Version: 0.1 Author: roga Author URI: http:\/\/blog.roga.tw License: GPL v2 *\/ function roga_wrap() { GLOBAL $wpdb; $request_uri = getenv(\u0026#39;REQUEST_URI\u0026#39;); $array = explode(\u0026#39;\/\u0026#39;, $request_uri); $status = TRUE; foreach($array as $row) { if( ! is_numeric($row) \u0026amp;\u0026amp; ! empty($row)) $status = FALSE; } if(count($array) != 5 || $status != TRUE) return NULL; $post_id = (int) $array[4]; \/\/ http:\/\/blog.roga.tw\/2011\/02\/16\/2484  $wp_result = $wpdb-\u0026gt;get_row(\u0026#34;SELECT `post_type`, `post_name`, `post_date` FROM `$wpdb-\u0026gt;posts` WHERE `ID` = $post_id\u0026#34;); if( ! isset($wp_result)) return NULL; $post_type = $wp_result-\u0026gt;post_type; $post_name = $wp_result-\u0026gt;post_name; $post_date = $wp_result-\u0026gt;post_date; if($post_type == \u0026#39;revision\u0026#39;) return NULL; $time = strtotime($post_date); $year = date(\u0026#39;Y\u0026#39;, $time); $month = date(\u0026#39;m\u0026#39;, $time); \/\/ old: \/%year%\/%monthnum%\/%day%\/%post_id% \t\/\/ new: \/%year%\/%monthnum%\/%postname%\/ \t$new_request_uri = \u0026#34;\/$year\/$month\/$post_name\u0026#34;; $http_host = getenv(\u0026#39;HTTP_HOST\u0026#39;); $logfile = WP_CONTENT_DIR . \u0026#34;\/cache\/wp-roga-redirect.log\u0026#34;; if(file_exists($logfile)) file_put_contents($logfile, sprintf(\u0026#34;[%s] %s -\u0026gt; %s \/ %s \u0026#34; . PHP_EOL, date_i18n(\u0026#34;Y-m-d H:i:s\u0026#34;), $request_uri, urldecode($new_request_uri), getenv(\u0026#39;HTTP_USER_AGENT\u0026#39;)), FILE_APPEND); header(\u0026#34;Status: 301 Moved Permanently\u0026#34;); header(\u0026#34;Location: http:\/$http_host$new_request_uri\u0026#34;); exit(); } add_action(\u0026#39;init\u0026#39;, \u0026#39;roga_wrap\u0026#39;);   ","inLanguage":"en","wordCount":449,"datePublished":"2011-02-21T04:42:34","dateModified":"2011-02-21T04:42:34","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["php, wordpress"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2011\/02\/wordpress-plugin-seo\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="WordPress plugin 加強網址 SEO">
+<meta property="og:description" content="由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com/2011/02/17/2542，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 /%year%/%monthnum%/%postname%/，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 404 NOT Found，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 Roga Blog 找到一篇 加強部落格的 SEO，提供了轉換的 plugin，底下是該程式碼:
 
 
  1
@@ -252,15 +262,112 @@ function roga_wrap()
 add_action('init', 'roga_wrap');
 
 
-"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2011/02/wordpress-plugin-seo/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="WordPress plugin 加強網址 SEO"><meta name=twitter:description content="由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com/2011/02/17/2542，為了使搜尋引擎更可以快速找到本站， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2011/02/wordpress-plugin-seo/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="WordPress plugin 加強網址 SEO">
+<meta name=twitter:description content="由於網站 SEO 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 blog.wu-boy.com/2011/02/17/2542，為了使搜尋引擎更可以快速找到本站， …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>WordPress plugin 加強網址 SEO</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 21, 2011
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>WordPress plugin 加強網址 SEO</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 21, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;449&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>由於網站 <a href=http://en.wikipedia.org/wiki/Search_engine_optimization>SEO</a> 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542</strong></span>，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 <strong><span style=color:green>blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/</span></strong>，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 <span style=color:red><strong>/%year%/%monthnum%/%postname%/</strong></span>，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 <strong><span style=color:red>404 NOT Found</span></strong>，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 <a href=http://blog.roga.tw>Roga Blog</a> 找到一篇 <a href=http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/>加強部落格的 SEO</a>，提供了轉換的 plugin，底下是該程式碼:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<article role=main class=blog-post>
+<p>由於網站 <a href=http://en.wikipedia.org/wiki/Search_engine_optimization>SEO</a> 在大家心中都是非常重要，現在製作網站也都考慮了很多 SEO 的問題，其中一個功能就是可不可以自訂網址，Wordpress 很早之前就支援了此功能，站長我呢，在創站的時候使用 <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542</strong></span>，為了使搜尋引擎更可以快速找到本站，所以打算將網址改成 <strong><span style=color:green>blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/</span></strong>，在後台 Permalink Settings 可以自訂部落格網址，將網址格式改成 <span style=color:red><strong>/%year%/%monthnum%/%postname%/</strong></span>，可是改了之後，之前搜尋引擎及別人引用的網址就會變成 <strong><span style=color:red>404 NOT Found</span></strong>，為瞭解決此問題，必須寫一支 Mapping Url 程式，讓之前的舊網址轉到新網址，剛好在 <a href=http://blog.roga.tw>Roga Blog</a> 找到一篇 <a href=http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/>加強部落格的 SEO</a>，提供了轉換的 plugin，底下是該程式碼:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -320,7 +427,9 @@ add_action('init', 'roga_wrap');
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=58><a style=outline:none;text-decoration:none;color:inherit href=#58>58</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=59><a style=outline:none;text-decoration:none;color:inherit href=#59>59</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=60><a style=outline:none;text-decoration:none;color:inherit href=#60>60</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-php data-lang=php>&lt;?php
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-php data-lang=php>&lt;?php
 <span style=color:#228b22>/*
 </span><span style=color:#228b22>Plugin Name: roga&#39;s url hotfix
 </span><span style=color:#228b22>Plugin URI: http://blog.roga.tw/2011/02/%E5%8A%A0%E5%BC%B7%E9%83%A8%E8%90%BD%E6%A0%BC%E7%9A%84-seo/
@@ -380,7 +489,12 @@ add_action('init', 'roga_wrap');
 }
 
 add_action(<span style=color:#cd5555>&#39;init&#39;</span>, <span style=color:#cd5555>&#39;roga_wrap&#39;</span>);
-</code></pre></td></tr></table></div></div><p>Roga 的作法相當容易，先去 parse 原先的 url，比如說本來是 <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542</strong></span>，程式先把 2011/02/17/2542 取出，在利用 array 取得 2542 這個唯一 POST ID，接下來去資料庫找尋該筆資料，把 postname 取出在轉換 Url 即可用 <span style=color:green><strong>301 Moved Permanently</strong> 告訴搜尋引擎改網址</span>。 在程式最前面發現一個小 bug，今天我們 parse <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542</strong></span> 沒問題，假如是此網址呢 <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542/</strong></span> 你會發現 WordPress 馬上吐出 <span style=color:red><strong>404 Not Found</strong></span> 錯誤訊息，原因就是出在 array 的取法，所以我修改了程式，patch 檔如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</code></pre></td></tr></table>
+</div>
+</div><p>Roga 的作法相當容易，先去 parse 原先的 url，比如說本來是 <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542</strong></span>，程式先把 2011/02/17/2542 取出，在利用 array 取得 2542 這個唯一 POST ID，接下來去資料庫找尋該筆資料，把 postname 取出在轉換 Url 即可用 <span style=color:green><strong>301 Moved Permanently</strong> 告訴搜尋引擎改網址</span>。 在程式最前面發現一個小 bug，今天我們 parse <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542</strong></span> 沒問題，假如是此網址呢 <span style=color:green><strong>blog.wu-boy.com/2011/02/17/2542/</strong></span> 你會發現 WordPress 馬上吐出 <span style=color:red><strong>404 Not Found</strong></span> 錯誤訊息，原因就是出在 array 的取法，所以我修改了程式，patch 檔如下:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
@@ -416,7 +530,9 @@ add_action(<span style=color:#cd5555>&#39;init&#39;</span>, <span style=color:#c
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-diff data-lang=diff><span style=color:#a00>--- url2.php	2011-02-21 11:19:56.000000000 +0800
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-diff data-lang=diff><span style=color:#a00>--- url2.php	2011-02-21 11:19:56.000000000 +0800
 </span><span style=color:#a00></span><span style=color:#0a0>+++ url.php	2011-02-21 11:20:35.000000000 +0800
 </span><span style=color:#0a0></span><span style=color:purple;font-weight:700>@@ -12,8 +12,7 @@
 </span><span style=color:purple;font-weight:700></span> function roga_wrap()
@@ -452,18 +568,182 @@ add_action(<span style=color:#cd5555>&#39;init&#39;</span>, <span style=color:#c
 </span><span style=color:#a00></span><span style=color:#0a0>+	header(&#34;Location: http://$http_host$new_request_uri&#34;);
 </span><span style=color:#0a0></span> 	exit();
  }
-</code></pre></td></tr></table></div></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/wordpress/>wordpress</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&text=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&title=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&title=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&title=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&description=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li><li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li><li><a href=/2016/04/write-markdown-in-wordpress/>在 WordPress 內寫 Markdown 語法</a></li><li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li><li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li><li><a href=/2015/12/force-https-connection-on-wordpress/>將 wordpress 強制使用 SSL 連線</a></li><li><a href=/2015/12/the-definitive-php-7-final-version-hhvm-benchmark/>PHP 7 vs HHVM Benchmark 比較</a></li><li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li><li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li><li><a href=/2015/10/php-fig-new-website/>PHP-FIG 新網站</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/ data-toggle=tooltip data-placement=top title="PHP CodeIgniter Google URL Shortener API Library">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/ data-toggle=tooltip data-placement=top title="切換 Ubuntu apt 的 mirror site">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2011/02/wordpress-plugin-seo>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2011/02/wordpress-plugin-seo'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+</code></pre></td></tr></table>
+</div>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/wordpress/>wordpress</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&text=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&title=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&title=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&title=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f02%2fwordpress-plugin-seo%2f&description=WordPress%20plugin%20%e5%8a%a0%e5%bc%b7%e7%b6%b2%e5%9d%80%20SEO" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2021/05/migrate-wordpress-to-hugo/>將部落格從 Wordpress 轉換到 Hugo</a></li>
+<li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li>
+<li><a href=/2016/04/write-markdown-in-wordpress/>在 WordPress 內寫 Markdown 語法</a></li>
+<li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li>
+<li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li>
+<li><a href=/2015/12/force-https-connection-on-wordpress/>將 wordpress 強制使用 SSL 連線</a></li>
+<li><a href=/2015/12/the-definitive-php-7-final-version-hhvm-benchmark/>PHP 7 vs HHVM Benchmark 比較</a></li>
+<li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li>
+<li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li>
+<li><a href=/2015/10/php-fig-new-website/>PHP-FIG 新網站</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2011/02/php-codeigniter-google-url-shortener-api-library/ data-toggle=tooltip data-placement=top title="PHP CodeIgniter Google URL Shortener API Library">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/ data-toggle=tooltip data-placement=top title="切換 Ubuntu apt 的 mirror site">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2011/02/wordpress-plugin-seo>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2011/02/wordpress-plugin-seo'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

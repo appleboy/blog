@@ -1,49 +1,337 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>GitHub Actions - 小惡魔 - AppleBOY</title><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><meta property="og:title" content="GitHub Actions"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/tags/github-actions/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="GitHub Actions"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/github-actions/feed.xml title="小惡魔 - AppleBOY"><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/github-actions/feed.xml title="小惡魔 - AppleBOY"><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>GitHub Actions - 小惡魔 - AppleBOY</title>
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<meta property="og:title" content="GitHub Actions">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/tags/github-actions/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="GitHub Actions">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/github-actions/feed.xml title="小惡魔 - AppleBOY">
+<link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/github-actions/feed.xml title="小惡魔 - AppleBOY">
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>GitHub Actions</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2020/10/deploy-lambda-github-actions-drone-ci-gitlab-ci/><h2 class=post-title>用 GitHub Actions, Drone CI 或 GitLab CI 部署 AWS Lambda</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 26, 2020
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=tags-heading>
+<h1>GitHub Actions</h1>
+<hr class=small>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/10/deploy-lambda-github-actions-drone-ci-gitlab-ci/>
+<h2 class=post-title>用 GitHub Actions, Drone CI 或 GitLab CI 部署 AWS Lambda</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 26, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;306&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=https://www.flickr.com/photos/appleboy/43711539730/in/dateposted-public/ title="Screen Shot 2018-10-24 at 9.37.49 AM"><img src="https://i1.wp.com/farm2.staticflickr.com/1956/43711539730_7bd9f610c3_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-10-24 at 9.37.49 AM" data-recalc-dims=1></a></p><p>最近剛好把 <a href=https://github.com/appleboy/drone-lambda>drone-lambda</a> 新增了一些新的功能，也就是可以透過 CI/CD 的方式來更新 <a href=https://aws.amazon.com/tw/lambda/>AWS Lambda</a> 基本設定，像是 Memory Size, Handler, Timeout, Runtime 或 Role 等 &mldr;，趁這機會寫篇教學紀錄如何透過 <a href=https://github.com/features/actions>GitHub Actions</a>, <a href=https://cloud.drone.io>Drone CI</a> 或 <a href=https://docs.gitlab.com/ee/ci/>GitLab CI</a> 部署 AWS Lambda。這三套部署方式都是透過 <a href=https://github.com/appleboy/drone-lambda>drone-lambda</a> 包好的 Image 來進行。底下的程式碼都可以在<a href=https://github.com/go-training/drone-lambda-demo>這邊找到</a>。</p><a href=https://blog.wu-boy.com/2020/10/deploy-lambda-github-actions-drone-ci-gitlab-ci/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/aws-lambda/>AWS Lambda</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/43711539730/in/dateposted-public/ title="Screen Shot 2018-10-24 at 9.37.49 AM"><img src="https://i1.wp.com/farm2.staticflickr.com/1956/43711539730_7bd9f610c3_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-10-24 at 9.37.49 AM" data-recalc-dims=1></a></p>
+<p>最近剛好把 <a href=https://github.com/appleboy/drone-lambda>drone-lambda</a> 新增了一些新的功能，也就是可以透過 CI/CD 的方式來更新 <a href=https://aws.amazon.com/tw/lambda/>AWS Lambda</a> 基本設定，像是 Memory Size, Handler, Timeout, Runtime 或 Role 等 &mldr;，趁這機會寫篇教學紀錄如何透過 <a href=https://github.com/features/actions>GitHub Actions</a>, <a href=https://cloud.drone.io>Drone CI</a> 或 <a href=https://docs.gitlab.com/ee/ci/>GitLab CI</a> 部署 AWS Lambda。這三套部署方式都是透過 <a href=https://github.com/appleboy/drone-lambda>drone-lambda</a> 包好的 Image 來進行。底下的程式碼都可以在<a href=https://github.com/go-training/drone-lambda-demo>這邊找到</a>。</p>
+<a href=https://blog.wu-boy.com/2020/10/deploy-lambda-github-actions-drone-ci-gitlab-ci/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/aws-lambda/>AWS Lambda</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone-ci/>drone ci</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/gitlab-ci/>GitLab CI</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/><h2 class=post-title>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 6, 2020
+<a href=https://blog.wu-boy.com/tags/gitlab-ci/>GitLab CI</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>
+<h2 class=post-title>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 6, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;167&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://lh3.googleusercontent.com/t5MID_dNklCmkU2VFrKkhHV89tta8i-9GMebbSyfd_uvvdyQlo6Q4JbhRkA0jCO84vcSLW8zbn4Nqvzm1PYmAgrBQ4e2J1aZiUOZ7p_NGNinNF7Svsld_JRBv5rwCouNEJ_oBxk-Vqs=w1920-h1080" alt></p><p>最近正打算使用 <a href=https://github.com/features/actions>GitHub Actions</a> 來串接 <a href=https://aws.amazon.com>AWS</a> 服務 (<a href=https://aws.amazon.com/tw/ecr/>ECR</a> + <a href=https://aws.amazon.com/tw/ecs/>ECS</a>)，上網找了一堆 <a href="https://github.com/marketplace?type=actions&query=ECR">ECR 套件</a>，發現就連 <a href=https://github.com/aws-actions/amazon-ecr-login>AWS 官方</a>都只有實作 Login 進 ECR，後面編譯跟上傳動作就需要自己寫，可以看看底下是 AWS 官方套件的範例:</p><a href=https://blog.wu-boy.com/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://lh3.googleusercontent.com/t5MID_dNklCmkU2VFrKkhHV89tta8i-9GMebbSyfd_uvvdyQlo6Q4JbhRkA0jCO84vcSLW8zbn4Nqvzm1PYmAgrBQ4e2J1aZiUOZ7p_NGNinNF7Svsld_JRBv5rwCouNEJ_oBxk-Vqs=w1920-h1080" alt></p>
+<p>最近正打算使用 <a href=https://github.com/features/actions>GitHub Actions</a> 來串接 <a href=https://aws.amazon.com>AWS</a> 服務 (<a href=https://aws.amazon.com/tw/ecr/>ECR</a> + <a href=https://aws.amazon.com/tw/ecs/>ECS</a>)，上網找了一堆 <a href="https://github.com/marketplace?type=actions&query=ECR">ECR 套件</a>，發現就連 <a href=https://github.com/aws-actions/amazon-ecr-login>AWS 官方</a>都只有實作 Login 進 ECR，後面編譯跟上傳動作就需要自己寫，可以看看底下是 AWS 官方套件的範例:</p>
+<a href=https://blog.wu-boy.com/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/aws-ecr/>AWS ECR</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ecr/>ECR</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/><h2 class=post-title>Docker 推出官方 GitHub Actions 套件</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 29, 2020
+<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/>
+<h2 class=post-title>Docker 推出官方 GitHub Actions 套件</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 29, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;255&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" title=cover><img src="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" alt=cover title=cover></a></p><p>去年 <a href=https://github.com>GitHub</a> 推出 <a href=https://github.com/features/actions>Actions</a>，就有不少開發者相繼把 CI/CD 流程內會使用到的 Plugin 都丟到 <a href="https://github.com/marketplace?type=actions">Marktetplace</a>，而在這 <a href=https://docker.com>Docker</a> 容器時代，肯定是需要用自動化上傳容器到 Docker Registry，而官方也在<a href=https://www.docker.com/blog/first-docker-github-action-is-here/>上週正式釋出第一版 GitHub Actions</a>，雖然在 Marktet 尚有不少開發者已經有實現了此功能，但是官方既然推出了，就採用官方的套件會比較適合。底下我們來看看如何使用 Docker 推出的 GitHub Aciton 來自動化上傳 Docker Image。除了介紹如何使用 GitHub Action 上傳 Image 外，我也會拿 <a href=https://drone.io/>Drone</a> 的 <a href=http://plugins.drone.io/drone-plugins/drone-docker/>Docker Plugin</a> 來進行比較。</p><a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" title=cover><img src="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" alt=cover title=cover></a></p>
+<p>去年 <a href=https://github.com>GitHub</a> 推出 <a href=https://github.com/features/actions>Actions</a>，就有不少開發者相繼把 CI/CD 流程內會使用到的 Plugin 都丟到 <a href="https://github.com/marketplace?type=actions">Marktetplace</a>，而在這 <a href=https://docker.com>Docker</a> 容器時代，肯定是需要用自動化上傳容器到 Docker Registry，而官方也在<a href=https://www.docker.com/blog/first-docker-github-action-is-here/>上週正式釋出第一版 GitHub Actions</a>，雖然在 Marktet 尚有不少開發者已經有實現了此功能，但是官方既然推出了，就採用官方的套件會比較適合。底下我們來看看如何使用 Docker 推出的 GitHub Aciton 來自動化上傳 Docker Image。除了介紹如何使用 GitHub Action 上傳 Image 外，我也會拿 <a href=https://drone.io/>Drone</a> 的 <a href=http://plugins.drone.io/drone-plugins/drone-docker/>Docker Plugin</a> 來進行比較。</p>
+<a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone-ci/>drone ci</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/><h2 class=post-title>用 GitHub Actions 部署 Go 語言服務</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 14, 2019
+<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/>
+<h2 class=post-title>用 GitHub Actions 部署 Go 語言服務</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 14, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;377&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://lh3.googleusercontent.com/NI2lnMOEhkrZJ-x_bmre_RoQxLnzYcpPXVB_p6eBMmPQ73yDgoftVmUHvk0P86Tt2MM_Q23IHNu7qq7j99RXzTEzG95BU1u1vdpell9krVGHlUmW3Ng7J7egj1LHugWHcHoezCty9o0=w1920-h1080" alt></p><p><a href=https://github.com/features/actions>GitHub Actions</a> 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 <a href=https://travis-ci.org/>Travis</a> 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 <a href=https://golang.org>Go 語言</a>服務，會用一個簡單 httpd 範例教大家如何透過 <a href=https://docker.com>Docker</a> 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -> 編譯 -> 上傳 -> 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。</p><ul><li>測試: Unit Testing 多一層保護</li><li>編譯: 透過 go build 編譯出 Binary 檔案</li><li>上傳: 寫 Dockerfile 將 Binary 包進容器內</li><li>啟動: 透過 docker-compose 方式來更新服務</li></ul><a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://lh3.googleusercontent.com/NI2lnMOEhkrZJ-x_bmre_RoQxLnzYcpPXVB_p6eBMmPQ73yDgoftVmUHvk0P86Tt2MM_Q23IHNu7qq7j99RXzTEzG95BU1u1vdpell9krVGHlUmW3Ng7J7egj1LHugWHcHoezCty9o0=w1920-h1080" alt></p>
+<p><a href=https://github.com/features/actions>GitHub Actions</a> 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 <a href=https://travis-ci.org/>Travis</a> 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 <a href=https://golang.org>Go 語言</a>服務，會用一個簡單 httpd 範例教大家如何透過 <a href=https://docker.com>Docker</a> 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -> 編譯 -> 上傳 -> 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。</p>
+<ul>
+<li>測試: Unit Testing 多一層保護</li>
+<li>編譯: 透過 go build 編譯出 Binary 檔案</li>
+<li>上傳: 寫 Dockerfile 將 Binary 包進容器內</li>
+<li>啟動: 透過 docker-compose 方式來更新服務</li>
+</ul>
+<a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2019/05/introduction-to-github-actions/><h2 class=post-title>GitHub 推出 CI/CD 服務 Actions 之踩雷經驗</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 21, 2019
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/05/introduction-to-github-actions/>
+<h2 class=post-title>GitHub 推出 CI/CD 服務 Actions 之踩雷經驗</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 21, 2019
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;268&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href="https://lh3.googleusercontent.com/vs6XKU4keYmwiBUeWrTVbYl4WKH7cTcmu6Lcggv0QWEBK81D06mbPg7skrmlnYrUf0JlEzhwjJwtmjVJ4p9wLXmbTs4mmzviiCK1RRwBhRXGom5w_3JSQwnV6UUbfH5Pd9uNNU5SCQE=w1920-h1080" title="GitHub Actions 簡介"><img src="https://lh3.googleusercontent.com/vs6XKU4keYmwiBUeWrTVbYl4WKH7cTcmu6Lcggv0QWEBK81D06mbPg7skrmlnYrUf0JlEzhwjJwtmjVJ4p9wLXmbTs4mmzviiCK1RRwBhRXGom5w_3JSQwnV6UUbfH5Pd9uNNU5SCQE=w1920-h1080" alt="GitHub Actions 簡介" title="GitHub Actions 簡介"></a></p><p>今年很高興又去 <a href=https://cloudsummit.ithome.com.tw/>Cloud Summit 研討會</a>給一場議程『初探 GitHub 自動化流程工具 Actions』，這場議程沒有講很多如何使用 <a href=https://github.com/features/actions>GitHub Actions</a>，反倒是講了很多設計上的缺陷，以及為什麼我現在不推薦使用。GitHub Actions 在去年推出來，在這麼多 CI/CD 的免費服務，GitHub 自家出來做很正常，我還在想到底什麼時候才會推出，beta 版出來馬上就申請來試用，但是使用下來體驗非常的不好，有蠻多不方便的地方，底下我們就來聊聊 GitHub Acitons 有哪些缺陷以及該改進的地方。</p><a href=https://blog.wu-boy.com/2019/05/introduction-to-github-actions/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/vs6XKU4keYmwiBUeWrTVbYl4WKH7cTcmu6Lcggv0QWEBK81D06mbPg7skrmlnYrUf0JlEzhwjJwtmjVJ4p9wLXmbTs4mmzviiCK1RRwBhRXGom5w_3JSQwnV6UUbfH5Pd9uNNU5SCQE=w1920-h1080" title="GitHub Actions 簡介"><img src="https://lh3.googleusercontent.com/vs6XKU4keYmwiBUeWrTVbYl4WKH7cTcmu6Lcggv0QWEBK81D06mbPg7skrmlnYrUf0JlEzhwjJwtmjVJ4p9wLXmbTs4mmzviiCK1RRwBhRXGom5w_3JSQwnV6UUbfH5Pd9uNNU5SCQE=w1920-h1080" alt="GitHub Actions 簡介" title="GitHub Actions 簡介"></a></p>
+<p>今年很高興又去 <a href=https://cloudsummit.ithome.com.tw/>Cloud Summit 研討會</a>給一場議程『初探 GitHub 自動化流程工具 Actions』，這場議程沒有講很多如何使用 <a href=https://github.com/features/actions>GitHub Actions</a>，反倒是講了很多設計上的缺陷，以及為什麼我現在不推薦使用。GitHub Actions 在去年推出來，在這麼多 CI/CD 的免費服務，GitHub 自家出來做很正常，我還在想到底什麼時候才會推出，beta 版出來馬上就申請來試用，但是使用下來體驗非常的不好，有蠻多不方便的地方，底下我們就來聊聊 GitHub Acitons 有哪些缺陷以及該改進的地方。</p>
+<a href=https://blog.wu-boy.com/2019/05/introduction-to-github-actions/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;</div></article></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href=/tags/github-actions/feed.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
+</div>
+</article>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=/tags/github-actions/feed.xml title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>

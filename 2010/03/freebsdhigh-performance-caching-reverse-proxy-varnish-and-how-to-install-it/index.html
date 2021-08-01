@@ -1,28 +1,145 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇) - 小惡魔 - AppleBOY</title><meta name=description content="在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝："><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2010\/03\/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it\/","name":"[ free bsd]high performance caching reverse proxy varnish (安裝架設篇)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)","description":"在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3\/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：","inLanguage":"en","wordCount":381,"datePublished":"2010-03-20T16:12:44","dateModified":"2010-03-20T16:12:44","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["apache, HAProxy, php, Squid, Varnish"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2010\/03\/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)"><meta property="og:description" content="在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝："><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)"><meta name=twitter:description content="在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.85.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇) - 小惡魔 - AppleBOY</title>
+<meta name=description content="在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：">
+<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2010\/03\/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it\/","name":"[ free bsd]high performance caching reverse proxy varnish (安裝架設篇)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)","description":"在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3\/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：","inLanguage":"en","wordCount":381,"datePublished":"2010-03-20T16:12:44","dateModified":"2010-03-20T16:12:44","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["apache, HAProxy, php, Squid, Varnish"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2010\/03\/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)">
+<meta property="og:description" content="在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：">
+<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
+<meta property="og:url" content="https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="小惡魔 - AppleBOY">
+<meta name=twitter:title content="[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)">
+<meta name=twitter:description content="在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache …">
+<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
+<meta name=twitter:card content="summary">
+<meta name=twitter:site content="@appleboy">
+<meta name=twitter:creator content="@appleboy">
+<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
+<meta name=generator content="Hugo 0.86.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
+<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
+<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
+<script async src=https://www.google-analytics.com/analytics.js></script>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class=container-fluid>
+<div class=navbar-header>
+<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
-<span class=icon-bar></span><span class=icon-bar></span><span class=icon-bar></span></button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
-<a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 20, 2010
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+</button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</div>
+<div class="collapse navbar-collapse" id=main-navbar>
+<ul class="nav navbar-nav navbar-right">
+<li>
+<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
+</li>
+<li class=navlinks-container>
+<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
+<div class=navlinks-children>
+<a href=/golang-online-course/> Go 語言基礎實戰</a>
+<a href=/docker-course/> Docker 容器開發實戰</a>
+<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
+</div>
+</li>
+<li>
+<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
+</li>
+<li>
+<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
+<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
+</a>
+</li>
+</ul>
+</div>
+<div class=avatar-container>
+<div class=avatar-img-border>
+<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
+<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
+</a>
+</div>
+</div>
+</div>
+</nav>
+<div id=modalSearch class="modal fade" role=dialog>
+<div class=modal-dialog>
+<div class=modal-content>
+<div class=modal-header>
+<button type=button class=close data-dismiss=modal>&#215;</button>
+<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
+</div>
+<div class=modal-body>
+<gcse:search></gcse:search>
+</div>
+<div class=modal-footer>
+<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
+</div>
+</div>
+</div>
+</div>
+<header class=header-section>
+<div class="intro-header no-img">
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<div class=post-heading>
+<h1>[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)</h1>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 20, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;381&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p><a href=https://www.flickr.com/photos/appleboy/4445679996/ title="Flickr 上 appleboy46 的 varnish-logo-red-64"><img src="https://i2.wp.com/farm3.static.flickr.com/2695/4445679996_0a9d597a94_o.gif?resize=235%2C64&ssl=1" alt=varnish-logo-red-64 data-recalc-dims=1></a> 在上禮拜跟 <a href=http://blog.darkhero.net>DarkHero</a> 兄聊到 <a href="http://blog.darkhero.net/?p=391">How To Build a Scalable Web Site (3/6)</a> 的上課講義，互相討論了 MySQL Load balance 以及 http <a href=http://en.wikipedia.org/wiki/Reverse_proxy>reverse proxy</a> 的方式，以前自己有用 <a href=http://haproxy.1wt.eu/>HAProxy</a> 當作 Web 平衡負載，順便紀錄了 <a href=http://blog.wu-boy.com/2008/06/23/283/>HAProxy FreeBSD 安裝方式</a>，這次要來介紹今天重點：<a href=http://varnish-cache.org/>Varnish Cache Server</a>，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 <a href=http://varnish-cache.org/wiki/ArchitectNotes>ArchitectNotes</a> 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：</p><pre class="brush: bash; title: ; notranslate" title>cd /usr/ports/www/varnish/
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class=container role=main>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<article role=main class=blog-post>
+<p><a href=https://www.flickr.com/photos/appleboy/4445679996/ title="Flickr 上 appleboy46 的 varnish-logo-red-64"><img src="https://i2.wp.com/farm3.static.flickr.com/2695/4445679996_0a9d597a94_o.gif?resize=235%2C64&ssl=1" alt=varnish-logo-red-64 data-recalc-dims=1></a> 在上禮拜跟 <a href=http://blog.darkhero.net>DarkHero</a> 兄聊到 <a href="http://blog.darkhero.net/?p=391">How To Build a Scalable Web Site (3/6)</a> 的上課講義，互相討論了 MySQL Load balance 以及 http <a href=http://en.wikipedia.org/wiki/Reverse_proxy>reverse proxy</a> 的方式，以前自己有用 <a href=http://haproxy.1wt.eu/>HAProxy</a> 當作 Web 平衡負載，順便紀錄了 <a href=http://blog.wu-boy.com/2008/06/23/283/>HAProxy FreeBSD 安裝方式</a>，這次要來介紹今天重點：<a href=http://varnish-cache.org/>Varnish Cache Server</a>，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 <a href=http://varnish-cache.org/wiki/ArchitectNotes>ArchitectNotes</a> 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：</p>
+<pre class="brush: bash; title: ; notranslate" title>cd /usr/ports/www/varnish/
 make install clean
-</pre>2. 修改 /etc/rc.conf<pre class="brush: bash; title: ; notranslate" title># varnishd
+</pre> 2. 修改 /etc/rc.conf
+<pre class="brush: bash; title: ; notranslate" title># varnishd
 varnishd_enable="YES"
 varnishd_listen=":80"
 varnishd_admin=":81"
 varnishd_backend=":5566"
-varnishd_config="/usr/local/etc/varnish/default.vcl"</pre>上面設定意思是說 Varnish listen on port 80，傳送 traffic 到後端 5566 port，管理連接埠是 81，也可以使用指令方式：<pre class="brush: bash; title: ; notranslate" title>varnishd -a :80 -b localhost:8080 -T localhost:6082</pre><blockquote><p>Varnishd listen on port 80，and forwarding traffic to a web server listen on localhost port 8080. It also turns on the management interface on port 6082. 3. 修改 default.vcl (Varnish Configuration Language) VCL 檔案告訴 Varnishd 正確的處理每個 request processing，包含在接受到 request 之前所處理的行為 vcl_recv()，另外還有 vcl_hit()、vcl_miss() 等&mldr;，都是用來處理 cache 如果存在或者是不存在時的情境 request。FreeBSD 預設放在 <span style=color:green>/usr/local/etc/varnish/default.vcl</span>。打開此檔案，您會看到：</p></blockquote><pre class="brush: bash; title: ; notranslate" title>backend default {
+varnishd_config="/usr/local/etc/varnish/default.vcl"</pre> 上面設定意思是說 Varnish listen on port 80，傳送 traffic 到後端 5566 port，管理連接埠是 81，也可以使用指令方式：
+<pre class="brush: bash; title: ; notranslate" title>varnishd -a :80 -b localhost:8080 -T localhost:6082</pre>
+<blockquote>
+<p>Varnishd listen on port 80，and forwarding traffic to a web server listen on localhost port 8080. It also turns on the management interface on port 6082. 3. 修改 default.vcl (Varnish Configuration Language) VCL 檔案告訴 Varnishd 正確的處理每個 request processing，包含在接受到 request 之前所處理的行為 vcl_recv()，另外還有 vcl_hit()、vcl_miss() 等&mldr;，都是用來處理 cache 如果存在或者是不存在時的情境 request。FreeBSD 預設放在 <span style=color:green>/usr/local/etc/varnish/default.vcl</span>。打開此檔案，您會看到：</p>
+</blockquote>
+<pre class="brush: bash; title: ; notranslate" title>backend default {
    .host = "127.0.0.1";
    .port = "80";
-}</pre>您只要把 host = "127.0.0.1" 改成你後端要連接的 ip 或者是 host，這樣 Varnish 會 forward traffic 到您的 web server。接下來只要啟動 apache 跟 Varnish 就算是初步架設完成。<pre class="brush: bash; title: ; notranslate" title>/usr/local/etc/rc.d/apache22 restart
-/usr/local/etc/rc.d/varnishd restart</pre><p><a href=https://www.flickr.com/photos/appleboy/4448204616/ title="Flickr 上 appleboy46 的 Varnish_01"><img src="https://i0.wp.com/farm3.static.flickr.com/2726/4448204616_8668e2d8b3.jpg?resize=500%2C170&ssl=1" alt=Varnish_01 data-recalc-dims=1></a> 大家可以看到 61.*.*.* 連到本機 80 port，接下來 Varnish 在開啟隨機 57475 port 連接到 Web Server 5566 port。 **Q:如何讓 apache 紀錄正確的 Client IP 到 log 檔案呢？** 1. 打開 Vcl config 檔案，寫入 Varnish configuration:</p><pre class="brush: bash; title: ; notranslate" title>sub vcl_recv {
+}</pre> 您只要把 host = "127.0.0.1" 改成你後端要連接的 ip 或者是 host，這樣 Varnish 會 forward traffic 到您的 web server。接下來只要啟動 apache 跟 Varnish 就算是初步架設完成。
+<pre class="brush: bash; title: ; notranslate" title>/usr/local/etc/rc.d/apache22 restart
+/usr/local/etc/rc.d/varnishd restart</pre>
+<p><a href=https://www.flickr.com/photos/appleboy/4448204616/ title="Flickr 上 appleboy46 的 Varnish_01"><img src="https://i0.wp.com/farm3.static.flickr.com/2726/4448204616_8668e2d8b3.jpg?resize=500%2C170&ssl=1" alt=Varnish_01 data-recalc-dims=1></a> 大家可以看到 61.*.*.* 連到本機 80 port，接下來 Varnish 在開啟隨機 57475 port 連接到 Web Server 5566 port。 **Q:如何讓 apache 紀錄正確的 Client IP 到 log 檔案呢？** 1. 打開 Vcl config 檔案，寫入 Varnish configuration:</p>
+<pre class="brush: bash; title: ; notranslate" title>sub vcl_recv {
   # Add a unique header containing the client address
   remove req.http.X-Forwarded-For;
   set    req.http.X-Forwarded-For = client.ip;
   # [...]
-}</pre>2. 開啟 apache httpd.conf 加入此行：<pre class="brush: bash; title: ; notranslate" title>LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined</pre><p><a href=https://www.flickr.com/photos/appleboy/4448227216/ title="Flickr 上 appleboy46 的 Varnish_02"><img src="https://i1.wp.com/farm3.static.flickr.com/2694/4448227216_99663d5959.jpg?resize=500%2C156&ssl=1" alt=Varnish_02 data-recalc-dims=1></a> <strong>Q:如何讓 PHP 程式紀錄正確的 Client IP？</strong> 可以參考底下程式碼就可以完全抓到 Proxy 後面真正使用者IP，否則您的 Web 只會抓到 Reverse Proxy 的 IP Address。</p><pre class="brush: php; title: ; notranslate" title>function getIP() {
+}</pre> 2. 開啟 apache httpd.conf 加入此行：
+<pre class="brush: bash; title: ; notranslate" title>LogFormat "%{X-Forwarded-For}i %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" varnishcombined</pre>
+<p><a href=https://www.flickr.com/photos/appleboy/4448227216/ title="Flickr 上 appleboy46 的 Varnish_02"><img src="https://i1.wp.com/farm3.static.flickr.com/2694/4448227216_99663d5959.jpg?resize=500%2C156&ssl=1" alt=Varnish_02 data-recalc-dims=1></a> <strong>Q:如何讓 PHP 程式紀錄正確的 Client IP？</strong> 可以參考底下程式碼就可以完全抓到 Proxy 後面真正使用者IP，否則您的 Web 只會抓到 Reverse Proxy 的 IP Address。</p>
+<pre class="brush: php; title: ; notranslate" title>function getIP() {
   if (validip($_SERVER["HTTP_CLIENT_IP"])) {
     return $_SERVER["HTTP_CLIENT_IP"];
   }
@@ -75,21 +192,183 @@ function validip($ip) {
 <strong>Q:rotate Varnish log file every day？</strong>
 打開 /etc/newsyslog.conf，加入底下兩行
 /var/log/varnish.log        640     7   *   @T00    JB  /var/run/varnishlog.pid
-/var/log/varnishncsa.log    640     7   *   @T00    JB  /var/run/varnishncsa.pid</pre>每天12點進行 log 備份，使用 gzip 壓縮 log 檔案。<div class=blog-tags><a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+/var/log/varnishncsa.log    640     7   *   @T00    JB  /var/run/varnishncsa.pid</pre> 每天12點進行 log 備份，使用 gzip 壓縮 log 檔案。
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/squid/>Squid</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/varnish/>Varnish</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&text=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&title=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&title=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&title=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&description=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li><li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li><li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li><li><a href=/2015/12/force-https-connection-on-wordpress/>將 wordpress 強制使用 SSL 連線</a></li><li><a href=/2015/12/the-definitive-php-7-final-version-hhvm-benchmark/>PHP 7 vs HHVM Benchmark 比較</a></li><li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li><li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li><li><a href=/2015/10/php-fig-new-website/>PHP-FIG 新網站</a></li><li><a href=/2015/10/laravel-homestead-support-php-7/>Laravel Homestead 支援 PHP 7</a></li><li><a href=/2015/06/laravel-5-1-is-released/>Laravel 5.1 is released</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2010/03/vim-%E6%83%B3%E5%A5%97%E7%94%A8-php-syntax-%E9%A1%8F%E8%89%B2%E6%96%BC-ros/ data-toggle=tooltip data-placement=top title="[Vim] 想套用 *.php syntax 顏色於 *.ros">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2010/03/%E5%9C%A8-ie8-firefox-chrome-css-%E7%BD%AE%E4%B8%AD%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/ data-toggle=tooltip data-placement=top title="在 IE8 FireFox Chrome CSS 置中解決方法">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it'}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/varnish/>Varnish</a>&nbsp;
+</div>
+<hr>
+<section id=social-share>
+<div class="list-inline footer-links">
+<div class=share-box aria-hidden=true>
+<ul class=share>
+<li>
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&text=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29&via=appleboy" target=_blank title="Share on Twitter">
+<i class="fab fa-twitter"></i>
+</a>
+</li>
+<li>
+<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f" target=_blank title="Share on Facebook">
+<i class="fab fa-facebook"></i>
+</a>
+</li>
+<li>
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&title=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on Reddit">
+<i class="fab fa-reddit"></i>
+</a>
+</li>
+<li>
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&title=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on LinkedIn">
+<i class="fab fa-linkedin"></i>
+</a>
+</li>
+<li>
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&title=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on StumbleUpon">
+<i class="fab fa-stumbleupon"></i>
+</a>
+</li>
+<li>
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2010%2f03%2ffreebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it%2f&description=%5bFreeBSD%5dhigh%20performance%20caching%20reverse%20proxy%3a%20Varnish%20%28%e5%ae%89%e8%a3%9d%e6%9e%b6%e8%a8%ad%e7%af%87%29" target=_blank title="Share on Pinterest">
+<i class="fab fa-pinterest"></i>
+</a>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<h4 class=see-also>See also</h4>
+<ul>
+<li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li>
+<li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li>
+<li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li>
+<li><a href=/2015/12/force-https-connection-on-wordpress/>將 wordpress 強制使用 SSL 連線</a></li>
+<li><a href=/2015/12/the-definitive-php-7-final-version-hhvm-benchmark/>PHP 7 vs HHVM Benchmark 比較</a></li>
+<li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li>
+<li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li>
+<li><a href=/2015/10/php-fig-new-website/>PHP-FIG 新網站</a></li>
+<li><a href=/2015/10/laravel-homestead-support-php-7/>Laravel Homestead 支援 PHP 7</a></li>
+<li><a href=/2015/06/laravel-5-1-is-released/>Laravel 5.1 is released</a></li>
+</ul>
+</article>
+<ul class="pager blog-pager">
+<li class=previous>
+<a href=https://blog.wu-boy.com/2010/03/vim-%E6%83%B3%E5%A5%97%E7%94%A8-php-syntax-%E9%A1%8F%E8%89%B2%E6%96%BC-ros/ data-toggle=tooltip data-placement=top title="[Vim] 想套用 *.php syntax 顏色於 *.ros">&larr; Previous Post</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/2010/03/%E5%9C%A8-ie8-firefox-chrome-css-%E7%BD%AE%E4%B8%AD%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/ data-toggle=tooltip data-placement=top title="在 IE8 FireFox Chrome CSS 置中解決方法">Next Post &rarr;</a>
+</li>
+</ul>
+<div class=disqus-comments>
+<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it>comments</span></button>
+<div id=disqus_thread></div>
+<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it'}</script>
+</div>
+</div>
+</div>
+</div>
+<footer class=post-footer>
+<div class=container>
+<div class=row>
+<div class="col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+<li>
+<a href=mailto:appleboy.tw@gmail.com title="Email me">
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.facebook.com/appleboy46 title=Facebook>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://github.com/appleboy title=GitHub>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://gitlab.com/appleboy title=GitLab>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://bitbucket.org/appleboy title=Bitbucket>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://twitter.com/appleboy title=Twitter>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://linkedin.com/in/appleboy title=LinkedIn>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+<li>
+<a href title=RSS>
+<span class="fa-stack fa-lg">
+<i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
+</span>
+</a>
+</li>
+</ul>
+<p class="credits copyright text-muted">
+<a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2021
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.85.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script><script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script><script src=https://blog.wu-boy.com/js/main.js></script><script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script><script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
+</p>
+<p class="credits theme-by text-muted">
+<a href=https://gohugo.io>Hugo v0.86.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
+<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
+<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
+<div class=back-to-top id=back-to-top>
+<i class="fas fa-angle-double-up"></i>
+</div>
+</body>
+</html>
