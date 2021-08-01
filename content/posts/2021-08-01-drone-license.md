@@ -7,8 +7,12 @@ url: /2021/08/drone-license/
 share_img: https://i.imgur.com/2P2MVNK.png
 categories:
   - Drone
+  - Golang
 tags:
   - drone
+  - golang
+  - git
+  - gitea
 ---
 
 ![cover](https://i.imgur.com/2P2MVNK.png)
@@ -47,7 +51,9 @@ Drone 是一套完全開源的程式碼，詳細代碼可以在 [GitHub 上面�
 
 ### 免費使用開源或企業版本
 
-上一點有提到官方安裝步驟預設是安裝試用企業版本的，所以都有 **5000** builds 次數限制，要預設免除這個限制有兩種做法，第一種就是如果您用的是 [Gitea][32] 或 [Gogs][33]，就不會有這限制，否則用在開源上面，請用底下方式來 build 出新的 binary (底下是解除開源版本限制)
+上一點有提到官方安裝步驟預設是安裝試用企業版本的，所以都有 **5000** builds 次數限制，要預設免除這個限制有兩種做法，第一種就是請使用 [Gitea][32] 或 [Gogs][33] 這兩套其中一套來當作 Git 服務，就不會有這限制，算是 Drone 給開源的福利，也算是幫忙推廣同樣是用 [Go 語言][41]開發的開源專案。第二種就是透過 Go 語言 go build 方式，而開源跟企業版·本請用底下方式來 build 出新的 binary (底下是解除開源版本限制)
+
+[41]: https://golang.org
 
 ```sh
 go build -tags "oss nolimit" github.com/drone/drone/cmd/drone-server
