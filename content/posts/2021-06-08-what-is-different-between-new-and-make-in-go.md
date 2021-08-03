@@ -27,10 +27,10 @@ package main
 import "fmt"
 
 func main() {
-	foo := new(int)
-	fmt.Println(foo)
-	fmt.Println(*foo)
-	fmt.Printf("%#v", foo)
+  foo := new(int)
+  fmt.Println(foo)
+  fmt.Println(*foo)
+  fmt.Printf("%#v", foo)
 }
 ```
 
@@ -49,23 +49,23 @@ $ go run main.go
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"sync"
+  "bytes"
+  "fmt"
+  "sync"
 )
 
 type SyncedBuffer struct {
-	lock   sync.Mutex
-	buffer bytes.Buffer
-	foo    int
-	bar    string
+  lock   sync.Mutex
+  buffer bytes.Buffer
+  foo    int
+  bar    string
 }
 
 func main() {
-	p := new(SyncedBuffer)
-	fmt.Println("foo:", p.foo)
-	fmt.Println("bar:", p.bar)
-	fmt.Printf("%#v\n", p)
+  p := new(SyncedBuffer)
+  fmt.Println("foo:", p.foo)
+  fmt.Println("bar:", p.bar)
+  fmt.Printf("%#v\n", p)
 }
 ```
 
@@ -75,26 +75,26 @@ func main() {
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"sync"
+  "bytes"
+  "fmt"
+  "sync"
 )
 
 type SyncedBuffer struct {
-	lock   sync.Mutex
-	buffer bytes.Buffer
-	foo    int
-	bar    string
+  lock   sync.Mutex
+  buffer bytes.Buffer
+  foo    int
+  bar    string
 }
 
 func main() {
-	p := &SyncedBuffer{
-		foo: 100,
-		bar: "foobar",
-	}
-	fmt.Println("foo:", p.foo)
-	fmt.Println("bar:", p.bar)
-	fmt.Printf("%#v\n", p)
+  p := &SyncedBuffer{
+    foo: 100,
+    bar: "foobar",
+  }
+  fmt.Println("foo:", p.foo)
+  fmt.Println("bar:", p.bar)
+  fmt.Printf("%#v\n", p)
 }
 ```
 
@@ -104,30 +104,30 @@ func main() {
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"sync"
+  "bytes"
+  "fmt"
+  "sync"
 )
 
 type SyncedBuffer struct {
-	lock   sync.Mutex
-	buffer bytes.Buffer
-	foo    int
-	bar    string
+  lock   sync.Mutex
+  buffer bytes.Buffer
+  foo    int
+  bar    string
 }
 
 func NewSynced(foo int, bar string) *SyncedBuffer {
-	return &SyncedBuffer{
-		foo: foo,
-		bar: bar,
-	}
+  return &SyncedBuffer{
+    foo: foo,
+    bar: bar,
+  }
 }
 
 func main() {
-	p := NewSynced(100, "foobar")
-	fmt.Println("foo:", p.foo)
-	fmt.Println("bar:", p.bar)
-	fmt.Printf("%#v\n", p)
+  p := NewSynced(100, "foobar")
+  fmt.Println("foo:", p.foo)
+  fmt.Println("bar:", p.bar)
+  fmt.Printf("%#v\n", p)
 }
 ```
 
@@ -137,14 +137,14 @@ func main() {
 package main
 
 import (
-	"fmt"
+  "fmt"
 )
 
 func main() {
-	p := new(map[string]string)
-	test := *p
-	test["foo"] = "bar"
-	fmt.Println(test)
+  p := new(map[string]string)
+  test := *p
+  test["foo"] = "bar"
+  fmt.Println(test)
 }
 ```
 
@@ -172,23 +172,23 @@ package main
 import "fmt"
 
 func main() {
-	var p *map[string]string
-	// new
-	p = new(map[string]string)
-	*p = map[string]string{
-		"bar": "foo",
-	}
-	people := *p
-	people["foo"] = "bar"
+  var p *map[string]string
+  // new
+  p = new(map[string]string)
+  *p = map[string]string{
+    "bar": "foo",
+  }
+  people := *p
+  people["foo"] = "bar"
 
-	fmt.Println(people)
-	fmt.Println(p)
+  fmt.Println(people)
+  fmt.Println(p)
 
-	// make
-	foobar := make(map[string]string)
-	foobar["foo"] = "bar"
-	foobar["bar"] = "foo"
-	fmt.Println(foobar)
+  // make
+  foobar := make(map[string]string)
+  foobar["foo"] = "bar"
+  foobar["bar"] = "foo"
+  fmt.Println(foobar)
 }
 ```
 
