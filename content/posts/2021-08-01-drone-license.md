@@ -65,7 +65,32 @@ go build -tags "oss nolimit" github.com/drone/drone/cmd/drone-server
 go build -tags "nolimit" github.com/drone/drone/cmd/drone-server
 ```
 
-這邊要注意，在解除限制前，先找公司法務商量，公司營業額已經大於 100 萬美金的話，請不要用上述方式繞過限制，乖乖付錢比較實在。
+這邊要注意，在解除限制前，先找公司法務商量，公司營業額已經大於 100 萬美金的話，請不要用上述方式繞過限制，乖乖付錢比較實在。很多人問到為什麼 [Gitea][32] 或 [Gogs][33] 為什麼沒這限制，請參考底下代碼，[程式碼會說話](https://github.com/drone/drone/blob/4b7f52ad8a96e8e447f813d4b3de19ca30ff4b0d/service/license/load.go#L37-L56):
+
+```go
+// Trial returns a default license with trial terms based
+// on the source code management system.
+func Trial(provider string) *core.License {
+  switch provider {
+  case "gitea", "gogs":
+    return &core.License{
+      Kind:   core.LicenseTrial,
+      Repos:  0,
+      Users:  0,
+      Builds: 0,
+      Nodes:  0,
+    }
+  default:
+    return &core.License{
+      Kind:   core.LicenseTrial,
+      Repos:  0,
+      Users:  0,
+      Builds: 5000,
+      Nodes:  0,
+    }
+  }
+}
+```
 
 [31]:https://docs.drone.io/server/overview/
 [32]:https://gitea.io/en-us/
