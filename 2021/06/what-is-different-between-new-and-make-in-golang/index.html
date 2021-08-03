@@ -150,10 +150,10 @@
 <span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	foo := <span style=color:#658b00>new</span>(<span style=color:#00688b;font-weight:700>int</span>)
-	fmt.<span style=color:#008b45>Println</span>(foo)
-	fmt.<span style=color:#008b45>Println</span>(*foo)
-	fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v&#34;</span>, foo)
+  foo := <span style=color:#658b00>new</span>(<span style=color:#00688b;font-weight:700>int</span>)
+  fmt.<span style=color:#008b45>Println</span>(foo)
+  fmt.<span style=color:#008b45>Println</span>(*foo)
+  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v&#34;</span>, foo)
 }
 </code></pre></td></tr></table>
 </div>
@@ -201,23 +201,23 @@
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
 <span style=color:#8b008b;font-weight:700>import</span> (
-	<span style=color:#cd5555>&#34;bytes&#34;</span>
-	<span style=color:#cd5555>&#34;fmt&#34;</span>
-	<span style=color:#cd5555>&#34;sync&#34;</span>
+  <span style=color:#cd5555>&#34;bytes&#34;</span>
+  <span style=color:#cd5555>&#34;fmt&#34;</span>
+  <span style=color:#cd5555>&#34;sync&#34;</span>
 )
 
 <span style=color:#8b008b;font-weight:700>type</span> SyncedBuffer <span style=color:#8b008b;font-weight:700>struct</span> {
-	lock   sync.Mutex
-	buffer bytes.Buffer
-	foo    <span style=color:#00688b;font-weight:700>int</span>
-	bar    <span style=color:#00688b;font-weight:700>string</span>
+  lock   sync.Mutex
+  buffer bytes.Buffer
+  foo    <span style=color:#00688b;font-weight:700>int</span>
+  bar    <span style=color:#00688b;font-weight:700>string</span>
 }
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	p := <span style=color:#658b00>new</span>(SyncedBuffer)
-	fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;foo:&#34;</span>, p.foo)
-	fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;bar:&#34;</span>, p.bar)
-	fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v\n&#34;</span>, p)
+  p := <span style=color:#658b00>new</span>(SyncedBuffer)
+  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;foo:&#34;</span>, p.foo)
+  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;bar:&#34;</span>, p.bar)
+  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v\n&#34;</span>, p)
 }
 </code></pre></td></tr></table>
 </div>
@@ -253,26 +253,26 @@
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
 <span style=color:#8b008b;font-weight:700>import</span> (
-	<span style=color:#cd5555>&#34;bytes&#34;</span>
-	<span style=color:#cd5555>&#34;fmt&#34;</span>
-	<span style=color:#cd5555>&#34;sync&#34;</span>
+  <span style=color:#cd5555>&#34;bytes&#34;</span>
+  <span style=color:#cd5555>&#34;fmt&#34;</span>
+  <span style=color:#cd5555>&#34;sync&#34;</span>
 )
 
 <span style=color:#8b008b;font-weight:700>type</span> SyncedBuffer <span style=color:#8b008b;font-weight:700>struct</span> {
-	lock   sync.Mutex
-	buffer bytes.Buffer
-	foo    <span style=color:#00688b;font-weight:700>int</span>
-	bar    <span style=color:#00688b;font-weight:700>string</span>
+  lock   sync.Mutex
+  buffer bytes.Buffer
+  foo    <span style=color:#00688b;font-weight:700>int</span>
+  bar    <span style=color:#00688b;font-weight:700>string</span>
 }
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	p := &amp;SyncedBuffer{
-		foo: <span style=color:#b452cd>100</span>,
-		bar: <span style=color:#cd5555>&#34;foobar&#34;</span>,
-	}
-	fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;foo:&#34;</span>, p.foo)
-	fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;bar:&#34;</span>, p.bar)
-	fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v\n&#34;</span>, p)
+  p := &amp;SyncedBuffer{
+    foo: <span style=color:#b452cd>100</span>,
+    bar: <span style=color:#cd5555>&#34;foobar&#34;</span>,
+  }
+  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;foo:&#34;</span>, p.foo)
+  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;bar:&#34;</span>, p.bar)
+  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v\n&#34;</span>, p)
 }
 </code></pre></td></tr></table>
 </div>
@@ -312,30 +312,30 @@
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
 <span style=color:#8b008b;font-weight:700>import</span> (
-	<span style=color:#cd5555>&#34;bytes&#34;</span>
-	<span style=color:#cd5555>&#34;fmt&#34;</span>
-	<span style=color:#cd5555>&#34;sync&#34;</span>
+  <span style=color:#cd5555>&#34;bytes&#34;</span>
+  <span style=color:#cd5555>&#34;fmt&#34;</span>
+  <span style=color:#cd5555>&#34;sync&#34;</span>
 )
 
 <span style=color:#8b008b;font-weight:700>type</span> SyncedBuffer <span style=color:#8b008b;font-weight:700>struct</span> {
-	lock   sync.Mutex
-	buffer bytes.Buffer
-	foo    <span style=color:#00688b;font-weight:700>int</span>
-	bar    <span style=color:#00688b;font-weight:700>string</span>
+  lock   sync.Mutex
+  buffer bytes.Buffer
+  foo    <span style=color:#00688b;font-weight:700>int</span>
+  bar    <span style=color:#00688b;font-weight:700>string</span>
 }
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>NewSynced</span>(foo <span style=color:#00688b;font-weight:700>int</span>, bar <span style=color:#00688b;font-weight:700>string</span>) *SyncedBuffer {
-	<span style=color:#8b008b;font-weight:700>return</span> &amp;SyncedBuffer{
-		foo: foo,
-		bar: bar,
-	}
+  <span style=color:#8b008b;font-weight:700>return</span> &amp;SyncedBuffer{
+    foo: foo,
+    bar: bar,
+  }
 }
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	p := <span style=color:#008b45>NewSynced</span>(<span style=color:#b452cd>100</span>, <span style=color:#cd5555>&#34;foobar&#34;</span>)
-	fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;foo:&#34;</span>, p.foo)
-	fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;bar:&#34;</span>, p.bar)
-	fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v\n&#34;</span>, p)
+  p := <span style=color:#008b45>NewSynced</span>(<span style=color:#b452cd>100</span>, <span style=color:#cd5555>&#34;foobar&#34;</span>)
+  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;foo:&#34;</span>, p.foo)
+  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;bar:&#34;</span>, p.bar)
+  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;%#v\n&#34;</span>, p)
 }
 </code></pre></td></tr></table>
 </div>
@@ -359,14 +359,14 @@
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
 <span style=color:#8b008b;font-weight:700>import</span> (
-	<span style=color:#cd5555>&#34;fmt&#34;</span>
+  <span style=color:#cd5555>&#34;fmt&#34;</span>
 )
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	p := <span style=color:#658b00>new</span>(<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>)
-	test := *p
-	test[<span style=color:#cd5555>&#34;foo&#34;</span>] = <span style=color:#cd5555>&#34;bar&#34;</span>
-	fmt.<span style=color:#008b45>Println</span>(test)
+  p := <span style=color:#658b00>new</span>(<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>)
+  test := *p
+  test[<span style=color:#cd5555>&#34;foo&#34;</span>] = <span style=color:#cd5555>&#34;bar&#34;</span>
+  fmt.<span style=color:#008b45>Println</span>(test)
 }
 </code></pre></td></tr></table>
 </div>
@@ -426,23 +426,23 @@ main.main()
 <span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	<span style=color:#8b008b;font-weight:700>var</span> p *<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>
-	<span style=color:#228b22>// new
-</span><span style=color:#228b22></span>	p = <span style=color:#658b00>new</span>(<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>)
-	*p = <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>{
-		<span style=color:#cd5555>&#34;bar&#34;</span>: <span style=color:#cd5555>&#34;foo&#34;</span>,
-	}
-	people := *p
-	people[<span style=color:#cd5555>&#34;foo&#34;</span>] = <span style=color:#cd5555>&#34;bar&#34;</span>
+  <span style=color:#8b008b;font-weight:700>var</span> p *<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>
+  <span style=color:#228b22>// new
+</span><span style=color:#228b22></span>  p = <span style=color:#658b00>new</span>(<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>)
+  *p = <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>{
+    <span style=color:#cd5555>&#34;bar&#34;</span>: <span style=color:#cd5555>&#34;foo&#34;</span>,
+  }
+  people := *p
+  people[<span style=color:#cd5555>&#34;foo&#34;</span>] = <span style=color:#cd5555>&#34;bar&#34;</span>
 
-	fmt.<span style=color:#008b45>Println</span>(people)
-	fmt.<span style=color:#008b45>Println</span>(p)
+  fmt.<span style=color:#008b45>Println</span>(people)
+  fmt.<span style=color:#008b45>Println</span>(p)
 
-	<span style=color:#228b22>// make
-</span><span style=color:#228b22></span>	foobar := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>)
-	foobar[<span style=color:#cd5555>&#34;foo&#34;</span>] = <span style=color:#cd5555>&#34;bar&#34;</span>
-	foobar[<span style=color:#cd5555>&#34;bar&#34;</span>] = <span style=color:#cd5555>&#34;foo&#34;</span>
-	fmt.<span style=color:#008b45>Println</span>(foobar)
+  <span style=color:#228b22>// make
+</span><span style=color:#228b22></span>  foobar := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#00688b;font-weight:700>string</span>)
+  foobar[<span style=color:#cd5555>&#34;foo&#34;</span>] = <span style=color:#cd5555>&#34;bar&#34;</span>
+  foobar[<span style=color:#cd5555>&#34;bar&#34;</span>] = <span style=color:#cd5555>&#34;foo&#34;</span>
+  fmt.<span style=color:#008b45>Println</span>(foobar)
 }
 </code></pre></td></tr></table>
 </div>
