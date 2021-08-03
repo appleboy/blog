@@ -344,95 +344,95 @@ OpenSSL version: OpenSSL 1.1.1h  <span style=color:#b452cd>22</span> Sep <span s
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
 <span style=color:#8b008b;font-weight:700>import</span> (
-	<span style=color:#cd5555>&#34;context&#34;</span>
-	<span style=color:#cd5555>&#34;log&#34;</span>
-	<span style=color:#cd5555>&#34;os&#34;</span>
-	<span style=color:#cd5555>&#34;os/signal&#34;</span>
-	<span style=color:#cd5555>&#34;sync&#34;</span>
-	<span style=color:#cd5555>&#34;syscall&#34;</span>
-	<span style=color:#cd5555>&#34;time&#34;</span>
+  <span style=color:#cd5555>&#34;context&#34;</span>
+  <span style=color:#cd5555>&#34;log&#34;</span>
+  <span style=color:#cd5555>&#34;os&#34;</span>
+  <span style=color:#cd5555>&#34;os/signal&#34;</span>
+  <span style=color:#cd5555>&#34;sync&#34;</span>
+  <span style=color:#cd5555>&#34;syscall&#34;</span>
+  <span style=color:#cd5555>&#34;time&#34;</span>
 )
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>withContextFunc</span>(ctx context.Context, f <span style=color:#8b008b;font-weight:700>func</span>()) context.Context {
-	ctx, cancel := context.<span style=color:#008b45>WithCancel</span>(ctx)
-	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
-		c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal)
-		<span style=color:#228b22>// register for interupt (Ctrl+C) and SIGTERM (docker)
-</span><span style=color:#228b22></span>		signal.<span style=color:#008b45>Notify</span>(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
-		<span style=color:#8b008b;font-weight:700>defer</span> signal.<span style=color:#008b45>Stop</span>(c)
+  ctx, cancel := context.<span style=color:#008b45>WithCancel</span>(ctx)
+  <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+    c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal)
+    <span style=color:#228b22>// register for interupt (Ctrl+C) and SIGTERM (docker)
+</span><span style=color:#228b22></span>    signal.<span style=color:#008b45>Notify</span>(c, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+    <span style=color:#8b008b;font-weight:700>defer</span> signal.<span style=color:#008b45>Stop</span>(c)
 
-		<span style=color:#8b008b;font-weight:700>select</span> {
-		<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
-		<span style=color:#8b008b;font-weight:700>case</span> &lt;-c:
-			<span style=color:#008b45>f</span>()
-			<span style=color:#008b45>cancel</span>()
-		}
-	}()
+    <span style=color:#8b008b;font-weight:700>select</span> {
+    <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+    <span style=color:#8b008b;font-weight:700>case</span> &lt;-c:
+      <span style=color:#008b45>f</span>()
+      <span style=color:#008b45>cancel</span>()
+    }
+  }()
 
-	<span style=color:#8b008b;font-weight:700>return</span> ctx
+  <span style=color:#8b008b;font-weight:700>return</span> ctx
 }
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	jobChan := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>100</span>)
-	stopped := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{})
-	finished := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{})
-	wg := &amp;sync.WaitGroup{}
-	ctx := <span style=color:#008b45>withContextFunc</span>(
-		context.<span style=color:#008b45>Background</span>(),
-		<span style=color:#8b008b;font-weight:700>func</span>() {
-			log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;stop the server&#34;</span>)
-			<span style=color:#658b00>close</span>(stopped)
-			wg.<span style=color:#008b45>Wait</span>()
-			<span style=color:#658b00>close</span>(finished)
-		},
-	)
+  jobChan := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#00688b;font-weight:700>int</span>, <span style=color:#b452cd>100</span>)
+  stopped := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{})
+  finished := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> <span style=color:#8b008b;font-weight:700>struct</span>{})
+  wg := &amp;sync.WaitGroup{}
+  ctx := <span style=color:#008b45>withContextFunc</span>(
+    context.<span style=color:#008b45>Background</span>(),
+    <span style=color:#8b008b;font-weight:700>func</span>() {
+      log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;stop the server&#34;</span>)
+      <span style=color:#658b00>close</span>(stopped)
+      wg.<span style=color:#008b45>Wait</span>()
+      <span style=color:#658b00>close</span>(finished)
+    },
+  )
 
-	<span style=color:#228b22>// create 4 workers to process job
-</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#b452cd>4</span>; i++ {
-		<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(i <span style=color:#00688b;font-weight:700>int</span>) {
-			log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;start worker: %02d&#34;</span>, i)
-			<span style=color:#8b008b;font-weight:700>for</span> {
-				<span style=color:#8b008b;font-weight:700>select</span> {
-				<span style=color:#8b008b;font-weight:700>case</span> &lt;-finished:
-					log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;stop worker: %02d&#34;</span>, i)
-					<span style=color:#8b008b;font-weight:700>return</span>
-				<span style=color:#8b008b;font-weight:700>default</span>:
-					<span style=color:#8b008b;font-weight:700>select</span> {
-					<span style=color:#8b008b;font-weight:700>case</span> job := &lt;-jobChan:
-						time.<span style=color:#008b45>Sleep</span>(time.<span style=color:#008b45>Duration</span>(job*<span style=color:#b452cd>100</span>) * time.Millisecond)
-						log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;worker: %02d, process job: %02d&#34;</span>, i, job)
-						wg.<span style=color:#008b45>Done</span>()
-					<span style=color:#8b008b;font-weight:700>default</span>:
-						log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;worker: %02d, no job&#34;</span>, i)
-						time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
-					}
-				}
-			}
-		}(i + <span style=color:#b452cd>1</span>)
-	}
+  <span style=color:#228b22>// create 4 workers to process job
+</span><span style=color:#228b22></span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#b452cd>4</span>; i++ {
+    <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>(i <span style=color:#00688b;font-weight:700>int</span>) {
+      log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;start worker: %02d&#34;</span>, i)
+      <span style=color:#8b008b;font-weight:700>for</span> {
+        <span style=color:#8b008b;font-weight:700>select</span> {
+        <span style=color:#8b008b;font-weight:700>case</span> &lt;-finished:
+          log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;stop worker: %02d&#34;</span>, i)
+          <span style=color:#8b008b;font-weight:700>return</span>
+        <span style=color:#8b008b;font-weight:700>default</span>:
+          <span style=color:#8b008b;font-weight:700>select</span> {
+          <span style=color:#8b008b;font-weight:700>case</span> job := &lt;-jobChan:
+            time.<span style=color:#008b45>Sleep</span>(time.<span style=color:#008b45>Duration</span>(job*<span style=color:#b452cd>100</span>) * time.Millisecond)
+            log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;worker: %02d, process job: %02d&#34;</span>, i, job)
+            wg.<span style=color:#008b45>Done</span>()
+          <span style=color:#8b008b;font-weight:700>default</span>:
+            log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;worker: %02d, no job&#34;</span>, i)
+            time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
+          }
+        }
+      }
+    }(i + <span style=color:#b452cd>1</span>)
+  }
 
-	<span style=color:#228b22>// send job
-</span><span style=color:#228b22></span>	<span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
-		<span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#b452cd>50</span>; i++ {
-			wg.<span style=color:#008b45>Add</span>(<span style=color:#b452cd>1</span>)
-			<span style=color:#8b008b;font-weight:700>select</span> {
-			<span style=color:#8b008b;font-weight:700>case</span> jobChan &lt;- i:
-				time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>100</span> * time.Millisecond)
-				log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;send the job: %02d\n&#34;</span>, i)
-			<span style=color:#8b008b;font-weight:700>case</span> &lt;-stopped:
-				wg.<span style=color:#008b45>Done</span>()
-				log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;stoped send the job&#34;</span>)
-				<span style=color:#8b008b;font-weight:700>return</span>
-			}
-		}
-		<span style=color:#8b008b;font-weight:700>return</span>
-	}()
+  <span style=color:#228b22>// send job
+</span><span style=color:#228b22></span>  <span style=color:#8b008b;font-weight:700>go</span> <span style=color:#8b008b;font-weight:700>func</span>() {
+    <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#b452cd>50</span>; i++ {
+      wg.<span style=color:#008b45>Add</span>(<span style=color:#b452cd>1</span>)
+      <span style=color:#8b008b;font-weight:700>select</span> {
+      <span style=color:#8b008b;font-weight:700>case</span> jobChan &lt;- i:
+        time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>100</span> * time.Millisecond)
+        log.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;send the job: %02d\n&#34;</span>, i)
+      <span style=color:#8b008b;font-weight:700>case</span> &lt;-stopped:
+        wg.<span style=color:#008b45>Done</span>()
+        log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;stoped send the job&#34;</span>)
+        <span style=color:#8b008b;font-weight:700>return</span>
+      }
+    }
+    <span style=color:#8b008b;font-weight:700>return</span>
+  }()
 
-	<span style=color:#8b008b;font-weight:700>select</span> {
-	<span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
-		time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
-		log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;server down&#34;</span>)
-	}
+  <span style=color:#8b008b;font-weight:700>select</span> {
+  <span style=color:#8b008b;font-weight:700>case</span> &lt;-ctx.<span style=color:#008b45>Done</span>():
+    time.<span style=color:#008b45>Sleep</span>(<span style=color:#b452cd>1</span> * time.Second)
+    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;server down&#34;</span>)
+  }
 }
 </code></pre></td></tr></table>
 </div>

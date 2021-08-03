@@ -338,103 +338,103 @@
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
 
 <span style=color:#8b008b;font-weight:700>import</span> (
-	<span style=color:#cd5555>&#34;fmt&#34;</span>
-	<span style=color:#cd5555>&#34;log&#34;</span>
-	<span style=color:#cd5555>&#34;time&#34;</span>
+  <span style=color:#cd5555>&#34;fmt&#34;</span>
+  <span style=color:#cd5555>&#34;log&#34;</span>
+  <span style=color:#cd5555>&#34;time&#34;</span>
 
-	<span style=color:#cd5555>&#34;github.com/aws/aws-sdk-go/aws&#34;</span>
-	<span style=color:#cd5555>&#34;github.com/aws/aws-sdk-go/aws/session&#34;</span>
-	<span style=color:#cd5555>&#34;github.com/aws/aws-sdk-go/service/sagemaker&#34;</span>
+  <span style=color:#cd5555>&#34;github.com/aws/aws-sdk-go/aws&#34;</span>
+  <span style=color:#cd5555>&#34;github.com/aws/aws-sdk-go/aws/session&#34;</span>
+  <span style=color:#cd5555>&#34;github.com/aws/aws-sdk-go/service/sagemaker&#34;</span>
 )
 
 <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-	sess, err := session.<span style=color:#008b45>NewSessionWithOptions</span>(session.Options{
-		<span style=color:#228b22>// Provide SDK Config options, such as Region.
-</span><span style=color:#228b22></span>		Config: aws.Config{
-			Region: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;ap-southeast-1&#34;</span>),
-		},
+  sess, err := session.<span style=color:#008b45>NewSessionWithOptions</span>(session.Options{
+    <span style=color:#228b22>// Provide SDK Config options, such as Region.
+</span><span style=color:#228b22></span>    Config: aws.Config{
+      Region: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;ap-southeast-1&#34;</span>),
+    },
 
-		<span style=color:#228b22>// Force enable Shared Config support
-</span><span style=color:#228b22></span>		SharedConfigState: session.SharedConfigEnable,
-	})
-	<span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-		log.<span style=color:#008b45>Fatal</span>(err)
-	}
+    <span style=color:#228b22>// Force enable Shared Config support
+</span><span style=color:#228b22></span>    SharedConfigState: session.SharedConfigEnable,
+  })
+  <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+    log.<span style=color:#008b45>Fatal</span>(err)
+  }
 
-	<span style=color:#228b22>// Create a SageMaker client from just a session.
-</span><span style=color:#228b22></span>	svc := sagemaker.<span style=color:#008b45>New</span>(sess)
-	_, err = svc.<span style=color:#008b45>CreateTrainingJob</span>(&amp;sagemaker.CreateTrainingJobInput{
-		RoleArn: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;arn:aws:iam::XXXXXXXXXXXX:role/sagemaker-role&#34;</span>),
-		InputDataConfig: []*sagemaker.Channel{
-			{
-				ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;training&#34;</span>),
-				DataSource: &amp;sagemaker.DataSource{
-					S3DataSource: &amp;sagemaker.S3DataSource{
-						S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
-						S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
-						S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/00c7b0fe-c871-45a9-9272-be986162f2ce&#34;</span>),
-					},
-				},
-			},
-			{
-				ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;evaluation&#34;</span>),
-				DataSource: &amp;sagemaker.DataSource{
-					S3DataSource: &amp;sagemaker.S3DataSource{
-						S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
-						S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
-						S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/0117d14a-8621-4744-b42c-8d12391835a7&#34;</span>),
-					},
-				},
-			},
-			{
-				ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;checkpoint&#34;</span>),
-				DataSource: &amp;sagemaker.DataSource{
-					S3DataSource: &amp;sagemaker.S3DataSource{
-						S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
-						S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
-						S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781&#34;</span>),
-					},
-				},
-			},
-			{
-				ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;config&#34;</span>),
-				DataSource: &amp;sagemaker.DataSource{
-					S3DataSource: &amp;sagemaker.S3DataSource{
-						S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
-						S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
-						S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/054cb1f8-ab42-44f1-b441-700c1635f519&#34;</span>),
-					},
-				},
-			},
-		},
-		StoppingCondition: &amp;sagemaker.StoppingCondition{
-			MaxRuntimeInSeconds: aws.<span style=color:#008b45>Int64</span>(<span style=color:#b452cd>3600</span>),
-		},
-		TrainingJobName: aws.<span style=color:#008b45>String</span>(fmt.<span style=color:#008b45>Sprintf</span>(<span style=color:#cd5555>&#34;training-%d&#34;</span>, time.<span style=color:#008b45>Now</span>().<span style=color:#008b45>Unix</span>())),
-		AlgorithmSpecification: &amp;sagemaker.AlgorithmSpecification{
-			TrainingImage:     aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model&#34;</span>),
-			TrainingInputMode: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;File&#34;</span>),
-		},
-		OutputDataConfig: &amp;sagemaker.OutputDataConfig{
-			S3OutputPath: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/outputs/&#34;</span>),
-		},
-		ResourceConfig: &amp;sagemaker.ResourceConfig{
-			InstanceCount:  aws.<span style=color:#008b45>Int64</span>(<span style=color:#b452cd>1</span>),
-			InstanceType:   aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;ml.m4.xlarge&#34;</span>),
-			VolumeSizeInGB: aws.<span style=color:#008b45>Int64</span>(<span style=color:#b452cd>50</span>),
-		},
-		Environment: <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]*<span style=color:#00688b;font-weight:700>string</span>{
-			<span style=color:#cd5555>&#34;FOO&#34;</span>: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;bar&#34;</span>),
-			<span style=color:#cd5555>&#34;BAR&#34;</span>: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;foo&#34;</span>),
-		},
-		HyperParameters: <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]*<span style=color:#00688b;font-weight:700>string</span>{
-			<span style=color:#cd5555>&#34;learning_rate&#34;</span>: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;0.5&#34;</span>),
-			<span style=color:#cd5555>&#34;end_rate&#34;</span>:      aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;0.6&#34;</span>),
-		},
-	})
-	<span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-		log.<span style=color:#008b45>Fatal</span>(err)
-	}
+  <span style=color:#228b22>// Create a SageMaker client from just a session.
+</span><span style=color:#228b22></span>  svc := sagemaker.<span style=color:#008b45>New</span>(sess)
+  _, err = svc.<span style=color:#008b45>CreateTrainingJob</span>(&amp;sagemaker.CreateTrainingJobInput{
+    RoleArn: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;arn:aws:iam::XXXXXXXXXXXX:role/sagemaker-role&#34;</span>),
+    InputDataConfig: []*sagemaker.Channel{
+      {
+        ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;training&#34;</span>),
+        DataSource: &amp;sagemaker.DataSource{
+          S3DataSource: &amp;sagemaker.S3DataSource{
+            S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
+            S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
+            S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/00c7b0fe-c871-45a9-9272-be986162f2ce&#34;</span>),
+          },
+        },
+      },
+      {
+        ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;evaluation&#34;</span>),
+        DataSource: &amp;sagemaker.DataSource{
+          S3DataSource: &amp;sagemaker.S3DataSource{
+            S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
+            S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
+            S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/0117d14a-8621-4744-b42c-8d12391835a7&#34;</span>),
+          },
+        },
+      },
+      {
+        ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;checkpoint&#34;</span>),
+        DataSource: &amp;sagemaker.DataSource{
+          S3DataSource: &amp;sagemaker.S3DataSource{
+            S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
+            S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
+            S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781&#34;</span>),
+          },
+        },
+      },
+      {
+        ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;config&#34;</span>),
+        DataSource: &amp;sagemaker.DataSource{
+          S3DataSource: &amp;sagemaker.S3DataSource{
+            S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
+            S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
+            S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/054cb1f8-ab42-44f1-b441-700c1635f519&#34;</span>),
+          },
+        },
+      },
+    },
+    StoppingCondition: &amp;sagemaker.StoppingCondition{
+      MaxRuntimeInSeconds: aws.<span style=color:#008b45>Int64</span>(<span style=color:#b452cd>3600</span>),
+    },
+    TrainingJobName: aws.<span style=color:#008b45>String</span>(fmt.<span style=color:#008b45>Sprintf</span>(<span style=color:#cd5555>&#34;training-%d&#34;</span>, time.<span style=color:#008b45>Now</span>().<span style=color:#008b45>Unix</span>())),
+    AlgorithmSpecification: &amp;sagemaker.AlgorithmSpecification{
+      TrainingImage:     aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model&#34;</span>),
+      TrainingInputMode: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;File&#34;</span>),
+    },
+    OutputDataConfig: &amp;sagemaker.OutputDataConfig{
+      S3OutputPath: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/outputs/&#34;</span>),
+    },
+    ResourceConfig: &amp;sagemaker.ResourceConfig{
+      InstanceCount:  aws.<span style=color:#008b45>Int64</span>(<span style=color:#b452cd>1</span>),
+      InstanceType:   aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;ml.m4.xlarge&#34;</span>),
+      VolumeSizeInGB: aws.<span style=color:#008b45>Int64</span>(<span style=color:#b452cd>50</span>),
+    },
+    Environment: <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]*<span style=color:#00688b;font-weight:700>string</span>{
+      <span style=color:#cd5555>&#34;FOO&#34;</span>: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;bar&#34;</span>),
+      <span style=color:#cd5555>&#34;BAR&#34;</span>: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;foo&#34;</span>),
+    },
+    HyperParameters: <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]*<span style=color:#00688b;font-weight:700>string</span>{
+      <span style=color:#cd5555>&#34;learning_rate&#34;</span>: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;0.5&#34;</span>),
+      <span style=color:#cd5555>&#34;end_rate&#34;</span>:      aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;0.6&#34;</span>),
+    },
+  })
+  <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+    log.<span style=color:#008b45>Fatal</span>(err)
+  }
 }
 </code></pre></td></tr></table>
 </div>
@@ -594,16 +594,16 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>			{
-				ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;checkpoint&#34;</span>),
-				DataSource: &amp;sagemaker.DataSource{
-					S3DataSource: &amp;sagemaker.S3DataSource{
-						S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
-						S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
-						S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781&#34;</span>),
-					},
-				},
-			},
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>{
+ ChannelName: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;checkpoint&#34;</span>),
+ DataSource: &amp;sagemaker.DataSource{
+   S3DataSource: &amp;sagemaker.S3DataSource{
+     S3DataDistributionType: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;FullyReplicated&#34;</span>),
+     S3DataType:             aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;S3Prefix&#34;</span>),
+     S3Uri:                  aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781&#34;</span>),
+   },
+ },
+},
 </code></pre></td></tr></table>
 </div>
 </div><p>可以在 <code>/opt/ml/data/input</code> 底下找到 <code>checkpoint</code> 目錄，更多詳細設定可以參考 <a href=https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_S3DataSource.html>S3DataSource</a>。</p>
@@ -616,10 +616,10 @@
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>		AlgorithmSpecification: &amp;sagemaker.AlgorithmSpecification{
-			TrainingImage:     aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model&#34;</span>),
-			TrainingInputMode: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;File&#34;</span>),
-		},
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>AlgorithmSpecification: &amp;sagemaker.AlgorithmSpecification{
+  TrainingImage:     aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model&#34;</span>),
+  TrainingInputMode: aws.<span style=color:#008b45>String</span>(<span style=color:#cd5555>&#34;File&#34;</span>),
+},
 </code></pre></td></tr></table>
 </div>
 </div><p>當模型完成時，會有很多資料需要給使用者查閱或下載，可以將檔案都丟到 <code>/opt/ml/output/data</code> 內，而 SageMaker 會將裡面的檔案全部壓縮成 <code>.tar.gz</code> 格式放到 <code>OutputDataConfig</code> 指定的 S3 路徑內。</p>

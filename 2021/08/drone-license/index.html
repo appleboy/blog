@@ -7,7 +7,7 @@
 <meta name=description content="
 自己推行 Drone CI/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","name":"開源專案 drone ci cd 平台真的免費嗎？"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"開源專案 Drone CI\/CD 平台真的免費嗎？","description":"自己推行 Drone CI\/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。\n","inLanguage":"en","wordCount":144,"datePublished":"2021-08-01T09:57:19","dateModified":"2021-08-01T09:57:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone, golang, git, gitea"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","name":"開源專案 drone ci cd 平台真的免費嗎？"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"開源專案 Drone CI\/CD 平台真的免費嗎？","description":"自己推行 Drone CI\/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。\n","inLanguage":"en","wordCount":227,"datePublished":"2021-08-01T09:57:19","dateModified":"2021-08-01T09:57:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["drone, golang, git, gitea"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/08\/drone-license\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="開源專案 Drone CI/CD 平台真的免費嗎？">
 <meta property="og:description" content="
 自己推行 Drone CI/CD 開源平台已經多年，很多人都會問我說，Drone 真的可以免費使用嗎？用在開源上面，或者是導入進公司內部團隊，這費用該怎麼計算呢？好的，本篇就帶大家了解 Drone 用在開源上或是公司內部團隊上需要注意的地方，官方其實有寫了一整頁 FAQ 非常詳細，底下是我整理幾點給大家知道。">
@@ -99,8 +99,8 @@
 <h1>開源專案 Drone CI/CD 平台真的免費嗎？</h1>
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on August 1, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;144&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;227&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -167,8 +167,58 @@
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>go build -tags <span style=color:#cd5555>&#34;nolimit&#34;</span> github.com/drone/drone/cmd/drone-server
 </code></pre></td></tr></table>
 </div>
-</div><p>這邊要注意，在解除限制前，先找公司法務商量，公司營業額已經大於 100 萬美金的話，請不要用上述方式繞過限制，乖乖付錢比較實在。</p>
-<h3 id=開源-vs-企業版本差異>開源 vs 企業版本差異</h3>
+</div><p>這邊要注意，在解除限制前，先找公司法務商量，公司營業額已經大於 100 萬美金的話，請不要用上述方式繞過限制，乖乖付錢比較實在。很多人問到為什麼 <a href=https://gitea.io/en-us/>Gitea</a> 或 <a href=https://gogs.io/>Gogs</a> 為什麼沒這限制，請參考底下代碼，<a href=https://github.com/drone/drone/blob/4b7f52ad8a96e8e447f813d4b3de19ca30ff4b0d/service/license/load.go#L37-L56>程式碼會說話</a>:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#228b22>// Trial returns a default license with trial terms based
+</span><span style=color:#228b22>// on the source code management system.
+</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>Trial</span>(provider <span style=color:#00688b;font-weight:700>string</span>) *core.License {
+  <span style=color:#8b008b;font-weight:700>switch</span> provider {
+  <span style=color:#8b008b;font-weight:700>case</span> <span style=color:#cd5555>&#34;gitea&#34;</span>, <span style=color:#cd5555>&#34;gogs&#34;</span>:
+    <span style=color:#8b008b;font-weight:700>return</span> &amp;core.License{
+      Kind:   core.LicenseTrial,
+      Repos:  <span style=color:#b452cd>0</span>,
+      Users:  <span style=color:#b452cd>0</span>,
+      Builds: <span style=color:#b452cd>0</span>,
+      Nodes:  <span style=color:#b452cd>0</span>,
+    }
+  <span style=color:#8b008b;font-weight:700>default</span>:
+    <span style=color:#8b008b;font-weight:700>return</span> &amp;core.License{
+      Kind:   core.LicenseTrial,
+      Repos:  <span style=color:#b452cd>0</span>,
+      Users:  <span style=color:#b452cd>0</span>,
+      Builds: <span style=color:#b452cd>5000</span>,
+      Nodes:  <span style=color:#b452cd>0</span>,
+    }
+  }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h3 id=開源-vs-企業版本差異>開源 vs 企業版本差異</h3>
 <p>底下是官方列出來的企業版本功能</p>
 <ul>
 <li>Supports distributed runners</li>
