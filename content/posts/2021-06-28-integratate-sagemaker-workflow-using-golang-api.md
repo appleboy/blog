@@ -97,103 +97,103 @@ tags:
 package main
 
 import (
-	"fmt"
-	"log"
-	"time"
+  "fmt"
+  "log"
+  "time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/sagemaker"
+  "github.com/aws/aws-sdk-go/aws"
+  "github.com/aws/aws-sdk-go/aws/session"
+  "github.com/aws/aws-sdk-go/service/sagemaker"
 )
 
 func main() {
-	sess, err := session.NewSessionWithOptions(session.Options{
-		// Provide SDK Config options, such as Region.
-		Config: aws.Config{
-			Region: aws.String("ap-southeast-1"),
-		},
+  sess, err := session.NewSessionWithOptions(session.Options{
+    // Provide SDK Config options, such as Region.
+    Config: aws.Config{
+      Region: aws.String("ap-southeast-1"),
+    },
 
-		// Force enable Shared Config support
-		SharedConfigState: session.SharedConfigEnable,
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
+    // Force enable Shared Config support
+    SharedConfigState: session.SharedConfigEnable,
+  })
+  if err != nil {
+    log.Fatal(err)
+  }
 
-	// Create a SageMaker client from just a session.
-	svc := sagemaker.New(sess)
-	_, err = svc.CreateTrainingJob(&sagemaker.CreateTrainingJobInput{
-		RoleArn: aws.String("arn:aws:iam::XXXXXXXXXXXX:role/sagemaker-role"),
-		InputDataConfig: []*sagemaker.Channel{
-			{
-				ChannelName: aws.String("training"),
-				DataSource: &sagemaker.DataSource{
-					S3DataSource: &sagemaker.S3DataSource{
-						S3DataDistributionType: aws.String("FullyReplicated"),
-						S3DataType:             aws.String("S3Prefix"),
-						S3Uri:                  aws.String("s3://sample-s3/converts/00c7b0fe-c871-45a9-9272-be986162f2ce"),
-					},
-				},
-			},
-			{
-				ChannelName: aws.String("evaluation"),
-				DataSource: &sagemaker.DataSource{
-					S3DataSource: &sagemaker.S3DataSource{
-						S3DataDistributionType: aws.String("FullyReplicated"),
-						S3DataType:             aws.String("S3Prefix"),
-						S3Uri:                  aws.String("s3://sample-s3/converts/0117d14a-8621-4744-b42c-8d12391835a7"),
-					},
-				},
-			},
-			{
-				ChannelName: aws.String("checkpoint"),
-				DataSource: &sagemaker.DataSource{
-					S3DataSource: &sagemaker.S3DataSource{
-						S3DataDistributionType: aws.String("FullyReplicated"),
-						S3DataType:             aws.String("S3Prefix"),
-						S3Uri:                  aws.String("s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781"),
-					},
-				},
-			},
-			{
-				ChannelName: aws.String("config"),
-				DataSource: &sagemaker.DataSource{
-					S3DataSource: &sagemaker.S3DataSource{
-						S3DataDistributionType: aws.String("FullyReplicated"),
-						S3DataType:             aws.String("S3Prefix"),
-						S3Uri:                  aws.String("s3://sample-s3/converts/054cb1f8-ab42-44f1-b441-700c1635f519"),
-					},
-				},
-			},
-		},
-		StoppingCondition: &sagemaker.StoppingCondition{
-			MaxRuntimeInSeconds: aws.Int64(3600),
-		},
-		TrainingJobName: aws.String(fmt.Sprintf("training-%d", time.Now().Unix())),
-		AlgorithmSpecification: &sagemaker.AlgorithmSpecification{
-			TrainingImage:     aws.String("XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model"),
-			TrainingInputMode: aws.String("File"),
-		},
-		OutputDataConfig: &sagemaker.OutputDataConfig{
-			S3OutputPath: aws.String("s3://sample-s3/outputs/"),
-		},
-		ResourceConfig: &sagemaker.ResourceConfig{
-			InstanceCount:  aws.Int64(1),
-			InstanceType:   aws.String("ml.m4.xlarge"),
-			VolumeSizeInGB: aws.Int64(50),
-		},
-		Environment: map[string]*string{
-			"FOO": aws.String("bar"),
-			"BAR": aws.String("foo"),
-		},
-		HyperParameters: map[string]*string{
-			"learning_rate": aws.String("0.5"),
-			"end_rate":      aws.String("0.6"),
-		},
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
+  // Create a SageMaker client from just a session.
+  svc := sagemaker.New(sess)
+  _, err = svc.CreateTrainingJob(&sagemaker.CreateTrainingJobInput{
+    RoleArn: aws.String("arn:aws:iam::XXXXXXXXXXXX:role/sagemaker-role"),
+    InputDataConfig: []*sagemaker.Channel{
+      {
+        ChannelName: aws.String("training"),
+        DataSource: &sagemaker.DataSource{
+          S3DataSource: &sagemaker.S3DataSource{
+            S3DataDistributionType: aws.String("FullyReplicated"),
+            S3DataType:             aws.String("S3Prefix"),
+            S3Uri:                  aws.String("s3://sample-s3/converts/00c7b0fe-c871-45a9-9272-be986162f2ce"),
+          },
+        },
+      },
+      {
+        ChannelName: aws.String("evaluation"),
+        DataSource: &sagemaker.DataSource{
+          S3DataSource: &sagemaker.S3DataSource{
+            S3DataDistributionType: aws.String("FullyReplicated"),
+            S3DataType:             aws.String("S3Prefix"),
+            S3Uri:                  aws.String("s3://sample-s3/converts/0117d14a-8621-4744-b42c-8d12391835a7"),
+          },
+        },
+      },
+      {
+        ChannelName: aws.String("checkpoint"),
+        DataSource: &sagemaker.DataSource{
+          S3DataSource: &sagemaker.S3DataSource{
+            S3DataDistributionType: aws.String("FullyReplicated"),
+            S3DataType:             aws.String("S3Prefix"),
+            S3Uri:                  aws.String("s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781"),
+          },
+        },
+      },
+      {
+        ChannelName: aws.String("config"),
+        DataSource: &sagemaker.DataSource{
+          S3DataSource: &sagemaker.S3DataSource{
+            S3DataDistributionType: aws.String("FullyReplicated"),
+            S3DataType:             aws.String("S3Prefix"),
+            S3Uri:                  aws.String("s3://sample-s3/converts/054cb1f8-ab42-44f1-b441-700c1635f519"),
+          },
+        },
+      },
+    },
+    StoppingCondition: &sagemaker.StoppingCondition{
+      MaxRuntimeInSeconds: aws.Int64(3600),
+    },
+    TrainingJobName: aws.String(fmt.Sprintf("training-%d", time.Now().Unix())),
+    AlgorithmSpecification: &sagemaker.AlgorithmSpecification{
+      TrainingImage:     aws.String("XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model"),
+      TrainingInputMode: aws.String("File"),
+    },
+    OutputDataConfig: &sagemaker.OutputDataConfig{
+      S3OutputPath: aws.String("s3://sample-s3/outputs/"),
+    },
+    ResourceConfig: &sagemaker.ResourceConfig{
+      InstanceCount:  aws.Int64(1),
+      InstanceType:   aws.String("ml.m4.xlarge"),
+      VolumeSizeInGB: aws.Int64(50),
+    },
+    Environment: map[string]*string{
+      "FOO": aws.String("bar"),
+      "BAR": aws.String("foo"),
+    },
+    HyperParameters: map[string]*string{
+      "learning_rate": aws.String("0.5"),
+      "end_rate":      aws.String("0.6"),
+    },
+  })
+  if err != nil {
+    log.Fatal(err)
+  }
 }
 ```
 
@@ -272,16 +272,16 @@ func main() {
 注意務必要打開 [CloudWatch][24] 跟 logs 的權限，不然跑完無法看到正常的 Log 訊息。接著 `InputDataConfig` 參數可以指定在 S3 上面任何檔案，透過 `Prefix` 設定來下載多個檔案，而 `ChannelName` 當作目錄分類。像是底下設定:
 
 ```go
-			{
-				ChannelName: aws.String("checkpoint"),
-				DataSource: &sagemaker.DataSource{
-					S3DataSource: &sagemaker.S3DataSource{
-						S3DataDistributionType: aws.String("FullyReplicated"),
-						S3DataType:             aws.String("S3Prefix"),
-						S3Uri:                  aws.String("s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781"),
-					},
-				},
-			},
+{
+ ChannelName: aws.String("checkpoint"),
+ DataSource: &sagemaker.DataSource{
+   S3DataSource: &sagemaker.S3DataSource{
+     S3DataDistributionType: aws.String("FullyReplicated"),
+     S3DataType:             aws.String("S3Prefix"),
+     S3Uri:                  aws.String("s3://sample-s3/converts/016c7bd3-13a6-49bd-9c8c-4abfc3522781"),
+   },
+ },
+},
 ```
 
 可以在 `/opt/ml/data/input` 底下找到 `checkpoint` 目錄，更多詳細設定可以參考 [S3DataSource][25]。
@@ -295,10 +295,10 @@ func main() {
 接著透過 `AlgorithmSpecification` 指定用哪個演算法來進行訓練，`TrainingImage` 可以指定預先包好的容器名稱。更多詳細設定請看[參考官方文件](https://docs.aws.amazon.com/sagemaker/latest/APIReference/API_AlgorithmSpecification.html)
 
 ```go
-		AlgorithmSpecification: &sagemaker.AlgorithmSpecification{
-			TrainingImage:     aws.String("XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model"),
-			TrainingInputMode: aws.String("File"),
-		},
+AlgorithmSpecification: &sagemaker.AlgorithmSpecification{
+  TrainingImage:     aws.String("XXXXXXXXXXXXX.dkr.ecr.ap-southeast-1.amazonaws.com/tl-training-model"),
+  TrainingInputMode: aws.String("File"),
+},
 ```
 
 當模型完成時，會有很多資料需要給使用者查閱或下載，可以將檔案都丟到 `/opt/ml/output/data` 內，而 SageMaker 會將裡面的檔案全部壓縮成 `.tar.gz` 格式放到 `OutputDataConfig` 指定的 S3 路徑內。
