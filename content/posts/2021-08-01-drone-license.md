@@ -108,9 +108,9 @@ func Trial(provider string) *core.License {
 * Supports autoscaling
 * Supports [extensions](https://docs.drone.io/extensions/overview/)
 
-而對比開源版本，多了底下限制
+對比開源版本，多了底下限制
 
 * Limited to a single machine
 * Limited to an embedded sqlite database
 
-也就是不支援 Postgres 或 MySQL 資料庫，也只能架設在單台機器上面。其他重要功能全都一樣，如果不是很介意這兩點，其實開源版本已經很夠用了。
+不支援 Postgres 或 MySQL 資料庫，只能架設在單台機器上面。其他重要功能全都一樣，如果不是很介意這兩點，其實開源版本已經很夠用了。
