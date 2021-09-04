@@ -7,7 +7,7 @@
 <meta name=description content="
 前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","name":"用 aws efs 或 fsx lustre 加速 sagemaker 模型訓練"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練","description":"前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。\n","inLanguage":"en","wordCount":610,"datePublished":"2021-09-04T12:43:19","dateModified":"2021-09-04T12:43:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["sagemaker, golang, FSx, Lustre, EFS"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","name":"用 aws efs 或 fsx lustre 加速 sagemaker 模型訓練"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練","description":"前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。\n","inLanguage":"en","wordCount":609,"datePublished":"2021-09-04T12:43:19","dateModified":"2021-09-04T12:43:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["sagemaker, golang, FSx, Lustre, EFS, terraform"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練">
 <meta property="og:description" content="
 前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
@@ -100,7 +100,7 @@
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on September 4, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;610&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;609&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -138,10 +138,10 @@
 <p>在講問題前，先來看看 SageMaker 訓練模型流程，底下先看看 Training Job 流程:</p>
 <p><img src=https://i.imgur.com/K57zeNx.png alt="job flow"></p>
 <p>可以看到第二個步驟是 <code>Downloading</code>，也就是每一次的 Training 過程，都需要從 S3 下載，這樣每次訓練，都需要浪費下載時間，而這個時間在 SageMaker 是算在訓練時間內，也就是需要花費的，假設檔案有個 100G，不只是讓訓練模型增加不少時間外，也額外多花了不少費用。</p>
-<p>除了使用者提供的 Dataset 之外，還要加上我們自家的 <code>1TB</code> Dataset 進行訓練，那如果把 1TB 資料放在 S3 上面，從下載到解壓縮可能就要一小時跑不掉，所以透過 S3 這方案肯定是不行的，浪費時間跟金錢。故最終有跟台灣 AWS 團隊討論出使用 <a href=https://aws.amazon.com/tw/fsx/lustre/?>AWS FSx for Lustre</a> 解決方案。</p>
+<p>除了使用者提供的 Dataset 之外，還要加上自家的 <code>1TB</code> Dataset 進行訓練，那如果把 1TB 資料放在 S3 上面，從下載到解壓縮可能就要一小時跑不掉，所以透過 S3 這方案肯定是不行的，浪費時間跟金錢。故最終有跟台灣 AWS 團隊討論出使用 <a href=https://aws.amazon.com/tw/fsx/lustre/?>AWS FSx for Lustre</a> 解決方案。</p>
 <h2 id=使用-amazon-fsx-for-lustre>使用 Amazon FSx for Lustre</h2>
 <p>首先 Lustre 就是一個雲端網路磁碟，它的最大好處就是可以整合 AWS S3，只要 S3 上面有增加任何檔案，Lustre 就會隨時將檔案同步進來，但是這僅限於單向同步，也就是 <code>S3 -> Lustre</code>，如果將 Lustre 掛載到 EC2 上面，砍掉任何檔案，是不會同步到 S3 上面的，這點需要非常小心注意。</p>
-<p>原本我的想法是，這樣挺不錯的，S3 可以同步到 Lustre 磁區內，但是這邊遇到問題是，本來我在 S3 有綁定了 <code>ObjectCreated</code> 到 SQS 內部，如下面 <a href=https://github.com/hashicorp/hcl>HCL 語法</a>範例 (<a href=https://www.terraform.io/>Terraform</a>)，但是只要你要使用 S3 同步到 Lustre 內，也需要綁定同樣 Event，這邊就完全不能設定，會噴 API 錯誤，等於是要開發者二選一這功能，其實相當奇怪啊，理應上 AWS S3 要可以同步發送不同的 Event 到不同的 Target 才對，所以因為這樣，我打消了將使用者的 Dataset 轉移到 Lustre 磁碟上。</p>
+<p>原本團隊的想法是，這樣挺不錯的，S3 可以同步到 Lustre 磁區內，但是這邊遇到問題是，本來 AWS S3 Bucket 上有綁定了 <code>ObjectCreated</code> 到 SQS 內部，如下面 <a href=https://github.com/hashicorp/hcl>HCL 語法</a>範例 (<a href=https://www.terraform.io/>Terraform</a>)，但是只要使用 S3 同步到 Lustre 內，也需要綁定同樣 Event，這邊就完全不能設定，會噴 API 錯誤，等於是要開發者二選一這功能，其實相當奇怪啊，理應上 AWS S3 要可以同步發送相同的 Event 到不同的 Target 才對，也因為這樣，團隊取消了將使用者的 Dataset 轉移到 Lustre 磁碟上。</p>
 <div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
@@ -198,11 +198,11 @@
 </div>
 </div><p>最終團隊只有將自家的 Dataset (800G) 放到 Lustre 上面。這邊提醒一下，Lustre 低消是 <code>1.2TB</code>，所以團隊只有少量的 Dataset 的話，其實不應該使用 Lustre 才對。</p>
 <h2 id=使用-amazon-elastic-file-system>使用 Amazon Elastic File System</h2>
-<p>上述 Lustre 整合 SageMaker 相當成功，也順利將整套訓練模型流程給定下來了。但是由於我們客戶都在中國境內居多，故我也將整套 Global AWS 架構，轉移到 AWS China 北京 Region。然而當在建置過程中，直接收到 SageMaker API 噴出底下錯誤訊息</p>
+<p>上述 Lustre 整合 SageMaker 相當成功，也順利將整套訓練模型流程給定下來了。但是由於客戶都在中國境內居多，故將整套 Global AWS 架構，轉移到 AWS China 北京 Region。然而當在建置過程中，直接收到 SageMaker API 噴出底下錯誤訊息</p>
 <blockquote>
 <p>FSx for Lustre is currently not supported in the region cn-north-1 for SageMaker</p>
 </blockquote>
-<p>看到這訊息我也蠻傻眼的，直接開 AWS Web Console 操作看看是否少了哪些功能，結果從 UI 上面是無法選擇使用 File System 功能</p>
+<p>看到這訊息真的蠻傻眼的，直接開 AWS Web Console 操作看看是否少了哪些功能，結果從 UI 上面是無法選擇使用 File System 功能</p>
 <p><img src=https://i.imgur.com/NfwgEtS.png alt=china></p>
 <p>當下馬上跟 AWS 團隊再次確認是否有支援 Lustre，結果得到的回覆是只有支援 EFS，而 UI 上面不支援使用 EFS，只能透過 API 方式進行串接。後端團隊立馬開始將 Lustre 轉換到 EFS，轉換過程遇到一些設定上的問題，像是底下:</p>
 <blockquote>
@@ -284,8 +284,8 @@
 <blockquote>
 <p>ClientError: Data download failed:Please ensure that the subnet&rsquo;s route table has a route to an S3 VPC endpoint or a NAT device, and both the security groups and the subnet&rsquo;s network ACL allow outbound traffic to S3.</p>
 </blockquote>
-<p>想像我們要去存取 AWS S3 的資源，像是 EC2 直接去讀取相關 AWS S3 檔案，都是沒問題的，而可以成功讀取最主要是這台 EC2 是在 <code>Public Subnet</code>，它有權限可以存取 Internet，而 Public Subnet 最主要有 route table 搭配 <a href=https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html>internet gateway</a> 才可以存取 Internet。</p>
-<p>而現在遇到此問題的原因是我們使用的是 <code>Private Subnet</code>，而此 Subnet 是不能存取 Internet 的，這時候就需要使用 S3 VPC endpoints 方式來解決此問題。所以透過設定 S3 VPC Endpoint 方式就可以達成存取 S3 檔案了。</p>
+<p>想像 AWS EC2要去存取 AWS S3 的資源，完全沒問題的，而可以成功讀取最主要因素是這台 EC2 是在 <code>Public Subnet</code>，它有權限可以存取 Internet，而 Public Subnet 最主要有 route table 搭配 <a href=https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html>internet gateway</a> 才可以存取 Internet。</p>
+<p>而現在遇到此問題的原因是架構使用的是 <code>Private Subnet</code>，而此 Subnet 是不能存取 Internet 的，這時候就需要使用 S3 VPC endpoints 方式來解決此問題。所以透過設定 S3 VPC Endpoint 方式就可以達成存取 S3 檔案了。</p>
 <div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
@@ -304,7 +304,7 @@
 </div>
 </div><h2 id=使用心得>使用心得</h2>
 <p>這邊得到一個關鍵的結論就是，假設團隊真的要在 AWS China 進行建置的話，在測試 Gloabl AWS 同時也需要進到 China 看看是否有相同的功能不然到時候整套流程會修改蠻大一部分，好在這次只是遇到 AWS Lustre 轉換到 AWS EFS 而已。</p>
-<p>另外在建置整套 AWS 環境時，需要對網路有一定的概念，還有防火牆，後端團隊針對權限部分設定的非常嚴謹，沒有用到的權限一率拔掉，或者是在 IAM 上面權限是慢慢打開，而不是一次全部開放。</p>
+<p>另外在建置整套 AWS 環境時，需要對網路有一定的概念，還有防火牆，團隊針對權限部分設定的非常嚴謹，沒有用到的權限一率拔掉，或者是在 IAM 上面權限是慢慢打開，而不是一次全部開放。</p>
 <h2 id=參考連結>參考連結</h2>
 <ul>
 <li><a href=https://aws.amazon.com/cn/blogs/china/use-amazon-fsx-for-lustre-and-amazon-efs-as-data-source-to-speed-up-amazon-sagemaker-training/>使用 Amazon FSx for Lustre 和 Amazon EFS 作数据源加快 Amazon Sagemaker 训练</a></li>
@@ -317,6 +317,7 @@
 <a href=https://blog.wu-boy.com/tags/fsx/>FSx</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/lustre/>Lustre</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/efs/>EFS</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/terraform/>terraform</a>&nbsp;
 </div>
 <hr>
 <section id=social-share>
