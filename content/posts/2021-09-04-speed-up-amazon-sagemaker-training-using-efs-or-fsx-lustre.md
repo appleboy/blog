@@ -1,5 +1,5 @@
 ---
-title: "用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練"
+title: "用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練"
 date: 2021-09-04T12:43:19+08:00
 author: appleboy
 type: post
