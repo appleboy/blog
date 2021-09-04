@@ -103,6 +103,42 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2007/06/php-%E5%A6%82%E4%BD%95%E6%9B%B4%E6%AD%A3%E7%B3%BB%E7%B5%B1%E6%99%82%E9%96%93-timezone_set/>
+<h2 class=post-title>[PHP] 如何更正系統時間 timezone_set</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 14, 2007
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;62&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>相信很多虛擬主機都會碰到時間的問題，比如說少 8 小時，或者是多 8 小時，現在只要在執行 php 的前端加上</p>
+<div>
+<pre class="brush: php; title: ; notranslate" title>date_default_timezone_set("Asia/Taipei");</pre>
+</div>
+<p>這樣就會更新到正確時間了，這樣在使用 <code>mktime()</code> 就沒啥問題了</p>
+<p>或者去系統改 <code>php.ini</code> 檔案</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>;Defines the default timezone used by the date functions
+date.timezone = Asia/Taipei</pre>
+</div>
+<p>Linux 系統校正時間，可以執行底下 Script:</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title># check if link file
+[ -L /etc/localtime ] && unlink /etc/localtime
+# update time zone
+ln -sf /usr/share/zoneinfo/Asia/Taipei /etc/localtime
+aptitude -y install ntpdate
+ntpdate time.stdtime.gov.tw
+# write time to clock.
+hwclock -w</pre>
+</div>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2007/06/%E5%9C%8B%E5%8F%B2%E9%A4%A8%E5%8F%B0%E7%81%A3%E6%96%87%E7%8D%BB%E9%A4%A8%EF%BD%9E%E7%99%BC%E7%94%9F%E5%A4%A7%E4%BA%8B%EF%BC%9F%E6%9B%BF%E4%BB%A3%E5%BD%B9%E4%BA%8B%E4%BB%B6/>
 <h2 class=post-title>國史館台灣文獻館～發生大事？替代役事件</h2>
 </a>
@@ -310,24 +346,6 @@ if(strlen($text) > $num) {
 make install clean 然後底下是安裝好之後的訊息
 NOTE: A set of sample configuration files have been installed: /usr/local/etc/smokeping/config /usr/local/etc/smokeping/smokemail /usr/local/etc/smokeping/basepage.html /usr/local/etc/smokeping/tmail You *MUST* edit these to suit your requirements. Please read the manpages ‘smokeping_install’ and ‘smokeping_config’ for further details on installation and configuration. If you are upgrading from a previous version of Smokeping, the manpage ‘smokeping_upgrade’ may be of help.
 <a href=https://blog.wu-boy.com/2007/04/freebsd-smokeping-%E5%AE%89%E8%A3%9D-%E6%9E%B6%E8%A8%AD/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/04/wordpress-plugin-fckeditor/>
-<h2 class=post-title>WordPress plugin fckeditor</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 18, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;14&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div align=left>
-<br><br>其實我之前就在找這個 plugin 了，今天不小心google到了，因為 wordpress 所提供內建的，不是很好用，所以網路有一套<br>&nbsp;<br> <a href=http://www.fckeditor.net/demo class=l onmousedown="return rwt(this,'','','res','2','__-zM4ohZKVD3PnIyOEoVsQM1UG6Y=','&sig2=HUnbF7NJ5ZtusHlJC4RZFg')">FCKeditor &#8211; Demo</a>&nbsp; 這一套還不錯用，網路上找到plugin <a onmousedown="return rwt(this,'','','res','10','__uBbzI4If6E8hNwSLjh664RBpeJE=','&sig2=kZ3AjS1u8wpE8RgTMwZ7Vg')" class=l href="http://briian.com/?p=19">[必讀] 其他用的所見即所得編輯器- 【重灌狂人】</a><span class=l> <br></span><br>這一篇裡面有下載檔案，大家可以去下載，demo的話，就上面link
-</div>
 </div>
 </article>
 </div>

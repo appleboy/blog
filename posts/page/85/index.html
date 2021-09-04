@@ -103,6 +103,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2007/08/sql-%E9%9A%A8%E6%A9%9F%E9%81%B8%E5%8F%96%E8%B3%87%E6%96%99-mssqlaccessmysql/>
+<h2 class=post-title>[SQL] 隨機選取資料 (MSSQL,ACCESS,MYSQL)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 16, 2007
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;44&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>這個功能還蠻需要的，底下就是三個例子 以下方法，可以幫助隨機取得廣告資料、最新消息等，隨機產生資料。 使用 SQL 語法的 TOP n 來指定取得筆數，再用 ORDER BY 的方式，來亂數取得資料，並排序。</p>
+<pre class="brush: sql; title: ; notranslate" title>MS SQL：SELECT TOP 1 * FROM Table WHERE 條件 ORDER BY NEWID()
+
+ACCESS：SELECT TOP 1 * FROM Table WHERE 條件 ORDER BY RND(數字欄位名稱)
+
+MYSQL：SELECT * FROM Table ORDER BY RAND() LIMIT 1
+</pre>
+<p><a href=http://blog.xuite.net/jameschih/java/8308864>http://blog.xuite.net/jameschih/java/8308864</a></p>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2007/08/%E5%B7%A5%E4%BD%9C%E6%97%A5%E8%A8%98-%E7%BE%8E%E5%A5%BD%E7%9A%84%E4%B8%80%E5%A4%A9%EF%BD%9E-%E5%B7%A5%E4%BD%9C%E8%A6%81%E5%91%8A%E4%B8%80%E6%AE%B5%E8%90%BD%E4%BA%86/>
 <h2 class=post-title>[工作日記] 美好的一天～ 工作要告一段落了</h2>
 </a>
@@ -276,27 +299,6 @@
 <pre class="brush: bash; title: ; notranslate" title>set ftp:charset Big5
 </pre><blockquote>
 </blockquote>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/07/freebsd-postfix-%E8%A8%AD%E5%AE%9A%E5%90%8C%E4%B8%80%E5%B8%B3%E8%99%9F%EF%BC%8C%E4%B8%8D%E5%90%8C%E7%B6%B2%E5%9F%9F%E6%94%B6%E4%BF%A1/>
-<h2 class=post-title>[FreeBSD] Postfix 設定同一帳號，不同虛擬網域收信</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 11, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;108&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>如果一台機器要管理多的網域的email，大家一定會遇到如果2個domain分別是 aaaa.com.tw，bbbb.com.tw，但是兩間公司都有 <a href=mailto:suport@aaaa.com.tw>suport@aaaa.com.tw</a>，suport@bbbb.com.tw，這樣子就會造成衝突，因為這兩間公司負責人不同，那要怎麼導向不同帳號呢，所以我們作法如下</p>
-<ul>
-<li>建立收發特定信的使用者帳號：真正收到信件的系統帳號</li>
-<li>建立虛擬郵件伺服器位址與帳號對照表：郵件位址跟收信帳號對照表</li>
-</ul>
-<a href=https://blog.wu-boy.com/2007/07/freebsd-postfix-%E8%A8%AD%E5%AE%9A%E5%90%8C%E4%B8%80%E5%B8%B3%E8%99%9F%EF%BC%8C%E4%B8%8D%E5%90%8C%E7%B6%B2%E5%9F%9F%E6%94%B6%E4%BF%A1/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

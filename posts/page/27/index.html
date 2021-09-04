@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/06/ngnix-php5-fpm-sock-failed-permission-denied/>
+<h2 class=post-title>Ngnix 搭配 PHP-FPM 噴 php5-fpm.sock failed (13: Permission denied)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 25, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;107&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+Nginx 搭配 PHP-FPM 已經是架設 PHP 伺服器基本入門款了，這次升級 CentOS 機器完後，發現 Log 一直噴出底下訊息
+nginx error connect to php5-fpm.sock failed (13: Permission denied) 透過 Stackoverflow 查到這篇解答 nginx error connect to php5-fpm.sock failed (13: Permission denied)，裡面提到兩種作法，其中一解法是直接修改 /var/run/php5-fpm.sock 為 666，讓其他使用者可以直接存取此檔案，但是此作法在下次重新開機後一樣會出現同問題，最終解法請修改 /etc/php-fpm.d/www.conf 如果是搭配 Nginx 請使用底下設定
+user = nginx group = nginx ; Set permissions for unix socket, if one is used. In Linux, read/write ; permissions must be set in order to allow connections from a web server.
+<a href=https://blog.wu-boy.com/2014/06/ngnix-php5-fpm-sock-failed-permission-denied/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php-fpm/>php-fpm</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/06/linode-new-plan-and-11th-birthday/>
 <h2 class=post-title>Linode 推出每月 10 美金方案</h2>
 </a>
@@ -356,31 +380,6 @@ $ dmidecode --type 17 | more 輸出結果為
 <a href=https://blog.wu-boy.com/tags/gulp-imagemin/>gulp-imagemin</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/optipng/>OptiPNG</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/04/linode-vps-double-ram-and-ssd/>
-<h2 class=post-title>Linode VPS 全面升級 Double RAM & SSD</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 18, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;55&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/13896098566 title="linode_logo_gray by Bo-Yi Wu, on Flickr"><img src="https://i1.wp.com/farm6.staticflickr.com/5165/13896098566_2f86b643bb_o.png?resize=288%2C65&ssl=1" alt=linode_logo_gray data-recalc-dims=1></a>
-</div>
-<p><a href=https://blog.linode.com/2014/04/17/linode-cloud-ssds-double-ram-much-more/>Linode</a> 又來了驚人的舉動，現在開始支援 SSD 以及小時計費服務，可以參考官網最新發表的 <a href=https://blog.linode.com/2014/04/17/linode-cloud-ssds-double-ram-much-more/>The New Linode Cloud: SSDs, Double RAM & much more</a>，內容講到硬碟現在全面升級為 SSD，而且是 native SSD servers。網路頻寬部份每個 Linode Host 都連接 40 Gbps 的頻寬，對外總頻寬為 160 Gbps，對內頻寬為 40 Gbps，當然根據個人買得 VPS 而有不同的對外頻寬。記憶體則是全面 Double 升級，原本最低的 1G 記憶體，現在都改為 2G 了，每個月才 20 美金，看起來又是被 <a href=https://www.digitalocean.com/>DigitalOcean</a> 刺激到，最小的 Linode 流量也改為 3 TB。來看看現在新的方案</p>
-<a href=https://blog.wu-boy.com/2014/04/linode-vps-double-ram-and-ssd/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/digital-ocean/>Digital Ocean</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linode/>Linode</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/vps/>VPS</a>&nbsp;
 </div>
 </article>
 </div>

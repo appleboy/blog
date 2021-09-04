@@ -103,6 +103,43 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/10/codeigniter-%E8%A7%A3%E6%B1%BA-ci-%E4%B8%8B%E8%BC%89%E5%87%BD%E6%95%B8-force_download-%E5%9C%A8-ie-%E5%BA%95%E4%B8%8B%E6%AA%94%E6%A1%88%E6%A8%99%E9%A1%8C%E4%BA%82%E7%A2%BC/>
+<h2 class=post-title>[CodeIgniter] 解決 CI 下載函數 force_download 在 IE 底下檔案標題亂碼</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 26, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;181&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+CodeIgniter 底下提供了 force_download 函數，讓使用者可以直接下載檔案，但是會遇到中文的問題，IE 底下開起來檔名會是亂碼，force_download(&lsquo;filename&rsquo;, &lsquo;data&rsquo;) 如果 filename 使用中文，測試 FireFox 跟 Chrome 都是沒問題的，唯獨 IE 開起來就是有問題，所以麻煩請修改 helpers/download_helper.php 這隻程式。
+if ( ! function_exists('force_download'))
+{
+function force_download($filename = '', $data = '')
+{
+if ($filename == '' OR $data == '')
+{
+return FALSE;
+}
+// Try to determine if the filename includes a file extension.
+// We need it in order to set the MIME type
+if (FALSE === strpos($filename, '.'))
+{
+return FALSE;
+}
+// Grab the file extension
+$x = explode('.
+<a href=https://blog.wu-boy.com/2009/10/codeigniter-%E8%A7%A3%E6%B1%BA-ci-%E4%B8%8B%E8%BC%89%E5%87%BD%E6%95%B8-force_download-%E5%9C%A8-ie-%E5%BA%95%E4%B8%8B%E6%AA%94%E6%A1%88%E6%A8%99%E9%A1%8C%E4%BA%82%E7%A2%BC/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/10/wordpress-2-8-5-hardening-release/>
 <h2 class=post-title>WordPress 2.8.5 Hardening Release</h2>
 </a>
@@ -326,35 +363,6 @@ PHP Performance tip: require versus require_once
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E5%89%AA%E9%A0%AD%E9%AB%AE/>剪頭髮</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/09/%E6%96%B0%E8%81%9E-codeigniter-v172-released/>
-<h2 class=post-title>[新聞] CodeIgniter v1.7.2 Released</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 16, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;51&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=http://codeigniter.com/>CodeIgniter</a> 終於 Release V1.7.2 版本了，官方網站也公佈了此<a href=http://codeigniter.com/news/codeigniter_v1.7.2_released/>消息</a>，那這次跟 v1.7.2 版本有哪些不一樣呢，我想最主要應該是支援 PHP 5.3.0 了</p>
-<ul>
-<li>相容於 PHP 5.3.0</li>
-<li>新增 <a href=http://codeigniter.com/user_guide/libraries/cart.html>Cart Class</a> 類別</li>
-<li>改善 <a href=http://codeigniter.com/user_guide/helpers/form_helper.html>Form helper</a> 函數</li>
-<li>新增 is_php() 到 <a href=http://codeigniter.com/user_guide/general/common_functions.html>Common functions</a> 來更有善的比較 PHP 版本</li>
-<li>無數個 bug 修正</li>
-<li>修改 show_error() 函數功能 更多的 bug 修正，可以觀看</li>
-</ul>
-<p><a href=http://codeigniter.com/user_guide/changelog.html>change log</a>，我也順便了 send-pr 給 FreeBSD ports maintainer 請他 update 到 1.7.2：<a href="http://www.freebsd.org/cgi/query-pr.cgi?pr=138848">ports/138848</a>，台灣的官網也需要來修正了，已經更新了 v1.7.2 上去，至於<a href=http://www.codeigniter.org.tw/user_guide/>繁體中文文件</a>方面還沒更新，有時間會把它更新，如果有任何問題，可以先到<a href=http://www.codeigniter.org.tw/forum/>論壇</a>留言找我。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/06/codeigniter-%E4%BD%BF%E7%94%A8%E8%80%85%E8%A8%BB%E5%86%8A-auth-code-%E8%AA%8D%E8%AD%89%E7%A2%BC/>
+<h2 class=post-title>[CodeIgniter] 使用者註冊 auth code 亂數認證碼圖片</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 9, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;684&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>我想這已經是網站最基本的技術，防止機器人大量註冊，或者是灌爆留言板，之前寫了兩篇製作認證碼的教學：<a href=http://blog.wu-boy.com/2009/01/05/701/>[PHP]製作類似 google 網頁認證碼</a>，<a href=http://blog.wu-boy.com/2008/10/28/572/>[PHP] 好用的留言板 驗證碼 功能</a>，這篇是要寫如何實做把<a href=http://blog.wu-boy.com/2009/01/05/701/>第一篇教學</a>整合到 <a href=http://www.codeigniter.com.tw/>CodeIgniter</a> 系統裡面，來筆記一下，以後用到就相當方便了，CodeIgniter 在 path 路徑上面有小 bug，查了國外討論區發現了這篇 <a href=http://codeigniter.com/forums/viewthread/63915/>Path to CSS doesn’t work a second time</a>，不過這並沒有解決我的問題，主機的網址是 <span style=color:#00f><a href=http://xxxxx.xxx/path/>http://xxxxx.xxx/path/</a></span>，所有的 CI 檔案都是放在 path 目錄底下，包含圖片是 <span style=color:#00f><a href=http://xxxxx.xxx/path/images/>http://xxxxx.xxx/path/images/</a></span>，在 View 裡面基本上只要寫 <span style=color:green><img src=/images/xx.gif></span> 這樣就可以顯示圖片了，但是要改成 <span style=color:green><img src=/path/images/xx.gif></span> 才能，但是我的 index.php 是放在 /path/ 裡面，以絕對路徑跟相對路徑來想，都是不太合理的，所以後來用 <span style=color:red><img src="<?=base_url();?>public/images/find.png" alt></span> 來解決，不過這是暫時的問題，我比較龜毛，喜歡寫短一點的 code。 如何裝上類似 google 的認證碼呢，首先打開 index.php 檔案</p>
+<pre class="brush: php; title: ; notranslate" title>/* 算出 index.php 根目錄 */
+define('Document_root',dirname(__FILE__));
+</pre>
+<a href=https://blog.wu-boy.com/2009/06/codeigniter-%E4%BD%BF%E7%94%A8%E8%80%85%E8%A8%BB%E5%86%8A-auth-code-%E8%AA%8D%E8%AD%89%E7%A2%BC/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/06/gmail-%E6%9C%80%E8%BF%91%E7%99%BC%E5%B8%83%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%9A%E9%80%B2%E9%9A%8E%E6%90%9C%E5%B0%8B%EF%BC%8C%E9%A0%90%E8%A6%BD%E6%94%B6%E4%BB%B6%E5%A4%BE%EF%BC%8C%E9%83%B5%E4%BB%B6/>
 <h2 class=post-title>[Gmail] 最近發布的功能：進階搜尋，預覽收件夾，郵件內容語言轉換</h2>
 </a>
@@ -338,28 +362,6 @@ $tpDiv.appendTo('body').css({'top':elmOffset.top + 'px', 'left':elmOffset.left+ 
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/05/php-class-rss-generator-%E7%94%A2%E7%94%9F%E5%99%A8/>
-<h2 class=post-title>[PHP] Class: RSS Generator 產生器</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 8, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;40&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近在寫新聞系統，需要 <a href=http://zh.wikipedia.org/wiki/RSS target=_blank>RSS</a> 線上訂閱的功能，所以在 <a href=http://www.phpclasses.org target=_blank>PHP Classes</a> 找到了 <a href=http://www.phpclasses.org/browse/package/2569.html target=_blank>RSS Generator</a> 產生器，這產生器使用起來也相當方便，在測試的時候剛好遇到一個問題，就是要對內容做 escape 的動作，避免 RSS 爛掉，看到 gslin 大的發表一篇 <a title='Permanent Link to "WordPress 的 exporter"' rel=bookmark href=http://blog.gslin.org/archives/2009/04/24/2002/>WordPress 的 exporter</a> 裡面寫到 WordPress 的產生 xml 格式沒有經過 escape 造成程式亂掉『<a onclick="pageTracker._trackPageview('/outbound/article/core.trac.wordpress.org')" href=https://core.trac.wordpress.org/ticket/9524>Exporter does not escape url</a>』，當然解決方法也很容易，那就是用 <a href=http://tw2.php.net/htmlspecialchars target=_blank>htmlspecialchars</a>，避免 url 裡面帶有 & 符號。 解決方法很容易，如下就可以了</p>
-<pre class="brush: php; title: ; notranslate" title>link = htmlentities($url, ENT_QUOTES);
-?></pre><blockquote>
-</blockquote>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

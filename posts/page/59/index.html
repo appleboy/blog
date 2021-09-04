@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/07/codeigniter-open-source-php-web-framework-%E7%B3%BB%E5%88%97%E8%AC%9B%E5%BA%A7/>
+<h2 class=post-title>[CodeIgniter] Open Source PHP Web Framework 系列講座</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 20, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;37&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><strong>update 2009.07.23</strong>: 有影音檔可以看了，<a href=http://whoswho.openfoundry.org/workshop/details/43-open-source-php-web-framework-codeigniter-.html>請點選這裡</a> 7月18日受到 <a href=http://www.openfoundry.org/>OSSF::自由軟體鑄造場(Open Source Software Foundry)</a>的邀請，在高雄講一場 <a href=http://whoswho.openfoundry.org/workshop/details/43-open-source-php-web-framework-codeigniter-.html>Open Source PHP Web Framework系列講座 - CodeIgniter (高雄場次)</a> ，我準備了 87 張投影片，包含介紹了 <a href=http://codeigniter.com/>CodeIgniter</a> 目前台灣官方網站的狀況，以及流行 PHP MVC Framework 的比較，大部分時間花在 Controller, Views 身上，還有 helper function, Library Class 教學使用，沒有把 Model 精華部份教完有點可惜，內容可能有點多，一整天六小時的課程把教學消化，好像有點困難了，這也是給我一點警惕，下次教學這部份內容要在改變一下，這樣對於來上課的學員，才不會感到排斥，最後非常感謝<a href=http://phorum.study-area.org/index.php>酷學園</a>的阿民來幫忙錄影，以及飛亨現場支援，以及讓我有這次機會可以上台分享這幾個月在 CI 上面的使用心得，底下是我這次的上課投影片，如果大家有問題可以到<a href=http://www.codeigniter.org.tw/forum/>論壇</a>討論，或者是看看<a href=http://www.codeigniter.org.tw/user_guide/>繁體中文教學文件</a>，如果對於翻譯教學文件有興趣，可以再跟我聯絡喔。</p>
+<div id=__ss_1742355 style=width:425px;text-align:left>
+</div>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/07/sql-mysql-row_number-simulation/>
 <h2 class=post-title>[SQL] MySQL ROW_NUMBER Simulation</h2>
 </a>
@@ -357,30 +379,6 @@ log-slow-queries = /var/log/mysql/mysql-slow.
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/06/codeigniter-%E4%BD%BF%E7%94%A8%E8%80%85%E8%A8%BB%E5%86%8A-auth-code-%E8%AA%8D%E8%AD%89%E7%A2%BC/>
-<h2 class=post-title>[CodeIgniter] 使用者註冊 auth code 亂數認證碼圖片</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 9, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;684&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>我想這已經是網站最基本的技術，防止機器人大量註冊，或者是灌爆留言板，之前寫了兩篇製作認證碼的教學：<a href=http://blog.wu-boy.com/2009/01/05/701/>[PHP]製作類似 google 網頁認證碼</a>，<a href=http://blog.wu-boy.com/2008/10/28/572/>[PHP] 好用的留言板 驗證碼 功能</a>，這篇是要寫如何實做把<a href=http://blog.wu-boy.com/2009/01/05/701/>第一篇教學</a>整合到 <a href=http://www.codeigniter.com.tw/>CodeIgniter</a> 系統裡面，來筆記一下，以後用到就相當方便了，CodeIgniter 在 path 路徑上面有小 bug，查了國外討論區發現了這篇 <a href=http://codeigniter.com/forums/viewthread/63915/>Path to CSS doesn’t work a second time</a>，不過這並沒有解決我的問題，主機的網址是 <span style=color:#00f><a href=http://xxxxx.xxx/path/>http://xxxxx.xxx/path/</a></span>，所有的 CI 檔案都是放在 path 目錄底下，包含圖片是 <span style=color:#00f><a href=http://xxxxx.xxx/path/images/>http://xxxxx.xxx/path/images/</a></span>，在 View 裡面基本上只要寫 <span style=color:green><img src=/images/xx.gif></span> 這樣就可以顯示圖片了，但是要改成 <span style=color:green><img src=/path/images/xx.gif></span> 才能，但是我的 index.php 是放在 /path/ 裡面，以絕對路徑跟相對路徑來想，都是不太合理的，所以後來用 <span style=color:red><img src="<?=base_url();?>public/images/find.png" alt></span> 來解決，不過這是暫時的問題，我比較龜毛，喜歡寫短一點的 code。 如何裝上類似 google 的認證碼呢，首先打開 index.php 檔案</p>
-<pre class="brush: php; title: ; notranslate" title>/* 算出 index.php 根目錄 */
-define('Document_root',dirname(__FILE__));
-</pre>
-<a href=https://blog.wu-boy.com/2009/06/codeigniter-%E4%BD%BF%E7%94%A8%E8%80%85%E8%A8%BB%E5%86%8A-auth-code-%E8%AA%8D%E8%AD%89%E7%A2%BC/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

@@ -103,6 +103,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/03/nginx-reverse-proxy-image-resizing/>
+<h2 class=post-title>用 Nginx 來架設線上即時縮圖機</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 17, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;513&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://i0.wp.com/farm1.staticflickr.com/790/26946324088_93725a917b_z.jpg?ssl=1"><img src="https://i0.wp.com/farm1.staticflickr.com/790/26946324088_93725a917b_z.jpg?w=840&ssl=1" alt data-recalc-dims=1></a></p>
+<p>在更早以前我們怎麼實現縮圖機制，當使用者上傳一張檔案，後端會固定將圖片縮圖成各種前端網頁需要的大小，不管前端頁面是否有使用，後端都會先產生好，這有什麼缺陷？</p>
+<ol>
+<li>佔用硬碟空間大小</li>
+<li>前端又需要另外一種格式的縮圖?</li>
+</ol>
+<p>第二個問題比較麻煩，當前端需要另一種縮圖格式，後端就要開始掃描系統的全部圖片，再重新產生一次。非常耗費後端系統效能。後來才改成透過 URL 定義長寬來決定即時縮圖，在 <a href=https://golang.org>Go 語言</a>內可以選擇使用 <a href=https://github.com/thoas/picfit>picfit</a> 來當作後端即時的縮圖機。本篇則是要提供另一種解法，就是使用 <a href=http://nginx.org>Nginx</a> 搭配 <a href=http://nginx.org/en/docs/http/ngx_http_image_filter_module.html>image_filter</a> 外掛來達成即時縮圖機制。</p>
+<a href=https://blog.wu-boy.com/2018/03/nginx-reverse-proxy-image-resizing/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/03/simple-queue-with-optimistic-concurrency-in-go/>
 <h2 class=post-title>用 Go 語言實現單一或多重 Queue 搭配 optimistic concurrency</h2>
 </a>
@@ -301,31 +327,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2017/11/downsize-node-modules-with-golang/>
-<h2 class=post-title>用 Go 語言減少 node_modules 容量來加速部署</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 21, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;177&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
-<p>之前寫過一篇『<a href=https://blog.wu-boy.com/2017/06/downsize-node_modules-to-improve-deploy-speed/>減少 node_modules 大小來加速部署 Node.js 專案</a>』文章，透過 <a href=https://yarnpkg.com/en/>Yarn</a> 指令可以移除不必要的模組，剩下的模組佔據整個專案大部分容量，那該如何針對留下的模組來瘦身呢？這週看到 <a href=https://nodejs.org/en/>Node.js</a> 大神 <a href=https://github.com/tj>TJ</a> 又發了一個 <a href=https://golang.org>Go 語言</a>專案叫做 <a href=https://github.com/tj/node-prune>node-prune</a>，此專案用來移除在 <code>node_modules</code> 內不必要的檔案，那哪些才是不必要的檔案呢？</p>
-<a href=https://blog.wu-boy.com/2017/11/downsize-node-modules-with-golang/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/node.js/>Node.js</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/yarn/>yarn</a>&nbsp;
 </div>
 </article>
 </div>

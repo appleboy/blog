@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it/>
+<h2 class=post-title>[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 20, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;381&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+在上禮拜跟 DarkHero 兄聊到 How To Build a Scalable Web Site (3/6) 的上課講義，互相討論了 MySQL Load balance 以及 http reverse proxy 的方式，以前自己有用 HAProxy 當作 Web 平衡負載，順便紀錄了 HAProxy FreeBSD 安裝方式，這次要來介紹今天重點：Varnish Cache Server，在近幾年流行的 Caching 機制，大家會想到 Squid，只要您設定良好的 Squid 參數，它一定運作的非常穩定，然而它的核心依然是 forward proxy，要架設成 Reverse Proxy 還必需要設定一些參數才可以達到，是有一定的困難性，然而 Varnish Cache Server 底層就是高效能 caching reverse proxy，也因為 Squid 是 1980 年發展出來的，程式架構過於老舊，可以參考 ArchitectNotes 瞭解這部份詳情。也許您會問到 Varnish 可以架設成 forward proxy 嗎？答案是可以的，但是您也許不會這麼做，因為它需要 DNS 技術，以及需要一個非常大且複雜的 Varnish VCL(Varnish Configuration Language) file。 1. 今天要介紹如何在 FreeBSD 系統安裝，在介紹之前，系統必須先安裝好 apache，這樣才可以正確啟動，利用 ports 安裝：
+<a href=https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/squid/>Squid</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/varnish/>Varnish</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/03/vim-%E6%83%B3%E5%A5%97%E7%94%A8-php-syntax-%E9%A1%8F%E8%89%B2%E6%96%BC-ros/>
 <h2 class=post-title>[Vim] 想套用 *.php syntax 顏色於 *.ros</h2>
 </a>
@@ -304,25 +328,6 @@ Ubuntu 6.10 (Edgy Eft) 之後使用 Upstart 代替原來的 sysinit，而 init �
 <a href=https://blog.wu-boy.com/tags/fedora/>Fedora</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/01/%E9%81%B2%E4%BE%86%E7%9A%84-jquery-1-4-released/>
-<h2 class=post-title>遲來的 jQuery 1.4 Released</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 21, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;63&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>為了慶祝 <a href=http://jquery14.com/day-01>jQuery</a> 四週年慶，官方網站終於 Release 1.4 版本了，也大幅度修改了 <a href=http://api.jquery.com/>jQuery API 網站</a>，跟以往一樣，jQuery 提供兩種版本讓大家測試跟下載：<a href=http://code.jquery.com/jquery-1.4.min.js>jQuery Minified</a> (23kb Gzipped)，這版本是利用 <a href=http://code.google.com/closure/compiler/>Google Closure Compiler</a> 去壓縮，以往好像是用 <a href=http://developer.yahoo.com/yui/compressor/>YUI Compressor</a>，另一版本就是沒經過壓縮：<a href=http://code.jquery.com/jquery-1.4.js>jQuery Regular</a> (154kb)，當然 Google 也提供了 host 來讓 jQuery 有 cache 檔案作用，增加網站速度： <a href=http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js>http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js</a> 1.4 版本的出來，最主要就是效能的改善，以及整個 Code Base 翻修，可以參考 <a href=http://ejohn.org/blog/>John Resig</a> 寫的 <a href=http://ejohn.org/blog/function-call-profiling/>JavaScript Function Call Profiling</a>，看到底下的圖，就大致上知道 1.4 的效能改善 <a href=https://www.flickr.com/photos/appleboy/4292816426/ title="4271690739_f0bced3a78 (by appleboy46)"><img src="https://i2.wp.com/farm3.static.flickr.com/2771/4292816426_9fb5cb331a_o.jpg?resize=500%2C375&ssl=1" title="4271690739_f0bced3a78 (by appleboy46)" alt="4271690739_f0bced3a78 (by appleboy46)" data-recalc-dims=1></a> <a href=http://api.jquery.com/css/>.css()</a> and <a href=http://api.jquery.com/attr/>.attr()</a> 效能改善圖： <a href=https://www.flickr.com/photos/appleboy/4292818140/ title="4271691147_fd72853fa4 (by appleboy46)"><img src="https://i2.wp.com/farm5.static.flickr.com/4037/4292818140_753f22920f_o.jpg?resize=500%2C375&ssl=1" title="4271691147_fd72853fa4 (by appleboy46)" alt="4271691147_fd72853fa4 (by appleboy46)" data-recalc-dims=1></a> 整篇都在說明 jQuery 效能的部份，真的是改善很多，<a href=http://mediatemple.net/>Media Temple</a> 主機商也贊助 jQuery 14天的徵文活動，大家可以上去看看有很多影片都是在介紹 jQuery，最後得獎的人可以獲得 13" MacBook Pro，真是太吸引人了。 最後可以參考 <a href=http://blog.darkthread.net/blogs/>黑暗執行緒</a>大大寫的：<a href=http://blog.darkthread.net/blogs/darkthreadtw/archive/2010/01/16/jquery-1-4.aspx>jQuery 1.4 小閱兵</a></p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
 </div>
 </article>
 </div>

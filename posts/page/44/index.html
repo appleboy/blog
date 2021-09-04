@@ -103,6 +103,38 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/09/svn-mv-vs-git-mv/>
+<h2 class=post-title>版本控制 svn move 移動或更名</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 27, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;103&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+公司採用 svn 當作版本控制，而我最近在整理 svn 上面全部的 source code。基本上我都會將 git 跟 svn 也一起搭配著用，因為個人比較熟悉 git 的操作方式，然而跟同事討論了專案目錄的架構，進而要把一些目錄轉換大小寫，本來的 App 就改成 app，這個在 git 底下(OS: Linux)操作非常容易，直接 git mv App app，之後看 git status 可以發現底下輸出：
+# On branch develop
+# Changes to be committed:
+# (use "git reset HEAD ..." to unstage)
+#
+# renamed: nav/hacks.txt - Nav/hacks.txt
+# renamed: nav/moo.fx.js - Nav/moo.fx.js
+# renamed: nav/moo.fx.pack.js - Nav/moo.fx.pack.js
+# renamed: nav/nav.js - Nav/nav.js
+# renamed: nav/prototype.lite.js - Nav/prototype.lite.js
+# renamed: nav/user_guide_menu.
+<a href=https://blog.wu-boy.com/2011/09/svn-mv-vs-git-mv/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/svn/>svn</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/09/introduction-to-git-submodule/>
 <h2 class=post-title>Git Submodule 介紹與使用</h2>
 </a>
@@ -323,38 +355,6 @@ git cherry-pick 使用方法 我們如何 Merge 別人的 pull request，首先�
 <a href=https://blog.wu-boy.com/tags/express/>Express</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/nodejs/>NodeJS</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/08/php-function-%E5%8F%83%E6%95%B8-default-value/>
-<h2 class=post-title>PHP function 參數 default value</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 6, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;80&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-2011.08.06 Update: 感謝 jaceju 指正筆誤 自己定義 PHP Function 的時候，假設該函式有1個參數，您可以傳入該參數或者是不傳，但是函式裡面如何判斷是否有傳入該參數呢？先看看底下例子:
-function test($arg_1 = NULL)
-{
-// 判斷 $arg_1 參數是否傳入
-$arg_1 = $arg_1 || 'test';
-echo $arg_1; } 你會發現上面結果會是 1，而不是 test，大家會懷疑為什麼這樣寫不行呢，那是因為 || 是 boolean operators，他只會 return true 或是 false，而不是回傳 string，如果想這這樣寫，大概可以用 javascript 或 perl 語言來寫，javascript 可以參考之前的文章 [Javascript] 在函數裡設定參數預設值，然而 PHP 的正確寫法要用 ?: 來取代
-function test($arg_1 = NULL)
-{
-// 判斷 $arg_1 參數是否傳入
-$arg_1 = (isset($arg_1)) ? $arg_1 : 'test';
-// 或者是
-$arg_1 = $arg_1 ?
-<a href=https://blog.wu-boy.com/2011/08/php-function-%E5%8F%83%E6%95%B8-default-value/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/javascrpt/>JavaScrpt</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

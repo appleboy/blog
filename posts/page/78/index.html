@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/03/%E7%AD%86%E8%A8%98-ssh-tunnel-%E9%81%8B%E7%94%A8%E5%9C%A8-linux-and-windows/>
+<h2 class=post-title>[筆記] ssh Tunnel 運用在 Linux and Windows FireFox</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 19, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;126&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天在看 <a href=http://blog.gslin.org/>gslin</a> 部落格的一篇文章：<a href=http://blog.gslin.org/archives/2005/08/17/43/>穿越公司的 FireWall</a>，看完之後我覺得相當不錯，可以解決我想要的 forwarding 的問題，以及繞過防火牆的機制，剛剛自己測試一下，發現還蠻好用的，其實利用這個方式還可以遠端管理很多伺服器，如：<a href=http://www.mysql.com/>Mysql</a> 伺服器…. SSH Tunnel必須建立於一個SSH連線上，它可以讓我們穿透防火牆，建立一個安全加密的傳輸。 例如：我們現在要透過 A主機去對 smtp 或者是 http 做連接的動作，那我們就必須先建立一個到A主機的SSH連線，然後在透過它建立 Tunnel 我們會使用到的putty和plink都可以在 <a href=http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html>這裡下載</a>， 不過我更喜歡<a href=http://www.csie.ntu.edu.tw/~piaip/pietty/>pietty</a>，由<a href=http://www.csie.ntu.edu.tw/~piaip/>piaip</a>長輩製作。</p>
+<a href=https://blog.wu-boy.com/2008/03/%E7%AD%86%E8%A8%98-ssh-tunnel-%E9%81%8B%E7%94%A8%E5%9C%A8-linux-and-windows/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ssh/>SSH</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/03/cc-%E5%AF%A6%E5%81%9A-c-%E8%AA%9E%E8%A8%80-substr-%E5%8A%9F%E8%83%BD%EF%BC%8C%E6%A8%A1%E6%93%AC%E8%A8%88%E7%AE%97%E6%A9%9F%E5%8A%9F%E8%83%BD/>
 <h2 class=post-title>[C/C++] 實做 C 語言 substr 功能，模擬計算機功能</h2>
 </a>
@@ -350,24 +372,6 @@ else
 <p>檢查 /etc/apache2/mods-enabled 內有沒有php5.conf , php5.load若沒有, 請 sudo a2enmod php5 重新啟動 apahce2 sudo /etc/init.d/apache2 restart
 <a href="http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?viewmode=flat&type=&topic_id=5298&forum=9"> http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?viewmode=flat&type=&topic_id=5298&forum=9</a></p>
 </blockquote>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/03/phpbb2-2022-2023-%E5%AE%89%E5%85%A8%E6%80%A7%E4%BF%AE%E6%AD%A3%E7%89%88%E6%9C%AC%E9%87%8B%E5%87%BA/>
-<h2 class=post-title>[phpBB2] 2.0.22 -> 2.0.23 安全性修正版本釋出</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 6, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;159&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-我在竹貓星球看到這個消息的，自己本身有在玩 phpBB2 的系統，其實這套是我學 php 的開始，當初架設漫畫網站，就是提供給大家一個漫畫平台，不過後來倒了，因為自己 php 功力沒有像今天有基本的基礎，所以就沒在繼續經營了，不過我想這不會影響我用 phpBB 這套免費的系統，然而我還在這系統開發跟 Gene6 FTP Server 整合的外掛，自己無聊亂寫的，不過這不是正題，底下就是轉錄自竹貓星球的文章。
-[Fix] Correctly re-assign group moderator on user deletion (Bug #280) [Fix] Deleting a forum with multiple polls included (Bug #6740) [Fix] Fixed postgresql query for obtaining group moderator in groupcp.php (Bug #6550) [Fix] Selected field on first entry by default for font size within posting_body.tpl (Bug #7124) [Fix] Adjusted maxlength parameters in admin/styles_edit_body.tpl (Bug #81) [Fix] Fixed html output in make_forum_select if no forums present (Bug #436) [Fix] Fixed spelling error(s) in lang_admin.
-<a href=https://blog.wu-boy.com/2008/03/phpbb2-2022-2023-%E5%AE%89%E5%85%A8%E6%80%A7%E4%BF%AE%E6%AD%A3%E7%89%88%E6%9C%AC%E9%87%8B%E5%87%BA/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

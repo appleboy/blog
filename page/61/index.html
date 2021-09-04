@@ -116,6 +116,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/05/php-class-rss-generator-%E7%94%A2%E7%94%9F%E5%99%A8/>
+<h2 class=post-title>[PHP] Class: RSS Generator 產生器</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 8, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;40&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在寫新聞系統，需要 <a href=http://zh.wikipedia.org/wiki/RSS target=_blank>RSS</a> 線上訂閱的功能，所以在 <a href=http://www.phpclasses.org target=_blank>PHP Classes</a> 找到了 <a href=http://www.phpclasses.org/browse/package/2569.html target=_blank>RSS Generator</a> 產生器，這產生器使用起來也相當方便，在測試的時候剛好遇到一個問題，就是要對內容做 escape 的動作，避免 RSS 爛掉，看到 gslin 大的發表一篇 <a title='Permanent Link to "WordPress 的 exporter"' rel=bookmark href=http://blog.gslin.org/archives/2009/04/24/2002/>WordPress 的 exporter</a> 裡面寫到 WordPress 的產生 xml 格式沒有經過 escape 造成程式亂掉『<a onclick="pageTracker._trackPageview('/outbound/article/core.trac.wordpress.org')" href=https://core.trac.wordpress.org/ticket/9524>Exporter does not escape url</a>』，當然解決方法也很容易，那就是用 <a href=http://tw2.php.net/htmlspecialchars target=_blank>htmlspecialchars</a>，避免 url 裡面帶有 & 符號。 解決方法很容易，如下就可以了</p>
+<pre class="brush: php; title: ; notranslate" title>link = htmlentities($url, ENT_QUOTES);
+?></pre><blockquote>
+</blockquote>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/05/%E5%88%A9%E7%94%A8-css-tbody-%E8%A7%A3%E6%B1%BA-ie-hover-%E5%95%8F%E9%A1%8C/>
 <h2 class=post-title>利用 IE7 CSS 2.0 tbody 解決 IE6 hover 問題</h2>
 </a>
@@ -352,31 +374,6 @@ $this->db->where('news_id', $id); </pre>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/04/%E9%AB%98%E9%9B%84-python-%E5%85%A5%E9%96%80-python-tutorial/>
-<h2 class=post-title>[高雄] Python 入門 – Python tutorial</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 14, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;186&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>在現今 <a href=http://www.google.com>Google</a> 的大多數服務都是利用 <a href=http://www.python.org/>Python</a> 程式撰寫，例如：<a href=http://code.google.com/intl/zh-TW/appengine/>Google App Engine</a>，之前買下的 Youtube 影音網站，就是因為 Youtube 是用 Python 的程式撰寫起來的一個 Web 2.0 網站，在上禮拜去參加了 <a href=http://whoswho.openfoundry.org/>工作坊</a> 所開的一門入門的課程 <a href=http://whoswho.openfoundry.org/workshop/details/18.html>Python 入門 - Python tutorial - 第一梯 (講者：黃宇新)</a>，這課程是給要學習 Python 的基本入門，講師 黃宇新 教的真的很棒，把 Python 的精神都講的非常好，自己感覺跟 Perl 的功能差沒多少，可是兩種語言在比較方面各有優缺點，聽完最大的感想歸納為兩點，那就是 <span style=color:red>Python 產生線上文件相當方</span>便，還有非常的<span style=color:red>快速模組化</span>，每個 Python 程式都是一個獨立模組，在其他 Python 程式裡面都以利用 import 方式來交互使用，個人認為在 系統管理、網路管理、網路傳輸程式、網頁程式開發 上面會有相當大的幫助。 Python 還有一個優點就是程式可閱讀性，在每個程式都必須有良好的撰寫習慣，那就是要善用 tab 鍵來排版，不然程式就是會錯誤，底下一個 Python 的例子，九九乘法表：</p>
-<pre class="brush: python; title: ; notranslate" title>#!/usr/local/bin/python
-for i in range(1,10):
-  for j in range(1,10):
-    print "%d*%d=%s" % (i,j,i*j),
-  print ""</pre>
-<a href=https://blog.wu-boy.com/2009/04/%E9%AB%98%E9%9B%84-python-%E5%85%A5%E9%96%80-python-tutorial/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/python/>Python</a>&nbsp;
 </div>
 </article>
 </div>

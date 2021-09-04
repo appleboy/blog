@@ -116,6 +116,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/12/embedding-files-in-go-1-16/>
+<h2 class=post-title>Go 1.16 推出 Embedding Files</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 27, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;397&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p><a href=https://golang.org>Go 語言</a>官方維護團隊 rsc 之前在 <a href=https://github.com/golang/go/issues/41191>GitHub Issue</a> 上面提出要在 go command line 直接支援 Embedding Files，沒想到過沒幾個月，就直接實現出來了，並且預計在 2021 的 <a href=https://tip.golang.org/doc/go1.16>go 1.16</a> 版本直接支援 <a href=https://tip.golang.org/pkg/embed/>embed 套件</a>。有了這個功能，就可以將靜態檔案或專案設定檔直接包起來，這樣部署就更方便了。底下來看看官方怎麼使用。</p>
+<a href=https://blog.wu-boy.com/2020/12/embedding-files-in-go-1-16/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>
 <h2 class=post-title>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</h2>
 </a>
@@ -314,61 +336,6 @@
 <a href=https://blog.wu-boy.com/2020/07/count-employee-punch-in-out-with-postgres/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/postgres/>Postgres</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/06/convert-postgres-data-to-csv-file/>
-<h2 class=post-title>將 Postgres 資料轉換到 CSV 格式</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 29, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;154&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w1920-h1080" title=postgres><img src="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w400" alt=postgres title=postgres></a></p>
-<p>時常用到 <a href=https://www.postgresql.org/ title=Postgres>Postgres</a> 轉換資料的功能，來即時協助 PM 了解目前使用者實際狀況，底下紀錄常用的指令。首先安裝 Postgres 環境，這邊其實就是用 Docker 方式來啟動一個全新的 Postgres DB。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>db</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>postgres:12<span style=color:#bbb>
-</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
-</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>volumes</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>      </span>- pg-data:/var/lib/postgresql/data<span style=color:#bbb>
-</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>logging</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>options</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-size</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;100k&#34;</span><span style=color:#bbb>
-</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-file</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;3&#34;</span><span style=color:#bbb>
-</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>environment</span>:<span style=color:#bbb>
-</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>POSTGRES_USER</span>:<span style=color:#bbb> </span>db<span style=color:#bbb>
-</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>POSTGRES_DB</span>:<span style=color:#bbb> </span>db<span style=color:#bbb>
-</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>POSTGRES_PASSWORD</span>:<span style=color:#bbb> </span>db<span style=color:#bbb>
-</span></code></pre></td></tr></table>
-</div>
-</div><p>上面的 <code>environment</code> 參數可以自由調整，接著透過 <code>docker-compose up -d</code> 來啟動資料庫進行 App 串接。</p>
-<a href=https://blog.wu-boy.com/2020/06/convert-postgres-data-to-csv-file/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/database/>database</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/postgres/>Postgres</a>&nbsp;
 </div>
 </article>

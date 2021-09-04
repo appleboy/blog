@@ -116,6 +116,40 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/11/ubuntu-java-java-jdbc-and-mysql/>
+<h2 class=post-title>[Ubuntu & java] java JDBC and MySQL</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 15, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;248&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近開始要摸 <a href=http://zh.wikipedia.org/wiki/Java>java</a> 了，目前大概先實做 java with <a href=http://java.sun.com/javase/technologies/database/>JDBC</a> 連接 MySQL，所以在 <a href=http://www.javaworld.com.tw>JavaWorld@TW</a> 這裡找了一些相關的文件，目前我在 Linux 底下實做，還沒找到一套很適合的 IDE Tool 來撰寫程式碼，大家好像都很推 <a href=http://www.netbeans.org/>netbeans</a> 跟 <a href=http://www.eclipse.org/>eclipse</a>，不過我目前還是使用 <a href=http://www.pspad.com/>PSPad</a> 來撰寫 java 程式碼，然後透過 FTP 的方式編輯，這不是重點，重點是要透過 jdbc 來連接 MySQL，目前是在 <a href=http://www.ubuntu-tw.org/>Ubuntu</a> 7.04 這一版本上面實做，底下是實做方法： 1. 首先先安裝 deb 檔案：透過 apt-get 的方式</p>
+<pre class="brush: bash; title: ; notranslate" title>#
+# 首先尋找 java lib with mysql
+apt-get install libmysql-java
+</pre> 2. 安裝好之後尋找 jar 檔案，加入到 class path 裡面
+<pre class="brush: bash; title: ; notranslate" title>#
+# 首先 echo $CLASSPAT
+#
+# java mysql jar 檔案如下
+/usr/share/java/mysql.jar
+# 加入 CLASSPATH，修改 /etc/bash.bashrc
+export CLASSPATH=$CLASSPATH:/usr/share/java/mysql.jar
+# 然後在
+source /etc/bash.bashrc</pre>
+<a href=https://blog.wu-boy.com/2008/11/ubuntu-java-java-jdbc-and-mysql/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/java/>Java</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/11/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F%E5%AE%89%E5%BE%B7%E5%88%97%E5%BB%9A%E6%88%BF-%E6%B3%95%E5%BC%8F%E7%B0%A1%E7%B4%84%E5%B0%8F%E9%A4%A8/>
 <h2 class=post-title>[高雄美食]安德列廚房 法式簡約小館</h2>
 </a>
@@ -332,43 +366,6 @@ $oFCKeditor->Create(); </pre> 基本上這樣大致上就完成了喔。很容�
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E7%BE%8E%E9%A3%9F/>美食</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/10/ajax-google-map-%E7%9A%84%E6%87%89%E7%94%A8%EF%BD%9E/>
-<h2 class=post-title>[AJAX] google map 的應用～</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 4, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;84&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>嗯嗯，我自己的 blog 有在寫美食，就會有美食地點，當然我覺得把 <a href=http://code.google.com/apis/maps/>google map api</a> 整合進來，是不錯的方法，其實 google map 也提供了只要輸入地址，就可以直接幫妳對應經度跟緯度的值，這樣就可以利用 ajax 的技術把資料庫裡面的地址都加上 google map 了，至少之前 <a href=http://www.kaoh.com.tw/>高雄線上</a> 是這樣加上所有店家資訊的地址 google map，其實要使用 google map 相當容易，其實妳只要按照下面步驟就可以了：</p>
-<ol class=doublespace>
-<li>
-<a href=http://code.google.com/apis/maps/signup.html>Sign up for a Google Maps API key.</a>
-</li>
-<li>
-Read the <a href=http://code.google.com/apis/maps/documentation/index.html>Maps API Concepts</a>.
-</li>
-<li>
-Check out some <a href=http://code.google.com/apis/maps/documentation/examples/>Maps API Examples</a>.
-</li>
-<li>
-Read the <a href=http://code.google.com/apis/maps/documentation/reference.html>Maps API Reference</a>.
-</li>
-</ol>
-<a href=https://blog.wu-boy.com/2008/10/ajax-google-map-%E7%9A%84%E6%87%89%E7%94%A8%EF%BD%9E/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/ajax/>AJAX</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

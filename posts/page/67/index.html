@@ -103,6 +103,36 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/12/mysql-%E5%AF%A6%E5%81%9A-mysql-master-master-replication-%E5%90%8C%E6%AD%A5/>
+<h2 class=post-title>[MySQL] 實做 MySQL Master-Master Replication 同步</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 30, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;426&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天無聊實做了 <a href=http://www.mysql.com/>MySQL</a> 資料庫同步化，那可以先看看 <a href=http://dev.mysql.com/doc/refman/5.0/en/replication.html>MySQL Master Slave Replication</a>，中文網站可以上 google 查詢或者是看看這一篇：<a href=http://plog.longwin.com.tw/my_note-app-setting/2008/03/11/mysql_replication_master_slave_set_2008>MySQL 設定 Replication (Master – Slave)</a>，基本上設定還蠻容易的，如果會 Master 同步到 Slave 的話，那 MySQL Master-Master 只是在用相同的方法在做一遍，如果不懂 MMM 的可以先參考這一篇：<a href=http://plog.longwin.com.tw/news-technology/2008/10/21/mysql-master-replication-manager-mmm-intro-2008>MySQL Master-Master Replication Manager(1) – 簡介</a>，這篇寫的很清楚，今天看了文章，我實做起來，遇到一些問題，其實還蠻奇怪的，所以底下就來紀錄一下步驟，順便也說明一下。 實做兩台 Ubuntu 機器： db1：192.168.1.1 db2：192.168.1.2 先設定 db1： 目前我都是在 Ubuntu 7.10 底下實做的，那基本上只要有支援 MySQL 的 Linux 或者 FreeBSD 機器都可以實做這個方法： <strong><span style=color:red>步驟一：先修改 my.cnf 這個檔案：</span></strong> FreeBSD 的話在：/var/db/mysql/my.cnf Ubuntu：/etc/mysql/my.cnf 有的版本是在 /etc/my.cnf 所以不太一定，請依照自己的作業系統 修改：</p>
+<pre class="brush: bash; title: ; notranslate" title>#
+# bind-address 請 mark 起來，因為我們必須讓 MySQL Listen 各個不同的 IP Address
+#bind-address           = 127.0.0.1
+#
+# server id 請記得每台機器都設定不同喔
+#
+server-id               = 1
+log_bin                 = /var/log/mysql/mysql-bin.log</pre>
+<a href=https://blog.wu-boy.com/2008/12/mysql-%E5%AF%A6%E5%81%9A-mysql-master-master-replication-%E5%90%8C%E6%AD%A5/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/12/freebsd%E5%88%A9%E7%94%A8-denyhosts-%E8%BB%9F%E9%AB%94%E6%93%8B%E6%8E%89%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3-ssh-%E7%9A%84%E4%BD%BF%E7%94%A8%E8%80%85/>
 <h2 class=post-title>[FreeBSD]利用 DenyHosts 軟體擋掉暴力破解 ssh 的使用者</h2>
 </a>
@@ -361,40 +391,6 @@ make install clean</pre> 那使用方法： for FreeBSD
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/11/ubuntu-java-java-jdbc-and-mysql/>
-<h2 class=post-title>[Ubuntu & java] java JDBC and MySQL</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 15, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;248&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近開始要摸 <a href=http://zh.wikipedia.org/wiki/Java>java</a> 了，目前大概先實做 java with <a href=http://java.sun.com/javase/technologies/database/>JDBC</a> 連接 MySQL，所以在 <a href=http://www.javaworld.com.tw>JavaWorld@TW</a> 這裡找了一些相關的文件，目前我在 Linux 底下實做，還沒找到一套很適合的 IDE Tool 來撰寫程式碼，大家好像都很推 <a href=http://www.netbeans.org/>netbeans</a> 跟 <a href=http://www.eclipse.org/>eclipse</a>，不過我目前還是使用 <a href=http://www.pspad.com/>PSPad</a> 來撰寫 java 程式碼，然後透過 FTP 的方式編輯，這不是重點，重點是要透過 jdbc 來連接 MySQL，目前是在 <a href=http://www.ubuntu-tw.org/>Ubuntu</a> 7.04 這一版本上面實做，底下是實做方法： 1. 首先先安裝 deb 檔案：透過 apt-get 的方式</p>
-<pre class="brush: bash; title: ; notranslate" title>#
-# 首先尋找 java lib with mysql
-apt-get install libmysql-java
-</pre> 2. 安裝好之後尋找 jar 檔案，加入到 class path 裡面
-<pre class="brush: bash; title: ; notranslate" title>#
-# 首先 echo $CLASSPAT
-#
-# java mysql jar 檔案如下
-/usr/share/java/mysql.jar
-# 加入 CLASSPATH，修改 /etc/bash.bashrc
-export CLASSPATH=$CLASSPATH:/usr/share/java/mysql.jar
-# 然後在
-source /etc/bash.bashrc</pre>
-<a href=https://blog.wu-boy.com/2008/11/ubuntu-java-java-jdbc-and-mysql/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/java/>Java</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 </div>
 </article>
 </div>

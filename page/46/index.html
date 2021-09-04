@@ -116,6 +116,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/05/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-version-control-git-clean-%E4%BD%BF%E7%94%A8%E6%99%82%E6%A9%9F/>
+<h2 class=post-title>版本控制 version control git clean 使用時機</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 20, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;72&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+在做公司的每一個案子，我都會使用 git 來做版本控制，雖然公司只有用 svn 控管，但是只要網路掛掉，就不能做任何事情了，更不用說 svn Server 掛點，因為 git 開 branch 免錢，因此每當我拿到新案子就按照 Git 版本控制 branch model 分支模組基本介紹 開了固定幾個 branch，由於剛開始 git init 沒有把 .gitignore 寫好，所以 commit 了一堆 *.o 或者是 *.ko 類似的檔案，我用了 git rm &ndash;cached 方式砍了，結果在切換 branch 的時候出現底下錯誤訊息:
+error: Untracked working tree file &lsquo;XXXXXXXX&rsquo; would be overwritten by merge. 這是因為當你 git rm &ndash;cached 檔案之後，切換 branch 時候會遇到衝突，本來的 master 分支還是存在這些檔案阿，因此這時候就要靠 git clean 來清掉移除檔案，可以利用 git help clean 來查看使用手冊。 Ref: Force git to overwrite local files on pull.
+<a href=https://blog.wu-boy.com/2011/05/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-version-control-git-clean-%E4%BD%BF%E7%94%A8%E6%99%82%E6%A9%9F/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/svn/>svn</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/05/plurk-api-2-0-beta-%E5%87%BA%E4%BE%86%E4%BA%86-oauth-core-1-0a/>
 <h2 class=post-title>Plurk API 2.0 beta 出來了 (OAuth Core 1.0a)</h2>
 </a>
@@ -361,31 +383,6 @@ export PAGER="most"</pre> 重點就在於 $LESS 必須加上
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/javascrpt/>JavaScrpt</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/json/>JSON</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/04/codeigniter-2-0-x-mvc-%E6%9E%B6%E6%A7%8B%E4%BB%8B%E7%B4%B9/>
-<h2 class=post-title>CodeIgniter 2.0.X MVC 架構介紹</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 16, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;40&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
-</div>
-<p>這次受到 <a href=http://www.openfoundry.org/>OSSF::自由軟體鑄造場(Open Source Software Foundry)</a> 邀請在高雄講 <a href=http://www.codeigniter.org.tw>CodeIgniter</a> 2.0.X 系列講座，一整天的課程，可以參考 <a href=http://www.openfoundry.org/tw/workshop/details/140--php-framework-codeigniter-20>KaLUG 社群技術分享工作坊 - 快速學習 PHP Framework - CodeIgniter 2.0</a>，2009 年我也是講了一場<a href=http://blog.wu-boy.com/2009/07/codeigniter-open-source-php-web-framework-%E7%B3%BB%E5%88%97%E8%AC%9B%E5%BA%A7/>介紹 CodeIgniter 1.7.X 講座</a>，這次針對於 CodeIgniter 2.0.X 做了詳細介紹，及我們該如何轉換原本網站程式到 CI 上面，學員雖然來的不多，但是我相信大家都有學到這次講課的精華，就是 CodeIgniter MVC 架構，跟如何應用 Controller Model Views 基礎用法，看到大家都很認真學習，還有學員從雲科大到高雄，真的太令我感動了，希望這次議程沒有讓學員們失望，底下附上我的簡報:</p>
-<h2 id=簡報檔>簡報檔</h2>
-<iframe src=//www.slideshare.net/slideshow/embed_code/key/CxNSbO87WsPGyw width=595 height=485 frameborder=0 marginwidth=0 marginheight=0 scrolling=no style="border:1px solid #ccc;border-width:1px;margin-bottom:5px;max-width:100%" allowfullscreen></iframe> <div style=margin-bottom:5px> <strong> <a href=//www.slideshare.net/appleboy/codeigniter-20x title="CodeIgniter 2.0.X" target=_blank>CodeIgniter 2.0.X</a> </strong> from <strong><a href=https://www.slideshare.net/appleboy target=_blank>Bo-Yi Wu</a></strong> </div>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>

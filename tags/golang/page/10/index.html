@@ -103,6 +103,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2016/11/send-line-notification-using-docker-written-in-golang/>
+<h2 class=post-title>用 Docker 發送 Line 訊息</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 15, 2016
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;382&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/25660808075/in/dateposted-public/ title=docker><img src="https://i2.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_z.jpg?w=840&ssl=1" alt=docker data-recalc-dims=1></a></p>
+<p>今年各家網路公司 (<a href=https://www.facebook.com>Facebook</a>, <a href=https://line.me/>Line</a> 和 <a href=https://telegram.org/>Telegram</a>&mldr;) 分別推出 Bot 服務，看起來 Bot 會是未來趨勢，對 Bot 不是很了解的話，可以參考 Eric ShangKuan 寫了一篇: <a href=https://medium.com/@ericsk/%E9%97%9C%E6%96%BC%E5%AF%AB%E5%B0%8D%E8%AB%87%E6%A9%9F%E5%99%A8%E4%BA%BA-bot-%E7%9A%84%E5%85%A9%E4%B8%89%E4%BA%8B-f28f1a0ce7c4#.uuo64bw2e>關於寫對談機器人 (bot) 的兩三事</a>。本篇會介紹如何透過 <a href=https://www.docker.com/>Docker</a> 整合 <a href=https://business.line.me/en/services/bot>Line Message API</a>，下面所有指令都會跟 Docker 有關，但是程式碼都是用 <a href=https://golang.org/>Golang</a> 撰寫，想說順便在台灣推廣 ^__^。就在今年四月 Line 推出第一版 SDK，但是到了九月，突然收到 Line 的通知，說舊版的不支援了，請大家換到<a href=https://devdocs.line.me/en>新板 API</a>，最近更動到新版本時，踩到官網 UI 的雷就是原來 Line 有分 Developer 跟一般帳號，這兩種差別就是在於有無<code>主動 Push Message</code> 功能，後來在 <a href=https://github.com/line/line-bot-sdk-go>Line-Go-SDK</a> 發問才找到<a href=https://github.com/line/line-bot-sdk-go/issues/32#issuecomment-260235045>解答</a>。底下會一步一步教大家如何透過 Docker 發送 Line 訊息。</p>
+<a href=https://blog.wu-boy.com/2016/11/send-line-notification-using-docker-written-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/bot/>bot</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/line-bot-api/>Line Bot API</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2016/08/build-microservices-in-golang/>
 <h2 class=post-title>2016 COSCUP 用 Golang 寫 Microservices</h2>
 </a>
@@ -310,38 +336,13 @@
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/02/the-simplest-way-to-use-docker-on-os-x-dlite/>
-<h2 class=post-title>在 MAC OS 快速又簡單安裝 Docker 環境 – dlite</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 15, 2016
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;286&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-在 Mac OS X 底下安裝 Docker 服務不難，只需要到 Docker Mac 教學網站下載 Docker Toolbox，就可以使用 docker-machine, docker, docker-compose 等指令操作 Docker 服務。本篇提供另外一種工具，讓 Mac 開發者可以快速使用 Docker 服務，就是這套用 Go 語言寫的 dlite 工具。
-安裝方式 dlite 提供三種方式安裝
-直接下載執行檔案 (推薦) (下載連結) 直接透過 brew 指令安裝: brew install dlite 開發者模式: git clone 專案，然後下 make dlite 產生執行檔案 請大家直接使用第一種方式安裝即可。
-使用方式 安裝 dlite 需要使用到磁碟空間及記憶體，你可以動態指定 memory 使用量，或者是磁碟空間，詳細指令可以透過 dlite install -h 觀看
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 $ sudo dlite install -h Usage: dlite [OPTIONS] install [install-OPTIONS] creates an empty disk image, downloads the os, saves configuration and creates a launchd agent Help Options: -h, --help Show this help message [install command options] -c, --cpus= number of CPUs to allocate (default: 1) -d, --disk= size of disk in GiB to create (default: 20) -m, --memory= amount of memory in GiB to allocate (default: 2) -s, --ssh-key= path to public ssh key (default: $HOME/.
-<a href=https://blog.wu-boy.com/2016/02/the-simplest-way-to-use-docker-on-os-x-dlite/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/dlite/>dlite</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/go/>Go</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mac/>Mac</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
 <a href=https://blog.wu-boy.com/tags/golang/page/9/>&larr; Newer Posts</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/tags/golang/page/11/>Older Posts &rarr;</a>
 </li>
 </ul>
 </div>

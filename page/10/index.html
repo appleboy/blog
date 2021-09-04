@@ -116,6 +116,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/10/deploy-app-to-aws-lambda-using-up-tool-in-ten-minutes/>
+<h2 class=post-title>用 10 分鐘部署專案到 AWS Lambda</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 25, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;428&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/43711539730/in/dateposted-public/ title="Screen Shot 2018-10-24 at 9.37.49 AM"><img src="https://i1.wp.com/farm2.staticflickr.com/1956/43711539730_7bd9f610c3_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-10-24 at 9.37.49 AM" data-recalc-dims=1></a></p>
+<p>看到這標題也許非常聳動，也可能覺得不可思議，今天來探討如何將專案直接部署到 <a href=https://aws.amazon.com/tw/lambda/>AWS Lambda</a> 並且自動化將 <a href=https://aws.amazon.com/tw/api-gateway/>API Gateway</a> 設定完成。當然要做到完全自動化，必須要使用一些工具才能完成，本篇將介紹由 <a href=https://github.com/tj>TJ</a> 所開發的 <a href=https://github.com/apex/up>apex/up</a> 工具，如果您不熟悉 EC2 也不太懂 Command line 操作，本文非常適合您，不需要管理任何 EC2 機器，也不需要在熟悉任何 Linux Command 就可以完成簡單的專案部署。首先為什麼我選擇 apex/up 而不是選擇 <a href=https://github.com/apex/apex>apex/apex</a>，原因是使用 up 工具，您的專案是不用更動任何程式碼，就可以將專案直接執行在 AWS Lambda，那 API Gateway 部分也會一並設定完成，將所有 Request 直接 Proxy 到該 Lambda function。如果您希望對於 AWS Lambda 有更多進階操作，我會建議您用 <a href=https://github.com/apex/apex>apex/apex</a> 或 <a href=https://serverless.com/>Serverless</a>。您可以想像使用 up 就可以將 AWS Lambda 當作小型的 EC2 服務，但是不用自己管理 EC2，現在 up 支援 <a href=https://golang.org>Golang</a>, <a href=https://nodejs.org/en/>Node.js</a>, <a href=https://www.python.org/>Python</a> 或 Java 程式語言，用一行 command 就可以將專案部署到雲端了。</p>
+<a href=https://blog.wu-boy.com/2018/10/deploy-app-to-aws-lambda-using-up-tool-in-ten-minutes/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/aws-lambda/>AWS Lambda</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/deployment/>deployment</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/10/go-1-11-support-go-module/>
 <h2 class=post-title>Go 語言 1.11 版本推出 go module</h2>
 </a>
@@ -322,29 +347,6 @@
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/graphql/>GraphQL</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/07/mkcert-zero-config-tool-to-make-locally-trusted-development-certificates/>
-<h2 class=post-title>在本機端快速產生網站免費憑證</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 6, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;495&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://i1.wp.com/farm2.staticflickr.com/1785/43227213371_a041db0810_o.png?ssl=1"><img src="https://i1.wp.com/farm2.staticflickr.com/1785/43227213371_a041db0810_o.png?w=840&ssl=1" alt data-recalc-dims=1></a></p>
-<p>大家看到網站免費憑證，一定會想到 <a href=https://letsencrypt.org/>Let&rsquo;s encrypt</a> 服務商提供一個網域可以使用 100 個免費憑證，如果您有很多 subdomain 需求，還可以申請獨立一張 <a href=https://community.letsencrypt.org/t/acme-v2-and-wildcard-certificate-support-is-live/55579>wildcard 憑證</a>，但是這是在伺服器端的操作，假設在本機端開發，該如何快速產生憑證，這樣開啟瀏覽器時，就可以看到綠色的 https 字眼</p>
-<p><a href="https://i2.wp.com/farm1.staticflickr.com/921/43177490822_974612c015_z.jpg?ssl=1"><img src="https://i2.wp.com/farm1.staticflickr.com/921/43177490822_974612c015_z.jpg?w=840&ssl=1" alt data-recalc-dims=1></a></p>
-<a href=https://blog.wu-boy.com/2018/07/mkcert-zero-config-tool-to-make-locally-trusted-development-certificates/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/certificate/>certificate</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

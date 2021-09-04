@@ -116,6 +116,55 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF/>
+<h2 class=post-title>Git 版本控制：利用 git reset 恢復檔案、暫存狀態、commit 訊息</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 20, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;320&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>這次來介紹一下 <a href=http://git-scm.com/>git</a> reset 的用法，為什麼會介紹這指令呢？因為今天想要看專案狀態，用 git status 觀看，發現被我玩爛了，所以出現了底下錯誤訊息：</p>
+<pre class="brush: bash; title: ; notranslate" title>$ git status
+error: bad index file sha1 signature
+fatal: index file corrupt</pre> 解決此問題非常簡單，要先刪除 index 檔案，請先砍掉
+<p><span style=color:green><strong>.git/index</strong></span>，恢復此 index 請用</p>
+<pre class="brush: bash; title: ; notranslate" title>git reset</pre> 這行指令相當於
+<p><span style=color:red><strong>git reset &ndash;mixed HEAD</strong></span>，或者是可以用 <span style=color:red><strong>git read-tree</strong></span> 來取代 git reset，當然 git reset 不只是有這功能而已，假如您已經建立了 commit 訊息，也可以將此訊息拿掉，重新在 commit，或者是您修改過的檔案在暫存區，git 也可以幫您恢復到未暫存，或者是不想要這次的修改，也可以恢復到未修改的檔案喔。</p>
+<h3 id=取消已經暫存的檔案-假如我們有兩個檔案需要-commit但是不小心按到-git-add--全部加入到暫存區那該怎麼恢復呢>取消已經暫存的檔案 假如我們有兩個檔案需要 commit，但是不小心按到 git add * 全部加入到暫存區，那該怎麼恢復呢？</h3>
+<pre class="brush: bash; title: ; notranslate" title># On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#       modified:   Makefile
+#       modified:   user/easy_setup/easysetup.h
+#</pre> 上面是以經在暫存區裡面等待被 commit 檔案(
+<p><span style=color:green>Changes to be committed</span>)，大家可以看到括號裡面有提示如何拿掉 (use &ldquo;git reset HEAD <file>&mldr;&rdquo; to unstage)，所以我們下：</p>
+<pre class="brush: bash; title: ; notranslate" title>git reset HEAD user/easy_setup/easysetup.h</pre> 之後會看到 『
+<p><span style=color:red>user/easy_setup/easysetup.h: locally modified</span>』此訊息，這時候在用 git status 看狀態</p>
+<pre class="brush: bash; title: ; notranslate" title># On branch master
+# Changes to be committed:
+#   (use "git reset HEAD <file>..." to unstage)
+#
+#       modified:   Makefile
+#
+# Changed but not updated:
+#   (use "git add <file>..." to update what will be committed)
+#
+#       modified:   user/easy_setup/easysetup.h
+#</pre>
+<a href=https://blog.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%EF%BC%9A%E5%88%A9%E7%94%A8-git-reset-%E6%81%A2%E5%BE%A9%E6%AA%94%E6%A1%88%E3%80%81%E6%9A%AB%E5%AD%98%E7%8B%80%E6%85%8B%E3%80%81commit-%E8%A8%8A%E6%81%AF/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/08/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-%E3%80%8Cyou-have-some-suspicious-patch-lines%E3%80%8D/>
 <h2 class=post-title>Git 版本控制: 「You have some suspicious patch lines」</h2>
 </a>
@@ -388,36 +437,6 @@ UseEncoding UTF-8 Big5</pre> Reference:
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/proftpd/>proftpd</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/06/phpbb3-bbcode-url-tag-%E8%BD%89%E6%8F%9B%E4%B8%AD%E6%96%87%E7%B6%B2%E5%9D%80%E9%A9%97%E8%AD%89/>
-<h2 class=post-title>[phpBB3] BBCode [url] Tag 支援中文網址</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 30, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;154&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-在 phpBB2 的時候就有發現這問題了，當時並沒有想去解決這問題，然而至今到了 phpBB3，依然出現這問題，不過我想這是因為中文網址的盛行，以及像 Wiki 之類都會有中文標籤，例如：一分鐘教室-userChrome.css，解決方法可以透過 urlencode 函式來處理掉網址編碼問題，在 phpBB 處理文章儲存，會先經過 bbcode 的處理，將 **** 標籤，會經過 get_preg_expression(&lsquo;url&rsquo;) 這函式的驗證，看 url 是否合法，當然如果網址列有中文就不可能通過，所以必須在網址驗證之前，把網址編碼過，通過驗證之後再把網址解碼，這樣就沒問題了，底下為安裝步驟 打開 includes/message_parser.php 找尋
-function validate_url($var1, $var2) 前面加入 /**
-* url encode
-*
-* @param string $string http url
-*/
-function encode_url($string)
-{
-$entities = array('%21', '%2A', '%27', '%28', '%29', '%3B', '%3A', '%40', '%26', '%3D', '%2B', '%24', '%2C', '%2F', '%3F', '%25', '%23', '%5B', '%5D');
-$replacements = array('!', '*', "'", "(", ")", ";", ":", "
-<a href=https://blog.wu-boy.com/2010/06/phpbb3-bbcode-url-tag-%E8%BD%89%E6%8F%9B%E4%B8%AD%E6%96%87%E7%B6%B2%E5%9D%80%E9%A9%97%E8%AD%89/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;
 </div>
 </article>
 </div>

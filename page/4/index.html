@@ -116,6 +116,61 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/06/convert-postgres-data-to-csv-file/>
+<h2 class=post-title>將 Postgres 資料轉換到 CSV 格式</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 29, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;154&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w1920-h1080" title=postgres><img src="https://lh3.googleusercontent.com/vbqq3rLa3xH1e2c1snKm4u0hhkm4mYaT7IRpVBQC22AYa_9xbzuCois2EXQT7-RvZNofhz2TJpz0-Wlfrs870jAn3fyfove-6uF_I8cSe89jI-zmq8BQ2XQS1_hRZJN5587iNVG6pvY=w400" alt=postgres title=postgres></a></p>
+<p>時常用到 <a href=https://www.postgresql.org/ title=Postgres>Postgres</a> 轉換資料的功能，來即時協助 PM 了解目前使用者實際狀況，底下紀錄常用的指令。首先安裝 Postgres 環境，這邊其實就是用 Docker 方式來啟動一個全新的 Postgres DB。</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-yaml data-lang=yaml><span style=color:#bbb>  </span><span style=color:#8b008b;font-weight:700>db</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>image</span>:<span style=color:#bbb> </span>postgres:12<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>restart</span>:<span style=color:#bbb> </span>always<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>volumes</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span>- pg-data:/var/lib/postgresql/data<span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>logging</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>options</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-size</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;100k&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>        </span><span style=color:#8b008b;font-weight:700>max-file</span>:<span style=color:#bbb> </span><span style=color:#cd5555>&#34;3&#34;</span><span style=color:#bbb>
+</span><span style=color:#bbb>    </span><span style=color:#8b008b;font-weight:700>environment</span>:<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>POSTGRES_USER</span>:<span style=color:#bbb> </span>db<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>POSTGRES_DB</span>:<span style=color:#bbb> </span>db<span style=color:#bbb>
+</span><span style=color:#bbb>      </span><span style=color:#8b008b;font-weight:700>POSTGRES_PASSWORD</span>:<span style=color:#bbb> </span>db<span style=color:#bbb>
+</span></code></pre></td></tr></table>
+</div>
+</div><p>上面的 <code>environment</code> 參數可以自由調整，接著透過 <code>docker-compose up -d</code> 來啟動資料庫進行 App 串接。</p>
+<a href=https://blog.wu-boy.com/2020/06/convert-postgres-data-to-csv-file/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/database/>database</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/postgres/>Postgres</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/06/why-we-need-to-learn-graphql/>
 <h2 class=post-title>為什麼要學 GraphQL?</h2>
 </a>
@@ -329,57 +384,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/>
-<h2 class=post-title>Go Modules 處理私有 GIT Repository 流程</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 4, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;433&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><img src="https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080" alt=golang></p>
-<p><a href=https://golang.org/>Golang</a> 在 <a href=https://golang.org/doc/go1.14#introduction>1.14</a> 正式說明可以將 <a href=https://github.com/golang/go/wiki/Modules>Go Modules</a> 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go mod init project_path
-go mod tidy
-</code></pre></td></tr></table>
-</div>
-</div><p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 <code>proxy.golang.org</code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go env -w <span style=color:#00688b>GOPRIVATE</span>=github.com/appleboy
-</code></pre></td></tr></table>
-</div>
-</div><p>上面代表告訴 go 指令，只要遇到 <code>github.com/appleboy</code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>，接著設定 Git</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>git config --global url.<span style=color:#cd5555>&#34;https://</span><span style=color:#00688b>$USERNAME</span><span style=color:#cd5555>:</span><span style=color:#00688b>$ACCESS_TOKEN</span><span style=color:#cd5555>@github.com&#34;</span>.insteadOf <span style=color:#cd5555>&#34;https://github.com&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>。</p>
-<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

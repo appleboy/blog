@@ -116,6 +116,57 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/>
+<h2 class=post-title>Go Modules 處理私有 GIT Repository 流程</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 4, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;433&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080" alt=golang></p>
+<p><a href=https://golang.org/>Golang</a> 在 <a href=https://golang.org/doc/go1.14#introduction>1.14</a> 正式說明可以將 <a href=https://github.com/golang/go/wiki/Modules>Go Modules</a> 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go mod init project_path
+go mod tidy
+</code></pre></td></tr></table>
+</div>
+</div><p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 <code>proxy.golang.org</code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go env -w <span style=color:#00688b>GOPRIVATE</span>=github.com/appleboy
+</code></pre></td></tr></table>
+</div>
+</div><p>上面代表告訴 go 指令，只要遇到 <code>github.com/appleboy</code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>，接著設定 Git</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>git config --global url.<span style=color:#cd5555>&#34;https://</span><span style=color:#00688b>$USERNAME</span><span style=color:#cd5555>:</span><span style=color:#00688b>$ACCESS_TOKEN</span><span style=color:#cd5555>@github.com&#34;</span>.insteadOf <span style=color:#cd5555>&#34;https://github.com&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>。</p>
+<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/02/install-drone-with-github-in-five-minutes/>
 <h2 class=post-title>用五分鐘安裝好 Drone 搭配 GitHub 自動化環境</h2>
 </a>
@@ -342,29 +393,6 @@
 <a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/12/setup-laravel-environment-in-15-minutes/>
-<h2 class=post-title>用 15 分鐘快速打造 Laravel 開發環境</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 6, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;218&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/pjvNN9g1j3Viepuj7ujFJxOOaXPW4GalM1N0nTEmtrH84y36YVJuDfLDmoVv9PgmsuyEJ9o1iwSnItKfyg91fLGETDSsxGXCnquhs1qy_SDYNw5S0MuS0caVbnWZzx9hB13LqRN7JYw=w1920-h1080" title="cover page"><img src="https://lh3.googleusercontent.com/pjvNN9g1j3Viepuj7ujFJxOOaXPW4GalM1N0nTEmtrH84y36YVJuDfLDmoVv9PgmsuyEJ9o1iwSnItKfyg91fLGETDSsxGXCnquhs1qy_SDYNw5S0MuS0caVbnWZzx9hB13LqRN7JYw=w1920-h1080" alt="cover page" title="cover page"></a></p>
-<p>相信大家對 Laravel 都很熟悉，但是初學者或是新進同事要快速入門 Laravel 最大的門檻就是該如何在短時間內在本機電腦快速安裝好公司專案。這時候使用 Laradock 就是一個最佳時機，透過 Docker 容器話，快速切換 PHP 版本，或者是安裝額外的服務像是 MySQL, MariaDB, phpMyAdmin 或 nginx 等服務，讓本機端不受到自訂安裝套件的困擾，用完隨時關閉，完全不會影響到電腦環境。底下我會介紹使用 Laradock 該注意的事情。完整詳細的操作步驟可以直接看 Youtube 影片。</p>
-<a href=https://blog.wu-boy.com/2019/12/setup-laravel-environment-in-15-minutes/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/laradock/>Laradock</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
 </div>
 </article>
 </div>

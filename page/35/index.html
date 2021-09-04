@@ -116,6 +116,43 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication/>
+<h2 class=post-title>Galera Cluster for MySQL Multi-master Replication</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 31, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;626&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a title="galera_mysql_replication by appleboy46, on Flickr" href=https://www.flickr.com/photos/appleboy/8603447002/><img alt=galera_mysql_replication src="https://i0.wp.com/farm9.staticflickr.com/8383/8603447002_050ecd1b53.jpg?resize=500%2C247&ssl=1" data-recalc-dims=1></a>
+</div> 最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的
+<p><a href=http://www.codership.com/content/using-galera-cluster target=_blank>Galera Cluster for MySQL</a> 方案。本篇會介紹在 <a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.centos.org/ target=_blank>CentOS</a> 6.x final 版本如何安裝 Galera 伺服器套件及設定。要架設 Galera Cluster Server，有兩種套件選擇，一個是 <a href=http://www.percona.com/software/percona-xtradb-cluster target=_blank>Percona XtraDB Cluster</a> 另一個是 <a href=https://downloads.mariadb.org/mariadb-galera/ target=_blank>MariaDB Galera Cluster</a>，這次作者會介紹後者的安裝。</p>
+<h3 id=galera-cluster-介紹-為什麼要選擇-galera-cluster-server它有什麼優點及功能呢mysqlgalera-是一套可以同步多台-mysqlinnodb-機器的叢集系統底下可以列出功能>Galera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優點及功能呢？MySQL/Galera 是一套可以同步多台 MySQL/InnoDB 機器的叢集系統，底下可以列出功能。</h3>
+<ul>
+<li>同步複製資料</li>
+<li>可讀取和寫入叢集系統內任一節點</li>
+<li>自動偵測節點錯誤，如果有節點當機，則叢集系統自動移除該節點</li>
+<li>可任意擴充節點</li>
+<li>採用 row level 方式來平行複製資料 從上面功能看來，我們可以平行任意擴充節點，動態增加伺服器到叢集系統，要做到上面功能，就是利用</li>
+</ul>
+<p><a href=http://www.codership.com/products/galera_replication target=_blank>Galera library</a> 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。</p>
+<a href=https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/galera/>Galera</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/innodb/>InnoDB</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mariadb/>Mariadb</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/percona/>Percona</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/03/coding-style-tool-editorconfig/>
 <h2 class=post-title>統一開發者編輯器 Coding Style</h2>
 </a>
@@ -355,35 +392,6 @@ Total 0 (delta 0), reused 0 (delta 0) error: denying non-fast forward refs/heads
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/backboe-event/>Backboe Event</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/backbone.js/>Backbone.js</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/02/git-hooks-parse-php-error-before-commit/>
-<h2 class=post-title>在 git Commit 之前檢查 PHP 是否有錯誤</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;53&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/8455538800/ title="Git-Logo-2Color by appleboy46, on Flickr"><img src="https://i0.wp.com/farm9.staticflickr.com/8523/8455538800_30f65954f8.jpg?resize=500%2C209&ssl=1" alt=Git-Logo-2Color data-recalc-dims=1></a>
-</div> 在 commit code 之前，程式設計師必須確保程式碼的正確性，包含不要放入 debug message 到
-<p><a href=http://git-scm.com/ target=_blank>git</a> server，寫了一個簡單的 pre-commit 程式，來確保 PHP 是否有 Parse error，或者是在寫 CoffeeScript 及 JavaScript 時，常常會用到 console.* 來當作中斷點或者是顯示變數資料，這也是需要盡量避免 commit 到伺服器，你可不想要長官 review 的時候看到這麼多 debug 訊息吧。這時候就是需要 <a href=http://git-scm.com/book/en/Customizing-Git-Git-Hooks target=_blank>git-hooks</a> 的 **<span style=color:red>pre-commit</span>** 幫忙檢查這些 Syntax 語法，可以直接參考<a href=https://github.com/appleboy/git-hooks>我的 git-hooks 專案</a>。安裝方式很簡單:</p>
-<pre class="brush: bash; title: ; notranslate" title>$ git clone https://github.com/appleboy/git-hooks.git
-$ chmod +x bin/hooks.sh pre-commit
-$ ./bin/hooks.sh your_project_path</pre> 如果使用 git commit 之前，就會檢查 .js、.coffee、.php 等副檔名。
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/coffeescript/>CoffeeScript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-hooks/>git hooks</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

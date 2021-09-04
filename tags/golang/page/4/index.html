@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/>
+<h2 class=post-title>[Go 教學] graceful shutdown with multiple workers</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 2, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;7&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1360&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>在閱讀本文章之前請先預習『<a href=https://blog.wu-boy.com/2019/11/implement-job-queue-using-buffer-channel-in-golang/>用 Go 語言 buffered channel 實作 Job Queue</a>』，本篇會針對<a href=https://www.slideshare.net/appleboy/job-queue-in-golang-184064840>投影片</a> p.26 到 p.56 做詳細的介紹，教大家如何從無到有寫一個簡單的 multiple worker，以及如何處理 graceful shutdown with workers，為什麼要處理 graceful shutdown? 原因是中途手動執行 ctrl + c 或者是部署新版程式都會遇到該如何確保 job 執行完成後才結束 main 函式。</p>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/channel/>channel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine/>
 <h2 class=post-title>使用 Go Channel 及 Goroutine 時機</h2>
 </a>
@@ -319,35 +341,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/05/handle-multiple-channel-in-15-minutes/>
-<h2 class=post-title>15 分鐘學習 Go 語言如何處理多個 Channel 通道</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 13, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;568&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>大家在初學 <a href=https://golang.org>Go 語言</a>時，肯定很少用到 Go Channel，也不太確定使用的時機點，其實在官方 Blog 有提供一篇不錯的文章『<a href=https://blog.golang.org/pipelines>Go Concurrency Patterns: Pipelines and cancellation</a>』，相信大家剛跨入學習新語言時，不會馬上看 Go Channel，底下我來用一個簡單的例子來說明如何使用 Go Channel，使用情境非常簡單，就是假設今天要同時處理 20 個背景工作，一定想到要使用 <a href=https://tour.golang.org/concurrency/1>Goroutines</a>，但是又想要收到這 20 個 JOB 處理的結果，並顯示在畫面上，如果其中一個 Job 失敗，就跳出 main 函式，當然又會希望這 20 個 JOB 預期在一分鐘內執行結束，如果超過一分鐘，也是一樣跳出 main 函式。針對這個問題，我們可以整理需要三個 Channel + 一個 Timeout 機制。</p>
-<ul>
-<li>使用 outChan 顯示各個 JOB 完成狀況</li>
-<li>使用 errChan 顯示 JOB 發生錯誤並且跳出 main 主程式</li>
-<li>使用 finishChan 通知全部 JOB 已經完成</li>
-<li>設定 Timeout 機制 (1 秒之內要完成所有 job)</li>
-</ul>
-<p>在看此文章之前，也許可以先理解什麼是『<a href=https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/>buffer vs unbuffer channel</a>』。</p>
-<a href=https://blog.wu-boy.com/2019/05/handle-multiple-channel-in-15-minutes/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/goroutines/>Goroutines</a>&nbsp;
 </div>
 </article>
 </div>
