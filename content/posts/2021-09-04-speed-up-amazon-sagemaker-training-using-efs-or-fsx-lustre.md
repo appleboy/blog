@@ -170,3 +170,4 @@ resource "aws_vpc_endpoint" "s3" {
 * [使用 Amazon FSx for Lustre 和 Amazon EFS 作数据源加快 Amazon Sagemaker 训练](https://aws.amazon.com/cn/blogs/china/use-amazon-fsx-for-lustre-and-amazon-efs-as-data-source-to-speed-up-amazon-sagemaker-training/)
 * [Installing the Amazon EFS client on other Linux distributions](https://docs.aws.amazon.com/efs/latest/ug/installing-amazon-efs-utils.html#installing-other-distro)
 * [Use a Private Docker Registry for Real-Time Inference Containers](https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-containers-inference-private.html)
+* [When to use an AWS S3 VPC endpoint](https://tomgregory.com/when-to-use-an-aws-s3-vpc-endpoint/)
