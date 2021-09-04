@@ -3,19 +3,19 @@
 <meta charset=utf-8>
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練 - 小惡魔 - AppleBOY</title>
+<title>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練 - 小惡魔 - AppleBOY</title>
 <meta name=description content="
 前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","name":"用 aws efs 或 fsx lustre 加速 sagemaker 模型訓練"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練","description":"前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。\n","inLanguage":"en","wordCount":609,"datePublished":"2021-09-04T12:43:19","dateModified":"2021-09-04T12:43:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["sagemaker, golang, FSx, Lustre, EFS, terraform"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練">
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","name":"用 aws efs 或 fsx lustre 加速 sagemaker ai 模型訓練"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練","description":"前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。\n","inLanguage":"en","wordCount":617,"datePublished":"2021-09-04T12:43:19","dateModified":"2021-09-04T12:43:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["sagemaker, golang, FSx, Lustre, EFS, terraform"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練">
 <meta property="og:description" content="
 前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
 <meta property="og:image" content="https://i.imgur.com/X4wpl6d.png">
 <meta property="og:url" content="https://blog.wu-boy.com/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練">
+<meta name=twitter:title content="用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練">
 <meta name=twitter:description content="
 前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來 …">
 <meta name=twitter:image content="https://i.imgur.com/X4wpl6d.png">
@@ -96,11 +96,11 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=post-heading>
-<h1>用 AWS EFS 或 FSx Lustre 加速 Sagemaker 模型訓練</h1>
+<h1>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</h1>
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on September 4, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;609&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;617&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -310,6 +310,7 @@
 <li><a href=https://aws.amazon.com/cn/blogs/china/use-amazon-fsx-for-lustre-and-amazon-efs-as-data-source-to-speed-up-amazon-sagemaker-training/>使用 Amazon FSx for Lustre 和 Amazon EFS 作数据源加快 Amazon Sagemaker 训练</a></li>
 <li><a href=https://docs.aws.amazon.com/efs/latest/ug/installing-amazon-efs-utils.html#installing-other-distro>Installing the Amazon EFS client on other Linux distributions</a></li>
 <li><a href=https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-containers-inference-private.html>Use a Private Docker Registry for Real-Time Inference Containers</a></li>
+<li><a href=https://tomgregory.com/when-to-use-an-aws-s3-vpc-endpoint/>When to use an AWS S3 VPC endpoint</a></li>
 </ul>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/sagemaker/>sagemaker</a>&nbsp;
@@ -325,7 +326,7 @@
 <div class=share-box aria-hidden=true>
 <ul class=share>
 <li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&text=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4&via=appleboy" target=_blank title="Share on Twitter">
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&text=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20AI%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4&via=appleboy" target=_blank title="Share on Twitter">
 <i class="fab fa-twitter"></i>
 </a>
 </li>
@@ -335,22 +336,22 @@
 </a>
 </li>
 <li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&title=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on Reddit">
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&title=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20AI%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on Reddit">
 <i class="fab fa-reddit"></i>
 </a>
 </li>
 <li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&title=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on LinkedIn">
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&title=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20AI%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on LinkedIn">
 <i class="fab fa-linkedin"></i>
 </a>
 </li>
 <li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&title=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on StumbleUpon">
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&title=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20AI%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on StumbleUpon">
 <i class="fab fa-stumbleupon"></i>
 </a>
 </li>
 <li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&description=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on Pinterest">
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f09%2fspeed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre%2f&description=%e7%94%a8%20AWS%20EFS%20%e6%88%96%20FSx%20Lustre%20%e5%8a%a0%e9%80%9f%20Sagemaker%20AI%20%e6%a8%a1%e5%9e%8b%e8%a8%93%e7%b7%b4" target=_blank title="Share on Pinterest">
 <i class="fab fa-pinterest"></i>
 </a>
 </li>
