@@ -43,7 +43,7 @@ tags:
 
 可以看到第二個步驟是 `Downloading`，也就是每一次的 Training 過程，都需要從 S3 下載，這樣每次訓練，都需要浪費下載時間，而這個時間在 SageMaker 是算在訓練時間內，也就是需要花費的，假設檔案有個 100G，不只是讓訓練模型增加不少時間外，也額外多花了不少費用。
 
-除了使用者提供的 Dataset 之外，還要加上我們自家的 `1TB` Dataset 進行訓練，那如果把 1TB 資料放在 S3 上面，從下載到解壓縮可能就要一小時跑不掉，所以透過 S3 這方案肯定是不行的，浪費時間跟金錢。故最終有跟台灣 AWS 團隊討論出使用 [AWS FSx for Lustre][21] 解決方案。
+除了使用者提供的 Dataset 之外，還要加上自家的 `1TB` Dataset 進行訓練，那如果把 1TB 資料放在 S3 上面，從下載到解壓縮可能就要一小時跑不掉，所以透過 S3 這方案肯定是不行的，浪費時間跟金錢。故最終有跟台灣 AWS 團隊討論出使用 [AWS FSx for Lustre][21] 解決方案。
 
 [21]:https://aws.amazon.com/tw/fsx/lustre/?
 
@@ -51,7 +51,7 @@ tags:
 
 首先 Lustre 就是一個雲端網路磁碟，它的最大好處就是可以整合 AWS S3，只要 S3 上面有增加任何檔案，Lustre 就會隨時將檔案同步進來，但是這僅限於單向同步，也就是 `S3 -> Lustre`，如果將 Lustre 掛載到 EC2 上面，砍掉任何檔案，是不會同步到 S3 上面的，這點需要非常小心注意。
 
-原本我的想法是，這樣挺不錯的，S3 可以同步到 Lustre 磁區內，但是這邊遇到問題是，本來 AWS S3 Bucket 上有綁定了 `ObjectCreated` 到 SQS 內部，如下面 [HCL 語法][32]範例 ([Terraform][31])，但是只要你要使用 S3 同步到 Lustre 內，也需要綁定同樣 Event，這邊就完全不能設定，會噴 API 錯誤，等於是要開發者二選一這功能，其實相當奇怪啊，理應上 AWS S3 要可以同步發送不同的 Event 到不同的 Target 才對，所以因為這樣，我取消了將使用者的 Dataset 轉移到 Lustre 磁碟上。
+原本團隊的想法是，這樣挺不錯的，S3 可以同步到 Lustre 磁區內，但是這邊遇到問題是，本來 AWS S3 Bucket 上有綁定了 `ObjectCreated` 到 SQS 內部，如下面 [HCL 語法][32]範例 ([Terraform][31])，但是只要使用 S3 同步到 Lustre 內，也需要綁定同樣 Event，這邊就完全不能設定，會噴 API 錯誤，等於是要開發者二選一這功能，其實相當奇怪啊，理應上 AWS S3 要可以同步發送相同的 Event 到不同的 Target 才對，也因為這樣，團隊取消了將使用者的 Dataset 轉移到 Lustre 磁碟上。
 
 [31]:https://www.terraform.io/
 [32]:https://github.com/hashicorp/hcl
@@ -91,7 +91,7 @@ resource "aws_s3_bucket_notification" "tl_bucket_notification" {
 
 > FSx for Lustre is currently not supported in the region cn-north-1 for SageMaker
 
-看到這訊息我也蠻傻眼的，直接開 AWS Web Console 操作看看是否少了哪些功能，結果從 UI 上面是無法選擇使用 File System 功能
+看到這訊息真的蠻傻眼的，直接開 AWS Web Console 操作看看是否少了哪些功能，結果從 UI 上面是無法選擇使用 File System 功能
 
 ![china](https://i.imgur.com/NfwgEtS.png)
 
@@ -144,11 +144,11 @@ inputDataConfig = append(
 
 > ClientError: Data download failed:Please ensure that the subnet's route table has a route to an S3 VPC endpoint or a NAT device, and both the security groups and the subnet's network ACL allow outbound traffic to S3.
 
-想像我們要去存取 AWS S3 的資源，像是 EC2 直接去讀取相關 AWS S3 檔案，都是沒問題的，而可以成功讀取最主要是這台 EC2 是在 `Public Subnet`，它有權限可以存取 Internet，而 Public Subnet 最主要有 route table 搭配 [internet gateway][41] 才可以存取 Internet。
+想像 AWS EC2要去存取 AWS S3 的資源，完全沒問題的，而可以成功讀取最主要因素是這台 EC2 是在 `Public Subnet`，它有權限可以存取 Internet，而 Public Subnet 最主要有 route table 搭配 [internet gateway][41] 才可以存取 Internet。
 
 [41]:https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html
 
-而現在遇到此問題的原因是我們使用的是 `Private Subnet`，而此 Subnet 是不能存取 Internet 的，這時候就需要使用 S3 VPC endpoints 方式來解決此問題。所以透過設定 S3 VPC Endpoint 方式就可以達成存取 S3 檔案了。
+而現在遇到此問題的原因是架構使用的是 `Private Subnet`，而此 Subnet 是不能存取 Internet 的，這時候就需要使用 S3 VPC endpoints 方式來解決此問題。所以透過設定 S3 VPC Endpoint 方式就可以達成存取 S3 檔案了。
 
 ```hcl
 resource "aws_vpc_endpoint" "s3" {
