@@ -51,7 +51,7 @@ tags:
 
 首先 Lustre 就是一個雲端網路磁碟，它的最大好處就是可以整合 AWS S3，只要 S3 上面有增加任何檔案，Lustre 就會隨時將檔案同步進來，但是這僅限於單向同步，也就是 `S3 -> Lustre`，如果將 Lustre 掛載到 EC2 上面，砍掉任何檔案，是不會同步到 S3 上面的，這點需要非常小心注意。
 
-原本我的想法是，這樣挺不錯的，S3 可以同步到 Lustre 磁區內，但是這邊遇到問題是，本來我在 S3 有綁定了 `ObjectCreated` 到 SQS 內部，如下面 [HCL 語法][32]範例 ([Terraform][31])，但是只要你要使用 S3 同步到 Lustre 內，也需要綁定同樣 Event，這邊就完全不能設定，會噴 API 錯誤，等於是要開發者二選一這功能，其實相當奇怪啊，理應上 AWS S3 要可以同步發送不同的 Event 到不同的 Target 才對，所以因為這樣，我打消了將使用者的 Dataset 轉移到 Lustre 磁碟上。
+原本我的想法是，這樣挺不錯的，S3 可以同步到 Lustre 磁區內，但是這邊遇到問題是，本來 AWS S3 Bucket 上有綁定了 `ObjectCreated` 到 SQS 內部，如下面 [HCL 語法][32]範例 ([Terraform][31])，但是只要你要使用 S3 同步到 Lustre 內，也需要綁定同樣 Event，這邊就完全不能設定，會噴 API 錯誤，等於是要開發者二選一這功能，其實相當奇怪啊，理應上 AWS S3 要可以同步發送不同的 Event 到不同的 Target 才對，所以因為這樣，我取消了將使用者的 Dataset 轉移到 Lustre 磁碟上。
 
 [31]:https://www.terraform.io/
 [32]:https://github.com/hashicorp/hcl
@@ -87,7 +87,7 @@ resource "aws_s3_bucket_notification" "tl_bucket_notification" {
 
 ## 使用 Amazon Elastic File System
 
-上述 Lustre 整合 SageMaker 相當成功，也順利將整套訓練模型流程給定下來了。但是由於我們客戶都在中國境內居多，故我也將整套 Global AWS 架構，轉移到 AWS China 北京 Region。然而當在建置過程中，直接收到 SageMaker API 噴出底下錯誤訊息
+上述 Lustre 整合 SageMaker 相當成功，也順利將整套訓練模型流程給定下來了。但是由於客戶都在中國境內居多，故將整套 Global AWS 架構，轉移到 AWS China 北京 Region。然而當在建置過程中，直接收到 SageMaker API 噴出底下錯誤訊息
 
 > FSx for Lustre is currently not supported in the region cn-north-1 for SageMaker
 
