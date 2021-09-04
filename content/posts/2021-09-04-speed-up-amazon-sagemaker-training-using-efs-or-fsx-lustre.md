@@ -163,3 +163,9 @@ resource "aws_vpc_endpoint" "s3" {
 這邊得到一個關鍵的結論就是，假設團隊真的要在 AWS China 進行建置的話，在測試 Gloabl AWS 同時也需要進到 China 看看是否有相同的功能不然到時候整套流程會修改蠻大一部分，好在這次只是遇到 AWS Lustre 轉換到 AWS EFS 而已。
 
 另外在建置整套 AWS 環境時，需要對網路有一定的概念，還有防火牆，後端團隊針對權限部分設定的非常嚴謹，沒有用到的權限一率拔掉，或者是在 IAM 上面權限是慢慢打開，而不是一次全部開放。
+
+## 參考連結
+
+* [使用 Amazon FSx for Lustre 和 Amazon EFS 作数据源加快 Amazon Sagemaker 训练](https://aws.amazon.com/cn/blogs/china/use-amazon-fsx-for-lustre-and-amazon-efs-as-data-source-to-speed-up-amazon-sagemaker-training/)
+* [Installing the Amazon EFS client on other Linux distributions](https://docs.aws.amazon.com/efs/latest/ug/installing-amazon-efs-utils.html#installing-other-distro)
+* [Use a Private Docker Registry for Real-Time Inference Containers](https://docs.aws.amazon.com/sagemaker/latest/dg/your-algorithms-containers-inference-private.html)
