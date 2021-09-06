@@ -19,7 +19,7 @@ tags:
 
 ![cover](https://i.imgur.com/X4wpl6d.png)
 
-前不久寫過一篇『[AI 團隊整合導入 AWS SageMaker 流程][1]』介紹如何用 [Go 語言][2]整合 [SageMaker API][3]。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。
+前不久寫過一篇『[AI 團隊整合導入 AWS SageMaker 流程][1]』介紹如何用 [Go 語言][2]整合 [SageMaker API][3]。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供 AI 平台讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。
 
 [1]:https://blog.wu-boy.com/2021/06/integratate-sagemaker-workflow-using-golang-api/
 [2]:https://golang.org
