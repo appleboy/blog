@@ -5,25 +5,25 @@
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練 - 小惡魔 - AppleBOY</title>
 <meta name=description content="
-前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
+前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供 AI 平台讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","name":"用 aws efs 或 fsx lustre 加速 sagemaker ai 模型訓練"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練","description":"前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。\n","inLanguage":"en","wordCount":617,"datePublished":"2021-09-04T12:43:19","dateModified":"2021-09-04T12:43:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["sagemaker, golang, FSx, Lustre, EFS, terraform"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","name":"用 aws efs 或 fsx lustre 加速 sagemaker ai 模型訓練"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練","description":"前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供 AI 平台讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。\n","inLanguage":"en","wordCount":619,"datePublished":"2021-09-04T12:43:19","dateModified":"2021-09-04T12:43:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["sagemaker, golang, FSx, Lustre, EFS, terraform"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練">
 <meta property="og:description" content="
-前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
+前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供 AI 平台讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。">
 <meta property="og:image" content="https://i.imgur.com/X4wpl6d.png">
 <meta property="og:url" content="https://blog.wu-boy.com/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="小惡魔 - AppleBOY">
 <meta name=twitter:title content="用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練">
 <meta name=twitter:description content="
-前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來 …">
+前不久寫過一篇『AI 團隊整合導入 AWS SageMaker 流程』介紹如何用 Go 語言整合 SageMaker API。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供 AI 平台讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單 …">
 <meta name=twitter:image content="https://i.imgur.com/X4wpl6d.png">
 <meta name=twitter:card content="summary">
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.88.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.88.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
@@ -100,7 +100,7 @@
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on September 4, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;617&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;619&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -130,7 +130,7 @@
 </aside>
 <article role=main class=blog-post>
 <p><img src=https://i.imgur.com/X4wpl6d.png alt=cover></p>
-<p>前不久寫過一篇『<a href=https://blog.wu-boy.com/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a>』介紹如何用 <a href=https://golang.org>Go 語言</a>整合 <a href=https://aws.amazon.com/tw/pm/sagemaker/>SageMaker API</a>。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供一個平台，讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。</p>
+<p>前不久寫過一篇『<a href=https://blog.wu-boy.com/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a>』介紹如何用 <a href=https://golang.org>Go 語言</a>整合 <a href=https://aws.amazon.com/tw/pm/sagemaker/>SageMaker API</a>。本篇會介紹在訓練 AI 模型前，如何將 Dataset 準備好並整合 SageMaker，過程中遇到什麼問題跟挑戰。團隊提供 AI 平台讓使用者可以上傳自家的 Dataset 搭配團隊內部預設的 Dataset 進行 AI 模型的訓練，最後將模型提供給使用者下載使用，簡單來說，使用者只需要提供 Dataset 並把 AI 訓練參數設定完畢，就可以拿到最後的模型進行後續的整合開發。底下我們探討使用者上傳 Dataset 的流程。</p>
 <h2 id=上傳流程>上傳流程</h2>
 <p><img src=https://i.imgur.com/X4wpl6d.png alt=cover></p>
 <p>使用者上傳的會是整包 <code>.zip</code> 格式的 Image 檔案，拿到檔案後，需要轉換成 tfrecord 格式，再重新打包上傳到 <a href=https://aws.amazon.com/tw/s3/>AWS S3</a> 空間。上團可以看到，後端開發一套 CLI 工具，使用者透過 CLI 進行認證，並將檔案上傳到 AWS S3 儲存空間，一旦上傳完畢後，S3 會發送 Push Event 到 <a href=https://aws.amazon.com/tw/sqs/>AWS SQS</a> 內，這時後端會在提供另一個服務來接受 SQS 訊息，每次拿到訊息後，會將檔案下載進行轉換，在打包上傳回 S3，並且將過程的訊息，傳回 API 服務，通知前端。</p>
@@ -472,7 +472,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.88.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.88.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>
