@@ -103,6 +103,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/07/freebsdlighttpd-php5-%E8%A7%A3%E6%B1%BA-wordpress-permalinks-mod_write/>
+<h2 class=post-title>[FreeBSD]Lighttpd + php5 + 解決 wordpress Permalinks mod_write</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 3, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;278&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天轉換跑道了，最近玩 Apache 玩的很不順，因為只要線上人數一多，就會吃很多記憶體，導致必須重新開 Apache，所以今天來玩看看 <a href=http://www.lighttpd.net/>lighttpd</a>試試看，看看結果如何，其實轉換到 <a href=http://www.lighttpd.net/>lighttpd</a> 需要注意很多事情，那就是 Lighttpd 並不支援 .htaccess 檔案，所以 mode_rewrite 功能要設定到 Lighttpd.conf 裡面，然後也去找看看 Lighttpd 的 virtual host 的寫法，然後還有一點就是 wordpress 的 Permalinks 的問題，算是今天都解決了，底下來寫一下作法：</p>
+<a href=https://blog.wu-boy.com/2008/07/freebsdlighttpd-php5-%E8%A7%A3%E6%B1%BA-wordpress-permalinks-mod_write/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/wordpress/>wordpress</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/07/freebsdapache-%E5%99%B4%E5%87%BA-signal-segmentation-fault-11/>
 <h2 class=post-title>[FreeBSD]Apache 噴出 signal Segmentation fault (11)</h2>
 </a>
@@ -324,35 +347,6 @@ cd /usr/ports/www/apache22 ; make WITH_MPM=worker install clean</pre> 如果是�
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E8%BD%89%E9%8C%84/>轉錄</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/06/freebsd-%E5%AE%89%E8%A3%9D-php-apc-%E5%8A%A0%E9%80%9F%E7%B6%B2%E9%A0%81%E9%80%9F%E5%BA%A6/>
-<h2 class=post-title>[FreeBSD] 安裝 PHP APC 加速網頁速度</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 5, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;159&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近在維護自己的機器，發現網站每秒 request 只要10幾次就會感覺吃很多資源，然後莫名 CPU 飆高到100%，後來只好去找怎麼去 tuning Apache，MySQL，PHP，至於改善 apache 跟 MySQL 我先不講了，我之後會在寫，我先處理了加速 PHP 的部份，我是安裝了 <a href=http://pecl.php.net/package/APC>APC</a>（Alternative PHP Cache），來改善執行 PHP 的速度，這個程式必須先安裝好 <a href=http://pecl.php.net/>PECL</a>(PHP Extension Community Library)，再來安裝 APC 就沒問題了。 1. 首先安裝 APC</p>
-<pre class="brush: bash; title: ; notranslate" title>#
-# 先切換到該軟體下面
-#
-cd /usr/ports/www/pecl-APC/; make install clean
-</pre>
-<a href=https://blog.wu-boy.com/2008/06/freebsd-%E5%AE%89%E8%A3%9D-php-apc-%E5%8A%A0%E9%80%9F%E7%B6%B2%E9%A0%81%E9%80%9F%E5%BA%A6/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/apc/>APC</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

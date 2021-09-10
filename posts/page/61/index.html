@@ -103,6 +103,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/05/jquery-%E6%97%A5%E6%9B%86%E6%99%82%E9%96%93%E5%A4%96%E6%8E%9B-timepicker-cssoffset-%E5%95%8F%E9%A1%8C-plugins/>
+<h2 class=post-title>[jQuery] 日曆時間外掛 timepicker CSS/Offset 問題 | Plugins</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 12, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;44&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近把之前弄的 <a href=http://jquery.com/>jQuery</a> 日期外掛拿出來看看，筆記過兩篇：<a href=http://blog.wu-boy.com/2008/05/13/251/ target=_blank>[jQuery筆記] 時間日期外掛：timepicker | jQuery Plugins</a> 跟 <a href=http://blog.wu-boy.com/2008/04/30/194/ target=_blank>[jQuery筆記] 好用的日期函式 datepicker</a>，目前在寫活動的開始時間跟結束時間會用到這兩個外掛，網路上有找到整合日期跟時間的程式，不過效果都不是我很喜歡，因為在時間方面想要設定可以分隔5分鐘，或者是10分鐘間隔，有沒有網友可以提供更好的 jQuery 外掛，可以將日曆跟時間整合在一起，用單一 input 欄位就可以控制，也可以設定間隔時間，目前是搭配這兩個外掛同時使用，也可以達到同樣效果。 timepicker <a href=http://labs.perifer.se/timedatepicker/>作者網站</a>，愈到了一個問題，只要網頁裡面有用到 <a href=http://docs.jquery.com/Show>jQuery Show</a> 跟 <a href=http://docs.jquery.com/Hide>hide</a> 都會讓 timepicker 程式判斷 <a href=http://docs.jquery.com/CSS/offset>CSS/offset</a> 發生錯誤，導致功能無法顯示在正確的地方，會跑到網頁其他位置，解決方法就是當滑鼠 click input 欄位時，再去呼叫取得目前 offset 的位置。</p>
+<pre class="brush: jscript; title: ; notranslate" title>var elmOffset = $(elm).offset();
+$tpDiv.appendTo('body').css({'top':elmOffset.top + 'px', 'left':elmOffset.left+ 'px'}).hide();</pre> 這樣就可以正確顯示在 input 下方，連這個都可以遇到地雷 XD
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/05/php-class-rss-generator-%E7%94%A2%E7%94%9F%E5%99%A8/>
 <h2 class=post-title>[PHP] Class: RSS Generator 產生器</h2>
 </a>
@@ -329,34 +350,6 @@ $this->db->join('project_news_categories b', 'a.categories_id = b.categories_id'
 $this->db->order_by("news_top DESC, a.add_time DESC");
 $this->db->where('news_id', $id); </pre>
 <a href=https://blog.wu-boy.com/2009/04/php-web-framework-codeigniter-mysql-database-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/04/php-%E5%A5%BD%E7%94%A8-web-framework-codeigniter-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8/>
-<h2 class=post-title>[PHP] 好用 Web Framework : CodeIgniter 安裝教學</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 17, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;183&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近都在 survey 一堆 PHP Web Framework，自己想學一套可以馬上上手的，其實因為目前在 PHP 的開發上面講求速度，以及程式的可維護性，雖然我自己有一套自己的開發方法，包含包好的 SQL Class 以及上傳模組，不過還是覺得熟悉一套 MVC 架構的寫法，將來維護或者是團隊合作方面會比較好分工，在小專案上面還可以自己來，但是大型專案就必須靠 MVC Framework 了，畢竟一個人寫程式，永遠比不上團隊合作，紀錄一下最近找到的一些網路比較多人用的 FrameWork：</p>
-<ul>
-<li><a href=http://www.symfony-project.org/ target=_blank>Symfony</a></li>
-<li><a href=http://cakephp.org/ target=_blank>CakePHP</a></li>
-<li><a href=http://codeigniter.com/ target=_blank>CodeIgniter</a></li>
-<li><a href=http://framework.zend.com/ target=_blank>Zend Framework</a></li>
-<li><a href=http://docs.kohanaphp.com/ target=_blank>Kohana</a></li>
-</ul>
-<a href=https://blog.wu-boy.com/2009/04/php-%E5%A5%BD%E7%94%A8-web-framework-codeigniter-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;

@@ -103,6 +103,35 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/11/2012-phpconf-restful-api-design-implementation-with-codeigniter-php-framework/>
+<h2 class=post-title>2012 PHPConf RESTful API Design & Implementation with CodeIgniter PHP Framework</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 3, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;32&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/8149789818/ title="phpconf by appleboy46, on Flickr"><img src="https://i1.wp.com/farm9.staticflickr.com/8474/8149789818_40bb35a5c0.jpg?resize=500%2C375&ssl=1" alt=phpconf data-recalc-dims=1></a>
+</div>
+<p>去年 <a href=http://phpconf.tw/ target=_blank>PHPConf</a> 介紹了 <a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter PHP Framework</a>，這次講如何在 CodeIgniter 底下設計 RESTFul API，其實主要介紹兩個 CodeIgniter 套件，第一個是 <a href=https://github.com/philsturgeon/codeigniter-restserver target=_blank>RESTFul Server</a> 前面是 <a href=https://github.com/philsturgeon/codeigniter-restclient target=_blank>RESTFul Client</a>，一個伺服器端，後面用來測試 (Unit Test)，底下是今年的 Slide，歡迎大家下載</p>
+<div style=margin-bottom:5px>
+<strong> <a href=http://www.slideshare.net/appleboy/restful-api-design-implementation-with-codeigniter-php-framework title="RESTful API Design & Implementation with CodeIgniter PHP Framework" target=_blank>RESTful API Design & Implementation with CodeIgniter PHP Framework</a> </strong> from <strong><a href=http://www.slideshare.net/appleboy target=_blank>Bo-Yi Wu</a></strong>
+</div>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/api/>API</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/phpconf/>PHPConf</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/10/php-cloud-hosting-phpfog-pagoda-appfog/>
 <h2 class=post-title>PHP 免費雲端主機 PHPFog vs Pagoda vs AppFog</h2>
 </a>
@@ -321,49 +350,6 @@ $xls->generateXML("test");</pre> 結論就是殺雞焉用牛刀，就這個簡�
 <h3 id=載入-jquery-和-plugin>載入 jQuery 和 plugin</h3>
 <pre class="brush: xml; title: ; notranslate" title></pre>
 <a href=https://blog.wu-boy.com/2012/08/a-lightweight-jquery-slideshow-plugin/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/08/how-to-disabled-gui-on-ubuntu-12-04-lts/>
-<h2 class=post-title>Ubuntu 停止使用 GUI 介面 12.04 LTS</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 6, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;54&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/6760100409/ title="logo-Ubuntu by appleboy46, on Flickr"><img src="https://i2.wp.com/farm8.staticflickr.com/7153/6760100409_b23d1ce67b_m.jpg?resize=240%2C165&ssl=1" alt=logo-Ubuntu data-recalc-dims=1></a>
-</div>
-<p>今天又拿到同事一台電腦來搞 Web Server，原先安裝 Ubuntu Desktop 要把它關閉，避免佔用太多資源，12.04 採用 <a href=http://en.wikipedia.org/wiki/LightDM target=_blank>LightDM</a> 來管理 X Display，輕量級及高效能管理工具，直接停止 LightDM 可以直接用底下 command line。</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>$ service lightdm stop</pre>
-</div>
-<p>如果開機直接不執行 X Display，可以透過底下步驟，</p>
-<h3 id=編輯-etcdefaultgrub>編輯 /etc/default/grub</h3>
-<p>用您個人喜歡的編輯器打開 <code>/etc/default/grub</code> 並且找到底下字串</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>GRUB_CMDLINE_LINUX_DEFAULT="<no matter what's you find here>"</pre>
-</div>
-<p>改成</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>GRUB_CMDLINE_LINUX_DEFAULT="text"</pre>
-</div>
-<h3 id=重新產生-grub>重新產生 Grub</h3>
-<p>只要有修改 <code>/etc/default/grub</code>，請務必重執行</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>$ sudo update-grub</pre>
-</div>
-<p>接著重新開機即可。</p>
-<p>參考資料:</p>
-<p><a href=http://askubuntu.com/questions/74645/possible-to-install-ubuntu-desktop-and-then-boot-to-no-gui target=_blank>Possible to install ubuntu-desktop and then boot to no GUI</a> <a href=http://superuser.com/questions/310978/starting-ubuntu-without-the-gui target=_blank>Starting Ubuntu without the GUI</a></p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>
 </div>

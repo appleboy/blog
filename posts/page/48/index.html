@@ -103,6 +103,34 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/03/ubuntu-debian-%E6%9E%B6%E8%A8%AD-apache-mpm-worker-mod_fcgid-%E7%AD%86%E8%A8%98/>
+<h2 class=post-title>Ubuntu (Debian) 架設 apache mpm worker mod_fcgid 筆記</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 17, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;232&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近想架設 <a href=http://www.redmine.org/>Redmine</a> 在 <a href=http://www.ubuntu.com/>Ubuntu</a> 伺服器上面，架設之前要先搞定 apache 搭配 mpm worker 及 mod_fcgi module，安裝步驟其實不難，就搭配懶人指令 <a href=http://en.wikipedia.org/wiki/Advanced_Packaging_Tool>apt</a> 就可以了。</p>
+<h3 id=安裝-apache-mpm-worker-由於怕安裝過程會叫你把-apache2-mpm-worker-移除改裝-apache2-mpm-prefork所以安裝順序上面有些變化請參考底下>安裝 apache mpm worker 由於怕安裝過程會叫你把 apache2-mpm-worker 移除，改裝 apache2-mpm-prefork，所以安裝順序上面有些變化，請參考底下:</h3>
+<pre class="brush: bash; title: ; notranslate" title># 先安裝
+$ apt-get install apache2.2-bin apache2.2-common apache2-mpm-worker libapache2-mod-fcgid php5-cli php5-cgi php5-common
+#後安裝
+$ apt-get install apache2 php5 php5-gd php5-curl</pre> 至於 PHP 5 套件就看你需要什麼就裝什麼吧，搜尋一下 php5-* 看看，apache 裝好預設看不到 PHP 網頁，也就是認不得 php type，請在 apache config 檔案加入底下
+<a href=https://blog.wu-boy.com/2011/03/ubuntu-debian-%E6%9E%B6%E8%A8%AD-apache-mpm-worker-mod_fcgid-%E7%AD%86%E8%A8%98/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/03/linux-kernel-%E8%AE%80%E5%8F%96-proc-%E5%BA%95%E4%B8%8B%E8%B3%87%E6%96%99%E6%9C%80%E4%BD%B3%E6%96%B9%E6%B3%95-seq_file-interface/>
 <h2 class=post-title>[Linux Kernel] 讀取 /proc 底下資料最佳方法: seq_file interface</h2>
 </a>
@@ -611,36 +639,6 @@ apt-get -y install libgdbm-dev</pre>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/01/freebsd-%E5%88%A9%E7%94%A8-fsck-%E6%8C%87%E4%BB%A4%E4%BF%AE%E5%BE%A9%E4%B8%8D%E6%AD%A3%E5%B8%B8%E6%96%B7%E9%9B%BB%E9%97%9C%E6%A9%9F/>
-<h2 class=post-title>[FreeBSD] 利用 fsck 指令修復不正常斷電關機</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 26, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;158&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-由於人不在機器前面，所以都請學弟妹幫忙直接拔電在插電，現在問題出來了，完全不能開機了，現在就只能進去單人模式修復，其實修復也非常容易，進入開機選單，選擇 Single user mode 模式，進入之後會直接看到底下訊息提示:
-enter full pathname of shell or return for :/bin/sh: 沒意外就直接按下 Enter 鍵就可以了，由於 fsck 指令在修復過程不可以先 mount 磁區，所以先利用 mount -a 來掛上所有磁區 # 掛上所有磁區
-mount -a
-# 顯示硬碟磁區
-df -h Console 會看到 Filesystem Size Used Avail Capacity Mounted on
-/dev/da0s1a 496M 341M 115M 75% /
-devfs 1.0K 1.0K 0B 100% /dev
-/dev/da0s1e 496M 16M 440M 4% /tmp
-/dev/da0s1f 24G 15G 6.4G 71% /usr
-/dev/da1s1d 33G 22G 8.4G 73% /usr/home
-/dev/da0s1d 4.
-<a href=https://blog.wu-boy.com/2011/01/freebsd-%E5%88%A9%E7%94%A8-fsck-%E6%8C%87%E4%BB%A4%E4%BF%AE%E5%BE%A9%E4%B8%8D%E6%AD%A3%E5%B8%B8%E6%96%B7%E9%9B%BB%E9%97%9C%E6%A9%9F/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 </div>
 </article>
 </div>

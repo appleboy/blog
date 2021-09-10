@@ -116,6 +116,41 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/12/linux-geany-sshfs-flag/>
+<h2 class=post-title>Geany 編輯器搭配 sshfs 參數注意事項</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 24, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;57&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6562683991/ title="geany_vectorized_free by appleboy46, on Flickr"><img src="https://i2.wp.com/farm8.staticflickr.com/7155/6562683991_065975d0dd_m.jpg?resize=240%2C191&ssl=1" alt=geany_vectorized_free data-recalc-dims=1></a>
+</div>
+<p><a href=http://www.geany.org/ target=_blank>Geany</a> 是一套我覺得在 Linux 作業系統底下蠻簡易及輕量的程式編輯器，之前撰寫一篇 <a href=http://blog.wu-boy.com/2011/07/linux-geany-fuse/ target=_blank>Linux 程式開發編輯器 Geany + Fuse 遠端掛載</a> 簡易介紹如何使用 <a href=http://fuse.sourceforge.net/ target=_blank>Fuse</a>，這次發現一個小問題，就是掛載要儲存檔案時候出現底下錯誤訊息</p>
+<blockquote>
+<p>Error renaming temporary file: Operation not permitted. The file on disk may now be truncated! 此錯誤訊息發生在用 Fuse 掛載遠端系統所造成，原先掛載指令如下</p>
+</blockquote>
+<pre class="brush: bash; title: ; notranslate" title>sshfs appleboy@xxxx.com.tw:/home/appleboy /home/git/CN 
+-p 22 -o reconnect,sshfs_sync -o uid=1000,gid=1000</pre> 我們只需要另外加上
+<p><span style=color:green><strong>workaround=rename</strong></span> flag 及可以解決此問題</p>
+<pre class="brush: bash; title: ; notranslate" title>sshfs appleboy@www.cn.ee.ccu.edu.tw:/home/appleboy /home/git/CN 
+-p 22 -o reconnect,sshfs_sync -o uid=1000,gid=1000 
+-o workaround=rename</pre> 測試環境為 Ubuntu 10.10.<p>.</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/geany/>Geany</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ssh/>SSH</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/sshfs/>sshfs</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/12/php-i18n-library-2/>
 <h2 class=post-title>PHP 多國語系製作 i18n library 筆記 (二)</h2>
 </a>
@@ -354,39 +389,6 @@ echo $lang->line("index") . "\n";</pre>
 <a href=https://blog.wu-boy.com/tags/compass/>Compass</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/sass/>SASS</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/11/codeigniter-nexmo-mobile-messaging/>
-<h2 class=post-title>CodeIgniter 透過 Nexmo 傳送簡訊 Mobile Messaging</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 7, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;56&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
-</div> 在 gslin 大神看到這篇
-<p><a href=http://blog.gslin.org/archives/2011/11/06/2771/%E7%94%A8-nexmo-%E9%80%81%E7%B0%A1%E8%A8%8A/>用 Nexmo 送簡訊</a>，自己也來測試看看，先到 <a href=http://nexmo.com>Nexmo</a> 註冊好會員，馬上就會有 EUR$2 可以使用，<a href=http://nexmo.com/pricing/index.html>傳送一封簡訊價錢</a>是 EUR$0.011，大概是台幣 0.45 元，目前支援<a href=http://www.cht.com.tw/>中華電信</a>、<a href=http://www.taiwanmobile.com/>台灣大哥大</a>、<a href=http://www.fetnet.net/>遠傳</a>、<a href=http://www.vibo.com.tw>威寶電信</a>，官方有提供一些 API Library，自己寫了一套 for <a href=http://www.CodeIgniter.org.tw target=_blank>CodeIgniter</a> 支援 JSON 及 XML 兩種格式，並且在 <a href=http://getsparks.org/ target=_blank>getsparks</a> 放上<a href=http://getsparks.org/packages/Nexmo-SMS-Message/versions/HEAD/show>一份</a>。</p>
-<h3 id=透過-getparks-安裝-直接參考網站安裝>透過 getparks 安裝 直接參考網站安裝:</h3>
-<p><a href=http://getsparks.org/packages/Nexmo-SMS-Message/versions/HEAD/show target=_blank>Get the Latest</a></p>
-<pre class="brush: bash; title: ; notranslate" title>php tools/spark install -v1.0.0 Nexmo-SMS-Message</pre> 讀取 spark library:
-<pre class="brush: php; title: ; notranslate" title>// Load the spark
-$this->load->spark('Nexmo-SMS-Message/1.0.0');
-// Load the library
-$this->load->library('nexmo');</pre>
-<h3 id=透過-git-安裝-直接看>透過 git 安裝 直接看</h3>
-<p><a href=https://github.com/appleboy/CodeIgniter-Nexmo-Message target=_blank>CodeIgniter-Nexmo-Message</a> README 安裝方法。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/nexmo/>Nexmo</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/sms/>SMS</a>&nbsp;
 </div>
 </article>
 </div>

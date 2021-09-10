@@ -116,6 +116,34 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/01/mysql-5-6-uuid-cloning-slave-server/>
+<h2 class=post-title>MySQL 5.6 UUID 複製資料到 Slave Server</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 23, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;60&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/8171305355/ title="mysql_logo by appleboy46, on Flickr"><img src="https://i1.wp.com/farm9.staticflickr.com/8488/8171305355_7fb578fdc9.jpg?w=300&ssl=1" alt=mysql_logo data-recalc-dims=1></a>
+</div>
+<p>在 <a href=http://www.mysqlperformanceblog.com/>MySQL Performance Blog</a> 看到這篇 <a href=http://www.mysqlperformanceblog.com/2014/01/21/beware-mysql-5-6-server-uuid-cloning-slaves/>Beware of MySQL 5.6 server UUID when cloning slaves</a>，裡面提到如果是要複製資料到 Slave 機器，大部分的使用者肯定是將 <code>/var/lib/mysql</code> 目錄整個 copy 到 Slave 機器上。如果是 <a href=http://dev.mysql.com/tech-resources/articles/whats-new-in-mysql-5.6.html>MySQL 5.6</a> Server 目錄內會有 <code>auto.cnf</code> 設定檔，這是 MySQL 5.6 新的功能叫做 <a href=http://dev.mysql.com/doc/refman/5.6/en/replication-options.html#sysvar_server_uuid>server_uuid</a>，在啟動 MySQL 後，就會自動建立 <code>auto.cnf</code> 檔案，此檔案就像是 <code>my.cnf</code> 或 <code>my.ini</code> 設定檔一樣，只是內容只有支援 <code>[auto]</code> 並且只有支援 <code>server_uuid</code> 這 key 值，例如</p>
+<a href=https://blog.wu-boy.com/2014/01/mysql-5-6-uuid-cloning-slave-server/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql-5.6/>MySQL 5.6</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/percona/>Percona</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/percona-xtrabackup/>Percona XtraBackup</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/replication/>Replication</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/xtrabackup/>XtraBackup</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/01/start-percona-xtradb-cluster-tips/>
 <h2 class=post-title>啟動 Percona XtraDB Cluster 注意事項</h2>
 </a>
@@ -360,31 +388,6 @@ PHP 設定檔 如果是裝 php-fpm 請修改 /etc/php5/fpm/php.ini 路徑
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/12/jenkins-apache-auth-setting/>
-<h2 class=post-title>Jenkins + Apache User Auth</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 8, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;140&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/10830034484/ title="jenkins_logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.staticflickr.com/5507/10830034484_95cba45707.jpg?resize=398%2C128&ssl=1" alt=jenkins_logo data-recalc-dims=1></a>
-</div>
-<p>上個月寫過一篇如何設定 <a href=http://nginx.org/ target=_blank>Nginx</a> + <a href=http://jenkins-ci.org/ target=_blank>Jenkins</a> 文章，可以參考: <a href=http://blog.wu-boy.com/2013/11/jenkins-nginx-auth/ target=_blank>Jenkins + Nginx User Auth</a>，這次筆記 Jenkins + <a href=http://httpd.apache.org target=_blank>Apache</a> 設定方式</p>
-<a href=https://blog.wu-boy.com/2013/12/jenkins-apache-auth-setting/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/jenkins/>Jenkins</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>
 </div>

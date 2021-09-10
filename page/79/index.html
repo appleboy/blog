@@ -116,6 +116,26 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/03/ubuntu-%E5%AE%89%E8%A3%9D-apache-php5-%E9%81%87%E5%88%B0%E7%9A%84%E5%95%8F%E9%A1%8C/>
+<h2 class=post-title>[Ubuntu] 安裝 apache php5 遇到的問題</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 7, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;43&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>很奇怪的，今天在安裝 apache2 跟 php5 想說很簡單，可是安裝好，寫測試檔測試的時候，發現當會變成下載 php5 的檔案，然後我看了一下 apache2.conf 觀察到如下 <ifmodule mod_php5.c> AddType application/x-httpd-php .php .phtml .php3 AddType application/x-httpd-php-source .phps </ifmodule> LoadModule php5_module /usr/lib/apache2/modules/libphp5.so 然後我去 /usr/lib/apache2/modules/ 底下看，也有看到 libphp5.so 這個檔案，但是就是不能執行 php，後來在 ubuntu 官網找到解答，解答方法如下</p>
+<blockquote>
+<p>檢查 /etc/apache2/mods-enabled 內有沒有php5.conf , php5.load若沒有, 請 sudo a2enmod php5 重新啟動 apahce2 sudo /etc/init.d/apache2 restart
+<a href="http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?viewmode=flat&type=&topic_id=5298&forum=9"> http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?viewmode=flat&type=&topic_id=5298&forum=9</a></p>
+</blockquote>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/03/phpbb2-2022-2023-%E5%AE%89%E5%85%A8%E6%80%A7%E4%BF%AE%E6%AD%A3%E7%89%88%E6%9C%AC%E9%87%8B%E5%87%BA/>
 <h2 class=post-title>[phpBB2] 2.0.22 -> 2.0.23 安全性修正版本釋出</h2>
 </a>
@@ -364,36 +384,6 @@ public class runstart{
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E4%B8%AD%E6%AD%A3%E5%A4%A7%E5%AD%B8/>中正大學</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/02/www-firefox-and-ie-%E7%9A%84-greasemonkey/>
-<h2 class=post-title>[WWW] firefox and IE 的 greasemonkey</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 23, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;69&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近發現這種新玩意，那就是猴子外掛 <a href=http://zh.wikipedia.org/wiki/Greasemonkey>Greasemonkey</a>，這一套我在 FireFox 有找到，用起來還不錯，可是一些 for ie 的網站，就使用不到了，所以我又另外去找了 <a href=http://zh.wikipedia.org/wiki/Greasemonkey>Greasemonkey</a> for ie 的版本，不過 for ie 的版本有兩套，一套是我想要，另一套我測試起來不是我想要的。 先介紹 for ie 的 <a href=http://zh.wikipedia.org/wiki/Greasemonkey>Greasemonkey</a>，總共有兩套 1.<a href=http://www.gm4ie.com/>gm4ie</a> 這一套了，其實相當不錯，不過有一個缺點，就是如果你的網站是用 iframe 做的化，他必需要重新 reload 整個網站，才會有作用，所以我並不打算用這套，不然他還是蠻方便的 2.<a href=http://www.bhelpuri.net/Trixie/>Trixie</a> 這個，就有符合到我的要求了，不過他在設定上面格式都要先寫好</p>
-<pre class="brush: jscript; title: ; notranslate" title>// ==UserScript==
-// @name          Server2
-// @description	  .
-// @namespace     http://musicplayer.sourceforge.net/greasemonkey
-// @include       http://xxxxxxxxx/index2/main_down.php*
-// @include       http://xxxxxxxxx/index2/main_down.php*
-</pre> 所有套用的網站，都要寫在 // @include 這個裡面才會有作用，然後在用 ie alt+t +x 就可以更改 reload 設定了 3.
-<p><a href=https://addons.mozilla.org/en-US/firefox/addon/748>Greasemonkey :: Firefox Add-ons</a> FireFox 的部份，這個外掛裝好，你在啟動他的時候，會要求你選擇編輯 js 的軟體，請務必選 notepad.exe ，不然你選擇其他程式，你就會編輯不到檔案，那他檔案的放置位置如下 C:\Documents and Settings\你的帳號\Application Data\Mozilla\Firefox\Profiles\qvq3wzwh.default\gm_scripts</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/firefox/>Firefox</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/greasemonkey/>Greasemonkey</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/windows/>windows</a>&nbsp;
 </div>
 </article>
 </div>

@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/>
+<h2 class=post-title>Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 20, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;324&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><strong>2019.10.23 本篇教學以 Traefik 1.7 版本為主</strong></p>
+<p><a href="https://lh3.googleusercontent.com/sggr23jjw2BJb3HMIpM9RtSTetm8TeEuk1CCbV6658ZZO5CCwEPK2YdGpOYPFrw4fansfS-aMNE5h-uv-8s7quNiuj4EU-UF0DBaNbKZt3YyNruAICq6JxUss9S5IPAC7TQfQlHbL2M=w1920-h1080"><img src="https://lh3.googleusercontent.com/sggr23jjw2BJb3HMIpM9RtSTetm8TeEuk1CCbV6658ZZO5CCwEPK2YdGpOYPFrw4fansfS-aMNE5h-uv-8s7quNiuj4EU-UF0DBaNbKZt3YyNruAICq6JxUss9S5IPAC7TQfQlHbL2M=w1920-h1080" alt></a></p>
+<p>之前寫過蠻多篇 <a href="https://blog.wu-boy.com/?s=+Let%27s+Encrypt" title="Let's Encrypt 的使用教學">Let&rsquo;s Encrypt 的使用教學</a>，但是這次要跟大家介紹一套非常好用的工具 <a href=https://traefik.io/ title=Traefik>Traefik</a> 搭配自動化更新 Let&rsquo;s Encrypt 憑證，為什麼會推薦 Traefik 呢，原因在於 Traefik 可以自動偵測 Docker 容器內的 Label 設定，並且套用設定在 Traefik 服務內，也就是只要修改服務的 docker-compose 內容，重新啟動，Traefik 就可以抓到新的設定。這點在其它工具像是 <a href=https://www.nginx.com/ title=Nginx>Nginx</a> 或 <a href=https://caddyserver.com title=Caddy>Caddy</a> 是無法做到的。底下我們來一步一步教大家如何設定啟用前後端服務。全部程式碼都放在 <a href=https://github.com/go-training/training/tree/master/example25-traefik-golang-app-lets-encrypt title="GitHub 上面">GitHub 上面</a>了。</p>
+<a href=https://blog.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/letsencrypt/>Letsencrypt</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/traefik/>traefik</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/01/costco-seagate-usb-hard-disk-2699/>
 <h2 class=post-title>Seagate 2.5吋 4TB 外接硬碟 好市多 2699 元</h2>
 </a>
@@ -303,29 +327,6 @@ Flickr 在 2019 年一月會開始將免費會員照片刪除到剩下 1000 張�
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone.io/>Drone.io</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/11/drone-ci-cd-platform-in-mopconf/>
-<h2 class=post-title>高雄 Mopcon 濁水溪以南最大研討會 – Drone CI/CD 介紹</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 6, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;41&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/45693842842/in/dateposted-public/ title="Screen Shot 2018-11-06 at 1.16.22 PM"><img src="https://i1.wp.com/farm2.staticflickr.com/1948/45693842842_d5fb6105b5_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-11-06 at 1.16.22 PM" data-recalc-dims=1></a></p>
-<p>今年又以講者身份參加 <a href=https://mopcon.org>Mopcon</a> 南區最大研討會，此次回高雄最主要推廣 <a href=https://github.com/drone/drone>Drone</a> 這套 CI/CD 平台。大家可以從過去的 Blog 或影片可以知道我在北部推廣了很多次 Drone 開源軟體，唯獨南台灣還沒講過，所以透過 Mopcon 研討會終於有機會可以來推廣了。本次把 Drone 的架構圖畫出來，如何架設在 <a href=https://kubernetes.io/>Kubernetes</a> 上以及該如何擴展 drone agent，有興趣的可以參考底下投影片:</p>
-<a href=https://blog.wu-boy.com/2018/11/drone-ci-cd-platform-in-mopconf/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/kubernetes/>kubernetes</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,39 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/03/%E5%9C%A8-ie8-firefox-chrome-css-%E7%BD%AE%E4%B8%AD%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/>
+<h2 class=post-title>在 IE8 FireFox Chrome CSS 置中解決方法</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 22, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;83&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>在 IE8 還沒出來之前，都是利用 margin: 0 auto; 的方式來解決 div 置中的問題，但是這在 IE8 並沒有發揮作用，無效了，底下在網路上發現兩種解法，分享給大家知道： <strong><span style=color:green;font-size:1.2em>1. Width:100%</span></strong> 在最外層 div 加入 Width:100% 的屬性，程式碼如下：</p>
+<pre class="brush: css; title: ; notranslate" title>#container {width:100%;}
+#centered {width:400px; margin:0 auto;}</pre>
+<p><strong><span style=color:green;font-size:1.2em>2. Text-Align:Center</span></strong> 在 div tag 裡面加入 Text-Align:Center，這樣 IE8 會偵測到此語法，就會服從 margin:0 auto; 之屬性，不過這樣內容會被全部至中，如果您有需要將其 div 內容往左邊對齊，那就必須在加上語法 Text-Align:left，底下是範例程式碼：</p>
+<pre class="brush: css; title: ; notranslate" title>#container {text-align:center;}
+#centered {width:400px; margin:0 auto;text-align:left;}</pre> IE6，IE7 則是利用下面語法：
+<pre class="brush: css; title: ; notranslate" title>#wrap {
+  margin: 0px auto; /* firefox */
+  *margin: 0px auto; /* ie7 */
+  _margin: 0px auto; /* ie6 */
+  height:100px; 
+  width:860px;
+  border:5px solid red;    
+}</pre> reference:
+<p><a href=http://stever.ca/web-design/centering-a-div-in-ie8-using-marginauto/>Centering a Div in IE8 Using margin:auto</a> <a href=http://www.flycan.com/board/topic3374.html>【CSS 語法教學】區塊置中的三種寫法</a></p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/03/freebsdhigh-performance-caching-reverse-proxy-varnish-and-how-to-install-it/>
 <h2 class=post-title>[FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇)</h2>
 </a>
@@ -316,31 +349,6 @@ if not exist !
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/chrmoe/>Chrmoe</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/01/how-to-change-run-levels-and-init-d-scripts-in-ubuntu-debian/>
-<h2 class=post-title>How to change run levels and init.d scripts in Ubuntu & Debian</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 28, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;333&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-Ubuntu 6.10 (Edgy Eft) 之後使用 Upstart 代替原來的 sysinit，而 init 是用來管理 Upstart 的 Daemon，本來系統預設的 runlevel 可以在 /boot/menu.list 或者是 /etc/inittab，可是現在這檔案已經移除了，取而代之的就是 Upstart 管理，可以利用 telinit 來改變系統 runlevel，然而現在 runlevel 的定義跟以前不太一樣了，原先 Ubuntu 跟 Fedora 系列 runlevel 代表意義如下：
-0:系統關機 (to halt the system) 1:單一使用者模式 (single-user mode) 2:尚未使用（可由使用者定義） 3:多使用者模式 (文字介面登入) 4:尚未使用 (可由使用者定義) 5:多使用者模式 (含有一個X介面的登入畫面) 6:重新開機 (reboot the system) 轉換成 Upstart 的話，就會變成底下
-0:系統關機 (to halt the system) 1:單一使用者模式 (single-user mode) 2:多使用者模式 (含有一個X介面的登入畫面) 3:多使用者模式 (含有一個X介面的登入畫面) 4:多使用者模式 (含有一個X介面的登入畫面) 5:多使用者模式 (含有一個X介面的登入畫面) 6:重新開機(reboot the system) 上面資訊可以在 man telinit 裡面找到，寫得很詳細，現在 Ubuntu 9.
-<a href=https://blog.wu-boy.com/2010/01/how-to-change-run-levels-and-init-d-scripts-in-ubuntu-debian/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/fedora/>Fedora</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>
 </div>

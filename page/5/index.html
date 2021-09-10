@@ -116,6 +116,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely/>
+<h2 class=post-title>停止 Go 服務前先處理完 Worker 內的 Job</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 28, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;287&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>在閱讀本文章之前，作者有寫過一篇『<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/>graceful shutdown with multiple workers</a>』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 <a href=https://docker.com>Docker</a>) 呢？底下是整個運作流程:</p>
+<p><img src="https://lh3.googleusercontent.com/bsmMhN5bVzpyDy-741CsS8s_wTyPfRpbLeZvJ0u7hOmCkXhBmS0qmVwkky4zveLxtNqQgGTUufWeNi2OVvOyXwx6QrADvt5n_6tAJlSzmRJK27U9C1EgOhzziZmLqNp_FTyqf4NAits=w1920-h1080" alt></p>
+<a href=https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/>
 <h2 class=post-title>Go Modules 處理私有 GIT Repository 流程</h2>
 </a>
@@ -363,36 +386,6 @@ go mod tidy
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/>
-<h2 class=post-title>用 GitHub Actions 部署 Go 語言服務</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 14, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;377&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><img src="https://lh3.googleusercontent.com/NI2lnMOEhkrZJ-x_bmre_RoQxLnzYcpPXVB_p6eBMmPQ73yDgoftVmUHvk0P86Tt2MM_Q23IHNu7qq7j99RXzTEzG95BU1u1vdpell9krVGHlUmW3Ng7J7egj1LHugWHcHoezCty9o0=w1920-h1080" alt></p>
-<p><a href=https://github.com/features/actions>GitHub Actions</a> 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 <a href=https://travis-ci.org/>Travis</a> 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 <a href=https://golang.org>Go 語言</a>服務，會用一個簡單 httpd 範例教大家如何透過 <a href=https://docker.com>Docker</a> 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -> 編譯 -> 上傳 -> 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。</p>
-<ul>
-<li>測試: Unit Testing 多一層保護</li>
-<li>編譯: 透過 go build 編譯出 Binary 檔案</li>
-<li>上傳: 寫 Dockerfile 將 Binary 包進容器內</li>
-<li>啟動: 透過 docker-compose 方式來更新服務</li>
-</ul>
-<a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

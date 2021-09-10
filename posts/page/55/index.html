@@ -103,6 +103,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/01/how-to-change-run-levels-and-init-d-scripts-in-ubuntu-debian/>
+<h2 class=post-title>How to change run levels and init.d scripts in Ubuntu & Debian</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 28, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;333&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+Ubuntu 6.10 (Edgy Eft) 之後使用 Upstart 代替原來的 sysinit，而 init 是用來管理 Upstart 的 Daemon，本來系統預設的 runlevel 可以在 /boot/menu.list 或者是 /etc/inittab，可是現在這檔案已經移除了，取而代之的就是 Upstart 管理，可以利用 telinit 來改變系統 runlevel，然而現在 runlevel 的定義跟以前不太一樣了，原先 Ubuntu 跟 Fedora 系列 runlevel 代表意義如下：
+0:系統關機 (to halt the system) 1:單一使用者模式 (single-user mode) 2:尚未使用（可由使用者定義） 3:多使用者模式 (文字介面登入) 4:尚未使用 (可由使用者定義) 5:多使用者模式 (含有一個X介面的登入畫面) 6:重新開機 (reboot the system) 轉換成 Upstart 的話，就會變成底下
+0:系統關機 (to halt the system) 1:單一使用者模式 (single-user mode) 2:多使用者模式 (含有一個X介面的登入畫面) 3:多使用者模式 (含有一個X介面的登入畫面) 4:多使用者模式 (含有一個X介面的登入畫面) 5:多使用者模式 (含有一個X介面的登入畫面) 6:重新開機(reboot the system) 上面資訊可以在 man telinit 裡面找到，寫得很詳細，現在 Ubuntu 9.
+<a href=https://blog.wu-boy.com/2010/01/how-to-change-run-levels-and-init-d-scripts-in-ubuntu-debian/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/fedora/>Fedora</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/01/%E9%81%B2%E4%BE%86%E7%9A%84-jquery-1-4-released/>
 <h2 class=post-title>遲來的 jQuery 1.4 Released</h2>
 </a>
@@ -313,37 +338,6 @@ Dec 9 21:17:02 freebsd kernel: fxp0: link state changed to DOWN Dec 9 21:17:03 f
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/12/phpmysql-%E7%92%B0%E5%A2%83%E4%B8%8B-sql-injection-%E6%94%BB%E9%98%B2%E6%88%B0/>
-<h2 class=post-title>PHP+MySQL 環境下 SQL Injection 攻防戰</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 6, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;222&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>在 <a href=http://www.ourmysql.com/>OurMySQL Blog</a> 看到這篇：『<a href=http://www.ourmysql.com/archives/791>PHP+MySQL环境下SQL Injection攻防总结</a>』寫的相當不錯，裡面有一些觀念，可以讓初學 PHP & MySQL 的使用者知道如何防護 <a href=http://en.wikipedia.org/wiki/SQL_injection>SQL Injection (資料隱碼)</a>，內容提到 <a href=http://tw2.php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc>magic_quotes_gpc</a> 在 on 跟 off 的狀況如何防護，但是可以清楚看到 <a href=http://tw2.php.net/>PHP</a> 官方文件提到在 PHP 5.3.0 magic_quotes_gpc 預設已經是關閉，在 PHP 6.0 之後正式移除，所以內容寫的 magic_quotes_gpc 狀況，可以大致上瞭解就好，真正防護 SQL Injection 是需要寫程式或者是考慮很多方式去防護。 一般在做文章查詢，都會使用 <span style=color:green>/articles.php?id=123</span> 網址傳送方式，以 $_GET[&lsquo;id&rsquo;] 送到 PHP 頁面去做處理，如果駭客想要測試是否可以利用 SQL Injection 做攻擊，可以在網址列加上 <span style=color:green>/articles.php?id=123</span><span style=color:red>'</span>，請注意網址後面多出 <span style=font-size:11pt;color:red>'</span>，如果沒有把 $_GET[&lsquo;id&rsquo;] 做處理的話，就會出現底下錯誤訊息：</p>
-<blockquote>
-<p><span style=color:red>supplied argument is not a valid MySQL result resource in</span> 這是因為平常在寫 SQL 語法，會是底下這種寫法：</p>
-</blockquote>
-<pre class="brush: php; title: ; notranslate" title>$sql = "SELECT id, title, content FROM articles WHERE id = '".$_GET['id']."'";
-$result = mysq_query($sql);</pre> 因為沒有處理跳脫字元 '，所以造成 SQL 語法錯誤，才會出現該錯誤訊息，但是如果又針對跳脫字元做防護得時候，還有另一種攻擊方式：
-<blockquote>
-<p><span style=color:green>/articles.php?id=0 union select 1,2,load_file(char(47,101,116,99,47,112,97,115,115,119,100))</span> 其中的數字就是/etc/passwd 字符串的ASCII，除此之外，還可以使用字串 16 進位方式：</p>
-</blockquote>
-<blockquote>
-<p><span style=color:green>/articles.php?id=0 union select 1,2,load_file(0×2f6574632f706173737764)</span> 可以參考一下 <a href=http://dev.mysql.com/doc/refman/5.0/en/string-functions.html#function_load-file>MySQL LOAD_FILE(file_name)</a>，底下文章提到了很多方式解決。</p>
-</blockquote>
-<a href=https://blog.wu-boy.com/2009/12/phpmysql-%E7%92%B0%E5%A2%83%E4%B8%8B-sql-injection-%E6%94%BB%E9%98%B2%E6%88%B0/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/09/freebsd%E5%AE%89%E8%A3%9D-apache2-worker-php526-mod_fastcgi-php5-fcgi/>
+<h2 class=post-title>[FreeBSD]安裝 apache2 (worker) + PHP5.2.6 + mod_fastcgi + php5-fcgi</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 13, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;229&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天把 <a href=http://www.freebsd.org>FreeBSD</a> web 改成了 <a href=http://www.apache.org/>apache</a> <a href=http://httpd.apache.org/docs/2.0/mod/worker.html>worker</a> 其實之前就已經這麼做了，只是今天加上 mod_fastcgi 我是參考 <a href=http://blog.gslin.org/archives/2008/08/17/1624/>DarkKiller 大神 apache22 (worker) + mod_fastcgi + php5-fcgi</a>，之前就把 Server 換成了 php5-fcgi，只不過我是搭配 <a href=http://www.lighttpd.net/>Lighttpd</a>，效能方面還不錯，可以參考這篇：<a href=http://blog.wu-boy.com/2008/07/10/291/>[FreeBSD] Lighttpd + PHP + mod_proxy + FastCGI</a>，那因為用 <a href=http://www.lighttpd.net/>lighttpd</a> 的外掛模組真的太少，不像 apache 支援這麼多 module，重點是還缺少了 .htaccess 這個功能，所以大大降低大家使用 <a href=http://www.lighttpd.net/>lighttpd</a>，近期內會把全部 server 換成 apache2 搭配 <a href=http://www.fastcgi.com/>mod_fastcgi</a>，那底下寫一下作法了：</p>
+<a href=https://blog.wu-boy.com/2008/09/freebsd%E5%AE%89%E8%A3%9D-apache2-worker-php526-mod_fastcgi-php5-fcgi/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/fastcgi/>fastcgi</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php-cgi/>php-cgi</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/09/%E7%B6%B2%E8%B7%AF%E7%B5%8420080913-%E6%88%91%E9%A4%8A%E7%9A%84%E9%AD%9A%E7%BC%B8-%E7%8E%AB%E7%91%B0%E8%9D%A6/>
 <h2 class=post-title>[生活日記]2008.09.13 我養的魚缸 玫瑰蝦</h2>
 </a>
@@ -314,28 +340,6 @@ default-character-set=utf8</pre>
 <a href=https://blog.wu-boy.com/tags/ikea/>IKEA</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E7%BE%8E%E9%A3%9F/>美食</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/08/%E7%84%A1%E5%90%8D%E5%B0%8F%E7%AB%99%E5%88%A9%E7%94%A8unix%E6%8C%87%E4%BB%A4-wget-%E6%8A%93%E5%8F%96-wretch-%E5%9C%96%E6%AA%94/>
-<h2 class=post-title>[無名小站]利用unix指令 wget 抓取 wretch 圖檔</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 23, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;123&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>囧～其實用 wget 就可以迅速抓到 <a href=http://www.wretch.cc/>無名小站</a> 的圖放到自己的伺服器上面，當然之前 <a href=http://www.ptt.cc>ptt</a> 的 php 版也有提供利用 curl 的方式來抓取圖，但是還要另寫另一隻讀圖程式，程式碼如下： 感謝 tsangbor＠ptt.cc 提供 DEMO: <a href=http://download.easygame.com.tw/get>http://download.easygame.com.tw/get</a>_wretch_img.php 輸入框請輸入 無名網友的相本 如： <a href="http://www.wretch.cc/album/album.php?id=qsplmiki&book=130">http://www.wretch.cc/album/album.php?id=qsplmiki&book=130</a> 程式碼：</p>
-<a href=https://blog.wu-boy.com/2008/08/%E7%84%A1%E5%90%8D%E5%B0%8F%E7%AB%99%E5%88%A9%E7%94%A8unix%E6%8C%87%E4%BB%A4-wget-%E6%8A%93%E5%8F%96-wretch-%E5%9C%96%E6%AA%94/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/%E7%84%A1%E5%90%8D%E5%B0%8F%E7%AB%99/>無名小站</a>&nbsp;
 </div>
 </article>
 </div>

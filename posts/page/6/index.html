@@ -103,6 +103,36 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/>
+<h2 class=post-title>用 GitHub Actions 部署 Go 語言服務</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 14, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;377&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://lh3.googleusercontent.com/NI2lnMOEhkrZJ-x_bmre_RoQxLnzYcpPXVB_p6eBMmPQ73yDgoftVmUHvk0P86Tt2MM_Q23IHNu7qq7j99RXzTEzG95BU1u1vdpell9krVGHlUmW3Ng7J7egj1LHugWHcHoezCty9o0=w1920-h1080" alt></p>
+<p><a href=https://github.com/features/actions>GitHub Actions</a> 也推出一陣子了，相信有不少雷，也是有很多優勢，未來在 GitHub 上面串接任何開源專案，都可以免費使用，過幾年可以看看 GitHub Actions 對 <a href=https://travis-ci.org/>Travis</a> 的影響是多少？本篇要來介紹如何透過 GitHub Actions 來部署 <a href=https://golang.org>Go 語言</a>服務，會用一個簡單 httpd 範例教大家如何透過 <a href=https://docker.com>Docker</a> 方式來更新。使用 Go 語言基本服務流程大致上會是『測試 -> 編譯 -> 上傳 -> 啟動』，透過這四個步驟來學習 GitHub Actions 該如何設定。</p>
+<ul>
+<li>測試: Unit Testing 多一層保護</li>
+<li>編譯: 透過 go build 編譯出 Binary 檔案</li>
+<li>上傳: 寫 Dockerfile 將 Binary 包進容器內</li>
+<li>啟動: 透過 docker-compose 方式來更新服務</li>
+</ul>
+<a href=https://blog.wu-boy.com/2019/12/deploy-golang-app-using-github-actions/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/12/setup-laravel-environment-in-15-minutes/>
 <h2 class=post-title>用 15 分鐘快速打造 Laravel 開發環境</h2>
 </a>
@@ -295,27 +325,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/08/golang-project-layout-and-practice/>
-<h2 class=post-title>Go 語言目錄結構與實踐</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 31, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;105&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>很高興今年錄取 <a href=https://modernweb.tw/>Modernweb</a> 講師，又有機會去宣傳 <a href=https://golang.org>Go 語言</a>，這次的議程最主要跟大家介紹 Go 專案的目錄該如何設計，一個基本的專案該需要有哪些功能，以及如何實現。大家剛入門 Go 時，肯定會開始找是否有一套 Web Framework 可以參考實踐，可惜的是，在 Go 語言沒有定義任何的目錄結構，所有的結構都可以根據團隊的狀況而有所改變，而這邊我想強調的是如果能讓團隊看到結構後，一目瞭然知道什麼功能該放哪個目錄，或什麼目錄內大概有什麼功能，那其實就夠了。看了許多開源專案，每個設計方式都是不同，但是當你要找什麼功能時，其實從根目錄就可以很清楚的知道要進入哪個地方可以找到您想要的功能及程式碼。這次在 Moderweb 上面的議題，就是分享我在開源專案所使用的目錄結構，以及結構內都放哪些必要的功能。</p>
-<a href=https://blog.wu-boy.com/2019/08/golang-project-layout-and-practice/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/>
+<h2 class=post-title>在 Ubuntu 10.10 (Maverick) 架設 Nginx + PHP FastCGI</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 25, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;378&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6760100409/ title="logo-Ubuntu by appleboy46, on Flickr"><img src="https://i2.wp.com/farm8.staticflickr.com/7153/6760100409_b23d1ce67b_m.jpg?resize=240%2C165&ssl=1" alt=logo-Ubuntu data-recalc-dims=1></a>
+</div> 今天來筆記如何在
+<p><a href=http://www.ubuntu-tw.org/ target=_blank>Ubuntu</a> 底下完整安裝 <a href=http://nginx.org/ target=_blank>Nginx</a> + <a href=http://www.fastcgi.com/drupal/ target=_blank>PHP FastCGI</a>，以及了解 Nginx 基本設定。我想大家都知道 <a href=http://www.apache.org/ target=_blank>Apache</a> 是一個很好的 Web Server 伺服器，也常常用在個人網站，或者一般小型專案，網路上也有一堆懶人包，如 <a href=http://www.appservnetwork.com/ target=_blank>Appserv</a>, <a href=http://www.apachefriends.org/zh_tw/xampp.html target=_blank>Xampp</a>，對於新手入門來說 Apache 是一個很好的選擇，但是您會發現用了 Apache 後，系統記憶體常常飆高 XD，載入太多額外不必要的模組，所以非常肥大，那這次就來嘗試另外一套 Web 伺服器 Nginx 吧。</p>
+<a href=https://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/fastcgi/>fastcgi</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/05/the-first-javascript-developer-conference-in-taiwan/>
 <h2 class=post-title>台灣第一屆 JavaScript Conference Developer 會議</h2>
 </a>
@@ -351,37 +376,6 @@ RT.View = Backbone.View.extend({ initialize: function() { if (this.model) { this
 <a href=https://blog.wu-boy.com/tags/backbone.js/>Backbone.js</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/javascrpt/>JavaScrpt</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/03/google-app-engine-frontend-instance-hours/>
-<h2 class=post-title>Google App Engine 收費機制 Frontend Instance Hours</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 21, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;70&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i0.wp.com/farm7.staticflickr.com/6046/7002236833_acf8926eae_o.png?w=840&ssl=1" data-recalc-dims=1>
-</div> 最近把一個簡易的 Web 丟到
-<p><a href=http://code.google.com/intl/zh-TW/appengine/ target=_blank>Google App Engine</a> 測試，但是發現每天都會因為 Frontend Instance Hours 不夠用，而造成網站被關閉 (Quota 爆漿)，上網找一下解決方法，發現了這篇: <a href="http://groups.google.com/group/taipei-gtug/browse_thread/thread/8d00a11c0b2f4fe?pli=1" target=_blank>Frontend Instance Hours 的問題</a>，只要透過底下方式就可以暫時解決這問題，如果是網站流量很大的話，那可能要考慮開啟付費機制。</p>
-<h3 id=解決方式-先進入>解決方式 先進入</h3>
-<p><a href=https://appengine.google.com/ target=_blank>App engine 後台</a>，點選您的 Application 之後可以看到左邊選單 <strong><span style=color:green>Application Settings</span></strong>，進入後找到 <strong><span style=color:green>Max Idle Instances</span></strong> 還有 <strong><span style=color:green>Min Pending Latency</span></strong> 這兩項設定，我們必須將 Max Idle Instances 設定為**<span style=color:red>1</span>**，以及 Min Pending Latency 設定為 **<span style=color:red>15s</span>**，但是 Max Idle Instances 預設是不給修改，而是跑 default value &ldquo;Automatic&rdquo;，這時候，我們必須把 **<span style=color:red>inbound_services</span>** 設定為 warmup 才可以動態調整 **<span style=color:green>Max Idle Instances</span>**。</p>
-<h3 id=設定-inbound_services-請打開網站根目錄底下的>設定 inbound_services 請打開網站根目錄底下的</h3>
-<p><a href=http://code.google.com/intl/zh-TW/appengine/docs/python/config/appconfig.html target=_blank>app.yaml</a>，在上面加入</p>
-<pre class="brush: bash; title: ; notranslate" title>inbound_services:
-- warmup</pre> 之後將設定上傳後，回到剛剛
-<p><strong><span style=color:green>Application Settings</span></strong> 將兩個數值調整為上面描述的設定，這樣就可以不用被 <a href=http://www.google.com target=_blank>Google</a> 收費了，想省錢的朋友們，可以儘快設定。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/gae/>GAE</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/google-app-engine/>Google App Engine</a>&nbsp;
 </div>
 </article>
 </div>

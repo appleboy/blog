@@ -116,6 +116,36 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/01/freebsd-%E5%88%A9%E7%94%A8-fsck-%E6%8C%87%E4%BB%A4%E4%BF%AE%E5%BE%A9%E4%B8%8D%E6%AD%A3%E5%B8%B8%E6%96%B7%E9%9B%BB%E9%97%9C%E6%A9%9F/>
+<h2 class=post-title>[FreeBSD] 利用 fsck 指令修復不正常斷電關機</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 26, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;158&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+由於人不在機器前面，所以都請學弟妹幫忙直接拔電在插電，現在問題出來了，完全不能開機了，現在就只能進去單人模式修復，其實修復也非常容易，進入開機選單，選擇 Single user mode 模式，進入之後會直接看到底下訊息提示:
+enter full pathname of shell or return for :/bin/sh: 沒意外就直接按下 Enter 鍵就可以了，由於 fsck 指令在修復過程不可以先 mount 磁區，所以先利用 mount -a 來掛上所有磁區 # 掛上所有磁區
+mount -a
+# 顯示硬碟磁區
+df -h Console 會看到 Filesystem Size Used Avail Capacity Mounted on
+/dev/da0s1a 496M 341M 115M 75% /
+devfs 1.0K 1.0K 0B 100% /dev
+/dev/da0s1e 496M 16M 440M 4% /tmp
+/dev/da0s1f 24G 15G 6.4G 71% /usr
+/dev/da1s1d 33G 22G 8.4G 73% /usr/home
+/dev/da0s1d 4.
+<a href=https://blog.wu-boy.com/2011/01/freebsd-%E5%88%A9%E7%94%A8-fsck-%E6%8C%87%E4%BB%A4%E4%BF%AE%E5%BE%A9%E4%B8%8D%E6%AD%A3%E5%B8%B8%E6%96%B7%E9%9B%BB%E9%97%9C%E6%A9%9F/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/01/linux-%E5%B0%87-iperf-%E5%B0%8E%E5%85%A5%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1-router/>
 <h2 class=post-title>[Linux] 將 iperf 導入嵌入式系統 Router</h2>
 </a>
@@ -409,33 +439,6 @@ v1.4.2.4
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github/>github</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/11/codeigniter-2-0-%E7%99%BC%E5%B1%95%E7%8B%80%E6%B3%81%E7%8F%BE%E5%9C%A8%E6%9B%B4%E6%A3%92%E4%BA%86-%E4%B8%8D%E5%86%8D%E6%94%AF%E6%8F%B4-php4/>
-<h2 class=post-title>CodeIgniter 2.0 發展狀況(現在更棒了) 不再支援 PHP4</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 13, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;89&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-CodeIgniter 在官網正式公告了一篇 2.0 目前的狀況及改善 CodeIgniter 2.0 - Now with more Awesome，該篇重點莫過於 CI 2.0 將不再支援 PHP 4.0 版本了，這是一項重大改變，官方給目前版本取了一個名稱：CodeIgniterNoPhp4，看到這名字大概就可以知道官方要捨棄 PHP4 了。 自從 CodeIgniter 將所有程式碼搬到 Bitbucket 上面時，就已經宣稱不再 support PHP4，運行了好幾個月，現在以 PHP 5.1.6 來當作開發重點，底下是官方說明 CI 2.0 該注意的地方(其實還有很多地方要注意): 1. 所有類別將以 CI_ 當作前置符號 2. 因為不支援 PHP4 了，所以建構子一律改成 __construct 3. CI_Base 已經被移除，取而代之的是 CI_Controller 4. 之前有提供 Compatibility 輔助函數，目前已經支援 PHP5 了，故將此移除 開始支援 Email and Validation chaining，看一下範例：
-$this-email-from('your@example.com', 'Your Name')
--to('someone@example.com')
--cc('another@another-example.com')
--bcc('them@their-example.com')
--subject('Email Test')
--message('Testing the email class.')
--send(); 最後官方作者有提到一些事情：ExpressionEngine and CodeIgniter 將不再支援 PHP4，PHP4 從2000年出來，到 2007 年結束，重點來了，官方說 PHP 4 帶給您的困擾，就如同現在 Internet Explorer 6。 可以參考: What&rsquo;s New in CodeIgniter 2.
-<a href=https://blog.wu-boy.com/2010/11/codeigniter-2-0-%E7%99%BC%E5%B1%95%E7%8B%80%E6%B3%81%E7%8F%BE%E5%9C%A8%E6%9B%B4%E6%A3%92%E4%BA%86-%E4%B8%8D%E5%86%8D%E6%94%AF%E6%8F%B4-php4/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 </div>
 </article>
 </div>
