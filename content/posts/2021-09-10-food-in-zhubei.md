@@ -20,6 +20,12 @@ tags:
 
 <!--more-->
 
+## 地址
+
+竹北鴨肉麵 (302新竹縣竹北市中正西路82號)
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d905.1740787612698!2d121.00260999999999!3d24.840057000000005!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x421a218739ea26e1!2z56u55YyX6bSo6IKJ6bq1!5e0!3m2!1sen!2sus!4v1631281181512!5m2!1sen!2sus" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+
 ## 炒麵
 
 ![炒麵](https://i.imgur.com/cN2emir.jpg)
