@@ -6,7 +6,8 @@ type: post
 url: /2021/09/中正西路必吃美食-鴨肉麵-肉絲炒飯
 share_img: https://i.imgur.com/eLgzIOW.jpg
 categories:
-  - 美食
+  - 美食日記
+  - 新竹美食
 tags:
   - 竹北美食
   - 新竹美食
