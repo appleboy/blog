@@ -7,7 +7,7 @@
 <meta name=description content="
 NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 golang-queue/queue，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者使用在單機的 Producer 及 Consumer 架構，使用的就是 Go 語言的 Goroutine 及 Channel，又或者直接搭配 NSQ, NATs 或 Redis Pub/Sub 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 Graceful Shutdown 所遇到的問題跟解決方式。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/graceful-shutdown-with-nsq-consumers\/","name":"Nsq consumers 處理 graceful shutdown 技巧"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"NSQ Consumers 處理 Graceful Shutdown 技巧","description":"NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 golang-queue\/queue，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者使用在單機的 Producer 及 Consumer 架構，使用的就是 Go 語言的 Goroutine 及 Channel，又或者直接搭配 NSQ, NATs 或 Redis Pub\/Sub 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 Graceful Shutdown 所遇到的問題跟解決方式。\n","inLanguage":"en","wordCount":742,"datePublished":"2021-09-19T14:50:42","dateModified":"2021-09-19T14:50:42","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["NSQ, graceful shutdown, queue, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/graceful-shutdown-with-nsq-consumers\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/graceful-shutdown-with-nsq-consumers\/","name":"Nsq consumers 處理 graceful shutdown 技巧"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"NSQ Consumers 處理 Graceful Shutdown 技巧","description":"NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 golang-queue\/queue，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者使用在單機的 Producer 及 Consumer 架構，使用的就是 Go 語言的 Goroutine 及 Channel，又或者直接搭配 NSQ, NATs 或 Redis Pub\/Sub 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 Graceful Shutdown 所遇到的問題跟解決方式。\n","inLanguage":"en","wordCount":743,"datePublished":"2021-09-19T14:50:42","dateModified":"2021-09-19T14:50:42","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["NSQ, graceful shutdown, queue, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/graceful-shutdown-with-nsq-consumers\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="NSQ Consumers 處理 Graceful Shutdown 技巧">
 <meta property="og:description" content="
 NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 golang-queue/queue，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者使用在單機的 Producer 及 Consumer 架構，使用的就是 Go 語言的 Goroutine 及 Channel，又或者直接搭配 NSQ, NATs 或 Redis Pub/Sub 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 Graceful Shutdown 所遇到的問題跟解決方式。">
@@ -100,7 +100,7 @@ NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊�
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on September 19, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;742&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;743&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -120,8 +120,8 @@ NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊�
 <li><a href=#影片介紹>影片介紹</a></li>
 <li><a href=#整合問題>整合問題</a></li>
 <li><a href=#nsq-maxinflight-設定>NSQ MaxInFlight 設定</a></li>
-<li><a href=#訊息丟回隊列>訊息丟回隊列</a></li>
-<li><a href=#心得>心得</a></li>
+<li><a href=#訊息丟回佇列-queue>訊息丟回佇列 Queue</a></li>
+<li><a href=#心得感想>心得感想</a></li>
 </ul>
 </li>
 </ul>
@@ -409,7 +409,7 @@ NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊�
 </code></pre></td></tr></table>
 </div>
 </div><p>先將 <code>MaxInFlight</code> 設定為零，也就是將整個 Message Flow 停止，不再讓 Consumer 可以繼續處理後續的 Message，最後在讀取 Consumer StopChan，確認所有的 Hander 都處理完畢，才真正關閉服務。</p>
-<h2 id=訊息丟回隊列>訊息丟回隊列</h2>
+<h2 id=訊息丟回佇列-queue>訊息丟回佇列 Queue</h2>
 <p>上面修正後，還是有其他問題，就是當 2 個 worker 處理完手上的 Message 後，由於將 MaxInFlight 設定為零了，但是在 Handler 手上還是會有一個需要處理，假設這個任務需要處理很久，這樣整個服務都需要多等個幾分鐘才可以關閉，這時候就需要將新的任務重新丟回到原本的 Queue 內，等到下一個新的 Handler 才來處理。</p>
 <div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
@@ -465,7 +465,7 @@ NSQ 是一套即時分散式處理消息平台，目的在於提供大量的訊�
   }))
 </code></pre></td></tr></table>
 </div>
-</div><h2 id=心得>心得</h2>
+</div><h2 id=心得感想>心得感想</h2>
 <p>正確的關閉服務，才可以讓系統穩定不會出現奇怪問題，也可以讓工程團隊專心處理程式邏輯，不用擔心部署上面會遇到什麼問題。之後會詳細寫一篇怎麼使用 <a href=https://github.com/golang-queue/queue>golang-queue/queue</a> 套件，讓系統不會產生大量的 goroutine 而發生效能上的問題。</p>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/nsq/>NSQ</a>&nbsp;
