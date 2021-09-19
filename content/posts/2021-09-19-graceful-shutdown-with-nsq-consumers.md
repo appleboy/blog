@@ -192,7 +192,7 @@ func (w *Worker) Shutdown() error {
 
 先將 `MaxInFlight` 設定為零，也就是將整個 Message Flow 停止，不再讓 Consumer 可以繼續處理後續的 Message，最後在讀取 Consumer StopChan，確認所有的 Hander 都處理完畢，才真正關閉服務。
 
-## 訊息丟回隊列
+## 訊息丟回佇列 Queue
 
 上面修正後，還是有其他問題，就是當 2 個 worker 處理完手上的 Message 後，由於將 MaxInFlight 設定為零了，但是在 Handler 手上還是會有一個需要處理，假設這個任務需要處理很久，這樣整個服務都需要多等個幾分鐘才可以關閉，這時候就需要將新的任務重新丟回到原本的 Queue 內，等到下一個新的 Handler 才來處理。
 
