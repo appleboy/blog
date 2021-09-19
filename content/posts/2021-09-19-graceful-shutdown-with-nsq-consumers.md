@@ -27,6 +27,14 @@ tags:
 
 <!--more-->
 
+## 影片介紹
+
+{{< youtube GqxzifczVLg >}}
+
+影片視頻會同步放到底下課程內
+
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 整合問題
 
 > 為什麼開發者還要自行去處理 NSQ Consumers 的 Graceful Shutdown 機制？
