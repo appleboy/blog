@@ -116,6 +116,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/03/apache-%E5%8F%96%E5%BE%97%E9%80%8F%E9%81%8E-reverse-proxy-varnish-%E7%9A%84-client-%E7%9C%9F%E6%AD%A3-ip-mod_rpaf/>
+<h2 class=post-title>Apache 取得透過 Reverse Proxy (Varnish) 的 Client 真正 IP (mod_rpaf)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 25, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;83&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+之前介紹 [FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇) 來當 Web 前端 Reverse Proxy，也有 load balance 的功能，不過碰到這樣的環境，後端 Apache Server 只會抓到 Reverse Proxy IP 來當作 log 紀錄，而無法正確取得 Client 端 IP，Varnish 官網 FAQ 有提到 log 檔案得的解決方法，不過在程式方面，要大量的修改，假設今天 Apache 跑10個 Virtual Host ，不就要去改10個網站程式，背後或許是一些大型 open source 的 Project，改起來相當不容易，也很費工夫。Darkhero 提供了 reverse proxy add forward module for Apache (mod_rpaf) 模組，只要裝上這模組，Apache 就不必動到其它設定就可以正確紀錄 log 檔案，且程式都不必修改，就可以得到正確 IP 了。 FreeBSD Ports 安裝方式：
+cd /usr/ports/www/mod_rpaf2/
+make install clean 修改 httpd.conf (FreeBSD: /usr/local/etc/apache22/httpd.conf) LoadModule rpaf_module libexec/apache22/mod_rpaf.
+<a href=https://blog.wu-boy.com/2010/03/apache-%E5%8F%96%E5%BE%97%E9%80%8F%E9%81%8E-reverse-proxy-varnish-%E7%9A%84-client-%E7%9C%9F%E6%AD%A3-ip-mod_rpaf/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mod_rpaf/>mod_rpaf</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/varnish/>Varnish</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/03/%E5%9C%A8-ie8-firefox-chrome-css-%E7%BD%AE%E4%B8%AD%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/>
 <h2 class=post-title>在 IE8 FireFox Chrome CSS 置中解決方法</h2>
 </a>
@@ -329,26 +354,6 @@ if not exist !
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/01/google-chrome-%E6%8E%A8%E5%87%BA-4-0-%E7%A9%A9%E5%AE%9A%E7%89%88-mozilla-%E6%8E%A8%E5%87%BA-firefox-3-6/>
-<h2 class=post-title>Google Chrome 推出 4.0 穩定版 & Mozilla 推出 FireFox 3.6</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 29, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;59&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=http://www.mozilla.com/>Mozilla</a> 在上禮拜 (2010.01.22) 推出了 <a href=http://moztw.org/firefox/releases/3.6/>FireFox 3.6</a>，大家可以下載測試效能如何，也可以 follow <a href=http://www.plurk.com/foxmosa>狐耳摩莎的 Plurk</a> 來收到 MozTW 的最新資訊，這篇重點不是在 FireFox，而是 <a href=http://www.google.com>Google</a> 正式推出 Windows 版本 <a href=http://chrome.blogspot.com/2010/01/over-1500-new-features-for-google.html>new Chrome 4.0 stable release</a>，4.0 版本已經可以正式使用 <a href=http://code.google.com/chrome/extensions/>Google Extensions</a>，之前在3.0版本，只能安裝 <a href=http://www.google.com/landing/chrome/beta/>Chrome Beta</a> 版本才可以使用 extension，現在只要將 Windows Google Chrome 升級成 Stable 版本，就可以全面使用 Extensions，可以使用<a href="http://www.google.com/support/chrome/bin/answer.py?hl=en&answer=95414">手動升級</a>，或者是在下禮拜就會自動 update 到最新版本。 <a href=https://www.flickr.com/photos/appleboy/4305644720/ title="Google Chrome 4.0 (by appleboy46)"><img src="https://i0.wp.com/farm3.static.flickr.com/2710/4305644720_fde6433a9c.jpg?resize=500%2C249&ssl=1" title="Google Chrome 4.0 (by appleboy46)" alt="Google Chrome 4.0 (by appleboy46)" data-recalc-dims=1></a> 最後可以參考 <a href=http://blog.ericsk.org/>ericsk</a> 大大所寫的<a href=http://blog.ericsk.org/archives/1389>從開發者角度看 Chrome 4 的推出</a> Reference: <a href=http://googlecode.blogspot.com/2010/01/extensibility-new-html-and-javascript.html>Extensibility + new HTML and JavaScript APIs for Google Chrome</a> <a href=http://blog.chromium.org/2010/01/more-resources-for-developers.html>More Resources for Developers</a></p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/chrmoe/>Chrmoe</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
 </div>
 </article>
 </div>

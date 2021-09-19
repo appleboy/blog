@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/09/graceful-shutdown-with-nsq-consumers/>
+<h2 class=post-title>NSQ Consumers 處理 Graceful Shutdown 技巧</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 19, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;736&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src=https://i.imgur.com/i98snGt.png alt=Imgur></p>
+<p><a href=https://nsq.io/>NSQ</a> 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 <a href=https://github.com/golang-queue/queue>golang-queue/queue</a>，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者用在單機的 Producer 及 Consumer 架構，使用的就是 <a href=https://golang.org>Go 語言</a>的 Goroutine 及 Channel，又或者直接搭配 <a href=https://nsq.io/>NSQ</a>, <a href=https://nats.io/>NATs</a> 或 <a href=https://redis.io/topics/pubsub>Redis Pub/Sub</a> 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>Graceful Shutdown</a> 所遇到的問題跟解決方式。</p>
+<a href=https://blog.wu-boy.com/2021/09/graceful-shutdown-with-nsq-consumers/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/nsq/>NSQ</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/graceful-shutdown/>graceful shutdown</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/queue/>queue</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>
 <h2 class=post-title>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</h2>
 </a>
@@ -326,69 +350,6 @@
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/open-policy-agent/>open policy agent</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/rbac/>RBAC</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2021/03/why-use-buffered-channel-in-signal-notify/>
-<h2 class=post-title>為什麼 signal.Notify 要使用 buffered channel</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 30, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;298&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>如果不了解什麼是 buffer 或 unbuffer <a href=https://tour.golang.org/concurrency/2>channel</a> 的朋友們，可以參考<a href=https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/>這篇文章</a>先做初步了解，本文要跟大家介紹為什麼 signal.Notify 要使用 buffered channel 才可以，底下先來看看如何使用 signal.Notify，當我們要做 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>graceful shutdown</a> 都會使用到這功能，想要正常關閉服務或連線，透過 signal 可以偵測訊號來源，執行後續相關工作 (關閉 DB 連線，檢查 Job 是否結束 &mldr; 等)。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;fmt&#34;</span>
-    <span style=color:#cd5555>&#34;os&#34;</span>
-    <span style=color:#cd5555>&#34;os/signal&#34;</span>
-)
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    <span style=color:#228b22>// Set up channel on which to send signal notifications.
-</span><span style=color:#228b22></span>    <span style=color:#228b22>// We must use a buffered channel or risk missing the signal
-</span><span style=color:#228b22></span>    <span style=color:#228b22>// if we&#39;re not ready to receive when the signal is sent.
-</span><span style=color:#228b22></span>    c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal, <span style=color:#b452cd>1</span>)
-    signal.<span style=color:#008b45>Notify</span>(c, os.Interrupt)
-
-    <span style=color:#228b22>// Block until a signal is received.
-</span><span style=color:#228b22></span>    s := &lt;-c
-    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Got signal:&#34;</span>, s)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。</p>
-<a href=https://blog.wu-boy.com/2021/03/why-use-buffered-channel-in-signal-notify/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

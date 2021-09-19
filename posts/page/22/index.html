@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2015/12/docker-save-my-ssh-terminal/>
+<h2 class=post-title>Docker 救了 Debian SSH terminal</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 7, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;76&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+上週在處理實體機器時，不小心下了底下指令
+$ dpkg --purge --force-all zlib1g 造成系統所有相關指令都不能使用，像是 ssh, scp, fetch, wget 等跟網路相關的指令都會出現底下錯誤訊息
+curl: error while loading shared libraries: libz.so.1: cannot open shared object file: No such file or directory 本來想說可以透過指令將檔案抓回來，放回去就可以恢復了，但是所有指令幾乎都不能用，連 git 也出現該錯誤訊息，這時候最怕 terminal 斷線，如果斷線了，就要到機房去處理問題了。最後想到用 Docker 來處理，簡單幾個步驟就可以將檔案抓回來了
+# 抓 debian images $ docker pull debian:7 # 進入 docker $ docker run -t -i debian:7 /bin/bash # 從 docker 複製檔案到 home 目錄，其中 e1bf3950b16c docker id $ docker cp e1bf3950b16c:/lib/x86_64-linux-gnu /home/ 完成後，在去 x86_64-linux-gnu 找到 libz.
+<a href=https://blog.wu-boy.com/2015/12/docker-save-my-ssh-terminal/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2015/12/50-laravel-tricks-and-5-2-new-feature/>
 <h2 class=post-title>Laravel 50 個小技巧 + Laravel 5.2 新功能</h2>
 </a>
@@ -351,54 +375,6 @@
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/reactjs/>ReactJS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/webpack/>Webpack</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2015/09/how-to-use-laravel-presenter-in-controller/>
-<h2 class=post-title>Laravel Presenter 在 Controller 的使用</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 4, 2015
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;195&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/6248708214/ title="Laravel PHP Framework by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&ssl=1" alt="Laravel PHP Framework" data-recalc-dims=1></a>
-</div>
-<p><a href=https://github.com/laravel-auto-presenter/laravel-auto-presenter>Laravel Auto Presenter</a> 是一套用在 view 裡的 decorates objects，搭配資料庫時，如果有需要組合或整合欄位來顯示相關資訊，這套就非常適合使用在 <a href=http://laravel.com/>Laravel</a> View 裡，如果不是透過 Laravel Auto Presenter，開發者也可以利用 <a href=http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators>Laravel Accessors & Mutators</a> 來實現這方法，只是這要寫在 Model 層，寫法如下，此做法寫起來蠻亂的，而且也並不是每個地方都需要擴充這些欄位。</p>
-<div>
-<pre class="brush: php; title: ; notranslate" title>/**
- * The accessors to append to the model's array form.
- *
- * @var array
- */
-protected $appends = [
-    'is_twitter',
-];
-<p>/**</p>
-<ul>
-<li>Get the user&rsquo;s is_twitter flag.</li>
-<li></li>
-<li>@param  string  $value</li>
-<li>@return string
-*/
-public function getIsTwitterAttribute()
-{
-return (bool) ($this-&gt;attributes[&lsquo;options&rsquo;] &amp; self::$OPTIONS[&lsquo;is_twitter&rsquo;]);
-}</pre></li>
-</ul>
-</div>
-<a href=https://blog.wu-boy.com/2015/09/how-to-use-laravel-presenter-in-controller/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/facebook-react/>Facebook React</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/laravel-presenter/>Laravel Presenter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/reactjs/>ReactJS</a>&nbsp;
 </div>
 </article>
 </div>

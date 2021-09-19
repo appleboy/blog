@@ -103,6 +103,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/11/innodb-as-the-default-mysql-storage-engine/>
+<h2 class=post-title>MySQL 預設儲存引擎: InnoDB 介紹</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 10, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;164&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/8171305355/ title="mysql_logo by appleboy46, on Flickr"><img src="https://i1.wp.com/farm9.staticflickr.com/8488/8171305355_7fb578fdc9.jpg?resize=489%2C253&ssl=1" alt=mysql_logo data-recalc-dims=1></a>
+</div>
+<p><a href=http://www.mysql.com target=_blank>MySQL</a> 是一套眾所皆知的 Database System，今天來簡介 <a href=http://dev.mysql.com/doc/refman/5.5/en/myisam-storage-engine.html target=_blank>InnoDB</a> 儲存引擎，在 MySQL 5.5.5 之前預設的儲存引擎是 <a href=https://dev.mysql.com/doc/refman/5.5/en/myisam-storage-engine.html target=_blank>MyISAM</a>，但是為什麼在 5.5 之後官方要將預設儲存引擎換成 InnoDB 呢？大家都知道 InnoDB 用來交易管理非常方便，因為 InnoDB 透過 row lock，相對於 <a href=http://dev.mysql.com/doc/refman/5.5/en/myisam-storage-engine.html target=_blank>MyISAM</a> 透過 table lock 來的有效率，也避免大量寫入的時候，造成無法讀取資料，這就是 row lock 的優勢，當然用 InnoDB 最主要的原因還有 Full-text search indexes 功能，但是別擔心 MySQL 5.6.4 之後(含此版本) InnoDB 開始支援 Full-text search 功能，另外在使用 MyISAM 時候，如果資料突然出問題，還必須使用 <a href=http://dev.mysql.com/doc/refman/5.0/en/binary-log.html target=_blank>MySQL Binary Log</a> 來恢復資料，如果用 InnoDB 這就沒關係了。大家還在用 MyISAM 嘛？開始升級伺服器，一起體驗 InnoDB 的功能，如果已經上線很久的網站，作者不建議轉換，因為可能會遇到很多雷。</p>
+<a href=https://blog.wu-boy.com/2012/11/innodb-as-the-default-mysql-storage-engine/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/innodb/>InnoDB</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/myisam/>MyISAM</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/11/2012-phpconf-restful-api-design-implementation-with-codeigniter-php-framework/>
 <h2 class=post-title>2012 PHPConf RESTful API Design & Implementation with CodeIgniter PHP Framework</h2>
 </a>
@@ -331,25 +356,6 @@ $xls->generateXML("test");</pre> 結論就是殺雞焉用牛刀，就這個簡�
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php-cs-fixer/>php-cs-fixer</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php-fig/>php-fig</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/08/a-lightweight-jquery-slideshow-plugin/>
-<h2 class=post-title>輕量級 jQuery Slideshow Plugin</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 12, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;69&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>相信在網路上可以找到一堆 jQuery Slideshow Plugin，例如 <a href=http://www.themeflash.com/30-powerful-jquery-slideshow-sliders-plugins-and-tutorials/ target=_blank>33 POWERFUL JQUERY SLIDESHOW (SLIDERS) PLUGINS AND TUTORIALS</a> 介紹了 33 種不同的 Slideshow Plugin，有些用起來很複雜，有些則是過於簡易，本來是想自己寫一套出來，但是想想是否可以找一套已經有輪子的架構，再拿來修改成專案所需要的套件，於是參考了<a href=https://github.com/Ephigenia/jquery.slideShow target=_blank>這套</a>原始碼，發現此專案只有提供 fade 和 slide 兩種效果，沒有像是投影片可以任意滑動的功能，所以自己把此功能 patch 上去，可以參考我放到 <a href=https://github.com/appleboy/jquery.slideShow target=_blank>Github 的專案</a>，寫法很容易，可以直接看<a href=http://appleboy.github.com/jquery/example_2/ target=_blank>線上 Example</a>。</p>
-<h3 id=載入-jquery-和-plugin>載入 jQuery 和 plugin</h3>
-<pre class="brush: xml; title: ; notranslate" title></pre>
-<a href=https://blog.wu-boy.com/2012/08/a-lightweight-jquery-slideshow-plugin/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

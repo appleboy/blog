@@ -116,6 +116,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/>
+<h2 class=post-title>Docker 推出官方 GitHub Actions 套件</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 29, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;255&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" title=cover><img src="https://lh3.googleusercontent.com/HM1o-XLKQSuzYOobmH10dENcm8KwZ3eMqHt99LWMLHMw_14CBHJEr8xuktBUvQFInGX1oLetjI97GkoHCTWFzaXLT_-YBVNv0_jsHYS1Fd2mDXk-v68I4itwP54-4eSZiQ3MewsF47U=w1920-h1080" alt=cover title=cover></a></p>
+<p>去年 <a href=https://github.com>GitHub</a> 推出 <a href=https://github.com/features/actions>Actions</a>，就有不少開發者相繼把 CI/CD 流程內會使用到的 Plugin 都丟到 <a href="https://github.com/marketplace?type=actions">Marktetplace</a>，而在這 <a href=https://docker.com>Docker</a> 容器時代，肯定是需要用自動化上傳容器到 Docker Registry，而官方也在<a href=https://www.docker.com/blog/first-docker-github-action-is-here/>上週正式釋出第一版 GitHub Actions</a>，雖然在 Marktet 尚有不少開發者已經有實現了此功能，但是官方既然推出了，就採用官方的套件會比較適合。底下我們來看看如何使用 Docker 推出的 GitHub Aciton 來自動化上傳 Docker Image。除了介紹如何使用 GitHub Action 上傳 Image 外，我也會拿 <a href=https://drone.io/>Drone</a> 的 <a href=http://plugins.drone.io/drone-plugins/drone-docker/>Docker Plugin</a> 來進行比較。</p>
+<a href=https://blog.wu-boy.com/2020/03/docker-release-github-actions-plugin/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone-ci/>drone ci</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github-actions/>GitHub Actions</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/03/shutdown-the-service-after-job-completely/>
 <h2 class=post-title>停止 Go 服務前先處理完 Worker 內的 Job</h2>
 </a>
@@ -360,32 +384,6 @@ go mod tidy
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/postgres/>Postgres</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/sqlite/>SQLite</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine/>
-<h2 class=post-title>使用 Go Channel 及 Goroutine 時機</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 18, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;481&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>相信不少開發者肯定聽過 Go 語言之所以讓人非常喜歡，就是因為 Go concurrency，如果您對於 concurrency 不了解的朋友們，可以直接參考<a href=https://tour.golang.org/concurrency/1>官網的範例</a>開始了解，範例會帶您一步一步了解什麼是 Channel 什麼是 Go concurrency？本篇會介紹 Channel 使用時機，在大部分寫 application 時，老實說很少用到 Channel，所以很多人其實不知道該在哪種場景需要使用 Channel，底下這句名言大家肯定聽過:</p>
-<blockquote>
-<p>Do not communicate by sharing memory; instead, share memory by communicating.</p>
-</blockquote>
-<p>本篇會用簡單的例子來帶大家理解上述名言。</p>
-<a href=https://blog.wu-boy.com/2020/01/when-to-use-go-channel-and-goroutine/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
 </div>
 </article>
 </div>

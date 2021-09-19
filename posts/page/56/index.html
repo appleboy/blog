@@ -103,6 +103,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/12/freebsd-freebsd-kernel-fxp0-link-state-changed-to-down-up/>
+<h2 class=post-title>[FreeBSD] freebsd kernel: fxp0: link state changed to DOWN / UP</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 10, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;134&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+這一個禮拜被機器弄的頭昏腦脹，突然網路斷掉，然後不知不覺中又好了，接下來是斷斷續續，時好時壞，所以去檢查看一下 /var/log/message 訊息，log 檔案吐出很多底下的資訊：
+Dec 9 21:17:02 freebsd kernel: fxp0: link state changed to DOWN Dec 9 21:17:03 freebsd kernel: fxp0: link state changed to UP Dec 9 21:17:10 freebsd kernel: fxp0: link state changed to DOWN Dec 9 21:17:12 freebsd kernel: fxp0: link state changed to UP 在網路上 FreeBSD mail list 查到一篇：『Interface Status changes to UP and Down』，裡面提到通常是硬體的問題，換過 switch 以及網路線，測試還是有問題，網路會斷斷續續，後來就用主機板上面另外兩個網孔測試，網路就不會時好時壞了，由於時常更改 /etc/rc.conf 裡面的 ip 設定，要重新啟動網路卡介面，這樣會造成遠端 ssh 斷線，解決方式請用下面指令： How do I restart network service over ssh session?
+<a href=https://blog.wu-boy.com/2009/12/freebsd-freebsd-kernel-fxp0-link-state-changed-to-down-up/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/12/phpmysql-%E7%92%B0%E5%A2%83%E4%B8%8B-sql-injection-%E6%94%BB%E9%98%B2%E6%88%B0/>
 <h2 class=post-title>PHP+MySQL 環境下 SQL Injection 攻防戰</h2>
 </a>
@@ -336,30 +357,6 @@ Save Web Form Content Using Control + S
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/11/perlphp-time-and-classdate-%E6%97%A5%E6%9C%9F%E8%BD%89%E6%8F%9B%E9%81%8B%E7%AE%97/>
-<h2 class=post-title>[Perl&PHP] time() and Class::Date 日期轉換運算</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 3, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;247&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>為了看個 <a href=http://mlb.mlb.com/index.jsp>MLB</a> 美國職棒，寫了一個網站：<a href=http://mimi.twgg.org/>美國職棒影片收集站</a>，裡面的內容影片連結，以及連結說明，都是利用 <a href=http://www.perl.org/>Perl</a> 搭配 <a href=http://www.mysql.com/>MySQL</a> 資料庫，以及 <a href=http://codeigniter.com/>CodeIgniter PHP Framework</a> 寫出來的，美國 MLB 開打時間，會比台灣晚一天的時差，所以在 <a href=http://www.php.net>PHP</a> 跟 Perl 都要針對時間作修改以及轉換運算，那底下會寫 PHP 跟 Perl 如何控制時間，還有資料庫如何設計，會比較適當。</p>
-<h2 id=span-stylecolor-008000php-日期轉換span-mysql-在資料庫時間格式方面最主要常見的兩種儲存方式一種就是-mysql-預設-datetime顯示的格式就會像是><span style=color:green>PHP 日期轉換</span> MySQL 在資料庫時間格式方面，最主要常見的兩種儲存方式，一種就是 MySQL 預設 datetime，顯示的格式就會像是</h2>
-<p><span style=color:red>2009-11-03 20:10:43</span>，另一種就是存成 <a href=http://en.wikipedia.org/wiki/Unix_time>UNIX time</a> 格式，可以設定為 int(11)，這兩種其實都可以使用，在 <a href=http://www.phpbb.com/>phpBB2</a> 是採用後者的方式，因為 open source 要支援多種資料庫，但是又要統一程式碼，所以乾脆用 UNIX 的時間標記，這樣比較好轉換時區，如果使用 UNIX 格式，可以利用 <a href=http://php.net/manual/en/function.time.php>time()</a> 函式來取的。</p>
-<a href=https://blog.wu-boy.com/2009/11/perlphp-time-and-classdate-%E6%97%A5%E6%9C%9F%E8%BD%89%E6%8F%9B%E9%81%8B%E7%AE%97/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/perl/>Perl</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

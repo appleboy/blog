@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/09/graceful-shutdown-with-nsq-consumers/>
+<h2 class=post-title>NSQ Consumers 處理 Graceful Shutdown 技巧</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 19, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;736&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src=https://i.imgur.com/i98snGt.png alt=Imgur></p>
+<p><a href=https://nsq.io/>NSQ</a> 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 <a href=https://github.com/golang-queue/queue>golang-queue/queue</a>，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者用在單機的 Producer 及 Consumer 架構，使用的就是 <a href=https://golang.org>Go 語言</a>的 Goroutine 及 Channel，又或者直接搭配 <a href=https://nsq.io/>NSQ</a>, <a href=https://nats.io/>NATs</a> 或 <a href=https://redis.io/topics/pubsub>Redis Pub/Sub</a> 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>Graceful Shutdown</a> 所遇到的問題跟解決方式。</p>
+<a href=https://blog.wu-boy.com/2021/09/graceful-shutdown-with-nsq-consumers/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/nsq/>NSQ</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/graceful-shutdown/>graceful shutdown</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/queue/>queue</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>
 <h2 class=post-title>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</h2>
 </a>
@@ -326,29 +350,6 @@
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/open-policy-agent/>open policy agent</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/rbac/>RBAC</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2021/03/debug-performance-issues-using-pyroscope/>
-<h2 class=post-title>即時效能分析工具 Pyroscope</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 1, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;159&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><img src="https://lh3.googleusercontent.com/PIRK3Qj4WiToHgB0QDDf6fMHZxDmEswjWJdTIfVJ8xY7UtSau5C0mosjALev5qbJMflIfrIWsC3bPjjxHRRWQNAiFZSCLbVlin-r1-ICV-lOnopbnpRj4BiMKJnTbslpdo-n3CS2zbQ=w1920-h1080" alt></p>
-<p>當網站上線後，流量增加或短暫功能故障，都會造成使用者體驗相當不好，而這時該怎麼快速找到效能的瓶頸呢？通常 CPU 衝到 100% 時，有時候也蠻難複製及找出關鍵問題點。本篇會介紹一套工具叫 <a href=https://pyroscope.io/>pyroscope</a>，讓開發者可以快速找到效能瓶頸的程式碼。之前也寫了相關的效能瓶頸文章，可以參考看看『<a href=https://blog.wu-boy.com/2020/06/golang-benchmark-pprof/>Go 語言用 pprof 找出程式碼效能瓶頸</a>』或『<a href=https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/>善用 Go 語言效能測試工具來提升執行效率</a>』，上述兩篇都是針對 <a href=https://golang.org>Go 語言</a>的效能分析文章，而 pyroscope 目前可以支援在 <a href=https://www.python.org/>Python</a>, <a href=https://www.ruby-lang.org/en/>Ruby</a> 或 <a href=https://golang.org>Go</a> 的環境。底下筆者會針對 Go 環境做介紹。</p>
-<a href=https://blog.wu-boy.com/2021/03/debug-performance-issues-using-pyroscope/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/pprof/>pprof</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/pyroscope/>Pyroscope</a>&nbsp;
 </div>
 </article>
 </div>

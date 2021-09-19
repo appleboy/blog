@@ -116,6 +116,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/07/caddy-lets-encrypt-wildcard-certificate/>
+<h2 class=post-title>用 Caddy 申請 Let’s Encrypt Wildcard 憑證</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 27, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;119&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/42761134805/in/dateposted-public/ title="Screen Shot 2018-07-27 at 11.29.44 AM"><img src="https://i2.wp.com/farm1.staticflickr.com/846/42761134805_c4ab2e9168_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-07-27 at 11.29.44 AM" data-recalc-dims=1></a></p>
+<p>2018 年 3 月 <a href=https://letsencrypt.org/>Let&rsquo;s Encrypt</a> 官方正式公告<a href=https://community.letsencrypt.org/t/acme-v2-production-environment-wildcards/55578>支援 Wildcard Certificate 憑證</a>，有在玩多個 subdomain 有福了，未來只要申請一張 <code>*.example.com</code> 就全部通用啦，當然很高興 <a href=https://caddyserver.com/>Caddy</a> 也跟進了，在 <a href=https://caddyserver.com/blog/caddy-0_11-released>v11.0</a> 正式支援多種 DNS Provider，只要申請 DNS 提供商的 API Key 或 Secret 設定在啟動 Caddy 步驟內就可以了。底下用 <a href=https://tw.godaddy.com/>Godaddy</a> 舉例。</p>
+<a href=https://blog.wu-boy.com/2018/07/caddy-lets-encrypt-wildcard-certificate/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/caddy/>caddy</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/letsencrypt/>Letsencrypt</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ssl/>SSL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/07/graphql-in-go/>
 <h2 class=post-title>Go 語言實戰 GraphQL</h2>
 </a>
@@ -352,28 +375,6 @@
 <p><a href=https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/ title=Go-brown-side.sh><img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&ssl=1" alt=Go-brown-side.sh data-recalc-dims=1></a></p>
 <p>之前寫過一篇『<a href=https://blog.wu-boy.com/2017/02/write-command-line-in-golang/>用 Golang 寫 Command line 工具</a>』教學，作者我錄了一個教學影片，教大家如何使用 <a href=https://golang.org>Go 語言</a>的 <a href=https://golang.org/pkg/flag/>Flag</a> 套件，套件用法很簡單，相信看了底下的影片教學馬上就會了，但是在這邊強調，用 flag 的時機會是在寫 command line tool 給同事或者是自己用，如果是寫大型 Web Application，不推薦使用 flag，原因是 flag 不支援讀取系統環境變數，如果是 web 服務，想要動態改變 port 或者是 DB 連線資訊，就變得比較複雜，也無法搭配 <a href=https://www.docker.com/>Docker</a> 使用，更不用說想結合 <a href=https://kubernetes.io/>Kubernetes</a>。如果要寫大專案，請使用 <a href=https://github.com/urfave/cli>urfave/cli</a> 或 <a href=https://github.com/spf13/cobra>spf13/cobra</a>。</p>
 <a href=https://blog.wu-boy.com/2018/04/how-to-use-golang-flag-package/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/03/golang-introduction-video/>
-<h2 class=post-title>Go 語言基礎實戰教學影片上線了</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 29, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;129&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/39050902230/in/dateposted-public/ title="Screen Shot 2018-03-17 at 11.40.12 PM"><img src="https://i2.wp.com/farm1.staticflickr.com/805/39050902230_b1d91bc120_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-03-17 at 11.40.12 PM" data-recalc-dims=1></a></p>
-<p>去年在台灣推廣 <a href=https://drone.io/>Drone</a> 這套由 <a href=https://golang.org>Go 語言</a>所撰寫的<a href=https://github.com/drone/drone>開源專案</a>，身為維護者之一，也將 Drone 跟 <a href=https://github.com/go-gitea/gitea>Gitea</a> 完成整合。如果對於從開發到部署整個流程，還不是很了解的朋友，我個人就是推薦使用 Drone，去年九月也推出 Drone 的教學影片系列:『<a href="https://www.udemy.com/devops-oneday/?couponCode=DRONE-DEVOPS">一天學會自動化測試及部署</a>』，在公司使用 Drone 到現在，不曾看到服務中斷，啟動速度也是毫秒等級。為什麼會這麼穩定及快速呢？當然要歸功於 Go 語言。而這次我個人針對 Go 語言，錄製了一份基礎教學『<a href="https://www.udemy.com/golang-fight/?couponCode=GOLANG-INTRO">GO 語言基礎實戰</a>』</p>
-<a href=https://blog.wu-boy.com/2018/03/golang-introduction-video/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

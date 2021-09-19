@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/09/graceful-shutdown-with-nsq-consumers/>
+<h2 class=post-title>NSQ Consumers 處理 Graceful Shutdown 技巧</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 19, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;736&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src=https://i.imgur.com/i98snGt.png alt=Imgur></p>
+<p><a href=https://nsq.io/>NSQ</a> 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 <a href=https://github.com/golang-queue/queue>golang-queue/queue</a>，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者用在單機的 Producer 及 Consumer 架構，使用的就是 <a href=https://golang.org>Go 語言</a>的 Goroutine 及 Channel，又或者直接搭配 <a href=https://nsq.io/>NSQ</a>, <a href=https://nats.io/>NATs</a> 或 <a href=https://redis.io/topics/pubsub>Redis Pub/Sub</a> 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>Graceful Shutdown</a> 所遇到的問題跟解決方式。</p>
+<a href=https://blog.wu-boy.com/2021/09/graceful-shutdown-with-nsq-consumers/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/nsq/>NSQ</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/graceful-shutdown/>graceful shutdown</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/queue/>queue</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/09/%E4%B8%AD%E6%AD%A3%E8%A5%BF%E8%B7%AF%E5%BF%85%E5%90%83%E7%BE%8E%E9%A3%9F-%E9%B4%A8%E8%82%89%E9%BA%B5-%E8%82%89%E7%B5%B2%E7%82%92%E9%A3%AF/>
 <h2 class=post-title>[竹北美食] 中正西路必吃美食 - 鴨肉麵 + 肉絲炒飯</h2>
 </a>
@@ -319,69 +343,6 @@
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/graceful-shutdown/>graceful shutdown</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/reader/>reader</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2021/05/mongodb-performance-tunning/>
-<h2 class=post-title>MongoDB 效能調校紀錄</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 16, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1049&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" title=mongodb><img src="https://lh3.googleusercontent.com/DZKO3gMs5RhQ0-uGU2Y-uaTsb7HKCJU3lH91uggni5HA-fpDMqgvKPwHRwuo-jlCbAJZYyY9TKKovtCDT7OFgiclb2VYz58HwmDeHUX6FjlwfnuTkaTZxYudTIiuJ6yWsuNu2vs1vTQ=w1920-h1080" alt=mongodb title=mongodb></a></p>
-<p>最近剛好在實作 <a href=https://prometheus.io/>Prometheus</a> + <a href=https://grafana.com/>Grafana</a> 的時候，對 MongoDB 做了容器 CPU 使用率 (<code>container_cpu_usage_seconds_total</code>) 的監控，Metrics 寫法如下:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>sum(
-    rate(container_cpu_usage_seconds_total{name!~<span style=color:#cd5555>&#34;(^</span>$<span style=color:#cd5555>|^0_.*)&#34;</span>}[1m]))
-by (name)
-</code></pre></td></tr></table>
-</div>
-</div><p>從上面的 Metrics 可以拉長時間來看，會發現專案的 MongoDB 非常不穩定，起起伏伏，這時候就需要來看看資料庫到底哪邊慢，以及看看哪個語法造成 CPU 飆高？</p>
-<p><img src="https://lh3.googleusercontent.com/FbcbJ75SVSEmNb94X6z9JsjkhKmuzjEGUesnTVxwcP2SGYWJpblQaD5ks02brR9kP9HYqP7KpbQAaoa7RUuBWi8EnXdN2eTCzekyGVmKAY4ltnmEnNrWerAzZkHIp9gGKieO71WUhJk=w1920-h1080" alt></p>
-<p>接著為了看 MongoDB 的 Log 紀錄，把 Grafana 推出的 <a href=https://grafana.com/oss/loki/>Loki</a>，也導入專案系統，將容器所有的 Log 都導向 Loki，底下可以看看 docker-compose 將 Log 輸出到 loki</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-fallback data-lang=fallback>    logging:
-      driver: loki
-      options:
-        loki-url: &#34;http://xxxxxxx/loki/api/v1/push&#34;
-        loki-retries: &#34;5&#34;
-        loki-batch-size: &#34;400&#34;
-        loki-external-labels: &#34;environment=production,project=mongo&#34;
-</code></pre></td></tr></table>
-</div>
-</div><p><img src="https://lh3.googleusercontent.com/TooE3Q49jzI_FpbjXm4b3A_9aho8J4Qws64XmhVzDVbe6NPMCmgYmuw5bMRwnMgmk_lXxNHDU1n6RXwFGvoZvPxLuM6clRJ_ZGRC9S47rvFbm3k9v6v8qaHhC6vqsFkXENQYlRAqKn0=w1920-h1080" alt></p>
-<p>先看看結論，做法其實很簡單，找出相對應 Slow Query，把相關的欄位加上 Index，就可以解決了</p>
-<p><img src="https://lh3.googleusercontent.com/WgyOX8OOff6KGKlOvSvoNxzDsPGyiXBwPa_PX3O7L9AYSBfQ9VoNAP5s_HkbmMa7rokTnF--ZLnJ4p6oLqoTCV2Gyq7B696SEbTIrGIi1kDVtijVpZlYTklq3qbLFtpKGAQHeXxHE-Q=w1920-h1080" alt></p>
-<p><img src="https://lh3.googleusercontent.com/nzKkL7J5x_LmoqTFYav5kKA8Jkp4E4s8OCOekd-fz2HAeU2ySC3DopumqMIevqelMN_bvw7Ug7BB2f6ZJeubCQzz4w1Uby709NqsqTEkQcJK7IwVkcHt_ZkArRjSlKfZvyWBE6ZBLnY=w1920-h1080" alt></p>
-<a href=https://blog.wu-boy.com/2021/05/mongodb-performance-tunning/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/database/>database</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/grafana/>grafana</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mongodb/>mongodb</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/prometheus/>prometheus</a>&nbsp;
 </div>
 </article>
 </div>

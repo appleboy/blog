@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>
+<h2 class=post-title>[Go 教學] 什麼是 graceful shutdown?</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;431&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>我們該如何升級 Web 服務，你會說很簡單啊，只要關閉服務，上程式碼，再開啟服務即可，可是很多時候開發者可能沒有想到現在服務上面是否有正在處理的資料，像是購物車交易？也或者是說背景有正在處理重要的事情，如果強制關閉服務，就會造成下次啟動時會有一些資料上的差異，那該如何優雅地關閉服務，這就是本篇的重點了。底下先透過簡單的 gin http 服務範例介紹簡單的 web 服務</p>
+<a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/graceful-shutdown/>graceful shutdown</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/>
 <h2 class=post-title>[Go 教學] graceful shutdown with multiple workers</h2>
 </a>
@@ -306,37 +328,6 @@
 <p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
 <p><a href=https://golang.org>Go 語言</a>在 1.11 推出 go module 來統一市面上不同管理 Go 套件的工具，像是 <a href=https://github.com/golang/dep>dep</a> 或 govendor 等，還不知道如何使用 go module，可以參考之前寫的一篇文章『<a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</a>』，在團隊內如果每個人在開發專案時，都透過網路去下載專案使用到的套件，這樣 10 個人就會浪費 10 個人的下載時間，並且佔用公司網路頻寬，所以我建議在公司內部架設一台 Go Proxy 服務，減少團隊在初始化專案所需要的時間，也可以減少在跑 CI/CD 流程時，所需要花費的時間，測試過公司 CI/CD 流程，有架設 Go Proxy，一般來說可以省下 1 ~ 2 分鐘時間，根據專案使用到的相依性套件用量來決定花費時間。本篇來介紹如何架設 <a href=https://github.com/gomods/athens>ATHENS</a> 這套開源 Go Proxy 專案。</p>
 <a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/>
-<h2 class=post-title>Go Module 如何發佈 v2 以上版本</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;216&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p><a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Go Module</a> 是 <a href=https://golang.org>Golang</a> 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 <code>GOPATH</code> 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇<a href=https://blog.golang.org/using-go-modules>教學部落格</a>，底下是教學會涵蓋的範圍</p>
-<ul>
-<li>Creating a new module.</li>
-<li>Adding a dependency.</li>
-<li>Upgrading dependencies.</li>
-<li>Adding a dependency on a new major version.</li>
-<li>Upgrading a dependency to a new major version.</li>
-<li>Removing unused dependencies.</li>
-</ul>
-<p>而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。</p>
-<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;

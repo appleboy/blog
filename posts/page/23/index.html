@@ -103,6 +103,54 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2015/09/how-to-use-laravel-presenter-in-controller/>
+<h2 class=post-title>Laravel Presenter 在 Controller 的使用</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 4, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;195&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6248708214/ title="Laravel PHP Framework by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&ssl=1" alt="Laravel PHP Framework" data-recalc-dims=1></a>
+</div>
+<p><a href=https://github.com/laravel-auto-presenter/laravel-auto-presenter>Laravel Auto Presenter</a> 是一套用在 view 裡的 decorates objects，搭配資料庫時，如果有需要組合或整合欄位來顯示相關資訊，這套就非常適合使用在 <a href=http://laravel.com/>Laravel</a> View 裡，如果不是透過 Laravel Auto Presenter，開發者也可以利用 <a href=http://laravel.com/docs/5.1/eloquent-mutators#accessors-and-mutators>Laravel Accessors & Mutators</a> 來實現這方法，只是這要寫在 Model 層，寫法如下，此做法寫起來蠻亂的，而且也並不是每個地方都需要擴充這些欄位。</p>
+<div>
+<pre class="brush: php; title: ; notranslate" title>/**
+ * The accessors to append to the model's array form.
+ *
+ * @var array
+ */
+protected $appends = [
+    'is_twitter',
+];
+<p>/**</p>
+<ul>
+<li>Get the user&rsquo;s is_twitter flag.</li>
+<li></li>
+<li>@param  string  $value</li>
+<li>@return string
+*/
+public function getIsTwitterAttribute()
+{
+return (bool) ($this-&gt;attributes[&lsquo;options&rsquo;] &amp; self::$OPTIONS[&lsquo;is_twitter&rsquo;]);
+}</pre></li>
+</ul>
+</div>
+<a href=https://blog.wu-boy.com/2015/09/how-to-use-laravel-presenter-in-controller/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/facebook-react/>Facebook React</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/laravel-presenter/>Laravel Presenter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/reactjs/>ReactJS</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2015/08/facebook-react-jest-with-webpack/>
 <h2 class=post-title>Facebook React Jest 搭配 Webpack 測試</h2>
 </a>
@@ -360,30 +408,6 @@ Because they use sleazy and spammy SEO optimizations to get there.
 <a href=https://blog.wu-boy.com/tags/mocha/>Mocha</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/node.js/>Node.js</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2015/05/mac-iterm2-tmux-with-mouse-mode/>
-<h2 class=post-title>Mac iTerm2 + tmux 搭配 Mouse mode</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 2, 2015
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;156&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/17151857929 title="Screen Shot 2015-05-02 at 10.17.10 AM by Bo-Yi Wu, on Flickr"><img src="https://i0.wp.com/farm8.staticflickr.com/7708/17151857929_cd5bd6c97b_z.jpg?resize=640%2C368&ssl=1" alt="Screen Shot 2015-05-02 at 10.17.10 AM" data-recalc-dims=1></a></p>
-<p>在 Mac 上必裝 <a href=http://iterm2.com/>iTerm2</a> 終端機軟體搭配 copy mode 相當好用，只要用滑鼠選擇了一段文字，系統就會自動幫忙 copy，接著在任何地方就可以直接使用 <code>command + v</code> 貼上，如果要多視窗操作，可以安裝 <a href=http://tmux.sourceforge.net/>tmux</a> 多視窗軟體，如果使用了 tmux 你會發現滾輪滑鼠無法使用了，也就是看不到執行過的畫面跟指令，這時候就要調整 tmux 設定檔，補上 <a href=https://github.com/appleboy/dotfiles/blob/master/.tmux.conf#L77-L82>Mouse mode 設定檔</a></p>
-<a href=https://blog.wu-boy.com/2015/05/mac-iterm2-tmux-with-mouse-mode/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/iterm2/>iTerm2</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mac/>Mac</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/tmux/>tmux</a>&nbsp;
 </div>
 </article>
 </div>

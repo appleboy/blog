@@ -116,6 +116,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/11/perlphp-time-and-classdate-%E6%97%A5%E6%9C%9F%E8%BD%89%E6%8F%9B%E9%81%8B%E7%AE%97/>
+<h2 class=post-title>[Perl&PHP] time() and Class::Date 日期轉換運算</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 3, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;247&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>為了看個 <a href=http://mlb.mlb.com/index.jsp>MLB</a> 美國職棒，寫了一個網站：<a href=http://mimi.twgg.org/>美國職棒影片收集站</a>，裡面的內容影片連結，以及連結說明，都是利用 <a href=http://www.perl.org/>Perl</a> 搭配 <a href=http://www.mysql.com/>MySQL</a> 資料庫，以及 <a href=http://codeigniter.com/>CodeIgniter PHP Framework</a> 寫出來的，美國 MLB 開打時間，會比台灣晚一天的時差，所以在 <a href=http://www.php.net>PHP</a> 跟 Perl 都要針對時間作修改以及轉換運算，那底下會寫 PHP 跟 Perl 如何控制時間，還有資料庫如何設計，會比較適當。</p>
+<h2 id=span-stylecolor-008000php-日期轉換span-mysql-在資料庫時間格式方面最主要常見的兩種儲存方式一種就是-mysql-預設-datetime顯示的格式就會像是><span style=color:green>PHP 日期轉換</span> MySQL 在資料庫時間格式方面，最主要常見的兩種儲存方式，一種就是 MySQL 預設 datetime，顯示的格式就會像是</h2>
+<p><span style=color:red>2009-11-03 20:10:43</span>，另一種就是存成 <a href=http://en.wikipedia.org/wiki/Unix_time>UNIX time</a> 格式，可以設定為 int(11)，這兩種其實都可以使用，在 <a href=http://www.phpbb.com/>phpBB2</a> 是採用後者的方式，因為 open source 要支援多種資料庫，但是又要統一程式碼，所以乾脆用 UNIX 的時間標記，這樣比較好轉換時區，如果使用 UNIX 格式，可以利用 <a href=http://php.net/manual/en/function.time.php>time()</a> 函式來取的。</p>
+<a href=https://blog.wu-boy.com/2009/11/perlphp-time-and-classdate-%E6%97%A5%E6%9C%9F%E8%BD%89%E6%8F%9B%E9%81%8B%E7%AE%97/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/perl/>Perl</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/10/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F-%E9%AB%98%E9%9B%84-ton-%E5%8D%A1%E8%8C%B2%E6%97%A5%E6%AD%90%E9%A2%A8%E5%B0%9A%E9%A3%9F%E5%A0%82/>
 <h2 class=post-title>[高雄美食] 高雄-TON 卡茲日歐風尚食堂</h2>
 </a>
@@ -358,28 +382,6 @@ PHP Performance tip: require versus require_once
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/09/freebsd-send-pr-committer-%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85/>
-<h2 class=post-title>[FreeBSD] send-pr porter committer 需要注意事項</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 22, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;134&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/3944776064/ title="logo-red (by appleboy46)"><img src="https://i2.wp.com/farm3.static.flickr.com/2495/3944776064_38690ab101.jpg?resize=457%2C75&ssl=1" title="logo-red (by appleboy46)" alt="logo-red (by appleboy46)" data-recalc-dims=1></a> 來紀錄一下最近使用 <a href="http://www.freebsd.org/cgi/man.cgi?query=send-pr&sektion=1">send-pr</a> 的心得，send-pr 就是提交問題 problem report (PR) 到 <a href=http://www.freebsd.org>FreeBSD</a> Support 中心，您也可以透過 send-pr 發送新的 ports 給 FreeBSD 中心，最近 <a href=http://codeIgniter.com>CodeIgniter</a> V1.7.2 的 Release，所以把 CI 的 patch 送給中心並且 CC 給 maintainer，/usr/bin/send-pr 這支 shell script 在 FreeBSD 用處可多了，不單只是 ports 的問題，也有 www, i386, ia64 的問題，都可以透過它回報給總部喔。 要瞭解 ports 怎麼產生，或者是怎麼製作 patch 都可以參考 <a href=http://www.freebsd.org/doc/en/books/porters-handbook/>FreeBSD Porter&rsquo;s Handbook</a>，文件是英文的，請大家多多包含，不過還是有<a href=http://www.freebsd.org/doc/zh_TW/books/porters-handbook/>中文的文件</a>，通常 patch 是還蠻簡單的，底下紀錄我做的步驟，以及如何測試 ports 正確性。其實步驟不難啦。</p>
-<a href=https://blog.wu-boy.com/2009/09/freebsd-send-pr-committer-%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ports/>ports</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/send-pr/>send-pr</a>&nbsp;
 </div>
 </article>
 </div>

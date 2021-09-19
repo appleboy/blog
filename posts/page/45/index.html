@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/08/%E6%8E%A8%E8%96%A6%E4%B8%80%E6%9C%AC%E6%9B%B8%E7%B1%8D-master-mobile-web-apps-with-jquery-mobile/>
+<h2 class=post-title>推薦一本書籍 Master Mobile Web Apps with jQuery Mobile</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 12, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;45&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/6034783546/ title="master-mobile-web-apps-with-jqm by appleboy46, on Flickr"><img src="https://i1.wp.com/farm7.static.flickr.com/6210/6034783546_64ef53c090.jpg?resize=375%2C483&ssl=1" alt=master-mobile-web-apps-with-jqm data-recalc-dims=1></a> 在這裡跟大家推薦一本國外的書籍，也就是 <a href=http://www.elated.com/ target=_blank>Elated.com</a> 網站作者 Matt Doyle 推出的一本新書 <a href=http://store.elated.com/ target=_blank>Master Mobile Web Apps with jQuery Mobile</a>，此作者也有推出 <a href=http://www.amazon.com/Beginning-PHP-5-3-Matt-Doyle/dp/0470413964 target=_blank>PHP</a> 及 <a href=http://www.amazon.com/Photoshop-Layers-Bible-Matt-Doyle/dp/0470082119/ target=_blank>Photoshop</a> 的書籍，本人相當佩服有美工天份又會寫程式人才。然而現在當紅的 Mobile Device，大家相繼為了 iOS, Android 或其他手持式裝置撰寫 Web 介面，目前網路上大家推的其中一套就是 <a href=http://jquerymobile.com/ target=_blank>jQuery Mobile</a>，而我呢，正在摸索另一套強大的 Web App Framework: <a href=http://www.sencha.com/products/touch/ target=_blank>Sencha Touch</a>，功能來比的話，個人覺得 Sencha Touch 優勢比較多，之後有機會再來寫一系列的 Sencha Touch 文章。此書有提供<a href=http://store.elated.com/products/jquery-mobile-book/Sample%20of%20Master%20Mobile%20Web%20Apps%20with%20jQuery%20Mobile.pdf target=_blank>目錄</a>可以參考，該作者會教大家如何搭配 PHP 跟 MySQL 結合 jQuery Mobile API 來撰寫程式，書籍應該是蠻完整的，目前售價美金19元，如果有興趣的人可以上網下單。</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jquery-mobile/>jQuery Mobile</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/sencha/>Sencha</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/sencha-touch/>Sencha Touch</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/08/%E7%84%A1%E7%97%9B%E5%AE%89%E8%A3%9D-nodejs-%E5%92%8C-node-framework-express/>
 <h2 class=post-title>無痛安裝 NodeJS 和 Node Framework Express</h2>
 </a>
@@ -395,32 +417,6 @@ xdebug.profiler_output_dir = /tmp/profiler 重新啟動 apache /usr/local/etc/rc
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/xdebug/>Xdebug</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/05/busybox-iptunnel-%E5%99%B4%E5%87%BA%E9%8C%AF%E8%AA%A4%E8%A8%8A%E6%81%AF/>
-<h2 class=post-title>busybox iptunnel 噴出錯誤訊息</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 26, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;32&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近在弄新案子，用的是 <a href=http://www.qca.qualcomm.com/>Atheros</a> solution (被<a href=http://www.qca.qualcomm.com/>高通</a>買下)，發現 SDK 裡面已經有更新到 <a href=http://www.busybox.net/>Busybox</a> 1.15，由於在建 ipv6 tunnel 時候必須用到 ip 這指令，當然必須支援 iptunnel，當我把 busybox 選項打開就噴出底下錯誤訊息:</p>
-<blockquote>
-<p>busybox-1.01/networking/libiproute/libiproute.a(iptunnel.o):iptunnel.c:(.text+0x574): more undefined references to `__cpu_to_be16' follow 在 Google 大神指示下找到<a href=http://groups.google.com/group/linux.debian.user.german/browse_thread/thread/76cd0c6ff94af074>一篇答案</a> 修改 networking/libiproute/iptunnel.c</p>
-</blockquote>
-<pre class="brush: bash; title: ; notranslate" title>#include <asm/types.h> 
-# 後面加上 
-#include <asm/byteorder.h></pre>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/busybox/>Busybox</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/embedded-system/>Embedded System</a>&nbsp;
 </div>
 </article>
 </div>

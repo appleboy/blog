@@ -116,6 +116,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/08/vim-%E5%B0%87-tab-%E8%BD%89%E6%8F%9B%E6%88%90-space/>
+<h2 class=post-title>[Vim] 將 Tab 轉換成 Space</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 25, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;128&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+Update 2010.08.28: Pspad 轉換既有 Tabs to Spaces by bootleq
+為了統一 Windows 跟 Linux 底下的編輯器在使用 Tab 功能相同，所以調整了 Vim 及 Pspad(我常用編輯器)的設定，底下是針對 Vim 及 Pspad 的解決方法。首先當大家使用 Vim 編輯器撰寫程式，常常會使用 Tab 來縮排程式碼，我們可以使用 expandtab 來插入空白鍵(Space)取代 Tab:
+1 :set expandtab 控制插入 Tab 時所需要的空白鍵(Tab)字元數，例如用4個空白鍵取代 Tab:
+1 :set tabstop=4 在我們設定完 expandtab 之後，所有的 Tab 鍵將會被 Space 所取代，但是原本在檔案文件中的 Tab 將不會改變，為了取代原有的 Tab 到新的設定，我們必須鍵入：
+1 :retab 針對程式縮排所需要的 Space 個數，我們可以使用 shiftwidth 選項
+1 :set shiftwidth=4 底下舉個例子：
+<a href=https://blog.wu-boy.com/2010/08/vim-%E5%B0%87-tab-%E8%BD%89%E6%8F%9B%E6%88%90-space/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/vim/>Vim</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/08/html5-%E6%A8%A1%E6%9D%BF%E6%9E%B6%E6%A7%8Bboilerplate/>
 <h2 class=post-title>Html5 模板架構(Boilerplate)</h2>
 </a>
@@ -396,43 +421,6 @@ pr_info("
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E8%87%AD%E8%B1%86%E8%85%90/>臭豆腐</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/07/linux-kernel-%E6%92%B0%E5%AF%AB-hello-world-module-the-__init-and-__exit-macros-part-2/>
-<h2 class=post-title>[Linux Kernel] 撰寫 Hello, World module: The __init and __exit Macros (part 2).</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 20, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;178&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-再看此篇之前，可以先閱讀作者先前寫的：『[Linux Kernel Driver] 撰寫簡單 Hello, World module (part 1).』，今天要介紹 Driver 的 init module 區別，在 Kernel 2.4 版本，您可以自行定義 init 跟 cleanup 函式，他們不再被個別稱為 init_module() 和 cleanup_module()，現在都使用 module_init() 和 module_exit() 兩大巨集，這兩函式被定義在 linux/init.h 檔案裡面，所以在寫程式務必將其 include 喔，另外一個核心模組(MODULE_LICENSE)，用於讓核心知道此模組遵守自由授權條款，若沒這項宣告，核心會跟您抱怨的喔，底下為範例：
-#include /* pr_info所需 include 檔案*/
-#include
-#include /* 所有 module 需要檔案*/
-#include
-MODULE_DESCRIPTION("Hello World !!");
-MODULE_AUTHOR("Bo-Yi Wu ");
-MODULE_LICENSE("GPL");
-static int __init hello_init(void)
-{
-pr_info("Hello, world appleboy\n");
-pr_info("The process is \"%s\" (pid %i)\n", current-comm, current-pid);
-return 0;
-}
-static void __exit hello_exit(void)
-{
-printk(KERN_INFO "
-<a href=https://blog.wu-boy.com/2010/07/linux-kernel-%E6%92%B0%E5%AF%AB-hello-world-module-the-__init-and-__exit-macros-part-2/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/driver/>Driver</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;
 </div>
 </article>
 </div>

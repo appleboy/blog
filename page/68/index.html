@@ -116,6 +116,35 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy/>
+<h2 class=post-title>[Linux&FreeBSD] 解决 umount時出現的 “Device is busy”</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 25, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;120&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 <a href=http://www.freebsd.org>FreeBSD</a> 那就要在安裝 <a href=http://www.freshports.org/sysutils/fuser>/usr/ports/sysutils/fuser</a> 這一個 tool 這樣才會有喔 安裝：『FreeBSD』</p>
+<pre class="brush: bash; title: ; notranslate" title>cd /usr/ports/sysutils/fuser
+make install clean</pre> 那使用方法： for FreeBSD
+<pre class="brush: bash; title: ; notranslate" title># fuser -m /var/log/maillog
+/var/log/maillog:   513wa
+# 加上 -u 參數
+# fuser -mu /var/log/maillog
+/var/log/maillog:   513wa(root)</pre>
+<p><strong>2008.11.28 update</strong> 另外解法： 可以使用 fstat -f /home 來觀看有哪些 process access /home</p>
+<a href=https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/11/php-%E8%A8%AD%E5%AE%9A-session-%E7%9A%84%E9%81%8E%E6%9C%9F%E6%99%82%E9%96%93-%E6%9A%AB%E5%AD%98%E6%AA%94%E9%81%8E%E5%A4%9A/>
 <h2 class=post-title>[PHP] 設定 session 的過期時間 & 暫存檔過多</h2>
 </a>
@@ -348,23 +377,6 @@ $oFCKeditor->Create(); </pre> 基本上這樣大致上就完成了喔。很容�
 <a href=https://blog.wu-boy.com/tags/fckeditor/>FCKeditor</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/html/>html</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/10/%E5%98%89%E7%BE%A9%E5%9C%8B%E6%85%B6%E7%85%99%E7%81%AB%E5%BD%B1%E7%89%87/>
-<h2 class=post-title>[嘉義]國慶煙火影片</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 12, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;13&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>這是利用小蚊子的相機拍的，大家看看就好，我覺得還不賴，不過現場看更棒 2008.10.10 嘉義國慶煙火 part1 2008.10.10 嘉義國慶煙火 part2</p>
-<a href=https://blog.wu-boy.com/2008/10/%E5%98%89%E7%BE%A9%E5%9C%8B%E6%85%B6%E7%85%99%E7%81%AB%E5%BD%B1%E7%89%87/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

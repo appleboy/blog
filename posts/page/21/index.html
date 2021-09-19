@@ -103,6 +103,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2015/12/docker-images-network-timed-out/>
+<h2 class=post-title>Docker 下載 Images 遇到 Network timed out</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 30, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;103&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/22947137613/in/datetaken-public/ title=Docker><img src="https://i2.wp.com/farm1.staticflickr.com/778/22947137613_69a88cb94b_z.jpg?resize=640%2C217&ssl=1" alt=Docker data-recalc-dims=1></a> 最近在弄 <a href=https://www.docker.com/>Docker</a> 忽然發現不管怎麼樣都不能 Pull Images 下來，會噴出底下錯誤訊息</p>
+<blockquote>
+<p>Unable to find image &lsquo;corbinu/docker-phpmyadmin:latest&rsquo; locally Pulling repository docker.io/corbinu/docker-phpmyadmin Network timed out while trying to connect to <a href=https://index.docker.io/v1/repositories/corbinu/docker-phpmyadmin/images>https://index.docker.io/v1/repositories/corbinu/docker-phpmyadmin/images</a>. You may want to check your internet connection or if you are behind a proxy.</p>
+</blockquote>
+<a href=https://blog.wu-boy.com/2015/12/docker-images-network-timed-out/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2015/12/a-super-small-docker-image-based-on-alpine-linux/>
 <h2 class=post-title>Alpine Linux 挑戰最小 docker image OS</h2>
 </a>
@@ -328,30 +351,6 @@
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php-7/>PHP 7</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/wordpress/>wordpress</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2015/12/docker-save-my-ssh-terminal/>
-<h2 class=post-title>Docker 救了 Debian SSH terminal</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 7, 2015
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;76&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-上週在處理實體機器時，不小心下了底下指令
-$ dpkg --purge --force-all zlib1g 造成系統所有相關指令都不能使用，像是 ssh, scp, fetch, wget 等跟網路相關的指令都會出現底下錯誤訊息
-curl: error while loading shared libraries: libz.so.1: cannot open shared object file: No such file or directory 本來想說可以透過指令將檔案抓回來，放回去就可以恢復了，但是所有指令幾乎都不能用，連 git 也出現該錯誤訊息，這時候最怕 terminal 斷線，如果斷線了，就要到機房去處理問題了。最後想到用 Docker 來處理，簡單幾個步驟就可以將檔案抓回來了
-# 抓 debian images $ docker pull debian:7 # 進入 docker $ docker run -t -i debian:7 /bin/bash # 從 docker 複製檔案到 home 目錄，其中 e1bf3950b16c docker id $ docker cp e1bf3950b16c:/lib/x86_64-linux-gnu /home/ 完成後，在去 x86_64-linux-gnu 找到 libz.
-<a href=https://blog.wu-boy.com/2015/12/docker-save-my-ssh-terminal/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 </div>
 </article>
 </div>

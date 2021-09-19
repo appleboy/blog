@@ -116,6 +116,37 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/04/php-web-framework-codeigniter-mysql-database-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/>
+<h2 class=post-title>[PHP] Web Framework : CodeIgniter MySQL Database 使用教學</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 20, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;312&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>繼上一篇 <a href=http://blog.wu-boy.com/2009/04/17/1173/>[PHP] 好用 Web Framework : CodeIgniter 安裝教學</a> 之後，這次來紀錄一下 <a href=http://codeigniter.com/user_guide/database/index.html>Database Class</a> 的用法，我想官方網站都已經寫的很詳細了，就大概快速講一下我的一些用法跟心得，其實最主要講的是內建的 <a href=http://codeigniter.com/user_guide/database/active_record.html>Active Record Class</a>，它可以快速撰寫 SQL 語法，不必打 where 或者是 From 這些字眼，insert update select 都可以利用 <a href=http://codeigniter.com/user_guide/database/active_record.html>Active Record Class</a> 很簡單的撰寫出來喔，它也幫忙簡單的檢查 escape SQL Injection，舉的簡單例子大概就知道了： 假設底下這個簡單的 join 一個表格的 select 語法</p>
+<pre class="brush: php; title: ; notranslate" title>$query = $this->db->query("SELECT a.news_id, a.news_name, a.add_time FROM project_news a
+ left join project_news_categories b on a.categories_id = b.categories_id
+where news_id = '".$id."' order by news_top DESC, a.add_time DESC
+");</pre> 利用
+<p><a href=http://codeigniter.com/user_guide/database/active_record.html>Active Record Class</a> 可以改寫成：</p>
+<pre class="brush: php; title: ; notranslate" title>$this->db->select('a.news_id, a.news_name, a.add_time');
+$this->db->from('project_news a');
+$this->db->join('project_news_categories b', 'a.categories_id = b.categories_id', 'left'); 
+$this->db->order_by("news_top DESC, a.add_time DESC");
+$this->db->where('news_id', $id); </pre>
+<a href=https://blog.wu-boy.com/2009/04/php-web-framework-codeigniter-mysql-database-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/04/php-%E5%A5%BD%E7%94%A8-web-framework-codeigniter-%E5%AE%89%E8%A3%9D%E6%95%99%E5%AD%B8/>
 <h2 class=post-title>[PHP] 好用 Web Framework : CodeIgniter 安裝教學</h2>
 </a>
@@ -361,40 +392,6 @@ background-color: #D1D7DC;
 <a href=https://blog.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%B7%A8%E8%BC%AF%E4%BA%8B%E4%BB%B6/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/zend-framework/>Zend Framework</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%80%8F%E8%A6%BD%E4%BA%8B%E4%BB%B6/>
-<h2 class=post-title>[PHP] Zend 使用 Google Calendar API – 瀏覽事件</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 27, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;243&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>昨天寫了一篇 <a href=http://blog.wu-boy.com/2009/03/26/1075/>[PHP] Zend 使用 Google Calendar API - 環境建立架設</a>，相信應該是非常簡單才對，那今天來介紹一下實做 Google Calendar API 的瀏覽、新增、刪除、修改事件的功能，在官方網站都有詳細的 API 功能介紹，我只不過把功能整合完整一點，詳細請看 <a href=http://code.google.com/apis/calendar/docs/1.0/developers_guide_php.html>Google Calendar API With PHP</a>。 1. 瀏覽功能：建立 index.php</p>
-<pre class="brush: php; title: ; notranslate" title>/*
-* include 昨天新增的config.inc.php 檔案
-*/
-include('config.inc.php');
-/*
-* 提供Calendar 的服務名稱
-*/
-$service = Zend_Gdata_Calendar::AUTH_SERVICE_NAME;
-/*
-* 登入帳號密碼
-*/
-$client = Zend_Gdata_ClientLogin::getHttpClient($googleAccount, $googlePassword, $service);</pre>
-<a href=https://blog.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%80%8F%E8%A6%BD%E4%BA%8B%E4%BB%B6/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/zend-framework/>Zend Framework</a>&nbsp;
 </div>

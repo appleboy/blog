@@ -103,6 +103,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/05/ubuntudebian-%E4%BD%BF%E7%94%A8%E7%B3%BB%E7%B5%B1%E8%A8%AD%E5%AE%9A%E5%85%A8%E5%9F%9F-http-proxy/>
+<h2 class=post-title>[Ubuntu/Debian] 使用系統設定全域 http Proxy</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 20, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;46&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>如果想讓 Ubuntu/Debian 不管是 http 或者是 ftp 都可以透過 Proxy 去取得資料，就必須要設定系統 Proxy，目前任職公司就必須這樣設定，當然也可以透過其他方式出去(ex. ssh tunnel) 可以搜尋其他文章，底下分成兩種方式設定。 1. 利用 command line 方式設定</p>
+<pre class="brush: bash; title: ; notranslate" title>export http_proxy=http://username:password@proxyserver.net:port/
+export ftp_proxy=http://username:password@proxyserver.netport/</pre> 寫入 ~/.bashrc
+<pre class="brush: bash; title: ; notranslate" title>source ~/.bashrc </pre> 2. 利用 Desktop 介面設定
+<pre class="brush: bash; title: ; notranslate" title>Settings-> Preference -> Network
+系統\偏好設定\代理伺服器</pre> reference:
+<p><a href=http://blog.mypapit.net/2006/02/how-to-use-apt-get-behind-proxy-server-ubuntudebian.html>How to use apt-get behind proxy server (Ubuntu/Debian)</a> <a href=http://goo.gl/SZYH>Ubuntu Proxy的設定</a></p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/proxy/>proxy</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/05/cc-count-1-bits-of-input-value-by-shifting/>
 <h2 class=post-title>[C/C++] count 1 bits of input value by shifting.</h2>
 </a>
@@ -432,31 +458,6 @@ cursor: default;
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/ckeditor/>CKeditor</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/fckeditor/>FCKeditor</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/03/apache-%E5%8F%96%E5%BE%97%E9%80%8F%E9%81%8E-reverse-proxy-varnish-%E7%9A%84-client-%E7%9C%9F%E6%AD%A3-ip-mod_rpaf/>
-<h2 class=post-title>Apache 取得透過 Reverse Proxy (Varnish) 的 Client 真正 IP (mod_rpaf)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 25, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;83&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-之前介紹 [FreeBSD]high performance caching reverse proxy: Varnish (安裝架設篇) 來當 Web 前端 Reverse Proxy，也有 load balance 的功能，不過碰到這樣的環境，後端 Apache Server 只會抓到 Reverse Proxy IP 來當作 log 紀錄，而無法正確取得 Client 端 IP，Varnish 官網 FAQ 有提到 log 檔案得的解決方法，不過在程式方面，要大量的修改，假設今天 Apache 跑10個 Virtual Host ，不就要去改10個網站程式，背後或許是一些大型 open source 的 Project，改起來相當不容易，也很費工夫。Darkhero 提供了 reverse proxy add forward module for Apache (mod_rpaf) 模組，只要裝上這模組，Apache 就不必動到其它設定就可以正確紀錄 log 檔案，且程式都不必修改，就可以得到正確 IP 了。 FreeBSD Ports 安裝方式：
-cd /usr/ports/www/mod_rpaf2/
-make install clean 修改 httpd.conf (FreeBSD: /usr/local/etc/apache22/httpd.conf) LoadModule rpaf_module libexec/apache22/mod_rpaf.
-<a href=https://blog.wu-boy.com/2010/03/apache-%E5%8F%96%E5%BE%97%E9%80%8F%E9%81%8E-reverse-proxy-varnish-%E7%9A%84-client-%E7%9C%9F%E6%AD%A3-ip-mod_rpaf/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mod_rpaf/>mod_rpaf</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/varnish/>Varnish</a>&nbsp;
 </div>
 </article>
 </div>

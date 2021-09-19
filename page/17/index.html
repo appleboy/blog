@@ -116,6 +116,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2016/11/golang-gofight-support-echo-framework/>
+<h2 class=post-title>輕量級 Gofight 支援 Echo 框架測試</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 17, 2016
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;211&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
+<p><a href=https://github.com/appleboy/gofight>Gofight</a> 是一套用 <a href=https://golang.org/>Golang</a> 撰寫的輕量級測試工具，專門測試 Golang Web Framework API，可以參考之前一篇教學: <a href=https://blog.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang/>用 gofight 來測試 golang web API handler</a>，在 <a href=https://echo.labstack.com/>Echo</a> 框架發布 <a href=https://github.com/labstack/echo/releases/tag/v3.0.0>v3.0.0</a> 之前，Echo 不支援 golang 標準的 <code>http.Request</code> 及 <code>http.ResponseWriter</code>，反倒是支援 <a href=https://github.com/valyala/fasthttp>fasthttp</a>，所以我發了 <a href=https://github.com/labstack/echo/issues/439>Issue</a> 希望作者可以支援原生的 http 標準，最後沒有得到回應。就在前幾天 Echo 在 v3.0.0 版本把 <code>fasthttp</code> 拿掉，這樣 Gofight 就可以移除特定函示，改用原生 http。</p>
+<a href=https://blog.wu-boy.com/2016/11/golang-gofight-support-echo-framework/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/gofight/>gofight</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2016/11/send-line-notification-using-docker-written-in-golang/>
 <h2 class=post-title>用 Docker 發送 Line 訊息</h2>
 </a>
@@ -335,30 +358,6 @@
 <a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/jenkins/>Jenkins</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/07/upgrade-docker-and-docker-compose-on-travis/>
-<h2 class=post-title>在 Travis 升級 Docker 和 docker-compose 版本</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 25, 2016
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;135&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/25660808075/in/dateposted-public/ title=docker><img src="https://i2.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_z.jpg?resize=640%2C217&ssl=1" alt=docker data-recalc-dims=1></a></p>
-<p><a href=https://travis-ci.org/>Travis</a> 是在 <a href=https://github.com/>Github</a> 上常用的整合測試服務，支援了各種程式語言 <a href=https://golang.org/>Golang</a>, PHP, Node.js ..等測試及部署，也同時支援了一些常用 Service，像是 <a href=https://www.docker.com/>Docker</a>, Redis 或 Database。這次來聊聊<a href=https://docs.travis-ci.com/user/docker/>在 Travis 如何使用 Docker</a>，在 Travis 內建的 Docker 跟 <a href=https://docs.docker.com/compose/>docker-compose</a> 版本都是非常舊，所以使用預設的 docker-compose 指令常常會出現 (詳細 build log 可以參考<a href=https://travis-ci.org/appleboy/golang-testing/jobs/147125401>這裡</a>)</p>
-<a href=https://blog.wu-boy.com/2016/07/upgrade-docker-and-docker-compose-on-travis/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/travis/>Travis</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/travis-ci/>Travis CI</a>&nbsp;
 </div>
 </article>
 </div>

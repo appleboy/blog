@@ -116,6 +116,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/04/%E8%A7%A3%E6%B1%BA%E5%9C%A8-ubuntu-terminal-%E5%BA%95%E4%B8%8B-git-diff-%E6%B2%92%E6%9C%89%E8%BC%B8%E5%87%BA%E7%B5%90%E6%9E%9C-10-10/>
+<h2 class=post-title>解決在 Ubuntu Terminal 底下 git diff 沒有輸出結果 10.10</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 19, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;47&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>自從把筆電安裝成 <a href=http://www.ubuntu-tw.org/>Ubuntu 10.10 maverick</a> 後，把所有 <a href=http://github.com target=_blank>github</a> 上面程式碼都用 <a href=http://git-scm.com/>git</a> clone 下來，最近遇到一個非常奇怪的問題，那就是修改檔案之後，正常來講，可以用 git diff 來查看修改過的程式碼，但是非常奇怪的事情就發生了，『完全沒有輸出』，後來在網路上找到一篇解法 <a href=http://git.661346.n2.nabble.com/git-diff-shows-no-output-td5444443.html>git diff shows no output</a>，原來是 $LESS 這個環境變數搞的鬼，其實可以用 <span style=color:green><strong>git diff | cat</strong></span> 方式看到 diff 結果。 我們打開 .bashrc 發現底下設定</p>
+<pre class="brush: bash; title: ; notranslate" title>export EDITOR="vim"
+export GIT_PAGER="less"
+export LESS="-XEfmrSw"
+export PAGER="most"</pre> 重點就在於 $LESS 必須加上
+<p><span style=color:red><strong>-X</strong></span>，並且請裝上 most 這指令</p>
+<pre class="brush: bash; title: ; notranslate" title>apt-get install most</pre>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/>
 <h2 class=post-title>你不可不知的 JSON 基本介紹</h2>
 </a>
@@ -381,35 +407,6 @@ $ sudo apt-get upgrade</pre> 沒圖沒真相啦，底下附上桌面截圖
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/firefox/>Firefox</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/03/codeigniter-2-0-1-release-%E7%99%BC%E4%BD%88%E4%BA%86/>
-<h2 class=post-title>CodeIgniter 2.0.1 Release 發佈了</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 20, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;44&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
-</div> 很高興可以聽到這消息，那就是
-<p><a href=http://www.codeigniter.org.tw/blog/codeigniter_2.0.1_released>CodeIgniter Release 2.0.1</a> 版本了，原本大家都很擔心為什麼 <a href=http://www.codeigniter.org.tw>CodeIgniter</a> 每發佈 Release 版本都要等個好幾個月甚至到半年以上，現在不用這麼久了，因為自從官方新增了 <a href=https://bitbucket.org/ellislab/codeigniter-reactor>CodeIgniter Reactor</a> 加速版本開發及修正，所以更多人貢獻了自己的程式碼及回報問題，我相信 CodeIgniter 會越來越好，希望有更多台灣的朋友來使用。 2.0.1 版本新增了 ENVIRONMENT 這環境變數，讓程式開發者可以任意調整環境狀況，最主要是改變 <a href=http://php.net/manual/en/function.error-reporting.php>PHP error reporting</a> 狀態:</p>
-<pre class="brush: php; title: ; notranslate" title>/*
- * production => error_reporting(0)
- * development => error_reporting(E_ALL)
- */
-define('ENVIRONMENT', 'production');</pre> 當您設定為 production，表示網站不需要任意輸出錯誤訊息，如果調整成 development，系統就會打開全部錯誤訊息，這對開發者相當重要。如果想瞭解更多，請參考
-<p><a href=http://codeigniter.org.tw/user_guide/general/environments.html>Handling Multiple Environments</a>。 歡迎大家下載最新版本: <a href=http://www.codeigniter.org.tw/downloads>http://www.codeigniter.org.tw/downloads</a> 如果想加入翻譯團隊，可以參考這裡: <a href=https://github.com/appleboy/PHP-CodeIgniter-Framework-Taiwan>https://github.com/appleboy/PHP-CodeIgniter-Framework-Taiwan</a></p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

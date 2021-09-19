@@ -103,6 +103,36 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2017/06/trigger-gitlab-ci-or-jenkins-using-drone/>
+<h2 class=post-title>Drone 自動觸發 GitLab CI 或 Jenkins 任務</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 28, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;363&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/34957940160/in/dateposted-public/ title=drone-logo_512><img src="https://i1.wp.com/c1.staticflickr.com/5/4236/34957940160_435d83114f_z.jpg?w=840&ssl=1" alt=drone-logo_512 data-recalc-dims=1></a></p>
+<p><a href=https://github.com/drone/drone>Drone</a> 是一套由 <a href=https://golang.org/>Go 語言</a>所開發的開源碼專案，讓開發者可以使用 <a href=http://docker.com/>Docker</a> Container 快速設定自動化測試及部署，上篇有提到『<a href=https://blog.wu-boy.com/2017/06/how-to-schedule-builds-in-drone/>Cronjob 搭配 Drone 服務</a>』，讓 <a href=https://jenkins.io/>Jenkins</a> 或 <a href=https://about.gitlab.com/features/gitlab-ci-cd/>GitLab CI</a> 用戶可以轉換 Cron Job 任務到 Drone 上面。本篇則是會介紹如何透過 Drone 去觸發 Jenkins 或 GitLab CI 上的工作，當然這是過渡時期，希望大家最後能將工作完整移轉到 Drone 上面，不要再依靠 Jenkins 或 GitLab CI 了。本篇會教大家用三種方式來觸發 GitLab CI 或 Jenkins 任務。</p>
+<hr>
+<ul>
+<li>使用 Drone CI/CD</li>
+<li>使用 Docker 指令</li>
+<li>使用 Command Line (命令列)</li>
+</ul>
+<a href=https://blog.wu-boy.com/2017/06/trigger-gitlab-ci-or-jenkins-using-drone/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jenkins/>Jenkins</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2017/06/how-to-schedule-builds-in-drone/>
 <h2 class=post-title>Cronjob 搭配 Drone 服務</h2>
 </a>
@@ -356,54 +386,6 @@
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/>
-<h2 class=post-title>Debian/Ubuntu 的 update-rc.d 使用教學</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 6, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;208&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/33486150390/in/dateposted-public title=Debian><img src="https://i2.wp.com/c1.staticflickr.com/3/2849/33486150390_198a19b880_n.jpg?w=840&ssl=1" alt=Debian data-recalc-dims=1></a></p>
-<p><a href=http://manpages.ubuntu.com/manpages/precise/man8/update-rc.d.8.html>update-rc.d</a> 是在 <a href=https://www.debian.org/>Debian</a> 或 <a href=https://www.ubuntu.com/>Ubuntu</a> 內用來管理 <code>/etc/init.d</code> 目錄內的 scripts 工具。不管是 Nginx 或 Mysql 等相關服務，都可以在 <code>/etc/init.d</code> 目錄內找到相對應的 script 檔案，隨便打開一個 script 檔案就可以看到標頭有固定的格式寫法:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#228b22>### BEGIN INIT INFO</span>
-<span style=color:#228b22># Provides:          gorush</span>
-<span style=color:#228b22># Required-Start:    $syslog $network</span>
-<span style=color:#228b22># Required-Stop:     $syslog $network</span>
-<span style=color:#228b22># Default-Start:     2 3 4 5</span>
-<span style=color:#228b22># Default-Stop:      0 1 6</span>
-<span style=color:#228b22># Short-Description: starts the gorush web server</span>
-<span style=color:#228b22># Description:       starts gorush using start-stop-daemon</span>
-<span style=color:#228b22>### END INIT INFO</span>
-</code></pre></td></tr></table>
-</div>
-</div>
-<a href=https://blog.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>
 </div>

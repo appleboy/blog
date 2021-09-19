@@ -116,6 +116,40 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/07/install-percona-xtradb-cluster-5-5-34-tips/>
+<h2 class=post-title>在 Debian 安裝 Percona Xtradb Cluster 5.5.34 注意事項</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;178&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/12023069753/ title="percona by appleboy46, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3820/12023069753_de60d0c86d_m.jpg?resize=240%2C234&ssl=1" alt=percona data-recalc-dims=1></a>
+</div>
+<p>最近幫公司安裝新的三台機器，全部上 <a href=https://www.debian.org/>Debian</a> 7.5 Server 版本，統一安裝 <a href=http://www.percona.com/software/percona-xtradb-cluster>Percona Xtradb Cluster</a> 最新版本 5.5.37。設定完第一台 Node，並且透過底下指令 boot up 成第一台 PXC。</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ /etc/init.d/mysql bootstrap-pxc</pre>
+</div>
+<p>後續第二台要啟動跟第一台進行 SST，寫到一半直接噴底下錯誤訊息</p>
+<blockquote>
+<p>WSREP_SST: [ERROR] Cleanup after exit with status:32 (20140702 10:57:28.004) WSREP_SST: [INFO] Removing the sst_in_progress file (20140702 10:57:28.006) 140702 10:57:28 [ERROR] WSREP: Process completed with error: wsrep_sst_xtrabackup &ndash;role &lsquo;joiner&rsquo; &ndash;address &lsquo;192.168.1.101&rsquo; &ndash;auth &lsquo;xxxxx:xxxxxx&rsquo; &ndash;datadir &lsquo;/var/lib/mysql/&rsquo; &ndash;defaults-file &lsquo;/etc/mysql/my.cnf&rsquo; &ndash;parent &lsquo;16042&rsquo;: 32 (Broken pipe) 140702 10:57:28 [ERROR] WSREP: Failed to read uuid:seqno from joiner script. 140702 10:57:28 [ERROR] WSREP: SST failed: 32 (Broken pipe)</p>
+</blockquote>
+<a href=https://blog.wu-boy.com/2014/07/install-percona-xtradb-cluster-5-5-34-tips/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/percoba-xtradb-cluster/>Percoba XtraDB Cluster</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/percona/>Percona</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/percona-mysql/>Percona MySQL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/07/openwrt-build-environment-on-ubuntu/>
 <h2 class=post-title>在 Ubuntu 建置 OpenWrt 編譯環境</h2>
 </a>
@@ -363,29 +397,6 @@ user = nginx group = nginx ; Set permissions for unix socket, if one is used. In
 <a href=https://blog.wu-boy.com/tags/boot/>boot</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/bootloader/>bootloader</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/05/check-ram-speed-on-ubuntu/>
-<h2 class=post-title>在 Ubuntu 底下查詢記憶時脈體資訊</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 2, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;86&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-最近想升級 Notebook 記憶體到 16G，要查看 Ubuntu 底下記憶體時脈資訊，可以透過 dmidecode 指令來取的記憶體硬體裝置資訊，此指令不只是這樣而已，還可以得知整台電腦硬體 components 資訊，底下擷取如何得到記憶體裝置資訊
-$ dmidecode --type 17 | more 輸出結果為
-# dmidecode 2.11 SMBIOS 2.4 present. Handle 0x0036, DMI type 17, 27 bytes Memory Device Array Handle: 0x0035 Error Information Handle: Not Provided Total Width: 64 bits Data Width: 64 bits Size: 2048 MB Form Factor: SODIMM Set: None Locator: DIMM0 Bank Locator: BANK 0 Type: DDR3 Type Detail: Synchronous Speed: 1067 MHz Manufacturer: 80CE Serial Number: 621AD76C Asset Tag: Unknown Part Number: M471B5673FH0-CF8
-<a href=https://blog.wu-boy.com/2014/05/check-ram-speed-on-ubuntu/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/ram/>Ram</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>

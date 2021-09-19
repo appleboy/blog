@@ -103,6 +103,33 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/>
+<h2 class=post-title>用 Traefik 搭配 Docker 快速架設服務</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 8, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;834&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><strong>更新: 2019.01.10 新增教學影片</strong></p>
+<p><a href="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" title="drone traefik docker deploy"><img src="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" alt="drone traefik docker deploy" title="drone traefik docker deploy"></a></p>
+<p>相信大家在架設服務肯定會選一套像是 <a href=http://www.haproxy.org/>HAProxy</a>, <a href=https://www.nginx.com/ title=Nginx>Nginx</a>, <a href=https://httpd.apache.org/ title=Apache>Apache</a> 或 <a href=https://caddyserver.com/ title=Caddy>Caddy</a>，這四套架設的難度差不多，如果要搭配 <a href=https://letsencrypt.org/ title="Let's Encrypt">Let&rsquo;s Encrypt</a> 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 <a href=https://golang.org/ title=Golang>Golang</a> 開發裡面已經內建了 Let&rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 <a href=https://traefik.io/ title=Traefik>Traefik</a>，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 <code>domain1.com</code> 及 <code>domain2.com</code>。來看看如何快速設定 Traefik。</p>
+<p><a href="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" title="traefik + docker + golang"><img src="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" alt="traefik + docker + golang" title="traefik + docker + golang"></a></p>
+<a href=https://blog.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/traefik/>traefik</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>
 <h2 class=post-title>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</h2>
 </a>
@@ -307,29 +334,6 @@ Flickr 在 2019 年一月會開始將免費會員照片刪除到剩下 1000 張�
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/graphql/>GraphQL</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/07/mkcert-zero-config-tool-to-make-locally-trusted-development-certificates/>
-<h2 class=post-title>在本機端快速產生網站免費憑證</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 6, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;495&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://i1.wp.com/farm2.staticflickr.com/1785/43227213371_a041db0810_o.png?ssl=1"><img src="https://i1.wp.com/farm2.staticflickr.com/1785/43227213371_a041db0810_o.png?w=840&ssl=1" alt data-recalc-dims=1></a></p>
-<p>大家看到網站免費憑證，一定會想到 <a href=https://letsencrypt.org/>Let&rsquo;s encrypt</a> 服務商提供一個網域可以使用 100 個免費憑證，如果您有很多 subdomain 需求，還可以申請獨立一張 <a href=https://community.letsencrypt.org/t/acme-v2-and-wildcard-certificate-support-is-live/55579>wildcard 憑證</a>，但是這是在伺服器端的操作，假設在本機端開發，該如何快速產生憑證，這樣開啟瀏覽器時，就可以看到綠色的 https 字眼</p>
-<p><a href="https://i2.wp.com/farm1.staticflickr.com/921/43177490822_974612c015_z.jpg?ssl=1"><img src="https://i2.wp.com/farm1.staticflickr.com/921/43177490822_974612c015_z.jpg?w=840&ssl=1" alt data-recalc-dims=1></a></p>
-<a href=https://blog.wu-boy.com/2018/07/mkcert-zero-config-tool-to-make-locally-trusted-development-certificates/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/certificate/>certificate</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

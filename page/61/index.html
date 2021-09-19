@@ -116,6 +116,26 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/05/php-codeigniter-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E7%BF%BB%E8%AD%AF%E8%A8%88%E7%95%AB/>
+<h2 class=post-title>[PHP] CodeIgniter 繁體中文翻譯計畫</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 17, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;88&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://i0.wp.com/www.codeigniter.com.tw/images/design/ci_logo2.gif?w=840" alt="CideIgniter 官方中文網站" data-recalc-dims=1> 本人目前正在推廣 <a href=http://www.codeigniter.com.tw/>CodeIgniter 官方中文網站</a>，這套 MVC 在我使用起來還蠻適合新手學習的，也非常容易上手的一套 MVC Web development 架構 ，希望推廣給台灣繁體 php web 開發人員，即使您之前沒有用過 MVC 架構，只要懂的一點 PHP 語法，基本 function 會使用，基本上就可以直接來使用 CodeIgniter，在這裡徵求對 php 或者 CodeIgniter 翻譯繁體中文有興趣的網友或者是使用者們，可以加入繁體中文的翻譯計畫，我在 <a href=https://github.com/ target=_blank>github </a>開了CodeIgniter translation 的 repository，網址是： <a href=http://github.com/appleboy/PHP-CodeIgniter-Framework-Taiwan/tree/master>http://github.com/appleboy/PHP-CodeIgniter-Framework-Taiwan/tree/master</a></p>
+<a href=https://blog.wu-boy.com/2009/05/php-codeigniter-%E7%B9%81%E9%AB%94%E4%B8%AD%E6%96%87%E7%BF%BB%E8%AD%AF%E8%A8%88%E7%95%AB/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/05/jquery-%E6%97%A5%E6%9B%86%E6%99%82%E9%96%93%E5%A4%96%E6%8E%9B-timepicker-cssoffset-%E5%95%8F%E9%A1%8C-plugins/>
 <h2 class=post-title>[jQuery] 日曆時間外掛 timepicker CSS/Offset 問題 | Plugins</h2>
 </a>
@@ -336,37 +356,6 @@ $(this).parent().parent().remove();
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/04/php-web-framework-codeigniter-mysql-database-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/>
-<h2 class=post-title>[PHP] Web Framework : CodeIgniter MySQL Database 使用教學</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 20, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;312&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>繼上一篇 <a href=http://blog.wu-boy.com/2009/04/17/1173/>[PHP] 好用 Web Framework : CodeIgniter 安裝教學</a> 之後，這次來紀錄一下 <a href=http://codeigniter.com/user_guide/database/index.html>Database Class</a> 的用法，我想官方網站都已經寫的很詳細了，就大概快速講一下我的一些用法跟心得，其實最主要講的是內建的 <a href=http://codeigniter.com/user_guide/database/active_record.html>Active Record Class</a>，它可以快速撰寫 SQL 語法，不必打 where 或者是 From 這些字眼，insert update select 都可以利用 <a href=http://codeigniter.com/user_guide/database/active_record.html>Active Record Class</a> 很簡單的撰寫出來喔，它也幫忙簡單的檢查 escape SQL Injection，舉的簡單例子大概就知道了： 假設底下這個簡單的 join 一個表格的 select 語法</p>
-<pre class="brush: php; title: ; notranslate" title>$query = $this->db->query("SELECT a.news_id, a.news_name, a.add_time FROM project_news a
- left join project_news_categories b on a.categories_id = b.categories_id
-where news_id = '".$id."' order by news_top DESC, a.add_time DESC
-");</pre> 利用
-<p><a href=http://codeigniter.com/user_guide/database/active_record.html>Active Record Class</a> 可以改寫成：</p>
-<pre class="brush: php; title: ; notranslate" title>$this->db->select('a.news_id, a.news_name, a.add_time');
-$this->db->from('project_news a');
-$this->db->join('project_news_categories b', 'a.categories_id = b.categories_id', 'left'); 
-$this->db->order_by("news_top DESC, a.add_time DESC");
-$this->db->where('news_id', $id); </pre>
-<a href=https://blog.wu-boy.com/2009/04/php-web-framework-codeigniter-mysql-database-%E4%BD%BF%E7%94%A8%E6%95%99%E5%AD%B8/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>
