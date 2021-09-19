@@ -16,7 +16,7 @@ tags:
 
 ![Imgur](https://i.imgur.com/i98snGt.png)
 
-[NSQ][1] 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 [golang-queue/queue][2]，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者用在單機的 Producer 及 Consumer 架構，使用的就是 [Go 語言][3]的 Goroutine 及 Channel，又或者直接搭配 [NSQ][1], [NATs][4] 或 [Redis Pub/Sub][5] 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 [Graceful Shutdown][6] 所遇到的問題跟解決方式。
+[NSQ][1] 是一套即時分散式處理消息平台，目的在於提供大量的訊息傳遞，團隊可以依據不同的任務來設計分散式架構去消化大量的訊息。而我在最近開發了一套開源項目 [golang-queue/queue][2]，這套詳細的資訊會再開另一篇進行討論，簡單來說這個套件可以讓開發者使用在單機的 Producer 及 Consumer 架構，使用的就是 [Go 語言][3]的 Goroutine 及 Channel，又或者直接搭配 [NSQ][1], [NATs][4] 或 [Redis Pub/Sub][5] 第三方的系統取代內建的 Channel 機制。而本篇會講在整合 NSQ 要處理 [Graceful Shutdown][6] 所遇到的問題跟解決方式。
 
 [1]:https://nsq.io/
 [2]:https://github.com/golang-queue/queue
