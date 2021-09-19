@@ -36,7 +36,7 @@ tags:
 當系統收到通知
 
 1. 通知 Consumer 不要處理新的 Message
-2. 等到所有的 Worker 都處理完手受 Message
+2. 等待 Consumer 處理完手上 Message
 3. 正常關閉 NSQ Consumer 服務
 
 先看看如何宣告 NSQ Consumer，[程式碼在這邊](https://github.com/golang-queue/nsq/blob/19c59b9c063ced2d6cfc9f404f7ab69be73ad795/nsq.go#L22-L37)
