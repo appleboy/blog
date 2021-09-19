@@ -162,7 +162,7 @@ NSQ 會根據目前的連線數量以及 `MaxInFlight` 設定值來決定現在�
 
 所以將 `Shutdown` 函式[改成如下](https://github.com/golang-queue/nsq/compare/v0.0.3...v0.0.4):
 
-```go
+```diff
 func (w *Worker) Shutdown() error {
   if !atomic.CompareAndSwapInt32(&w.stopFlag, 0, 1) {
     return queue.ErrQueueShutdown
@@ -170,9 +170,9 @@ func (w *Worker) Shutdown() error {
 
   w.stopOnce.Do(func() {
     if atomic.LoadInt32(&w.startFlag) == 1 {
-      w.q.ChangeMaxInFlight(0)
++     w.q.ChangeMaxInFlight(0)
       w.q.Stop()
-      <-w.q.StopChan
++     <-w.q.StopChan
       w.p.Stop()
     }
 
