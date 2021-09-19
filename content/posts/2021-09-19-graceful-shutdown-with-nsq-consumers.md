@@ -194,7 +194,7 @@ func (w *Worker) Shutdown() error {
 
 ## 訊息丟回隊列
 
-上面修正後，還是有個問題點，就是當 2 個 worker 處理完手受的 Message 後，由於我們先將 MaxInFlight 設定為零了，但是在 Handler 手上還是會有一個需要處理，假設這個任務需要處理很久，這樣整個服務都需要多等個幾分鐘才可以關閉，所以這時候就需要將新的任務重新丟回到原本的 Queue 內，等到下一個新的 Handler 才來處理。
+上面修正後，還是有其他問題，就是當 2 個 worker 處理完手上的 Message 後，由於將 MaxInFlight 設定為零了，但是在 Handler 手上還是會有一個需要處理，假設這個任務需要處理很久，這樣整個服務都需要多等個幾分鐘才可以關閉，這時候就需要將新的任務重新丟回到原本的 Queue 內，等到下一個新的 Handler 才來處理。
 
 ```diff
   w.q.AddHandler(nsq.HandlerFunc(func(msg *nsq.Message) error {
