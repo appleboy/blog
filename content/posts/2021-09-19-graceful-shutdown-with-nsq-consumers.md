@@ -11,6 +11,7 @@ tags:
   - NSQ
   - graceful shutdown
   - queue
+  - golang
 ---
 
 ![Imgur](https://i.imgur.com/i98snGt.png)
