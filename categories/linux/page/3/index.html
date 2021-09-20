@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/11/intergrate-work-flow-with-gitlab/>
+<h2 class=post-title>Gitlab CE + Gitlab CI 打造版本控制及自動測試流程</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 1, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;65&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/10605193576/ title="gitlab_logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm4.staticflickr.com/3830/10605193576_54b54e4dfc_n.jpg?resize=320%2C206&ssl=1" alt=gitlab_logo data-recalc-dims=1></a>
+</div>
+<p>Git 版本控制不管在嵌入式或 Web 領域都是很受歡迎的工具，尤其是不會遇到像 svn 搞爛 source tree，然後又要 Google 一堆解法。一般公司入門大概就是買 <a href=https://github.com/ target=_blank>Github</a> 服務，一個月才五美金，可以提供五個 Private Project，當然你也可以不付錢，而去使用 <a href=https://bitbucket.org/ target=_blank>Bitbucket</a>，好處就是無限的 Private Project，唯一的限制就是開發者數量，只能在五個以內，設定超過五個，就不給 push 或 pull 了，完成版本控制後，接著就是專案的自動測試，在 github 上面，推的就是 <a href=https://travis-ci.org/ target=_blank>travis-ci</a>，這也是全部 open source 專案的喜好，你會發現大部分的專案都會放上 <a href=https://github.com/appleboy/backbone-template-engine/blob/master/.travis.yml target=_blank>.travis.yml</a>，來告訴 travis 需要的測試步驟，測試步驟完成後，就要將 source code deploy 到 Amazone 或其他雲端服務，到這個服務基本上都要收費了，所以<a href=http://blog.wu-boy.com/2013/10/drone-io-with-runy-compass-setup/ target=_blank>上一篇</a>有介紹 <a href=https://drone.io/ target=_blank>Drone.io</a> 服務，可以自動測試加上 Deploy 到遠端機器，不過缺點就是不支援 Private Project，要的話就是要收費。</p>
+<a href=https://blog.wu-boy.com/2013/11/intergrate-work-flow-with-gitlab/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/10/haproxy-get-user-real-ip-using-codeigniter/>
 <h2 class=post-title>HAProxy 搭配 CodeIgniter 取使用者真實 IP</h2>
 </a>
@@ -346,36 +370,6 @@ Linode 512 goes from 20GB to 24GB Linode 1GB goes from 40GB to 48GB Linode 2GB g
 <a href=https://blog.wu-boy.com/tags/amazon/>Amazon</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linode/>Linode</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/vps/>VPS</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/06/how-to-install-xdebub-extension-on-ubuntu/>
-<h2 class=post-title>PHP 程式設計師必備 Xdebug extension 安裝 on Ubuntu</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 17, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;95&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/5806873037/ title="xdebug-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm6.static.flickr.com/5108/5806873037_823aef3cd1_o.png?resize=200%2C116&ssl=1" alt=xdebug-logo data-recalc-dims=1></a>
-</div> 之前寫了一篇
-<p><a href=http://blog.wu-boy.com/2011/06/%E5%A5%BD%E7%94%A8-php-debug-extension-xdebug-on-freebsd-%E5%AE%89%E8%A3%9D/ target=_blank>在 FreeBSD 的安裝方式</a>，這次來紀錄如何在 Ubuntu 系統上安裝 <a href=http://xdebug.org/ target=_blank>Xdebug PHP extension</a>，開發網頁有太多的 debug 工具，其實最重要只要找到合適的開發環境，縮短專案開發程式時間，那底下就是介紹如何安裝在 Ubuntu 12.04 系統上。</p>
-<h3 id=系統安裝-透過-ubuntu-內建程式-apt-安裝即可>系統安裝 透過 Ubuntu 內建程式 apt 安裝即可</h3>
-<pre class="brush: bash; title: ; notranslate" title># php xdebug
-aptitude -y install php5-dev
-aptitude -y install php-pear
-pecl install xdebug</pre>
-<a href=https://blog.wu-boy.com/2012/06/how-to-install-xdebub-extension-on-ubuntu/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/xdebug/>Xdebug</a>&nbsp;
 </div>
 </article>
 </div>

@@ -103,6 +103,33 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%B7%A8%E8%BC%AF%E4%BA%8B%E4%BB%B6/>
+<h2 class=post-title>[PHP] Zend 使用 Google Calendar API – 編輯事件</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 28, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;326&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>上一篇介紹了瀏覽 Google Calendar API 範圍內所有的事件，有沒有發現在 index.php 就有瀏覽單一事件的連結，我們透過 API 可以取得單一事件的 evenID，取得的方式就是透過 <a href=http://tw2.php.net/basename>basename</a> 函式：</p>
+<pre class="brush: php; title: ; notranslate" title>basename($event->id->text)</pre> 我們可以利用 $_GET 方式讀取到 evenID 值，傳送到 event.php 來接收
+<pre class="brush: php; title: ; notranslate" title>$eventId = ( isset($_POST['id']) ) ? $_POST['id'] : $_GET['id'];</pre> 1. 新增 event.php 檔案，寫入開頭：
+<pre class="brush: php; title: ; notranslate" title>where as $where) {
+  $whereValue = $where->valueString;//地點
+}
+?></pre>
+<a href=https://blog.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%B7%A8%E8%BC%AF%E4%BA%8B%E4%BB%B6/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/zend-framework/>Zend Framework</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/03/php-zend-%E4%BD%BF%E7%94%A8-google-calendar-api-%E7%80%8F%E8%A6%BD%E4%BA%8B%E4%BB%B6/>
 <h2 class=post-title>[PHP] Zend 使用 Google Calendar API – 瀏覽事件</h2>
 </a>
@@ -350,38 +377,6 @@ $(<span style=color:#cd5555>&#39;#selectList :selected&#39;</span>).text();
 <div class=post-entry>
 <p>轉貼自：<a href=http://but.tw/2008/10/programmers_rule/>程式設計師的格言</a> <strong>我覺得有些話真的還蠻中肯的。</strong> 程式設計師的格言（盜作不少） 譯自 <a href=http://www2.biglobe.ne.jp/~oni_page/other/etc/pr03.html>http://www2.biglobe.ne.jp/~oni_page/other/etc/pr03.html</a> <a href="http://mixi.jp/view_community.pl?id=1772737">http://mixi.jp/view_community.pl?id=1772737</a> (版本4 2008/12/16更新) 譯註 SE是日本軟體公司裡程式設計師的頭子。自己不太寫程式，主要工作是跟客戶確認規格。 程式設計師多半自己不面對客戶。 在台灣隨公司不同，比較接近SA或PM。 總之就保留原樣寫SE囉。</p>
 <a href=https://blog.wu-boy.com/2009/03/%E8%BD%89%E8%B2%BC%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E6%A0%BC%E8%A8%80/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/03/pear-%E5%88%A9%E7%94%A8-validate-%E5%A5%97%E4%BB%B6%E9%A9%97%E8%AD%89-e-mail-%E5%A4%9A%E9%87%8D%E8%A1%A8%E5%96%AE%E8%AA%8D%E8%AD%89/>
-<h2 class=post-title>[Pear] 利用 Validate 套件驗證 E-mail 多重表單認證</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 15, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;533&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近都在玩 <a href=http://en.wikipedia.org/wiki/Open_source>open source</a> 的程式，方便加速自己開發 PHP 的專案，在申請帳號密碼部份就可以利用 <a href=http://pear.php.net/package/Validate>Validate</a> 套件來驗證，以及 email 填寫正確性，可以檢查 MX 或者是 A record 紀錄，還蠻方便的，也可以檢查 <a href=http://pear.php.net/package/Validate/docs/0.8.2/Validate/Validate.html#methodmultiple>multiple</a> 欄位，設計的相當不錯，也有金融相關套件可以驗證 <a href=http://en.wikipedia.org/wiki/Credit_card>CreditCard</a>，金融套件名稱是 <a href=http://pear.php.net/package/Validate_Finance>Validate_Finance</a> 裡面的 <a href=http://pear.php.net/package/Validate_Finance_CreditCard>Validate_Finance_CreditCard</a> 部份，線上也有很多相關說明，可以參考 <a href=http://pear.php.net/package/Validate/docs/0.8.2/>Validate 線上手冊</a>，目前已經到 0.8.2 (beta)，如果使用 Release 版本，請選用 0.8.1，軟體可以在此<a href=http://pear.php.net/package/Validate/download/>下載</a>，0.8.2 是在 2009-01-31 Release 出來的，還不錯用，最主要的功能如下</p>
-<blockquote>
-<p>Package to validate various datas. It includes : - numbers (min/max, decimal or not) - email (syntax, domain check, <a href=http://www.w3.org/Protocols/rfc822/>rfc822</a>) - string (predifined type alpha upper and/or lowercase, numeric,&mldr;) - date (min, max, rfc822 compliant) - uri (<a href=http://www.w3.org/2002/11/dbooth-names/rfc2396-numbered_clean.htm>RFC2396</a>) - possibility valid multiple data with a single method call (::multiple)</p>
-</blockquote>
-<ol>
-<li>驗證各種不同的日期函式</li>
-<li>驗證數字(最小/最大,是否是10進位)</li>
-<li>email 驗證(正規語法驗證，check domain name 是否存在，<a href=http://www.w3.org/Protocols/rfc822/>rfc822</a> 驗證)</li>
-<li>字串驗證(正規語法驗證，是否包含數字英文字母，可輸入最長或最短)</li>
-<li>url 驗證(遵從 <a href=http://www.w3.org/2002/11/dbooth-names/rfc2396-numbered_clean.htm>RFC2396</a> 規定)</li>
-<li>多重欄位(multiple data)驗證(可以同時驗證上述功能)</li>
-</ol>
-<a href=https://blog.wu-boy.com/2009/03/pear-%E5%88%A9%E7%94%A8-validate-%E5%A5%97%E4%BB%B6%E9%A9%97%E8%AD%89-e-mail-%E5%A4%9A%E9%87%8D%E8%A1%A8%E5%96%AE%E8%AA%8D%E8%AD%89/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/pear/>PEAR</a>&nbsp;
 </div>
 </article>
 </div>

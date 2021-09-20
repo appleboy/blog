@@ -103,6 +103,24 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2006/12/mrtg-server-performace/>
+<h2 class=post-title>MRTG Server performace</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 5, 2006
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;119&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+每次看到 每5分鐘執行 mrtg 的時候， 以root身份去執行它，會使系統瞬間負載增加 就算在好的電腦，我發現在mrtg畫圖的瞬間，還是會使系統負擔，要如何避免這樣呢
+The RunAsDaemon keyword enables daemon mode operation. The purpose of daemon mode is that MRTG is launched once and not repeatedly (as it is with cron). This behavior saves computing resourses as loading and parsing of configuration files happens only once. Using daemon mode MRTG itself is responible for timing the measurement intervals. Therfore its important to set the Interval keyword to an apropiate value.
+<a href=https://blog.wu-boy.com/2006/12/mrtg-server-performace/ class=post-read-more>[Read More]</a>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2006/12/linux-%E5%AE%89%E8%A3%9D%E4%BD%BF%E7%94%A8-webalizer/>
 <h2 class=post-title>[Linux] 安裝使用 Webalizer</h2>
 </a>
@@ -341,26 +359,6 @@ This package is an installer package, it does not actually contain the J2SDK doc
 最近館內買了一台2u的伺服器，雙cpu AMD，底下圖片上面那台，下面那台是後端的圖片資料庫
 DSCF0070 Hosted on Zooomr processor : 1 vendor_id : AuthenticAMD cpu family : 15 model : 37 model name : AMD Opteron(tm) Processor 248 stepping : 1 cpu MHz : 2193.217 cache size : 1024 KB MemTotal: 2055132 kB 2顆，不過重點不是這個，重點這台機器我搞了1個星期 就是因為抓不到scsi介面卡，打電話給客服，好像機器不是他們裝的 原本機器送過裝好suse 9.0 enterorise server，可是我不喜歡suse，還可以安裝桌面 一堆有的沒有程式，所以我只好砍掉自己系統重做，不過原本想用freebsd 6.1 release 也沒辦法 外接卡不支援freebsd 那就別安裝了，根本抓不到硬碟，最後上網找driver，終於找到for fc centos 想說沒玩過centOS 4.4 就裝來玩看看 , 順便動手切了LVM DSCF0075 Hosted on Zooomr 安裝好之後機器大概就ok了，沒什麼問題 這台機器，是在 捷洲資訊股份有限公司 台中分公司台中市南屯區大英街636號 Web Site : http://www.
 <a href=https://blog.wu-boy.com/2006/11/linux-centos-%E5%AE%89%E8%A3%9D%E5%9C%A8-2u-server/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2006/10/linux-%E4%BD%BF%E7%94%A8-yum-%E6%9B%B4%E6%96%B0-redhat-enterprise-server-4/>
-<h2 class=post-title>[Linux] 使用 yum 更新 redhat enterprise server 4</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 28, 2006
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;153&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-由於 redhat enterprise server 4 伺服器版本，沒有提供線上升級套件的功能yum 所以我利用 centos的yum/apt的server來更新 設定檔如下 [base] name=Fedora Core $releasever – $basearch – Base baseurl=http://ftp.isu.edu.tw/pub/Linux/CentOS/4.4/os/$basearch/ [updates-released] name=Fedora Core $releasever – $basearch – Released Updates baseurl=http://ftp.isu.edu.tw/pub/Linux/CentOS/4.4/updates/$basearch/ 更新 yum 指令如下 yum的常用指令: yum update [套件1] [套件2] […] 更新套件,若後面不加任何的套件,則會更新所有系統目前已經安裝了的套件 yum install 套件1 [套件2] […] 安裝套件 yum upgrade [套件1] [套件2] […] 升級套件,將一些過舊即將洮汰的套件也一起升級 yum remove 套件1 [套件2] […] 移除套件 yum clean packages 清除暫存(/var/cache/yum)目錄下的套件 yum clean headers 清除暫存(/var/cache/yum)目錄下的 headers yum clean oldheaders 清除暫存(/var/cache/yum)目錄下舊的 headers yum clean 或是 yum clean all 清除暫存(/var/cache/yum)目錄下的套件及舊的 headers 等於是執行 yum clean packages 及 yum clean oldheaders yum list 列出所有的套件 yum list updates 列出所有可以更新的套件 yum list installed 列出所有已安裝的套件 yum list extras 列出所有已安裝但不在 Yum Repository 內的套件 yum list [參數] 列出所指定的套件,參數可以是套件名稱或是在 shell 中所使用的表示式,如 ?
-<a href=https://blog.wu-boy.com/2006/10/linux-%E4%BD%BF%E7%94%A8-yum-%E6%9B%B4%E6%96%B0-redhat-enterprise-server-4/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;

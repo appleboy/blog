@@ -103,6 +103,26 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/03/ubuntu-%E5%AE%89%E8%A3%9D-apache-php5-%E9%81%87%E5%88%B0%E7%9A%84%E5%95%8F%E9%A1%8C/>
+<h2 class=post-title>[Ubuntu] 安裝 apache php5 遇到的問題</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 7, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;43&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>很奇怪的，今天在安裝 apache2 跟 php5 想說很簡單，可是安裝好，寫測試檔測試的時候，發現當會變成下載 php5 的檔案，然後我看了一下 apache2.conf 觀察到如下 <ifmodule mod_php5.c> AddType application/x-httpd-php .php .phtml .php3 AddType application/x-httpd-php-source .phps </ifmodule> LoadModule php5_module /usr/lib/apache2/modules/libphp5.so 然後我去 /usr/lib/apache2/modules/ 底下看，也有看到 libphp5.so 這個檔案，但是就是不能執行 php，後來在 ubuntu 官網找到解答，解答方法如下</p>
+<blockquote>
+<p>檢查 /etc/apache2/mods-enabled 內有沒有php5.conf , php5.load若沒有, 請 sudo a2enmod php5 重新啟動 apahce2 sudo /etc/init.d/apache2 restart
+<a href="http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?viewmode=flat&type=&topic_id=5298&forum=9"> http://www.ubuntu.org.tw/modules/newbb/viewtopic.php?viewmode=flat&type=&topic_id=5298&forum=9</a></p>
+</blockquote>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/02/apache-mod_rewrite-%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95%EF%BC%8C%E7%B6%B2%E5%9F%9F-redirect/>
 <h2 class=post-title>[Apache] mod_rewrite 進階用法，網域 redirect</h2>
 </a>
@@ -324,25 +344,6 @@ ForceBandWidthModule [On|Off] 這個設定預設情形，他不會對每個要�
 BandWidth [From] [bytes/s] 這個設定有2個參數，第一是from，第二是速度，第一你可以用整個ip位址，或者是network mask例如：192.168.0.0/24 or 192.168.0.0/255.255.255.0) or all。最後的all就是全部皆可，不限制 BandWidth localhost 10240 BandWidth 192.168.218.5 0 上面針對 localhost 給 10KB的速度，然後針對 192.168.218.5 不限制速度 在版本0.8還可以針對client端的瀏覽器做限制
 BandWidth u:[User-Agent] [bytes/s] 你可以利用正規語法比對client端瀏覽器 BandWidth &ldquo;u:^Mozilla/5(.
 <a href=https://blog.wu-boy.com/2007/08/apache-mod_bw-%E9%A0%BB%E5%AF%AC%E4%B8%8B%E8%BC%89%E9%99%90%E5%88%B6/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/07/lftp-%E5%9C%A8-utf-8-%E7%B3%BB%E7%B5%B1%E5%BA%95%E4%B8%8B%EF%BC%8C%E9%80%A3%E6%8E%A5big5%E7%AB%99%E5%8F%B0/>
-<h2 class=post-title>lftp 在 utf-8 系統底下，連接big5站台</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 16, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;8&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>在utf-8的ubuntu底下，如果使用lftp連接到big5或者是不支援unicode的站台，會出現亂碼，解決方法就是 在列出目錄之前，下底下指令 進入 lftp 後用</p>
-<pre class="brush: bash; title: ; notranslate" title>set ftp:charset Big5
-</pre><blockquote>
-</blockquote>
 </div>
 </article>
 </div>

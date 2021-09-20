@@ -103,6 +103,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/>
+<h2 class=post-title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;672&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<blockquote>
+<p>線上課程:『<a href="https://www.udemy.com/course/golang-fight/?couponCode=202002" title="Docker 容器實用實戰">Go 語言實戰</a>』目前特價 <strong>$2100 TWD</strong>，優惠代碼『<strong>202003</strong>』，也可以直接匯款（價格再減 <strong>100</strong>），如果想搭配另外兩門課程合購可以透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a></p>
+</blockquote>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>上一篇作者有提到『<a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>什麼是 graceful shutdown?</a>』，本篇透過 docker-compose 方式來驗證 <a href=https://golang.org>Go 語言</a>的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 <a href=https://docker.com>Docker</a> 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 <a href=https://kubernetes.io/>kubernetes</a> 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。</p>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/docker-compose/>Docker compose</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>
 <h2 class=post-title>[Go 教學] 什麼是 graceful shutdown?</h2>
 </a>
@@ -310,28 +336,6 @@
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/minio/>minio</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/s3/>s3</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/>
-<h2 class=post-title>架設 Go Proxy 服務加速 go module 下載速度</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 10, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;171&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p><a href=https://golang.org>Go 語言</a>在 1.11 推出 go module 來統一市面上不同管理 Go 套件的工具，像是 <a href=https://github.com/golang/dep>dep</a> 或 govendor 等，還不知道如何使用 go module，可以參考之前寫的一篇文章『<a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</a>』，在團隊內如果每個人在開發專案時，都透過網路去下載專案使用到的套件，這樣 10 個人就會浪費 10 個人的下載時間，並且佔用公司網路頻寬，所以我建議在公司內部架設一台 Go Proxy 服務，減少團隊在初始化專案所需要的時間，也可以減少在跑 CI/CD 流程時，所需要花費的時間，測試過公司 CI/CD 流程，有架設 Go Proxy，一般來說可以省下 1 ~ 2 分鐘時間，根據專案使用到的相依性套件用量來決定花費時間。本篇來介紹如何架設 <a href=https://github.com/gomods/athens>ATHENS</a> 這套開源 Go Proxy 專案。</p>
-<a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

@@ -103,6 +103,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/08/golang-project-layout-and-practice/>
+<h2 class=post-title>Go 語言目錄結構與實踐</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 31, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;105&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>很高興今年錄取 <a href=https://modernweb.tw/>Modernweb</a> 講師，又有機會去宣傳 <a href=https://golang.org>Go 語言</a>，這次的議程最主要跟大家介紹 Go 專案的目錄該如何設計，一個基本的專案該需要有哪些功能，以及如何實現。大家剛入門 Go 時，肯定會開始找是否有一套 Web Framework 可以參考實踐，可惜的是，在 Go 語言沒有定義任何的目錄結構，所有的結構都可以根據團隊的狀況而有所改變，而這邊我想強調的是如果能讓團隊看到結構後，一目瞭然知道什麼功能該放哪個目錄，或什麼目錄內大概有什麼功能，那其實就夠了。看了許多開源專案，每個設計方式都是不同，但是當你要找什麼功能時，其實從根目錄就可以很清楚的知道要進入哪個地方可以找到您想要的功能及程式碼。這次在 Moderweb 上面的議題，就是分享我在開源專案所使用的目錄結構，以及結構內都放哪些必要的功能。</p>
+<a href=https://blog.wu-boy.com/2019/08/golang-project-layout-and-practice/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/08/minio-remove-healthcheck-script-for-docker-image/>
 <h2 class=post-title>Minio 從 Docker 容器移除 healthcheck 腳本</h2>
 </a>
@@ -315,30 +336,6 @@
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/heroku/>Heroku</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/>
-<h2 class=post-title>Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 20, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;324&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><strong>2019.10.23 本篇教學以 Traefik 1.7 版本為主</strong></p>
-<p><a href="https://lh3.googleusercontent.com/sggr23jjw2BJb3HMIpM9RtSTetm8TeEuk1CCbV6658ZZO5CCwEPK2YdGpOYPFrw4fansfS-aMNE5h-uv-8s7quNiuj4EU-UF0DBaNbKZt3YyNruAICq6JxUss9S5IPAC7TQfQlHbL2M=w1920-h1080"><img src="https://lh3.googleusercontent.com/sggr23jjw2BJb3HMIpM9RtSTetm8TeEuk1CCbV6658ZZO5CCwEPK2YdGpOYPFrw4fansfS-aMNE5h-uv-8s7quNiuj4EU-UF0DBaNbKZt3YyNruAICq6JxUss9S5IPAC7TQfQlHbL2M=w1920-h1080" alt></a></p>
-<p>之前寫過蠻多篇 <a href="https://blog.wu-boy.com/?s=+Let%27s+Encrypt" title="Let's Encrypt 的使用教學">Let&rsquo;s Encrypt 的使用教學</a>，但是這次要跟大家介紹一套非常好用的工具 <a href=https://traefik.io/ title=Traefik>Traefik</a> 搭配自動化更新 Let&rsquo;s Encrypt 憑證，為什麼會推薦 Traefik 呢，原因在於 Traefik 可以自動偵測 Docker 容器內的 Label 設定，並且套用設定在 Traefik 服務內，也就是只要修改服務的 docker-compose 內容，重新啟動，Traefik 就可以抓到新的設定。這點在其它工具像是 <a href=https://www.nginx.com/ title=Nginx>Nginx</a> 或 <a href=https://caddyserver.com title=Caddy>Caddy</a> 是無法做到的。底下我們來一步一步教大家如何設定啟用前後端服務。全部程式碼都放在 <a href=https://github.com/go-training/training/tree/master/example25-traefik-golang-app-lets-encrypt title="GitHub 上面">GitHub 上面</a>了。</p>
-<a href=https://blog.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/letsencrypt/>Letsencrypt</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/traefik/>traefik</a>&nbsp;
 </div>
 </article>
 </div>

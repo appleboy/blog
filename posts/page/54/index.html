@@ -103,6 +103,53 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/>
+<h2 class=post-title>[編輯器] CKeditor 更換 background-color and font-size</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 30, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;162&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+相信大家在製作 Web 過程，一定會用到編輯器，然而 CKeditor 前身 FCKeditor 非常有名，FCKeditor 運行了六年之久，在去年2009年的時候，轉換成了 CKeditor，目前開發團隊也專注於此版本，現在已經推出到 CKEditor 3.2 released!，可以參考 CKEditor 3.x - Developer&rsquo;s Guide，裡面也整合了 jQuery，替很多開發者想到更多管道去整合網站，然而今天設計網站，需要改變編輯器的背景顏色，預設是白色背景，但是並非所有網站都是白色呈現，所以才需要動到背景顏色，這樣好讓使用者可以融入整個背景，在 Plurk 發表了這問題，也找了官方論壇，都沒有發現正確解答，官方論壇有篇類似問題：Change the background color of the CKEditor text area，這篇自己試過是沒有用的，正確解法可以參考 CKeditor 的 API:contentsCss。 1. 首先在 CKeditor 根目錄建立新檔案：mysitestyles.css
+body
+{
+/* Font */
+font-family: Arial, Verdana, sans-serif;
+font-size: 12px;
+/* Text color */
+color: #f0f0f0;
+/* Remove the background color to make it transparent */
+background-color: #353c42;
+}
+html
+{
+/* #3658: [IE6] Editor document has horizontal scrollbar on long lines
+To prevent this misbehavior, we show the scrollbar always */
+_overflow-y: scroll
+}
+img:-moz-broken
+{
+-moz-force-broken-image-icon : 1;
+width : 24px;
+height : 24px;
+}
+img, input, textarea
+{
+cursor: default;
+} 2.
+<a href=https://blog.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/ckeditor/>CKeditor</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/fckeditor/>FCKeditor</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/03/apache-%E5%8F%96%E5%BE%97%E9%80%8F%E9%81%8E-reverse-proxy-varnish-%E7%9A%84-client-%E7%9C%9F%E6%AD%A3-ip-mod_rpaf/>
 <h2 class=post-title>Apache 取得透過 Reverse Proxy (Varnish) 的 Client 真正 IP (mod_rpaf)</h2>
 </a>
@@ -322,25 +369,6 @@ if not exist !
 <a href=https://blog.wu-boy.com/tags/chrome/>Chrome</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/02/phpbb-3-1-%E7%89%88%E6%9C%AC%E5%B0%87%E4%B8%8D%E5%86%8D%E6%94%AF%E6%8F%B4-php4/>
-<h2 class=post-title>phpBB 3.1 版本將不再支援 PHP4</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 31, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;61&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>在 <a href=http://www.phpbb.com/>phpBB</a> 官方網站看到這篇：『<a href="http://www.phpbb.com/community/viewtopic.php?f=14&t=1958605">phpBB 3.1 to discontinue support for PHP versions below 5.2</a>』，內容大致上是說 phpBB 3.0 &ldquo;Olympus&rdquo; 系列的版本將是 phpBB 支援 php 4 最後一個版本，之後所推出的 phpBB 3.1 &ldquo;Ascraeus&rdquo; 版本，PHP 需要 5.2 或者是更高才可以正確執行。隨著 3.1 版本的推出，3.0 將會繼續維護 6~9 個月的時間，這版本將會繼續維持相容於 php 4 系統。 由於 phpBB 3.1 還處於開發的階段，尚未決定發佈日期，所以大家還是有很多時間可以將 php 升級到 5.2.0 或者是更高。看到 phpBB 可以捨棄 php 4 還蠻高興的，自己本身玩 phpBB 多年，看到 2.0 到 3.0 的變化蠻大的，php 4 安全姓做的非常不好，所以導致 code 非常隴長，希望 3.1 可以快點推出。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;
 </div>
 </article>
 </div>

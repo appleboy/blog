@@ -116,6 +116,56 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/08/codeigniter-%E5%88%A9%E7%94%A8-jquery-%E7%B0%A1%E6%98%93%E9%A9%97%E8%AD%89%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E8%99%9Femail/>
+<h2 class=post-title>[CodeIgniter] 利用 jQuery 簡易驗證使用者帳號/Email</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 26, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;166&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;width:100%;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/4928689646/ title="codeigniter_2 by appleboy46, on Flickr"><img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?resize=137%2C189&ssl=1" alt=codeigniter_2 data-recalc-dims=1></a>
+</div> 好久沒寫相關
+<p><a href=http://CodeIgniter.com>CodeIgniter</a> 文章，針對於剛入門 CI 的新手們，此篇教學如何使用 <a href=http://jquery.com/>jQuery</a> AJAX 搭配 CI 來驗證使用者帳號及相關資訊，本篇教學帶您如何在 CI 中發出 AJAX request 給伺服器端。 請先在網頁 header 自行 include jQuery 檔案，或者可以使用 <a href=http://code.google.com/intl/zh-TW/apis/libraries/devguide.html>Google AJAX CDN</a> 方式來讀取，將底下程式碼放到 </header> 之前：</p>
+<pre class="brush: jscript; title: ; notranslate" title>$(document).ready(function() {
+    /* 先停止讀取狀態 */
+    $('#Loading').hide();
+
+    /* 填寫好 email 欄位，按下 Tab 會進行讀取 */
+    $('#email').blur(function(){
+    /* 讀取 email 欄位 */
+	var a = $("#email").val();
+    /* email 正規語法 */
+	var filter = /^[a-zA-Z0-9]+[a-zA-Z0-9_.-]+[a-zA-Z0-9_-]+@[a-zA-Z0-9]+[a-zA-Z0-9.-]+[a-zA-Z0-9]+.[a-z]{2,4}$/;
+    /* 簡易驗證 email */
+	if(filter.test(a)){
+        /* 讀取狀態 */
+		$('#Loading').show();
+        /* AJAX 比對資料庫 */
+		$.post("controller_name/check_email_availablity", {
+			email: $('#email').val()
+		}, function(response){
+            /* 驗證後讀取 reponse 狀態 */
+			$('#Loading').hide();
+			setTimeout("finishAjax('Loading', '"+escape(response)+"')", 400);
+		});
+		return false;
+	}
+});
+</pre>
+<a href=https://blog.wu-boy.com/2010/08/codeigniter-%E5%88%A9%E7%94%A8-jquery-%E7%B0%A1%E6%98%93%E9%A9%97%E8%AD%89%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E8%99%9Femail/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/08/vim-%E5%B0%87-tab-%E8%BD%89%E6%8F%9B%E6%88%90-space/>
 <h2 class=post-title>[Vim] 將 Tab 轉換成 Space</h2>
 </a>
@@ -397,30 +447,6 @@ pr_info("
 <a href=https://blog.wu-boy.com/tags/driver/>Driver</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/kernel/>Kernel</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/07/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F%E9%81%93%E6%98%8E%E4%B8%AD%E5%AD%B8%E6%AD%A6%E5%BB%9F%E8%B7%AF%E5%A5%BD%E5%90%83%E8%87%AD%E8%B1%86%E8%85%90/>
-<h2 class=post-title>[高雄美食]道明中學武廟路好吃愛嬌姨臭豆腐</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 24, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;6&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/4783335906/ title="Flickr 上 appleboy46 的 IMG_1290"><img src="https://i2.wp.com/farm5.static.flickr.com/4116/4783335906_6df8eacf93.jpg?resize=500%2C375&ssl=1" alt=IMG_1290 data-recalc-dims=1></a>
-</div>
-<p>我相信在高雄要吃到好吃的臭豆腐，無非就是豪記臭豆腐，大家可以參考<a href=http://blog.sina.com.tw/akane847/>懶喵兒滴窩</a>：『<a href="http://blog.sina.com.tw/akane847/article.php?pbgid=7423&entryid=612784">[高雄-三民]豪記臭豆腐王【港式臭豆腐專賣店】 (新址)</a>』，但是這次要來介紹也許在高雄比較少人知道的路邊攤臭豆腐，它位於高雄市武廟路上一間不起眼的臭豆腐，<a href=http://www.dmhs.kh.edu.tw/>道明中學</a>對面巷子走進去接到武廟路就可以吃到了，營業時間是下午15:30~19:40，時間不長，但是大排長龍阿，想要去吃的，最好不要挑晚餐時間，因為自己那個時間去吃，至少等了半小時。</p>
-<a href=https://blog.wu-boy.com/2010/07/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F%E9%81%93%E6%98%8E%E4%B8%AD%E5%AD%B8%E6%AD%A6%E5%BB%9F%E8%B7%AF%E5%A5%BD%E5%90%83%E8%87%AD%E8%B1%86%E8%85%90/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/%E8%87%AD%E8%B1%86%E8%85%90/>臭豆腐</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;
 </div>
 </article>
 </div>

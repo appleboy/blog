@@ -103,6 +103,51 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/02/linux-%E5%BB%BA%E6%A7%8B-ubuntu-10-10-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83/>
+<h2 class=post-title>[Linux] 打造 Ubuntu 10.10 嵌入式系統 Embedded System 開發環境</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 10, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;152&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>作者於公司內部擔任<a href=http://en.wikipedia.org/wiki/Embedded_system>嵌入式系統</a>(Embedded System)工程師，由於嵌入式系統開發環境，本 Team 大多是用於 <a href=http://fedoraproject.org/>Fedora</a> 作業系統，個人覺得 Fedora 太肥了，所以打造了 <a href=http://www.ubuntu-tw.org/>Ubuntu</a> 的環境，針對於各家不同晶片廠商所提供的 <a href=http://en.wikipedia.org/wiki/Toolchain>ToolChain</a> 及 Code base 進行編譯，其實也不會很難，修改 Makefile 檔案大致上都可以完成，安裝各種不同版本的 gcc 來搭配各家 <a href=http://en.wikipedia.org/wiki/Vendor>Vendor</a> 所提供的環境，底下是剛安裝好 Ubuntu 10.10 版本所需要的一些軟體套件，利用 apt-get 指令就可以安裝完成:</p>
+<pre class="brush: bash; title: ; notranslate" title>#!/bin/sh
+apt-get update
+apt-get -y install openssh-server
+apt-get -y install vim
+apt-get -y upgrade
+apt-get -y install build-essential
+apt-get -y install git
+apt-get -y install subversion
+apt-get -y install bison
+apt-get -y install flex
+apt-get -y install gettext
+apt-get -y install g++
+apt-get -y install libncurses5-dev
+apt-get -y install libncursesw5-dev
+apt-get -y install exuberant-ctags
+apt-get -y install sharutils
+apt-get -y install help2man
+apt-get -y install zlib1g-dev libssl-dev
+# for samba 3.0.2 
+apt-get -y install gawk 
+# for Ralink      
+apt-get -y install libid3tag0-dev
+apt-get -y install libgdbm-dev</pre>
+<a href=https://blog.wu-boy.com/2011/02/linux-%E5%BB%BA%E6%A7%8B-ubuntu-10-10-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/embedded-system/>Embedded System</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/02/%E6%96%B0%E8%81%9E-codeigniter-%E7%99%BC%E4%BD%88-2-0-0-%E7%89%88-release/>
 <h2 class=post-title>[新聞] CodeIgniter 發佈 2.0.0 版 Release</h2>
 </a>
@@ -372,29 +417,6 @@ Arch Linux 2010.05 (i386 and x86_64) CentOS 5.5 (i386 and x86_64) Debian 5.0 (i3
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/12/linux-virtualbox-ubuntu-10-10-%E7%B7%A8%E8%AD%AF%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1/>
-<h2 class=post-title>[Linux] VirtualBox + Ubuntu 10.10 編譯嵌入式系統</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 4, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;57&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style=float:left;margin-right:25px>
-<a href=https://www.flickr.com/photos/appleboy/4105985126/ title="vbox_logo2_gradient (by appleboy46)"><img src="https://i1.wp.com/farm3.static.flickr.com/2522/4105985126_591a664ca4_o.png?resize=140%2C180&ssl=1" title="vbox_logo2_gradient (by appleboy46)" alt="vbox_logo2_gradient (by appleboy46)" data-recalc-dims=1></a>
-</div> 最近使用
-<p><a href=http://www.ubuntu-tw.org/>Ubuntu</a> 來編譯嵌入式的環境，由於個人比較不喜歡 <a href=http://fedora.tw/>Fedora</a> 的系統，所以自己用了 <a href=http://www.virtualbox.org/>VirtualBox</a> 來搭配 10.10 的 Ubuntu 系統，在這裡提醒一下，請安裝最新版的 <strong>VirtualBox 3.2.12 for Windows hosts</strong>，否則在安裝 Ubuntu 之後，繼續安裝 Guest Addition 的時候會當機喔，重開機之後可以看到桌面多出一個光碟，是要您繼續安裝 Additions <a href=https://www.flickr.com/photos/appleboy/5230492977/ title="VirtualBox + Ubuntu by appleboy46, on Flickr"><img src="https://i1.wp.com/farm6.static.flickr.com/5128/5230492977_ea049b4d9b.jpg?resize=500%2C276&ssl=1" alt="VirtualBox + Ubuntu" data-recalc-dims=1></a> 切換到該光碟目錄</p>
-<pre class="brush: bash; title: ; notranslate" title>cd /media/VBOXADDITIONS_3.2.12_68302/</pre> 直接執行
-<pre class="brush: bash; title: ; notranslate" title>sh VBoxLinuxAdditions-x86.run</pre> 重新開機就完成了，可以直接切換視窗大小...等，編譯 gcc 必須要一些 Cross tool，利用 apt-get 方式安裝:
-<pre class="brush: bash; title: ; notranslate" title>apt-get install build-essential</pre> 安裝額外 USB 裝置: 視窗上面 Devices -> USB Devices 選擇你要的外接硬碟，會跳出 Windows 安裝額外 Driver
-<p><a href=https://www.flickr.com/photos/appleboy/5230491839/ title="VirtualBox + Ubuntu 10.10 by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.static.flickr.com/5205/5230491839_0486144dc4.jpg?resize=396%2C308&ssl=1" alt="VirtualBox + Ubuntu 10.10" data-recalc-dims=1></a> 直接按 Continue Anyway <a href=https://www.flickr.com/photos/appleboy/5230491869/ title="VirtualBox + Ubuntu 10.10 by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.static.flickr.com/5123/5230491869_0b65019a5c.jpg?resize=500%2C383&ssl=1" alt="VirtualBox + Ubuntu 10.10" data-recalc-dims=1></a> 完成 <a href=https://www.flickr.com/photos/appleboy/5230491883/ title="VirtualBox + Ubuntu 10.10 by appleboy46, on Flickr"><img src="https://i1.wp.com/farm6.static.flickr.com/5082/5230491883_923604958e.jpg?resize=500%2C383&ssl=1" alt="VirtualBox + Ubuntu 10.10" data-recalc-dims=1></a> 補上 Ubuntu 畫面 <a href=https://www.flickr.com/photos/appleboy/5231085398/ title="VirtualBox + Ubuntu 10.10 by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.static.flickr.com/5085/5231085398_0f81217c05.jpg?resize=500%2C304&ssl=1" alt="VirtualBox + Ubuntu 10.10" data-recalc-dims=1></a></p>
 </div>
 </article>
 </div>

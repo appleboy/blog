@@ -116,6 +116,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/01/caddy-harbor-docker-registry/>
+<h2 class=post-title>Caddy 搭配 Harbor 自架私有 Docker Registry</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 4, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;213&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/25660808075/in/dateposted-public/ title=docker><img src="https://i2.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_z.jpg?w=840&ssl=1" alt=docker data-recalc-dims=1></a></p>
+<p><a href=http://vmware.github.io/harbor/>Harbor</a> 是由 <a href=https://www.vmware.com>VMWare</a> 公司用 <a href=https://golang.org>Go 語言</a>所開發的開源軟體，它可以讓團隊存放各種不同的私有 <a href=https://www.docker.com/>Docker</a> 映像檔，假如團隊內沒考慮 <a href=https://aws.amazon.com/tw/ecr/>AWS 的 ECR</a> 或者是 Google 提供的 <a href=https://cloud.google.com/container-registry/>GCR 方案</a>，建議您可以參考看看 Harbor，而 Harbor 提供了簡易的 UI 介面，包含權限控管，及跨區域的自動同步功能，比起自己從官網把 <a href=https://docs.docker.com/registry/#what-it-is>Docker Registry</a> 架起來，功能多上不少。本篇不會教大家如何架設 Harbor，有興趣的可以直接參考<a href=https://github.com/vmware/harbor/blob/master/docs/user_guide.md>官方文件</a>，此篇會紀錄如何透過 Caddy 將憑證用在 Harbor 內部。</p>
+<a href=https://blog.wu-boy.com/2018/01/caddy-harbor-docker-registry/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2017/12/drone-cli-local-testing/>
 <h2 class=post-title>在本機端導入 Drone CLI 做專案測試</h2>
 </a>
@@ -340,28 +361,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/k8s/>k8s</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/kubernetes/>kubernetes</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2017/09/drone-on-kubernetes-on-aws/>
-<h2 class=post-title>用 Kubernetes 將 Drone CI/CD 架設在 AWS</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 23, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;419&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/37237823752/in/dateposted-public/ title="Screen Shot 2017-09-24 at 12.53.39 AM"><img src="https://i0.wp.com/farm5.staticflickr.com/4497/37237823752_68a508e4bb_z.jpg?w=840&ssl=1" alt="Screen Shot 2017-09-24 at 12.53.39 AM" data-recalc-dims=1></a></p>
-<p><a href=https://github.com/drone/drone>Drone</a> 是我今年主推的 CI/CD 自架服務，詳細可以參考<a href=https://blog.wu-boy.com/2017/09/why-i-choose-drone-as-ci-cd-tool/>這篇文章</a>，目前在公司內部團隊使用了一年以上，服務相當穩定。Drone 本身可以透過 <a href=https://github.com/go-training/drone-tutorial>docker-compose 方式</a>快速在機器上架設完成，但是由於 <a href=https://kubernetes.io/>Kubernetes</a> 的盛行，大家也希望能透過 Kubernetes 來安裝 Drone 服務。本篇會教大家如何在 AWS 上透過 Kubernetes 安裝完成。Drone 預設使用 <a href=https://www.sqlite.org/>SQLite</a> 當作資料庫，檔案會直接存放在 <code>/var/lib/drone</code> 路徑底下，但是容器內不支援寫入，所以必須要要額外掛上空間讓 Drone 可以寫入資料。此篇會以 <a href=https://github.com>GitHub</a> 認證 + SQLite 來教學。</p>
-<a href=https://blog.wu-boy.com/2017/09/drone-on-kubernetes-on-aws/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/kubernetes/>kubernetes</a>&nbsp;
 </div>
 </article>

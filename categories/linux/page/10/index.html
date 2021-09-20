@@ -103,6 +103,39 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/10/php%E8%A7%A3%E6%B1%BA-pearmail_mime-%E6%A8%99%E9%A1%8C-utf-8-%E4%BA%82%E7%A2%BC%E5%95%8F%E9%A1%8C%E4%B8%8D%E8%83%BD%E9%A1%AF%E7%A4%BA/>
+<h2 class=post-title>[PHP]解決 PEAR::Mail_Mime 標題 UTF-8 亂碼問題(不能顯示)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 1, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;193&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>話說大家在寫 PHP 的時候，一定會很常用到 mail 這個函式，畢竟一個網站一定會有很多需要用到寄信的地方，我先給大家推薦一下 <a href=http://pear.php.net/package/Mail_Mime>PEAR::Mail_Mime</a> 跟 <a href=http://pear.php.net/package/Mail>PEAR::Mail</a> 這兩個 Pear 的套件，用起來相當不錯，支援 html 跟 UTF-8 或者是 Big5 編碼，我之前寫過一篇 <a title="Permanent Link to [PHP] 好用的 PEAR - PHP Mail and Mail_Mime" rel=bookmark href=http://blog.wu-boy.com/2007/12/18/129/>[PHP] 好用的 PEAR – PHP Mail and Mail_Mime</a>，裡面寫的還蠻詳細的，不過上次有一個問題還沒解決，就是如果用 UTF-8 編碼的標題，會顯示不出來，<a href=http://mail.google.com>Gmail</a> 收到的話就會是 no subject，然後昨天用了一個非常笨的解決方法，改成把標題使用 Big5 就可以了，解決方法如下： <strong>Update：感謝 darkhero 提供解決方法：</strong> 如果要用 UTF-8 的標題：</p>
+<pre class="brush: php; title: ; notranslate" title>$param['head_charset'] = 'utf-8';
+  $hdrs = array(
+                'From'    => 'appleboy.tw@gmail.com',
+                'Subject' => '=?utf8?B?' . base64_encode($subj) . '?=', 
+                'Content-type' => 'text/html; charset=utf-8'
+                ); </pre> 先讓主機支援 PEAR：
+<pre class="brush: bash; title: ; notranslate" title>#
+#  FreeBSD ports 安裝
+cd /usr/ports/devel/pear
+make install clean</pre>
+<a href=https://blog.wu-boy.com/2008/10/php%E8%A7%A3%E6%B1%BA-pearmail_mime-%E6%A8%99%E9%A1%8C-utf-8-%E4%BA%82%E7%A2%BC%E5%95%8F%E9%A1%8C%E4%B8%8D%E8%83%BD%E9%A1%AF%E7%A4%BA/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mail/>mail</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/pear/>PEAR</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/09/php%E5%A6%82%E4%BD%95%E6%8A%8A-yahoo-bbath-%E5%8A%A0%E5%85%A5%E7%B6%B2%E7%AB%99%E5%85%A5%E5%8F%A3%E8%AA%8D%E8%AD%89/>
 <h2 class=post-title>[PHP]如何把 Yahoo! BBAuth 加入網站入口認證</h2>
 </a>
@@ -316,33 +349,6 @@ RoR的部署方式從架構上來說分為前端和後端： 一、前端 前端
 <a href=https://blog.wu-boy.com/tags/litespeed/>litespeed</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/07/freebsd-lighttpd-php-mod_proxy-fastcgi/>
-<h2 class=post-title>[FreeBSD] Lighttpd + PHP + mod_proxy + FastCGI</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 10, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近一直在玩 <a href=http://www.lighttpd.net/>Lighttpd</a> 這一套 web 的 daemon，我覺得這一套還蠻好用的，不像 Apache 掛載這麼多 module 結果吃還蠻大的資源，加上 Apache 預設跑 MPM prefork 所以如果大型網站大概就會掛掉，線上人數一堆，就會快撐不住了，所以用 <a href=http://httpd.apache.org/docs/2.0/mod/worker.html>MPM worker</a> 或者是 <a href=http://httpd.apache.org/docs/2.2/mod/event.html>MPM Event</a>，然後 <a href=http://www.lighttpd.net/>Lighttpd</a> 本身還支援 <a href=http://trac.lighttpd.net/trac/wiki/Docs%3AModRewrite>mod_rewrite</a> 的功能，可以參考我之前寫的 <a href=http://blog.wu-boy.com/2008/07/03/287/>[FreeBSD]Lighttpd + php5 + 解決 wordpress Permalinks 問題</a>，不過最近遇到一個很奇怪問題，那就是 <a href=http://www.lighttpd.net/>Lighttpd</a> 會自己掛點，但是我看 message 跟 error log 底下是：</p>
-<blockquote>
-<p>2008-07-10 09:08:31: (server.c.1258) NOTE: a request for /wp-includes/js/scriptaculous/effects.js?ver=1.8.0 timed out after writing 32991 bytes. We waited 360 seconds. If this a problem increase server.max-write-idle</p>
-</blockquote>
-<a href=https://blog.wu-boy.com/2008/07/freebsd-lighttpd-php-mod_proxy-fastcgi/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/proxy/>proxy</a>&nbsp;
 </div>
 </article>
 </div>

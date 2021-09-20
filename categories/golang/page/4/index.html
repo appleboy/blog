@@ -103,6 +103,57 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/>
+<h2 class=post-title>Go Modules 處理私有 GIT Repository 流程</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 4, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;433&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080" alt=golang></p>
+<p><a href=https://golang.org/>Golang</a> 在 <a href=https://golang.org/doc/go1.14#introduction>1.14</a> 正式說明可以將 <a href=https://github.com/golang/go/wiki/Modules>Go Modules</a> 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go mod init project_path
+go mod tidy
+</code></pre></td></tr></table>
+</div>
+</div><p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 <code>proxy.golang.org</code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go env -w <span style=color:#00688b>GOPRIVATE</span>=github.com/appleboy
+</code></pre></td></tr></table>
+</div>
+</div><p>上面代表告訴 go 指令，只要遇到 <code>github.com/appleboy</code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>，接著設定 Git</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>git config --global url.<span style=color:#cd5555>&#34;https://</span><span style=color:#00688b>$USERNAME</span><span style=color:#cd5555>:</span><span style=color:#00688b>$ACCESS_TOKEN</span><span style=color:#cd5555>@github.com&#34;</span>.insteadOf <span style=color:#cd5555>&#34;https://github.com&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>。</p>
+<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/>
 <h2 class=post-title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</h2>
 </a>
@@ -309,27 +360,6 @@
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/08/golang-project-layout-and-practice/>
-<h2 class=post-title>Go 語言目錄結構與實踐</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 31, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;105&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>很高興今年錄取 <a href=https://modernweb.tw/>Modernweb</a> 講師，又有機會去宣傳 <a href=https://golang.org>Go 語言</a>，這次的議程最主要跟大家介紹 Go 專案的目錄該如何設計，一個基本的專案該需要有哪些功能，以及如何實現。大家剛入門 Go 時，肯定會開始找是否有一套 Web Framework 可以參考實踐，可惜的是，在 Go 語言沒有定義任何的目錄結構，所有的結構都可以根據團隊的狀況而有所改變，而這邊我想強調的是如果能讓團隊看到結構後，一目瞭然知道什麼功能該放哪個目錄，或什麼目錄內大概有什麼功能，那其實就夠了。看了許多開源專案，每個設計方式都是不同，但是當你要找什麼功能時，其實從根目錄就可以很清楚的知道要進入哪個地方可以找到您想要的功能及程式碼。這次在 Moderweb 上面的議題，就是分享我在開源專案所使用的目錄結構，以及結構內都放哪些必要的功能。</p>
-<a href=https://blog.wu-boy.com/2019/08/golang-project-layout-and-practice/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>

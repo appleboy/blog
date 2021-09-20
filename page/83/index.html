@@ -116,6 +116,25 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2007/10/%E7%94%9F%E6%B4%BB%E7%B6%B2%E8%B7%AF%E7%B5%84-%E7%A2%A9%E4%B8%80-%E7%A2%A9%E4%BA%8C-%E7%B1%83%E7%90%83%E6%AF%94%E8%B3%BD/>
+<h2 class=post-title>[生活]網路組 碩一 碩二 籃球比賽</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 31, 2007
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;5&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>禮拜五又是比籃球賽了，因為上次比壘球賽，<a href=http://life.wu-boy.com/2007/10/20/65/>新生盃壘球比賽～ 跟學長們比賽 網路組</a>，碩二學長們，不甘心，所以又想跟我們比籃球賽，沒辦法，可能是我們碩一太強？哈哈，話說我到底是碩一還是碩三，囧，好像沒有人把我當學長看，囧，不過沒關西，打球最快樂了，哈哈。 話說我們比賽全場，總共分上半場，下半場，我們是不限時間，只要那一隊先得滿31分，就算贏了，所以上下半場總分最高62分，由於碩一來的人數太多，所以原本我碩一先發，結果碩一就把我丟到碩二去了，所以我上半場就打碩二了，打碩二的時候，一直被電，因為太多人跑不動了，哈哈，不過這很正常，不過我可以跑滿整場，哈哈，上半場打很悶，因為碩一太強，而且碩二氣氛不太好，因為有人得失心很重，所以很悶，碩二整個氣氛都是怪，哈哈，因為打球要快樂的我，所以我不太喜歡這種感覺，不符合我快樂小惡魔的習性，哈哈。 下半場，我就跑去打碩一了，囧～，我是場上唯一打過碩二跟碩一的，碩二都說我背叛他們，哈哈，沒辦法，不過我打碩一就打滿整場，體力真好，我打完之後，還跟其他朋友打三三，打完三三然後呢，又去找180的pk一對一，囧我同學都說我很變態，都不會累，不過打完之後，回去睡很久，睡完就好了，哈哈，我真的超愛運動。</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/%E7%B6%B2%E8%B7%AF%E7%B5%84/>網路組</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2007/10/%E8%BD%89%E9%8C%84%E7%B5%A6%E8%8B%A6%E8%BF%BD%E4%B8%8D%E5%88%B0%E5%A5%B3%E5%AD%A9%E7%9A%84%E7%94%B7%E6%80%A7%E5%B9%BE%E9%BB%9E%E5%BB%BA%E8%AD%B0/>
 <h2 class=post-title>[轉錄]給苦追不到女孩的男性幾點建議</h2>
 </a>
@@ -286,38 +305,6 @@
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E9%AB%98%E9%9B%84/>高雄</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/09/freebsd-%E5%AE%89%E8%A3%9D-memcache-for-php/>
-<h2 class=post-title>[FreeBSD] 安裝 memcache for php 多重伺服器共享 Session</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 22, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;343&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>今天來玩看看 memcache 看看，話說 memcache 是個非常好用的東西，可以參考官網作法 <a href=http://tw.php.net/memcache>連結</a>，其實我在前一個工作，就有老闆問我說，像公司作這麼多網站，有沒有辦法統整成一個，然後底下各種服務，只需要登入過一次就好，而不必重複登入，畢竟會讓使用者覺得很煩，所以就有了 memcache 這東西出來，底下就來介紹 FreeBSD 的安裝方式</p>
-<ul>
-<li>安裝方法： 安裝 ports 的套件 memcache 跟 pecl-memcache</li>
-</ul>
-<pre class="brush: bash; title: ; notranslate" title>cd /usr/ports/databases/memcached; make install clean
-cd /usr/ports/databases/pecl-memcache; make install clean
-</pre> 然後他會把 extension=memcache.so 寫到 /usr/local/etc/php/extensions.ini 然後你只需要重新啟動 apache 即可，還有把 memcached 服務打開 所以請下底下指令
-<pre class="brush: bash; title: ; notranslate" title>echo "memcached_enable=\"YES\"" >> /etc/rc.conf
-/usr/local/etc/rc.d/memcached start
-/usr/local/etc/rc.d/apache22 restart
-</pre>
-<a href=https://blog.wu-boy.com/2007/09/freebsd-%E5%AE%89%E8%A3%9D-memcache-for-php/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/memcache/>memcache</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

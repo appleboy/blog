@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/06/jquery-%E9%A9%97%E8%AD%89%E8%A1%A8%E5%96%AE%E5%AF%A6%E4%BD%9C%E7%AD%86%E8%A8%98-api13selectors/>
+<h2 class=post-title>[jQuery] 驗證表單實作筆記 API/1.3/Selectors</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 16, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;230&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>驗證 form 表單屬於前端的工作，非常重要，避免使用者填錯格式，當然在 jQuery Plugin 可以找到專門驗證表單的外掛：<a href=http://bassistance.de/jquery-plugins/jquery-plugin-validation/>jQuery plugin: Validation</a>，此外掛不能相容於 IE 6，會沒辦法呈現效果，google 到一篇解決方法：<a href=http://groups.google.com/group/jquery-en/browse_thread/thread/843bc94ffef99250>Validating not happening in IE6 & no error removal on keyup</a>，這篇裡面提到，必須使用 un-packed and un-minified 的版本，也就是沒有壓縮過的 javascript 檔案，不過我自己沒有試過就是了，底下針對表單的 checkbox select input radio 欄位做檢查的筆記，可以讓大家參考看看。 在 jQuery 1.3 裡面正式拿掉 [@attr] 的寫法，所以以前寫 <span style=color:#f60>$(&ldquo;input:radio[@name=reg_sex]")</span> 都要改成 <span style=color:green>$(&ldquo;input:radio[name=reg_sex]")</span>，這樣才是正確的，可以參考 <a href=http://docs.jquery.com/Selectors>jQuery Selector</a> 這篇的 Attribute Filters 部份，先來一篇網路上實做提示說明在 text 來未：<a href=http://www.electrictoolbox.com/jquery-toggle-between-password-text-field/>jQuery: show plain text in a password field and then make it a regular password field on focus</a> 作法很簡單：建立兩個輸入 password 的 text input 欄位：</p>
+<pre class="brush: xml; title: ; notranslate" title></pre>
+<a href=https://blog.wu-boy.com/2009/06/jquery-%E9%A9%97%E8%AD%89%E8%A1%A8%E5%96%AE%E5%AF%A6%E4%BD%9C%E7%AD%86%E8%A8%98-api13selectors/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/06/%E5%AE%A3%E5%82%B3-%E5%AE%89%E5%A6%AE%E6%9C%B5%E6%8B%89%E5%89%B5%E4%BD%9C%E6%AD%8C%E6%9B%B2%EF%BC%9A%E4%BA%BA%E7%94%9F%E6%9C%80%E5%A4%A7%E7%9A%84%E6%84%8F%E7%BE%A9/>
 <h2 class=post-title>[宣傳] 安妮朵拉創作歌曲：人生最大的意義</h2>
 </a>
@@ -344,32 +366,6 @@ sysctl security.bsd.see_other_gids=0</pre> 兩種效果是一樣的，當然可�
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/05/vps-%E8%99%9B%E6%93%AC%E4%B8%BB%E6%A9%9F-linode-720-%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97-%E4%B8%80/>
-<h2 class=post-title>[VPS] 虛擬主機 Linode 720 使用心得 (一)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 21, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;70&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/www.linode.com/images/linode_logo_gray.png?w=840" alt="Linode VPS" data-recalc-dims=1>
-</div> 最近正在玩
-<p><a href=http://www.linode.com/>Linode 720 VPS</a> 這個方案，整體服務感覺非常的不錯，正在測試速度跟效能，可以選擇四個地方的機房，可以參考此 <a href=http://www.linode.com/avail.cfm>連結</a>，剛開通給我的是 Fremont, CA 機房，其實在哪個機房都是要自己去測試看看，ping 主機，或者是開 ftp 下載，http上傳下載，都要交換測試速度阿，在 Fremont, CA 那邊目前可以放 6 個 Linode 720s 服務，測試 web 的速度感覺還蠻不錯的，Linode 抓取學宿網路速度可以到達 400K/s 以上，抓取美國職棒官網 MLB TV 可以到 4MB/s 以上，學網抓 Linode 可以到 1MB/s，有圖證明： <a href=https://www.flickr.com/photos/appleboy/3550079119/ title="linode_wget_in (by appleboy46)"><img src="https://i0.wp.com/farm4.static.flickr.com/3325/3550079119_31ebd2247f.jpg?resize=500%2C140&ssl=1" title="linode_wget_in (by appleboy46)" alt="linode_wget_in (by appleboy46)" data-recalc-dims=1></a> Linode 抓取美國檔案 <a href=https://www.flickr.com/photos/appleboy/3550829452/ title="linode_01 (by appleboy46)"><img src="https://i0.wp.com/farm4.static.flickr.com/3335/3550829452_5c4a9ae1d0.jpg?resize=500%2C123&ssl=1" title="linode_01 (by appleboy46)" alt="linode_01 (by appleboy46)" data-recalc-dims=1></a> Linode 抓取學網檔案 <a href=https://www.flickr.com/photos/appleboy/3550023357/ title="linode_02 (by appleboy46)"><img src="https://i0.wp.com/farm4.static.flickr.com/3613/3550023357_681a4826d9.jpg?resize=500%2C55&ssl=1" title="linode_02 (by appleboy46)" alt="linode_02 (by appleboy46)" data-recalc-dims=1></a> 學網抓 Linode 檔案</p>
-<a href=https://blog.wu-boy.com/2009/05/vps-%E8%99%9B%E6%93%AC%E4%B8%BB%E6%A9%9F-linode-720-%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97-%E4%B8%80/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/centos/>Centos</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linode/>Linode</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/vps/>VPS</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,35 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/05/linux-kernel-built-in-vs-module/>
+<h2 class=post-title>[Linux Kernel] built-in vs. module</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 28, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;59&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>在編譯 <a href=http://code.google.com/android/>Android</a> Linux Kernel 2.6.29 Driver，常常遇到該把 Driver 用 built-in 或者是編譯成 module 呢？這其實看人習慣，就跟問你編輯器是用 <a href=http://www.vim.org/>Vim</a> 或者是 <a href=http://www.gnu.org/software/emacs/>emacs</a> 是同樣意思，這兩者是有很大的差異，built-in 用在開機自動讀取載入，所以直接編譯成 uImage 檔案給嵌入式系統，像是 SCSI 或者是 SATA Driver 都建議編譯成 built-in 的方式，反而是一些音效驅動程式，可以編譯成 module，NTFS 就是可以編譯成 module，等您需要的時候在動態載入就可以，這樣可以減少 Kernel Image 的使用空間。 如果不想用 built-in 編譯，開機又需要驅動程式，那就需要透過 initrd 方式來啟動。底下整理兩者差異：</p>
+<h3 id=built-in>built-in：</h3>
+<blockquote>
+<p>開機自動載入，不可移除 Linux Kernel Image 大 需要重新 Compile</p>
+</blockquote>
+<h3 id=module>module：</h3>
+<blockquote>
+<p>可動態載入 Linux Kernel Image 小 不需要重新 Compile reference: <a href=http://www.mail-archive.com/gentoo-user@gentoo.org/msg09418.html>[gentoo-user] kernel: built-in vs. module</a></p>
+</blockquote>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/android/>Android</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/driver/>Driver</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/05/ubuntudebian-%E4%BD%BF%E7%94%A8%E7%B3%BB%E7%B5%B1%E8%A8%AD%E5%AE%9A%E5%85%A8%E5%9F%9F-http-proxy/>
 <h2 class=post-title>[Ubuntu/Debian] 使用系統設定全域 http Proxy</h2>
 </a>
@@ -424,53 +453,6 @@ $.
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/>
-<h2 class=post-title>[編輯器] CKeditor 更換 background-color and font-size</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 30, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;162&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-相信大家在製作 Web 過程，一定會用到編輯器，然而 CKeditor 前身 FCKeditor 非常有名，FCKeditor 運行了六年之久，在去年2009年的時候，轉換成了 CKeditor，目前開發團隊也專注於此版本，現在已經推出到 CKEditor 3.2 released!，可以參考 CKEditor 3.x - Developer&rsquo;s Guide，裡面也整合了 jQuery，替很多開發者想到更多管道去整合網站，然而今天設計網站，需要改變編輯器的背景顏色，預設是白色背景，但是並非所有網站都是白色呈現，所以才需要動到背景顏色，這樣好讓使用者可以融入整個背景，在 Plurk 發表了這問題，也找了官方論壇，都沒有發現正確解答，官方論壇有篇類似問題：Change the background color of the CKEditor text area，這篇自己試過是沒有用的，正確解法可以參考 CKeditor 的 API:contentsCss。 1. 首先在 CKeditor 根目錄建立新檔案：mysitestyles.css
-body
-{
-/* Font */
-font-family: Arial, Verdana, sans-serif;
-font-size: 12px;
-/* Text color */
-color: #f0f0f0;
-/* Remove the background color to make it transparent */
-background-color: #353c42;
-}
-html
-{
-/* #3658: [IE6] Editor document has horizontal scrollbar on long lines
-To prevent this misbehavior, we show the scrollbar always */
-_overflow-y: scroll
-}
-img:-moz-broken
-{
--moz-force-broken-image-icon : 1;
-width : 24px;
-height : 24px;
-}
-img, input, textarea
-{
-cursor: default;
-} 2.
-<a href=https://blog.wu-boy.com/2010/03/%E7%B7%A8%E8%BC%AF%E5%99%A8-ckeditor-%E6%9B%B4%E6%8F%9B-background-color-and-font-size/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/ckeditor/>CKeditor</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/fckeditor/>FCKeditor</a>&nbsp;
 </div>
 </article>
 </div>

@@ -103,6 +103,34 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/08/%E8%BD%89%E8%BC%89mysql-%E7%9A%84-set-names-xxx-%E5%AD%97%E5%85%83%E7%B7%A8%E7%A2%BC%E5%95%8F%E9%A1%8C%E5%88%86%E6%9E%90/>
+<h2 class=post-title>[轉載]MySQL 的 “SET NAMES xxx” 字元編碼問題分析</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 25, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;161&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>轉載自: <a href="http://www.phpchina.com/bbs/viewthread.php?tid=13861">PHPChina</a> 近來接受 BBT 的培訓，做一個投票系統。系統程式碼倒不是很難，但是我的時間主要花費在了研究字符集和編碼上面。MySQL 和 Apache 兩個系統的編碼（字符集）問題讓我費勁腦筋，吃盡苦頭。網上對這些問題的解決比較零散，比較片面，大部分是提供解決方法，卻不說為什麼。於是我將這幾天收穫總結一下，避免後來者再走彎路。這篇文章對 PHP 編寫有一點幫助（看完你就知道，怎樣讓你的 PHP 程式在大部分空間提供商的伺服器裡顯示正常），但是更多幫助在於網路伺服器的架設和設置。 先說 MySQL 的字符集問題。Windows 下可透過修改 my.ini 內的</p>
+<pre class="brush: bash; title: ; notranslate" title># CLIENT SECTION
+[mysql]
+default-character-set=utf8
+# SERVER SECTION
+[mysqld]
+default-character-set=utf8</pre>
+<a href=https://blog.wu-boy.com/2008/08/%E8%BD%89%E8%BC%89mysql-%E7%9A%84-set-names-xxx-%E5%AD%97%E5%85%83%E7%B7%A8%E7%A2%BC%E5%95%8F%E9%A1%8C%E5%88%86%E6%9E%90/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/sql/>sql</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/08/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9Fikea-%E5%AE%9C%E5%AE%B6%E5%AE%B6%E4%BF%B1-%E7%91%9E%E5%85%B8%E7%BE%8E%E9%A3%9F%E9%A4%90%E9%BB%9E-food/>
 <h2 class=post-title>[高雄美食]IKEA 宜家家俱 瑞典美食餐點 food</h2>
 </a>
@@ -328,30 +356,6 @@ RoR的部署方式從架構上來說分為前端和後端： 一、前端 前端
 <a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/proxy/>proxy</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/07/freebsd%E8%A7%A3%E6%B1%BA-lighttpd-log-permission-denied-%E5%95%8F%E9%A1%8C/>
-<h2 class=post-title>[FreeBSD]解決 lighttpd log Permission denied 問題</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;128&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>今天早上伺服器 lighttpd 沒有跑起來，發現是因為沒有寫入 lighttpd.access.log 的權限，所以造成不能啟動</p>
-<blockquote>
-<p>2008-07-04 08:37:15: (mod_accesslog.c.535) opening access-log failed: Permission denied /var/log/lighttpd/lighttpd.access.log 目前的解法大概就是不能去改 /var/log 這個資料夾權限，所以我在 /var/log 底下新增 lighttpd 這個資料夾</p>
-</blockquote>
-<a href=https://blog.wu-boy.com/2008/07/freebsd%E8%A7%A3%E6%B1%BA-lighttpd-log-permission-denied-%E5%95%8F%E9%A1%8C/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/lighttpd/>lighttpd</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/log/>log</a>&nbsp;
 </div>
 </article>
 </div>

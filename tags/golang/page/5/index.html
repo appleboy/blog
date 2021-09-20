@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/>
+<h2 class=post-title>架設 Go Proxy 服務加速 go module 下載速度</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 10, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;171&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p><a href=https://golang.org>Go 語言</a>在 1.11 推出 go module 來統一市面上不同管理 Go 套件的工具，像是 <a href=https://github.com/golang/dep>dep</a> 或 govendor 等，還不知道如何使用 go module，可以參考之前寫的一篇文章『<a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</a>』，在團隊內如果每個人在開發專案時，都透過網路去下載專案使用到的套件，這樣 10 個人就會浪費 10 個人的下載時間，並且佔用公司網路頻寬，所以我建議在公司內部架設一台 Go Proxy 服務，減少團隊在初始化專案所需要的時間，也可以減少在跑 CI/CD 流程時，所需要花費的時間，測試過公司 CI/CD 流程，有架設 Go Proxy，一般來說可以省下 1 ~ 2 分鐘時間，根據專案使用到的相依性套件用量來決定花費時間。本篇來介紹如何架設 <a href=https://github.com/gomods/athens>ATHENS</a> 這套開源 Go Proxy 專案。</p>
+<a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/>
 <h2 class=post-title>Go Module 如何發佈 v2 以上版本</h2>
 </a>
@@ -479,30 +501,6 @@
 <a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/traefik/>traefik</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>
-<h2 class=post-title>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 30, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;268&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://photos.google.com/share/AF1QipPZ8MkcLAazbfRWwBrT1CQpipCL8N_1uAcYosJmJ-o6du2XRRHNEokVarxey5Bp8w?key=clctLU9JYVMzcEdHYWR2dUlVTVZ6YnZUUjlYRG9B&source=ctrlq.org"><img src="https://lh3.googleusercontent.com/Q5CP9S-xtRHxnDRvxDpWWkvBsEVw5C5uRyb5EiBh-UpYkrp_dkZp_oN8yi1WtqwruhSgnwNMB5QjJPxO94ABjG9oLBqmcRjlouNTNmrChIWbQcsAAbuV9eWB1wbsK-x-OY6iolb5ahc=w2400" alt></a></p>
-<p>相信各位 <a href=http://golang.org>Go 語言</a>開發者陸陸續續都將專案從各種 <a href=https://github.com/golang/go/wiki/PackageManagementTools>Vendor 工具</a>轉換到 <a href=https://github.com/golang/go/wiki/Modules>Go Module</a>，本篇會帶大家一步一步從舊專案轉換到 Go Module，或是該如何導入新專案，最後會結合 CI/CD 著名的兩套工具 <a href=https://travis-ci.org/>Travis</a> 或 <a href=https://drone.io/>Drone</a> 搭配 Go Module 測試。</p>
-<a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/travis/>Travis</a>&nbsp;
 </div>
 </article>
 </div>

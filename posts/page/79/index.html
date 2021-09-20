@@ -103,6 +103,51 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/03/java-%E6%AD%A3%E8%A6%8F%E5%8F%96%E4%BB%A3%E8%A1%A8%E7%A4%BA%E6%B3%95/>
+<h2 class=post-title>[Java] 正規取代表示法</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 10, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;141&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近弄國科會計畫，所以都在碰 java 的東西，都在弄 <a href=http://www.w3.org/TR/rdf-sparql-query/>sparql</a> 跟 <a href=http://www.w3.org/TR/rdf-schema/>rdf</a> 的東西，昨天弄懂一些基本的 <a href=http://www.w3.org/TR/rdf-sparql-query/>sparql</a>，然而利用 sarql 語法取出來的數值不是我想要的，所以利用正規表示，把字串取代了。 我想取代的字串如下：</p>
+<blockquote>
+<p>( ?url = “LAB221″^^xsd:string ) 我只想要中間的 LAB221 的部份，然後我上網找了方法，總共可以使用兩種方法 第一種</p>
+</blockquote>
+<pre class="brush: java; title: ; notranslate" title>String result = "( ?url = \"LAB221\"^^xsd:string )";
+// compile pattern
+Pattern p = Pattern.compile("[^\"]+\"([^\"]+)\"[^\"]+");
+
+// get matcher
+Matcher m = p.matcher(result.replaceAll("[
+
+<li>
+  
+</li>]",""));
+
+// test if match
+if (m.matches()) {
+  System.out.println(m.group(1));
+}
+else
+{
+  System.out.println("error");
+}
+
+/* 正規比對 */
+</pre> 上面感謝 ptt qrtt1 給我的一點啟示
+<a href=https://blog.wu-boy.com/2008/03/java-%E6%AD%A3%E8%A6%8F%E5%8F%96%E4%BB%A3%E8%A1%A8%E7%A4%BA%E6%B3%95/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/java/>Java</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/03/%E7%94%9F%E6%B4%BB%E6%97%A5%E8%A8%98-%E4%B8%AD%E6%AD%A3%E9%9B%BB%E6%A9%9F%E9%80%9A%E8%A8%8A%E7%B6%B2%E8%B7%AF%E7%B5%84%E8%8A%B1%E5%9C%83/>
 <h2 class=post-title>[生活日記] 中正電機通訊網路組花圃</h2>
 </a>
@@ -353,26 +398,6 @@ public class runstart{
 </li>
 </pre> 你會在你 blog 上面發現底下這圖案
 <p><a href=https://www.flickr.com/photos/appleboy/2297991458/ title="google by appleboy46, on Flickr"><img src="https://i2.wp.com/farm4.static.flickr.com/3100/2297991458_abeb0033c2_o.jpg?resize=206%2C106&ssl=1" alt=google border=0 data-recalc-dims=1></a> 如果你 google talk 在線上，他就會顯示藍色的喔，這樣就代表成功了</p>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/02/java-%E5%AE%89%E8%A3%9D%E5%A5%BD-jdk-%E8%A8%AD%E5%AE%9A-path-%E8%B7%AF%E5%BE%91/>
-<h2 class=post-title>[Java] 安裝好 Jdk 設定 path 跟 classpath 路徑</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 27, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;49&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>今天剛裝好 jdk 新版 jdk1.6.0_04，如要下載請到 <a href=http://java.sun.com/javase/downloads/index.jsp>這裡</a> 下載，裝好之後當然底下要找編譯檔案，就是要去 bin 這個資料夾，然後找到 javac 跟 java 執行檔就可以了，不過如果你要在任何地方都要使用這個執行檔，就要去修改 path，設定方法如下 <a href=https://www.flickr.com/photos/appleboy/2296039572/ title="java_1 by appleboy46, on Flickr"><img src="https://i2.wp.com/farm4.static.flickr.com/3283/2296039572_21e85b77f0_o.jpg?resize=419%2C479&ssl=1" alt=java_1 border=0 data-recalc-dims=1></a> 我的電腦右鍵->內容 k</p>
-<a href=https://blog.wu-boy.com/2008/02/java-%E5%AE%89%E8%A3%9D%E5%A5%BD-jdk-%E8%A8%AD%E5%AE%9A-path-%E8%B7%AF%E5%BE%91/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/java/>Java</a>&nbsp;
 </div>
 </article>
 </div>

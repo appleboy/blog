@@ -103,6 +103,41 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/04/ubuntu%EF%BC%86fedora-%E9%96%8B%E6%A9%9F-%E7%B6%B2%E8%B7%AF%E5%8D%A1-mac-%E8%AE%8A%E5%8B%95%E4%BA%82%E8%B7%B3-%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/>
+<h2 class=post-title>[Ubuntu＆Fedora] 開機 網路卡 MAC 變動亂跳 [解決方法]</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 9, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;104&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在幫 lab 同學處理他安裝好的 <a href=http://www.ubuntu.org.tw/>ubuntu</a> linux，結果發現一個問題，就是只要重新開機，網路卡的 mac 就會改變，還真是奇怪，後來在 google 找到一篇文章：<a href="http://www.karayou.com/redirect.php?tid=206006&goto=lastpost">Ubuntu的MAC一直亂跳嗎?</a> 或者是ubuntu官方論壇：<a href="http://ubuntuforums.org/showthread.php?p=4156690#post4156690">解決方法</a>，才終於解決這個問題。 在主機板 GA-M56S-S3 這個系列板子都會有這種問題，至少我測試過兩張主機板都會這樣，所以看了那些解決方法，可以解決 ubuntu 的問題，但是不能解決 fedora core 的問題，我解決 fedora 的方法，其實很簡單，只要你會利用文字介面設定網路，就可以了 fedora 解法：前提是你不會讓機器開機亂跳動 ethx，所以你要按照上面的解法，解決前半部份 先在 root 底下新增一個檔案 ifcfg-eth0，然後寫入</p>
+<pre class="brush: bash; title: ; notranslate" title># Broadcom Corporation NetXtreme BCM5721 Gigabit Ethernet PCI Express
+DEVICE=eth0
+BOOTPROTO=none
+BROADCAST=140.123.107.255
+HWADDR=00:15:F2:A7:37:42
+IPADDR=140.123.107.*
+IPV6_AUTOCONF=yes
+NETMASK=255.255.255.0
+NETWORK=140.123.107.0
+ONBOOT=yes
+GATEWAY=140.123.107.249
+TYPE=Ethernet
+</pre>
+<a href=https://blog.wu-boy.com/2008/04/ubuntu%EF%BC%86fedora-%E9%96%8B%E6%A9%9F-%E7%B6%B2%E8%B7%AF%E5%8D%A1-mac-%E8%AE%8A%E5%8B%95%E4%BA%82%E8%B7%B3-%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%B3%95/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/fedora/>Fedora</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/04/ubuntu-%E5%BF%AB%E9%80%9F%E4%BF%AE%E5%BE%A9%E9%96%8B%E6%A9%9F%E9%81%B8%E5%96%AE%EF%BC%8C%E9%9B%99%E4%BD%9C%E6%A5%AD%E7%B3%BB%E7%B5%B1/>
 <h2 class=post-title>[Ubuntu] 快速修復開機選單，雙作業系統</h2>
 </a>
@@ -319,23 +354,6 @@ tissue,"xxxx"</pre> 然後在寫一個 shell 檔去把它讀進來，shell 檔�
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E8%BD%89%E9%8C%84/>轉錄</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/03/blogad%E6%B4%BB%E5%8B%95-%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%90%8D%E6%95%99%E5%AD%B8/>
-<h2 class=post-title>[BlogAD活動] 活動報名教學</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 25, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;53&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近在本站台右邊拉了 <a href=http://www.blogad.com.tw/>BlogAD</a> 的廣告，最近該公司發起了一個抽獎活動，其實這抽獎活動目的就是拉越多人進來越好，然而加入會員的人也可以參加抽獎活動喔，而最主要的目的就是每拉一個人，我就可以得到額外50元的獎金，我覺得這相當不錯，如果想贊助本站台，也可以透過這個方式然達成這個目的，註冊的網站就是 <a href=http://www.panelpower.com.tw/>東方快線網路市調</a>，這網站你加入之後，她會不定時讓您參加問卷調查，調查完之後，會給你額外的獎金，不論是5元或者是10元，我覺得都相當不錯，累積到一定的程度之後，就可以兌換現金。 活動報名如下： <a href="http://www.blogad.com.tw/Events/20080311_Eol/Edm.aspx?N=appleboy"><img border=0 width=546 src="http://www.blogad.com.tw/Transfer/ToadEol.aspx?F_ID=15810&P_ID=50&WebLoginName=appleboy&A_ID=257&pic=546.gif"></a> 報名方式如下：</p>
-<a href=https://blog.wu-boy.com/2008/03/blogad%E6%B4%BB%E5%8B%95-%E6%B4%BB%E5%8B%95%E5%A0%B1%E5%90%8D%E6%95%99%E5%AD%B8/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/01/mysqlleft-right-inner-outer-join-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/>
+<h2 class=post-title>[MySQL]left, right, inner, outer join 使用方法</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 24, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;159&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在高雄面試的時候，被問到的資料庫問題，什麼是 left join，out join，inner join，其實這些都是寫基本 SQL 語法需要知道的，當然我比較少用到 out join，不過還是要知道一下比較好喔，底下來說明一下這些，整理一些心得</p>
+<h2 id=表格-test1-資料表>表格 test1 資料表</h2>
+<p><a href=https://www.flickr.com/photos/appleboy/3222461660/ title="2 (by appleboy46)"><img src="https://i2.wp.com/farm4.static.flickr.com/3327/3222461660_4203972953_o.jpg?resize=171%2C92&ssl=1" title="2 (by appleboy46)" alt="2 (by appleboy46)" data-recalc-dims=1></a></p>
+<h2 id=表格-test2-資料表>表格 test2 資料表</h2>
+<p><a href=https://www.flickr.com/photos/appleboy/3222461636/ title="1 (by appleboy46)"><img src="https://i1.wp.com/farm4.static.flickr.com/3328/3222461636_c25a9bf9e5_o.jpg?resize=126%2C121&ssl=1" title="1 (by appleboy46)" alt="1 (by appleboy46)" data-recalc-dims=1></a></p>
+<a href=https://blog.wu-boy.com/2009/01/mysqlleft-right-inner-outer-join-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/01/linuxfreebsd-find-%E6%8C%87%E4%BB%A4%E7%94%A8%E6%B3%95%E6%95%99%E5%AD%B8/>
 <h2 class=post-title>[Linux&FreeBSD] Find 指令用法教學</h2>
 </a>
@@ -375,39 +399,6 @@ Read the <a href=http://code.google.com/apis/maps/documentation/reference.html>M
 <a href=https://blog.wu-boy.com/tags/ajax/>AJAX</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/10/php%E8%A7%A3%E6%B1%BA-pearmail_mime-%E6%A8%99%E9%A1%8C-utf-8-%E4%BA%82%E7%A2%BC%E5%95%8F%E9%A1%8C%E4%B8%8D%E8%83%BD%E9%A1%AF%E7%A4%BA/>
-<h2 class=post-title>[PHP]解決 PEAR::Mail_Mime 標題 UTF-8 亂碼問題(不能顯示)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 1, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;193&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>話說大家在寫 PHP 的時候，一定會很常用到 mail 這個函式，畢竟一個網站一定會有很多需要用到寄信的地方，我先給大家推薦一下 <a href=http://pear.php.net/package/Mail_Mime>PEAR::Mail_Mime</a> 跟 <a href=http://pear.php.net/package/Mail>PEAR::Mail</a> 這兩個 Pear 的套件，用起來相當不錯，支援 html 跟 UTF-8 或者是 Big5 編碼，我之前寫過一篇 <a title="Permanent Link to [PHP] 好用的 PEAR - PHP Mail and Mail_Mime" rel=bookmark href=http://blog.wu-boy.com/2007/12/18/129/>[PHP] 好用的 PEAR – PHP Mail and Mail_Mime</a>，裡面寫的還蠻詳細的，不過上次有一個問題還沒解決，就是如果用 UTF-8 編碼的標題，會顯示不出來，<a href=http://mail.google.com>Gmail</a> 收到的話就會是 no subject，然後昨天用了一個非常笨的解決方法，改成把標題使用 Big5 就可以了，解決方法如下： <strong>Update：感謝 darkhero 提供解決方法：</strong> 如果要用 UTF-8 的標題：</p>
-<pre class="brush: php; title: ; notranslate" title>$param['head_charset'] = 'utf-8';
-  $hdrs = array(
-                'From'    => 'appleboy.tw@gmail.com',
-                'Subject' => '=?utf8?B?' . base64_encode($subj) . '?=', 
-                'Content-type' => 'text/html; charset=utf-8'
-                ); </pre> 先讓主機支援 PEAR：
-<pre class="brush: bash; title: ; notranslate" title>#
-#  FreeBSD ports 安裝
-cd /usr/ports/devel/pear
-make install clean</pre>
-<a href=https://blog.wu-boy.com/2008/10/php%E8%A7%A3%E6%B1%BA-pearmail_mime-%E6%A8%99%E9%A1%8C-utf-8-%E4%BA%82%E7%A2%BC%E5%95%8F%E9%A1%8C%E4%B8%8D%E8%83%BD%E9%A1%AF%E7%A4%BA/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mail/>mail</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/pear/>PEAR</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>

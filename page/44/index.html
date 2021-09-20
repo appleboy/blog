@@ -116,6 +116,46 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/10/how-to-remove-duplicated-rpm-package/>
+<h2 class=post-title>AWS 機器上 duplicated RPM 問題</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 7, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;140&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6219253012/ title="AWS-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm7.static.flickr.com/6174/6219253012_f5f9a7ed0c.jpg?resize=270%2C110&ssl=1" alt=AWS-logo data-recalc-dims=1></a>
+</div> 昨天幫忙升級全部
+<p><a href=http://aws.amazon.com/ target=_blank>AWS</a> RPM 套件，升級過程本來很順利，不過不知道哪一個 RPM 造成 SSH 全面斷線，接著我直接到 <a href=http://aws.amazon.com/console/ target=_blank>AWS Management Console</a> 把機器 restart，登入系統之後下 yum update，直接給我噴出底下錯誤訊息</p>
+<pre class="brush: plain; title: ; notranslate" title>---> Package zlib.i686 0:1.2.3-24.7.amzn1 will be updated
+---> Package zlib.i686 0:1.2.3-25.8.amzn1 will be an update
+--> Finished Dependency Resolution
+ You could try using --skip-broken to work around the problem
+** Found 155 pre-existing rpmdb problem(s), 'yum check' output follows:
+audit-libs-2.1-5.15.amzn1.x86_64 is a duplicate with audit-libs-2.0.4-1.14.amzn1.x86_64
+authconfig-6.1.12-5.14.amzn1.x86_64 is a duplicate with authconfig-6.1.4-6.13.amzn1.x86_64
+basesystem-10.0-4.9.amzn1.noarch is a duplicate with basesystem-10.0-4.8.amzn1.noarch
+bash-4.1.2-8.14.amzn1.x86_64 is a duplicate with bash-4.1.2-3.13.amzn1.x86_64
+binutils-2.20.51.0.2-5.20.17.amzn1.x86_64 is a duplicate with binutils-2.20.51.0.2-5.12.15.amzn1.x86_64
+cloud-init-0.5.15-16.amzn1.noarch is a duplicate with cloud-init-0.5.15-8.amzn1.noarch
+coreutils-8.4-13.13.amzn1.x86_64 is a duplicate with coreutils-8.4-9.12.amzn1.x86_64
+coreutils-libs-8.4-13.13.amzn1.x86_64 is a duplicate with coreutils-libs-8.4-9.12.amzn1.x86_64
+cpp-4.4.5-6.35.amzn1.x86_64 is a duplicate with cpp-4.4.4-13.33.amzn1.x86_64
+</pre>
+<a href=https://blog.wu-boy.com/2011/10/how-to-remove-duplicated-rpm-package/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/fedora/>Fedora</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/10/install-compass-css-authoring-framework-on-windows/>
 <h2 class=post-title>在 Windows 底下安裝 Compass CSS Authoring Framework</h2>
 </a>
@@ -347,31 +387,6 @@ git cherry-pick 使用方法 我們如何 Merge 別人的 pull request，首先�
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9/>
-<h2 class=post-title>JavaScript Reference Select and Option objects 用法介紹</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 19, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;269&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>在網頁裡面用 <a href=http://www.w3schools.com/jsref/dom_obj_select.asp target=_blank>Select</a> 是很常遇到的，之前也寫了一篇<a href=http://blog.wu-boy.com/2009/03/jquery-%E5%A6%82%E4%BD%95%E5%8F%96%E5%BE%97-select-liset-index-%E5%92%8C-value-%E5%80%BC/ target=_blank>如何利用 jQuery 動態增加 option 或取值</a>，<a href=http://jQuery.com target=_blank>jQuery</a> 部份就不介紹了，那是需要搭配 <a href=http://www.texotela.co.uk/code/jquery/select/ target=_blank>jQuery Plugin: Select box manipulation</a>，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 <a href=http://www.tizag.com/javascriptT/javascript-innerHTML.php target=_blank>innerHtml</a> 的方式來把資料塞入到 Select 裡面，雖然 <a href=http://moztw.org/ target=_blank>FireFox</a> 或 <a href="http://www.google.com/chrome?hl=zh-TW" target=_blank>Chrome</a> 都可以正常運作，但是遇到 IE 還是沒辦法動。</p>
-<h3 id=如何取得-select-element-底下很多方法可以取得-select-element-1-透過-form-name--element-name>如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name + element name</h3>
-<pre class="brush: jscript; title: ; notranslate" title>document.myform.selectname</pre> 2. 透過 form name + element 陣列(注意看 select 是位在 form element index 值多少)
-<pre class="brush: jscript; title: ; notranslate" title>document.myform.elements<em></em></pre> 3. 透過獨一無二的 ID
-<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("selectid")</pre>
-<a href=https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
 </div>
 </article>
 </div>
