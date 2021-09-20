@@ -23,6 +23,8 @@ tags:
 [3]:http://golang.org/
 [4]:https://github.com/ochinchina/supervisord
 
+<!--more-->
+
 ## 教學影片
 
 {{< youtube bN0iEd4z_7Q >}}
