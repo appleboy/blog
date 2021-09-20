@@ -40,7 +40,7 @@ tags:
 1. 在 Container 內管理多個 Process
 2. 沒有 Docker 環境
 
-第一點就是如果在 Container 內管理 Process，想看看先把 Python 環境安裝完成，整個容器會變得非常肥，這就是大家需要考慮的狀況。第二種狀況，像我們團隊有一個環境是完全沒有網路，也禁止用 Docker，因為 Docker 會讓 IT 很難管理其他同仁的使用方式，造成一些權限上的錯誤，故被禁止使用 Docker，這時候開發者要管理多個服務時，有 Go 語言版本的 Supervisor 對 SRE 團隊幫助極大，不用在需要考慮 Python 的因素。
+第一點就是如果在 Container 內管理 Process，想看看先把 Python 環境安裝完成，整個容器會變得非常肥，這就是大家需要考慮的狀況。第二種狀況，像我們團隊有一個環境是完全沒有網路，也禁止用 Docker，因為 Docker 會讓 IT 很難管理其他同仁的使用方式，造成一些權限上的錯誤，故被禁止使用 Docker，這時候開發者要管理多個服務時，有 Go 語言版本的 Supervisor 對 SRE 團隊幫助極大，不需要在考慮 Python 版本的因素。
 
 ## 安裝方式
 
