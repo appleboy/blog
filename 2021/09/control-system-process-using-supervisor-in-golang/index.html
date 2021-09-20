@@ -5,19 +5,19 @@
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>用 Supervisor 管理系統程式 - 小惡魔 - AppleBOY</title>
 <meta name=description content="
-相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者也提到，為什麼要寫一個 Go 語言版本的工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接在任何平台上跑，管理者就不需要再為了 Python 環境而煩惱。">
+相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","name":"用 supervisor 管理系統程式"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Supervisor 管理系統程式","description":"相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者也提到，為什麼要寫一個 Go 語言版本的工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接在任何平台上跑，管理者就不需要再為了 Python 環境而煩惱。\n","inLanguage":"en","wordCount":325,"datePublished":"2021-09-20T18:55:22","dateModified":"2021-09-20T18:55:22","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["supervisor, golang, python"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","name":"用 supervisor 管理系統程式"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Supervisor 管理系統程式","description":"相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。\n","inLanguage":"en","wordCount":325,"datePublished":"2021-09-20T18:55:22","dateModified":"2021-09-20T18:55:22","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["supervisor, golang, python"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="用 Supervisor 管理系統程式">
 <meta property="og:description" content="
-相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者也提到，為什麼要寫一個 Go 語言版本的工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接在任何平台上跑，管理者就不需要再為了 Python 環境而煩惱。">
+相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。">
 <meta property="og:image" content="https://i.imgur.com/4uBJZAG.png">
 <meta property="og:url" content="https://blog.wu-boy.com/2021/09/control-system-process-using-supervisor-in-golang/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="小惡魔 - AppleBOY">
 <meta name=twitter:title content="用 Supervisor 管理系統程式">
 <meta name=twitter:description content="
-相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者也提到，為什麼要寫一個 Go 語言版本的工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式， …">
+相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接 …">
 <meta name=twitter:image content="https://i.imgur.com/4uBJZAG.png">
 <meta name=twitter:card content="summary">
 <meta name=twitter:site content="@appleboy">
@@ -129,7 +129,7 @@
 </aside>
 <article role=main class=blog-post>
 <p><img src=https://i.imgur.com/4uBJZAG.png alt=cover></p>
-<p>相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 <a href=https://www.python.org/>Python</a> 版本的 <a href=http://supervisord.org/>Supervisor</a> 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 <a href=http://golang.org/>Go 語言</a>寫出來的開源套件『<a href=https://github.com/ochinchina/supervisord>Supervisord</a>』，作者也提到，為什麼要寫一個 Go 語言版本的工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接在任何平台上跑，管理者就不需要再為了 Python 環境而煩惱。</p>
+<p>相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 <a href=https://www.python.org/>Python</a> 版本的 <a href=http://supervisord.org/>Supervisor</a> 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 <a href=http://golang.org/>Go 語言</a>寫出來的開源套件『<a href=https://github.com/ochinchina/supervisord>Supervisord</a>』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。</p>
 <h2 id=教學影片>教學影片</h2>
 <div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
 <iframe src=https://www.youtube.com/embed/bN0iEd4z_7Q style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
@@ -144,7 +144,7 @@
 <li>在 Container 內管理多個 Process</li>
 <li>沒有 Docker 環境</li>
 </ol>
-<p>第一點就是如果在 Container 內管理 Process，想看看在把 Python 環境放進去，整個容器會變得非常肥，這就是大家需要考慮的狀況。第二種狀況，像我們團隊有一個環境是完全沒有網路，也禁止用 Docker，因為 Docker 會讓 IT 很難管理其他同仁的使用方式，造成一些權限上的錯誤，故被禁止使用 Docker，這時候開發者要管理多個服務時，有 Go 語言版本的 Supervisor 對 SRE 團隊幫助極大，不用在需要考慮 Python 的因素。</p>
+<p>第一點就是如果在 Container 內管理 Process，想看看先把 Python 環境安裝完成，整個容器會變得非常肥，這就是大家需要考慮的狀況。第二種狀況，像我們團隊有一個環境是完全沒有網路，也禁止用 Docker，因為 Docker 會讓 IT 很難管理其他同仁的使用方式，造成一些權限上的錯誤，故被禁止使用 Docker，這時候開發者要管理多個服務時，有 Go 語言版本的 Supervisor 對 SRE 團隊幫助極大，不需要在考慮 Python 版本的因素。</p>
 <h2 id=安裝方式>安裝方式</h2>
 <p>可以到 <a href=https://github.com/ochinchina/supervisord/releases>Release 頁面</a>下載相對應 OS 版本，或者你是 GO 開發者可以自行編譯</p>
 <div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
