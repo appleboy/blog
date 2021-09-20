@@ -16,7 +16,7 @@ tags:
 
 ![cover](https://i.imgur.com/4uBJZAG.png)
 
-相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 [Python][2] 版本的 [Supervisor][1] 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 [Go 語言][3]寫出來的開源套件『[Supervisord][4]』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接在任何平台上跑，管理者就不需要再為了 Python 環境而煩惱。
+相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 [Python][2] 版本的 [Supervisor][1] 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 [Go 語言][3]寫出來的開源套件『[Supervisord][4]』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。
 
 [1]:http://supervisord.org/
 [2]:https://www.python.org/
