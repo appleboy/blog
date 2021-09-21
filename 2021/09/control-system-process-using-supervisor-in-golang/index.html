@@ -7,7 +7,7 @@
 <meta name=description content="
 相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","name":"用 supervisor 管理系統程式"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Supervisor 管理系統程式","description":"相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。\n","inLanguage":"en","wordCount":325,"datePublished":"2021-09-20T18:55:22","dateModified":"2021-09-20T18:55:22","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["supervisor, golang, python"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","name":"用 supervisor 管理系統程式"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Supervisor 管理系統程式","description":"相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。\n","inLanguage":"en","wordCount":322,"datePublished":"2021-09-20T18:55:22","dateModified":"2021-09-20T18:55:22","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["supervisor, golang, python"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/09\/control-system-process-using-supervisor-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="用 Supervisor 管理系統程式">
 <meta property="og:description" content="
 相信大家都有管理 Linux 主機 Process 的經驗，用的工具也是千奇百種，但是肯定對 Python 版本的 Supervisor 並不陌生，這套工具相當好用，可以監控不同的 Process 狀態，也可以自動重啟。而本篇要介紹用 Go 語言寫出來的開源套件『Supervisord』，作者提到為什麼要用 Go 語言開發此工具，原因很簡單，就是透過 Go 語言的跨平台優勢，寫一套程式，可以直接跑在任何平台，管理者就不需要再為了 Python 環境而煩惱。">
@@ -100,7 +100,7 @@
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on September 20, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;325&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;322&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -294,10 +294,10 @@ node_supervisord_up{<span style=color:#00688b>group</span>=<span style=color:#cd
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
 </span></code></pre></td>
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>FROM debian:latest
-COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord
-CMD [<span style=color:#cd5555>&#34;/usr/local/bin/supervisord&#34;</span>]
-</code></pre></td></tr></table>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-dockerfile data-lang=dockerfile><span style=color:#8b008b;font-weight:700>FROM</span><span style=color:#cd5555> debian:latest</span><span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>COPY</span> --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord<span style=color:#a61717;background-color:#e3d2d2>
+</span><span style=color:#a61717;background-color:#e3d2d2></span><span style=color:#8b008b;font-weight:700>CMD</span> [<span style=color:#cd5555>&#34;/usr/local/bin/supervisord&#34;</span>]<span style=color:#a61717;background-color:#e3d2d2>
+</span></code></pre></td></tr></table>
 </div>
 </div><h2 id=心得感想>心得感想</h2>
 <p>目前整個生態都趨向於容器化，但是這種舊有的管理方式，還是存在各種不同的情境，有了 Go 語言版本，大大降低團隊處理環境的時間，蠻推薦大家使用 Go 版本來整合 Container 內部，或是在非 Docker 環境下的管理。</p>
