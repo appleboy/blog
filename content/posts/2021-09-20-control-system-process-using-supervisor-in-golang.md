@@ -109,7 +109,7 @@ killasgroup=true
 
 > p.Signal(syscall.SIGKILL, killasgroup)
 
-```go
+```go {linenos=table,hl_lines=[3]}
 if atomic.LoadInt32(&stopped) == 0 {
   log.WithFields(log.Fields{"program": p.GetName()}).Info("force to kill the program")
   p.Signal(syscall.SIGKILL, killasgroup)
