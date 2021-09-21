@@ -136,7 +136,7 @@ node_supervisord_up{group="tip-backend",name="tip-backend"} 1
 
 最後要在 Docker 內也使用 `Supervisord` 工具的話，可以透過 `COPY` 直接從官方 Image 把 binary 複製過去即可。
 
-```sh
+```dockerfile
 FROM debian:latest
 COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord
 CMD ["/usr/local/bin/supervisord"]
