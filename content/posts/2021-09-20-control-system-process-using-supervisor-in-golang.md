@@ -105,7 +105,28 @@ stopasgroup=true
 killasgroup=true
 ```
 
-字面上的意思就不用再多說明了，這邊要注意的是 `stopsignal` 設定，如果沒有設定此項目，Process 有處理 Graceful Shutdown 的話，那這樣程式不會如你預期的結束，故這項目一定要加上去。除了 Web 介面外，還可以用 CLI 看到所有 Process 狀態
+字面上的意思就不用再多說明了，這邊要注意的是 `stopsignal` 設定，如果沒有設定此項目，Process 有處理 Graceful Shutdown 的話，那這樣程式不會如你預期的結束，故這項目一定要加上去。相關[程式碼可以看這邊](https://github.com/ochinchina/supervisord/blob/a8e4c46c8f3de8bdc5aff5d8bcbf6b935f9eab8c/process/process.go#L937)，目前看到預設就是用 `syscall.SIGKILL` 強制關閉程式。
+
+> p.Signal(syscall.SIGKILL, killasgroup)
+
+```go
+if atomic.LoadInt32(&stopped) == 0 {
+  log.WithFields(log.Fields{"program": p.GetName()}).Info("force to kill the program")
+  p.Signal(syscall.SIGKILL, killasgroup)
+  killEndTime := time.Now().Add(killwaitsecs)
+  for killEndTime.After(time.Now()) {
+    //if it exits
+    if p.state != Starting && p.state != Running && p.state != Stopping {
+      atomic.StoreInt32(&stopped, 1)
+      break
+    }
+    time.Sleep(10 * time.Millisecond)
+  }
+  atomic.StoreInt32(&stopped, 1)
+}
+```
+
+除了 Web 介面外，還可以用 CLI 看到所有 Process 狀態
 
 ```sh
 supervisord ctl status
