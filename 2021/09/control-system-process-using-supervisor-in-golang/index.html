@@ -245,8 +245,8 @@
 <table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style=display:block;width:100%;background-color:#d6d6c6><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span></span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
 </span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
@@ -261,8 +261,8 @@
 <td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
 <pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>if</span> atomic.<span style=color:#008b45>LoadInt32</span>(&amp;stopped) == <span style=color:#b452cd>0</span> {
   log.<span style=color:#008b45>WithFields</span>(log.Fields{<span style=color:#cd5555>&#34;program&#34;</span>: p.<span style=color:#008b45>GetName</span>()}).<span style=color:#008b45>Info</span>(<span style=color:#cd5555>&#34;force to kill the program&#34;</span>)
-  p.<span style=color:#008b45>Signal</span>(syscall.SIGKILL, killasgroup)
-  killEndTime := time.<span style=color:#008b45>Now</span>().<span style=color:#008b45>Add</span>(killwaitsecs)
+<span style=display:block;width:100%;background-color:#d6d6c6>  p.<span style=color:#008b45>Signal</span>(syscall.SIGKILL, killasgroup)
+</span>  killEndTime := time.<span style=color:#008b45>Now</span>().<span style=color:#008b45>Add</span>(killwaitsecs)
   <span style=color:#8b008b;font-weight:700>for</span> killEndTime.<span style=color:#008b45>After</span>(time.<span style=color:#008b45>Now</span>()) {
     <span style=color:#228b22>//if it exits
 </span><span style=color:#228b22></span>    <span style=color:#8b008b;font-weight:700>if</span> p.state != Starting &amp;&amp; p.state != Running &amp;&amp; p.state != Stopping {
