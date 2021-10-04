@@ -105,7 +105,7 @@ stopasgroup=true
 killasgroup=true
 ```
 
-字面上的意思就不用再多說明了，這邊要注意的是 `stopsignal` 設定，如果沒有設定此項目，Process 有處理 Graceful Shutdown 的話，那這樣程式不會如你預期的結束，故這項目一定要加上去。相關[程式碼可以看這邊](https://github.com/ochinchina/supervisord/blob/a8e4c46c8f3de8bdc5aff5d8bcbf6b935f9eab8c/process/process.go#L937)，目前看到預設就是用 `syscall.SIGKILL` 強制關閉程式。
+字面上的意思就不用再多說明了，這邊要注意的是 `stopsignal` 設定，如果沒有設定此項目，Process 有處理 Graceful Shutdown 的話，那這樣程式不會如你預期的結束，故這選項一定要加上去。相關[程式碼可以看這邊](https://github.com/ochinchina/supervisord/blob/a8e4c46c8f3de8bdc5aff5d8bcbf6b935f9eab8c/process/process.go#L937)，目前看到預設就是用 `syscall.SIGKILL` 強制關閉程式。
 
 > p.Signal(syscall.SIGKILL, killasgroup)
 
