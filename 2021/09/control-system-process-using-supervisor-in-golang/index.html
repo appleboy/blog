@@ -196,7 +196,7 @@
 <span style=color:#658b00>password</span>=
 </code></pre></td></tr></table>
 </div>
-</div><p>其中 inet_http_server 是一個簡易的管理介面，用來看到設定好的 Process 狀態，Web 介面很陽春如下:</p>
+</div><p>其中 <code>inet_http_server</code> 是一個簡易的管理介面，用來看到設定好的 Process 狀態，Web 介面很陽春，但是實用:</p>
 <p><img src=https://i.imgur.com/4uBJZAG.png alt=cover></p>
 <p>可以透過 Web 介面啟動或暫停 Process，此頁面也可以透過 <code>username</code> 及 <code>password</code> 保護。接著看 Process 如何設定:</p>
 <div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
@@ -237,7 +237,7 @@
 <span style=color:#658b00>killasgroup</span>=<span style=color:#cd5555>true</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>字面上的意思就不用再多說明了，這邊要注意的是 <code>stopsignal</code> 設定，如果沒有設定此項目，Process 有處理 Graceful Shutdown 的話，那這樣程式不會如你預期的結束，故這項目一定要加上去。相關<a href=https://github.com/ochinchina/supervisord/blob/a8e4c46c8f3de8bdc5aff5d8bcbf6b935f9eab8c/process/process.go#L937>程式碼可以看這邊</a>，目前看到預設就是用 <code>syscall.SIGKILL</code> 強制關閉程式。</p>
+</div><p>字面上的意思就不用再多說明了，這邊要注意的是 <code>stopsignal</code> 設定，如果沒有設定此項目，Process 有處理 Graceful Shutdown 的話，那這樣程式不會如你預期的結束，故這選項一定要加上去。相關<a href=https://github.com/ochinchina/supervisord/blob/a8e4c46c8f3de8bdc5aff5d8bcbf6b935f9eab8c/process/process.go#L937>程式碼可以看這邊</a>，目前看到預設就是用 <code>syscall.SIGKILL</code> 強制關閉程式。</p>
 <blockquote>
 <p>p.Signal(syscall.SIGKILL, killasgroup)</p>
 </blockquote>
