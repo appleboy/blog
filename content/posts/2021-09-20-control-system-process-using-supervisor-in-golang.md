@@ -80,7 +80,7 @@ username=
 password=
 ```
 
-其中 inet_http_server 是一個簡易的管理介面，用來看到設定好的 Process 狀態，Web 介面很陽春如下:
+其中 `inet_http_server` 是一個簡易的管理介面，用來看到設定好的 Process 狀態，Web 介面很陽春，但是實用:
 
 ![cover](https://i.imgur.com/4uBJZAG.png)
 
