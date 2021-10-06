@@ -7,7 +7,7 @@
 <meta name=description content="
 除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","name":"如何發佈出高質量的 pull request (簡稱 pr)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何發佈出高質量的 Pull Request (簡稱 PR)","description":"除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。\n","inLanguage":"en","wordCount":153,"datePublished":"2021-10-06T22:02:25","dateModified":"2021-10-06T22:02:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["code review, github, gitea"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","name":"如何發佈出高質量的 pull request (簡稱 pr)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何發佈出高質量的 Pull Request (簡稱 PR)","description":"除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。\n","inLanguage":"en","wordCount":153,"datePublished":"2021-10-06T22:02:25","dateModified":"2021-10-06T22:02:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["code review, github, gitea, bitbucket, gitlab"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="如何發佈出高質量的 Pull Request (簡稱 PR)">
 <meta property="og:description" content="
 除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
@@ -133,7 +133,7 @@
 <p><img src=https://i.imgur.com/iQ6TfHQ.png alt="code review"></p>
 <p>除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。</p>
 <h2 id=確保通過所有-ci-流程再發-pr>確保通過所有 CI 流程再發 PR</h2>
-<p>通常開發者開發新功能或解 Bug 時，會開立新的分支，而當這個分支進行第一個新的 Commit 後，後面的 CI (測試, 代碼質量驗證) 就會開始進行完整流程，確保此提交是可以正常運作，而在發 PR 之前，開發同仁務必確保 CI 是有通過驗證的，而不是發了 PR，通知 Reviewr 後，等到 Reviewr 收到信件，點開來看發現 CI 是 Failure，這樣就浪費雙方寶貴的時間。除了 CI 之外，也可以將一些常用的驗證流程，寫進 Makefile 讓團隊可以共同使用。</p>
+<p>通常開發者開發新功能或解 Bug 時，會開立新的分支，而當這個分支進行第一個新的 Commit 後，後面的 CI (測試, 代碼質量驗證) 就會開始進行完整流程，確保此提交是可以正常運作，而在發 PR 之前，開發同仁務必確保 CI 是有通過驗證的，而不是發了 PR，通知 Reviewr 後，等到 Reviewr 收到信件，點開來看發現 CI 是 Failure，這樣就浪費雙方寶貴的時間。除了 CI 之外，也可以將一些常用的驗證流程，寫進 Makefile 讓團隊可以自己的開發環境進行驗證，加速開發流程。</p>
 <p><img src=https://i.imgur.com/0m2P3LI.jpg alt="commit log"></p>
 <h2 id=務必撰寫-unit-testing>務必撰寫 Unit Testing</h2>
 <p>這點相當重要，當工程師在解決一個問題後，請務必撰寫 Unit Testing，這點可以大幅降低 Reviewer 時間，我自己個人在看 PR 時，都會優先看測試的邏輯是否有符合業務邏輯，如果符合的話，其實接下來 Review 就會非常的快，當開發者沒寫測試，這時候就會相當擔心，這個 PR 會不會影響到其他功能，或者是不符合業務邏輯。雖然我知道大部分開發者都不太習慣寫測試，但是有了這個良好的習慣，團隊也不用擔心開發者會改壞既有的功能或產生無法預期的錯誤。</p>
@@ -154,6 +154,8 @@
 <a href=https://blog.wu-boy.com/tags/code-review/>code review</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github/>github</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gitea/>gitea</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/bitbucket/>bitbucket</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitlab/>gitlab</a>&nbsp;
 </div>
 <hr>
 <section id=social-share>
