@@ -3,7 +3,7 @@ title: "如何發佈出高質量的 Pull Request (簡稱 PR)"
 date: 2021-10-06T22:02:25+08:00
 author: appleboy
 type: post
-url: /2021/09/how-to-write-high-quality-pull-request
+url: /2021/10/how-to-write-high-quality-pull-request
 share_img: https://i.imgur.com/iQ6TfHQ.png
 categories:
   - GitHub
