@@ -116,6 +116,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group/>
+<h2 class=post-title>在 Docker 內設定使用者及群組權限的三種方式</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 10, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;138&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/CDrKX9nVEAkUnrVNX26Mf0HY1iW73gM6z8WCITgo5QUWx3yXZPOzAI6op59p-YxKYgPkBQalH-rWUb2gElpc2gwjZ3M5jgKeHQ4MI88DkMXjxzkAhQX-zgIqjbGpRrlV38uXLFDxcMU=w1920-h1080" title=docker><img src="https://lh3.googleusercontent.com/CDrKX9nVEAkUnrVNX26Mf0HY1iW73gM6z8WCITgo5QUWx3yXZPOzAI6op59p-YxKYgPkBQalH-rWUb2gElpc2gwjZ3M5jgKeHQ4MI88DkMXjxzkAhQX-zgIqjbGpRrlV38uXLFDxcMU=w1920-h1080" alt=docker title=docker></a></p>
+<p>如果平常本身有在玩 <a href=https://www.docker.com/>Docker</a> 的開發者肯定知道透過 docker command 啟動的容器預設是使用 <code>root</code> 來當作預設使用者及群組，這邊會遇到一個問題，當 Host 環境你有 root 權限就沒有此問題，如果你沒有 root 權限，又有需求在 Docker 容器內掛上 Volume，會發現產生出來的檔案皆會是 root 權限，這時候在 Host 完全無法寫入。本篇教大家使用三種方式來設定容器使用者權限。</p>
+<a href=https://blog.wu-boy.com/2019/10/three-ways-to-setup-docker-user-and-group/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/10/ansible-setup-google-container-registry-and-upload-image-via-drone-ci-cd/>
 <h2 class=post-title>Ansible 設定 Google Container Registry 搭配 Drone 自動上傳</h2>
 </a>
@@ -314,37 +335,6 @@
 <a href=https://blog.wu-boy.com/tags/ansible/>ansible</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone-ci/>drone ci</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/>
-<h2 class=post-title>Go Module 如何發佈 v2 以上版本</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;216&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p><a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Go Module</a> 是 <a href=https://golang.org>Golang</a> 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 <code>GOPATH</code> 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇<a href=https://blog.golang.org/using-go-modules>教學部落格</a>，底下是教學會涵蓋的範圍</p>
-<ul>
-<li>Creating a new module.</li>
-<li>Adding a dependency.</li>
-<li>Upgrading dependencies.</li>
-<li>Adding a dependency on a new major version.</li>
-<li>Upgrading a dependency to a new major version.</li>
-<li>Removing unused dependencies.</li>
-</ul>
-<p>而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。</p>
-<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,38 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/01/how-to-install-grub2-from-live-cd/>
+<h2 class=post-title>用 Ubuntu 10.10 Live CD 重新安裝 GRUB 2 到 Bootloader</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 27, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;321&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6760100409/ title="logo-Ubuntu by appleboy46, on Flickr"><img src="https://i2.wp.com/farm8.staticflickr.com/7153/6760100409_b23d1ce67b_m.jpg?resize=240%2C165&ssl=1" alt=logo-Ubuntu data-recalc-dims=1></a>
+</div>
+<p>今天起床打開電腦，<a href=http://www.ubuntu.com target=_blank>Ubuntu</a> 跳出 Warning 訊息，boot 磁區剩下 84MB，所以我手殘進去 /boot/ 目錄，把舊的 Kernel 清除，不小心砍掉 initrd.img-2.6.35-32-generic Linux Image 開機所需要的檔案，結果之後開機出現</p>
+<blockquote>
+<p>You need to load the kernel first
+大家好像都是升級 Kernel 之後才會出現上述狀況，網路上找到的解答都不符合我的需求，所以我又往 <a href=https://help.ubuntu.com/community/Grub2 target=_blank>GRUB2</a> 開機 Boot 去瞭解，新的 GRUB 2 跟原先的 GRUB 的解法已經完全不同了，沒有 <span style=color:red><strong>/boot/grub/menu.list</strong></span>，而被 <span style=color:green><strong>/boot/grub/grub.cfg</strong></span> 取代，所以不應該在手動編輯此檔案。grub.cfg 會在有更新 Kernel 版本時，手動執行 update-grub 的時候被修改覆寫。這次發生的原因是在我把舊版 Kernel 刪除，而忘記執行 update-grub，這時候的最佳解法就是透過 Live CD 來救援。</p>
+</blockquote>
+<a href=https://blog.wu-boy.com/2012/01/how-to-install-grub2-from-live-cd/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/boot/>boot</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/bootloader/>bootloader</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/grub/>grub</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/grub2/>GRUB2</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/01/ubuntu-mount-dvd-iso-on-ubuntu/>
 <h2 class=post-title>[筆記] 在 Ubuntu mount DVD ISO 檔案</h2>
 </a>
@@ -358,29 +390,6 @@ echo $lang->line("index") . "\n";</pre>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/nexmo/>Nexmo</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/sms/>SMS</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/11/codeigniter-2-1-0-has-been-released/>
-<h2 class=post-title>CodeIgniter 2.1.0 has been released</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 16, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;112&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
-</div> 2011/11/16 台灣官方公告訊息:『
-<p><a href=http://www.codeigniter.org.tw/blog/codeigniter_2.1.0_released target=_blank>CodeIgniter 2.1.0 Release</a>』 在上禮拜參加了 <a href=http://phpconf.tw/2011 target=_blank>2011 PHP Conference</a>，並且介紹了 <a href=http://CodeIgniter.org.tw target=_blank>CodeIgniter</a> 目前官方動態、安裝及使用方式，結果就在過沒幾天就釋出 2.1.0 版本了，在這次的版本修正了許多 Bug 以及增加了一些功能，底下就來看看 CodeIgniter 2.1.0 修正及改變了哪些。</p>
-<a href=https://blog.wu-boy.com/2011/11/codeigniter-2-1-0-has-been-released/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 </div>
 </article>
 </div>

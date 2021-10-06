@@ -116,6 +116,26 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/01/mysql-%E5%85%A7%E5%BB%BA%E5%87%BD%E5%BC%8F-mysql-replace-%E5%8A%9F%E8%83%BD/>
+<h2 class=post-title>[MySQL] 內建函式 MySQL Replace 功能</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 27, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;29&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天老師寄信給我，說我轉移的 <a href=http://journal.cn.ee.ccu.edu.tw/>journal.CN</a> 的文章，出現以前的文章，不能看到圖片，我去查了一下，發現 AMS 文章系統的編輯軟體，相當爛，它的插入圖片，竟然是用絕對網址，然後他會先讀取 mainfile.php 裡面的</p>
+<pre class="brush: php; title: ; notranslate" title>define('XOOPS_URL', 'http://journal.cn.ee.ccu.edu.tw');
+</pre> 然後把圖片的網址寫死，而不是動態的，就是利用相對路徑，所以我利用了 replace 的功能來解決全部文章圖片的問題，語法如下
+<pre class="brush: sql; title: ; notranslate" title>update `xoops_ams_text` set `hometext` = replace(`hometext`,'140.123.107.38/~cnews','journal.cn.ee.ccu.edu.tw');
+</pre> 上面是說，取代 hometext 這個欄位的，找到 140.123.107.38/~cnews 取代成 journal.cn.ee.ccu.edu.tw 這語法相當好用，大家可以嘗試看看，畢竟如果用 php 的 replace 語法，還要利用陣列方式，比較麻煩
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/01/%E7%94%9F%E6%B4%BB%E6%97%A5%E8%A8%98%E6%98%9F%E6%9C%9F%E4%B8%80%E7%9A%84%E7%B6%B2%E8%B7%AF%E5%AE%89%E5%85%A8%E6%9C%9F%E6%9C%AB%E5%A0%B1%E5%91%8A/>
 <h2 class=post-title>[生活日記]星期一的網路安全期末報告</h2>
 </a>
@@ -313,28 +333,6 @@ Press any keys - Ctrl-D will terminate this program
 <a href=https://blog.wu-boy.com/tags/%E5%9C%8B%E5%8F%B2%E9%A4%A8/>國史館</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E6%96%87%E7%8D%BB%E9%A4%A8/>文獻館</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E6%9B%BF%E4%BB%A3%E5%BD%B9/>替代役</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/12/php-%E5%A5%BD%E7%94%A8%E7%9A%84-pear-php-mail-and-mail_mime/>
-<h2 class=post-title>[PHP] 好用的 PEAR – PHP Mail and Mail_Mime</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 18, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;229&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>今天在寫期末的 Project，我的專題是寫無線 802.1X 認證，搭配 FreeBADIUS Server，然後我在搭配網頁整合認證機制，然後我在做使用者帳號申請部份，需要靠 Email 認證，但是我去看官網，介紹好像也沒什麼，在寄信的時候常常會遇到亂碼，不然就是寄信 html 部份會有問題，或者是不能附加檔案之類的，然後網路上找不到一個好用的 class ，所以就用了 <a href=http://pear.php.net/package/Mail_Mime>PEAR::Mail_Mime</a> 跟 <a href=http://pear.php.net/package/Mail>PEAR::Mail</a>，這兩個套件還不錯用，如果想寄單純的信件，就用 PEAR::Mail 這個就可以了，如果要搭配 html 網頁，就要搭上 PEAR::Mail_Mime</p>
-<a href=https://blog.wu-boy.com/2007/12/php-%E5%A5%BD%E7%94%A8%E7%9A%84-pear-php-mail-and-mail_mime/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/mail/>mail</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/pear/>PEAR</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

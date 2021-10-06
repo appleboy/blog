@@ -103,6 +103,42 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration/>
+<h2 class=post-title>Fabric 管理多台 Linux 機器的 command tool</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 25, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;484&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/8679381967/ title="python-logo-master-v3-TM by appleboy46, on Flickr"><img src="https://i0.wp.com/farm9.staticflickr.com/8123/8679381967_75cee4e0e9_n.jpg?resize=320%2C108&ssl=1" alt=python-logo-master-v3-TM data-recalc-dims=1></a>
+</div> 相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是
+<p><a href=https://github.com/capistrano/capistrano target=_blank>capistrano</a>、<a href=http://docs.fabfile.org target=_blank>Fabric</a>、<a href=http://code.google.com/p/parallel-ssh/ target=_blank>pssh</a>、<a href="http://packages.debian.org/search?keywords=dsh" target=_blank>dsh</a>…等都，本篇會以 <a href=http://www.python.org/ target=_blank>Python</a> 所推的 Fabric 來做介紹。另外 Ruby 所寫的 capistrano tool 也是不錯的選擇，這兩套其實大同小異，可以將 Deploy 的邏輯寫成單一 file 再透過 task 定義來決定執行的工作。當然你也可以透過此 tool 來管理 local 端動作，但是這有點多此一舉，因為基本的 Shell 就可以完成了，如果熟悉 Python 則選 fabric，如果喜歡寫 <a href=http://www.ruby-lang.org/en/ target=_blank>Ruby</a> 則可以試試看 capistrano。</p>
+<h3 id=安裝方式installation-如果是>安裝方式(Installation) 如果是</h3>
+<p><a href=http://www.centos.org/ target=_blank>CentOS</a> 系列可以透過 yum 套件管理，<a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.debian.org/ target=_blank>Debian</a> 則是透過 aptitude 方式安裝。 Yum</p>
+<pre class="brush: bash; title: ; notranslate" title># install python pip tool and fabric command
+yum -y install python-pip
+pip-python install fabric</pre> APT
+<pre class="brush: bash; title: ; notranslate" title># install python easy_install
+aptitude -y install python-pip
+# install fabric command
+pip install fabric</pre> 安裝 capistrano 可以透過 Ruby gem。
+<pre class="brush: bash; title: ; notranslate" title>$ gem install capistrano</pre>
+<a href=https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/capistrano/>capistrano</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/fabric/>Fabric</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/python/>Python</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/04/linode-nextgen-ram-upgrade/>
 <h2 class=post-title>Linode 最後優惠 升級記憶體</h2>
 </a>
@@ -351,30 +387,6 @@ Total 0 (delta 0), reused 0 (delta 0) error: denying non-fast forward refs/heads
 <a href=https://blog.wu-boy.com/tags/bower/>Bower</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/03/backbone-js-rewrite-into-coffeescript/>
-<h2 class=post-title>Backbone.js rewrite into CoffeeScript?</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 1, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;37&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/7059615321/ title="backbone by appleboy46, on Flickr"><img src="https://i1.wp.com/farm6.staticflickr.com/5338/7059615321_097833dea8.jpg?resize=451%2C80&ssl=1" alt=backbone data-recalc-dims=1></a>
-</div> 看到
-<p><a href=https://github.com/gsamokovarov target=_blank>@gsamokovarov</a> 提出將 <a href=http://backbonejs.org/ target=_blank>Backbone.js</a> 改寫成 <a href=http://coffeescript.org/ target=_blank>CoffeeScript</a> 架構的 <a href=https://github.com/documentcloud/backbone/pull/2317 target=_blank>Pull request</a>，結果官方團隊其中一位開發作者回應了一張圖，代表他的心情 XD，各位有興趣可以點上面連結看看，後來有其他人回應說，為什麼官方不用 CoffeeScript 來寫了，發此 Pull Request 的作者也有說，他只是將架構改成 CoffeeScript 讓大家參考看看而已，沒有真的希望可以納入整個 Backbone.js 專案，如果有其他開發者需要的話，一樣可以 fork 此<a href=https://github.com/gsamokovarov/backbone.coffee target=_blank>專案</a>，說明文件也用 <a href=http://jashkenas.github.com/docco/ target=_blank>docco</a> 產生好了，可以參考此<a href=http://gsamokovarov.github.com/backbone.coffee/ target=_blank>連結</a>，官方作者也提到，大部份的第3方 Library 還是不會使用 CoffeeScript 來當作基底開發，畢竟並非所有人都知道 CoffeeScript，如果官方想這麼開發的話，早就再 2010 年丟釋出 Backbone.js 的時候就直接採用了，不會拖到現在還沒出來，當然最後官方也希望將此 pull request 寫到 wiki 裡面給大家參考，等待原作者補開發動機及細節。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/backbone.js/>Backbone.js</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/coffeescript/>CoffeeScript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/javascrpt/>JavaScrpt</a>&nbsp;
 </div>
 </article>
 </div>

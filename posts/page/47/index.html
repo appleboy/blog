@@ -103,6 +103,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/05/svn-%E6%81%A2%E5%BE%A9%E7%95%A5%E9%81%8E%E8%A1%9D%E7%AA%81%E6%AA%94%E6%A1%88-conflict-file/>
+<h2 class=post-title>svn 恢復略過衝突檔案 (conflict file)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 4, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;44&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>當我們利用 svn up 更新程式碼，如果遇到修改相同檔案的相同地方，就會發生衝突 (conflict) 此時就必須修改或者是略過，當選擇略過此檔案就會出現底下訊息</p>
+<blockquote>
+<p>Skipped &lsquo;lib/logs/logDB.txt&rsquo; Skipped &lsquo;lib/confs/Conf.php&rsquo; At revision 912. Summary of conflicts: Skipped paths: 2 之後怎麼用 svn up 更新檔案，都會因此被略過，那該怎麼恢復被略過檔案的狀態，讓它們可以繼續被更新呢？網路上找到一篇 <a href=http://little418.com/2009/05/svn-local-obstruction-incoming-add-upon-merge.html>svn local obstruction, incoming add upon merge</a> 解法，用 <span style=color:green><strong>svn resolve</strong></span> 來解決問題，只要針對該檔案打入底下指令即可</p>
+</blockquote>
+<pre class="brush: bash; title: ; notranslate" title>svn resolve --accept working lib/confs/Conf.php
+svn resolve --accept working lib/logs/logDB.txt</pre>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/svn/>svn</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/04/%E5%9C%A8-ubuntu-%E5%AE%89%E8%A3%9D%E6%88%96%E5%8D%87%E7%B4%9A-git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%9A%843%E7%A8%AE%E6%96%B9%E6%B3%95/>
 <h2 class=post-title>在 Ubuntu 安裝或升級 Git 版本控制的3種方法</h2>
 </a>
@@ -364,35 +389,6 @@ git-server-的兩三事 Pro Git - Table of Contents 簡體中文版 Git 初學�
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/html5/>html5</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/>
-<h2 class=post-title>2011 OSDC Day 1 筆記</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 31, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;268&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-Update: 補上 OSDC 紀錄影片 2011.06.26 今年很高興可以北上參加 OSDC 2011 (Open Source Developers Conference)，由於之前都在南部唸書及工作，沒有機會北上參加聚會，現在人在新竹，終於有機會可以參加了，雖然早上六點就要起床趕電車了，不過到現場聽課感覺就是不同，也可以認識很多新朋友，底下來紀錄上課筆記
-微軟與 jQuery 社群的親密接觸 講者: Eric Shangkuan (Microsoft) Slide: 微軟與 jQuery 社群的親密接觸 這是 OSDC 第一場演講，早上九點就開始了，雖然人不多，但是蠻多人還是為了講者而來，首先介紹什麼是 jQuery，以及 jQuery 一些基本用法，像是 CSS selector，如何在 Windows Visual Studio 上面開發 jQuery 及撰寫 plugin 整合進去 ASP.Net，最後介紹三個不錯用的 jQuery Plugin: Templeate, Datalink, Globalzation。
-Templeate: 這搭配 Facebook api 可以直接做個人頁面，請參考這裡 Globalzation: 前端多國語系實做 Datalink: 可以快速處理 form，利用 object 跟 jQuery 搭配 如果要研究上述三個 jQuery Plugin 可以參考底下: jQuery Datalink: https://github.com/jquery/jquery-datalink jQuery Templeate: https://github.
-<a href=https://blog.wu-boy.com/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/ajax/>AJAX</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/embedded-system/>Embedded System</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/osdc/>OSDC</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/perl/>Perl</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/python/>Python</a>&nbsp;
 </div>
 </article>
 </div>

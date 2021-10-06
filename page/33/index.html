@@ -116,6 +116,35 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/>
+<h2 class=post-title>Git rebase + stash 小技巧</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 18, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;108&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>每天打開電腦，第一件事情就是將專案程式碼更新的最新，以便整合同事新開發的功能，免的跟自己寫的功能衝突，所以最常用用的就是 <code>git pull --rebase origin master</code>，此命令使用 <code>rebase</code> 來取代 <code>merge</code> 程式碼，也可以避免在 log 清單內出現 <code>merge branch master into master</code> 等字樣，但是如果在開發一半進度時，想同時將同事的程式碼先 merge 進來，會發現無法 merge，git 會請你先將 local 修改過的檔案 commit，才可以讓您更新，所以這時候我們可以用 git stash 方式來解決</p>
+<p>如果你在 master 分支上，並且想 pull 最新的 commit，可以透過底下指令步驟</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ git stash --include-untracked
+$ git pull --rebase origin master
+$ git stash pop
+# fix conflict (merge)</pre>
+</div>
+<a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/git-stash/>git stash</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/08/cross-site-request-in-js-web-apps-and-codeigniter-php-framework/>
 <h2 class=post-title>Cross Site Request Forgery in JS Web Apps and CodeIgniter PHP Framework</h2>
 </a>
@@ -398,30 +427,6 @@
 <a href=https://blog.wu-boy.com/tags/memcache/>memcache</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/06/jsdc-ksdg-gruntjs-tool/>
-<h2 class=post-title>JSDC 和 KSDG 影音紀錄 (淺談 GruntJS 整合開發工具)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 11, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;30&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a title="gruntlogo by appleboy46, on Flickr" href=https://www.flickr.com/photos/appleboy/8591850168/><img alt=gruntlogo src="https://i2.wp.com/farm9.staticflickr.com/8244/8591850168_ca0e125ffa_n.jpg?resize=200%2C200&ssl=1" data-recalc-dims=1></a>
-</div> 很高興今年在
-<p><a href=http://jsdc.tw/2013/ target=_blank>JSDC</a> 擔任講師，演講主題為『<a href=http://blog.wu-boy.com/2013/05/2013-javascript-conference-front-tool-grunt-js/ target=_blank>你不可不知的前端開發工具</a>』，這場議程只有30分鐘可以講，時間實在是不太夠，要消化這麼多工具其實對於聽眾有點困難，真是對不起聽眾了，不過沒關係，高雄 <a href=https://www.facebook.com/groups/KSDGroup target=_blank>KSDG</a> 五月份邀請我講『<a href=http://blog.wu-boy.com/2013/05/how-to-integrate-front-end-tools-via-gruntjs/ target=_blank>打造團隊共同開發環境</a>』，其實就是將 <a href=http://gruntjs.com/ target=_blank>GruntJS</a> 精華整個講一遍，大概有一個多小時，底下是官方影音，如果朋友們沒北上參加，也可以透過 <a href=http://www.youtube.com/user/JSDCTW/videos target=_blank>JSDC Youtube</a> 來欣賞。 JSDC 35分鐘議程</p>
-<a href=https://blog.wu-boy.com/2013/06/jsdc-ksdg-gruntjs-tool/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/grunt/>Grunt</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/gruntjs/>GruntJS</a>&nbsp;
 </div>
 </article>
 </div>

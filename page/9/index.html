@@ -116,6 +116,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/>
+<h2 class=post-title>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 24, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;441&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" title="提升 docker build 時間"><img src="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" alt="提升 docker build 時間" title="提升 docker build 時間"></a></p>
+<p>在現代 CI/CD 的環境流程中，使用 <a href=https://github.com/jpetazzo/dind>Docker In Docker</a> 來編譯容器已經相當流行了，像是 <a href=https://about.gitlab.com/product/continuous-integration/>GitLab CI</a> 或 <a href=https://github.com/drone/drone title=Drone>Drone</a> 都是全走 <a href=https://www.docker.com/ title=Docker>Docker</a> 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 <a href=https://hub.docker.com/ title="Docker Hub">Docker Hub</a> 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 <a href=https://github.com/docker/docker/releases/tag/v1.13.0>v1.13</a> 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。</p>
+<a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/02/deploy-golang-app-to-heroku/>
 <h2 class=post-title>快速部署網站到 Heroku 雲平台</h2>
 </a>
@@ -477,28 +500,6 @@ Flickr 在 2019 年一月會開始將免費會員照片刪除到剩下 1000 張�
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/12/flutter-release-1-0-0-version/>
-<h2 class=post-title>Flutter 推出 1.0 版本</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 5, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;218&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/46133062882/in/dateposted-public/ title="Screen Shot 2018-12-05 at 10.25.34 AM"><img src="https://i0.wp.com/farm5.staticflickr.com/4843/46133062882_6aed05cb12_z.jpg?resize=640%2C422&ssl=1" alt="Screen Shot 2018-12-05 at 10.25.34 AM" data-recalc-dims=1></a></p>
-<p>很高興看到台灣時間 12/5 號 <a href=https://flutter.io/>Flutter</a> 正式推出 <a href=https://developers.googleblog.com/2018/12/flutter-10-googles-portable-ui-toolkit.html>1.0 版本</a>，相信很多人都不知道什麼是 Flutter，簡單來說開發者只要學會 Flutter 就可以維護一套程式碼，並且同時編譯出 iOS 及 Android 手機 App，其實就跟 <a href=https://facebook.com>Facebook</a> 推出的 <a href=https://facebook.github.io/react-native/>React Native</a> 一樣，但是 Flutter 的老爸是 <a href=https://google.com>Google</a>。相信大家很常看到這一兩年內，蠻多新創公司相繼找 RN 工程師，而不是分別找兩位 iOS 及 Android 工程師，原因就在後續的維護性及成本。而 Flutter 也有相同好處。我個人覺得 RN 跟 Flutter 比起來，單純對入門來說，RN 是非常好上手的，但是如果您考慮到後續的維護成本，我建議選用 Flutter，雖然 Flutter 要學一套全新的語言 <a href=https://www.dartlang.org/>Dart</a>，在初期時要學習如何使用 Widgets，把很多元件都寫成 Widgets 方便後續維護。但是在 RN 後期的維護使用了大量的第三方 Library，您想要升級一個套件可能影響到太多地方，造成不好維護。語言選擇 RN 可以使用純 JavaScript 撰寫，或者是導入 JS Flow + TypeScript 來達到 Statically Type，而 Flutter 則是使用 Dart 直接支援強型別編譯。如果現在要我選擇學 RN 或 Flutter 我肯定選擇後者。那底下來看看這次 Flutter 釋出了哪些新功能？對於 Flutter 還不了解的，可以看底下介紹影片。</p>
-<a href=https://blog.wu-boy.com/2018/12/flutter-release-1-0-0-version/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/dart/>dart</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/flutter/>flutter</a>&nbsp;
 </div>
 </article>
 </div>

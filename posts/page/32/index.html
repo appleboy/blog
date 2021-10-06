@@ -103,6 +103,38 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/11/jenkins-nginx-auth/>
+<h2 class=post-title>Jenkins + Nginx User Auth</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 13, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;187&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/10830034484/ title="jenkins_logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.staticflickr.com/5507/10830034484_95cba45707.jpg?resize=398%2C128&ssl=1" alt=jenkins_logo data-recalc-dims=1></a>
+</div>
+<p><a href=http://jenkins-ci.org/ target=_blank>Jenkins CI</a> 是一套非常好的 Job 執行 Tool，可以幫忙跑專案測試，測試完成後繼續 Deploy 到相對應的伺服器，也可以自動寄信給開發者或者是指定的內部人員。在 <a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.debian.org/ target=_blank>Debian</a> 安裝方式非常簡單，按照下述操作就可以簡易架設完成</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ aptitude -y install openjdk-7-jre openjdk-7-jdk
+$ wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add -
+$ sh -c 'echo deb http://pkg.jenkins-ci.org/debian binary/ > /etc/apt/sources.list.d/jenkins.list'
+$ aptitude -y update
+$ aptitude -y install jenkins</pre>
+</div>
+<a href=https://blog.wu-boy.com/2013/11/jenkins-nginx-auth/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jenkins/>Jenkins</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/11/intergrate-work-flow-with-gitlab/>
 <h2 class=post-title>Gitlab CE + Gitlab CI 打造版本控制及自動測試流程</h2>
 </a>
@@ -330,35 +362,6 @@ home_mailbox = Maildir/ 接著取消 MAIL 變數 $ unset MAIL 最後寫入新的
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/mail/>mail</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/postfix/>Postfix</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/>
-<h2 class=post-title>Git rebase + stash 小技巧</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 18, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;108&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>每天打開電腦，第一件事情就是將專案程式碼更新的最新，以便整合同事新開發的功能，免的跟自己寫的功能衝突，所以最常用用的就是 <code>git pull --rebase origin master</code>，此命令使用 <code>rebase</code> 來取代 <code>merge</code> 程式碼，也可以避免在 log 清單內出現 <code>merge branch master into master</code> 等字樣，但是如果在開發一半進度時，想同時將同事的程式碼先 merge 進來，會發現無法 merge，git 會請你先將 local 修改過的檔案 commit，才可以讓您更新，所以這時候我們可以用 git stash 方式來解決</p>
-<p>如果你在 master 分支上，並且想 pull 最新的 commit，可以透過底下指令步驟</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>$ git stash --include-untracked
-$ git pull --rebase origin master
-$ git stash pop
-# fix conflict (merge)</pre>
-</div>
-<a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-stash/>git stash</a>&nbsp;
 </div>
 </article>
 </div>

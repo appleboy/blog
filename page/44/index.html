@@ -116,6 +116,35 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/10/install-ruby-rubygems-compass-on-centos/>
+<h2 class=post-title>在 CentOS 上面安裝 Ruby 環境</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 13, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;176&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6239698353/ title="centos by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6176/6239698353_3e6c99f692_o.png?resize=293%2C79&ssl=1" alt=centos data-recalc-dims=1></a>
+</div> 目前開發網站都傾向於用
+<p><a href=http://compass-style.org target=_blank>Compass</a> 這套 CSS Framework 來 develop，開發之前必須把環境先弄好，就是要有 <a href=http://www.ruby-lang.org/ target=_blank>Ruby</a> 套件才可以安裝 Compass，網路上的教學幾乎都在是 Ubuntu 底下用 apt-get 方式來安裝，其實相當方便，但是 <a href=http://fedoraproject.org/ target=_blank>Fedora</a> 或 <a href=http://www.centos.org/ target=_blank>CentOS</a> 就是要用 yum 方式來安裝，這次碰到 CentOS 竟然 yum search git 出來的結果是空的，所以決定全部都透過 tar 的方式來安裝全部套件了。由於 Fedora 幾乎都可以找到套件，但是碰到 <a href=http://rubygems.org/ target=_blank>rubygems</a> 需要用到 ruby 1.8.7 以上版本，所以還是乖乖的用 tar 方式吧。 大家可以試試看透過底下 yum 方式安裝:</p>
+<pre class="brush: bash; title: ; notranslate" title>yum install -y ruby ruby-devel rubygems</pre> 雖然 Fedora 透過上面可以安裝成功，可是 ruby 跟 rubygems 的版本根本是...太舊了吧 ...
+<a href=https://blog.wu-boy.com/2011/10/install-ruby-rubygems-compass-on-centos/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/centos/>Centos</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/compass/>Compass</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/fedora/>Fedora</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/rubygems/>RubyGems</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/10/how-to-remove-duplicated-rpm-package/>
 <h2 class=post-title>AWS 機器上 duplicated RPM 問題</h2>
 </a>
@@ -361,32 +390,6 @@ git cherry-pick 使用方法 我們如何 Merge 別人的 pull request，首先�
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/08/codeigniter-%E8%BD%89%E7%A7%BB%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%88%B0-github-%E9%A0%86%E4%BE%BF-release-2-0-3/>
-<h2 class=post-title>CodeIgniter 轉移版本控制到 Github 順便 Release 2.0.3</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 22, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;52&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
-</div> 在我上禮拜 8/20,8/21 參加
-<p><a href=http://coscup.org/2011/ target=_blank>COSCUP 2011</a> 會議的時候，<a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter</a> 偷偷 Release 了 2.0.3 版本，也不算偷偷 Release，因為剛好8月20,21號也是 <a href=http://cicon2011.com/ target=_blank>CICON 2011</a> 會議，CodeIgniter 想給來聽演講的學員們一個驚喜吧，也因為這個 CodeIgniter Con 2011 會議，官方也宣佈將轉換版本控制，原本放在 <a href=https://bitbucket.org/ellislab/codeigniter-reactor target=_blank>bitbucket</a> 的程式碼也都轉換到 <a href=https://github.com/EllisLab/CodeIgniter target=_blank>Github</a> 上面了，另外順便把 CodeIgniter Reactor 取消後面 Reactor 字串，改成 CodeIgniter 了，那 Reactor 呢，就變成 Develop 分支，這個消息真的是太棒了，轉換到大家所熟悉的 Git 版本控制，有些常常在貢獻程式碼的開發者，都是在使用 Github。不管是不是 CodeIgniter，其他許多 opensource 包含 <a href=http://jQuery.com target=_blank>jQuery</a>, <a href=http://www.phpBB.com target=_blank>phpBB</a>…等都是在使用 github。 [</p>
-<h3 id=直接下載-203-玩看看吧1-參考>直接下載 2.0.3 玩看看吧]<a href=http://www.codeigniter.org.tw/downloads/file/CodeIgniter_2.0.3>1</a> 參考:</h3>
-<p><a href=http://www.codeigniter.org.tw/blog/github_reactor_and_codeigniter_2.0.3_released target=_blank>繁體中文 CodeIgniter 官方公告</a></p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
 </div>
 </article>
 </div>

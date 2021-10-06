@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/01/taiwain-codeigniter-source-code-release/>
+<h2 class=post-title>CodeIgniter 台灣官網原始碼釋出</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 20, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;29&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
+</div> 2009 年開始接觸
+<p><a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter</a>，拿到第1版原始碼來自 <a href=http://codeigniter.org.cn target=_blank>中國 CodeIgniter </a>，版本是很舊的 1.7.x 版本，目前官方已經是 2.1.3 版本，現在朝 3.0.x 版本邁進，這次有機會將整個原始碼改寫成 3.0.x develop 分支版本，也將整個官方 source code 分享出來，讓需要原始碼範例初學者可以參考，Source Code 已經放在 <a href=http://github.com target=_blank>github</a> 上面，由於是拿大陸那邊的原始碼，也許有些地方寫的不是很完整，歡迎大家 pull request。 <a href=https://github.com/CodeIgniter-TW/Web target=_blank>台灣 CodeIgniter Source Code Github</a></p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/01/jquery-1-9-final-jquery-2-0-beta-migrate-final-released/>
 <h2 class=post-title>jQuery 1.9 final, jQuery 2.0 beta and Migrate plugin 釋出</h2>
 </a>
@@ -322,40 +346,6 @@ Linode 512 goes from 20GB to 24GB Linode 1GB goes from 40GB to 48GB Linode 2GB g
 <a href=https://blog.wu-boy.com/tags/appfog/>AppFog</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/phpfog/>phpfog</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/11/nginx-check-if-file-exists/>
-<h2 class=post-title>Nginx 判斷檔案是否存在</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 29, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;56&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>如果你有在使用 <a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter</a> + <a href=http://nginx.org/ target=_blank>Nginx</a> + <a href=http://php-fpm.org/ target=_blank>PHP-FPM</a> 使用者，務必看到這篇 <a href=https://github.com/EllisLab/CodeIgniter/issues/2038 target=_blank>CLI problem nginx php-fpm</a>，在使用 CLI 時候會有些問題，解決方式也非常簡單，只要在 index.php 裡面加上</p>
-<pre class="brush: php; title: ; notranslate" title>$_SERVER['PATH_INFO'] = NULL;</pre> 當然這篇最主要不是講這個，而是最後我有提到一篇解法，在
-<p><a href=http://www.farinspace.com/codeigniter-nginx-rewrite-rules/ target=_blank>Nginx 裡面如何設定 rewrite 功能</a>，比較不同的是，現在不用在設定這麼複雜了，要判斷檔案是否存在，不要在使用下面方式</p>
-<pre class="brush: bash; title: ; notranslate" title>server {
-  root /var/www/domain.com;
-  location / {
-    if (!-f $request_filename) {
-      break;
-    }
-  }
-}</pre> 而必須改成
-<pre class="brush: bash; title: ; notranslate" title>location / {
-    try_files $uri $uri/ /index.php;
-}</pre> 請看
-<p><a href=http://wiki.nginx.org/Pitfalls#Check_IF_File_Exists target=_blank>Check IF File Exists</a>，看完之後可以拿掉很多設定，讓 Nginx 設定檔看起來更簡單容易。 參考: <a href=http://wiki.nginx.org/NginxHttpCoreModule#try_files target=_blank>try_files</a></p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
 </div>
 </article>
 </div>

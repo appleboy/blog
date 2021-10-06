@@ -116,6 +116,40 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/11/nginx-check-if-file-exists/>
+<h2 class=post-title>Nginx 判斷檔案是否存在</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 29, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;56&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>如果你有在使用 <a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter</a> + <a href=http://nginx.org/ target=_blank>Nginx</a> + <a href=http://php-fpm.org/ target=_blank>PHP-FPM</a> 使用者，務必看到這篇 <a href=https://github.com/EllisLab/CodeIgniter/issues/2038 target=_blank>CLI problem nginx php-fpm</a>，在使用 CLI 時候會有些問題，解決方式也非常簡單，只要在 index.php 裡面加上</p>
+<pre class="brush: php; title: ; notranslate" title>$_SERVER['PATH_INFO'] = NULL;</pre> 當然這篇最主要不是講這個，而是最後我有提到一篇解法，在
+<p><a href=http://www.farinspace.com/codeigniter-nginx-rewrite-rules/ target=_blank>Nginx 裡面如何設定 rewrite 功能</a>，比較不同的是，現在不用在設定這麼複雜了，要判斷檔案是否存在，不要在使用下面方式</p>
+<pre class="brush: bash; title: ; notranslate" title>server {
+  root /var/www/domain.com;
+  location / {
+    if (!-f $request_filename) {
+      break;
+    }
+  }
+}</pre> 而必須改成
+<pre class="brush: bash; title: ; notranslate" title>location / {
+    try_files $uri $uri/ /index.php;
+}</pre> 請看
+<p><a href=http://wiki.nginx.org/Pitfalls#Check_IF_File_Exists target=_blank>Check IF File Exists</a>，看完之後可以拿掉很多設定，讓 Nginx 設定檔看起來更簡單容易。 參考: <a href=http://wiki.nginx.org/NginxHttpCoreModule#try_files target=_blank>try_files</a></p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/11/backbone-js-model-and-collection-tregger-event/>
 <h2 class=post-title>Backbone.js Model and Collection Tregger Event</h2>
 </a>
@@ -344,29 +378,6 @@ $xls->generateXML("test");</pre> 結論就是殺雞焉用牛刀，就這個簡�
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/compass/>Compass</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/normalize.css/>Normalize.css</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/08/codeigniter-3-0-x-support-native-session-driver/>
-<h2 class=post-title>CodeIgniter 3.0.x 支援 Native Session Driver</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 30, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;37&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
-</div> 看來
-<p><a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter</a> 團隊看到大家的心聲了，在 2.0.x 版本的時候就已經有人開始發 patch 讓 CI 可以支援 Native Session，也就是透過 session_start 來存取 session，而不是本來的 cookie session，很高興 <a href=http://philsturgeon.co.uk/ target=_blank>philsturgeon</a> (<a href=http://fuelphp.com/ target=_blank>Fuel Framework</a> 作者) 今天將此功能 merge 進來 3.0.x 分支，另外 Session 也同時抽出來變成 <a href=http://www.codeigniter.org.tw/user_guide/general/drivers.html target=_blank>Driver</a> 而不是單一個 <a href=http://www.codeigniter.org.tw/user_guide/general/libraries.html target=_blank>Library</a> 了，詳細可以看<a href=https://github.com/EllisLab/CodeIgniter/commit/1e40c21 target=_blank>此 Patch 連結</a>，也因為這樣所以之前自己寫的 <a href=https://github.com/appleboy/CodeIgniter-Native-Session target=_blank>CodeIgniter-Native-Session</a> 可以功成身退了。目前官方同時維護兩個分支，2.1.x 另外是 3.0.x，後者是專門開發新功能，有機會在慢慢介紹。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

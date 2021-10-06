@@ -103,6 +103,37 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/>
+<h2 class=post-title>初探 Pulumi 上傳靜態網站到 AWS S3 (一)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;9&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;1840&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" title=cover><img src="https://lh3.googleusercontent.com/pw/ACtC-3f_62JD9fB_bxTcLFJRGhsADlda4hjJjFkzsuDAx0SnMTGZNlX0kl1j4n3WMpjBcPP9BpNOYrIVsy80vqXwjhKSLP7hH_d01FqpdCjA_S9cCdrBXnqE14LndovknJXimWkPHVKo56bcaJgP0SpqDw3Vog=w1283-h571-no?authuser=0" alt=cover title=cover></a></p>
+<p>上一篇作者提到了兩套 <a href=https://www.pulumi.com/docs/get-started/install/>Infrastructure as Code</a> 工具，分別是 <a href=https://www.terraform.io/>Terraform</a> 跟 <a href=https://www.pulumi.com/>Pulumi</a>，大家對於前者可能會是比較熟悉，那本篇用一個實際案例『建立 AWS S3 並上傳靜態網站』來跟大家分享如何從無開始一步一步使用 Pulumi。本教學使用的程式碼都可以在 <a href=https://github.com/go-training/infrastructure-as-code-workshop/tree/main/pulumi/labs/lab01-modern-infrastructure-as-code>GitHub 上面瀏覽及下載</a>。教學會拆成七個章節:</p>
+<ol>
+<li>建立 Pulumi 新專案</li>
+<li>設定 AWS 環境</li>
+<li>初始化 Pulumi 架構 (建立 S3 Bucket)</li>
+<li>更新 AWS 架構 (S3 Hosting)</li>
+<li>設定 Pulumi Stack 環境變數 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li>
+<li>建立第二個 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li>
+<li>刪除 Pulumi Stack 環境 (<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>教學二</a>)</li>
+</ol>
+<a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-01/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/pulumi/>pulumi</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/02/introduction-to-infrastructure-as-code-terraform-vs-pulumi/>
 <h2 class=post-title>初探 Infrastructure as Code 工具 Terraform vs Pulumi</h2>
 </a>
@@ -302,28 +333,6 @@
 <a href=https://blog.wu-boy.com/2020/09/golang-scale-in-cloud-summit-taiwan/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/09/limit-concurrency-in-golang/>
-<h2 class=post-title>用 Go 語言實戰 Limit Concurrency 方法</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 6, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;800&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>最近看到一篇文章討論的非常熱烈，就是『<a href=https://utcc.utoronto.ca/~cks/space/blog/programming/GoConcurrencyStillNotEasy>concurrency is still not easy</a>』這篇文章甚至上了 <a href="https://news.ycombinator.com/item?id=24359650">Hack News</a>，大家有興趣可以點進去看看，而本篇會用一個實際案例介紹為什麼作者會說寫 Concurrency 不是這麼容易。大家都知道在 <a href=https://golang.org>Go 語言</a>內，要寫 Concurrency 只要透過一個關鍵字 <code>go</code> 就可以輕易寫出，而多個 Goroutine 要溝通就是需要透過 Channel 方式，而網路上有一堆 Concurrency Pattern 提供給各位開發者，但是官方 Go 的標準庫內並沒有包含這些 Pattern，所以實作之後，說實在很難看出問題。文章內提到 <a href=https://github.com/google/gops>gops</a> 實作 Limit Concurrency 遇到系統整個 hang 住的問題？什麼是 Limit Concurrency，就是當系統有多個工作需要同時執行，但是需要限制 Concurrency 數量，避免整個資源都被吃光。底下來介紹文章內遇到的問題。</p>
-<a href=https://blog.wu-boy.com/2020/09/limit-concurrency-in-golang/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/concurrency/>concurrency</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>

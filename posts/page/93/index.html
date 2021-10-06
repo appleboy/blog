@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2006/11/linux-suse-server-9-my-company-computer/>
+<h2 class=post-title>[Linux] Suse Server 9 && My Company Computer</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 18, 2006
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;19&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>館內買的17萬伺服器，剛來的時候是安裝 Suse Linux Enterprise 9</p>
+<div style=width:500px;text-align:right>
+<a title="Zooomr Photo Sharing :: Photo Sharing" href=http://beta.zooomr.com/photos/23204@Z01/415115/><img border=0 style="border:1px solid #000" alt=DSCF0070 src="https://i0.wp.com/static.zooomr.com/images/415115_4a1a1a6c14.jpg?resize=500%2C375" data-recalc-dims=1></a><span style=float:left>DSCF0070</span> Hosted on <strong>Zooom<span style=color:#9eae15>r</span></strong>
+</div> 玩來玩去所有的linux好像都差不多，正版的linux
+<p><a href=https://www.flickr.com/photos/10526457@N00/300502248/ title="Photo Sharing"><img alt="Suse LINUX Server" src="https://i2.wp.com/static.flickr.com/99/300502248_cfe083862f.jpg?resize=434%2C500" data-recalc-dims=1></a> 其實網路上都下載的到，差別在於你買企業版，提供30天免費服務電話，打電話去煩他 不過我想一個資訊人員，應該不用這樣吧~哈 我們館內還有買dell的機器，買的是rhel4的系統，也是正版，明天去拍一下 順便看看我的桌面吧 超亂~ <a href=https://www.flickr.com/photos/10526457@N00/300502207/ title="Photo Sharing"><img alt="My company Desktop" src="https://i1.wp.com/static.flickr.com/119/300502207_6a7eebfea6.jpg?resize=500%2C375" data-recalc-dims=1></a> 桌上都是一堆雜誌pchome pc office這是我們定的，都是由我保管 哈~</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/%E5%9C%8B%E5%8F%B2%E9%A4%A8/>國史館</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2006/11/ubuntu-%E5%AE%89%E8%A3%9D-java-tool-for-flickr-upload-tool/>
 <h2 class=post-title>[Ubuntu] 安裝 java-tool for Flickr upload tool</h2>
 </a>
@@ -328,47 +352,6 @@ update-rc.d bbsd defaults 90 90為開機時的執行順序, 端看您如何設�
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2006/10/linux-ubuntu-606-proftpd-mysql-%E5%AE%89%E8%A3%9D%E6%96%B9%E5%BC%8F/>
-<h2 class=post-title>[Linux] Ubuntu 6.06 Proftpd + Mysql 安裝方式</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 21, 2006
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;237&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-ProFTPD Version 1.2.10 Mysql Version 4.1.0 支援 UTF8 請確定你的proftpd有支援sql module
-proftpd -l | grep mysql
-proftpd -l | grep sql
-mod_sql.c
-mod_sql_mysql.c
-mod_quotatab_sql.c 確定有支援之後 再來就是建立mysql資料庫 * 建立 proftp 資料庫 CREATE DATABASE `ftp` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci; * 建立使用者資料表 CREATE TABLE `ftp` (
-`username` varchar( 60 ) default NULL ,
-`uid` int( 11 ) NOT NULL ,
-`gid` int( 11 ) default NULL ,
-`password` varchar( 30 ) default NULL ,
-`homedir` varchar( 60 ) default NULL ,
-`shell` varchar( 11 ) default ‘/bin/false’,
-PRIMARY KEY ( `uid` ) ,
-UNIQUE KEY ( `username` )
-) TYPE = MYISAM; 此資料表是在紀錄使用者的基本資訊，uid是使用者系統uid，gid是使用者group的id，passwd使用者的密碼 homedir為使用者登入的家目錄， shell可以為該使用者指定相應的shell * 建立使用者群組資料表 CREATE TABLE `groups` (
-`groupname` varchar( 30 ) NOT NULL default ‘’,
-`gid` int( 11 ) NOT NULL default ‘0′,
-`members` text default NULL
-) TYPE = MYISAM; 其中grpname是組的名稱，gid是系統組的ID，members是組的成員。注意：多成員，他們之間要用逗號隔開，不能使用空格 例如 3個使用者 test1 test2 test3 ，members就要寫 (test1,test2,test3) #設置MySQL認證： SQLConnectInfo 資料庫 資料庫帳號 資料庫密碼 #設置user資料表資訊『對應你的設定的資料表』 SQLUserInfo ftp username password uid gid homedir shell #設置group資料表資訊『對應你的設定的資料表』 SQLGroupInfo groups groupname gid members #設定使用者密碼編碼方式 ex：Plaintext 純文字 SQLAuthTypes Plaintext #設定mysql log檔 SQLLogFile /var/log/sql.
-<a href=https://blog.wu-boy.com/2006/10/linux-ubuntu-606-proftpd-mysql-%E5%AE%89%E8%A3%9D%E6%96%B9%E5%BC%8F/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/proftpd/>proftpd</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>

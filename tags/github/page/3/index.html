@@ -103,6 +103,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/03/git-denying-non-fast-forward/>
+<h2 class=post-title>Git denying non-fast forward 問題</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 14, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;134&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+最近幫別公司處理 denying non-fast forward 的 git server 問題，沒事就別動檔案權限，不管是不是修改內容，只要用 chmod 指令，Git 還是會判別檔案變動。處理 git push 直接給我噴
+$ git push --force origin master
+Total 0 (delta 0), reused 0 (delta 0) error: denying non-fast forward refs/heads/master (you should pull first) To git@git.example.com:myrepo.git ! [remote rejected] master - master (non-fast forward) error: failed to push some refs to 'git@git.example.com:myrepo.git' 會遇到這問題的原因是使用者將不該 commit 的程式碼都 push 到伺服器上面，例如資料庫帳號密碼，個人帳蜜等等，這真的是不應該，解決方式也沒有很難，只要用 git reset --hard 到您需要的 commit hash 值，並且 git push --force 方式蓋掉 Server 上面的程式碼，但是如果遇到 git push &ndash;force origin 或 git push &ndash;force origin master 都無作用，那就請加上底下設定
+<a href=https://blog.wu-boy.com/2013/03/git-denying-non-fast-forward/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/02/git-hooks-parse-php-error-before-commit/>
 <h2 class=post-title>在 git Commit 之前檢查 PHP 是否有錯誤</h2>
 </a>

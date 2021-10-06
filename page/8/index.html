@@ -116,6 +116,37 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/>
+<h2 class=post-title>Go Module 如何發佈 v2 以上版本</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;216&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p><a href=https://github.com/golang/go/wiki/Modules#semantic-import-versioning>Go Module</a> 是 <a href=https://golang.org>Golang</a> 推出的一套件管理系統，在 Go 1.11 推出後，許多 Package 也都陸續支援 Go Module 取代舊有的套件管理系統，像是 govendor 或 dep 等，而再過不久之後，保留 vendor 的方式也會被移除，畢竟現在開發已經不需要在 <code>GOPATH</code> 目錄底下了。對於 Go Module 不熟的話，建議先看官方今年寫的一篇<a href=https://blog.golang.org/using-go-modules>教學部落格</a>，底下是教學會涵蓋的範圍</p>
+<ul>
+<li>Creating a new module.</li>
+<li>Adding a dependency.</li>
+<li>Upgrading dependencies.</li>
+<li>Adding a dependency on a new major version.</li>
+<li>Upgrading a dependency to a new major version.</li>
+<li>Removing unused dependencies.</li>
+</ul>
+<p>而本篇最主要會跟大家探討如何發佈 v2 以上的套件版本。</p>
+<a href=https://blog.wu-boy.com/2019/06/how-to-release-the-v2-or-higher-version-in-go-module/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/05/introduction-to-github-actions/>
 <h2 class=post-title>GitHub 推出 CI/CD 服務 Actions 之踩雷經驗</h2>
 </a>
@@ -320,29 +351,6 @@
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gitea/>gitea</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/>
-<h2 class=post-title>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 24, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;441&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" title="提升 docker build 時間"><img src="https://lh3.googleusercontent.com/NxYD5o3PrenPHddPaNvv8EMK6u-cUdx5KnmmdYMXpxLzD9oDcTAchd0q4GRJxsOLJkeAhhVxzDmcJoWIzHqyo6hTV1FYZXzUbQ-elJNzlqKTYcBJcAOhkansgWHPTleQGOz92xwv_zE=w1920-h1080" alt="提升 docker build 時間" title="提升 docker build 時間"></a></p>
-<p>在現代 CI/CD 的環境流程中，使用 <a href=https://github.com/jpetazzo/dind>Docker In Docker</a> 來編譯容器已經相當流行了，像是 <a href=https://about.gitlab.com/product/continuous-integration/>GitLab CI</a> 或 <a href=https://github.com/drone/drone title=Drone>Drone</a> 都是全走 <a href=https://www.docker.com/ title=Docker>Docker</a> 環境，然而有很多人建議盡量不要在 CI 環境使用 Docker In Docker，原因在於 CI 環境無法使用 Host Image 資料，導致每次要上傳 Image 到 <a href=https://hub.docker.com/ title="Docker Hub">Docker Hub</a> 時都需要重新下載所有的 Docker Layer，造成每次跑一次流程都會重複花費不少時間，而這個問題在 <a href=https://github.com/docker/docker/releases/tag/v1.13.0>v1.13</a> 時被解決，現在只要在編譯過程指定一個或者是多個 Image 列表，先把 Layer 下載到 Docker 內，接著對照 Dockerfile 內只要有被 Cache 到就不會重新再執行，講得有點模糊，底下直接拿實際例子來看看。</p>
-<a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;
 </div>
 </article>
 </div>

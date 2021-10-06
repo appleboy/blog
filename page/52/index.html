@@ -116,6 +116,38 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/>
+<h2 class=post-title>[Linux Kernel] 簡單 hello world: License and Module 介紹(part 3)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 25, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;331&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+在 Kernel 2.4 或以上版本，在編譯模組完成，要進行 load module 之前，你會發現底下訊息：
+# insmod hello-3.o
+Warning: loading hello-3.o will taint the kernel: no license
+See http://www.tux.org/lkml/#export-tainted for information about tainted modules 很顯然這訊息是要您在 kernel module 裡面加上版權宣告，例如："GPL"，"GPL v2"…等來宣告您的 module 並非 open source，利用 MODULE_LICENSE() 巨集來宣告程式 License，同樣的，可以用 MODULE_DESCRIPTION() 來描述此模組或者是 Driver 的功用跟簡介，以及用 MODULE_AUTHOR() 來定義此模組作者，這些巨集都可以在 linux/module.h 裡找到，但是這些並非用於 Kernel 本身，如果大家想看範例程式，可以到 drivers/ 資料夾底下觀看每一個 Driver 程式，底下是簡單 hello world 範例：
+#include /* pr_info所需 include 檔案*/
+#include
+#include /* 所有 module 巨集需要檔案*/
+#include
+static int __init hello_init(void)
+{
+pr_info("
+<a href=https://blog.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/driver/>Driver</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/kernel/>Kernel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/07/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F%E9%81%93%E6%98%8E%E4%B8%AD%E5%AD%B8%E6%AD%A6%E5%BB%9F%E8%B7%AF%E5%A5%BD%E5%90%83%E8%87%AD%E8%B1%86%E8%85%90/>
 <h2 class=post-title>[高雄美食]道明中學武廟路好吃愛嬌姨臭豆腐</h2>
 </a>
@@ -405,34 +437,6 @@ $message = preg_replace($preg['search'], $preg['replace'], $message);
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/06/php-%E5%A5%BD%E7%94%A8-debug-php-%E5%B7%A5%E5%85%B7-firephp-for-firefox-on-codeigniter/>
-<h2 class=post-title>[PHP] 好用 Debug PHP 工具 FirePHP for FireFox on CodeIgniter</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;274&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-之前介紹過 javascript FireFox Debug 工具 FireBug (Using firebug for firefox 除錯 javascript)，今天來介紹 PHP 除錯工具 FirePHP，它可以輸出 PHP 資料到 FireBug console 介面，方便解決 PHP 相關問題，而不會去影響線上網站的畫面，安裝方式非常簡單，請先安裝 FireFox addon for FirePHP，重新啟動 FireFox 這樣就安裝成功了，接下來就是 include FirePHP Library 檔案，就可以正常使用了。另外還會介紹如何安裝到 CodeIgniter PHP Framework Firebug: https://addons.mozilla.org/en-US/firefox/addon/1843 FirePHP: https://addons.mozilla.org/en-US/firefox/addon/6149 底下先看畫面：
-$array = array("a" = "1", "b" = "2");
-$firephp-info($array, "info");
-$firephp-warn($array, "warn");
-$firephp-error($array, "error");
-Install FirePHP 安裝 Ref : http://www.firephp.org/HQ/Install.htm 在 Zend Framework 已經有開發完成，可以參考：FirePHP and Zend Framework 1.6 下載檔案：Download FirePHPCore library version 0.
-<a href=https://blog.wu-boy.com/2010/06/php-%E5%A5%BD%E7%94%A8-debug-php-%E5%B7%A5%E5%85%B7-firephp-for-firefox-on-codeigniter/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/firefox/>Firefox</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/firephp/>FirePHP</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>
