@@ -11,6 +11,8 @@ tags:
   - code review
   - github
   - gitea
+  - bitbucket
+  - gitlab
 ---
 
 ![code review](https://i.imgur.com/iQ6TfHQ.png)
