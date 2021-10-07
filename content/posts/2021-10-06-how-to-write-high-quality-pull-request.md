@@ -41,11 +41,13 @@ tags:
 
 ![issue link](https://i.imgur.com/AL3qCuH.jpg)
 
-## 審核 PR 過程請勿 rebase commit history
+## 審核 PR 過程盡量少用 rebase commit history
 
-當 PR 發出後，Reviewer 會給開發者建議修改的方向，而開發者只需要根據這些建議，繼續將 commit 持續 push 上來即可，請勿使用 `git rebase` 將所有 commit log 進行整理，因為只要整理過後，Reviewer 就不知道已經看完哪些 commit，因為也許 Reviewer 只要針對後來 push 的 commit 挑著看即可。以現在所有 Git 服務來說 ([Gitea][11], [GitHub][12], [Bitbucket][13] 或 [GitLab][14]) 其實都有支援 [Squash Commit](https://www.gitkraken.com/learn/git/git-squash)，所以現在發 PR 後不要再進行整理 commit log 了。
+當 PR 發出後，Reviewer 開始給開發者建議修改的方向，而開發者只需要根據這些建議，繼續將 commit 持續 push 上來即可，盡量不要使用 `git rebase` 將所有 commit log 進行整理，因為只要整理過後，Reviewer 就不知道已經看完哪些 commit，因為也許 Reviewer 只要針對後來 push 的 commit 挑著看即可。以現在所有 Git 服務來說 ([Gitea][11], [GitHub][12], [Bitbucket][13] 或 [GitLab][14]) 其實都有支援 [Squash Commit](https://www.gitkraken.com/learn/git/git-squash)，所以現在發 PR 後不要再進行整理 commit log 了。
 
 ![commit history](https://i.imgur.com/qeiHdi5.png)
+
+上面這張圖可以說明當有新的 commit 時，GitHub 會很貼心的紀錄 Reviewer 尚未看到的部分，減少 Code Review 時間。
 
 [11]:https://gitea.io/en-us/
 [12]:https://github.com/
