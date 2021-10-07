@@ -5,19 +5,19 @@
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>如何發佈高質量的 Pull Request (簡稱 PR) - 小惡魔 - AppleBOY</title>
 <meta name=description content="
-除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
+除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","name":"如何發佈高質量的 pull request (簡稱 pr)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何發佈高質量的 Pull Request (簡稱 PR)","description":"除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。\n","inLanguage":"en","wordCount":163,"datePublished":"2021-10-06T22:02:25","dateModified":"2021-10-06T22:02:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["code review, github, gitea, bitbucket, gitlab"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","name":"如何發佈高質量的 pull request (簡稱 pr)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何發佈高質量的 Pull Request (簡稱 PR)","description":"除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。\n","inLanguage":"en","wordCount":172,"datePublished":"2021-10-06T22:02:25","dateModified":"2021-10-06T22:02:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["code review, pull request, github, gitea, bitbucket, gitlab"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="如何發佈高質量的 Pull Request (簡稱 PR)">
 <meta property="og:description" content="
-除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
+除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
 <meta property="og:image" content="https://i.imgur.com/iQ6TfHQ.png">
 <meta property="og:url" content="https://blog.wu-boy.com/2021/10/how-to-write-high-quality-pull-request/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="小惡魔 - AppleBOY">
 <meta name=twitter:title content="如何發佈高質量的 Pull Request (簡稱 PR)">
 <meta name=twitter:description content="
-除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
+除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
 <meta name=twitter:image content="https://i.imgur.com/iQ6TfHQ.png">
 <meta name=twitter:card content="summary">
 <meta name=twitter:site content="@appleboy">
@@ -100,7 +100,7 @@
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on October 6, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;163&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;172&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -121,7 +121,7 @@
 <li><a href=#務必撰寫-unit-testing>務必撰寫 Unit Testing</a></li>
 <li><a href=#每個-pr-只做一件事情>每個 PR 只做一件事情</a></li>
 <li><a href=#pr-請務必連接-issue-tracking-系統>PR 請務必連接 Issue Tracking 系統</a></li>
-<li><a href=#審核-pr-過程請勿-rebase-commit-history>審核 PR 過程請勿 rebase commit history</a></li>
+<li><a href=#審核-pr-過程盡量少用-rebase-commit-history>審核 PR 過程盡量少用 rebase commit history</a></li>
 <li><a href=#多寫註解及說明>多寫註解及說明</a></li>
 <li><a href=#心得感想>心得感想</a></li>
 <li><a href=#參考連結>參考連結</a></li>
@@ -132,7 +132,7 @@
 </aside>
 <article role=main class=blog-post>
 <p><img src=https://i.imgur.com/iQ6TfHQ.png alt="code review"></p>
-<p>除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，也可以省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。</p>
+<p>除了在公司團隊內負責審核各專案 PR 之外，也在 <a href=https://github.com/>GitHub</a> 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。</p>
 <h2 id=確保通過所有-ci-流程再發-pr>確保通過所有 CI 流程再發 PR</h2>
 <p>通常開發者開發新功能或解 Bug 時，會開立新的分支，而當這個分支進行第一個新的 Commit 後，後面的 CI (測試, 代碼質量驗證) 就會開始進行完整流程，確保此提交是可以正常運作，而在發 PR 之前，開發同仁務必確保 CI 是有通過驗證的，而不是發了 PR，通知 Reviewr 後，等到 Reviewr 收到信件，點開來看發現 CI 是 Failure，這樣就浪費雙方寶貴的時間。除了 CI 之外，也可以將一些常用的驗證流程，寫進 Makefile 讓團隊可以自己的開發環境進行驗證，加速開發流程。</p>
 <p><img src=https://i.imgur.com/0m2P3LI.jpg alt="commit log"></p>
@@ -143,10 +143,12 @@
 <h2 id=pr-請務必連接-issue-tracking-系統>PR 請務必連接 Issue Tracking 系統</h2>
 <p>不管是新功能或者是 Bugs 都會有 Issue Tracking (像是 Jira 或是 GitHub Project 或是 Trello 等平台) 來記錄，在發 PR 務必跟這些 Task 連結在一起，這樣開發者可以在 Issue 上面詳細描述開發過程，也可以讓 Reviewer 快速了解之前在 Issue 上面討論過哪些方向或做法，也讓未來其他開發者在功能開發上可以找到相關的紀錄。</p>
 <p><img src=https://i.imgur.com/AL3qCuH.jpg alt="issue link"></p>
-<h2 id=審核-pr-過程請勿-rebase-commit-history>審核 PR 過程請勿 rebase commit history</h2>
-<p>當 PR 發出後，Reviewer 會給開發者建議修改的方向，而開發者只需要根據這些建議，繼續將 commit 持續 push 上來即可，請勿使用 <code>git rebase</code> 將所有 commit log 進行整理，因為只要整理過後，Reviewer 就不知道已經看完哪些 commit，因為也許 Reviewer 只要針對後來 push 的 commit 挑著看即可。以現在所有 Git 服務來說 (<a href=https://gitea.io/en-us/>Gitea</a>, <a href=https://github.com/>GitHub</a>, <a href=https://bitbucket.org/>Bitbucket</a> 或 <a href=https://about.gitlab.com/>GitLab</a>) 其實都有支援 <a href=https://www.gitkraken.com/learn/git/git-squash>Squash Commit</a>，所以現在發 PR 後不要再進行整理 commit log 了。</p>
+<h2 id=審核-pr-過程盡量少用-rebase-commit-history>審核 PR 過程盡量少用 rebase commit history</h2>
+<p>當 PR 發出後，Reviewer 開始給開發者建議修改的方向，而開發者只需要根據這些建議，繼續將 commit 持續 push 上來即可，盡量不要使用 <code>git rebase</code> 將所有 commit log 進行整理，因為只要整理過後，Reviewer 就不知道已經看完哪些 commit，因為也許 Reviewer 只要針對後來 push 的 commit 挑著看即可。以現在所有 Git 服務來說 (<a href=https://gitea.io/en-us/>Gitea</a>, <a href=https://github.com/>GitHub</a>, <a href=https://bitbucket.org/>Bitbucket</a> 或 <a href=https://about.gitlab.com/>GitLab</a>) 其實都有支援 <a href=https://www.gitkraken.com/learn/git/git-squash>Squash Commit</a>，所以現在發 PR 後不要再進行整理 commit log 了。</p>
+<p><img src=https://i.imgur.com/qeiHdi5.png alt="commit history"></p>
+<p>上面這張圖可以說明當有新的 commit 時，GitHub 會很貼心的紀錄 Reviewer 尚未看到的部分，減少 Code Review 時間。</p>
 <h2 id=多寫註解及說明>多寫註解及說明</h2>
-<p>如果想要更有效率的 Code Review，請在 PR 提交的代碼中，增加說明，<code>What, Why, How</code>，說明這是什麼問題，為什麼會這樣想，以及最後如何實作出來，這些都有效的幫助 Reviewer 知道你的開發邏輯思維，加速討論，這是雙贏的局面，一方面紀錄開發的想法，這樣大家也許會有不同的思維來看這提交。</p>
+<p>想要更有效率的 Code Review，請在 PR 提交的代碼中，增加說明，<code>What, Why, How</code>，說明遇到什麼問題，為什麼會這樣想，以及最後如何實作出來，這些都有效的幫助 Reviewer 知道你的開發邏輯思維，加速討論，這是雙贏的局面，一方面紀錄開發的想法，這樣大家也許會有不同的思維來看這提交。</p>
 <p><img src=https://i.imgur.com/gyWn2Ej.jpg alt="code review"></p>
 <h2 id=心得感想>心得感想</h2>
 <p>完整做到上面條件，會讓團隊有更多時間創造更大的價值，好的 PR 更可以讓團隊成員有良好的習慣帶動其他單位。這些條件會隨著團隊在合作磨合上會再陸續增加，上述就是在公司團隊內很常遇到的問題，整理在這邊給大家參考，如果有任何建議，歡迎大家留言討論</p>
@@ -156,6 +158,7 @@
 </ul>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/code-review/>code review</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/pull-request/>pull request</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/github/>github</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gitea/>gitea</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/bitbucket/>bitbucket</a>&nbsp;
