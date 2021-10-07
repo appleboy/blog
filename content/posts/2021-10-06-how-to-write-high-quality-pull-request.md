@@ -9,6 +9,7 @@ categories:
   - GitHub
 tags:
   - code review
+  - pull request
   - github
   - gitea
   - bitbucket
