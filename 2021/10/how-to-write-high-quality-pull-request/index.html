@@ -3,19 +3,19 @@
 <meta charset=utf-8>
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>如何發佈高質量的 Pull Request (簡稱 PR) - 小惡魔 - AppleBOY</title>
+<title>如何發佈高品質的 Pull Request (簡稱 PR) - 小惡魔 - AppleBOY</title>
 <meta name=description content="
 除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","name":"如何發佈高質量的 pull request (簡稱 pr)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何發佈高質量的 Pull Request (簡稱 PR)","description":"除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。\n","inLanguage":"en","wordCount":172,"datePublished":"2021-10-06T22:02:25","dateModified":"2021-10-06T22:02:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["code review, pull request, github, gitea, bitbucket, gitlab"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="如何發佈高質量的 Pull Request (簡稱 PR)">
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","name":"如何發佈高品質的 pull request (簡稱 pr)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何發佈高品質的 Pull Request (簡稱 PR)","description":"除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。\n","inLanguage":"en","wordCount":172,"datePublished":"2021-10-06T22:02:25","dateModified":"2021-10-06T22:02:25","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["code review, pull request, github, gitea, bitbucket, gitlab"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/how-to-write-high-quality-pull-request\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<meta property="og:title" content="如何發佈高品質的 Pull Request (簡稱 PR)">
 <meta property="og:description" content="
 除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
 <meta property="og:image" content="https://i.imgur.com/iQ6TfHQ.png">
 <meta property="og:url" content="https://blog.wu-boy.com/2021/10/how-to-write-high-quality-pull-request/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="如何發佈高質量的 Pull Request (簡稱 PR)">
+<meta name=twitter:title content="如何發佈高品質的 Pull Request (簡稱 PR)">
 <meta name=twitter:description content="
 除了在公司團隊內負責審核各專案 PR 之外，也在 GitHub 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。">
 <meta name=twitter:image content="https://i.imgur.com/iQ6TfHQ.png">
@@ -96,7 +96,7 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=post-heading>
-<h1>如何發佈高質量的 Pull Request (簡稱 PR)</h1>
+<h1>如何發佈高品質的 Pull Request (簡稱 PR)</h1>
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on October 6, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
@@ -134,7 +134,7 @@
 <p><img src=https://i.imgur.com/iQ6TfHQ.png alt="code review"></p>
 <p>除了在公司團隊內負責審核各專案 PR 之外，也在 <a href=https://github.com/>GitHub</a> 上面提交多個 PR，並且與全世界各地開發者一起共同維護大型專案，一個好的 PR 可以加速專案的進行，且省下多數 Reviewr 寶貴的時間，故我自己整理底下幾點，來確保團隊同事之前有個共同的標準外，也大大降低 Review 時間，提升專案品質。</p>
 <h2 id=確保通過所有-ci-流程再發-pr>確保通過所有 CI 流程再發 PR</h2>
-<p>通常開發者開發新功能或解 Bug 時，會開立新的分支，而當這個分支進行第一個新的 Commit 後，後面的 CI (測試, 代碼質量驗證) 就會開始進行完整流程，確保此提交是可以正常運作，而在發 PR 之前，開發同仁務必確保 CI 是有通過驗證的，而不是發了 PR，通知 Reviewr 後，等到 Reviewr 收到信件，點開來看發現 CI 是 Failure，這樣就浪費雙方寶貴的時間。除了 CI 之外，也可以將一些常用的驗證流程，寫進 Makefile 讓團隊可以自己的開發環境進行驗證，加速開發流程。</p>
+<p>通常開發者開發新功能或解 Bug 時，會開立新的分支，而當這個分支進行第一個新的 Commit 後，後面的 CI (測試, 代碼品質驗證) 就會開始進行完整流程，確保此提交是可以正常運作，而在發 PR 之前，開發同仁務必確保 CI 是有通過驗證的，而不是發了 PR，通知 Reviewr 後，等到 Reviewr 收到信件，點開來看發現 CI 是 Failure，這樣就浪費雙方寶貴的時間。除了 CI 之外，也可以將一些常用的驗證流程，寫進 Makefile 讓團隊可以自己的開發環境進行驗證，加速開發流程。</p>
 <p><img src=https://i.imgur.com/0m2P3LI.jpg alt="commit log"></p>
 <h2 id=務必撰寫-unit-testing>務必撰寫 Unit Testing</h2>
 <p>當工程師開發功能或解決問題後，請務必撰寫 Unit Testing，這點可以大幅降低 Reviewer 時間，我自己個人在看 PR 時，都會優先看測試的邏輯是否有符合業務邏輯，如果符合的話，其實接下來 Review 就會非常的快，當開發者沒寫測試，這時候就會相當擔心，這個 PR 會不會影響到其他功能，或者是不符合業務邏輯。雖然我知道大部分開發者都不太習慣寫測試，但是有了這個良好的習慣，團隊也不用擔心開發者會改壞既有的功能或產生無法預期的錯誤。</p>
@@ -170,7 +170,7 @@
 <div class=share-box aria-hidden=true>
 <ul class=share>
 <li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&text=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e8%b3%aa%e9%87%8f%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29&via=appleboy" target=_blank title="Share on Twitter">
+<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&text=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e5%93%81%e8%b3%aa%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29&via=appleboy" target=_blank title="Share on Twitter">
 <i class="fab fa-twitter"></i>
 </a>
 </li>
@@ -180,22 +180,22 @@
 </a>
 </li>
 <li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&title=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e8%b3%aa%e9%87%8f%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on Reddit">
+<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&title=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e5%93%81%e8%b3%aa%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on Reddit">
 <i class="fab fa-reddit"></i>
 </a>
 </li>
 <li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&title=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e8%b3%aa%e9%87%8f%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on LinkedIn">
+<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&title=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e5%93%81%e8%b3%aa%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on LinkedIn">
 <i class="fab fa-linkedin"></i>
 </a>
 </li>
 <li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&title=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e8%b3%aa%e9%87%8f%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on StumbleUpon">
+<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&title=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e5%93%81%e8%b3%aa%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on StumbleUpon">
 <i class="fab fa-stumbleupon"></i>
 </a>
 </li>
 <li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&description=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e8%b3%aa%e9%87%8f%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on Pinterest">
+<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fhow-to-write-high-quality-pull-request%2f&description=%e5%a6%82%e4%bd%95%e7%99%bc%e4%bd%88%e9%ab%98%e5%93%81%e8%b3%aa%e7%9a%84%20Pull%20Request%20%28%e7%b0%a1%e7%a8%b1%20PR%29" target=_blank title="Share on Pinterest">
 <i class="fab fa-pinterest"></i>
 </a>
 </li>
