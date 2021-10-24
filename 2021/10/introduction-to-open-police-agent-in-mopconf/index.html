@@ -18,9 +18,10 @@ Three ways to deploy an Open Policy Agent.
 
 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管
 使用 RESTful API 串接 Open Policy Agent
-">
+
+如果可以的話，大家可以給我一些回饋，請填寫會後問卷">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","name":"Introduction to open policy agent 初探權限控管機制"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Introduction to Open Policy Agent 初探權限控管機制","description":"很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:\n Why do we need a Policy Engine? Why do we choose Open Policy Agent? Workflow with Open Policy Agent? What is Policy Language (Rego)? RBAC and IAM Role Design Three ways to deploy an Open Policy Agent.  可以參考另外兩篇介紹\n 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管 使用 RESTful API 串接 Open Policy Agent ","inLanguage":"en","wordCount":319,"datePublished":"2021-10-24T11:39:20","dateModified":"2021-10-24T11:39:20","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, open policy agent"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","name":"Introduction to open policy agent 初探權限控管機制"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Introduction to Open Policy Agent 初探權限控管機制","description":"很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:\n Why do we need a Policy Engine? Why do we choose Open Policy Agent? Workflow with Open Policy Agent? What is Policy Language (Rego)? RBAC and IAM Role Design Three ways to deploy an Open Policy Agent.  可以參考另外兩篇介紹\n 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管 使用 RESTful API 串接 Open Policy Agent  如果可以的話，大家可以給我一些回饋，請填寫會後問卷\n","inLanguage":"en","wordCount":320,"datePublished":"2021-10-24T11:39:20","dateModified":"2021-10-24T11:39:20","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, open policy agent"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="Introduction to Open Policy Agent 初探權限控管機制">
 <meta property="og:description" content="
 很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:
@@ -36,7 +37,8 @@ Three ways to deploy an Open Policy Agent.
 
 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管
 使用 RESTful API 串接 Open Policy Agent
-">
+
+如果可以的話，大家可以給我一些回饋，請填寫會後問卷">
 <meta property="og:image" content="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080">
 <meta property="og:url" content="https://blog.wu-boy.com/2021/10/introduction-to-open-police-agent-in-mopconf/">
 <meta property="og:type" content="website">
@@ -130,7 +132,7 @@ Workflow …">
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on October 24, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;319&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;320&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -172,6 +174,7 @@ Workflow …">
 <li><a href=https://blog.wu-boy.com/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li>
 <li><a href=https://blog.wu-boy.com/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li>
 </ul>
+<p>如果可以的話，大家可以給我一些回饋，請填寫<a href=https://docs.google.com/forms/d/e/1FAIpQLSfRuK40O1j5KIPHt6RQyY3Au77bW91kgGIEGOrNxsjxHUSwgA/viewform>會後問卷</a></p>
 <h2 id=投影片>投影片</h2>
 <script async class=speakerdeck-embed data-id=9cfef3dc602c41ee93215b3c05d4f5a8 data-ratio=1.33333333333 src=//speakerdeck.com/assets/embed.js></script>
 <h2 id=教學影片>教學影片</h2>
