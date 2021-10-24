@@ -116,6 +116,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/03/gitea-support-oauth-provider/>
+<h2 class=post-title>開源專案 Gitea 支援 OAuth Provider</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 9, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;190&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/SrQvhDJm5NMkrxrut0lACspnz6iQSFCX3vlbtGCuAcwO-i_4iJCJ6trK3V2F6Q6s6fQ_EcSglwAL0qO0aLaTRtk4Ca32EI7Ks1H7u_nI9jC6xn3PF9hhgccjkbN3irX5pGi9kV-vIxk=w1920-h1080" title=Gitea><img src="https://lh3.googleusercontent.com/SrQvhDJm5NMkrxrut0lACspnz6iQSFCX3vlbtGCuAcwO-i_4iJCJ6trK3V2F6Q6s6fQ_EcSglwAL0qO0aLaTRtk4Ca32EI7Ks1H7u_nI9jC6xn3PF9hhgccjkbN3irX5pGi9kV-vIxk=w1920-h1080" alt=Gitea title=Gitea></a></p>
+<p>很高興看到 <a href=https://gitea.io title=Gitea>Gitea</a> 正式支援 <a href=https://github.com/go-gitea/gitea/pull/5378 title="OAuth Provider ">OAuth Provider</a> 了，此功能經歷了四個月終於正式合併進 master 分支，預計會在 <a href=https://github.com/go-gitea/gitea/milestone/32 title="1.18 版本">1.8 版本</a>釋出，由於此功能已經進 master，這樣我們就可以把原本 Drone 透過帳號密碼登入，改成使用 OAtuh 方式了，增加安全性。但是在使用之前，Drone 需要合併 <a href=https://github.com/drone/go-login/pull/3 title=drone/go-login>drone/go-login@3</a> 及 <a href=https://github.com/drone/drone/pull/2622 title=drone/drone@2622>drone/drone@2622</a>。如果您會使用 Go 語言，不妨現在就可以來試試看了，透過 go build 來編譯原始碼。</p>
+<a href=https://blog.wu-boy.com/2019/03/gitea-support-oauth-provider/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitea/>gitea</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/02/using-cache-from-can-speed-up-your-docker-builds/>
 <h2 class=post-title>在 docker-in-docker 環境中使用 cache-from 提升編譯速度</h2>
 </a>
@@ -479,27 +502,6 @@
 Flickr 在 2019 年一月會開始將免費會員照片刪除到剩下 1000 張，這次透過 Go 工具 來將備份好的 Flickr 相簿上傳到 Google Photos，此工具只適合用在 MacOS 及 Linux 上面，Windows 請改用『Backup and Sync from Google』工具。
 *Free members with more than 1,000 photos or videos uploaded to Flickr have until Tuesday, January 8, 2019, to upgrade to Pro or download content over the limit. After January 8, 2019, members over the limit will no longer be able to upload new photos to Flickr.
 <a href=https://blog.wu-boy.com/2018/12/upload-flickr-to-google-photos/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/12/drone-cloud-service/>
-<h2 class=post-title>Drone CI/CD 推出 Cloud 服務支援開源專案</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 9, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;49&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/46191388892/in/dateposted-public/ title="Screen Shot 2018-12-08 at 10.36.20 PM"><img src="https://i1.wp.com/farm2.staticflickr.com/1956/46191388892_1446150027_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-12-08 at 10.36.20 PM" data-recalc-dims=1></a> <a href=https://github.com/drone/drone>Drone</a> 在上個月宣布推出 <a href=https://blog.drone.io/drone-cloud/>Cloud 服務</a> 整合 <a href=https://github.com>GitHub</a> 帳戶內的 Repo，只要登入後就可以跑 GitHub 上面的專案自動化整合及測試，原先在 GitHub 上面常見的就是 <a href=https://travis-ci.org/>Travis</a> 或 <a href=https://circleci.com/>CircleCI</a>，現在 Drone 也正式加入角逐行列，但是從文中內可以看到其實是由 <a href=http://packet.net/>Packet</a> 這間公司獨家贊助硬體及網路給 Drone，兩台實體機器，一台可以跑 X86 另外一台可以跑 ARM，也就是如果有在玩 ARM 開發版，現在可以直接在 Drone Cloud 上面直接跑測試。底下是硬體規格:</p>
-<a href=https://blog.wu-boy.com/2018/12/drone-cloud-service/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
 </div>
 </article>
 </div>

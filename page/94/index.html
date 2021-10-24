@@ -116,6 +116,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2006/10/ubuntu-%E9%96%8B%E6%A9%9F%E8%87%AA%E5%8B%95%E5%9F%B7%E8%A1%8Cscript/>
+<h2 class=post-title>[Ubuntu] 開機自動執行script</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 21, 2006
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;75&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+因為在安裝 maple bbs 的時候 發現itoc的方式沒辦法解決開機自動執行 沒有 inetd.conf 也沒有 xinetd 的方式 ，所以利用下面方式才可以達成 我是增加一個檔案 /etc/init.d/bbsd 然後增加以下內容 ————————————–
+#!/bin/sh # # MapleBBS # su bbs -c ‘/home/bbs/bin/camera’ su bbs -c ‘/home/bbs/bin/account’ /home/bbs/bin/bbsd /home/bbs/bin/bmtad /home/bbs/bin/bpop3d /home/bbs/bin/gemd /home/bbs/bin/bguard /home/bbs/bin/xchatd /home/bbs/innd/innbbsd —————————————
+chmod 755 /etc/init.d/bbsd 然後 cd /etc
+update-rc.d bbsd defaults 90 90為開機時的執行順序, 端看您如何設定. update-rc.d會自動幫各個rcX.d目錄下建立一link至/etc/init.d/執行檔 或者是 update-rc.d iptables start 20 2 3 4 5 . stop 0 1 6 . 後面有一個點喔 2.
+<a href=https://blog.wu-boy.com/2006/10/ubuntu-%E9%96%8B%E6%A9%9F%E8%87%AA%E5%8B%95%E5%9F%B7%E8%A1%8Cscript/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2006/10/linux-ubuntu-606-proftpd-mysql-%E5%AE%89%E8%A3%9D%E6%96%B9%E5%BC%8F/>
 <h2 class=post-title>[Linux] Ubuntu 6.06 Proftpd + Mysql 安裝方式</h2>
 </a>
@@ -362,25 +386,13 @@ cd /usr/ports/www/lighttpd/ make config [X] OPENSSL Enable SSL support [ ] OPENL
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/archives/>
-<h2 class=post-title>歷年文章</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 1, 0001
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;0&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;0&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Appleboy
-</span>
-</p>
-<div class=post-entry>
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
 <a href=https://blog.wu-boy.com/page/93/>&larr; Newer Posts</a>
+</li>
+<li class=next>
+<a href=https://blog.wu-boy.com/page/95/>Older Posts &rarr;</a>
 </li>
 </ul>
 </div>

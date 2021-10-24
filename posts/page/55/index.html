@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/02/cc-%E6%8C%87%E6%A8%99%E7%9B%B8%E5%8A%A0-%EF%BC%9For-%E7%9B%B8%E6%B8%9B-offset/>
+<h2 class=post-title>[C/C++] 指標相加 = ？or 相減 = offset</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;265&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+最近看到網路上討論 C/C++ 題目，某公司主管給新進人員面試的 C/C++ 考題，如下：
+1 2 3 4 5 6 7 8 int main(void) { int *a,*b; a=1; b=1; printf("%d\n",a+b); return 0; } 請問上面這個題目，哪裡有出問題，這是面試官問新進人員的題目之一，看也知道這程式丟到 Dev-C++ 是不會過的，a b 都是宣告為整數指標型態，可是在 a=1 或 b=1 在 Dev-C++ 裡面是編譯不過的，但是那寫法是沒有錯的，就像你設定 a=0 或者是 a=NULL 是一樣意思，不過最好是不要這樣寫，assignment 這樣寫不太好，可以改成 a = (int )1; b = (int )1; 這樣就可以順利編譯通過，再來 printf("%d\n",a+b); 這行錯很大，指標相加會爆炸吧，如果程式這樣寫，不把 OS 搞掛，那我還會覺得懷疑呢，正確寫法是指標加上 offset(位移)，這樣才是可以正確執行的，所以我們把程式改成下面：
+1 2 3 4 5 6 7 8 int main(void) { int *a,*b; a = (int *)1; b = (int *)1; printf("%d\n",a+(int)b); return 0; } 最後的執行結果是 5，(int) b 就相當於 sizeof(b) 也等於 sizeof(int ) 答案都是四，所以就是 1+4 =5，指標是不能相加的，只能透過 offset 方式來讓指標指向不同 base，但是如果是指標相減，那就是求 offset 的意思喔，看一下底下例子
+<a href=https://blog.wu-boy.com/2010/02/cc-%E6%8C%87%E6%A8%99%E7%9B%B8%E5%8A%A0-%EF%BC%9For-%E7%9B%B8%E6%B8%9B-offset/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/02/google-chrome-%E6%94%AF%E6%8F%B4%E8%B6%85%E9%81%8E-40000-extensions-with-greasemonkey/>
 <h2 class=post-title>Google Chrome 支援超過 40,000 Extensions! with Greasemonkey</h2>
 </a>
@@ -298,39 +320,6 @@ Usage:
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/plurk-api/>Plurk API</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84/>
-<h2 class=post-title>[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 29, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;144&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：
-R&ndash;A&ndash;B&ndash;C&ndash;D&ndash;E&ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成
-R&ndash;A&ndash;D'&ndash;E&ndash;HEAD 有兩種方式可以移除 B & C
-# detach head and move to D commit
-git checkout
-# move HEAD to A, but leave the index and working tree as for D
-git reset --soft
-# Redo the D commit re-using the commit message, but now on top of A
-git commit -C
-# Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD master
-# push it
-git push --force
-另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick 這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !
-<a href=https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;
 </div>
 </article>
 </div>

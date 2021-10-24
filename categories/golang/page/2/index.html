@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/05/comunicate-with-open-policy-agent-using-resful-api/>
+<h2 class=post-title>使用 RESTful API 串接 Open Policy Agent</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 4, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;756&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080" title="Open Policy Agent"><img src="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080" alt="Open Policy Agent" title="Open Policy Agent"></a></p>
+<p>上一篇『<a href=https://blog.wu-boy.com/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a>』介紹了如何透過 <a href=https://golang.org>Go 語言</a>直接嵌入 Open Policy Agent (簡稱 OPA)設定檔，並透過 Go 套件直接查詢使用者權限。由於目前 OPA 只有支援三種模式串接各種不同的 Application，一種是透過 Go 語言直接整合，詳細請看上一篇教學，另一種是透過 RESTful API，也就是本篇的教學，最後一種是透過 <a href=https://webassembly.org/>WebAssembly</a> 讓其他 application 可以直接讀取。之後有機會再來寫 WebAssembly 教學。而本篇將帶您了解如何透過 RESTful API 方式來完成 <a href=https://en.wikipedia.org/wiki/Role-based_access_control>RBAC 權限控管</a>，其實我比較期待支援 <a href=https://grpc.io/>gRPC</a> 模式，但是看到這篇 <a href=https://github.com/open-policy-agent/opa/issues/841>issue 提到</a>，OPA 現在已經支援 Plugin 模式，大家想擴充的，可以自行處理。</p>
+<a href=https://blog.wu-boy.com/2021/05/comunicate-with-open-policy-agent-using-resful-api/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/open-policy-agent/>open policy agent</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>
 <h2 class=post-title>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</h2>
 </a>
@@ -363,28 +385,6 @@
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/>
-<h2 class=post-title>善用 Go 語言效能測試工具來提升執行效率</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 2, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;95&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>在 AI 訓練模型前，都需要經過大量的資料處理，而資料處理的速度在整個流程內扮演很重要的角色，寫出高效能的 Parser 能降低整體處理時間，那如何評估程式效能如何，以及如何快速找到效能瓶頸？本議程會帶大家了解 <a href=https://golang.org>Go 語言</a>內建的效能測試工具，透過 <a href=https://blog.wu-boy.com/2018/06/how-to-write-benchmark-in-go/>Benchmark</a> 來找出程式效能瓶頸的地方，快速改善及優化，讓整個系統流程更順暢。也會順道分享 Go 在字串處理優化的一些小技巧。聽過此議程相信您對 Go 語言會有更深入的了解，如果你想寫出有效率的程式碼，本議程一定不能錯過。</p>
-<a href=https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/benchmark/>benchmark</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>

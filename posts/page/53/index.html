@@ -103,6 +103,54 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/>
+<h2 class=post-title>[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 10, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;210&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+基於 Moztw 討論區 有大陸使用者註冊之後，在簽名檔加入一些廣告連結，為了降低 Google Page Rank，所以我們必須指示搜尋引擎「不要前往此網頁上的連結」或是「不要前往此連結」，可以參考 關於 rel=&ldquo;nofollow&rdquo;，phpBB3 編輯三個檔案就可以了，此修改不影響文章內容，只有針對簽名檔作用，底下是 patch 程式碼，可以參考看看 includes/bbcode.php
+--- phpBB3/includes/bbcode.php 2010-03-06 04:37:23.000000000 +0800
++++ www/includes/bbcode.php 2010-06-10 20:58:02.000000000 +0800
+@@ -2,7 +2,8 @@
+/**
+*
+* @package phpBB3
+-* @version $Id$
++* @version $Id: bbcode.php 9461 2009-04-17 15:23:17Z acydburn $
++* @log 2010-06-10 appleboy $
+* @copyright (c) 2005 phpBB Group
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+*
+@@ -48,7 +49,7 @@
+/**
+* Second pass bbcodes
+*/
+- function bbcode_second_pass(&$message, $bbcode_uid = '', $bbcode_bitfield = false)
++ function bbcode_second_pass(&$message, $bbcode_uid = '', $bbcode_bitfield = false, $bbcode_is_sig = false)
+{
+if ($bbcode_uid)
+{
+@@ -110,6 +111,13 @@
+}
+$message = preg_replace($preg['search'], $preg['replace'], $message);
++
++ /*
++ * 2010.
+<a href=https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/06/php-%E5%A5%BD%E7%94%A8-debug-php-%E5%B7%A5%E5%85%B7-firephp-for-firefox-on-codeigniter/>
 <h2 class=post-title>[PHP] 好用 Debug PHP 工具 FirePHP for FireFox on CodeIgniter</h2>
 </a>
@@ -426,27 +474,6 @@ $.
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/html/>html</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/04/cc-strpbrk-%E5%9C%A8%E5%AD%97%E4%B8%B2%E4%B8%AD%E6%89%BE%E5%B0%8B%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AC%A6%E8%99%9F%E6%88%96%E5%AD%97%E6%AF%8D/>
-<h2 class=post-title>[C/C++] strpbrk 在字串中找尋指定的符號或字母</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 1, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;190&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-繼上一篇：『[C/C++] 切割字串函數：strtok, Network mac address 分割』，內容寫到 Microsoft 用到 strpbrk 來找尋字串中特定符號，並且回傳該符號的位址，用法如下：
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 #include "string.h"#include "stdlib.h"#include "stdio.h" int main () { char str[] = "This is a sample string"; char key[] = "aeiou"; char * pch; printf ("Vowels in '%s': ",str); pch = strpbrk (str, key); while (pch != NULL) { printf ("%c " , *pch); /* 也可以直接輸出字串 */ printf("\noutput=%s\n", pch); pch = strpbrk (pch+1,key); } printf ("\n"); system("pause"); return 0; } 輸出結果：
-<a href=https://blog.wu-boy.com/2010/04/cc-strpbrk-%E5%9C%A8%E5%AD%97%E4%B8%B2%E4%B8%AD%E6%89%BE%E5%B0%8B%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AC%A6%E8%99%9F%E6%88%96%E5%AD%97%E6%AF%8D/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
 </div>
 </article>
 </div>

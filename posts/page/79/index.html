@@ -103,6 +103,58 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/03/phpxoops-%E5%A4%96%E6%8E%9B-ams-%E7%B3%BB%E7%B5%B1-bug/>
+<h2 class=post-title>[PHP][Xoops] 外掛 AMS 系統 bug ?</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 13, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;364&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>上學期接任 <a href=http://journal.cn.ee.ccu.edu.tw/>CN Journal</a> 組刊管理者，上任網管阿伯，留下一堆bug給我解決，不過還好去 trace 一下 AMS 的 code 之後發現一些 code 怪怪的，也不知道是不是 AMS 系統的問題</p>
+<blockquote>
+<p>[BUG1]Preview button funcation error 修改AMS的編輯模組改為Koivi Editor，即可以解決無法正常預覽的功能 [BUG2]面板線上修改功能，只能看不能修改 這個問題是編寫該文章的作者，如要再次編輯修改該文章內容，需指定版本控制，否則無法修改 [BUG3]線上編輯有問題會PO上去出現空格過多(</br>)&lt;預覽跟po上去網頁不同> 建議先轉換成html複製在筆記本上編輯,編好在貼回去比較安全 [BUG4]封面下文字(前言)無法對齊有不規律跳行或莫名的空格 建議把前言文字先用筆記本貼成一排然後在貼到編輯區裏,即可恢復你想要的排版 如果只要有裝 AMS 跟 使用他內建的編輯器 Koivi 會出現很多斷行問題，因為他使用 html 編輯，所以按一次 enter 之後，他會出現 <br>一次，然後系統又使用 nl2br，所以等於斷行兩次，當然我檢查了一下 AMS 裡面的 code 修改：modules/AMS/class/class.newsstory.php</p>
+</blockquote>
+<pre class="brush: php; title: ; notranslate" title>function hometext($format="Show")
+{
+    $myts =&#038; MyTextSanitizer::getInstance();
+    $html = 1;
+    $smiley = 1;
+    $xcodes = 1;
+    if ( $this->nohtml() ) {
+        $html = 0;
+    }
+    if ( $this->nosmiley() ) {
+        $smiley = 0;
+    }
+    switch ( $format ) {
+        case "Show":
+        $hometext = $myts->displayTarea($this->hometext,$html,$smiley,$xcodes);
+        break;
+        case "Edit":
+        $hometext = $myts->htmlSpecialChars($this->hometext);
+        break;
+        case "Preview":
+        $hometext = $myts->previewTarea($this->hometext,$html,$smiley,$xcodes);
+        break;
+        case "InForm":
+        $hometext = $myts->htmlSpecialChars( $myts->stripSlashesGPC($this->hometext));
+        break;
+        case "N":
+        $hometext = stripslashes($this->hometext);
+        break;
+    }
+    return $hometext;
+}
+</pre>
+<a href=https://blog.wu-boy.com/2008/03/phpxoops-%E5%A4%96%E6%8E%9B-ams-%E7%B3%BB%E7%B5%B1-bug/ class=post-read-more>[Read More]</a>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/03/www-ftp-%E7%9A%84%E4%B8%BB%E5%8B%95%E6%A8%A1%E5%BC%8F-active-%E5%92%8C%E8%A2%AB%E5%8B%95%E6%A8%A1%E5%BC%8F-passive/>
 <h2 class=post-title>[WWW] FTP 的主動模式( active )和被動模式( passive )</h2>
 </a>
@@ -348,29 +400,6 @@ public class runstart{
 用程式去判斷會更快，因為上面的函式，都是要單一字元去檢查，非常不方便，所以就寫了底下的程式</p>
 </blockquote>
 <a href=https://blog.wu-boy.com/2008/03/cc-%E5%88%A4%E6%96%B7%E5%AD%97%E4%B8%B2%E6%98%AF%E5%90%A6%E7%82%BA%E6%95%B8%E5%AD%97/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/02/cc-%E5%88%A4%E6%96%B7%E5%B9%B4%E4%BB%BD%E6%98%AF%E5%90%A6%E9%96%8F%E5%B9%B4/>
-<h2 class=post-title>[C/C++] 判斷年份是否閏年</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 1, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;103&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-無聊幫同學寫作業，其實這還蠻簡單的，判斷閏年的方法如下
-1、可以被4整除但不可以被100整除。 2、可以被400整除。
-程式碼如下
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 #include &lt;stdio.h>#include &lt;string.h>#include &lt;stdlib.h>int leap(int year); int leap(int year) { if((year%4)==0 && (year%100)!=0 || (year%400) ==0) { printf ("%d是閏年\n",year); } else { printf ("%d不是閏年\n",year); } } int main(int argc,char *argv[]) { char *p; char year[20]; printf("請輸入您要查詢的年份『輸入exit離開』: "); while(fgets(year, sizeof(year), stdin)) { if ((p = strchr(year, '\n')) !
-<a href=https://blog.wu-boy.com/2008/02/cc-%E5%88%A4%E6%96%B7%E5%B9%B4%E4%BB%BD%E6%98%AF%E5%90%A6%E9%96%8F%E5%B9%B4/ class=post-read-more>[Read More]</a>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;

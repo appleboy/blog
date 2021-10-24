@@ -116,6 +116,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/04/cc-strpbrk-%E5%9C%A8%E5%AD%97%E4%B8%B2%E4%B8%AD%E6%89%BE%E5%B0%8B%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AC%A6%E8%99%9F%E6%88%96%E5%AD%97%E6%AF%8D/>
+<h2 class=post-title>[C/C++] strpbrk 在字串中找尋指定的符號或字母</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 1, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;190&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+繼上一篇：『[C/C++] 切割字串函數：strtok, Network mac address 分割』，內容寫到 Microsoft 用到 strpbrk 來找尋字串中特定符號，並且回傳該符號的位址，用法如下：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 #include "string.h"#include "stdlib.h"#include "stdio.h" int main () { char str[] = "This is a sample string"; char key[] = "aeiou"; char * pch; printf ("Vowels in '%s': ",str); pch = strpbrk (str, key); while (pch != NULL) { printf ("%c " , *pch); /* 也可以直接輸出字串 */ printf("\noutput=%s\n", pch); pch = strpbrk (pch+1,key); } printf ("\n"); system("pause"); return 0; } 輸出結果：
+<a href=https://blog.wu-boy.com/2010/04/cc-strpbrk-%E5%9C%A8%E5%AD%97%E4%B8%B2%E4%B8%AD%E6%89%BE%E5%B0%8B%E6%8C%87%E5%AE%9A%E7%9A%84%E7%AC%A6%E8%99%9F%E6%88%96%E5%AD%97%E6%AF%8D/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/04/cc-%E5%88%87%E5%89%B2%E5%AD%97%E4%B8%B2%E5%87%BD%E6%95%B8%EF%BC%9Astrtok-network-mac-address-%E5%88%86%E5%89%B2/>
 <h2 class=post-title>[C/C++] 切割字串函數：strtok, Network mac address 分割</h2>
 </a>
@@ -360,28 +381,6 @@ if not exist !
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/usb/>USB</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/windows/>windows</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/02/cc-%E6%8C%87%E6%A8%99%E7%9B%B8%E5%8A%A0-%EF%BC%9For-%E7%9B%B8%E6%B8%9B-offset/>
-<h2 class=post-title>[C/C++] 指標相加 = ？or 相減 = offset</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;265&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-最近看到網路上討論 C/C++ 題目，某公司主管給新進人員面試的 C/C++ 考題，如下：
-1 2 3 4 5 6 7 8 int main(void) { int *a,*b; a=1; b=1; printf("%d\n",a+b); return 0; } 請問上面這個題目，哪裡有出問題，這是面試官問新進人員的題目之一，看也知道這程式丟到 Dev-C++ 是不會過的，a b 都是宣告為整數指標型態，可是在 a=1 或 b=1 在 Dev-C++ 裡面是編譯不過的，但是那寫法是沒有錯的，就像你設定 a=0 或者是 a=NULL 是一樣意思，不過最好是不要這樣寫，assignment 這樣寫不太好，可以改成 a = (int )1; b = (int )1; 這樣就可以順利編譯通過，再來 printf("%d\n",a+b); 這行錯很大，指標相加會爆炸吧，如果程式這樣寫，不把 OS 搞掛，那我還會覺得懷疑呢，正確寫法是指標加上 offset(位移)，這樣才是可以正確執行的，所以我們把程式改成下面：
-1 2 3 4 5 6 7 8 int main(void) { int *a,*b; a = (int *)1; b = (int *)1; printf("%d\n",a+(int)b); return 0; } 最後的執行結果是 5，(int) b 就相當於 sizeof(b) 也等於 sizeof(int ) 答案都是四，所以就是 1+4 =5，指標是不能相加的，只能透過 offset 方式來讓指標指向不同 base，但是如果是指標相減，那就是求 offset 的意思喔，看一下底下例子
-<a href=https://blog.wu-boy.com/2010/02/cc-%E6%8C%87%E6%A8%99%E7%9B%B8%E5%8A%A0-%EF%BC%9For-%E7%9B%B8%E6%B8%9B-offset/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
 </div>
 </article>
 </div>

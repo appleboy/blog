@@ -116,6 +116,50 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2007/04/lftp-%E4%BD%BF%E7%94%A8fxp%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8implicit-mode%E5%8A%A0%E5%AF%86%E5%82%B3%E8%BC%B8/>
+<h2 class=post-title>Lftp 使用FXP以及使用implicit mode加密傳輸</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 2, 2007
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;149&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>其實 lftp 是一個相當好用的文字介面ftp軟體，目前我在玩 linux，就是搭配這套軟體，這套軟體可以搭配shell script，來做到備份的工作，相當不錯，之前在網路上看到 segaa大大寫的一篇 <a href=http://blog.segaa.net/blog.php/1/post/3/100>[freebsd] lftp安裝與應用</a> 使用起來很方便，不過我遇到的server都是利用 explicit mode 方式加密，如果利用 implicit mode方式連接，指令可能有些不同，底下來介紹一下</p>
+<p>如果你的server端用 explicit 方式來連接，你可使用</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>lftp -d -u appleboy -p PORT url
+</code></pre></td></tr></table>
+</div>
+</div><p>如果你用 implicit 方式的話，就用下面</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>[appleboy@appleboy-dorm][~][20:23:03]$ lftp
+lftp :~&gt; open -d ftps://username:password@url:port 
+<span style=color:#228b22>#</span>
+<span style=color:#228b22># 注意 是 ftps://</span>
+<span style=color:#228b22>#</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<a href=https://blog.wu-boy.com/2007/04/lftp-%E4%BD%BF%E7%94%A8fxp%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8implicit-mode%E5%8A%A0%E5%AF%86%E5%82%B3%E8%BC%B8/ class=post-read-more>[Read More]</a>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2007/03/mysql-mysqlbinlog-%E8%B3%87%E6%96%99%E5%BA%AB%E8%99%95%E7%90%86%E4%BA%8C%E9%80%B2%E5%88%B6%E6%97%A5%E8%AA%8C%E6%AA%94%E6%A1%88%E7%9A%84%E5%AF%A6%E7%94%A8%E5%B7%A5%E5%85%B7/>
 <h2 class=post-title>[mysql] mysqlbinlog 資料庫處理二進制日誌檔案的實用工具</h2>
 </a>
@@ -362,23 +406,6 @@
 <div class=post-entry>
 <p>哈哈~ 我已經回到南投了~ 不過高雄到南投 我是坐國光客運~ 其實這也是最便宜的，因為每趟只需要250元，還不錯啦，我在當兵幾乎都是坐國光客運，畢竟他也很快，在高速公路也很敢衝，時間也不會差太多，哈 <a href=https://www.flickr.com/photos/appleboy/405493546/ title="Photo Sharing"><img src="https://i1.wp.com/farm1.static.flickr.com/128/405493546_d756e99e16.jpg?resize=500%2C375&ssl=1" alt=DSCN1953 data-recalc-dims=1></a></p>
 <a href=https://blog.wu-boy.com/2007/02/%E9%AB%98%E9%9B%84%E5%9B%9E%E5%8D%97%E6%8A%95-%E5%9C%8B%E5%85%89%E4%B9%8B%E6%97%85/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/02/%E6%AF%8F%E5%B9%B4%E7%9A%84%E9%81%8E%E5%B9%B4%EF%BC%8C%E7%B8%BD%E6%98%AF%E7%89%B9%E5%88%A5%E5%86%B7%E6%B8%85/>
-<h2 class=post-title>每年的過年，總是特別冷清</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 21, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;13&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>說到過年，我想是大家最快樂的時光了，可是重我出生到目前，我感覺我們家的過年，不像是在過年，跟平常都沒什麼兩樣，就好比我們家裏每到特特殊節日，比如說父親節，母親節，我也沒趕受到有這種氣氛的感覺，都覺得跟平常日子沒什麼兩樣，就連我自己的生日，我爸媽也都是忘記，我們都沒有什麼慶祝的習慣，所以我目前也很習慣的這種生活，所以導致我過年兩邊的娘家我都不太喜歡回去，因為兩邊的覺得氣氛不太對，哈哈。 今年回鄉下，我爸爸的媽媽家，看到阿罵還蠻健康的，心理很高興，每次回家那邊都很無聊，所以都會來個照相，我跟我哥哥都很白痴亂照，還有我跟我阿姨照相，以及全家福，先來幾張我自己的自拍照</p>
-<a href=https://blog.wu-boy.com/2007/02/%E6%AF%8F%E5%B9%B4%E7%9A%84%E9%81%8E%E5%B9%B4%EF%BC%8C%E7%B8%BD%E6%98%AF%E7%89%B9%E5%88%A5%E5%86%B7%E6%B8%85/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

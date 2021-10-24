@@ -116,6 +116,68 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/04/init-func-in-golang/>
+<h2 class=post-title>Go 語言的 init 函式</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 19, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;204&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/ title=Go-brown-side.sh><img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&ssl=1" alt=Go-brown-side.sh data-recalc-dims=1></a></p>
+<p>本篇會帶大家認識 <a href=https://golang.org>Go 語言</a>的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看<a href=https://play.golang.org/p/AN-6MK4qVVL>例子</a>，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+)
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>init</span>() {
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;init 1&#34;</span>)
+}
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>init</span>() {
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;init 2&#34;</span>)
+}
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Hello, playground&#34;</span>)
+}
+</code></pre></td></tr></table>
+</div>
+</div>
+<a href=https://blog.wu-boy.com/2018/04/init-func-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/04/how-to-use-filter-in-drone/>
 <h2 class=post-title>[影片教學] 使用 Filter 將專案跑在特定 Drone Agent 服務</h2>
 </a>
@@ -303,29 +365,6 @@
 <a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/lambda/>lambda</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/01/introduction-to-drone-cicd/>
-<h2 class=post-title>Drone CI/CD 系統簡介</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 18, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;68&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/38854798135/in/dateposted-public/ title="Screen Shot 2018-01-18 at 10.21.43 AM"><img src="https://i1.wp.com/farm5.staticflickr.com/4660/38854798135_a4ed025e7f_z.jpg?w=840&ssl=1" alt="Screen Shot 2018-01-18 at 10.21.43 AM" data-recalc-dims=1></a></p>
-<p>很高興到 <a href=https://www.facebook.com/groups/GCPUG.TW/>GCPUG.TW</a> 分享『Drone CI/CD 系統簡介』，會議介紹了 <a href=https://github.com/drone/drone>Drone</a> 系統架構，這套是由 <a href=https://golang.org>Go 語言</a>所開發，前兩年我參加了 Drone 開源專案的開發，也貢獻了數個 <a href=http://plugins.drone.io/>Drone Plugin</a>，去年我正式開始宣傳 Drone 的好處及優勢，以及為什麼要從 <a href=https://jenkins.io/>Jenkins</a> 或 <a href=https://jenkins.io/>GitLab CI</a> 轉換到 Drone，會議大綱如下，很感謝 <a href=https://www.qnap.com/zh-tw/>QNAP</a> 提供現場直播及錄影。</p>
-<a href=https://blog.wu-boy.com/2018/01/introduction-to-drone-cicd/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 </div>
 </article>
 </div>

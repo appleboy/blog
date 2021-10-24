@@ -103,6 +103,57 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/>
+<h2 class=post-title>Go Modules 處理私有 GIT Repository 流程</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 4, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;433&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080" alt=golang></p>
+<p><a href=https://golang.org/>Golang</a> 在 <a href=https://golang.org/doc/go1.14#introduction>1.14</a> 正式說明可以將 <a href=https://github.com/golang/go/wiki/Modules>Go Modules</a> 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go mod init project_path
+go mod tidy
+</code></pre></td></tr></table>
+</div>
+</div><p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 <code>proxy.golang.org</code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go env -w <span style=color:#00688b>GOPRIVATE</span>=github.com/appleboy
+</code></pre></td></tr></table>
+</div>
+</div><p>上面代表告訴 go 指令，只要遇到 <code>github.com/appleboy</code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>，接著設定 Git</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>git config --global url.<span style=color:#cd5555>&#34;https://</span><span style=color:#00688b>$USERNAME</span><span style=color:#cd5555>:</span><span style=color:#00688b>$ACCESS_TOKEN</span><span style=color:#cd5555>@github.com&#34;</span>.insteadOf <span style=color:#cd5555>&#34;https://github.com&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 <a href=https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line>Personal Access Token</a>。</p>
+<a href=https://blog.wu-boy.com/2020/03/read-private-module-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/>
 <h2 class=post-title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</h2>
 </a>
@@ -313,29 +364,6 @@
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/08/minio-remove-healthcheck-script-for-docker-image/>
-<h2 class=post-title>Minio 從 Docker 容器移除 healthcheck 腳本</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 18, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;176&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/3lAv9HlhI9mxCfow0jHY5-G6H-tvXJLCv3S2QvzKReV_R-61oywRIXW6sruwPrS69CXpMAuIrccgVH8HY5hIzDGvenyhFhKcGmBk0CmU1c36k6NrjSvYESSmAEAejlxmxdW_gduXZio=w1920-h1080" title="minio golang"><img src="https://lh3.googleusercontent.com/3lAv9HlhI9mxCfow0jHY5-G6H-tvXJLCv3S2QvzKReV_R-61oywRIXW6sruwPrS69CXpMAuIrccgVH8HY5hIzDGvenyhFhKcGmBk0CmU1c36k6NrjSvYESSmAEAejlxmxdW_gduXZio=w1920-h1080" alt="minio golang" title="minio golang"></a></p>
-<p><a href=https://min.io/>Minio</a> 是一套開源專案的 Object 儲存容器，如果你有使用 <a href=https://aws.amazon.com/tw/s3/>AWS S3</a>，相信要找一套代替 S3 的替代品，一定會想到這套用 <a href=https://golang.org>Go 語言</a>開發的 Minio 專案。讓您在公司內部也可以享有 S3 的儲存容器，不需要變動任何程式碼就可以無痛從 AWS S3 搬到公司內部。剛好最近在整合 Traefik 搭配 Minio，由於 Minio 原先已經內建 healthcheck 腳本，所以當運行 Minio 時，使用 <code>docker ps</code> 正常來說可以看到類似 <code>Up 7 weeks (healthy)</code> 字眼，但是 Minio 運行了三分鐘之後，狀態就會從 <code>healthy</code> 變成 <code>unhealthy</code>，造成 Traefik 會自動移除 frontend 的對應設定，這樣 Web 就無法顯示了。我在 Udemy 上面有介紹如<a href=https://www.udemy.com/course/golang-fight/learn/lecture/9962004#overview>何用 Golang 寫 healthcheck</a>，大家有興趣可以參考看看，coupon code 可以輸入 <strong>GOLANG2019</strong> 。</p>
-<a href=https://blog.wu-boy.com/2019/08/minio-remove-healthcheck-script-for-docker-image/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/minio/>minio</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/s3/>s3</a>&nbsp;
 </div>
 </article>
 </div>

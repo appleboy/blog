@@ -116,6 +116,33 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/06/how-to-install-gearman-on-ubuntu-or-debian-with-mysql/>
+<h2 class=post-title>How to install Gearman on Ubuntu or Debian with MySQL 安裝測試篇</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 13, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;444&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<img src="https://i2.wp.com/gearman.org/_media/:wiki:logo.png?w=840" alt data-recalc-dims=1>
+</div>
+<p><a href=http://gearman.org/ target=_blank>Gearman</a> 可以在背景幫忙處理繁瑣的工作，例如壓縮影片、處理縮圖、發送認證信…等，這次不會提到太多 Gearman 介紹，如果想瞭解 Gearman 可以參考<a href=http://www.jaceju.net/ target=_blank>小鐵兄</a>寫的 <a href=http://www.jaceju.net/blog/archives/1211/ target=_blank>Gearman 心得</a>，此篇會筆記如何在 Ubuntu or Debian 安裝 Gearman 搭配 MySQL 服務，當然如果你不是使用 MySQL，也可以另外搭配 <a href=http://memcached.org/ target=_blank>Memcached</a> 或 <a href=http://www.sqlite.org/ target=_blank>SQLite</a> 都可以</p>
+<a href=https://blog.wu-boy.com/2013/06/how-to-install-gearman-on-ubuntu-or-debian-with-mysql/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gearman/>Gearman</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/memcache/>memcache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/06/jsdc-ksdg-gruntjs-tool/>
 <h2 class=post-title>JSDC 和 KSDG 影音紀錄 (淺談 GruntJS 整合開發工具)</h2>
 </a>
@@ -344,36 +371,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/04/nginx-1-4-0-support-spdy-module/>
-<h2 class=post-title>nginx 1.4.0 釋出並支援 SPDY</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 28, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;241&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><strong>Update: 由於 OpenSSL CVE-2014-0160 Heartbleed Security，請將 openssl 升級到 1.0.1g 版本</strong></p>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/8684224387/ title="nginx-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm9.staticflickr.com/8401/8684224387_19de454ebf.jpg?resize=320%2C120&ssl=1" alt=nginx-logo data-recalc-dims=1></a>
-</div>
-<p>很高興看到 <a href=http://nginx.org/ target=_blank>Nginx</a> Release 1.4.0 版本，此新版本開始支援 <a href=http://nginx.org/en/docs/http/ngx_http_spdy_module.html target=_blank>SPDY module</a>，對於 SPDY 還不熟悉了解的，可以參考今年 <a href=http://www.webconf.tw target=_blank>2013 WebConf</a> 講師 ihower 介紹的 <a href=http://www.slideshare.net/ihower/a-brief-introduction-to-spdy-http20 target=_blank>A brief introduction to SPDY - 邁向 HTTP/2.0</a>，要提升整個 Web Performance，可以將 SPDY 導入，對於使用 Apache 使用者，請參考 <a href=http://code.google.com/p/mod-spdy/ target=_blank>mod_spdy</a>，如果是 Nginx 用戶，在 1.3.x 版本，可以直接用官方 <a href=http://nginx.org/patches/spdy/patch.spdy.txt>patch</a>，升級到 1.4.x 就不需要 patch 了，但 OS 是 <a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.centos.org/ target=_blank>CentOS</a> 系列是需要自行編譯，這次會筆記在 CentOS 下將 spdy 編譯進系統。</p>
-<h3 id=安裝方式>安裝方式</h3>
-<p>先看 Ngix 是否有支援 spdy，直接下 nginx -V 觀看</p>
-<blockquote>
-<p>nginx version: nginx/1.1.19 TLS SNI support enabled configure arguments: &ndash;prefix=/etc/nginx &ndash;conf-path=/etc/nginx/nginx.conf &ndash;erth=/var/lib/nginx/body &ndash;http-fastcgi-temp-path=/var/lib/nginx/fastcgi &ndash;http-lb/nginx/proxy &ndash;http-scgi-temp-path=/var/lib/nginx/scgi &ndash;http-uwsgi-temp-path==/var/run/nginx.pid &ndash;with-debug &ndash;with-http_addition_module &ndash;with-http_dav_moith-http_image_filter_module &ndash;with-http_realip_module &ndash;with-http_stub_status__xslt_module &ndash;with-ipv6 &ndash;with-sha1=/usr/include/openssl &ndash;with-md5=/usr/includ/buildd/nginx-1.1.19/debian/modules/nginx-auth-pam &ndash;add-module=/build/buildd/d/nginx-1.1.19/debian/modules/nginx-upstream-fair &ndash;add-module=/build/buildd/ng</p>
-</blockquote>
-<a href=https://blog.wu-boy.com/2013/04/nginx-1-4-0-support-spdy-module/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/spdy/>spdy</a>&nbsp;
 </div>
 </article>
 </div>
