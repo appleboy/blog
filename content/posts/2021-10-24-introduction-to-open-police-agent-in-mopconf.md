@@ -40,14 +40,6 @@ tags:
 
 {{< speakerdeck id="9cfef3dc602c41ee93215b3c05d4f5a8" >}}
 
-## 教學影片
-
-{{< youtube BMLBv9ZUbPM >}}
-
-影片視頻會同步放到底下課程內
-
-* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
-
 [1]:https://www.openpolicyagent.org/
 
 ## 現場提問
