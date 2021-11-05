@@ -6,7 +6,7 @@ date: 2021-05-29T06:37:19+00:00
 
 ---
 
-![](https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080)
+![logo](https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080)
 
 ## 課程介紹
 
@@ -17,7 +17,7 @@ date: 2021-05-29T06:37:19+00:00
 在各種教學平台上已經有很多課程介紹 Docker 容器技術，很多 Docker 的基礎教學都非常完整，所以這門課程會著重在 Docker 實戰，藉由工作上會用到的 Docker 容器技術加以介紹，所以課程內容會相當廣泛，介紹各種不同的工具及平台來協助團隊在部署或架構面上更完整。像是底下一系列相關應用及部署技巧
 
 1. 用 docker-compose 快速安裝 Gitea (Git Host 最將選擇)
-2. 用 Docker 直接快速部署到 Heroku 平台 
+2. 用 Docker 直接快速部署到 Heroku 平台
 3. 用 docker-compose 實現 rolling update 機制
 4. 用 Docker 搭配 GitHub Action 部署 Go 語言服務
 5. 用 Docker 快速建置 PHP Laravel 開發環境
@@ -31,24 +31,24 @@ date: 2021-05-29T06:37:19+00:00
 
 Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師。長期貢獻於 Open Source 專案，熱愛開發程式。
 
-  * Mopcon 研討會講師 ([2020][17])
-  * iTHome Cloud Summit 研討會講師 ([2020][17])
-  * Mopcon 研討會講師 ([2019][16])
-  * iThome Modern Web 研討會講師 ([2019][15])
-  * iTHome Cloud Summit 研討會講師 ([2019][14])
-  * Mopcon 研討會講師 ([2018][13])
-  * iThome Modern Web 研討會講師 ([2018][12])
-  * Mopcon 研討會講師 ([2017][11])
-  * iThome Modern Web 研討會講師 (2017)
-  * iThome Gopher Day 研討會講師 (2017)
-  * iTHome Cloud Summit 研討會講師 (2017)
-  * iTHome ChatBot 研討會講師 (2017)
-  * iTHome DevOps 研討會講師 (2016, 2017)
-  * PHPConf 研討會講師 (2012, 2013)
-  * COSCUP 研討會講師 (2016, 2014)
-  * JSDC 研討會講師 (2013)
-  * OSDC 研討會講師 (2014)
-  * 公司內部教育訓練講師 (Git, Docker 及相關程式語言)
+* Mopcon 研討會講師 ([2020][17])
+* iTHome Cloud Summit 研討會講師 ([2020][17])
+* Mopcon 研討會講師 ([2019][16])
+* iThome Modern Web 研討會講師 ([2019][15])
+* iTHome Cloud Summit 研討會講師 ([2019][14])
+* Mopcon 研討會講師 ([2018][13])
+* iThome Modern Web 研討會講師 ([2018][12])
+* Mopcon 研討會講師 ([2017][11])
+* iThome Modern Web 研討會講師 (2017)
+* iThome Gopher Day 研討會講師 (2017)
+* iTHome Cloud Summit 研討會講師 (2017)
+* iTHome ChatBot 研討會講師 (2017)
+* iTHome DevOps 研討會講師 (2016, 2017)
+* PHPConf 研討會講師 (2012, 2013)
+* COSCUP 研討會講師 (2016, 2014)
+* JSDC 研討會講師 (2013)
+* OSDC 研討會講師 (2014)
+* 公司內部教育訓練講師 (Git, Docker 及相關程式語言)
 
 [11]: https://mopcon.org/2017/
 [12]: https://modernweb.tw/2018/
@@ -61,9 +61,9 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 目前為數個 Go 專案開發及維護者
 
-  * [Gin][21]: 主流的 Web 框架，適合用來寫 API 服務，目前是擔任維護及開發角色。
-  * [Gitea][22]: 輕量級 Git 伺服器，目前擔任維護及開發角色。
-  * [Drone][23]: 用 Docker Container 來持續整和部署，可與上面 Gitea 串接，目前為貢獻者及數個 Plugin 作者。
+* [Gin][21]: 主流的 Web 框架，適合用來寫 API 服務，目前是擔任維護及開發角色。
+* [Gitea][22]: 輕量級 Git 伺服器，目前擔任維護及開發角色。
+* [Drone][23]: 用 Docker Container 來持續整和部署，可與上面 Gitea 串接，目前為貢獻者及數個 Plugin 作者。
 
 [21]: https://github.com/gin-gonic/gin
 [22]: https://gitea.io/zh-tw/
@@ -71,9 +71,9 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 講師個人相關連結
 
-  * Blog: <https://blog.wu-boy.com/>
-  * Github: <https://github.com/appleboy>
-  * Slide: <http://www.slideshare.net/appleboy>
+* Blog: <https://blog.wu-boy.com/>
+* Github: <https://github.com/appleboy>
+* Slide: <http://www.slideshare.net/appleboy>
 
 ## 購買資訊
 
@@ -81,7 +81,7 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 * 富邦銀行: 012
 * 富邦帳號: 746168268370
-* 匯款金額: 台幣 `$800` 元 (匯款優惠 100 元，網路優惠價為 `$900` 元)
+* 匯款金額: 台幣 `$1000` 元 (匯款優惠 200 元，網路優惠價為 `$1200` 元)
 
 [31]: https://www.udemy.com/course/docker-practice/
 [32]: https://facebook.com/appleboy46

@@ -8,7 +8,7 @@ dsq_thread_id:
 
 ---
 
-[<img src="https://i1.wp.com/c1.staticflickr.com/5/4236/34957940160_435d83114f_z.jpg?w=840&#038;ssl=1" alt="drone-logo_512" data-recalc-dims="1" />][1]
+![cover](https://i.imgur.com/2P2MVNK.png)
 
 ## 課程緣由
 
@@ -23,7 +23,7 @@ dsq_thread_id:
   3. 如何用其他語言撰寫 Plugin 整合進 Drone 服務
   4. 如何用 Drone 整合團隊部署測試流程 (如下圖)
 
-[<img src="https://c1.staticflickr.com/5/4185/34309691871_65d36545a5_c.jpg" alt="Screen Shot 2017-05-04 at 11.50.29 AM" data-recalc-dims="1" />][9]
+![git flow](https://c1.staticflickr.com/5/4185/34309691871_65d36545a5_c.jpg)
 
 ## 課程大綱
 
@@ -43,24 +43,24 @@ dsq_thread_id:
 
 Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師。長期貢獻於 Open Source 專案，熱愛開發程式。
 
-  * Mopcon 研討會講師 ([2020][17])
-  * iTHome Cloud Summit 研討會講師 ([2020][17])
-  * Mopcon 研討會講師 ([2019][16])
-  * iThome Modern Web 研討會講師 ([2019][15])
-  * iTHome Cloud Summit 研討會講師 ([2019][14])
-  * Mopcon 研討會講師 ([2018][13])
-  * iThome Modern Web 研討會講師 ([2018][12])
-  * Mopcon 研討會講師 ([2017][11])
-  * iThome Modern Web 研討會講師 (2017)
-  * iThome Gopher Day 研討會講師 (2017)
-  * iTHome Cloud Summit 研討會講師 (2017)
-  * iTHome ChatBot 研討會講師 (2017)
-  * iTHome DevOps 研討會講師 (2016, 2017)
-  * PHPConf 研討會講師 (2012, 2013)
-  * COSCUP 研討會講師 (2016, 2014)
-  * JSDC 研討會講師 (2013)
-  * OSDC 研討會講師 (2014)
-  * 公司內部教育訓練講師 (Git, Docker 及相關程式語言)
+* Mopcon 研討會講師 ([2020][17])
+* iTHome Cloud Summit 研討會講師 ([2020][17])
+* Mopcon 研討會講師 ([2019][16])
+* iThome Modern Web 研討會講師 ([2019][15])
+* iTHome Cloud Summit 研討會講師 ([2019][14])
+* Mopcon 研討會講師 ([2018][13])
+* iThome Modern Web 研討會講師 ([2018][12])
+* Mopcon 研討會講師 ([2017][11])
+* iThome Modern Web 研討會講師 (2017)
+* iThome Gopher Day 研討會講師 (2017)
+* iTHome Cloud Summit 研討會講師 (2017)
+* iTHome ChatBot 研討會講師 (2017)
+* iTHome DevOps 研討會講師 (2016, 2017)
+* PHPConf 研討會講師 (2012, 2013)
+* COSCUP 研討會講師 (2016, 2014)
+* JSDC 研討會講師 (2013)
+* OSDC 研討會講師 (2014)
+* 公司內部教育訓練講師 (Git, Docker 及相關程式語言)
 
 [11]: https://mopcon.org/2017/
 [12]: https://modernweb.tw/2018/
@@ -73,9 +73,9 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 目前為數個 Go 專案開發及維護者
 
-  * [Gin][21]: 主流的 Web 框架，適合用來寫 API 服務，目前是擔任維護及開發角色。
-  * [Gitea][22]: 輕量級 Git 伺服器，目前擔任維護及開發角色。
-  * [Drone][23]: 用 Docker Container 來持續整和部署，可與上面 Gitea 串接，目前為貢獻者及數個 Plugin 作者。
+* [Gin][21]: 主流的 Web 框架，適合用來寫 API 服務，目前是擔任維護及開發角色。
+* [Gitea][22]: 輕量級 Git 伺服器，目前擔任維護及開發角色。
+* [Drone][23]: 用 Docker Container 來持續整和部署，可與上面 Gitea 串接，目前為貢獻者及數個 Plugin 作者。
 
 [21]: https://github.com/gin-gonic/gin
 [22]: https://gitea.io/zh-tw/
@@ -83,30 +83,30 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 講師個人相關連結
 
-  * Blog: <https://blog.wu-boy.com/>
-  * Github: <https://github.com/appleboy>
-  * Slide: <http://www.slideshare.net/appleboy>
+* Blog: <https://blog.wu-boy.com/>
+* Github: <https://github.com/appleboy>
+* Slide: <http://www.slideshare.net/appleboy>
 
 ## 適合對象
 
-  * 系統管理者
-  * 前端開發者
-  * 後端開發者
-  * 全端開發者
+* 系統管理者
+* 前端開發者
+* 後端開發者
+* 全端開發者
 
 ## 開發環境
 
-  * 開發環境：[Docker][12] + 您的偏好語言 (Node.js, Python, Golang)
-  * 開發工具：Visual Studio Code 或您偏好的編輯器 (Sublime, Vim ..)
-  * 開發語言：您偏好的開發語言 (Node.js, Python, Golang ..)
-  * 開發系統：Linux, MacOS
+* 開發環境：[Docker][12] + 您的偏好語言 (Node.js, Python, Golang)
+* 開發工具：Visual Studio Code 或您偏好的編輯器 (Sublime, Vim ..)
+* 開發語言：您偏好的開發語言 (Node.js, Python, Golang ..)
+* 開發系統：Linux, MacOS
 
 ## 事前準備
 
 請大家先安裝好 Docker 及相關開發工具及語言。
 
-  * MacOS: [教學連結][13]
-  * Linux: [教學連結][14]
+* MacOS: [教學連結][13]
+* Linux: [教學連結][14]
 
 ## 為什麼不使用 Jenkins 或 GitLab CI
 
@@ -118,7 +118,7 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 * 富邦銀行: 012
 * 富邦帳號: 746168268370
-* 匯款金額: 台幣 `$2000` 元 (匯款優惠 200 元，網路優惠價為 `$2200` 元)
+* 匯款金額: 台幣 `$2500` 元 (匯款優惠 300 元，網路優惠價為 `$2800` 元)
 
 [31]: https://www.udemy.com/devops-oneday/
 [32]: https://facebook.com/appleboy46

@@ -7,7 +7,8 @@ dsq_thread_id:
   - 6549529735
 
 ---
-[<img src="https://i0.wp.com/farm1.staticflickr.com/800/40815293371_85ca0b960f_z.jpg?w=840&#038;ssl=1" alt="Screen Shot 2018-03-14 at 11.44.48 PM" data-recalc-dims="1" />][1]
+
+![logo](https://i0.wp.com/farm1.staticflickr.com/800/40815293371_85ca0b960f_z.jpg?w=840&)
 
 ## 課程緣由
 
@@ -43,24 +44,24 @@ Go 語言 (又稱 Golang) 是 Google 推出新一代的強大語言，2018 年 1
 
 Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師。長期貢獻於 Open Source 專案，熱愛開發程式。
 
-  * Mopcon 研討會講師 ([2020][17])
-  * iTHome Cloud Summit 研討會講師 ([2020][17])
-  * Mopcon 研討會講師 ([2019][16])
-  * iThome Modern Web 研討會講師 ([2019][15])
-  * iTHome Cloud Summit 研討會講師 ([2019][14])
-  * Mopcon 研討會講師 ([2018][13])
-  * iThome Modern Web 研討會講師 ([2018][12])
-  * Mopcon 研討會講師 ([2017][11])
-  * iThome Modern Web 研討會講師 (2017)
-  * iThome Gopher Day 研討會講師 (2017)
-  * iTHome Cloud Summit 研討會講師 (2017)
-  * iTHome ChatBot 研討會講師 (2017)
-  * iTHome DevOps 研討會講師 (2016, 2017)
-  * PHPConf 研討會講師 (2012, 2013)
-  * COSCUP 研討會講師 (2016, 2014)
-  * JSDC 研討會講師 (2013)
-  * OSDC 研討會講師 (2014)
-  * 公司內部教育訓練講師 (Git, Docker 及相關程式語言)
+* Mopcon 研討會講師 ([2020][17])
+* iTHome Cloud Summit 研討會講師 ([2020][17])
+* Mopcon 研討會講師 ([2019][16])
+* iThome Modern Web 研討會講師 ([2019][15])
+* iTHome Cloud Summit 研討會講師 ([2019][14])
+* Mopcon 研討會講師 ([2018][13])
+* iThome Modern Web 研討會講師 ([2018][12])
+* Mopcon 研討會講師 ([2017][11])
+* iThome Modern Web 研討會講師 (2017)
+* iThome Gopher Day 研討會講師 (2017)
+* iTHome Cloud Summit 研討會講師 (2017)
+* iTHome ChatBot 研討會講師 (2017)
+* iTHome DevOps 研討會講師 (2016, 2017)
+* PHPConf 研討會講師 (2012, 2013)
+* COSCUP 研討會講師 (2016, 2014)
+* JSDC 研討會講師 (2013)
+* OSDC 研討會講師 (2014)
+* 公司內部教育訓練講師 (Git, Docker 及相關程式語言)
 
 [11]: https://mopcon.org/2017/
 [12]: https://modernweb.tw/2018/
@@ -73,9 +74,9 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 目前為數個 Go 專案開發及維護者
 
-  * [Gin][21]: 主流的 Web 框架，適合用來寫 API 服務，目前是擔任維護及開發角色。
-  * [Gitea][22]: 輕量級 Git 伺服器，目前擔任維護及開發角色。
-  * [Drone][23]: 用 Docker Container 來持續整和部署，可與上面 Gitea 串接，目前為貢獻者及數個 Plugin 作者。
+* [Gin][21]: 主流的 Web 框架，適合用來寫 API 服務，目前是擔任維護及開發角色。
+* [Gitea][22]: 輕量級 Git 伺服器，目前擔任維護及開發角色。
+* [Drone][23]: 用 Docker Container 來持續整和部署，可與上面 Gitea 串接，目前為貢獻者及數個 Plugin 作者。
 
 [21]: https://github.com/gin-gonic/gin
 [22]: https://gitea.io/zh-tw/
@@ -83,22 +84,23 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 講師個人相關連結
 
-  * Blog: <https://blog.wu-boy.com/>
-  * Github: <https://github.com/appleboy>
-  * Slide: <http://www.slideshare.net/appleboy>
+* Blog: <https://blog.wu-boy.com/>
+* Github: <https://github.com/appleboy>
+* Slide: <http://www.slideshare.net/appleboy>
 
 ## 適合對象
 
-  * 系統管理者
-  * 前端開發者
-  * 後端開發者
-  * 全端開發者
+* 系統管理者
+* 前端開發者
+* 後端開發者
+* 全端開發者
 
 ## 開發環境
 
-  * 開發環境：Go 語言 1.11 版本
-  * 開發工具：[Visual Studio Code][9] + [Go Plugin][10]
-  * 開發系統：Linux, MacOS, Windows
+* 開發環境：Go 語言 1.11 版本
+* 開發工具：[Visual Studio Code][9] + [Go Plugin][10]
+* 開發系統：Linux, MacOS, Windows
+
 ## 購買資訊
 
 請直接點選這裡[線上購買][31]，優惠碼為: `{{< coupon >}}`，如果需要更優惠價錢，或者是搭配其他課程一起購買，請直接[聯絡我][32]，也可以透過線上匯款方式，匯款後一樣 FB 私訊丟我，我會開一個免費課程連結給您
