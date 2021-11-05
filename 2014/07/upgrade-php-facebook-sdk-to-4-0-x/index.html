@@ -9,7 +9,7 @@
 
 最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","name":"升級 php facebook sdk 到 4.0.x 版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"升級 PHP Facebook SDK 到 4.0.x 版本","description":" 最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。\n","inLanguage":"en","wordCount":450,"datePublished":"2014-07-24T09:11:12","dateModified":"2014-07-24T09:11:12","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, Composer, Facebook, Facebook SDK, php"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","name":"升級 php facebook sdk 到 4.0.x 版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"升級 PHP Facebook SDK 到 4.0.x 版本","description":" 最近幫公司建立 Staging 環境，申請了新的 FB App 來，用原本 Facebook v3.2.3 SDK 發現已經不能 work 了，去翻了 Facebook Platform Changelog，看到今年 4 月 30 號以後申請的 App 會強制走 v2.0 Auth 機制，所以原本用 php sdk 3.2.3 版本的話，完全無法呼叫 Auth 2.0 API，導致整個網站爛掉，當然線上的網站是不會隨意換 App ID 及 secret，免得怎麼爆掉的都不知道。這次來教學在 CodeIgniter 轉換 PHP Facebook SDK，可以直接參考官方 4.0.0 的教學，原本 3.2.3 版本直接下載程式碼，放到 library 目錄，直接 include 就可以取得 Facebook 個人資料，4.0.0 版本以後，請先確認系統是否升級為 PHP 5.4 版本以上，並且支援 Composer 安裝，當然如果不用 Composer 也可以，只是要 include 很多檔案，真的比較麻煩。\n","inLanguage":"en","wordCount":449,"datePublished":"2014-07-24T09:11:12","dateModified":"2014-07-24T09:11:12","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, Composer, Facebook, Facebook SDK, php"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/07\/upgrade-php-facebook-sdk-to-4-0-x\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="升級 PHP Facebook SDK 到 4.0.x 版本">
 <meta property="og:description" content="
   
@@ -29,7 +29,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.88.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
@@ -106,7 +106,7 @@
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on July 24, 2014
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;450&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;449&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -140,7 +140,6 @@
 <li>Author: appleboy</li>
 <li></li>
 </ul>
-<p>*/</p>
 <p>require &lsquo;vendor/autoload.php&rsquo;;</p>
 <p>use Facebook\FacebookSession;
 use Facebook\FacebookRequest;
@@ -275,8 +274,8 @@ public function facebook()
 }
 </code></pre>
 <p>}</p>
-<p>/* End of file login.php */
-/* Location: ./application/controllers/login.php */
+<p>/* End of file login.php <em>/
+/</em> Location: ./application/controllers/login.php */
 </pre></p>
 </div>
 <p>打開瀏覽器，直接執行 <code>http://xxxx/login/facebook</code> 就可以看到 Facebook 登入連結。所以程式碼都放在 <a href=https://github.com>Github</a> 上 <a href=https://github.com/appleboy/codeigniter-facebook-php-sdk-v4>codeigniter-facebook-php-sdk-v4</a>，歡迎取用。</p>
@@ -442,7 +441,7 @@ public function facebook()
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.88.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

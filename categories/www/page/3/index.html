@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.88.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/categories/www/feed.xml title="小惡魔 - AppleBOY">
@@ -120,7 +120,7 @@
 </div> 最近把一個簡易的 Web 丟到
 <p><a href=http://code.google.com/intl/zh-TW/appengine/ target=_blank>Google App Engine</a> 測試，但是發現每天都會因為 Frontend Instance Hours 不夠用，而造成網站被關閉 (Quota 爆漿)，上網找一下解決方法，發現了這篇: <a href="http://groups.google.com/group/taipei-gtug/browse_thread/thread/8d00a11c0b2f4fe?pli=1" target=_blank>Frontend Instance Hours 的問題</a>，只要透過底下方式就可以暫時解決這問題，如果是網站流量很大的話，那可能要考慮開啟付費機制。</p>
 <h3 id=解決方式-先進入>解決方式 先進入</h3>
-<p><a href=https://appengine.google.com/ target=_blank>App engine 後台</a>，點選您的 Application 之後可以看到左邊選單 <strong><span style=color:green>Application Settings</span></strong>，進入後找到 <strong><span style=color:green>Max Idle Instances</span></strong> 還有 <strong><span style=color:green>Min Pending Latency</span></strong> 這兩項設定，我們必須將 Max Idle Instances 設定為**<span style=color:red>1</span>**，以及 Min Pending Latency 設定為 **<span style=color:red>15s</span>**，但是 Max Idle Instances 預設是不給修改，而是跑 default value &ldquo;Automatic&rdquo;，這時候，我們必須把 **<span style=color:red>inbound_services</span>** 設定為 warmup 才可以動態調整 **<span style=color:green>Max Idle Instances</span>**。</p>
+<p><a href=https://appengine.google.com/ target=_blank>App engine 後台</a>，點選您的 Application 之後可以看到左邊選單 <strong><span style=color:green>Application Settings</span></strong>，進入後找到 <strong><span style=color:green>Max Idle Instances</span></strong> 還有 <strong><span style=color:green>Min Pending Latency</span></strong> 這兩項設定，我們必須將 Max Idle Instances 設定為**<span style=color:red>1</span>**，以及 Min Pending Latency 設定為 <strong><span style=color:red>15s</span></strong>，但是 Max Idle Instances 預設是不給修改，而是跑 default value &ldquo;Automatic&rdquo;，這時候，我們必須把 <strong><span style=color:red>inbound_services</span></strong> 設定為 warmup 才可以動態調整 <strong><span style=color:green>Max Idle Instances</span></strong>。</p>
 <h3 id=設定-inbound_services-請打開網站根目錄底下的>設定 inbound_services 請打開網站根目錄底下的</h3>
 <p><a href=http://code.google.com/intl/zh-TW/appengine/docs/python/config/appconfig.html target=_blank>app.yaml</a>，在上面加入</p>
 <pre class="brush: bash; title: ; notranslate" title>inbound_services:
@@ -197,7 +197,7 @@
 <div style="margin:0 auto;text-align:center">
 <img src="https://i1.wp.com/www.linode.com/images/linode_logo_gray.png?w=840" alt="Linode VPS" data-recalc-dims=1>
 </div> 如果有在玩虛擬主機的朋友們，這是一項非常大的消息(
-<p><a href=http://blog.linode.com/2011/09/01/linode-reduces-transfer-pricing/ target=_blank>Linode Reduces Transfer Pricing</a>)，那就是從**<span style=color:red>2011年9月1日</span>**開始，只要是流入 <a href=http://www.linode.com/ target=_blank>Linode VPS</a> 或者是 <a href=http://blog.linode.com/2011/07/13/introducing-nodebalancer/ target=_blank>NodeBalancer</a> 伺服器的流量都是**<span style=color:red>免費</span>**，至於流出流量呢？只要是超過限制的 transfer pool 都是以 $0.10/GB 來計費，這相當便宜阿，Linode 看的出來蠻用心的，可以租一台當作 backup server 也不賴，價格來說也不會很貴啦，最小 VPS 每個月流量給大 200G/month，其實也用不太完，但是網路的速度，可能就要評估看看，不要依賴 Ping 的 ttl 值，以直接下載檔案速度來觀看也許會比較適合喔。</p>
+<p><a href=http://blog.linode.com/2011/09/01/linode-reduces-transfer-pricing/ target=_blank>Linode Reduces Transfer Pricing</a>)，那就是從**<span style=color:red>2011年9月1日</span><strong>開始，只要是流入 <a href=http://www.linode.com/ target=_blank>Linode VPS</a> 或者是 <a href=http://blog.linode.com/2011/07/13/introducing-nodebalancer/ target=_blank>NodeBalancer</a> 伺服器的流量都是</strong><span style=color:red>免費</span>**，至於流出流量呢？只要是超過限制的 transfer pool 都是以 $0.10/GB 來計費，這相當便宜阿，Linode 看的出來蠻用心的，可以租一台當作 backup server 也不賴，價格來說也不會很貴啦，最小 VPS 每個月流量給大 200G/month，其實也用不太完，但是網路的速度，可能就要評估看看，不要依賴 Ping 的 ttl 值，以直接下載檔案速度來觀看也許會比較適合喔。</p>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/linode/>Linode</a>&nbsp;
@@ -461,7 +461,7 @@ Arch Linux 2010.05 (i386 and x86_64) CentOS 5.5 (i386 and x86_64) Debian 5.0 (i3
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.88.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

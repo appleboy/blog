@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.88.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/github/feed.xml title="小惡魔 - AppleBOY">
@@ -141,7 +141,7 @@ Total 0 (delta 0), reused 0 (delta 0) error: denying non-fast forward refs/heads
 <div style="margin:0 auto;text-align:center">
 <a href=https://www.flickr.com/photos/appleboy/8455538800/ title="Git-Logo-2Color by appleboy46, on Flickr"><img src="https://i0.wp.com/farm9.staticflickr.com/8523/8455538800_30f65954f8.jpg?resize=500%2C209&ssl=1" alt=Git-Logo-2Color data-recalc-dims=1></a>
 </div> 在 commit code 之前，程式設計師必須確保程式碼的正確性，包含不要放入 debug message 到
-<p><a href=http://git-scm.com/ target=_blank>git</a> server，寫了一個簡單的 pre-commit 程式，來確保 PHP 是否有 Parse error，或者是在寫 CoffeeScript 及 JavaScript 時，常常會用到 console.* 來當作中斷點或者是顯示變數資料，這也是需要盡量避免 commit 到伺服器，你可不想要長官 review 的時候看到這麼多 debug 訊息吧。這時候就是需要 <a href=http://git-scm.com/book/en/Customizing-Git-Git-Hooks target=_blank>git-hooks</a> 的 **<span style=color:red>pre-commit</span>** 幫忙檢查這些 Syntax 語法，可以直接參考<a href=https://github.com/appleboy/git-hooks>我的 git-hooks 專案</a>。安裝方式很簡單:</p>
+<p><a href=http://git-scm.com/ target=_blank>git</a> server，寫了一個簡單的 pre-commit 程式，來確保 PHP 是否有 Parse error，或者是在寫 CoffeeScript 及 JavaScript 時，常常會用到 console.* 來當作中斷點或者是顯示變數資料，這也是需要盡量避免 commit 到伺服器，你可不想要長官 review 的時候看到這麼多 debug 訊息吧。這時候就是需要 <a href=http://git-scm.com/book/en/Customizing-Git-Git-Hooks target=_blank>git-hooks</a> 的 <strong><span style=color:red>pre-commit</span></strong> 幫忙檢查這些 Syntax 語法，可以直接參考<a href=https://github.com/appleboy/git-hooks>我的 git-hooks 專案</a>。安裝方式很簡單:</p>
 <pre class="brush: bash; title: ; notranslate" title>$ git clone https://github.com/appleboy/git-hooks.git
 $ chmod +x bin/hooks.sh pre-commit
 $ ./bin/hooks.sh your_project_path</pre> 如果使用 git commit 之前，就會檢查 .js、.coffee、.php 等副檔名。
@@ -274,7 +274,7 @@ A svn-ds/branches/develop/changelog.
 <div style="margin:auto 0;text-align:center">
 <a href=https://www.flickr.com/photos/appleboy/6209323485/ title="Bitbucket by appleboy46, on Flickr"><img src="https://i1.wp.com/farm7.static.flickr.com/6161/6209323485_9ffbcb2911_o.png?resize=256%2C256&ssl=1" alt=Bitbucket data-recalc-dims=1></a>
 </div> 很高興剛剛收到
-<p><a href=https://bitbucket.org/ target=_blank>Bitbucket</a> 寄來一封<a href=http://blog.bitbucket.org/2011/10/03/bitbucket-now-rocks-git/ target=_blank>會員信</a>，標題非常吸引大家的注意，那就是 <strong><span style=color:green>Bitbucket now rocks Git.</span></strong>，是的，你沒看錯，Bitbucket 現在開始支援 Git repository，不再只有 Mercurial 可以使用，這還不算什麼，Bitbucket 更是推出**<span style=color:red>無限制免費 private repos for free </span>**，這樣的推出，不知道會有多少 <a href=https://github.com/ target=_blank>Github</a> 用戶轉移到 Bitbucket 上面，還有另一項主因就是 **<span style=color:red>Unlimited disk space 無限制硬碟容量</span>**，不過也許不用高興的太早，Bitbucket 在使用者人數上面有些限制，可以參考 <a href=https://bitbucket.org/plans target=_blank>Plans & Pricing</a>，免費方案每個 Repository 只能有5個 User，反觀 Github 並沒有這限制，不過我想這也不是問題，大家可以 Fork 到自己的專案，在 Pull Request 即可。 補充官方網站提供了<a href=https://bitbucket.org/repo/import target=_blank>轉換各大 Source Hosting 工具</a>，目前支援 <a href=https://github.com/ target=_blank>Github</a>、<a href=http://sourceforge.net/ target=_blank>SourceForge</a>、<a href=http://code.google.com/intl/zh-TW/ target=_blank>Google Code</a>、<a href=http://subversion.tigris.org/ target=_blank>Subversion</a>、<a href=http://mercurial.selenic.com/ target=_blank>Mercurial</a>…等。</p>
+<p><a href=https://bitbucket.org/ target=_blank>Bitbucket</a> 寄來一封<a href=http://blog.bitbucket.org/2011/10/03/bitbucket-now-rocks-git/ target=_blank>會員信</a>，標題非常吸引大家的注意，那就是 <strong><span style=color:green>Bitbucket now rocks Git.</span></strong>，是的，你沒看錯，Bitbucket 現在開始支援 Git repository，不再只有 Mercurial 可以使用，這還不算什麼，Bitbucket 更是推出**<span style=color:red>無限制免費 private repos for free </span>**，這樣的推出，不知道會有多少 <a href=https://github.com/ target=_blank>Github</a> 用戶轉移到 Bitbucket 上面，還有另一項主因就是 <strong><span style=color:red>Unlimited disk space 無限制硬碟容量</span></strong>，不過也許不用高興的太早，Bitbucket 在使用者人數上面有些限制，可以參考 <a href=https://bitbucket.org/plans target=_blank>Plans & Pricing</a>，免費方案每個 Repository 只能有5個 User，反觀 Github 並沒有這限制，不過我想這也不是問題，大家可以 Fork 到自己的專案，在 Pull Request 即可。 補充官方網站提供了<a href=https://bitbucket.org/repo/import target=_blank>轉換各大 Source Hosting 工具</a>，目前支援 <a href=https://github.com/ target=_blank>Github</a>、<a href=http://sourceforge.net/ target=_blank>SourceForge</a>、<a href=http://code.google.com/intl/zh-TW/ target=_blank>Google Code</a>、<a href=http://subversion.tigris.org/ target=_blank>Subversion</a>、<a href=http://mercurial.selenic.com/ target=_blank>Mercurial</a>…等。</p>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/bitbucket/>Bitbucket</a>&nbsp;
@@ -483,7 +483,7 @@ v1.4.2.4
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.88.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

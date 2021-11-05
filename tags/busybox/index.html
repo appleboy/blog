@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.88.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/busybox/feed.xml title="小惡魔 - AppleBOY">
@@ -165,7 +165,7 @@
 </span>
 </p>
 <div class=post-entry>
-<p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p>
+<img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1>
 <p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p>
 <p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p>
 <p>if_readlist_proc 函式裡面:</p>
@@ -297,7 +297,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.88.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

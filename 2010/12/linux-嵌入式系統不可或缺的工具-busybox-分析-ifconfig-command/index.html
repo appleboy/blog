@@ -4,7 +4,7 @@
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<meta name=description content=" 
 玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel netfilter 部份，以及 user space 部份 iptables extension。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。
 要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。
 if_readlist_proc 函式裡面:
@@ -41,7 +41,7 @@ Inter-|   Receive                                                |  Transmit
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
 <script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2010\/12\/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command\/","name":"[ linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command","description":"玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel netfilter 部份，以及 user space 部份 iptables extension。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等\u0026hellip;.。\n要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 \/proc\/net\/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 \/proc\/net\/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。\nif_readlist_proc 函式裡面:\n1 2 3 4  fh = fopen_or_warn(_PATH_PROCNET_DEV, \u0026#34;r\u0026#34;); if (!fh) { return if_readconf(); }   看一下 \/proc\/net\/dev 內容\n1 2 3 4  Inter-| Receive | Transmit face |bytes packets errs drop fifo frame compressed multicast|bytes packets errs drop fifo colls carrier compressed lo: 104 1 0 0 0 0 0 0 104 1 0 0 0 0 0 0 eth0:21798505 51360 0 0 0 0 0 0 7693686 46844 0 0 0 0 0 0   ","inLanguage":"en","wordCount":879,"datePublished":"2010-12-26T16:08:07","dateModified":"2010-12-26T16:08:07","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Busybox, Embedded System, Linux"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2010\/12\/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command">
-<meta property="og:description" content="
+<meta property="og:description" content=" 
 玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel netfilter 部份，以及 user space 部份 iptables extension。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。
 要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。
 if_readlist_proc 函式裡面:
@@ -80,14 +80,14 @@ Inter-|   Receive                                                |  Transmit
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="小惡魔 - AppleBOY">
 <meta name=twitter:title content="[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command">
-<meta name=twitter:description content="
+<meta name=twitter:description content=" 
 玩過嵌入式系統的使用者，一定都會知道 Busybox，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel …">
 <meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
 <meta name=twitter:card content="summary">
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.88.1"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
@@ -177,7 +177,7 @@ Inter-|   Receive                                                |  Transmit
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <article role=main class=blog-post>
-<p><img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1></p>
+<img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1>
 <p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p>
 <p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p>
 <p>if_readlist_proc 函式裡面:</p>
@@ -754,7 +754,7 @@ err = <span style=color:#b452cd>0</span>;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.88.1</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>
