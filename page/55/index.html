@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,34 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/02/%E8%A3%BD%E4%BD%9C-windows-xp-usb-%E9%96%8B%E6%A9%9F%E7%B3%BB%E7%B5%B1-%E6%A8%A1%E6%93%AC%E5%85%89%E7%A2%9F%E9%96%8B%E6%A9%9F/>
+<h2 class=post-title>製作 Windows XP USB 開機系統 (模擬光碟開機)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 15, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;166&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+最近幫朋友重灌一台電腦，發現他是 HP Mini 1109TU，沒有內建光碟機，然後朋友又沒買外接式光碟機，所以只好趕快上網找如何製作 Windows XP USB 系統，如果是 Linux 系列就好辦了，網路上找到一堆關於 Linux 教學文件，後來在 mobile01 找到一篇：『[教學]將USB 隨身碟 製成 XP 的安裝碟 (模擬CD-ROM)』，裡面的安裝過程我全部測試過了，可以正常運作，利用 USB 安裝 XP 真的還蠻快的，少了 CD-Rom 的讀取，USB 真的安裝相當快速，不過大家在上面下載的安裝程式，它會先將您的 USB 進行 Fat32 格式化，然後複製 XP 光碟內容到 USB 隨身碟，在設定複製內容到 USB 的同時，請不要將 USB 掛載到 D 槽，因為看了一下程式碼 usb_prep8.cmd 裡面有一段設定 USB 開機選項：
+:_getusb
+set _ok=
+echo.
+echo Please give Target USB-Drive Letter e.g type U
+ECHO.
+set /p _ok= Enter Target USB-Drive Letter: set _ok=!_ok:~0,1!
+if not exist !
+<a href=https://blog.wu-boy.com/2010/02/%E8%A3%BD%E4%BD%9C-windows-xp-usb-%E9%96%8B%E6%A9%9F%E7%B3%BB%E7%B5%B1-%E6%A8%A1%E6%93%AC%E5%85%89%E7%A2%9F%E9%96%8B%E6%A9%9F/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/usb/>USB</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/windows/>windows</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/02/cc-%E6%8C%87%E6%A8%99%E7%9B%B8%E5%8A%A0-%EF%BC%9For-%E7%9B%B8%E6%B8%9B-offset/>
 <h2 class=post-title>[C/C++] 指標相加 = ？or 相減 = offset</h2>
@@ -313,28 +341,6 @@ Usage:
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/12/php-framework-how-to-implement-plurk-api-in-codeigniter/>
-<h2 class=post-title>[PHP Framework] How to implement Plurk API in CodeIgniter</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 30, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;803&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/4228352638/ title="ci_logo2 (by appleboy46)"><img src="https://i2.wp.com/farm3.static.flickr.com/2519/4228352638_19b13306d3_o.gif?resize=170%2C73&ssl=1" title="ci_logo2 (by appleboy46)" alt="ci_logo2 (by appleboy46)" data-recalc-dims=1></a> 很開心在12月看到 <a href=http://www.plurk.com/API>Plurk Release API</a> 出來，而自己也跟網路上一些朋友合作開發 <a href=http://code.google.com/p/php-plurk-api/>PHP implementation of Plurk API</a>，Plurk (簡稱噗浪)在台灣這一兩年紅了起來，網路高手分別針對噗浪研究產生非官方的 API，現在官網 Release 出來，提供了 <a href=http://en.wikipedia.org/wiki/Java_(programming_language)>Java</a> 跟 <a href=http://www.python.org/>Python</a> 的 Example，我想因為 Plurk 是用 Python 寫出來的，所以提供了範例，但是 API 出來沒多久，<a href=http://blog.roga.tw/>roga</a> 就集合了網路一些強者，一起開發了 PHP Plurk API，我也拿了此 API 在實作到 <a href=http://codeigniter.com>CodeIgniter Framework</a>，讓在使用此套 open source 的使用者可以享用 Plurk API。不過從2009.12.29日之後，Plurk 官網有限制每天只能 call 50.000 次，已經蠻多了，不要操掛 Plurk 的機器阿。</p>
-<a href=https://blog.wu-boy.com/2009/12/php-framework-how-to-implement-plurk-api-in-codeigniter/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/plurk-api/>Plurk API</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -435,7 +441,7 @@ Usage:
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

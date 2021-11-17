@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,24 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2007/11/freebsd-%E7%84%A1%E7%B7%9A-ap-%E9%8E%96%E5%AE%9A%E4%BD%BF%E7%94%A8%E8%80%85-mac-address/>
+<h2 class=post-title>[FreeBSD] 無線 AP 鎖定使用者 MAC Address</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 16, 2007
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;305&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+在之前的文章已經提到如何利用一張無線網卡架設 AP 伺服器，[FreeBSD] 無線網卡架設AP Server DWL-G520 Ralink RT2561，但是如何跟外面賣得產品一樣可以鎖mac呢，雖然mac的竄改相當普遍，linux底下只要下一個指令就可以達到了，不過你要知道別人的mac還蠻難的吧，除非你跟她同一網域，所以底下就介紹在freebsd底下如何做到。 在linux底下其實很簡單，因為google一下就好了 http://madwifi.org/wiki/UserDocs 這個網頁相當豐富，教你如何在linux底下實做ap跟鎖MAC。
+Steps 1. First, make sure your card is not set to any particular mode or essid. 2. Run: * To flush the list of MAC addresses: iwpriv ath0 maccmd 3 * To make the list a whitelist: iwpriv ath0 maccmd 1 3. Put the card in master mode: iwconfig ath0 mode master essid test ifconfig ath0 up 4. At this point, nothing will be able to connect to the AP, since the whitelist is empty.
+<a href=https://blog.wu-boy.com/2007/11/freebsd-%E7%84%A1%E7%B7%9A-ap-%E9%8E%96%E5%AE%9A%E4%BD%BF%E7%94%A8%E8%80%85-mac-address/ class=post-read-more>[Read More]</a>
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2007/11/%E7%94%9F%E6%B4%BB%E6%97%A5%E8%A8%98-%E4%BB%8A%E5%A4%A9%E7%B6%B2%E8%B7%AF%E7%B5%84%E5%AF%A6%E9%A9%97%E5%AE%A4-221%E5%A4%A7%E6%8E%83%E9%99%A4/>
 <h2 class=post-title>[生活日記] 今天網路組實驗室 221大掃除</h2>
@@ -295,22 +313,6 @@
 <a href=https://blog.wu-boy.com/tags/%E5%BD%B1%E9%9F%B3/>影音</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/09/%E7%94%9F%E6%B4%BB%E6%97%A5%E8%A8%98%E4%B8%80%E5%80%8B%E4%BA%BA%E5%90%83%E5%9B%9B%E5%80%8B%E6%9C%88%E9%A4%85%EF%BD%9E%E5%9B%A7-%E7%88%BD/>
-<h2 class=post-title>[生活日記]一個人吃四個月餅～囧 爽</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 30, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;2&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>話說昨天學妹帶六個月餅過來，我吃掉四個了，哈哈，真爽，中餐就吃一個芭辣，加4個月餅，呼呼有點飽，真爽，在lab裡面寫程式然後吃月餅，沒有比這更爽的事情了哈哈，我還真愛吃，囧 然後下午又去打球了，真爽，不過話說我昨天腳扭傷，操，我還跑去打球，我還真是個運動狂，哈哈，可能一天不去體育館都會覺得怪怪的，話說兩年前的我，因為太愛去體育館，所以我老闆的客跟我衝突，我會選擇去體育館，然後換來的是期中考成績太爛，就因為如此，我想讓自己冷靜一下，所以我選擇休學，兩年後今天的我，我改變我的作法，我上完課程才會去體育館，雖然這樣晚餐可能要自己去買了，不能跟同學一起去吃了，沒關西，這我無所謂，哈哈，有時後去體育館也是放鬆整天心情的地方，就算我沒啥運動，可能去那邊只練半小時，也會想去體育館晃晃，因為感覺很不賴。</p>
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -411,7 +413,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

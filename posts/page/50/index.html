@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,48 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/>
+<h2 class=post-title>[資料庫] 如何轉換 Mysql varchar type 到 int type</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 17, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;157&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>先來說明為什麼有時候需要用到轉換 varchar 到 int 型態，就是因為 order by 的問題，幫學校修改 Mysql 錯誤排序，前人設計全部都用 varchar 型態去存資料，當然包含了學生入學年度，以前不會遇到這問題，但是到了民國100年，就會發生排序錯誤，底下來講個例子，這樣大家就可以瞭解了。 建立 test 資料表，並且先增兩個欄位分別是 a(<span style=color:red><strong>varchar</strong></span>) 跟 b(<span style=color:green><strong>int</strong></span>)，個別輸入 100, 90 兩列資料</p>
+<pre class="brush: bash; title: ; notranslate" title>mysql> select * from test;
++------+------+
+| a    | b    |
++------+------+
+| 100  |  100 |
+| 90   |   90 |
++------+------+
+</pre> 先針對 varchar 排序 order by a DESC
+<pre class="brush: bash; title: ; notranslate" title>mysql> select * from test order by a desc;
++------+------+
+| a    | b    |
++------+------+
+| 90   |   90 |
+| 100  |  100 |
++------+------+</pre> 再來針對 int 排序 order by b DESC
+<pre class="brush: bash; title: ; notranslate" title>mysql> select * from test order by b desc;
++------+------+
+| a    | b    |
++------+------+
+| 100  |  100 |
+| 90   |   90 |
++------+------+</pre>
+<a href=https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/>
 <h2 class=post-title>[C/C++] 判斷檔案是否存在 file_exists</h2>
@@ -381,36 +423,6 @@ hg clone http://bitbucket.org/ellislab/codeigniter 這次我們來看看 CodeIgn
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/09/codeigniter-%E7%B0%A1%E5%96%AE%E6%93%B7%E5%8F%96-html-%E5%8E%9F%E5%A7%8B%E7%A2%BCphp-simple-html-dom-parser/>
-<h2 class=post-title>[CodeIgniter] 簡單擷取 html 原始碼(PHP Simple HTML DOM Parser)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 29, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;518&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>來介紹一套解析 html 原始碼的 open source: <a href=http://simplehtmldom.sourceforge.net/>PHP Simple HTML DOM Parser</a>，這套程式可以讓您任意對原始碼進行擷取操作，抓取一些您需要的資訊，在搭配 preg_match 跟 preg_match_all 函數來使用，使用方法可以參考線上 <a href=http://simplehtmldom.sourceforge.net/manual.htm>Document</a>，簡單的範例如下(參考官方網站):</p>
-<pre class="brush: php; title: ; notranslate" title>// Create a DOM object from a string
-$html = str_get_html('Hello!');
-
-// Create a DOM object from a URL
-$html = file_get_html('http://www.google.com/');
-
-// Create a DOM object from a HTML file
-$html = file_get_html('test.htm');</pre> 程式提供了三種讓您讀取原始碼，您可以直接丟 $string 或者是網址列，或者是檔案都可以，如果使用過 jQuery 您會發現在擷取 dom 的寫法很像，參考使用說明都寫得很清楚，由於
-<p><a href=http://codeigniter.com>CodeIgniter</a> 沒有此功能，所以我把程式改了一下 porting 到 CI 的 libraries 資料夾裡面，Patch 檔案</p>
-<a href=https://blog.wu-boy.com/2010/09/codeigniter-%E7%B0%A1%E5%96%AE%E6%93%B7%E5%8F%96-html-%E5%8E%9F%E5%A7%8B%E7%A2%BCphp-simple-html-dom-parser/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -509,7 +521,7 @@ $html = file_get_html('test.htm');</pre> 程式提供了三種讓您讀取原始
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,32 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/>
+<h2 class=post-title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 8, 2020
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;672&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<blockquote>
+<p>線上課程:『<a href="https://www.udemy.com/course/golang-fight/?couponCode=202002" title="Docker 容器實用實戰">Go 語言實戰</a>』目前特價 <strong>$2100 TWD</strong>，優惠代碼『<strong>202003</strong>』，也可以直接匯款（價格再減 <strong>100</strong>），如果想搭配另外兩門課程合購可以透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a></p>
+</blockquote>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>上一篇作者有提到『<a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>什麼是 graceful shutdown?</a>』，本篇透過 docker-compose 方式來驗證 <a href=https://golang.org>Go 語言</a>的 graceful shutdown 是否可以正常運作。除了驗證之外，單機版 <a href=https://docker.com>Docker</a> 本身就可以設定 scale 容器數量，那這時候又該如何搭配 graceful shutdown 來實現 rolling update 呢？相信大家對於 rolling update 並不陌生，現在的 <a href=https://kubernetes.io/>kubernetes</a> 已經有實現這個功能，用簡單的指令就可以達到此需求，但是對於沒有在用 k8s 架構的開發者，可能網站也不大，那該如何透過單機本的 docker 來實現呢？底下先來看看為什麼會出現這樣的需求。</p>
+<a href=https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/docker-compose/>Docker compose</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>
 <h2 class=post-title>[Go 教學] 什麼是 graceful shutdown?</h2>
@@ -323,28 +349,6 @@
 <a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd/>
-<h2 class=post-title>Drone CI/CD 支援 Auto cancellation 機制</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 20, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;116&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/RK0neP9RNsD1P5N5zGL0BqgvUFnDDb1YuzyIUKLlD01ejmM87JNaU29bweqw_CyD0v39FYfi5wAh6wCls1CIxaMMiOdHX6WQ4p7hFU5Qlt052uya0NZ6pjJJAA24rfhbpDFDwKmivfU=w1920-h1080"><img src="https://lh3.googleusercontent.com/RK0neP9RNsD1P5N5zGL0BqgvUFnDDb1YuzyIUKLlD01ejmM87JNaU29bweqw_CyD0v39FYfi5wAh6wCls1CIxaMMiOdHX6WQ4p7hFU5Qlt052uya0NZ6pjJJAA24rfhbpDFDwKmivfU=w1920-h1080" alt></a></p>
-<p>大家一定會問什麼是『Auto cancellation』呢？中文翻作自動取消，這機制會用在 CI/CD 的哪個流程或步驟呢？我們先來探討一個情境，不知道大家有無遇過在同一個 branch 陸續發了 3 個 commit，會發現在 CI/CD 會依序啟動 3 個 Job 來跑這 3 個 commit，假設您有設定同時間只能跑一個 Job，這樣最早的 commit 會先開始啟動，後面兩個 commit 則會處於 <code>Penging</code> 的狀態，等到第一個 Job 完成後，後面兩個才會繼續執行。</p>
-<a href=https://blog.wu-boy.com/2019/10/auto-cancellation-in-drone-ci-cd/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/travis/>Travis</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -445,7 +449,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,29 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/02/recovering-terraform-state/>
+<h2 class=post-title>搶救 Terraform State 檔案</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 14, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;201&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src="https://lh3.googleusercontent.com/3ZDBZ2vZbRS1NTRzSg1ftpwIhEltm9iPe4-DFNE4y6yuLxbsvxGd6UQfLwcSvHb-AhGBcmtK36NiWBT1BeUzE8ra713qNV-cFnDk2pSVP_mqpz_MG5bpNg0Yx8jZc2-wlkOTb-xk1FE=w1920-h1080" alt="recovery the terraform state file"></p>
+<p>近期其中一個專案使用 Terraform 來管理 AWS 雲平台，初期預計只有我一個人在使用 Terraform，所以就沒有將 <a href=https://www.terraform.io/docs/language/settings/backends/index.html>Backend State</a> 放在 AWS S3 進行備份管理，這個粗心大意讓我花了大半時間來搶救 State (.tfstate) 檔案，而搶救過程也是蠻順利的，只是需要花時間用 <strong><a href=https://www.terraform.io/docs/cli/import/index.html>terraform import</a></strong> 指令將所有的 State 狀態全部轉回來一次，當然不是每個 Resource 都可以正常運作，還是需要搭配一些修正才能全部轉換。</p>
+<p>結論: 請使用 <code>terraform import</code> 指令，這是最終解法。</p>
+<a href=https://blog.wu-boy.com/2021/02/recovering-terraform-state/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/terraform/>terraform</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/02/upload-static-content-to-aws-s3-using-pulumi-02/>
 <h2 class=post-title>初探 Pulumi 上傳靜態網站到 AWS S3 (二)</h2>
@@ -332,29 +355,6 @@
 <a href=https://blog.wu-boy.com/tags/gitlab-ci/>GitLab CI</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/10/select-multiple-channel-in-golang/>
-<h2 class=post-title>Go 語言 Select Multiple Channel 注意事項</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 12, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;325&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p>相信大家都知道 Select 可以用來處理多個 Channel，但是大家有沒有想過一個情境，如果是 for 搭配 select 時，肯定會用一個 Timer 或 context 來處理 Timeout 或手動 Cancel，假設如果跟其他 Channel 同時到達時，官方說法是 Select 會隨機選擇一個狀況來執行，如果並非選到我們所要的 case 那就會造成情境或流程上的錯誤，而本影片就是講解該如何解決此問題，請大家務必詳細了解業務的需求，來決定程式碼架構該如何寫。</p>
-<a href=https://blog.wu-boy.com/2020/10/select-multiple-channel-in-golang/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/channel/>channel</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -455,7 +455,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

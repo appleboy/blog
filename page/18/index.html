@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,29 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2016/09/upload-docker-image-to-registry-using-travis/>
+<h2 class=post-title>用 Travis 自動上傳 Docker Image 到 Docker Registry</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 17, 2016
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;235&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://i1.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_c.jpg?ssl=1"><img src="https://i1.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_c.jpg?w=840&ssl=1" alt data-recalc-dims=1></a></p>
+<p>在今年七月寫了一篇『<a href=https://blog.wu-boy.com/2016/07/upgrade-docker-and-docker-compose-on-travis/>在 Travis 升級 Docker 和 docker-compose 版本</a>』，就在上個月底 <a href=https://travis-ci.org/>Travis</a> 終於將 <a href=https://www.docker.com/>Docker</a> 預設版本換成 1.12.x 版本，並且將 <a href=https://docs.docker.com/compose/>docker-compose</a> 也一併升級到 1.8.0，這樣就可以不用手動升級了。那這篇會紀錄如何用 Travis 自動編譯 Docker Image 並且上傳到 <a href=https://hub.docker.com/>Docker Hub</a>。Docker Hub 提供兩種方式讓開發者上傳 Image，第一種是透過 Command line 下指令手動上傳，另外一種則是在 Docker Hub 後台指定 Dockerfile 路徑及需要執行編譯的分支，這樣只要 Push commit 到 <a href=https://github.com/>Github</a>，Docker Hub 就會根據 <a href=https://docs.docker.com/engine/reference/builder/>Dockerfile</a> 來自動編譯 Docker Image。本篇會介紹如何透過 Travis 服務來自動上傳 Dokcer Image，像是 Golang 的部屬方式通常是編譯出 Binary 執行檔後，將此執行檔加入 Image 最後才上傳。</p>
+<a href=https://blog.wu-boy.com/2016/09/upload-docker-image-to-registry-using-travis/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/travis/>Travis</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/travis-ci/>Travis CI</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2016/09/drone-ci-server-integrate-atlassian-bitbucket-server/>
 <h2 class=post-title>Drone CI Server 搭配 Atlassian Bitbucket Server (前身 Stash)</h2>
@@ -326,30 +349,6 @@
 <a href=https://blog.wu-boy.com/tags/postgres/>Postgres</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/05/scaledrone-websocket-from-nodejs-to-go/>
-<h2 class=post-title>ScaleDrone Websocket 平台從 Node.js 轉換到 Golang</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 22, 2016
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;135&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
-<p>又看到一間網路平台公司從 <a href=https://nodejs.org/en/>Node.js</a> 跳到 <a href=https://golang.org/>Golang</a> 了。<a href=http://www.scaledrone.com>ScaleDrone</a> 是一間提供了 <a href=https://en.wikipedia.org/wiki/WebSocket>websocket</a> 服務的公司，讓 web 可以透過 ScaleDrone 即時將訊息傳播到各種瀏覽器，但是今天看到 ScaleDrone 即將把後端平台使用的語言從 <a href=http://blog.scaledrone.com/posts/nodejs-to-go>Node.js 轉換到 Golang</a>，為什麼要轉語言呢，官方提到大量的 Websocket 連線，讓伺服器記憶體快吃不消了，然而 ScaleDrone 用 Go 語言來實際測試，發現記憶體不但沒有增加，反而還降低了 response 及 connections 時間。底下是針對 Node.js vs Go 語言轉換比較。</p>
-<a href=https://blog.wu-boy.com/2016/05/scaledrone-websocket-from-nodejs-to-go/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/javascrpt/>JavaScrpt</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/node.js/>Node.js</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/websocket/>websocket</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -450,7 +449,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

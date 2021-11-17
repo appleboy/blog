@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,33 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/03/jquery-%E8%A1%A8%E5%96%AE%E5%8F%96%E5%80%BC-radio-checkbox-select-text/>
+<h2 class=post-title>[jQuery] 表單取值 radio checkbox select text 驗證表單</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 18, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;319&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在專案全面使用 <a href=http://jquery.com/>jQuery</a> 來整合後台部份，目前還沒有大量用到 AJAX 的部份，等以後有時間會全部轉換 AJAX 利用 JSON 的部份，其實之前就有寫到一篇用 datatype JSON 的方式來實現 AJAX：<a href=http://blog.wu-boy.com/2008/09/22/412/>[jQuery] AJAX 學習筆記 (一) 如何使用 JSON 驗證使用者表單</a>，大家可以參考看看，不過今天大概寫一下昨天在實做驗證表單取值的一些心得，在設計後台的時候，我把編輯文章跟新增文章的功能做在同一塊，然後利用 jQuery 去改變傳值狀態，利用 hidden 的 mode 欄位來決定是要新增文章還是修改文章</p>
+<pre class="brush: jscript; title: ; notranslate" title>$(document).ready(function() 
+{
+  $("#add_news_link").click(function(){
+    $("#mode").attr("value", "add");
+  });
+})
+</pre>
+<a href=https://blog.wu-boy.com/2009/03/jquery-%E8%A1%A8%E5%96%AE%E5%8F%96%E5%80%BC-radio-checkbox-select-text/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/03/jquery-javascript-plotting-library-%E7%95%AB%E5%9C%96-chart/>
 <h2 class=post-title>[jQuery] Javascript plotting library 畫圖 chart</h2>
@@ -309,32 +336,6 @@
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/03/google-app-engine-sdk%EF%BC%9Apython-%E5%9F%BA%E6%9C%AC%E6%95%99%E5%AD%B8%E5%AE%89%E8%A3%9D/>
-<h2 class=post-title>Google App Engine SDK：python 基本教學安裝</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 7, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;220&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><img src="https://i0.wp.com/code.google.com/appengine/images/appengine-silver-120x30.gif?resize=120%2C30" alt="Powered by Google App Engine" data-recalc-dims=1> <a href=http://code.google.com/appengine/>Google App Engine</a> 利用 python 程式語言所組成，可以利用 <a href=http://www.google.com.tw/>Google</a> 背後的技術來開發您的 Web application，後端就交給 Google 的強大雲端運算能力，前端就可以利用 <a href=http://code.google.com/appengine/downloads.html>SDK</a> 來開發您的 Web 介面，後端儲存可以用 <a href=http://www.google.com.tw/>Google</a> <a href=http://labs.google.com/papers/bigtable.html target=_blank>Bigtable</a> 及 <a href=http://labs.google.com/papers/gfs.html target=_blank>GFS</a> 的儲存方式，那現在就不多說了，花了一點時間把環境建立起來，遇到一些問題，現在來筆記一下，目前我在 <a href=http://www.tw.freebsd.org/>FreeBSD</a> 7.1 Release 來當作 <a href=http://code.google.com/appengine/>Google App Engine</a> 開發平台，在安裝方面有遇到一些小問題，底下來看看： 在 FreeBSD 安裝方法還蠻簡單的，首先把 python 環境弄好</p>
-<pre class="brush: bash; title: ; notranslate" title># cd /usr/ports/lang/python25/
-# make install clean</pre> 底下這張圖就是安裝好的結果：
-<p><a href=https://www.flickr.com/photos/appleboy/3333900131/ title="GAE (by appleboy46)"><img title="GAE (by appleboy46)" src="https://i2.wp.com/farm4.static.flickr.com/3556/3333900131_dd95bd7d35.jpg?resize=500%2C151&ssl=1" alt="GAE (by appleboy46)" data-recalc-dims=1></a></p>
-<a href=https://blog.wu-boy.com/2009/03/google-app-engine-sdk%EF%BC%9Apython-%E5%9F%BA%E6%9C%AC%E6%95%99%E5%AD%B8%E5%AE%89%E8%A3%9D/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/python/>Python</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -433,7 +434,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

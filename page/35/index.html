@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,34 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/04/install-nginx-spdy-module-on-ubuntu-or-debian/>
+<h2 class=post-title>Install Nginx + spdy module on Ubuntu or Debian</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 30, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;40&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/8684224387/ title="nginx-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm9.staticflickr.com/8401/8684224387_19de454ebf.jpg?resize=320%2C120&ssl=1" alt=nginx-logo data-recalc-dims=1></a>
+</div> 上一篇提到
+<p><a href=http://blog.wu-boy.com/2013/04/nginx-1-4-0-support-spdy-module/ target=_blank>nginx 1.4.0 釋出並支援 SPDY</a>，教學環境是 CentOS，這次在 Ubuntu 環境編譯遇到</p>
+<blockquote>
+<p>/usr/bin/ld: cannot find -lperl 找不到 perl library，解法可以透過 aptitude 安裝 libperl5.14，安裝好後，到 /usr/lib 底下找到 libperl.so.5.14.2，由於檔案命名關係，請用 ln 將檔案 link 成 libperl.so</p>
+</blockquote>
+<pre class="brush: bash; title: ; notranslate" title>$ ln -s libperl.so.5.14.2 libperl.so</pre> 接著可以正確編譯了，底下安裝相關套件
+<pre class="brush: bash; title: ; notranslate" title>$ aptitude -y install libpcre3-dev libgd-dev libgd2-xpm-dev libgeoip-dev</pre>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/04/nginx-1-4-0-support-spdy-module/>
 <h2 class=post-title>nginx 1.4.0 釋出並支援 SPDY</h2>
@@ -383,29 +411,6 @@ indent_style = tab
 <a href=https://blog.wu-boy.com/tags/vps/>VPS</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/03/git-denying-non-fast-forward/>
-<h2 class=post-title>Git denying non-fast forward 問題</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 14, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;134&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-最近幫別公司處理 denying non-fast forward 的 git server 問題，沒事就別動檔案權限，不管是不是修改內容，只要用 chmod 指令，Git 還是會判別檔案變動。處理 git push 直接給我噴
-$ git push --force origin master
-Total 0 (delta 0), reused 0 (delta 0) error: denying non-fast forward refs/heads/master (you should pull first) To git@git.example.com:myrepo.git ! [remote rejected] master - master (non-fast forward) error: failed to push some refs to 'git@git.example.com:myrepo.git' 會遇到這問題的原因是使用者將不該 commit 的程式碼都 push 到伺服器上面，例如資料庫帳號密碼，個人帳蜜等等，這真的是不應該，解決方式也沒有很難，只要用 git reset --hard 到您需要的 commit hash 值，並且 git push --force 方式蓋掉 Server 上面的程式碼，但是如果遇到 git push &ndash;force origin 或 git push &ndash;force origin master 都無作用，那就請加上底下設定
-<a href=https://blog.wu-boy.com/2013/03/git-denying-non-fast-forward/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -506,7 +511,7 @@ Total 0 (delta 0), reused 0 (delta 0) error: denying non-fast forward refs/heads
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

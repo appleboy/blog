@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,34 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2007/12/unix-bash-%E8%A8%98%E6%86%B6%E6%8C%87%E4%BB%A4-for-linux/>
+<h2 class=post-title>[UNIX] bash 記憶指令 For Linux</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 23, 2007
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;74&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+在 FreeBSD 裡面，要做到這樣非常方便，當我們在終端機輸入 vi 之後按下 Up 鍵，終端機會顯示之前下過的 vi 指令，這在常常使用 command 的使用者來講相當方便，也非常重要，在 FreeBSD 底下，只要在 .cshrc 裡面加上
+bindkey “^W” backward-delete-word bindkey -k up history-search-backward bindkey -k down history-search-forward 可是在 linux 底下要如何達到這樣呢，那就是 man bash『history-search-backward』，『history-search-forward』這兩個功能，對我來說非常重要，然而你要達到這功能，就是利用 showkey 跟 bind 這兩個指令 首先你要先找到 Up 這個鍵的 16 位元的編碼
+showkey -a
+Press any keys - Ctrl-D will terminate this program
+^[[A 27 0033 0x1b
+91 0133 0x5b
+65 0101 0x41
+然後在 bind 上去，寫到 /etc/bashrc 地下就可以了 bind '"
+<a href=https://blog.wu-boy.com/2007/12/unix-bash-%E8%A8%98%E6%86%B6%E6%8C%87%E4%BB%A4-for-linux/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/bash/>bash</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2007/12/%E7%94%9F%E6%B4%BB%E6%97%A5%E8%A8%98%E5%9B%9E%E5%8D%97%E6%8A%95%E6%9B%BF%E4%BB%A3%E5%BD%B9%E5%96%AE%E4%BD%8D%E7%95%B6%E8%AC%9B%E5%B8%AB/>
 <h2 class=post-title>[生活日記]回南投替代役單位當講師</h2>
@@ -306,24 +334,6 @@ natd_enable="
 <a href=https://blog.wu-boy.com/2007/11/%E5%BF%83%E6%83%85%E5%90%84%E4%BD%8D%E8%A6%BA%E5%BE%97%E5%A4%A7%E5%AD%B8%E7%95%A2%E6%A5%AD%E5%BE%88%E9%87%8D%E8%A6%81%E5%97%8E/ class=post-read-more>[Read More]</a>
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/11/freebsd-%E7%84%A1%E7%B7%9A-ap-%E9%8E%96%E5%AE%9A%E4%BD%BF%E7%94%A8%E8%80%85-mac-address/>
-<h2 class=post-title>[FreeBSD] 無線 AP 鎖定使用者 MAC Address</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 16, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;305&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-在之前的文章已經提到如何利用一張無線網卡架設 AP 伺服器，[FreeBSD] 無線網卡架設AP Server DWL-G520 Ralink RT2561，但是如何跟外面賣得產品一樣可以鎖mac呢，雖然mac的竄改相當普遍，linux底下只要下一個指令就可以達到了，不過你要知道別人的mac還蠻難的吧，除非你跟她同一網域，所以底下就介紹在freebsd底下如何做到。 在linux底下其實很簡單，因為google一下就好了 http://madwifi.org/wiki/UserDocs 這個網頁相當豐富，教你如何在linux底下實做ap跟鎖MAC。
-Steps 1. First, make sure your card is not set to any particular mode or essid. 2. Run: * To flush the list of MAC addresses: iwpriv ath0 maccmd 3 * To make the list a whitelist: iwpriv ath0 maccmd 1 3. Put the card in master mode: iwconfig ath0 mode master essid test ifconfig ath0 up 4. At this point, nothing will be able to connect to the AP, since the whitelist is empty.
-<a href=https://blog.wu-boy.com/2007/11/freebsd-%E7%84%A1%E7%B7%9A-ap-%E9%8E%96%E5%AE%9A%E4%BD%BF%E7%94%A8%E8%80%85-mac-address/ class=post-read-more>[Read More]</a>
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -424,7 +434,7 @@ Steps 1. First, make sure your card is not set to any particular mode or essid. 
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

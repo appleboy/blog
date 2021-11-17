@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,28 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/>
+<h2 class=post-title>切換 Ubuntu apt 的 mirror site</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 22, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;31&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><strong>Update: 國網內部員工建議用 <a href=http://ftp.twaren.net>http://ftp.twaren.net</a> 這台</strong></p>
+<p>最近常常會發生 apt-get update 指令失敗，台大這台 <span style=color:red>tw.archive.ubuntu.com</span> 似乎常常掛點，所以網路上找一下其他的 mirror site，看到似乎很多人都在用國網的 Server ( <a href=http://free.nchc.org.tw>http://free.nchc.org.tw</a> )，要換的話，請更改 <code>/etc/apt/sources.list</code>，將全部 tw.archive.ubuntu.com 都取代成 free.nchc.org.tw，其實還有另一個 domain 就是 opensource.nchc.org.tw，這些都可以用，沒有 apt 的 <a href=http://www.ubuntu.com/>Ubuntu</a> 或 <a href=http://www.debian.org/>Debian</a> 簡直就不是 Server 了&mldr;XD</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/debian/>Debian</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/02/wordpress-plugin-seo/>
 <h2 class=post-title>WordPress plugin 加強網址 SEO</h2>
@@ -536,48 +558,6 @@ Arch Linux 2010.05 (i386 and x86_64) CentOS 5.5 (i386 and x86_64) Debian 5.0 (i3
 <a href=https://blog.wu-boy.com/tags/linode/>Linode</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/>
-<h2 class=post-title>[資料庫] 如何轉換 Mysql varchar type 到 int type</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 17, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;157&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>先來說明為什麼有時候需要用到轉換 varchar 到 int 型態，就是因為 order by 的問題，幫學校修改 Mysql 錯誤排序，前人設計全部都用 varchar 型態去存資料，當然包含了學生入學年度，以前不會遇到這問題，但是到了民國100年，就會發生排序錯誤，底下來講個例子，這樣大家就可以瞭解了。 建立 test 資料表，並且先增兩個欄位分別是 a(<span style=color:red><strong>varchar</strong></span>) 跟 b(<span style=color:green><strong>int</strong></span>)，個別輸入 100, 90 兩列資料</p>
-<pre class="brush: bash; title: ; notranslate" title>mysql> select * from test;
-+------+------+
-| a    | b    |
-+------+------+
-| 100  |  100 |
-| 90   |   90 |
-+------+------+
-</pre> 先針對 varchar 排序 order by a DESC
-<pre class="brush: bash; title: ; notranslate" title>mysql> select * from test order by a desc;
-+------+------+
-| a    | b    |
-+------+------+
-| 90   |   90 |
-| 100  |  100 |
-+------+------+</pre> 再來針對 int 排序 order by b DESC
-<pre class="brush: bash; title: ; notranslate" title>mysql> select * from test order by b desc;
-+------+------+
-| a    | b    |
-+------+------+
-| 100  |  100 |
-| 90   |   90 |
-+------+------+</pre>
-<a href=https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -678,7 +658,7 @@ Arch Linux 2010.05 (i386 and x86_64) CentOS 5.5 (i386 and x86_64) Debian 5.0 (i3
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

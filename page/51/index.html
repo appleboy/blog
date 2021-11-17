@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,36 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/09/codeigniter-%E7%B0%A1%E5%96%AE%E6%93%B7%E5%8F%96-html-%E5%8E%9F%E5%A7%8B%E7%A2%BCphp-simple-html-dom-parser/>
+<h2 class=post-title>[CodeIgniter] 簡單擷取 html 原始碼(PHP Simple HTML DOM Parser)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 29, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;518&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>來介紹一套解析 html 原始碼的 open source: <a href=http://simplehtmldom.sourceforge.net/>PHP Simple HTML DOM Parser</a>，這套程式可以讓您任意對原始碼進行擷取操作，抓取一些您需要的資訊，在搭配 preg_match 跟 preg_match_all 函數來使用，使用方法可以參考線上 <a href=http://simplehtmldom.sourceforge.net/manual.htm>Document</a>，簡單的範例如下(參考官方網站):</p>
+<pre class="brush: php; title: ; notranslate" title>// Create a DOM object from a string
+$html = str_get_html('Hello!');
+
+// Create a DOM object from a URL
+$html = file_get_html('http://www.google.com/');
+
+// Create a DOM object from a HTML file
+$html = file_get_html('test.htm');</pre> 程式提供了三種讓您讀取原始碼，您可以直接丟 $string 或者是網址列，或者是檔案都可以，如果使用過 jQuery 您會發現在擷取 dom 的寫法很像，參考使用說明都寫得很清楚，由於
+<p><a href=http://codeigniter.com>CodeIgniter</a> 沒有此功能，所以我把程式改了一下 porting 到 CI 的 libraries 資料夾裡面，Patch 檔案</p>
+<a href=https://blog.wu-boy.com/2010/09/codeigniter-%E7%B0%A1%E5%96%AE%E6%93%B7%E5%8F%96-html-%E5%8E%9F%E5%A7%8B%E7%A2%BCphp-simple-html-dom-parser/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/09/icos-2010-introduction-to-codeigniter-php-mvc-framework/>
 <h2 class=post-title>ICOS 2010 Introduction to CodeIgniter PHP MVC Framework</h2>
@@ -403,40 +433,6 @@ strstr 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 /* strstr example */ #include &lt;std
 <a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/>
-<h2 class=post-title>[網站] 好站連結 (七) Android, javascript, Css, PHP, Perl, FreeBSD, Linux</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 30, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-Windows C#
-C# 比較字串 MSDN 比較字串 Request.Form Collection Request Query String / Form Parametrs ASP.NET QueryString Usage Using include files with ASP.NET html
-[將所有 的內容包到一個
-中][7] apache
-Fixing mod_rewrite and .htaccess on GoDaddy Hosting javascript
-jQuery Week Calendar Javascript: reference the parent window from a popup How to get and set form element values with jQuery How to check and uncheck a checkbox with jQuery Loop through parameters passed to a Javascript function perl-completion.
-<a href=https://blog.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/android/>Android</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/c/>C#</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mssql/>MSSQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/perl/>Perl</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90/>好站連結</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -537,7 +533,7 @@ jQuery Week Calendar Javascript: reference the parent window from a popup How to
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

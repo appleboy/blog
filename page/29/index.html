@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,30 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/04/go-git-service-using-go-language/>
+<h2 class=post-title>用 Go 語言寫的 Github Git 服務</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 7, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;190&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<img src="https://i1.wp.com/farm4.staticflickr.com/3762/13686798143_dd15f54076_o.png?w=840&ssl=1" alt=null data-recalc-dims=1>
+<p>最近看到大陸那邊用 <a href=http://golang.org/>Go</a> 語言寫了一套類似 <a href=https://github.com/>Github</a> 服務叫做 <a href=https://github.com/gogits/gogs>Gogs</a>(Go Git Service)，目前個人裝起來速度方面相當快，跟 <a href=http://gitlab.org>GitLab</a> 用 <a href=https://www.ruby-lang.org/en/>Ruby</a> 寫的 Git Service 速度有差，以功能完整性來說，GitLab 還是大勝 Gogs，安裝方式則是 Gogs 勝於 GitLab，如果最後要推薦用 Gogs 還是 GitLab，我個人還是會選 GitLab 因為畢竟還是要搭配 <a href=http://jenkins-ci.org/>Jenkins</a> 等 CI 服務才能發揮作用，這次來筆記如何在 Ubuntu 上安裝 Gogs。</p>
+<a href=https://blog.wu-boy.com/2014/04/go-git-service-using-go-language/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/go/>Go</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/03/html5-boilerplate-drop-ie8-support/>
 <h2 class=post-title>html5-boilerplate 打算不支援 IE8 瀏覽器</h2>
@@ -380,41 +404,6 @@ $ rake add_source VERSION=2.0.0-p451 --trace</pre>
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/02/percona-xtradb-cluster-5-6-ist-and-sst/>
-<h2 class=post-title>Percona XtraDB Cluster 5.6 找合適 IST Donor</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 9, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;231&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/12023069753/ title="percona by appleboy46, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3820/12023069753_de60d0c86d_m.jpg?resize=240%2C234&ssl=1" alt=percona data-recalc-dims=1></a>
-</div>
-<p>Gcache 是用來紀錄 <a href=http://www.mysql.com/>MySQL</a> 最近所使用的 SQL Command，其本身是佔用記憶體空間，大小可以由 <code>wsrep_provider_options</code> 定義，如果有任何 MySQL Node 重新啟動，那麼可以經由 Live Node 內的 Gcache 將尚未同步的資料補上，同步資料的方式分為兩種一種為 IST(Incremental State Transfer) 另一種為 SST(State Snapshot Transfer)，但是同步資料時，管理者無法決定同步方式。先來看看 Gcache 一些特性</p>
-<ul>
-<li>node 重新啟動，Gcache 資料會全部消失</li>
-<li>Gcache 大小為固定，如果超過大小，則回刪除最早資料</li>
-<li>選擇 Donor node 會直接忽略 Gcache 狀態</li>
-<li>Node 重新啟動，需要同步的資料並非在指定 Node Gcahe 內，則會啟動 SST 同步</li>
-<li>到目前版本為止，沒有任何方式可以知道 Gcache 狀態</li>
-</ul>
-<p>根據以上特性可以知道，當 Node 重新啟動，很容易就執行 SST 模式，舉例子來說，當有 Node crashed 超過一個晚上，你要如何知道其他 Node 內的 Gcache 資料大於需要同步的資料量？或者是當 Cluster 內只有兩台機器，那重新啟動任何一台 Node 都會是跑 SST 同步。</p>
-<a href=https://blog.wu-boy.com/2014/02/percona-xtradb-cluster-5-6-ist-and-sst/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/gcache/>Gcache</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ist-donor/>IST donor</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/percona-xtradb-cluster-5.6/>Percona XtraDB Cluster 5.6</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/perocna-xtradb-cluster/>Perocna XtraDB Cluster</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -515,7 +504,7 @@ $ rake add_source VERSION=2.0.0-p451 --trace</pre>
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

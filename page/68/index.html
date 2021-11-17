@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,34 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/12/ajax-jquery-plugin-cascade-%E5%A4%9A%E9%87%8D%E4%B8%8B%E6%8B%89%E9%81%B8%E5%96%AE%E6%87%89%E7%94%A8-by-json/>
+<h2 class=post-title>[AJAX] jQuery plugin cascade 多重下拉選單應用 by json</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 19, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;353&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近在弄動態下拉式選單，因為層級的關係，所以必須用到，大學裡面各學院，底下在各系所，在網路上看到一篇 <a href=http://blog.roodo.com/taikobo0/archives/6166625.html>[AJAX] jQuery的多重下拉式選單應用 PART1</a>，實做起來是不會困難，可是我遇到一些怪問題就是了，目前還沒有解決，當然首推 <a href=http://plugins.jquery.com>jQuery plugin</a> 套件 <a href=http://plugins.jquery.com/project/cascade>cascade</a>，那也參考了國外的一篇文章 <a href=http://devlicio.us/blogs/mike_nichols/archive/2008/05/25/jquery-cascade-cascading-values-from-forms.aspx>jQuery.cascade : Cascading values from forms</a> ，這幾篇看完其實就差不多了，因為大家都寫得很清楚，<a href=http://dev.chayachronicles.com/jquery/cascade/index.html>官方網站</a> 更是把所有應用都寫出來了，詳細很多用法可以參考 <a href=http://dev.chayachronicles.com/jquery/cascade/index.html>官方網站</a>，看原始碼大概就知道在寫甚麼了。 先來說明一下使用的方法：在這個 jQuery cascade plugin 裡面，定義了一格式：</p>
+<pre class="brush: jscript; title: ; notranslate" title>/*
+格式就在底下總共有三攔
+*/
+{'when':'selectedValue','value':'itemValue','text':'itemText'}
+</pre> 第一個 when：這是上一層的 select 的 value 值 第二個 value：這是下一層的 select 的 value 值 第三個 text：這是下一層 option 的 text 我想有一點 html 基礎的，大概就知道我在說什麼了吧
+<a href=https://blog.wu-boy.com/2008/12/ajax-jquery-plugin-cascade-%E5%A4%9A%E9%87%8D%E4%B8%8B%E6%8B%89%E9%81%B8%E5%96%AE%E6%87%89%E7%94%A8-by-json/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/ajax/>AJAX</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/plugin/>plugin</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/12/%E5%9C%8B%E7%A7%91%E6%9C%83%E8%A8%88%E7%95%AB%E8%99%8E%E5%B0%BE%E7%A7%91%E6%8A%80%E5%A4%A7%E5%AD%B8%E5%A0%B1%E5%91%8A/>
 <h2 class=post-title>[國科會計畫]虎尾科技大學報告</h2>
@@ -347,41 +375,6 @@ source /etc/bash.bashrc</pre>
 <a href=https://blog.wu-boy.com/tags/%E4%B8%AD%E6%AD%A3%E5%A4%A7%E5%AD%B8/>中正大學</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/10/php-%E5%A5%BD%E7%94%A8%E7%9A%84%E7%95%99%E8%A8%80%E6%9D%BF-%E9%A9%97%E8%AD%89%E7%A2%BC-%E5%8A%9F%E8%83%BD/>
-<h2 class=post-title>[PHP] 好用的留言板 驗證碼 功能</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 28, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;86&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>這算是大家都知道的技術了吧，因為說實在的，留言板惡意灌水實在是太容易了，就算是檔檔 referer 也是沒用，因為表頭可以自己偽造，那最好的方法就是用 PHP 驗證碼的機制，這個機制利用 GD 縮圖的部份，然後再把驗證數字存放在 SESSION 裡面，不過 PHPBB 的作法是存在 database 資料庫裡面進行比對，然後在 delete 該比資料，畢竟每個連線都有自己的 ssid 的值，所以這樣進行比對，我想是不錯的方法，也可以用在很多地方，那底下是我去 <a href=http://jax-work-archive.blogspot.com>Jax 的工作紀錄</a> 看到的一篇：<a href=http://jax-work-archive.blogspot.com/2007/11/php.html>PHP 驗證碼</a>，拿過來筆記一下。 首先先去 Windows 底下的 Fonts 資料夾，選一個字型吧，因為裡面會用到喔，不然底下這一段 code 會用到</p>
-<pre class="brush: php; title: ; notranslate" title>imagettftext($im, 20, 0, 25, 35, $Color,"arial.ttf",$verification__session);
-/*
-imagettftext (int im, int size, int angle,
-int x, int y, int col,
-string fontfile, string text)
-im 圖片物件
-size 文字大小
-angle 0度將會由左到右讀取文字，而更高的值表示逆時鐘旋轉
-x y 文字起始座標
-col 顏色物件
-fontfile 字形路徑，為主機實體目錄的絕對路徑，
-可自行設定想要的字型
-text 寫入的文字字串
-*/</pre>
-<a href=https://blog.wu-boy.com/2008/10/php-%E5%A5%BD%E7%94%A8%E7%9A%84%E7%95%99%E8%A8%80%E6%9D%BF-%E9%A9%97%E8%AD%89%E7%A2%BC-%E5%8A%9F%E8%83%BD/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -482,7 +475,7 @@ text 寫入的文字字串
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

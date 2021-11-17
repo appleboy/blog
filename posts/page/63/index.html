@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,39 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/04/%E5%88%A9%E7%94%A8-freebsd-update-%E5%8D%87%E7%B4%9A-freebsd-security-patch-%E5%AE%89%E5%85%A8%E6%80%A7/>
+<h2 class=post-title>利用 freebsd-update 升級 FreeBSD security patch 安全性</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 2, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;224&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>在玩 <a href=http://www.freebsd.org>FreeBSD</a> 系統一定會常常需要升級 <a href=http://www.freebsd.org/security/>security</a> 的 patch，之前寫過一篇手動升級 FreeBSD security patch：<a href=http://blog.wu-boy.com/2008/08/26/338/>FreeBSD 的 security patch 跟 如何 upgrade</a>，那篇寫的內容也很容易瞭解，那現在又有另一種升級方式，就是利用 FreeBSD 內建指令 <a href=http://www.freshports.org/security/freebsd-update/>freebsd-update</a>，這是可以 fetch 或者是 install 和 rollback binary 升級系統，不過這指令只能用在 <span style=color:red>Release Engineering</span> 的系統上面，例如 FreeBSD 7.1-RELEASE and FreeBSD 7.1-RC1，<span style=color:red>不可以</span>使用在 FreeBSD 6.2-STABLE 或者是 FreeBSD 7.0-CURRENT 版本上面，那在 <a href=http://blog.gslin.org/>DK大神 blog</a> 上面有寫一篇可以升級 PRERELEASE 系統：<a href=http://blog.gslin.org/archives/2009/03/24/1980/>用 freebsd-update 將 FreeBSD 7.1-PRERELEASE 升級到 7.1-RELEASE</a>，這方法可以騙過 freebsd-update 指令，不過我想本身要對 FreeBSD 很熟阿，不然會遇到很多地雷阿。 基本 OPTIONS 如下：</p>
+<pre class="brush: bash; title: ; notranslate" title>-b basedir   -- 指定系統掛載根目錄 預設值：/
+                (default: /)
+-d workdir   -- 檔案暫存的地方
+                (default: /var/db/freebsd-update/)
+-f conffile  -- 讀取基本設定檔
+                (default: /etc/freebsd-update.conf)
+-k KEY       -- Trust an RSA key with SHA256 hash of KEY
+-r release   -- 指定 Release 版本 (e.g., 6.2-RELEASE)
+-s server    -- 指定抓取哪一台伺服器
+                (default: update.FreeBSD.org)
+-t address   -- 搭配 corn 指定 email，當執行完畢，寄信通知使用者
+                (default: root)</pre>
+<a href=https://blog.wu-boy.com/2009/04/%E5%88%A9%E7%94%A8-freebsd-update-%E5%8D%87%E7%B4%9A-freebsd-security-patch-%E5%AE%89%E5%85%A8%E6%80%A7/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/security/>security</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/03/mysql-count%E6%AC%84%E4%BD%8D-vs-mysql_num_rows-%E9%80%9F%E5%BA%A6%EF%BC%9F/>
 <h2 class=post-title>MySQL count(“欄位”) vs mysql_num_rows 速度？</h2>
@@ -368,33 +401,6 @@ $(<span style=color:#cd5555>&#39;#selectList :selected&#39;</span>).text();
 <a href=https://blog.wu-boy.com/tags/gmail/>Gmail</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/03/jquery-%E8%A1%A8%E5%96%AE%E5%8F%96%E5%80%BC-radio-checkbox-select-text/>
-<h2 class=post-title>[jQuery] 表單取值 radio checkbox select text 驗證表單</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 18, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;319&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近在專案全面使用 <a href=http://jquery.com/>jQuery</a> 來整合後台部份，目前還沒有大量用到 AJAX 的部份，等以後有時間會全部轉換 AJAX 利用 JSON 的部份，其實之前就有寫到一篇用 datatype JSON 的方式來實現 AJAX：<a href=http://blog.wu-boy.com/2008/09/22/412/>[jQuery] AJAX 學習筆記 (一) 如何使用 JSON 驗證使用者表單</a>，大家可以參考看看，不過今天大概寫一下昨天在實做驗證表單取值的一些心得，在設計後台的時候，我把編輯文章跟新增文章的功能做在同一塊，然後利用 jQuery 去改變傳值狀態，利用 hidden 的 mode 欄位來決定是要新增文章還是修改文章</p>
-<pre class="brush: jscript; title: ; notranslate" title>$(document).ready(function() 
-{
-  $("#add_news_link").click(function(){
-    $("#mode").attr("value", "add");
-  });
-})
-</pre>
-<a href=https://blog.wu-boy.com/2009/03/jquery-%E8%A1%A8%E5%96%AE%E5%8F%96%E5%80%BC-radio-checkbox-select-text/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -493,7 +499,7 @@ $(<span style=color:#cd5555>&#39;#selectList :selected&#39;</span>).text();
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

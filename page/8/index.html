@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,28 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/>
+<h2 class=post-title>架設 Go Proxy 服務加速 go module 下載速度</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 10, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;171&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p><a href=https://golang.org>Go 語言</a>在 1.11 推出 go module 來統一市面上不同管理 Go 套件的工具，像是 <a href=https://github.com/golang/dep>dep</a> 或 govendor 等，還不知道如何使用 go module，可以參考之前寫的一篇文章『<a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</a>』，在團隊內如果每個人在開發專案時，都透過網路去下載專案使用到的套件，這樣 10 個人就會浪費 10 個人的下載時間，並且佔用公司網路頻寬，所以我建議在公司內部架設一台 Go Proxy 服務，減少團隊在初始化專案所需要的時間，也可以減少在跑 CI/CD 流程時，所需要花費的時間，測試過公司 CI/CD 流程，有架設 Go Proxy，一般來說可以省下 1 ~ 2 分鐘時間，根據專案使用到的相依性套件用量來決定花費時間。本篇來介紹如何架設 <a href=https://github.com/gomods/athens>ATHENS</a> 這套開源 Go Proxy 專案。</p>
+<a href=https://blog.wu-boy.com/2019/07/speed-up-go-module-download-using-go-proxy-athens/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/go-module/>go module</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/06/install-drone-ci-cd-using-ansible/>
 <h2 class=post-title>用 Ansible 安裝 Drone CI/CD 開源專案</h2>
@@ -326,33 +348,6 @@
 <a href=https://blog.wu-boy.com/tags/golang-channel/>golang channel</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/03/setup-traefik-with-drone-ci-cd-in-ten-minutes/>
-<h2 class=post-title>10 分鐘內用 Traefik 架設 Drone 搭配 GitHub 服務</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 22, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;257&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/HIVQn1cNncIZ8EdJ7P-Nc9ohmuoSgGfnhB0Nfjl3fxsSoZ_RUBrz0yPB73EQy2Plc5NB1919QKsU7gwioFV0A9f-kD46qFovSkeJBO64iKPnTxZ860YGjdhRDMxseJ67OjSVSsEoskY=w2400"><img src="https://lh3.googleusercontent.com/HIVQn1cNncIZ8EdJ7P-Nc9ohmuoSgGfnhB0Nfjl3fxsSoZ_RUBrz0yPB73EQy2Plc5NB1919QKsU7gwioFV0A9f-kD46qFovSkeJBO64iKPnTxZ860YGjdhRDMxseJ67OjSVSsEoskY=w2400" alt></a></p>
-<p>這標題也許有點誇張，但是如果實際操作一次，肯定可以在 10 分鐘內操作完成。本篇來教大家如何用 <a href=https://traefik.io/>Traefik</a> 當作前端 Proxy，後端搭配 <a href=https://github.com/drone/drone>Drone</a> 服務接 <a href=https://github.com>GitHub</a>，為什麼會用 Traefik，原因很簡單，你可以把 Traefik 角色想成是 <a href=https://www.nginx.com/>Nginx</a>，但是又比 Nginx 更簡單設定，另外一點就是，Traefik 自動整合了 <a href=https://letsencrypt.org/>Let&rsquo;s Encrypt</a> 服務，您就不用擔心憑證會過期的問題。假如機器只會有一個 Drone 當 Host 的話，其實也可以不使用 Traefik，因為 Drone 其實也是內建自動更新憑證的功能。如果您對 Traefik 有興趣，可以直接參考底下兩篇文章</p>
-<ul>
-<li><a href=https://blog.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/>用 Traefik 搭配 Docker 快速架設服務</a> (內附教學影片)</li>
-<li><a href=https://blog.wu-boy.com/2019/01/traefik-docker-and-lets-encrypt/>Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證</a> (內附教學影片)</li>
-</ul>
-<a href=https://blog.wu-boy.com/2019/03/setup-traefik-with-drone-ci-cd-in-ten-minutes/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/traefik/>traefik</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -453,7 +448,7 @@
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

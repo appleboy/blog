@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,30 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/12/mysql-myisam-tables-convert-to-innodb/>
+<h2 class=post-title>MySQL MyISAM Engine 轉換成 InnoDB</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 15, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;191&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<img src="https://i2.wp.com/farm9.staticflickr.com/8488/8171305355_db09e220a4_o.png?w=840&ssl=1" alt data-recalc-dims=1>
+</div> 如果對於 InnoDB 不了解的讀者們，可以參考作者之前寫的
+<p><a href=http://blog.wu-boy.com/2012/11/innodb-as-the-default-mysql-storage-engine/ target=_blank>MySQL 預設儲存引擎: InnoDB 介紹</a>，最近開始把原本 <a href=http://dev.mysql.com target=_blank>MySQL</a> 5.1 預設 <a href=http://dev.mysql.com/doc/refman/5.5/en/myisam-storage-engine.html target=_blank>MyISAM</a> Table 全部轉換成 <a href=http://dev.mysql.com/doc/refman/5.5/en/innodb-storage-engine.html target=_blank>InnoDB</a>，MySQL 5.5 版本開始預設的儲存引擎就是 InnoDB，InnoDB 現在也非常完整，也支援 Full Text (5.6.4 開始支援)。作者在轉換過程其實蠻順利的，步驟也不是很複雜，只要按底下步驟，就可以順利轉換。</p>
+<a href=https://blog.wu-boy.com/2012/12/mysql-myisam-tables-convert-to-innodb/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/innodb/>InnoDB</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/12/phpfog-will-be-closed/>
 <h2 class=post-title>PHPFog 即將關閉，請儘速轉移到 AppFog</h2>
@@ -337,40 +361,6 @@
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/09/a-simple-php-to-excel-conversion-library/>
-<h2 class=post-title>簡易 PHP Excel Generator Library</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 14, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;58&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/6034284842/ title="php-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&ssl=1" alt=php-logo data-recalc-dims=1></a>
-</div> 因為專案需求，必須將資料庫資料輸出成簡易 Excel 檔案，如果要用 PHP 取裡 Excel 文件，我想大家首推一定是
-<p><a href=http://phpexcel.codeplex.com/ target=_blank>PHPExcel</a>，不管你要對 Excel 做任何處理都一定辦的到，但是專案只需要 generate excel 簡易表格出來，有需要這麼強大的 PHPExcel，網路上找到一個非常簡易的 Library 那就是 <a href=http://code.google.com/p/php-excel/ target=_blank>php-excel</a> 作者似乎現在沒再更新了，不過已經夠專案使用了，PHP 程式碼也非常簡單。</p>
-<h3 id=how-to-use-程式碼很簡易>How to use 程式碼很簡易</h3>
-<pre class="brush: php; title: ; notranslate" title>$header = array('編號', '姓名', '電話'); 
-$body = array('1', '小惡魔', '0934353289'); 
-$xls = new Excel_XML;
-$xls->addRow($header);
-$xls->addRow($body);
-$xls->generateXML("test");</pre> 或是將資料寫成多為陣列
-<pre class="brush: php; title: ; notranslate" title>$body = array(array('編號', '姓名', '電話'), array('1', '小惡魔', '0934353289')); 
-$xls = new Excel_XML;
-$xls->addArray($body);
-$xls->generateXML("test");</pre> 結論就是殺雞焉用牛刀，就這個簡易 Library 就對了。<p>�</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/excel/>Excel</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -469,7 +459,7 @@ $xls->generateXML("test");</pre> 結論就是殺雞焉用牛刀，就這個簡�
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

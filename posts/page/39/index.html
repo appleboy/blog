@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,40 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/09/a-simple-php-to-excel-conversion-library/>
+<h2 class=post-title>簡易 PHP Excel Generator Library</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 14, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;58&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6034284842/ title="php-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&ssl=1" alt=php-logo data-recalc-dims=1></a>
+</div> 因為專案需求，必須將資料庫資料輸出成簡易 Excel 檔案，如果要用 PHP 取裡 Excel 文件，我想大家首推一定是
+<p><a href=http://phpexcel.codeplex.com/ target=_blank>PHPExcel</a>，不管你要對 Excel 做任何處理都一定辦的到，但是專案只需要 generate excel 簡易表格出來，有需要這麼強大的 PHPExcel，網路上找到一個非常簡易的 Library 那就是 <a href=http://code.google.com/p/php-excel/ target=_blank>php-excel</a> 作者似乎現在沒再更新了，不過已經夠專案使用了，PHP 程式碼也非常簡單。</p>
+<h3 id=how-to-use-程式碼很簡易>How to use 程式碼很簡易</h3>
+<pre class="brush: php; title: ; notranslate" title>$header = array('編號', '姓名', '電話'); 
+$body = array('1', '小惡魔', '0934353289'); 
+$xls = new Excel_XML;
+$xls->addRow($header);
+$xls->addRow($body);
+$xls->generateXML("test");</pre> 或是將資料寫成多為陣列
+<pre class="brush: php; title: ; notranslate" title>$body = array(array('編號', '姓名', '電話'), array('1', '小惡魔', '0934353289')); 
+$xls = new Excel_XML;
+$xls->addArray($body);
+$xls->generateXML("test");</pre> 結論就是殺雞焉用牛刀，就這個簡易 Library 就對了。<p>�</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/excel/>Excel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/09/compass-scss-version-of-normalize-css/>
 <h2 class=post-title>CSS layout 好幫手 Compass scss version of normalize.css</h2>
@@ -336,31 +370,6 @@ if ($a == $b)
 <a href=https://blog.wu-boy.com/tags/mobile-web/>Mobile Web</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/07/css-layout-twitter-bootstrap-cdn/>
-<h2 class=post-title>CSS Layout 好幫手 Twitter bootstrap CDN</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 7, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;66&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>我相信大家對於 <a href=http://twitter.github.com/bootstrap/ target=_blank>Twitter Bootstrap</a> 並不陌生，它解決了程式設計師 Layout CSS 版面很多問題，並且提供多種 js plugin 及 CSS 樣式讓整個網站看起來更專業了。這次發現 <a href=http://www.netdna.com/ target=_blank>NetDNA</a> 這間 CDN 公司推出了 <a href=http://www.bootstrapcdn.com/ target=_blank>Twitter Bootstrap CDN 服務</a>，不管 twitter bootstrap 提供了哪些 CSS 和 javascript，CDN 都已經有檔案可以使用。 如果要載入整個 CSS 和 Javascript 可以直接 include底下兩個檔案</p>
-<pre class="brush: bash; title: ; notranslate" title># CSS
-//current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-combined.min.css
-# JS
-//current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.min.js</pre>
-<a href=https://blog.wu-boy.com/2012/07/css-layout-twitter-bootstrap-cdn/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/twitter-bootstrap/>Twitter Bootstrap</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -459,7 +468,7 @@ if ($a == $b)
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

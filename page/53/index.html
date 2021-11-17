@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.89.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.89.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,43 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/06/phpbb3-%E5%A4%96%E6%8E%9B-%E6%A0%B9%E6%93%9A%E4%BD%BF%E7%94%A8%E8%80%85%E6%96%87%E7%AB%A0%E6%95%B8%E7%9B%AE%E9%99%90%E5%88%B6%E7%B0%BD%E5%90%8D%E6%AA%94%E9%A1%AF%E7%A4%BA/>
+<h2 class=post-title>[phpBB3 外掛] 根據使用者文章數目限制簽名檔顯示</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 13, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;210&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+前一篇提到：『[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”』，本篇會將其做成後台，方便管理者可以從後台管理，這次加上一個新功能：『限制使用者顯示簽名檔』，根據使用者文章數量來決定是否顯示簽名檔，可以避免想要來打廣告的新註冊使用者，限制文章數量是一種方式，但是也不是最好的方式，phpBB3 本身可以在後台限制是否顯示使用者簽名檔，不過我想各大站長都會開放此功能，好讓使用者可以放個人網站或者是部落格，底下是外掛安裝方式：
+安裝 打開 includes/acp/acp_board.php 找尋
+#
+# Find
+#
+'max_sig_img_height' = array('lang' = 'MAX_SIG_IMG_HEIGHT', 'validate' = 'int:0', 'type' = 'text:5:4', 'explain' = true, 'append' = ' ' . $user-lang['PIXEL']), 後面加上 #
+# after add
+#
+'max_sig_post_count_limit' = array('lang' = 'MAX_SIG_POSTS_LIMIT', 'validate' = 'int:0', 'type' = 'text:5:4', 'explain' = true),
+打開 viewtopic.php 找尋
+#
+# Find
+#
+if ($row['user_sig'] && $config['allow_sig'] && $user-optionget('viewsigs')) 取代 #
+# Replace
+#
+if (($row['user_sig'] && $config['allow_sig'] && $user-optionget('viewsigs') && $row['user_posts'] = $config['max_sig_post_count_limit']) || (isset($user-data['session_admin']) && $user-data['session_admin'])) 中文化 打開 language/zh_cmn_hant/acp/board.
+<a href=https://blog.wu-boy.com/2010/06/phpbb3-%E5%A4%96%E6%8E%9B-%E6%A0%B9%E6%93%9A%E4%BD%BF%E7%94%A8%E8%80%85%E6%96%87%E7%AB%A0%E6%95%B8%E7%9B%AE%E9%99%90%E5%88%B6%E7%B0%BD%E5%90%8D%E6%AA%94%E9%A1%AF%E7%A4%BA/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/>
 <h2 class=post-title>[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”</h2>
@@ -468,27 +505,6 @@ $.
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/04/css-ie-6-7-8-firefox-hack-%E6%94%AF%E6%8F%B4%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E5%9C%96-background-or-img-javascript/>
-<h2 class=post-title>[CSS] IE 6, 7, 8 FireFox hack 支援透明背景圖 background or img javascript</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 5, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;381&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>先前在國外部落格發現一篇非常好用的教學：<a href=http://net.tutsplus.com/tutorials/html-css-techniques/quick-tip-how-to-target-ie6-ie7-and-ie8-uniquely-with-4-characters/>Quick Tip: How to Target IE6, IE7, and IE8 Uniquely with 4 Characters</a>，裡面有提供一部教學影片，非常好用，也很實在，底下可以先看影片，看完大概就可以針對 IE, FireFox, Chrome 進行 CSS Hack。 目前網頁製作，要符合多瀏覽器跨平台(<a href=http://www.microsoft.com/taiwan/products/ie/>IE</a>, <a href=http://www.apple.com/tw/safari/download/>Safari</a>, <a href=http://www.google.com.tw/chrome>Chrome</a>, <a href=http://moztw.org/>FireFox</a>…等)，就必須動到 CSS Hack，雖然 Google 已經宣稱不支援 IE6，但是很多單位，很多學校跟客戶都是使用 IE6 瀏覽器，不只國內這樣，國外大廠也都希望支援 IE 系列，包含 IE6, IE7, IE8，這時候就必須知道如何分別針對各種不同 IE 做設定，底下就來看看實做例子。</p>
-<a href=https://blog.wu-boy.com/2010/04/css-ie-6-7-8-firefox-hack-%E6%94%AF%E6%8F%B4%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF%E5%9C%96-background-or-img-javascript/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/html/>html</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -589,7 +605,7 @@ $.
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.89.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.89.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>
