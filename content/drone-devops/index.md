@@ -110,11 +110,11 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 ## 為什麼不使用 Jenkins 或 GitLab CI
 
-可以直接參考之前寫的一篇：『[為什麼我用 Drone 取代 Jenkins 及 GitLab CI][15]』
+可以直接參考之前寫的一篇：『[為什麼我用 Drone 取代 Jenkins 及 GitLab CI](https://blog.wu-boy.com/2017/09/why-i-choose-drone-as-ci-cd-tool/)』
 
 ## 購買資訊
 
-請直接點選這裡[線上購買][31]，優惠碼為: `{{< coupon >}}`，如果需要更優惠價錢，或者是搭配其他課程一起購買，請直接[聯絡我][32]，也可以透過線上匯款方式，匯款後一樣 FB 私訊丟我，我會開一個免費課程連結給您
+請直接點選這裡[線上購買][31]，優惠碼為: `{{< coupon >}}`，如果需要更優惠價錢，或者是搭配其他課程一起購買，請直接[聯絡我][32]，也可以透過線上匯款方式，匯款後一樣 FB 私訊丟我，我會開一個免費課程連結給您
 
 * 富邦銀行: 012
 * 富邦帳號: 746168268370
@@ -137,5 +137,4 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
  [12]: https://docs.docker.com/engine/installation/
  [13]: https://docs.docker.com/docker-for-mac/install/
  [14]: https://docs.docker.com/engine/installation/linux/ubuntu/
- [15]: https://blog.wu-boy.com/2017/09/why-i-choose-drone-as-ci-cd-tool/
  [16]: https://www.udemy.com/devops-oneday/
