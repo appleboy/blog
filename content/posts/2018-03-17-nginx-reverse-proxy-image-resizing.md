@@ -34,7 +34,7 @@ http://foobar.org/image_width/bucket_name/image_name
 
   * **image_width**: 圖片 width
   * **bucket_name**: 圖片目錄或 AWS S3 bucket
-  * **image_width**: 圖片檔名
+  * **image_name**: 圖片檔名
 
 其中 bucket 可以是 [AWS S3][6]。底下是 Nginx 的簡單設定:
 
@@ -57,7 +57,7 @@ server {
 }
 ```
 
-我們可以設定 expires 來讓使用這存在瀏覽器端，這樣下次瀏覽網頁的時候都可以使用快取機制。可以看到 `IMAGE_HOST` 可以是 AWS S3 URL。
+我們可以設定 expires 來讓使用者存在瀏覽器端，這樣下次瀏覽網頁的時候都可以使用快取機制。可以看到 `IMAGE_HOST` 可以是 AWS S3 URL。
 
   1. 先從 `IMAGE_HOST` 下載圖片
   2. Nginx 執行縮圖
