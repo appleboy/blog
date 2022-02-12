@@ -7,7 +7,7 @@
 <meta name=description content="
 Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","name":"初探 golang 1.18 generics 功能"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 golang 1.18 generics 功能","description":"Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。\n","inLanguage":"en","wordCount":739,"datePublished":"2022-02-11T08:18:19","dateModified":"2022-02-11T08:18:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","name":"初探 golang 1.18 generics 功能"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 golang 1.18 generics 功能","description":"Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。\n","inLanguage":"en","wordCount":743,"datePublished":"2022-02-11T08:18:19","dateModified":"2022-02-11T08:18:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="初探 golang 1.18 generics 功能">
 <meta property="og:description" content="
 Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。">
@@ -100,7 +100,7 @@ Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一�
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2022
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;739&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;743&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -117,6 +117,7 @@ Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一�
 <ul>
 <li>
 <ul>
+<li><a href=#影片教學>影片教學</a></li>
 <li><a href=#安裝-118-及整合-vscode-編輯器>安裝 1.18 及整合 Vscode 編輯器</a></li>
 <li><a href=#使用-generic>使用 generic</a></li>
 <li><a href=#心得>心得</a></li>
@@ -128,6 +129,14 @@ Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一�
 <article role=main class=blog-post>
 <p><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt=logo></p>
 <p><a href=https://go.dev/>Go 語言</a>在近期內會推出 <a href=https://tip.golang.org/doc/go1.18>1.18</a> 版本，而 1.18 最重要的功能之一就是 <a href=https://go.dev/doc/tutorial/generics>generics</a>，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。</p>
+<h2 id=影片教學>影片教學</h2>
+<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
+<iframe src=https://www.youtube.com/embed/Tnaw9VXF65U style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
+</div>
+<p>影片視頻會同步放到底下課程內</p>
+<ul>
+<li><a href=https://blog.wu-boy.com/golang-online-course/>Go 語言課程</a></li>
+</ul>
 <h2 id=安裝-118-及整合-vscode-編輯器>安裝 1.18 及整合 Vscode 編輯器</h2>
 <p>首先要先安裝 <a href=https://go.dev/blog/go1.18beta2>go1.18 beta2</a> 版本，方式很簡單，請參考底下</p>
 <div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
