@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,35 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2015/12/force-https-connection-on-wordpress/>
+<h2 class=post-title>將 wordpress 強制使用 SSL 連線</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 19, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;110&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/23840721545/in/dateposted-public/ title=Letsencrypt><img src="https://i1.wp.com/farm6.staticflickr.com/5803/23840721545_e0350b687f.jpg?w=300&ssl=1" alt=Letsencrypt data-recalc-dims=1></a>
+</div>
+<p>繼上篇介紹 <a href=https://blog.wu-boy.com/2015/12/letsencrypt-entering-public-beta-free-ssl/>Letsencrypt 開放申請免費 SSL 憑證</a>，就把我的 Blog 強制使用 https 連線，Wordpress 強制使用 SSL 連線有幾個步驟需要注意，底下會是搭配 Nginx 相關設定，建議如果有裝任何 Plugin，都先進去後台暫時關閉。Nginx 1.9.5 之後有把 <a href=http://nginx.org/en/docs/http/ngx_http_v2_module.html>http2</a> 模組加入，所以本篇會是以設定 http2 為主，當然跟 <a href=https://www.chromium.org/spdy/spdy-whitepaper>spdy</a> 設定一樣，只是換個名字而已。</p>
+<a href=https://blog.wu-boy.com/2015/12/force-https-connection-on-wordpress/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/http2/>http2</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/letsencrypt/>Letsencrypt</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/spdy/>spdy</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ssl/>SSL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/wordpress/>wordpress</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2015/12/letsencrypt-entering-public-beta-free-ssl/>
 <h2 class=post-title>Letsencrypt 開放申請免費 SSL 憑證</h2>
@@ -344,29 +373,6 @@ curl: error while loading shared libraries: libz.so.1: cannot open shared object
 <a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2015/10/php-fig-new-website/>
-<h2 class=post-title>PHP-FIG 新網站</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 29, 2015
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;38&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/22559448635/in/datetaken-public/ title="Screen Shot 2015-10-29 at 9.46.27 AM"><img src="https://i1.wp.com/farm1.staticflickr.com/648/22559448635_09c4a75b88_z.jpg?resize=640%2C184&ssl=1" alt="Screen Shot 2015-10-29 at 9.46.27 AM" data-recalc-dims=1></a>
-</div>
-<p><a href=http://www.php-fig.org/>PHP-FIG</a> 終於通出新網站了，介面比上一版本還要清楚許多，首頁直接清楚列出三大標準參考 AUTOLOADING, INTERFACES, CODING STYLES，網站的 Souce Code 可以在 <a href=https://github.com>Github</a> 上面<a href=https://github.com/php-fig/php-fig.github.com>找到</a>，目前 FIG 只有釋出 PSR-0, PSR-1, PSR-2, PSR-3, PSR-4, PSR-7，其他有很多部分目前都在 Review 中，詳情可以參考 <a href=http://www.php-fig.org/psr/>PHP Standards Recommendations</a>，Coding Style 部分，我建議可以裝 <a href=https://github.com/FriendsOfPHP/PHP-CS-Fixer>PHP-CS-Fixer</a> 搭配 SublimText 編輯器就可以自動幫你校正所有 PHP Source Code。新人建議可以先把 <a href=http://www.php-fig.org/psr/psr-2/>PSR-2</a> 看完，這樣團隊 Coding Style 才能達到一致性。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php-fig/>php-fig</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -460,12 +466,12 @@ curl: error while loading shared libraries: libz.so.1: cannot open shared object
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

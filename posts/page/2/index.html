@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,30 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/06/integratate-sagemaker-workflow-using-golang-api/>
+<h2 class=post-title>AI 團隊整合導入 AWS SageMaker 流程</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 27, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;828&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><img src=https://i.imgur.com/REuJgTP.png alt=Flow></p>
+<h2 id=團隊困境>團隊困境</h2>
+<p>如果團隊未來想把<a href=https://medium.com/@troy801125/machine-learning-%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E5%92%8C%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E6%98%AF%E4%BB%80%E9%BA%BC-49a6ba41ab3e>機器學習</a>推廣成一個服務，可以讓開發者帶入不同的參數進行客製化的學習，最終拿到學習過的 Model。或是團隊資源不夠，想要使用大量的 GPU 資源來加速 AI Model Training，這時就是要朝向使用第三方資源像是 <a href=https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html>AWS SageMaker</a> 來進行整合。而在團隊內會分成機器學習團隊，及後端團隊，前者是專門進行資料分析及 AI Model 演算法及程式碼開發，後者則是專攻全部工作流程，從產生測試資料，前置準備，到 Training Model，及將產生的結果發送給開法者，這整段流程會由後端團隊進行串接。所以當我們要用第三方服務時 AWS SageMaker，對於機器學習團隊來說，要將整個環境打包成容器模式，並且符合 SageMaker 所規定的格式，<strong>過程相當複雜</strong>，而為了讓開發環境統一，我們使用了<a href=https://docs.aws.amazon.com/sagemaker/latest/dg/docker-containers.html>容器技術</a> (Docker Container) 來進行 SageMaker 串接，本篇會教大家如何整合 SageMaker 流程，讓機器學習團隊可以專注於 Model 流程開發，而不需要花時間在整合容器技術並符合 SageMaker 格式。</p>
+<a href=https://blog.wu-boy.com/2021/06/integratate-sagemaker-workflow-using-golang-api/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/sagemaker/>sagemaker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/aws/>aws</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/06/graceful-stop-service-using-docker-compose-in-golang/>
 <h2 class=post-title>用 docker-compose 優雅關閉服務</h2>
@@ -403,29 +427,6 @@ by (name)
 <a href=https://blog.wu-boy.com/tags/pyroscope/>Pyroscope</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2021/02/share-files-between-two-computer-using-croc-tool/>
-<h2 class=post-title>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 16, 2021
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;309&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><img src="https://lh3.googleusercontent.com/VHlioiLpLfqBnh5PnGjYhU6l7dZ2V3PURxz5RfulFL74xYYr4kL5EgkOa-OfLQyIALLgmRIcKlLHnbIENFe0cyv82XQW5ia0HgeNwm4u2ijNsjSQQjkrY4JJjloB_pHTOT-EtxzxOlw=w1920-h1080" alt=croc></p>
-<p>兩台電腦之間該如何傳送檔案，其實方法有超多種的，像是 FTP 或透過 SSH 方式來傳送檔案，但是這些方法步驟都有點複雜，FTP 需要架設 FTP 服務，SSH 要學習 SCP 指令，那有沒有更好的方式從單一電腦點對點傳送檔案到另一台呢？傳送過程需要快速又要安全，本篇介紹一套用 <a href=https://golang.org>Go 語言</a>寫的工具叫 <a href=https://github.com/schollz/croc>croc</a>，詳細的介紹可以參考看看<a href=https://schollz.com/blog/croc6/>作者的 Blog 介紹</a>，此工具有底下功能及優勢。</p>
-<a href=https://blog.wu-boy.com/2021/02/share-files-between-two-computer-using-croc-tool/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/croc/>croc</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -519,12 +520,12 @@ by (name)
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,30 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang/>
+<h2 class=post-title>用 gofight 來測試 golang web API handler</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 6, 2016
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;431&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
+<p>身為一位後端工程師，如果專案初期階段不導入測試，等到專案越來越大時，您就會發現，解了一個 bug，又產生好多個額外 bug，讓產品一直處於不穩定狀態。後端最主要提供前端或手機端 RESTFul API，所以今天來介紹一套 <a href=https://github.com/appleboy/gofight>gofight</a> 工具，用來測試 <a href=https://golang.org/>Golang</a> 的 http <a href=https://golang.org/pkg/net/http/#Handler>handler</a>，讓開發者可以送 Form, JSON, Raw 資料，後端處理後，可以拿到 response 資料，透過 <a href=https://github.com/stretchr/testify>Testify</a> 來測試資料是否符合需求。</p>
+<p>目前大部份的 Golang Web Framework 都可以透過 <a href=https://github.com/appleboy/gofight>gofight</a> 來測試，除非作者有把 <code>ServeHTTP</code> 改成自己定義 Response，不然基本上都是可以支援的，我自己測試了 <a href=https://github.com/gin-gonic/gin>Gin</a>, <a href=https://github.com/gorilla/mux>Mux</a>, <a href=https://github.com/julienschmidt/httprouter>HttpRouter</a> 都是可以使用的，底下來看看 <a href=https://github.com/appleboy/gofight>gofight</a> 該如何使用。</p>
+<a href=https://blog.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/gofight/>gofight</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2016/03/docker-commands-and-best-practices-cheat-sheet/>
 <h2 class=post-title>Docker 實用指令及 Best Practices Cheat Sheet 圖表</h2>
@@ -351,31 +375,6 @@ container 放大架構圖
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/01/laravel-socialite-with-google-facebook-twitter/>
-<h2 class=post-title>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 14, 2016
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;60&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/23493872563/in/dateposted-public/ title=laravel><img src="https://i1.wp.com/farm2.staticflickr.com/1655/23493872563_4f01a9c336_o.png?resize=400%2C400&ssl=1" alt=laravel data-recalc-dims=1></a></p>
-<p><a href=https://laravel.com/>Laravel</a> 提供了 <a href=https://github.com/laravel/socialite>Socialite</a> 套件讓開發者可以快速整合 Facebook, Twitter, <a href=https://www.google.com>Google</a>, LinkedIn, GitHub and Bitbucket 等第三方服務的登入認證，我挑了大家最常使用的 Facebook, Twitter, Google 來整合，用 Google 跟 Twitter 需要注意一些小細節，首先是 Google 部分，如果大家去 <a href=https://console.developers.google.com>Developer console</a> 把 Oauth Callback 寫完，注意的是，這樣是不夠的，要去把 <code>Contacts API</code> 及 <code>Google+ API</code> 啟用，才可以真正使用 Google OAuth 認證服務。</p>
-<a href=https://blog.wu-boy.com/2016/01/laravel-socialite-with-google-facebook-twitter/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/socialite/>Socialite</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/twitter/>Twitter</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -471,12 +470,12 @@ container 放大架構圖
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

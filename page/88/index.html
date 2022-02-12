@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,22 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2007/05/php-%E6%97%A5%E6%9C%9F%E5%87%BD%E6%95%B8%E3%80%8E%E6%90%AD%E9%85%8Djavascript%E3%80%8F/>
+<h2 class=post-title>[PHP] 日期函數『搭配javascript』</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 28, 2007
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;26&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>剛剛發現一個好玩的函數，用在購物車的時候，可以選擇發表團購日期，跟結束日期，下面我是設定發起日後14天之內要下架，還不錯用 大家參考看看吧，其實做出很多功能，大家修改函數就可以了 function jmp2_date_ex($str,$str1,$str2,$sy,$ey){ global $$str; $$str=str_replace("-","/",$$str); $nextWeek = time() + (14 * 24 * 60 * 60); $sy=date(&ldquo;Ymd&rdquo;); $ey=date(&ldquo;Ymd&rdquo;,$nextWeek); echo &ldquo;<input id=$str name=$str type=text size=8 value='".$$str."' readonly style=height:18;font-size:9pt>"; ?> &lt;? } [/code]</p>
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2007/05/php-header%E4%B8%8B%E8%BC%89%E6%AA%94%E6%A1%88-%E6%90%AD%E9%85%8D%E8%B3%87%E6%96%99%E5%BA%AB/>
 <h2 class=post-title>[PHP] header下載檔案 搭配資料庫</h2>
@@ -328,26 +344,6 @@ NOTE: A set of sample configuration files have been installed: /usr/local/etc/sm
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2007/04/sql-sql-%E9%80%B2%E9%9A%8E%E6%90%9C%E5%B0%8B%E5%AF%AB%E6%B3%95-%E4%B8%80%E5%80%8B%E5%BE%88%E7%B0%A1%E5%96%AE%E7%9A%84%E5%95%8F%E9%A1%8C/>
-<h2 class=post-title>[SQL] SQL 進階搜尋寫法~ 一個很簡單的問題</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 6, 2007
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;144&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-最近在幫 國史館台灣文獻館 寫館內搜尋系統，然後遇到一個問題，晚上跟 sayya裡的大大 ghost 搞了很久，也佔用 ghost 大大很多時間，在這裡先感謝他大力相助~，他還說 這是他解決最久的問題，哈哈，問題如下
-我先列出3個表格的欄位跟一些值 table1 class_id, class_title 1 name1 2 name2 table2 class_id, series_name 1 000001 1 000002 1 000003 2 001001 2 001002 2 001003 table3 group_id, group_name 1 000001 1 000002 1 000003 1 000004 2 001001 2 001002 2 001003 如果想要 table1 跟 table2 結合 只要下 sql語法一
-############
-ex: Select * From table1 as t1, table2 as t2 where t1.
-<a href=https://blog.wu-boy.com/2007/04/sql-sql-%E9%80%B2%E9%9A%8E%E6%90%9C%E5%B0%8B%E5%AF%AB%E6%B3%95-%E4%B8%80%E5%80%8B%E5%BE%88%E7%B0%A1%E5%96%AE%E7%9A%84%E5%95%8F%E9%A1%8C/ class=post-read-more>[Read More]</a>
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -443,12 +439,12 @@ ex: Select * From table1 as t1, table2 as t2 where t1.
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

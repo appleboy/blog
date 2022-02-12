@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,24 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/01/update-aws-lambda-using-drone-lambda-tool/>
+<h2 class=post-title>自動化更新 AWS Lambda 函數</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 25, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;299&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/38984480815/in/dateposted-public/ title=Snip20180125_1><img src="https://i1.wp.com/farm5.staticflickr.com/4745/38984480815_c8284784d4_z.jpg?w=840&ssl=1" alt=Snip20180125_1 data-recalc-dims=1></a></p>
+<p>昨天介紹了『<a href=https://blog.wu-boy.com/2018/01/write-golang-in-aws-lambda/>在 AWS Lambda 上寫 Go 語言</a>』，無服務器的時代已經來臨，透過昨天的教學，開發者可以很快的用 <a href=https://golang.org>Go 語言</a>寫簡易的 <a href=https://ithelp.ithome.com.tw/articles/10157431>Restful API</a> 或 <a href=http://graphql.org/learn/>GraphQL</a> 服務，直接無痛丟到 <a href=https://aws.amazon.com/tw/lambda/>AWS Lambda</a>，然而寫完編譯打包上傳整個流程，是非常枯燥乏味的，如何有效地透過自動化工具像是 <a href=https://jenkins.io>Jenkins</a> 或 <a href=https://github.com/drone/drone>Drone</a> 來達到自動化上傳，減少工程師花時間手動上傳，省下的時間，可以讓工程師多寫個幾行程式碼呢。</p>
+<a href=https://blog.wu-boy.com/2018/01/update-aws-lambda-using-drone-lambda-tool/ class=post-read-more>[Read More]</a>
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/01/write-golang-in-aws-lambda/>
 <h2 class=post-title>在 AWS Lambda 上寫 Go 語言搭配 API Gateway</h2>
@@ -311,28 +329,6 @@
 <a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2017/11/grpc-health-check-in-go/>
-<h2 class=post-title>Go 語言實現 gRPC Health 驗證</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 14, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;730&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/26629370309/in/dateposted-public/ title=grpc_square_reverse_4x><img src="https://i1.wp.com/farm5.staticflickr.com/4555/26629370309_b2fa3b59df_z.jpg?w=840&ssl=1" alt=grpc_square_reverse_4x data-recalc-dims=1></a></p>
-<p>本篇教大家如何每隔一段時間驗證 <a href=https://grpc.io/>gRPC</a> 服務是否存活，如果想了解什麼是 gRPC 可以參考 這篇『<a href=https://yami.io/grpc/>REST 的另一個選擇：gRPC</a>』，這邊就不多介紹 gRPC 了，未來將會是容器的時代， 那該如何檢查容器 Container 是否存活。如果是用 Kubernetes 呢？該如何來撰寫 gRPC 接口搭配 <code>livenessProbe</code> 設定。底下是在 <a href=https://docs.docker.com/engine/reference/builder/>Dockerfile</a> 內可以設定 <code>HEALTHCHECK</code> 來 達到檢查容器是否存活。詳細說明可以參考此<a href=https://docs.docker.com/engine/reference/builder/#healthcheck>連結</a>。</p>
-<a href=https://blog.wu-boy.com/2017/11/grpc-health-check-in-go/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/grpc/>gRPC</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -426,12 +422,12 @@
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

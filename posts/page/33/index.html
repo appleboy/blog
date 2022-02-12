@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,31 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/09/css-clear-fix-tip/>
+<h2 class=post-title>CSS Clear Fix 小技巧</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 15, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;81&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+記的之前 evenwu 為了找尋外包 CSS 人才，出了一份考題，有提供上機考，真是佛心來的，還給用 Inspector 或上網。其中一題就是
+第二題、如果一個X元素內的子元素通通 float: left 請問X元素本身會有什麼狀況？如果我要在X元素內下背景，卻沒有顯示，請問如何解決？ 解決方式就是實作本身 clearfix，或者是在元素後加上 clear: both 的標籤，大概就是底下的樣子
+如果是要在 container 實作 clearfix，就必須透過 css before 和 after。
+.clearfix { *zoom: 1; } .clearfix:before, .clearfix:after { content: ""; display: table; line-height: 0; } .clearfix:after { clear: both; } SASS 版本
+.clearfix { *zoom: 1; &:before, &:after { display: table; content: ""; line-height: 0; } &:after { clear: both; } } 這樣只要在任何 element 加上 clearfix css 就可以了，支援瀏覽器版版: Firefox 3.
+<a href=https://blog.wu-boy.com/2013/09/css-clear-fix-tip/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/css-clear/>CSS Clear</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/09/setup-laravel-with-nginx/>
 <h2 class=post-title>Nginx 搭配 Laravel PHP Framework 設定</h2>
@@ -335,59 +360,6 @@ $ git stash pop
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/07/css-vertical-align-center/>
-<h2 class=post-title>CSS 垂直置中解法</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;178&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>相信大家在 <a href=http://www.google.com target=_blank>Google</a> 可以找到很多<a href="https://www.google.com.tw/search?q=css+vertical-align+center&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a" target=_blank>解法</a>，這幾天在 Facebook 發現<a href=https://www.facebook.com/josephj6802/posts/10200920251622230 target=_blank>更精彩的解決方式</a>，就是用 <a href=http://www.w3schools.com/cssref/sel_before.asp target=_blank>CSS:before</a> 跟 <a href=http://www.w3schools.com/cssref/pr_class_display.asp target=_blank>inline-block</a>，底下提供範例:</p>
-<p>html 程式碼</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-html data-lang=html><span style=color:#1e889b>&lt;!DOCTYPE html&gt;</span>
-&lt;<span style=color:#8b008b;font-weight:700>html</span>&gt;
-&lt;<span style=color:#8b008b;font-weight:700>head</span>&gt;
-&lt;<span style=color:#8b008b;font-weight:700>meta</span> <span style=color:#658b00>charset</span>=<span style=color:#cd5555>utf-8</span> /&gt;
-&lt;<span style=color:#8b008b;font-weight:700>title</span>&gt;JS Bin&lt;/<span style=color:#8b008b;font-weight:700>title</span>&gt;
-&lt;/<span style=color:#8b008b;font-weight:700>head</span>&gt;
-&lt;<span style=color:#8b008b;font-weight:700>body</span>&gt;
-  &lt;<span style=color:#8b008b;font-weight:700>div</span> <span style=color:#658b00>class</span>=<span style=color:#cd5555>&#34;ot&#34;</span>&gt;
-    &lt;<span style=color:#8b008b;font-weight:700>div</span> <span style=color:#658b00>class</span>=<span style=color:#cd5555>&#34;wrapper&#34;</span>&gt;&lt;/<span style=color:#8b008b;font-weight:700>div</span>&gt;
-  &lt;/<span style=color:#8b008b;font-weight:700>div</span>&gt; 
-&lt;/<span style=color:#8b008b;font-weight:700>body</span>&gt;
-&lt;/<span style=color:#8b008b;font-weight:700>html</span>&gt;
-</code></pre></td></tr></table>
-</div>
-</div>
-<a href=https://blog.wu-boy.com/2013/07/css-vertical-align-center/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/inline-block/>inline-block</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -481,12 +453,12 @@ $ git stash pop
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

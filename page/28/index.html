@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,42 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/06/safely-reference-javascript-global-variables/>
+<h2 class=post-title>安全使用 JavaScript Global Variables</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 11, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;153&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>剛開始學習 <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript>JavaScript</a> 時候，一定會大量使用 Global Variables。但是使用 Global Variables 的同時，請務必使用 <code>var</code> 宣告，而不是直接使用阿，否則會常常遇到 <code>ReferenceError</code> 的錯誤。</p>
+<div>
+<pre class="brush: jscript; title: ; notranslate" title>function addToBlockList (item) {
+  block_List.push(item);
+}
+<p>addToBlockList (&ldquo;add 127.0.0.1&rdquo;);</pre></p>
+</div>
+<p>執行後你可以發現 console 噴出 <code>Uncaught ReferenceError: block_List is not defined</code>，加上一個判斷試試看。程式碼改成底下</p>
+<div>
+<pre class="brush: jscript; title: ; notranslate" title>function addToBlockList (item) {
+  if (block_list) {
+    block_List.push(item);
+  }
+}
+<p>addToBlockList (&ldquo;add 127.0.0.1&rdquo;);</pre></p>
+</div>
+<a href=https://blog.wu-boy.com/2014/06/safely-reference-javascript-global-variables/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/coffeescript/>CoffeeScript</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/05/understanding-google-search-engine/>
 <h2 class=post-title>認識現今 Google 搜尋引擎</h2>
@@ -361,34 +397,6 @@ $ dmidecode --type 17 | more 輸出結果為
 <a href=https://blog.wu-boy.com/tags/percona-software/>Percona Software</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/04/startssl-close-registeration-openssl-cve-2014-0160-heartbleed-security/>
-<h2 class=post-title>StartSSL 關閉註冊 OpenSSL CVE-2014-0160 Heartbleed Security</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 11, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;18&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/13774392623 title="heartbleed by Bo-Yi Wu, on Flickr"><img src="https://i1.wp.com/farm8.staticflickr.com/7102/13774392623_7baaa68597_m.jpg?resize=198%2C240&ssl=1" alt=heartbleed data-recalc-dims=1></a>
-</div>
-<p>這幾天 OpenSSL 發出很嚴重的 <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-0160">CVE-2014-0160 Bug</a> 叫做「<a href=http://heartbleed.com/>Heartbleed</a>」，台灣資安公司 <a href=http://devco.re/>DEVCORE</a> 也直接發布了<a href=http://devco.re/blog/2014/04/09/openssl-heartbleed-CVE-2014-0160/>一篇文章</a>，請大家儘快升級系統，並且通知全部會員修改密碼，目前看到 <a href=https://github.com/>Github</a> 等大型網站都已經先將使用者 Session 資料清除，另外個人憑證部份也必須要更換，所以這幾天免費提供申請的 <a href=https://www.startssl.com/>StartSSL</a> 服務，被大量的使用者來申請，目前看到官方網站直接<del>關閉註冊</del>給個暫時的 warning 訊息 XD 如下圖</p>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/13774487325 title="startssl by Bo-Yi Wu, on Flickr"><img src="https://i2.wp.com/farm8.staticflickr.com/7328/13774487325_28dfcf420d_z.jpg?resize=640%2C224&ssl=1" alt=startssl data-recalc-dims=1></a>
-</div>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/openssl/>OpenSSL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/security/>security</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ssl/>SSL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/startssl/>StartSSL</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -484,12 +492,12 @@ $ dmidecode --type 17 | more 輸出結果為
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

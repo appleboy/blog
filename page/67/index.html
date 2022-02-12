@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,37 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/01/javascript%E5%88%A4%E6%96%B7%E4%B8%AD%E6%96%87%E5%85%A8%E5%BD%A2%E5%AD%97%E6%95%B8%E6%9C%89%E5%B9%BE%E5%80%8B/>
+<h2 class=post-title>[javascript]判斷中文全形字數有幾個</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 22, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;95&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>在 <a href=http://www.ptt.cc/index.html>ptt</a> <a href=telnet://ptt.cc>bbs</a> 的 AJAX 版討論到如何判斷計算有幾個中文字數，那 TonyQ 兄跟 toshii 兄分別提供了兩種方法，我自己測試了一下包含全形字型，如：？，。…這些都算喔，我自己想到 <a href=http://www.cht.com.tw/>中華電信</a> <a href=http://www.emome.net/>emome</a> 的簡訊系統也會有判斷數字加上英文跟中文字的算法，看了一下大致上都是相同的。 TonyQ 解法：</p>
+<pre class="brush: jscript; title: ; notranslate" title>/*
+利用 regex pattern
+*/
+function chineseCount(word){
+    return word.split(/[\u4e00-\u9a05]/).length -1;
+}
+
+var word="test中asd文asd字as到底asd有幾asd個?";
+alert(chineseCount(word));
+</pre>
+<a href=https://blog.wu-boy.com/2009/01/javascript%E5%88%A4%E6%96%B7%E4%B8%AD%E6%96%87%E5%85%A8%E5%BD%A2%E5%AD%97%E6%95%B8%E6%9C%89%E5%B9%BE%E5%80%8B/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/ajax/>AJAX</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/01/linuxfreebsd-find-%E6%8C%87%E4%BB%A4%E7%94%A8%E6%B3%95%E6%95%99%E5%AD%B8/>
 <h2 class=post-title>[Linux&FreeBSD] Find 指令用法教學</h2>
@@ -404,30 +435,6 @@ cd /usr/ports/security/denyhosts; make install clean
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/12/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F%E8%A5%BF%E5%A0%A4-tasty-%E8%A5%BF%E5%A0%A4%E4%B8%AD%E5%B1%B1%E5%BA%97/>
-<h2 class=post-title>[高雄美食]西堤 TASTY (西堤中山店)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 19, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;104&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/10526457@N00/3095498302/ title=1208194122><img src="https://i0.wp.com/farm4.static.flickr.com/3141/3095498302_e33deb0926.jpg?w=840&ssl=1" border=0 alt=1208194122 data-recalc-dims=1></a></p>
-<div id=map_address_20081208 style=width:500px;height:300px>
-</div> 在慶祝一週年之前，我就已經在規劃了，欠小蚊子一頓餐點，之前有一次本來要去吃，但是當天定位根本沒位子，所以這次學聰明了，馬上在一個月之前就定好了
-<p><a href=http://www.tasty.com.tw>西堤牛排</a>，我自己本身也是第一次去吃，所以也帶著好奇的心情去吃，因為之前吃過同企業的 <a href=http://blog.wu-boy.com/2008/10/05/536/>[嘉義美食]陶板屋</a>，我覺得還不賴，那高雄這一間西堤第一次去吃，所以就跟小蚊子一起去吃，當天到了，發現人還真是多阿，2F整個都已經塞滿了客人，還沒六點半就已經超多人了，還是禮拜一呢，果然經濟不景氣，還是不會影響到餐飲業。</p>
-<a href=https://blog.wu-boy.com/2008/12/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F%E8%A5%BF%E5%A0%A4-tasty-%E8%A5%BF%E5%A0%A4%E4%B8%AD%E5%B1%B1%E5%BA%97/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/%E8%A5%BF%E5%A0%A4/>西堤</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -523,12 +530,12 @@ cd /usr/ports/security/denyhosts; make install clean
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

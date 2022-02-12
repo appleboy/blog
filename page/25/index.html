@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,41 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2015/03/replace-git-with-https-protocol-for-bower/>
+<h2 class=post-title>透過 https 下載套件，取代 git protocol</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 14, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;55&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://i0.wp.com/farm9.staticflickr.com/8523/8455538800_30f65954f8.jpg?ssl=1"><img src="https://i0.wp.com/farm9.staticflickr.com/8523/8455538800_30f65954f8.jpg?w=840&ssl=1" alt data-recalc-dims=1></a></p>
+<p>現在前端套件幾乎都會透過 <a href=http://bower.io/>Bower</a> 來下載，而 Bower 預設使用 git protocol 來下載原始檔案，如果遇到 timeout 逾時，也就是無法透過 <code>git://</code> 方式，就必須要切換成 <code>https://</code> 下載，蠻多人遇到此問題，網路上找到這篇 <a href=https://github.com/angular/angular-phonecat/issues/141>bower install - github.com connection timed out</a> 解答。在 Console 視窗噴出底下錯誤訊息，就請改用 https 方式。</p>
+<blockquote>
+<p>Additional error details: fatal: unable to connect to github.com: github.com[0: 192.30.252.130]: errno=Connection timed out
+切換方式很容易，請在 Console 鍵入底下指令</p>
+</blockquote>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ git config --global url.<span style=color:#cd5555>&#34;https://&#34;</span>.insteadOf git://
+</code></pre></td></tr></table>
+</div>
+</div><p>遇到 <code>bower install</code> 卡卡的也可以用這招 ＸＤ</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/bower/>Bower</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/npm/>npm</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2015/02/the-6to5-javascript-transpiler-has-renamed-to-babel/>
 <h2 class=post-title>6to5 JavaScript Transpiler 重新命名為 Babel</h2>
@@ -346,31 +381,6 @@
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/12/optimizing-php-composer-performance/>
-<h2 class=post-title>加速 PHP Composer 執行效率</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 3, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;256&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/15747689648 title="logo-composer-transparent by Bo-Yi Wu, on Flickr"><img src="https://i2.wp.com/farm9.staticflickr.com/8658/15747689648_a4e7ccfca9_m.jpg?resize=202%2C240&ssl=1" alt=logo-composer-transparent data-recalc-dims=1></a>
-</div>
-<p>早上剛起床就看到 <a href=https://blog.gslin.org>DK</a> 發表一篇<a href=https://blog.gslin.org/archives/2014/12/02/5383/%E5%A2%9E%E5%8A%A0%E4%B8%80%E8%A1%8C%E7%A8%8B%E5%BC%8F%E7%A2%BC%E8%AE%93-php-composer-%E6%95%88%E7%8E%87%E7%88%86%E5%A2%9E/>增加一行程式碼讓 PHP Composer 效率爆增</a>，<a href=https://getcomposer.org/>Composer</a> 是 PHP 套件管理工具，現在各大 Framework 都用 Composer 管理套件相依性，但是最讓人擔憂的是，每次執行 <code>composer install</code> 或 update 的時候，機器就會開始哀號，然後等了很久指令才執行完成。今天看到 <a href=http://github.com>Github</a> 上 Composer 為了改善執行效率及時間<a href=https://github.com/composer/composer/commit/ac676f47f7bbc619678a29deae097b6b0710b799>就把 gc disabled</a>。這 commit 引發了很多人迴響，超多搞笑留言圖片。底下有兩種方式可以加速 Composer 執行效率</p>
-<a href=https://blog.wu-boy.com/2014/12/optimizing-php-composer-performance/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/composer/>Composer</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -466,12 +476,12 @@
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

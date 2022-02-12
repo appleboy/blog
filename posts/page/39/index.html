@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/posts/feed.xml title="小惡魔 - AppleBOY">
@@ -102,6 +102,30 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/09/php-preg_replace-performance/>
+<h2 class=post-title>[PHP] preg_replace 效能測試 (將兩個空白字元以上取代成一個)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 21, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;16&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6034284842/ title="php-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&ssl=1" alt=php-logo data-recalc-dims=1></a>
+</div>
+<p><a href=http://php.net/manual/en/function.preg-replace.php target=_blank>preg_replace</a> 可以使用正規語法來取代字串任何字元，，今天探討取代空白字元的效能，雖然這是個不起眼的效能評估，一般人不太會這樣去改，不過這是國外 PHP Framework 有人提出來修正的，經過許多人的測試一致同意。功能就是一篇文章內如果有多餘的空白能空取代成一個，一般人都會用 <strong><span style=color:green>\s+</span></strong> 正規語法，畢竟大家都知道 \s 代表單一空白或 \r 等符號，但是國外有人提出用 <strong><span style=color:green>{2,}</span></strong> 方式來取代空白。程式碼如下，大家可以測試看看。</p>
+<a href=https://blog.wu-boy.com/2012/09/php-preg_replace-performance/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/performance/>Performance</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/09/a-simple-php-to-excel-conversion-library/>
 <h2 class=post-title>簡易 PHP Excel Generator Library</h2>
@@ -341,35 +365,6 @@ if ($a == $b)
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/07/develop-iphone-moblie-web-app-tip/>
-<h2 class=post-title>開發 iPhone Mobile Web App 一些小技巧</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 17, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;203&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>開發 Mobile Web App 有好一陣子，底下來紀錄過去開發的一些經驗以及 iPhone 上面一些 meta 的設定小技巧，適用於 Mobile Web 開發，如果有任何錯誤，請大家可以留言給我，也或者有不錯的建議都可以一起討論。不過此篇文章會比較偏向 iOS iPhone Device 上面的開發技巧。那廢話不多說了，來看看設計 Mobile 需要注意哪些事項。</p>
-<h3 id=良好的設計模式-底下是-web-程式設計師應該注意的事項>良好的設計模式 底下是 Web 程式設計師應該注意的事項</h3>
-<ul>
-<li>html 檔案必須宣告 DOCTYPE 型態<br>
-以目前 HTML5 就必須寫成 <!doctype html></li>
-<li>完全區隔 HTML, CSS, 和 JavaScript 檔案，以便將來好維護或擴充</li>
-<li>完整的 html 架構，不要少個單引號或雙引號，或是少寫 close tag</li>
-</ul>
-<a href=https://blog.wu-boy.com/2012/07/develop-iphone-moblie-web-app-tip/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/iphone/>iPhone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mobile-web/>Mobile Web</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -463,12 +458,12 @@ if ($a == $b)
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>

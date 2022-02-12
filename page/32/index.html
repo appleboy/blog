@@ -16,7 +16,7 @@
 <meta name=twitter:site content="@appleboy">
 <meta name=twitter:creator content="@appleboy">
 <link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
+<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
 <link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
 <link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
 <link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/feed.xml title="小惡魔 - AppleBOY">
@@ -115,6 +115,28 @@
 <div class=row>
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
+<article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/11/jquery-serialize-object-no-support-ie7-8-browser/>
+<h2 class=post-title>jquery-serialize-object 不支援 IE7,8 瀏覽器?</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 20, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;88&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>最近專案需求用到 <a href=https://github.com/macek/jquery-serialize-object target=_blank>jQuery Serialize Object plugin</a>，它能夠自動將 Form 表單內的值，全部轉成 object 或 json 字串，減少開發者每次都要寫抓取 Form 表單內全部欄位的值。此套件安裝及使用方法都很容易，安裝可以透過 <a href=http://bower.io/ target=_blank>Bower</a> 方式，或者是下載 source code 直接 include 即可，在 IE 7 或 8 為什麼沒辦法使用呢，原因是作者使用了 <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach target=_blank>Array.prototype.forEach</a>，此語法需要 JavaScript 1.6 版本，很抱歉，在 IE8 並不支援 forEach 寫法，所以 <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript target=_blank>Mozilla Javascript 開發者文件</a>內有提供 Compatibility 方法： if (!Array.prototype.forEach) { Array.prototype.forEach = function (fn, scope) { &lsquo;use strict&rsquo;; var i, len; for (i = 0, len = this.length; i &lt; len; ++i) { if (i in this) { fn.call(scope, this[i], i, this); } } }; }[/code] 但是既然這是 <a href=http://plugins.jquery.com/ target=_blank>jQuery Plugin</a>，就可以透過 jQuery 內建的 <a href=http://api.jquery.com/each/ target=_blank>each</a> 函式來解決，最後發了 <a href=https://github.com/macek/jquery-serialize-object/pull/14 target=_blank>Pull request</a> 給作者，就看作者收不收了 XD</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/browser/>browser</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ie/>IE</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/javascrpt/>JavaScrpt</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
+</div>
+</article>
 <article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/11/western-union-quick-cash-google-adsense/>
 <h2 class=post-title>西聯匯款 Google Adsense 取款步驟</h2>
@@ -350,31 +372,6 @@ $ aptitude -y install jenkins</pre>
 <a href=https://blog.wu-boy.com/tags/rest/>REST</a>&nbsp;
 </div>
 </article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/09/css-clear-fix-tip/>
-<h2 class=post-title>CSS Clear Fix 小技巧</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 15, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;81&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-記的之前 evenwu 為了找尋外包 CSS 人才，出了一份考題，有提供上機考，真是佛心來的，還給用 Inspector 或上網。其中一題就是
-第二題、如果一個X元素內的子元素通通 float: left 請問X元素本身會有什麼狀況？如果我要在X元素內下背景，卻沒有顯示，請問如何解決？ 解決方式就是實作本身 clearfix，或者是在元素後加上 clear: both 的標籤，大概就是底下的樣子
-如果是要在 container 實作 clearfix，就必須透過 css before 和 after。
-.clearfix { *zoom: 1; } .clearfix:before, .clearfix:after { content: ""; display: table; line-height: 0; } .clearfix:after { clear: both; } SASS 版本
-.clearfix { *zoom: 1; &:before, &:after { display: table; content: ""; line-height: 0; } &:after { clear: both; } } 這樣只要在任何 element 加上 clearfix css 就可以了，支援瀏覽器版版: Firefox 3.
-<a href=https://blog.wu-boy.com/2013/09/css-clear-fix-tip/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/css-clear/>CSS Clear</a>&nbsp;
-</div>
-</article>
 </div>
 <ul class="pager main-pager">
 <li class=previous>
@@ -470,12 +467,12 @@ $ aptitude -y install jenkins</pre>
 <p class="credits copyright text-muted">
 <a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
-2021
+2022
 &nbsp;&bull;&nbsp;
 <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
 </p>
 <p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
+<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
 </p>
 </div>
 </div>
