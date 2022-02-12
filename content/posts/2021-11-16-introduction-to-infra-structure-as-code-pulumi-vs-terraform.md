@@ -2,6 +2,11 @@
 title: infrastructure as code 優勢及工具選擇
 date: 2021-11-17T08:18:19+08:00
 share_img: https://i.imgur.com/Ljxw0ng.png
+author: appleboy
+type: post
+slug: introduction-to-infra-structure-as-code-pulumi-vs-terraform
+aliases:
+  - /posts/2021-11-16-introduction-to-infra-structure-as-code-pulumi-vs-terraform
 categories:
   - DevOps
 tags:
