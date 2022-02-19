@@ -116,6 +116,68 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2017/05/go-struct-method-pointer-or-value/>
+<h2 class=post-title>Go 語言內 struct methods 該使用 pointer 或 value 傳值?</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 22, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;372&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
+<p>上週末在台北講『<a href=http://learning.ithome.com.tw/course/JjojzNh9P1N9H>Go 語言基礎課程</a>』，其中一段介紹 Struct 的使用，發現有幾個學員對於在 Method 內要放 Pointer 或 Value 感到困惑，而我自己平時在寫 Go 語言也沒有注意到這點。好在強者學員 <a href="https://www.facebook.com/YinChenLiao?fref=nf">Dboy Liao</a> 找到一篇說明:『<a href=https://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/>Don&rsquo;t Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang</a>』，在 Go 語言如何區分 <code>func (s *MyStruct)</code> 及 <code>func (s MyStruct)</code>，底下我們先來看看簡單的 Struct 例子</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
+
+<span style=color:#8b008b;font-weight:700>type</span> Cart <span style=color:#8b008b;font-weight:700>struct</span> {
+    Name  <span style=color:#00688b;font-weight:700>string</span>
+    Price <span style=color:#00688b;font-weight:700>int</span>
+}
+
+<span style=color:#8b008b;font-weight:700>func</span> (c Cart) <span style=color:#008b45>GetPrice</span>() {
+    fmt.<span style=color:#008b45>Println</span>(c.Price)
+}
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    c := &amp;Cart{<span style=color:#cd5555>&#34;bage&#34;</span>, <span style=color:#b452cd>100</span>}
+    c.<span style=color:#008b45>GetPrice</span>()
+}
+</code></pre></td></tr></table>
+</div>
+</div>
+<a href=https://blog.wu-boy.com/2017/05/go-struct-method-pointer-or-value/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2017/04/build-minimal-docker-container-using-multi-stage-for-go-app/>
 <h2 class=post-title>用 Docker Multi-Stage 編譯出 Go 語言最小 Image</h2>
 </a>
@@ -352,32 +414,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2017/02/caddy-setting-with-drone-ci-server/>
-<h2 class=post-title>Caddy 搭配 Drone 伺服器設定</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 7, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;196&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/32758934825/in/dateposted-public/ title=The_Caddy_web_server_logo.svg><img src="https://i0.wp.com/c1.staticflickr.com/1/528/32758934825_665c449ff3_z.jpg?resize=640%2C138&ssl=1" alt=The_Caddy_web_server_logo.svg data-recalc-dims=1></a></p>
-<h2 id=緣由>緣由</h2>
-<p><a href=https://caddyserver.com/>Caddy</a> 是一套 <a href=https://zh.wikipedia.org/zh-tw/HTTP/2>HTTP/2</a> 伺服器，你可以想成跟 <a href=https://nginx.org/>Nginx</a> 是同一種角色，但是 Caddy 有一點不一樣的地方就是自動支援 HTTPS 設定，也就是 Caddy 幫網站自動申請 <a href=https://letsencrypt.org/>Letsencrypt</a> 憑證，開發者不需要擔心憑證會過期，Caddy 會定期幫忙更換。<a href=https://www.docker.com/>Drone</a> 則是一套以 <a href=https://www.docker.com/>Docker</a> 為基礎的 <a href=https://en.wikipedia.org/wiki/Continuous_integration>Continuous Integration</a> 平台。就在上個月 Caddy 發佈了 <a href=https://github.com/mholt/caddy/releases/tag/v0.9.5>0.9.5</a> 版本，更新過後，發現 <a href=https://github.com/drone/drone>Drone</a> 的 WebSocket 連線會斷線又連線，底下來看看 Caddy 更動了什麼造成 WebSocket 連線失效。</p>
-<a href=https://blog.wu-boy.com/2017/02/caddy-setting-with-drone-ci-server/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/caddy/>caddy</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
 </div>
 </article>
 </div>

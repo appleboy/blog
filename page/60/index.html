@@ -116,6 +116,37 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/07/codeigniter-lighttpd-rewrite-rule-apache-mod_rewrite/>
+<h2 class=post-title>[CodeIgniter] lighttpd rewrite rule && apache mod_rewrite</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 9, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;63&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=http://codeigniter.com>CodeIgniter</a> 要移除網址列存在的 index.php，<a href=http://www.apache.org/>apache</a> 必須使用 <a href=http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html>mod_rewrite</a> 寫入 .htaccess 的方式來達成，<a href=http://www.lighttpd.net/>lighttpd</a> 也是有支援 rewrite，可以參考官方文件：<a href=http://redmine.lighttpd.net/wiki/lighttpd/Docs:ModRewrite>Module: mod_rewrite</a>，設定方法很容易。</p>
+<pre class="brush: bash; title: ; notranslate" title>$HTTP["host"] == "mimi.twgg.org" {
+  server.document-root = "/var/www/html/MLB/"
+  url.rewrite = (
+        "^/images/.*$" => "$0",
+        "^/includes/.*$" => "$0",
+        "^/(.*)$" => "index.php/$1"
+
+  )
+  accesslog.filename = "/var/log/lighttpd/mimi.twgg.org-access_log"
+}</pre>
+<a href=https://blog.wu-boy.com/2009/07/codeigniter-lighttpd-rewrite-rule-apache-mod_rewrite/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/07/perl-with-utf-8-mode/>
 <h2 class=post-title>[Perl] 解決 Wide character in print with UTF-8 mode</h2>
 </a>
@@ -365,27 +396,6 @@ define('Document_root',dirname(__FILE__));
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/gmail/>Gmail</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/06/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F-%E6%8B%89%E6%96%90%E7%88%BE%E5%BB%9A%E6%88%BF%E7%84%97%E7%83%A4%E9%A3%AF/>
-<h2 class=post-title>[高雄美食] 拉斐爾廚房焗烤飯</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 2, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;11&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/3586947717/ title="0524185739 (by appleboy46)"><img src="https://i2.wp.com/farm4.static.flickr.com/3629/3586947717_2dbbf9a093.jpg?resize=500%2C375&ssl=1" title="0524185739 (by appleboy46)" alt="0524185739 (by appleboy46)" data-recalc-dims=1></a> 好久沒來寫篇美食了，最近吃了一家還不錯的焗烤飯，那就是在高雄市文化中心附近的拉斐爾，這間價位真的算可以投資的喔，還蠻便宜的，焗烤飯價位都介於 100~150 元之間，義大利麵也都在100元以下，加上 39 元就可以享用套餐系列喔，有烤麵包，飲料，濃湯。大家可以來這裡吃看看，除了一樓之外還有地下室可以用餐，地下室還蠻適合開同學會的，上面那張圖就是地下室的照片。 <a href=https://www.flickr.com/photos/appleboy/3586952533/ title="0524190141 (by appleboy46)"><img src="https://i2.wp.com/farm4.static.flickr.com/3364/3586952533_007c6c735c.jpg?resize=375%2C500&ssl=1" title="0524190141 (by appleboy46)" alt="0524190141 (by appleboy46)" data-recalc-dims=1></a></p>
-<a href=https://blog.wu-boy.com/2009/06/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F-%E6%8B%89%E6%96%90%E7%88%BE%E5%BB%9A%E6%88%BF%E7%84%97%E7%83%A4%E9%A3%AF/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/%E6%8B%89%E6%96%90%E7%88%BE%E5%BB%9A%E6%88%BF/>拉斐爾廚房</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;
 </div>
 </article>
 </div>

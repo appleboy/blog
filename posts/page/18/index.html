@@ -103,6 +103,33 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2016/10/ssh-agent-forwarding-proxycommand-tutorial/>
+<h2 class=post-title>SSH agent forwarding 教學</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 5, 2016
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;196&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><strong>2016.11.13 Update: SSH Agent Forwarding 有安全性問題，請用 <code>ProxyCommand</code> 取代，請參考 <a href=https://heipei.github.io/2015/02/26/SSH-Agent-Forwarding-considered-harmful/>SSH Agent Forwarding considered harmful</a></strong> <a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/30008040142/in/dateposted-public/ title="Screen Shot 2016-10-05 at 9.26.13 AM"><img src="https://i0.wp.com/c7.staticflickr.com/6/5219/30008040142_9d50881bba_z.jpg?resize=640%2C371&ssl=1" alt="Screen Shot 2016-10-05 at 9.26.13 AM" data-recalc-dims=1></a></p>
+<p><a href=https://developer.github.com/guides/using-ssh-agent-forwarding/>SSH agent forwarding</a> 可以讓開發者將 Local 端的 SSH Key Pair 帶到另外一台機器進行傳送，也就是說你不用將 SSH Key 複製到遠端 Server 再進行跳板動作，原本在 AWS 維護多台 EC2 主機，都會固定有一台跳板機，大家都把自己需要登入遠端機器的 SSH Key 複製到跳板機，這做法其實沒有很安全，又需要多下一個指令進行跳板。</p>
+<blockquote>
+<p>個人電腦 -&mdash;> EC2 跳板機 -&mdash;> EC2 Server</p>
+</blockquote>
+<p>大家都會把 Key Pair 存放到跳板機，安全性堪憂，只要這台主機被 Hack，或者是內部員工登入，拿別人的 Key Pair 登入其它主機，不就可以搞破壞？所以此篇教學主要教大家如何設定 SSH agent forwarding，讓憑證只存放在自己電腦，而不需上傳到 <code>EC2 跳板機</code>。這樣跳板機就真的只是跳板機，不需要存放任何憑證資料，每小時設定清空 Ubuntu User 家目錄，避免內部員工放個人資料或憑證，提升主機安全性。</p>
+<a href=https://blog.wu-boy.com/2016/10/ssh-agent-forwarding-proxycommand-tutorial/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ssh/>SSH</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2016/09/docker-cache-on-travis/>
 <h2 class=post-title>在 Travis 實現 Docker Cache</h2>
 </a>
@@ -310,29 +337,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/yisin/>yisin</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/%E5%B0%8F%E7%9A%93/>小皓</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/07/speed-up-npm-install-command/>
-<h2 class=post-title>用一行指令加速 npm install</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 10, 2016
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;148&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/24588632402/in/dateposted-public/ title=Npm-logo.svg><img src="https://i2.wp.com/farm2.staticflickr.com/1564/24588632402_35c2cab0b6_z.jpg?resize=640%2C249&ssl=1" alt=Npm-logo.svg data-recalc-dims=1></a></p>
-<p>不久之前寫過一篇 <a href=https://blog.wu-boy.com/2016/01/speed-up-npm-install/>提升 npm install 安裝速度</a>，但是發現速度還是沒有變快，在 DevOps 的流程花在 <code>npm install</code> 的時間非常冗長，造成每次測試或 Deploy 都要花大量時間等待，且吃掉很多機器的資源，本篇要提供一個小技巧改善 npm install 安裝時間，其實簡單來說就是 cache 第一次安裝好的 <code>node_modules</code> 目錄，之後每次安裝就拿 cache 目錄來新增或減少 packages 即可。</p>
-<a href=https://blog.wu-boy.com/2016/07/speed-up-npm-install-command/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/node.js/>Node.js</a>&nbsp;
 </div>
 </article>
 </div>

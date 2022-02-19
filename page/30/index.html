@@ -116,6 +116,38 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/02/laravel-memcached-cross-domain-session/>
+<h2 class=post-title>Laravel 搭配 Memcached Cross Domain Session</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 24, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;142&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6248708214/ title="Laravel PHP Framework by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&ssl=1" alt="Laravel PHP Framework" data-recalc-dims=1></a>
+</div>
+<p><a href=http://laravel.com/>Laravel</a> 提供了 <code>file</code>、<code>cookie</code>、<code>database</code>、<code>memcached</code>、<code>array</code> 五種方式來存取 <a href=http://laravel.com/docs/session>Session</a>，預設的使用方式會是 <code>file</code> 存取，如果要跨 Domain 存取 Session 基本上只要設定 <code>php.ini</code> 裡面的 Session 相關參數即可，請注意底下 3 個參數。</p>
+<ul>
+<li><a href=http://tw1.php.net/manual/en/session.configuration.php#ini.session.save-path>session.save_handler</a></li>
+<li><a href=http://tw1.php.net/manual/en/session.configuration.php#ini.session.save-handler>session.save_path</a></li>
+<li><a href=http://tw1.php.net/manual/en/session.configuration.php#ini.session.cookie-domain>session.cookie_domain</a></li>
+</ul>
+<a href=https://blog.wu-boy.com/2014/02/laravel-memcached-cross-domain-session/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/memcache/>memcache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/memcached/>Memcached</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/session/>Session</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/02/backbone-js-1-1-1-amd-release/>
 <h2 class=post-title>Backbone.js 1.1.1 Release 釋出 AMD 版本</h2>
 </a>
@@ -381,35 +413,6 @@ fatal: index-pack failed</pre>
 <a href=https://blog.wu-boy.com/tags/percona-software/>Percona Software</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/percona-xtradb-cluster/>Percona XtraDB Cluster</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/xtradb-cluster/>XtraDB Cluster</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/01/percona-xtradb-server-read-only-issue/>
-<h2 class=post-title>Percona XtraDB Server 出現 read only issue</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 16, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;86&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/8171305355/ title="mysql_logo by appleboy46, on Flickr"><img src="https://i1.wp.com/farm9.staticflickr.com/8488/8171305355_7fb578fdc9.jpg?w=300&ssl=1" alt=mysql_logo data-recalc-dims=1></a>
-</div>
-<p>最近在整理 <a href=http://www.percona.com/software/percona-server>Percona XtraDB Server</a> 將 Read Write 全部拆開，寫入部份只開一台 Node，讀取機器 Replica 則是越多越好，當然如果預計 write 都不會有任何 conflict 的話，那就不用拆開，read write 都可以在同一台即可，拆開的目的要解決 <code>Innodb transaction locking</code> 問題。今天遇到的是將機器讀寫都放在同一台，然後同時多台 Master 架構，結果跑在 <a href=http://www.codeigniter.org.tw/>CodeIgniter</a> 上面出現底下錯誤訊息</p>
-<blockquote>
-<p>The MySQL server is running with the &ndash;read-only option so it cannot execute this statement</p>
-</blockquote>
-<a href=https://blog.wu-boy.com/2014/01/percona-xtradb-server-read-only-issue/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/percona/>Percona</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/percona-xtradb-cluster/>Percona XtraDB Cluster</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/xtradb/>XtraDB</a>&nbsp;
 </div>
 </article>
 </div>

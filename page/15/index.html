@@ -116,6 +116,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2017/08/2017-coscup-introduction-to-gitea-drone/>
+<h2 class=post-title>2017 COSCUP 研討會: Gitea + Drone 介紹</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 7, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;96&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/36020937670/in/dateposted-public/ title=gitea-lg><img src=https://farm5.staticflickr.com/4377/36020937670_fbcf1ee3d3_z.jpg alt=gitea-lg></a></p>
+<p>今年很高興可以到 <a href=http://coscup.org/2017>COSCUP</a> 分享『<strong>Gitea + Drone 介紹</strong>』，我是在第二天的最後一場來做分享，最後還被大會進來趕人，講超過時間了。這次是我第一次到<a href=http://www.coss.ntu.edu.tw/>台大社科院</a>，太陽真的好大，兩天下來流的汗水，大概已經是一年份的了。由於今年 COSCUP 不供應午餐，在第一天中午到科技站出口，左轉第一個店面就坐下來吃麵，店面不大，賣傳統小吃，我點了麻醬麵大碗 55 元，燙青菜 35 元，真的很大碗，不知道是不是因為在學校附近的關係，所以特別大碗，我心裡想說，這裡不是台北嗎？</p>
+<a href=https://blog.wu-boy.com/2017/08/2017-coscup-introduction-to-gitea-drone/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/gitea/>gitea</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jenkins/>Jenkins</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2017/07/drone-release-0-8-0-rc-1/>
 <h2 class=post-title>Drone 發佈 0.8.0-rc.1 版本</h2>
 </a>
@@ -323,68 +347,6 @@
 <a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/node.js/>Node.js</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/yarn/>yarn</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2017/05/go-struct-method-pointer-or-value/>
-<h2 class=post-title>Go 語言內 struct methods 該使用 pointer 或 value 傳值?</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 22, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;372&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
-<p>上週末在台北講『<a href=http://learning.ithome.com.tw/course/JjojzNh9P1N9H>Go 語言基礎課程</a>』，其中一段介紹 Struct 的使用，發現有幾個學員對於在 Method 內要放 Pointer 或 Value 感到困惑，而我自己平時在寫 Go 語言也沒有注意到這點。好在強者學員 <a href="https://www.facebook.com/YinChenLiao?fref=nf">Dboy Liao</a> 找到一篇說明:『<a href=https://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/>Don&rsquo;t Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang</a>』，在 Go 語言如何區分 <code>func (s *MyStruct)</code> 及 <code>func (s MyStruct)</code>，底下我們先來看看簡單的 Struct 例子</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
-
-<span style=color:#8b008b;font-weight:700>type</span> Cart <span style=color:#8b008b;font-weight:700>struct</span> {
-    Name  <span style=color:#00688b;font-weight:700>string</span>
-    Price <span style=color:#00688b;font-weight:700>int</span>
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> (c Cart) <span style=color:#008b45>GetPrice</span>() {
-    fmt.<span style=color:#008b45>Println</span>(c.Price)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    c := &amp;Cart{<span style=color:#cd5555>&#34;bage&#34;</span>, <span style=color:#b452cd>100</span>}
-    c.<span style=color:#008b45>GetPrice</span>()
-}
-</code></pre></td></tr></table>
-</div>
-</div>
-<a href=https://blog.wu-boy.com/2017/05/go-struct-method-pointer-or-value/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

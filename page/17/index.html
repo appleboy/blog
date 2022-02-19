@@ -116,6 +116,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2017/02/caddy-setting-with-drone-ci-server/>
+<h2 class=post-title>Caddy 搭配 Drone 伺服器設定</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 7, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;196&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/32758934825/in/dateposted-public/ title=The_Caddy_web_server_logo.svg><img src="https://i0.wp.com/c1.staticflickr.com/1/528/32758934825_665c449ff3_z.jpg?resize=640%2C138&ssl=1" alt=The_Caddy_web_server_logo.svg data-recalc-dims=1></a></p>
+<h2 id=緣由>緣由</h2>
+<p><a href=https://caddyserver.com/>Caddy</a> 是一套 <a href=https://zh.wikipedia.org/zh-tw/HTTP/2>HTTP/2</a> 伺服器，你可以想成跟 <a href=https://nginx.org/>Nginx</a> 是同一種角色，但是 Caddy 有一點不一樣的地方就是自動支援 HTTPS 設定，也就是 Caddy 幫網站自動申請 <a href=https://letsencrypt.org/>Letsencrypt</a> 憑證，開發者不需要擔心憑證會過期，Caddy 會定期幫忙更換。<a href=https://www.docker.com/>Drone</a> 則是一套以 <a href=https://www.docker.com/>Docker</a> 為基礎的 <a href=https://en.wikipedia.org/wiki/Continuous_integration>Continuous Integration</a> 平台。就在上個月 Caddy 發佈了 <a href=https://github.com/mholt/caddy/releases/tag/v0.9.5>0.9.5</a> 版本，更新過後，發現 <a href=https://github.com/drone/drone>Drone</a> 的 WebSocket 連線會斷線又連線，底下來看看 Caddy 更動了什麼造成 WebSocket 連線失效。</p>
+<a href=https://blog.wu-boy.com/2017/02/caddy-setting-with-drone-ci-server/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/caddy/>caddy</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2017/01/business-benefits-of-go/>
 <h2 class=post-title>從商業利益看 Go 程式語言</h2>
 </a>
@@ -329,33 +355,6 @@
 <a href=https://blog.wu-boy.com/tags/https/>https</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/letsencrypt/>Letsencrypt</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/10/ssh-agent-forwarding-proxycommand-tutorial/>
-<h2 class=post-title>SSH agent forwarding 教學</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 5, 2016
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;196&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><strong>2016.11.13 Update: SSH Agent Forwarding 有安全性問題，請用 <code>ProxyCommand</code> 取代，請參考 <a href=https://heipei.github.io/2015/02/26/SSH-Agent-Forwarding-considered-harmful/>SSH Agent Forwarding considered harmful</a></strong> <a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/30008040142/in/dateposted-public/ title="Screen Shot 2016-10-05 at 9.26.13 AM"><img src="https://i0.wp.com/c7.staticflickr.com/6/5219/30008040142_9d50881bba_z.jpg?resize=640%2C371&ssl=1" alt="Screen Shot 2016-10-05 at 9.26.13 AM" data-recalc-dims=1></a></p>
-<p><a href=https://developer.github.com/guides/using-ssh-agent-forwarding/>SSH agent forwarding</a> 可以讓開發者將 Local 端的 SSH Key Pair 帶到另外一台機器進行傳送，也就是說你不用將 SSH Key 複製到遠端 Server 再進行跳板動作，原本在 AWS 維護多台 EC2 主機，都會固定有一台跳板機，大家都把自己需要登入遠端機器的 SSH Key 複製到跳板機，這做法其實沒有很安全，又需要多下一個指令進行跳板。</p>
-<blockquote>
-<p>個人電腦 -&mdash;> EC2 跳板機 -&mdash;> EC2 Server</p>
-</blockquote>
-<p>大家都會把 Key Pair 存放到跳板機，安全性堪憂，只要這台主機被 Hack，或者是內部員工登入，拿別人的 Key Pair 登入其它主機，不就可以搞破壞？所以此篇教學主要教大家如何設定 SSH agent forwarding，讓憑證只存放在自己電腦，而不需上傳到 <code>EC2 跳板機</code>。這樣跳板機就真的只是跳板機，不需要存放任何憑證資料，每小時設定清空 Ubuntu User 家目錄，避免內部員工放個人資料或憑證，提升主機安全性。</p>
-<a href=https://blog.wu-boy.com/2016/10/ssh-agent-forwarding-proxycommand-tutorial/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ssh/>SSH</a>&nbsp;
 </div>
 </article>
 </div>

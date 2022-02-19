@@ -103,6 +103,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/>
+<h2 class=post-title>[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 4, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;540&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 /* strcat example */ #include &lt;stdio.h>#include &lt;string.h> int main () { char str[80]; strcpy (str,"these "); strcat (str,"strings "); strcat (str,"are "); strcat (str,"concatenated."); puts (str); return 0; } output:
+1 these strings are concatenated. 看一下 strcat 原始碼：
+1 2 3 4 5 6 7 8 9 char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。
+<a href=https://blog.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrstr-strchr/>
 <h2 class=post-title>[C/C++] cstring (string.h) 搜尋函式：strstr, strchr</h2>
 </a>
@@ -370,39 +393,6 @@ cd /usr/ports/databases/mysql51-server && make install 安裝 Apache 2.2.15 cd /
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/>
-<h2 class=post-title>[Linux Kernel] 撰寫簡單 Hello, World module (part 1).</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 21, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;143&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-來筆記如何在 Kernel 撰寫 hello world! module，在 Ubuntu Kernel 2.6.31-14 環境下撰寫，其實不難啦，首先先進入 Kernel 目錄，請在 /usr/src 底下看自己的系統版本，或者是利用 uname -r 來知道 Kernel 版本，底下是在 Ubuntu Kernel 2.6.31-14 Kernel 實做：
-進入 Kernel 目錄 #
-# cd Kernel directory
-#
-cd /usr/src/linux-headers-2.6.31-14-generic-pae 建立 hello 目錄 #
-# mkdir directory
-#
-mkdir hello 建立 Makfile 以及 hello.c hello.c: #include /* pr_info 所需 include 檔案*/
-#include
-#include /* 所有 module 需要檔案*/
-#include
-MODULE_DESCRIPTION("Hello World !!");
-MODULE_AUTHOR("
-<a href=https://blog.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/driver/>Driver</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;
 </div>
 </article>
 </div>

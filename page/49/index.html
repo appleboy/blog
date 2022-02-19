@@ -116,6 +116,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/03/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-branch-model-%E5%88%86%E6%94%AF%E6%A8%A1%E7%B5%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/>
+<h2 class=post-title>Git 版本控制 branch model 分支模組基本介紹</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 2, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;505&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>我相信大家對於 <a href=http://git-scm.com/>Git</a> 版本控制不陌生了，Git 最大強項就是可以任意建立 branch，讓您開發程式不需要擔心原本的程式碼會被動到，造成不知道該怎麼恢復原來的狀態。為了不影響產品發展，branch 對於大型工作團隊就顯得更重要了，今天在網路上看到一篇 <a href=http://nvie.com/posts/a-successful-git-branching-model/>A successful Git branching model</a> 文章，裡面把 branch 使用方式寫得非常清楚，底下我會透過指令來說明如何使用簡單 branch 指令，當然請大家先去 <a href=https://github.com/>github</a> 註冊申請帳號，如果不想申請帳號，也可以自己在 local 端去執行。</p>
+<p>底下所引用的圖片都是經由 <a href=http://nvie.com/posts/a-successful-git-branching-model/>A successful Git branching model</a> 文章所提供。</p>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/5488984404/ title="git-flow by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.static.flickr.com/5293/5488984404_4f693eec32_z.jpg?resize=480%2C640&ssl=1" alt=git-flow data-recalc-dims=1></a>
+</div>
+<p>看到這張圖其實就說明了 branch 最重要的精神:『無限建立分支』，大家也不用害怕看不懂這張圖，底下說明 branch 分支狀況</p>
+<a href=https://blog.wu-boy.com/2011/03/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-branch-model-%E5%88%86%E6%94%AF%E6%A8%A1%E7%B5%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/git-branch/>git branch</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/02/%E5%88%A9%E7%94%A8-mb_strwidth-%E5%8F%96%E4%BB%A3-mb_strlen-%E8%A8%88%E7%AE%97-multi-byte-%E5%AD%97%E6%95%B8/>
 <h2 class=post-title>利用 mb_strwidth 取代 mb_strlen 計算 Multi-byte 字數</h2>
 </a>
@@ -516,61 +542,6 @@ $(MAKE) && $(MAKE) install ;\ --host, CC, CXX 請換上 Tool Chain 對應路徑�
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/>
-<h2 class=post-title>[Linux] 嵌入式系統不可或缺的工具 – busybox 分析 ifconfig command</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 26, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;5&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;879&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<img src="https://i1.wp.com/www.busybox.net/images/busybox1.png?w=840" alt=Busybox data-recalc-dims=1>
-<p>玩過嵌入式系統的使用者，一定都會知道 <a href=http://zh.wikipedia.org/zh-tw/BusyBox>Busybox</a>，它提供一些小型 Linux command，方便在 console 端使用，以及一些 C 語言或者是 shell script 裡面，大家都知道 ifconfig 這指令，為了從 Kernel 2.6.15 轉換到 2.6.34.7 版本，原本的 Busybox 版本只有 1.0.1，現在已經到 1.18.1，轉換過程改了 Kernel <a href=http://www.netfilter.org/>netfilter</a> 部份，以及 user space 部份 <a href=http://netfilter.org/documentation/HOWTO/netfilter-extensions-HOWTO.html>iptables extension</a>。ifconfig 是 Busybox 其中一個指令用來查看目前有多少網路介面(network interface)，來看看他是如何得到這些 interface 資訊，包含介面名稱、type、IP Adress、IP network mask、HW address 等&mldr;.。</p>
-<p>要讀取 interface 相關資訊可以透過兩種方式，一種是讀取 (IPv6 是 /proc/net/if_inet6)，另一種透過 Socket 連接SOCK_DGRAM，最後用 iotcl 方式讀取 interface 相關資料，busybox 會先偵測檔案 /proc/net/dev 是否存在，如果 Kernel 有支援，就會讀取此檔案，如果不存在，則利用 socket 讀取資料。</p>
-<p>if_readlist_proc 函式裡面:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-c data-lang=c>fh = fopen_or_warn(_PATH_PROCNET_DEV, <span style=color:#cd5555>&#34;r&#34;</span>);
-<span style=color:#8b008b;font-weight:700>if</span> (!fh) {
-    <span style=color:#8b008b;font-weight:700>return</span> if_readconf();
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>看一下 /proc/net/dev 內容</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>Inter-|   Receive                                                |  Transmit
- face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
-    lo:     <span style=color:#b452cd>104</span>       <span style=color:#b452cd>1</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>         <span style=color:#b452cd>0</span>      <span style=color:#b452cd>104</span>       <span style=color:#b452cd>1</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>       <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>
-  eth0:21798505   <span style=color:#b452cd>51360</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>         <span style=color:#b452cd>0</span>  <span style=color:#b452cd>7693686</span>   <span style=color:#b452cd>46844</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>    <span style=color:#b452cd>0</span>     <span style=color:#b452cd>0</span>       <span style=color:#b452cd>0</span>          <span style=color:#b452cd>0</span>
-</code></pre></td></tr></table>
-</div>
-</div>
-<a href=https://blog.wu-boy.com/2010/12/linux-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E4%B8%8D%E5%8F%AF%E6%88%96%E7%BC%BA%E7%9A%84%E5%B7%A5%E5%85%B7-busybox-%E5%88%86%E6%9E%90-ifconfig-command/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/busybox/>Busybox</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/embedded-system/>Embedded System</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 </div>
 </article>
 </div>
