@@ -7,7 +7,7 @@
 <meta name=description content="
 大家在開發軟體時，會快速迭代專案時程跟需求，功能越多，系統就會開始出現效能上的瓶頸，而最快的解決方式就是先垂直擴展，把 CPU 跟記憶體先往上加，但是這是治標不治本，所以之前有推薦大家一套如何在服務執行時，快速找到哪個地方執行較慢，請參考之前的文章『即時效能分析工具 Pyroscope』，Pyroscope 目前支援了很多語言，像是 Go, Python, Java, Ruby, Rust, PHP 及 .Net，如果你想要快速在本地端找到效能瓶頸，請繼續將本篇看完。底下會用 Go 語言實際範例教大家。">
 <meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2022\/02\/pyroscope-adhoc-profiling-in-golang\/","name":"使用 pyroscope adhoc 加速找到效能瓶頸"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 pyroscope adhoc 加速找到效能瓶頸","description":"大家在開發軟體時，會快速迭代專案時程跟需求，功能越多，系統就會開始出現效能上的瓶頸，而最快的解決方式就是先垂直擴展，把 CPU 跟記憶體先往上加，但是這是治標不治本，所以之前有推薦大家一套如何在服務執行時，快速找到哪個地方執行較慢，請參考之前的文章『即時效能分析工具 Pyroscope』，Pyroscope 目前支援了很多語言，像是 Go, Python, Java, Ruby, Rust, PHP 及 .Net，如果你想要快速在本地端找到效能瓶頸，請繼續將本篇看完。底下會用 Go 語言實際範例教大家。\n","inLanguage":"en","wordCount":358,"datePublished":"2022-02-27T09:07:55","dateModified":"2022-02-27T09:07:55","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, pyroscope, pyroscope adhoc, profiling"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2022\/02\/pyroscope-adhoc-profiling-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
+<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2022\/02\/pyroscope-adhoc-profiling-in-golang\/","name":"使用 pyroscope adhoc 加速找到效能瓶頸"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"使用 pyroscope adhoc 加速找到效能瓶頸","description":"大家在開發軟體時，會快速迭代專案時程跟需求，功能越多，系統就會開始出現效能上的瓶頸，而最快的解決方式就是先垂直擴展，把 CPU 跟記憶體先往上加，但是這是治標不治本，所以之前有推薦大家一套如何在服務執行時，快速找到哪個地方執行較慢，請參考之前的文章『即時效能分析工具 Pyroscope』，Pyroscope 目前支援了很多語言，像是 Go, Python, Java, Ruby, Rust, PHP 及 .Net，如果你想要快速在本地端找到效能瓶頸，請繼續將本篇看完。底下會用 Go 語言實際範例教大家。\n","inLanguage":"en","wordCount":375,"datePublished":"2022-02-27T09:07:55","dateModified":"2022-02-27T09:07:55","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, pyroscope, pyroscope adhoc, profiling"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2022\/02\/pyroscope-adhoc-profiling-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
 <meta property="og:title" content="使用 pyroscope adhoc 加速找到效能瓶頸">
 <meta property="og:description" content="
 大家在開發軟體時，會快速迭代專案時程跟需求，功能越多，系統就會開始出現效能上的瓶頸，而最快的解決方式就是先垂直擴展，把 CPU 跟記憶體先往上加，但是這是治標不治本，所以之前有推薦大家一套如何在服務執行時，快速找到哪個地方執行較慢，請參考之前的文章『即時效能分析工具 Pyroscope』，Pyroscope 目前支援了很多語言，像是 Go, Python, Java, Ruby, Rust, PHP 及 .Net，如果你想要快速在本地端找到效能瓶頸，請繼續將本篇看完。底下會用 Go 語言實際範例教大家。">
@@ -100,7 +100,7 @@
 <span class=post-meta>
 <i class="fas fa-calendar"></i>&nbsp;Posted on February 27, 2022
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;358&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;375&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
 </span>
 </div>
@@ -119,6 +119,7 @@
 <ul>
 <li><a href=#為什麼要用-adhoc-profiling>為什麼要用 adhoc profiling</a></li>
 <li><a href=#adhoc-profiling-使用方式>adhoc profiling 使用方式</a></li>
+<li><a href=#線上-profiling-服務>線上 Profiling 服務</a></li>
 <li><a href=#心得>心得</a></li>
 </ul>
 </li>
@@ -281,6 +282,13 @@
 <p>除了點開 HTML 檔案之外，大家也可以用 pyroscope CLI 在本機端打開 Server 服務，此時 Server 服務會去讀取家目錄內 <code>~/.pyroscope/pyroscope/</code> 位置，裡面存放開發者每次的 Profiling JSON 格式數據。請打開 <code>http://localhost:4040</code></p>
 <p><img src=https://i.imgur.com/xW08yIt.png alt=UI></p>
 <p>從上圖可以看到點選左邊 Single View，就可以看到上面出現 pyroscope data 的 Tab，裡面就是該目錄內所有數據，可以即時呈現及比較數據。</p>
+<h2 id=線上-profiling-服務>線上 Profiling 服務</h2>
+<p>如果連本地端都不想安裝任何環境，可以透過底下兩個線上服務來完成。</p>
+<ul>
+<li><a href=https://flamegraph.com/>Upload and Share Interactive Flamegraphs</a></li>
+<li><a href=https://playground.flamegraph.com/playground>Playground</a></li>
+</ul>
+<p>可以將有效能問題的程式碼放到 Playground 上，並分享給團隊其他同仁，直接線上修改測試即可，其實跟 Go 提供的 <a href=https://go.dev/play>Playground</a> 差不多意思。</p>
 <h2 id=心得>心得</h2>
 <p>有了這個功能幫助挺大的，尤其時想在本機端做一些效能上分析，雖然有 pprof 可以使用，但是沒有好的 UI 介面，還是很難縮短除錯時間，而有了 adhoc 功能，還可以將數據分享給其他同事一起來幫忙。畢竟服務正式上線後，不會將 pyroscope 功能啟動，免得服務受到效能上的影響，而在測試站就會隨時監控，搭配 Prometheus + Grafana 找出特定時間點效能變化。</p>
 <p>上面第一段有提到，目前支援多種不同語言，大家在本地端就可以快速測試不同寫法帶來不同的效能，而不是要將代碼推上機器後才可以驗證，真的縮短蠻多時間的。也可以在找到問題同時，先將 HTML 檔案附件在 Issue Tracking 系統上。</p>
