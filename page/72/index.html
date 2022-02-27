@@ -116,6 +116,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/08/%E6%95%99%E5%AD%B8%E7%B6%B2%E9%A0%81%E7%B0%A1%E9%AB%94%E7%B9%81%E9%AB%94%E8%BD%89%E6%8F%9B%E7%A8%8B%E5%BC%8Fgoogle-ajax-language-api/>
+<h2 class=post-title>[教學]網頁簡體繁體轉換程式(Google AJAX Language API)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 14, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;58&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>在 <a href=http://www.ptt.cc>PTT</a> PHP 版看到一篇：<a href=http://www.ptt.cc/bbs/PHP/M.1218595508.A.8C4.html>[請益]簡體字轉繁體字的方法</a>，然後裡面其實有推文說可以用看看 <a href=http://code.google.com/apis/ajaxlanguage/documentation/>Google AJAX Language API</a>，然後我自己去測試，發現只要文字一多，<a href=http://www.google.com>google</a> 就轉換不出來了，就會出現無效果，我自己也回一篇 <a href=http://www.ptt.cc/bbs/PHP/M.1218697288.A.440.html>Re: [請益]簡體字轉繁體字的方法</a>，其實問題出在哪裡，我也不確定，這可能要問 <a href=http://www.google.com>google</a> 了，不然 google 提供的這個還蠻方便的，可以即時整合到網站裡面。 <strong>update：google API 不能用的原因，就是轉換的字數超過限制</strong> 嗯嗯，後來改用<a href=http://www.twvbb.com/vbb/thread/24/572/2/>【原創】深藍UTF-8正體簡體轉換函數 1.0</a> 裡面這套 VBB 系統提供的簡體繁體轉換，大概看一下原始碼，就可以使用了，不會很難，只要在網頁 header 端加上：</p>
+<a href=https://blog.wu-boy.com/2008/08/%E6%95%99%E5%AD%B8%E7%B6%B2%E9%A0%81%E7%B0%A1%E9%AB%94%E7%B9%81%E9%AB%94%E8%BD%89%E6%8F%9B%E7%A8%8B%E5%BC%8Fgoogle-ajax-language-api/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/ajax/>AJAX</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/07/php%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-flush-%E8%B7%9F-ob_flush/>
 <h2 class=post-title>[PHP]如何使用 flush() 跟 ob_flush()</h2>
 </a>
@@ -347,34 +370,6 @@ RoR的部署方式從架構上來說分為前端和後端： 一、前端 前端
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/06/php%E8%A7%A3%E6%B1%BA%E7%B6%B2%E7%AB%99%E8%A2%AB-sql-injection-%E6%94%BB%E6%93%8A/>
-<h2 class=post-title>[PHP]解決網站被 SQL injection 攻擊</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 26, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;150&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>其實這個安全性的問題，在目前台灣網站都存在這樣的問題，大家平常用 $_POST，$_GET 用得很順利，但是沒有想過帳號密碼被 SQL injection 破解，當網站被破解了，基本上你損失就是相當嚴重，網路上也有很多攻擊方式，不過這方法是最常被拿出來講的，我自己有一套解決方式，除了比較重要的地方，就是輸入帳號密碼的地方要加強防護之外，加上數字驗證碼，還要 check 帳號的特性，我底下是我驗證帳號密碼機制</p>
-<pre class="brush: php; title: ; notranslate" title>if($user_name == '' || $user_passwd == ''){
-    	ErrMsg("帳號或密碼不得空白");
-    }
-    if (!preg_match('/^\w+$/', $user_name)){
-    	ErrMsg("請勿攻擊本站台");
-    }</pre>
-<a href=https://blog.wu-boy.com/2008/06/php%E8%A7%A3%E6%B1%BA%E7%B6%B2%E7%AB%99%E8%A2%AB-sql-injection-%E6%94%BB%E6%93%8A/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/sql/>sql</a>&nbsp;
 </div>
 </article>
 </div>

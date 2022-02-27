@@ -116,6 +116,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/07/sql-mysql-row_number-simulation/>
+<h2 class=post-title>[SQL] MySQL ROW_NUMBER Simulation</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 15, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;193&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>在台大 <a href=http://www.ptt.cc/bbs/Database/index.html>PTT Database</a> 版看到有人問一個問題，我覺得還不錯，問題如下：<a href=http://www.ptt.cc/bbs/Database/M.1247394036.A.A50.html>網頁版</a></p>
+<blockquote>
+<p>小弟在練習做一個系統遇到以下問題 志願 | 系所 | 功能 1 | a | 退選 2 | b | 退選 3 | c | 退選 4 | d | 退選 5 | e | 退選 網頁介面如上(用for迴圈+mysql_fetch_object抓出資料) 報名序號 | 姓名 | 志願1 | 志願2 | 志願3 | 志願4 | 志願5 1001 小王 a b c d e 資料庫欄位內容如上 想請問~若使用者想退選志願3~~照理說用update把志願3欄位清掉 網頁再一次抓資料會變成志願3的系所變空的~(如下表) 志願 | 系所 | 功能 1 | a | 退選 2 | b | 退選 3 | | 退選 4 | d | 退選 5 | e | 退選 有沒有辦法在select的時候排除空的那欄 也就是說抓資料的時候，以上述為例，只抓出4筆，變成下表 志願 | 系所 | 功能 1 | a | 退選 2 | b | 退選 3 | d | 退選 4 | e | 退選</p>
+</blockquote>
+<a href=https://blog.wu-boy.com/2009/07/sql-mysql-row_number-simulation/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/mssql/>MSSQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/07/codeigniter-lighttpd-rewrite-rule-apache-mod_rewrite/>
 <h2 class=post-title>[CodeIgniter] lighttpd rewrite rule && apache mod_rewrite</h2>
 </a>
@@ -369,33 +394,6 @@ define('Document_root',dirname(__FILE__));
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/06/gmail-%E6%9C%80%E8%BF%91%E7%99%BC%E5%B8%83%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%9A%E9%80%B2%E9%9A%8E%E6%90%9C%E5%B0%8B%EF%BC%8C%E9%A0%90%E8%A6%BD%E6%94%B6%E4%BB%B6%E5%A4%BE%EF%BC%8C%E9%83%B5%E4%BB%B6/>
-<h2 class=post-title>[Gmail] 最近發布的功能：進階搜尋，預覽收件夾，郵件內容語言轉換</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 6, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;60&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>最近在 <a href=http://gmailblog.blogspot.com/>Gmail Lab</a> 看到發布了許多新功能，都蠻好用的，加速搜尋郵件內容，收件者，寄件者，郵件內容語言轉換，匯入其他郵件的通訊名單…等，進階搜尋是這之前就開發好得功能，可以在 <a href="http://mail.google.com/support/bin/answer.py?hl=en&answer=7190">search operators</a> 這篇裡面找到相關的用法，簡單來說底下有個例子：</p>
-<ul>
-<li>&ldquo;<em>to:me is:starred</em>&rdquo; 搜尋寄信給您所標記的郵件</li>
-<li>&ldquo;<em>is:chat from:heather</em>&rdquo; 搜尋與heather使用者對話的內容</li>
-<li>&ldquo;<em>is:starred -in:inbox</em>&rdquo; 搜尋所有信件夾內未標記郵件</li>
-<li>&ldquo;<em>from:elliot filename:pdf</em>&rdquo; 搜尋 <em>elliot</em> 寄來信件附件檔帶有 pdf 檔案 上面例子看了很複雜吧，因為你還要記的很多相關的語法，才可以正確搜尋到，所以 google 很貼心的設計了</li>
-</ul>
-<p><a href=http://gmailblog.blogspot.com/2009/04/new-in-labs-gmail-search-made-easier.html>Search Autocomplete</a>，之前我有寫一篇：<a title="Permanent Link to New in Labs:Gmail search autocomplete 快速找尋使用者 email 跟附件檔案" rel=bookmark href=../2009/04/05/1129/>New in Labs:Gmail search autocomplete 快速找尋使用者 email 跟附件檔案</a>，造福了使用 Gmail 的大眾。 預覽收件夾這功能可以參考：<a href=http://gmailblog.blogspot.com/2009/05/new-in-labs-inbox-preview.html>New in Labs: Inbox preview</a>，這功能用在當開啟 gmail 網頁時，會有 loading 的畫面，那針對速度慢得使用者，可以預先看到新的郵件標題，而不需要整個載入之後才看的到，目前還沒有遇到這種狀況，不過大家可以試試看。 郵件內容語言轉換(<a href=http://gmailblog.blogspot.com/2009/05/new-in-labs-automatic-message.html>New in Labs: Automatic message translation</a>)，這功能相當不錯，可以利用 google translate tool 進行轉換您所想要的語言，如下圖： <a href=https://www.flickr.com/photos/appleboy/3599768514/ title="Gmail (by appleboy46)"><img title="Gmail (by appleboy46)" src="https://i1.wp.com/farm3.static.flickr.com/2478/3599768514_7771513234_o.png?w=600&ssl=1" alt="Gmail (by appleboy46)" data-recalc-dims=1></a> 蠻多好玩的功能，都可以去 Gmail Lab 去開起來喔，大家試試看吧</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/gmail/>Gmail</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,34 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/04/openssl-cve-2014-0160-heartbleed/>
+<h2 class=post-title>OpenSSL CVE-2014-0160 (Heartbleed) 漏洞攻擊手法</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 14, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;107&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/13774392623 title="heartbleed by Bo-Yi Wu, on Flickr"><img src="https://i1.wp.com/farm8.staticflickr.com/7102/13774392623_7baaa68597_m.jpg?resize=198%2C240&ssl=1" alt=heartbleed data-recalc-dims=1></a>
+</div>
+<p><a href=http://devco.re/>DEVCORE</a> 資安公司寫了一篇 <a href=http://devco.re/blog/2014/04/11/openssl-heartbleed-how-to-hack-how-to-protect/>OpenSSL Heartbleed 全球駭客的殺戮祭典，你參與了嗎？</a> 內如介紹如何透過工具攻擊及測試現有網站，也提供如何修正 OpenSSL 漏洞，Debian，Centos，FreeBSD 等。要檢查機器是否更新到正確版本，可以透過底下指令</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ openssl version -a</pre>
+</div>
+<a href=https://blog.wu-boy.com/2014/04/openssl-cve-2014-0160-heartbleed/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/devcore/>DEVCORE</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/heartbleed/>Heartbleed</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/openssl/>OpenSSL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/04/osdc-2014-talk-introduction-to-percona-xtradb-cluster-and-haproxy/>
 <h2 class=post-title>OSDC 2014 Talk: Introduction to Percona XtraDB Cluster and HAProxy</h2>
 </a>
@@ -353,49 +381,6 @@ set :env, "production"</pre>
 <a href=https://blog.wu-boy.com/tags/percoba-xtradb-cluster/>Percoba XtraDB Cluster</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/percona/>Percona</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/percona-cloud-tools/>Percona Cloud Tools</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/02/ruby-debugger-and-no-source-for-ruby-error/>
-<h2 class=post-title>Ruby 安裝 debugger package 發生 No source for ruby 錯誤</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 27, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;67&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/12343631243/ title="Ruby_logo by appleboy46, on Flickr"><img style=max-height:200px src="https://i2.wp.com/farm6.staticflickr.com/5492/12343631243_7bc052fa05.jpg?w=840&ssl=1" alt=Ruby_logo data-recalc-dims=1></a>
-</div>
-<p>當您在特定 <a href=https://www.ruby-lang.org/en/>Ruby</a> 版本下安裝 <a href=https://rubygems.org/gems/debugger>debugger gem</a> 套件，會碰到底下錯誤訊息</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>Using debugger-ruby_core_source (1.2.4) 
-Installing debugger-linecache (1.2.4) with native extensions 
-Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native
-extension.
-<p>checking for vm_core.h&hellip; no
-checking for vm_core.h&hellip; no
-Makefile creation failed</p>
-<hr>
-<p>No source for ruby-2.0.0-p451 provided with debugger-ruby_core_source
-gem.
-**************************************************************************</pre></p>
-</div>
-<p>會發生此錯誤的最大原因是在 <code>debugger-ruby_core_source</code> 原始碼內，只有包含特定少數的 Headers，解決此錯誤也非常簡單，可以直接將目前的 ruby 版本 headers 安裝到 <code>debugger-ruby_core_source</code> 目錄內即可，透國 rake 就可以完成</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>$ cd /usr/local/rvm/gems/ruby-2.0.0-p451/gems/debugger-ruby_core_source-1.2.4/lib/debugger/ruby_core_source
-$ rake add_source VERSION=2.0.0-p451 --trace</pre>
-</div>
-<p>執行完成後，就可以回到原專案目錄透過 <code>bundle install</code> 繼續安裝套件。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ruby-on-rails/>Ruby on Rails</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/rubygems/>RubyGems</a>&nbsp;
 </div>
 </article>
 </div>

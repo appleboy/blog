@@ -103,6 +103,30 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/03/vim-%E6%83%B3%E5%A5%97%E7%94%A8-php-syntax-%E9%A1%8F%E8%89%B2%E6%96%BC-ros/>
+<h2 class=post-title>[Vim] 想套用 *.php syntax 顏色於 *.ros</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 16, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;37&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/4436671479/ title="Flickr 上 appleboy46 的 vim_header"><img src="https://i2.wp.com/farm5.static.flickr.com/4018/4436671479_0596c469d4_o.gif?resize=180%2C45&ssl=1" alt=vim_header data-recalc-dims=1></a> <a href=http://www.vim.org/>Vim</a> 是一套強大的編輯器，它分佈於各大 UNIX systems，安裝好一套 UNIX 系統，預設就是 Vi 編輯器(<a href=http://www.freebsd.org>FreeBSD</a> 預設是 ee)，相當好用，他也支援各種語言的 syntax，讓您在編輯檔案能夠看到各種不同顏色，在 FreeBSD 底下可以去看 /usr/local/share/vim/vim64/syntax/ 該資料夾支援各種語言，例如 PHP、Ruby、css、html、java、C/C++…等，假設今天我們想要 .ros 的副檔名需要用 php.vim syntax 來開啟，就必須做底下設定： 執行底下：</p>
+<pre class="brush: bash; title: ; notranslate" title>mkdri ~/.vim
+vi ~/.vim/filetype.vim </pre> 寫入 filetype.vim 資訊 if version < 600 syntax clear elseif exists("b:current_syntax") finish endif augroup filetypedetect au! BufRead,BufNewFile *.ros setfiletype php augroup END[/code] ps. on freebsd 7.1-RELEASE-p11 vim version 6.4.9 reference:
+<p><a href=http://fourdollars.blogspot.com/2009/05/vim-markdown-syntax.html>Vim 套用 Markdown syntax</a> <a href=http://blog.longwin.com.tw/archives/000021.html>vi 設定</a></p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/vim/>Vim</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/03/freebsd-denyhosts-%E8%A8%AD%E5%AE%9A%E5%9C%A8-hosts-allow-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85/>
 <h2 class=post-title>[FreeBSD] DenyHosts 設定在 hosts.allow 注意事項</h2>
 </a>
@@ -299,27 +323,6 @@ Ubuntu 6.10 (Edgy Eft) 之後使用 Upstart 代替原來的 sysinit，而 init �
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/01/how-to-install-google-web-toolkit-with-eclipse/>
-<h2 class=post-title>How to install Google Web Toolkit with Eclipse</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 17, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;85&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-Google Web Toolkit (簡稱：GWT)是先以 Java 語言編寫 AJAX 應用程式網頁，然後在編譯成最佳化 Javascript，不但幫助了剛入門 Javascrit，然後又需要撰寫 AJAX 應用程式的工程師很大的幫助，不僅如此，Google App Engine 也提供了 Java 跟 Python 環境，整合了 GWT，讓您可以上傳到 GAE 的空間進行測試，GWT 目的是產生具有高效能性的 Web 應用程式，您不需要是 Javascript 專家也可以做到，GWT 用在 Google 相當多的服務，例如 Google Wave, 新版的 Google AdWords 可以參考這裡更多實際範例。它是開放姓原始碼(open source)，完全免費，您也可以參與 GWT 的開發。 Google Plugin for Eclipse 支援 Google Web Toolkit 跟 Google App Engine 開發，我們可以直接安裝此 Plugin 就可以開始上手 GWT，當製作完成之後，就可以上傳到 GAE，直接打開提供的網址就可以看到成果了。 首先安裝 Google Plugin for Eclipse，先去下載 Eclipse 3.5 (Galileo) 最新版，打開 Eclipse 1. 選擇 Help -> Install New Software 2.
-<a href=https://blog.wu-boy.com/2010/01/how-to-install-google-web-toolkit-with-eclipse/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/google-web-toolkit/>Google Web Toolkit</a>&nbsp;
 </div>
 </article>
 </div>

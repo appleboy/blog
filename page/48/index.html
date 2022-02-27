@@ -116,6 +116,25 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/04/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B-ram-disk-%E5%9C%A8-ubuntu-%E4%B8%8A%E9%9D%A2/>
+<h2 class=post-title>如何建立 Ram Disk 在 Ubuntu 上面</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on April 14, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;52&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><strong>Update: 此篇文章建立 RAM DISK 還是用原來 3G 記憶體，而不是用 4G 裡面的 1G，感謝<a href=http://profiles.google.com/uijin.tw>威阿</a>提醒修正</strong> 之前拜了一台筆電 <a href=http://www.techbang.com.tw/posts/3108-toshiba-portege-r700-evaluation>Toshiba Portege R700</a>，拿到電腦馬上二話不說，灌成 <a href=http://www.ubuntu-tw.org/>Ubuntu 10.10</a> 32 位元，但是筆電有 4G 的記憶體，32位元只能支援到 3G，<del datetime=2011-04-15T01:47:52+00:00>所以剩下 1G 就拿來當作是 Ram Disk，反正不用白不用</del>，可以把臨時要用且關機不需要的檔案或程式丟到 RAM DISK，如果把 FireFox 的 cache 資料放在裡面應該會蠻快的，底下紀錄如何開機就直接掛上 1G 的 Ram Disk。 兩個步驟就可以了：</p>
+<pre class="brush: bash; title: ; notranslate" title>mkdir -p /media/ramdisk
+mount -t tmpfs -o size=1024M tmpfs /media/ramdisk</pre> 把上面寫到
+<p><strong><span style=color:green>/etc/rc.local</span></strong> 檔案，這樣開機就會自動把 RAM Disk 掛上去。</p>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/04/codeigniter-2-0-2-released/>
 <h2 class=post-title>CodeIgniter 2.0.2 Released</h2>
 </a>
@@ -482,42 +501,6 @@ module_exit(exit_modules);</pre>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/c/c++/>C/C++</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/03/%E7%94%A8-js-%E6%88%96-php-%E5%88%A4%E6%96%B7-android-%E6%89%8B%E6%A9%9F%E4%B8%8A%E7%B6%B2/>
-<h2 class=post-title>用 js 或 php 判斷 Android 手機上網</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 5, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;47&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>之前寫了一篇 <a href=http://blog.wu-boy.com/2010/10/jquery-%E5%81%B5%E6%B8%AC%E7%80%8F%E8%A6%BD%E5%99%A8%E7%89%88%E6%9C%AC-%E4%BD%9C%E6%A5%AD%E7%B3%BB%E7%B5%B1os-detection/>jQuery 偵測瀏覽器版本, 作業系統(OS detection)</a>，這次可以來加上 Android 手機版本，其實就是分析瀏覽器 <a href=http://en.wikipedia.org/wiki/User_agent>User Agent</a> 來達到目的，底下分享 PHP 跟 Javascript 作法</p>
-<h3 id=php-方法>PHP 方法</h3>
-<pre class="brush: php; title: ; notranslate" title>if(stripos($_SERVER['HTTP_USER_AGENT'],'Android') !== false) 
-{
-	header('Location: http://android.xxx.com');
-	exit();
-}</pre>
-<h3 id=javascript-方法>Javascript 方法</h3>
-<pre class="brush: jscript; title: ; notranslate" title>if(navigator.userAgent.match(/Android/i))
-{
-	window.location = 'http://android.xxx.com';
-}</pre>
-<h3 id=apache-htaccess-方法-用>Apache .htaccess 方法 用</h3>
-<p><a href=http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html>Apache mod rewrite</a> 方法</p>
-<pre class="brush: bash; title: ; notranslate" title>RewriteCond %{HTTP_USER_AGENT} ^.*Android.*$
-RewriteRule ^(.*)$ http://android.xxx.com [R=301]
-</pre>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>
 </div>

@@ -103,6 +103,49 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2014/02/ruby-debugger-and-no-source-for-ruby-error/>
+<h2 class=post-title>Ruby 安裝 debugger package 發生 No source for ruby 錯誤</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on February 27, 2014
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;67&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/12343631243/ title="Ruby_logo by appleboy46, on Flickr"><img style=max-height:200px src="https://i2.wp.com/farm6.staticflickr.com/5492/12343631243_7bc052fa05.jpg?w=840&ssl=1" alt=Ruby_logo data-recalc-dims=1></a>
+</div>
+<p>當您在特定 <a href=https://www.ruby-lang.org/en/>Ruby</a> 版本下安裝 <a href=https://rubygems.org/gems/debugger>debugger gem</a> 套件，會碰到底下錯誤訊息</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>Using debugger-ruby_core_source (1.2.4) 
+Installing debugger-linecache (1.2.4) with native extensions 
+Gem::Installer::ExtensionBuildError: ERROR: Failed to build gem native
+extension.
+<p>checking for vm_core.h&hellip; no
+checking for vm_core.h&hellip; no
+Makefile creation failed</p>
+<hr>
+<p>No source for ruby-2.0.0-p451 provided with debugger-ruby_core_source
+gem.
+**************************************************************************</pre></p>
+</div>
+<p>會發生此錯誤的最大原因是在 <code>debugger-ruby_core_source</code> 原始碼內，只有包含特定少數的 Headers，解決此錯誤也非常簡單，可以直接將目前的 ruby 版本 headers 安裝到 <code>debugger-ruby_core_source</code> 目錄內即可，透國 rake 就可以完成</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ cd /usr/local/rvm/gems/ruby-2.0.0-p451/gems/debugger-ruby_core_source-1.2.4/lib/debugger/ruby_core_source
+$ rake add_source VERSION=2.0.0-p451 --trace</pre>
+</div>
+<p>執行完成後，就可以回到原專案目錄透過 <code>bundle install</code> 繼續安裝套件。</p>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ruby-on-rails/>Ruby on Rails</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/rubygems/>RubyGems</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2014/02/laravel-memcached-cross-domain-session/>
 <h2 class=post-title>Laravel 搭配 Memcached Cross Domain Session</h2>
 </a>
@@ -372,32 +415,6 @@ fatal: index-pack failed</pre>
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/percona-xtradb-cluster/>Percona XtraDB Cluster</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/xtradb-cluster/>XtraDB Cluster</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2014/01/percona-xtradb-cluster-reference-architecture-with-haproxy/>
-<h2 class=post-title>Percona XtraDB Cluster 搭配 HAProxy</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on January 19, 2014
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;745&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/12023069753/ title="percona by appleboy46, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3820/12023069753_de60d0c86d_m.jpg?resize=240%2C234&ssl=1" alt=percona data-recalc-dims=1></a>
-</div>
-<p>本篇文章紀錄安裝 <a href=http://www.percona.com/software/percona-xtradb-cluster>Percona XtraDB Cluster</a> (簡稱 PXC) 及搭配 <a href=http://haproxy.1wt.eu/>HAProxy</a> 做分散流量系統，其實在業界已經很常看到 HAProxy + MySQL Cluster Database 解決方案，HAProxy 幫您解決負載平衡，並且偵測系統是否存活，管理者也就不用擔心 MySQL 服務是否會掛掉。本篇會著重於 HAProxy 設定部份，並且紀錄每一步安裝步驟。之前本作者寫過一篇 <a href=http://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication/>Galera Cluster for MySQL Multi-master Replication</a>，也可以參考。今天測試系統都會以 <a href=http://www.centos.org/>CentOS</a> 為主，各位讀者可以直接開 <a href=http://aws.amazon.com/ec2/>Amazone EC2</a> 來測試，測試完成再關閉即可。</p>
-<a href=https://blog.wu-boy.com/2014/01/percona-xtradb-cluster-reference-architecture-with-haproxy/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/percona-software/>Percona Software</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/percona-xtradb-cluster/>Percona XtraDB Cluster</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/xtradb-cluster/>XtraDB Cluster</a>&nbsp;
 </div>

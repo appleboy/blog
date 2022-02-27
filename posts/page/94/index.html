@@ -103,6 +103,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2006/11/freebsd-%E5%AE%89%E8%A3%9D%E5%9F%BA%E6%9C%ACmrtg%E4%B8%BB%E6%A9%9F%E6%B5%81%E9%87%8F%E7%B5%B1%E8%A8%88%E5%9C%96/>
+<h2 class=post-title>[FreeBSD] 安裝基本mrtg主機流量統計圖</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 8, 2006
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;117&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+主機資訊 FreeBSD 6.1-RELEASE 安裝步驟 cd /usr/ports/net-mgmt/net-snmp; make install clean
+cd /usr/ports/net-mgmt/mrtg; make install clean 這2個安裝好，其實基本上就已經可以使用了 在 /etc/rc.conf 加上 snmpd_enable="YES"
+snmpd_flags="-a -p /var/run/snmpd.pid"
+snmptrapd_enable="YES"
+snmptrapd_flags="-a -p /var/run/snmptrapd.pid" 修改 snmpd.conf 檔 目錄在 /usr/local/share/snmp/snmpd.conf com2sec local localhost public com2sec lan 192.168.100.0/24 public group RWGroup v1 local group ROGroup v1 lan view all included .1 80 access RWGroup “” any noauth prefix all all all access ROGroup “” any noauth prefix all none none 紅色部份，盡量不要用 public ，因為這樣別人可以猜到你的mrtg設定 修改好存檔
+<a href=https://blog.wu-boy.com/2006/11/freebsd-%E5%AE%89%E8%A3%9D%E5%9F%BA%E6%9C%ACmrtg%E4%B8%BB%E6%A9%9F%E6%B5%81%E9%87%8F%E7%B5%B1%E8%A8%88%E5%9C%96/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mrtg/>mrtg</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/snmp/>snmp</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2006/11/freebsd-%E5%AE%89%E8%A3%9D-sshit-%E8%A8%AD%E5%AE%9A%E6%95%99%E5%AD%B8/>
 <h2 class=post-title>[FreeBSD] 安裝 sshit 設定教學</h2>
 </a>
@@ -340,43 +366,6 @@ core file size (blocks, -c) 0 data seg size (kbytes, -d) unlimited file size (bl
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mrtg/>mrtg</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/snmp/>snmp</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2006/09/freebsd-proftpd-ssl-%E8%99%9B%E6%93%AC%E5%B8%B3%E8%99%9F%E8%A8%AD%E5%AE%9A%E5%AE%89%E8%A3%9D/>
-<h2 class=post-title>[FreeBSD] Proftpd + SSL 虛擬帳號設定安裝</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 22, 2006
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;53&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>系統 ubuntu 6.06 + proftpd 1.2.10</p>
-<pre class="brush: bash; title: ; notranslate" title>TLSEngine on
-TLSLog /var/log/proftpd-tls.log
-TLSProtocol TLSv1
-TLSRequired on
-TLSRSACertificateFile /etc/proftpd/HostCA.crt
-TLSRSACertificateKeyFile /etc/proftpd/HostCA.key
-TLSCACertificateFile /etc/proftpd/RootCA.crt
-TLSVerifyClient off</pre> 虛擬帳號實做
-<pre class="brush: bash; title: ; notranslate" title>AuthUserFile /etc/proftpd/proftpd.passwd
-AuthGroupFile /etc/proftpd/proftpd.group
-SystemLog /etc/proftpd/proftpd.syslog 
-
-TransferLog /var/log/xferlog
-LogFormat awstats "%t %h %u %m %f %s %b"
-ExtendedLog /var/log/xferlog read,write awstats</pre> 在linux底下如何新增帳號：
-<pre class="brush: bash; title: ; notranslate" title>ftpasswd --passwd --file=/etc/proftpd/proftpd.passwd --name=test --uid=2000 --gid=1001 --home=/home/ftp --shell=/bin/false</pre>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/proftpd/>proftpd</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
 </div>
 </article>
 </div>

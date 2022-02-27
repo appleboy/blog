@@ -103,6 +103,34 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2012/10/php-mvc-framework-nginx-php-fpm/>
+<h2 class=post-title>PHP MVC Framework 搭配 Nginx + PHP-FPM 設定檔</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on October 8, 2012
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;302&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6248708214/ title="Laravel PHP Framework by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&ssl=1" alt="Laravel PHP Framework" data-recalc-dims=1></a>
+</div> 相信大家都知道
+<p><a href=http://nginx.com/ target=_blank>Nginx</a> 搭配 <a href=http://php-fpm.org/ target=_blank>PHP-FPM</a> 用起來效能還不錯，這次來筆記如何設定 Nginx 去除 PHP MVC Framework 討厭的 index.php 字串，不管是 <a href=http://laravel.com/ target=_blank>Laravel</a> 或 <a href=http://codeigniter.org.tw target=_blank>CodeIgniter</a> 教學文件都是在 <a href=http://www.apache.org/ target=_blank>Apache</a> 設定 <a href=http://en.wikipedia.org/wiki/Htaccess target=_blank>.htaccess</a> 來達成 Cleaner URL，Apache 最大好處支援 .htaccess，但是 Nginx 也有強大的效能，此篇紀錄如何設定 Nginx 達成 <a href=http://httpd.apache.org/docs/2.2/mod/mod_rewrite.html target=_blank>mod_rewrite</a> 效果。</p>
+<a href=https://blog.wu-boy.com/2012/10/php-mvc-framework-nginx-php-fpm/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php-fpm/>php-fpm</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2012/09/sshfs-filesystem-for-windows/>
 <h2 class=post-title>Windows 下安裝 sshfs</h2>
 </a>
@@ -333,36 +361,6 @@ $xls->generateXML("test");</pre> 結論就是殺雞焉用牛刀，就這個簡�
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/mp3/>MP3</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/ubuntu/>Ubuntu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2012/07/about-php-fig-group-coding-style-guide/>
-<h2 class=post-title>關於 PHP FIG Group 所制定的 PSR-0, PSR-1, PSR-2</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 23, 2012
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;83&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>上禮拜寫了一篇 <a href=http://blog.wu-boy.com/2012/07/how-to-write-maintainable-php-source-code/ target=_blank>寫出好維護的 PHP 程式碼</a>，看到 <a href=http://blog.gslin.org/ target=_blank>gslin 大神</a>回應了一篇 <a href=http://blog.gslin.org/archives/2012/07/23/2928/%E9%97%9C%E6%96%BC%E5%8F%AF%E7%B6%AD%E8%AD%B7%E7%9A%84-php-%E5%B0%88%E6%A1%88%EF%BC%9Aphp-fig-%E7%9A%84-psr-0%E3%80%81psr-1%E3%80%81psr-2/ target=_blank>關於可維護的 PHP 專案：PHP-FIG 的 PSR-0、PSR-1、PSR-2</a>，其實我已經關注 <a href=http://www.php-fig.org/ target=_blank>PHP FIG</a> 有一陣子了，FIG 所定義的三份文件 PSR-0 (<a href=https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md target=_blank>Auto loading Standard</a>), PSR-1 (<a href=https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md target=_blank>Basic Coding Standard</a>), PSR-2 <a href=https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md target=_blank>(Coding Style Standard</a>) 寫的非常清楚，目的就是讓 PHP Open Source 專案有共同的 Coding Standard，方便大家共同開發。所以上禮拜提到的投影片內容有大部份參考了這份文件，裏面的內容比較不同的地方就差於 Control Structures 部份，舉個簡單例子： 寫 if 條件式，網路上只有兩種寫法 &lt;?php
-if ($a == $b) {
-&mldr;&mldr;
-}[/code]</p>
-<p>另外一種寫法</p>
-<p>[code lang=&ldquo;php&rdquo;]&lt;?php
-if ($a == $b)
-{
-&mldr;&mldr;
-}[/code]</p>
-<a href=https://blog.wu-boy.com/2012/07/about-php-fig-group-coding-style-guide/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php-fig/>php-fig</a>&nbsp;
 </div>
 </article>
 </div>

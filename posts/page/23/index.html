@@ -103,6 +103,39 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>
+<h2 class=post-title>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 14, 2015
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;51&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6248708214/ title="Laravel PHP Framework by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&ssl=1" alt="Laravel PHP Framework" data-recalc-dims=1></a>
+</div>
+<p>昨天半夜看到 <a href=https://laravel-news.com>Laravel News</a> 發佈<a href=https://laravel-news.com/2015/11/laravel-homestead-now-with-mysql-5-7-and-node-5-0/>支援 MySQL 5.7 和 Node 5.0 的消息</a>，作者已經將 Homestead Vagrant box 更新上最新版了，如果你是用 PHP7 版本，請更新到 0.1.1 (laravel/homestead-7 branch)，如果非用 PHP 5.7 請更新到 0.3.3 版本，此 Box 更新兩個項目，就是支援 <a href=https://www.mysql.com/>MySQL</a> 5.7 版本，及 <a href=https://nodejs.org/en/>NodeJS</a> 5.0 版本，已經非常新的版號，透過底下指令就可以更新 Local 端的 Box Image:</p>
+<div>
+<pre class="brush: bash; title: ; notranslate" title>$ vagrant box update</pre>
+</div>
+<p>MySQL 5.7 版本支援了 <a href=https://dev.mysql.com/doc/refman/5.7/en/json.html>JSON Format</a> 真是太令人振奮了，另外此 Box 也是為了將來要釋出 <a href=https://laravel-news.com/2015/11/laravel-5-2-a-look-at-whats-coming/>Laravel 5.2</a> 版本搭配用。最後補上升級後版本截圖</p>
+<div style="margin:0 auto;text-align:center">
+<a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/22583759038/in/datetaken-public/ title="Screen Shot 2015-11-14 at 2.41.31 PM"><img src="https://i1.wp.com/farm1.staticflickr.com/759/22583759038_e9558fda0c_z.jpg?resize=640%2C178&ssl=1" alt="Screen Shot 2015-11-14 at 2.41.31 PM" data-recalc-dims=1></a>
+</div>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/homestead/>Homestead</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/laravel-homestead/>Laravel Homestead</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/laravel-news/>Laravel news</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2015/11/git-tips-don-t-commit-commented-out-code/>
 <h2 class=post-title>Git tips 請不要 commit 已經註解的程式碼</h2>
 </a>
@@ -381,53 +414,6 @@ mysql -uhomestead -psecret -e "CREATE DATABASE IF NOT EXISTS \`$DB\` DEFAULT CHA
 <a href=https://blog.wu-boy.com/tags/homestead/>Homestead</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/laravel-homestead/>Laravel Homestead</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2015/07/undo-git-reset-hard/>
-<h2 class=post-title>git tips 找尋遺失的 commit 紀錄</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2015
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;118&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/13158675193/ title="github-logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm3.staticflickr.com/2238/13158675193_2892abac95_n.jpg?w=840&ssl=1" alt=github-logo data-recalc-dims=1></a></p>
-<p>個人每天常用的常用的三大 Git 指令分別是 <code>git reset</code>, <code>git pull</code>, <code>git rebase</code>，但是呢有時候手殘，常常把 git reset <code>--soft</code> 打成 git reset <code>--hard</code> 造成不可預期的錯誤，朋友圈內也有人常常問我該如何救不見的 commit，其實很容易，git 對於每隔操作後產生的 commit 都會存放在 Local 端，所以基本上不用擔心 commit 記錄會不見，有一種狀況會永遠消失，那就是假設尚未 commit 目前修正過的檔案，然後下 git reset <code>--hard</code> HEAD，這樣的話我想誰都無法幫忙把已修正過的檔案找回來了，原因是連 git 都不知道你改了什麼啊。所以為了避免這情況方生，個人建議開發者，只要開發到一定的階段，務必要下一個 commit 當作記錄，但是你會說，這樣功能開發完後，就會有很多個 commit 非常不好看，這時候可以嘗試 git rebase 將整個功能合併成一個 commit，這樣其他開發者 review 時就會非常清楚。</p>
-<p>現在的問題是如果開發者不小心下了 <code>git reset --hard HEAD^</code>，上一個 commit 就會消失了，這時候該如何救回來呢？答案可以使用 <code>git reflog</code> 指令然觀看開發者全部 git 的操作記錄，裡面詳細記載你曾經下過的 git 指令</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ git reflog
-794be8b HEAD@{0}: reset: moving to HEAD^
-5e2be6f HEAD@{1}: commit (amend): update
-bfa593c HEAD@{2}: cherry-pick: update
-794be8b HEAD@{3}: reset: moving to 649c658
-794be8b HEAD@{4}: reset: moving to HEAD^
-649c658 HEAD@{5}: commit: update
-794be8b HEAD@{6}: commit (initial): addd
-</code></pre></td></tr></table>
-</div>
-</div><p>上面可以看到之前 commit 的記錄，接著可以透過 <code>git reset --hard xxxxx</code>，或者是用 <code>git cherry-pick xxxxx</code> 將上一個 commit ID 記錄抓回來即可。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-reflog/>git reflog</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-reset/>git reset</a>&nbsp;
 </div>
 </article>
 </div>

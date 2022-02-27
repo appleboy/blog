@@ -103,6 +103,28 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/>
+<h2 class=post-title>Go 語言的 graphQL-go 套件正式支援 Concurrent Resolvers</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 16, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;601&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+要在 Go 語言寫 graphQL，大家一定對 graphql-go 不陌生，討論度最高的套件，但是我先說，雖然討論度是最高，但是效能是最差的，如果大家很要求效能，可以先參考此專案，裡面有目前 Go 語言的 graphQL 套件比較效能，有機會在寫另外一篇介紹。最近 graphql-go 的作者把 Concurrent Resolvers 的解法寫了一篇 Issue 來討論，最終採用了 Resolver returns a Thunk 方式來解決 Concurrent 問題，這個 PR 沒有用到額外的 goroutines，使用方式也最簡單
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 "pullRequests": &graphql.Field{ Type: graphql.NewList(PullRequestType), Resolve: func(p graphql.ResolveParams) (interface{}, error) { ch := make(chan []PullRequest) // Concurrent work via Goroutines. go func() { // Async work to obtain pullRequests.
+<a href=https://blog.wu-boy.com/2018/09/graphql-go-library-support-concurrent-resolvers/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/graphql/>GraphQL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/08/escape-url-rawquery-on-parse-in-golang/>
 <h2 class=post-title>在 Go 語言內的 URL RawQuery 的改變</h2>
 </a>
@@ -348,27 +370,6 @@
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mongodb/>mongodb</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/transaction/>transaction</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/02/simply-output-go-html-template-execution-to-strings/>
-<h2 class=post-title>將 Go Html Template 存入 String 變數</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 28, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;109&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
-<p>在 <a href=https://golang.org/>Go 語言</a>內通常都將 <a href=https://golang.org/pkg/text/template/>Html Temaple</a> 寫入到 <code>io.Writer interface</code> 像是 <code>*http.ResponseWriter</code>，但是有些情境需要將 Template 寫入到 String 變數內，例如實作簡訊 Template，這時候需要將 Html Temaple 轉成 String。該如何實作，非常簡單，只需要在任意變數內實作 <code>io.Writer interface</code> 即可，而 String 該如何轉換呢？可以使用 buffer&rsquo;s pointer</p>
-<a href=https://blog.wu-boy.com/2018/02/simply-output-go-html-template-execution-to-strings/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

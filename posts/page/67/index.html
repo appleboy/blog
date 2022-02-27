@@ -103,6 +103,27 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/01/googleoffline-gmail-%E6%96%B0%E5%8A%9F%E8%83%BD/>
+<h2 class=post-title>[Google]Offline Gmail 新功能</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 29, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;124&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>今天看到 <a href="http://mail.google.com/mail/?hl=zh-tw">Gmail</a> 的新功能：<a href=http://googlesystem.blogspot.com/2009/01/offline-gmail.html>Offline Gmail</a> 可以讓使用者離線瀏覽自己的 Gmail 信箱，看到 <a href=http://gmailblog.blogspot.com/2009/01/new-in-labs-offline-gmail.html>New in Labs: Offline Gmail</a> 這篇，裡面有一個影片非常的詳細介紹了這個 Offline Gmail 的好處，它利用了 <a href=http://gears.google.com/>Gears</a> 來下載您的 mail 資料放於 local cache，這 cache 可以自動地 synchronized Gmail’s Server，當您失去了網路連線，Gmail 就會自動切換到 offline mode，然後轉換存取到您的電腦硬碟，來取代網路連線的模式。 底下是 google 的一段影片</p>
+<a href=https://blog.wu-boy.com/2009/01/googleoffline-gmail-%E6%96%B0%E5%8A%9F%E8%83%BD/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/gmail/>Gmail</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/google/>google</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/01/mysqlleft-right-inner-outer-join-%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/>
 <h2 class=post-title>[MySQL]left, right, inner, outer join 使用方法</h2>
 </a>
@@ -370,40 +391,6 @@ log_bin                 = /var/log/mysql/mysql-bin.log</pre>
 <a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/12/freebsd%E5%88%A9%E7%94%A8-denyhosts-%E8%BB%9F%E9%AB%94%E6%93%8B%E6%8E%89%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3-ssh-%E7%9A%84%E4%BD%BF%E7%94%A8%E8%80%85/>
-<h2 class=post-title>[FreeBSD]利用 DenyHosts 軟體擋掉暴力破解 ssh 的使用者</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 26, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;310&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>不管是架設好 Linux 跟 <a href=http://www.freebsd.org/>FreeBSD</a> 通常都會有國外的 hacker 來 try 機器的 SSH 帳號密碼，我想這是很正常的，網路上也提供很多方法來分析 Log 檔，<a href=http://www.freebsd.org/>FreeBSD</a>：/var/log/auth.log，我可以分析檔案，然後再利用 firewall like ipfw or pf 的方式來達到，或者是利用寫到 /etc/hosts.deny 來達到 Block 的功能，網路上有很多工具可以用，例如 <a href=http://denyhosts.sourceforge.net/>DenyHosts</a>，<a href=http://sshguard.sourceforge.net/>sshguard</a> 或者是 <a href=http://anp.ath.cx/sshit/>sshit</a>，可以參考我之前寫的一篇<a href=http://blog.wu-boy.com/2006/11/04/31/>利用 sshit 來達到阻擋 ssh 使用者</a>，然而今天來介紹一下 DenyHosts 再 FreeBSD 底下如何設定，還蠻方便的。 首先利用 ports 安裝，<a href=http://denyhosts.sourceforge.net/>DenyHosts</a> 是利用 <a href=http://www.python.org/>python</a> 的程式語言寫出來的：</p>
-<pre class="brush: bash; title: ; notranslate" title>Port:   denyhosts-2.6_2
-Path:   /usr/ports/security/denyhosts
-Info:   Script to thwart ssh attacks
-Maint:  janos.mohacsi@bsd.hu
-B-deps: python25-2.5.2_3
-R-deps: python25-2.5.2_3
-WWW:    http://denyhosts.sourceforge.net/
-
-/* 利用 ports 安裝 */
-cd /usr/ports/security/denyhosts; make install clean
-</pre>
-<a href=https://blog.wu-boy.com/2008/12/freebsd%E5%88%A9%E7%94%A8-denyhosts-%E8%BB%9F%E9%AB%94%E6%93%8B%E6%8E%89%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3-ssh-%E7%9A%84%E4%BD%BF%E7%94%A8%E8%80%85/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/denyhost/>DenyHost</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ssh/>SSH</a>&nbsp;
 </div>
 </article>
 </div>

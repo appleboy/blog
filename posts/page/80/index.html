@@ -103,6 +103,55 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/03/java-%E5%88%A4%E6%96%B7%E5%AD%97%E4%B8%B2%E6%98%AF%E5%90%A6%E6%98%AF%E6%95%B4%E6%95%B8/>
+<h2 class=post-title>[Java] 判斷字串是否是整數</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 5, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;303&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>有時候必須知道輸入的字串是否是整數，如果不是的話，就要重新輸入，這有兩種作法 第一種是使用 try … catch … finally 的方法，如下</p>
+<pre class="brush: java; title: ; notranslate" title>public class test
+{ 
+	public static void main(String args[])
+  {
+    BufferedReader buf = new BufferedReader(new InputStreamReader(System.in)); 
+    try{
+      System.out.print("請輸入你要的數字:");
+      int test = Integer.parseInt(buf.readLine()); 
+    }
+    catch(ArrayIndexOutOfBoundsException e)
+    {
+      System.out.println(e.toString() + "陣列程式發生錯誤");  
+    }
+    catch(ArithmeticException e)
+    {
+      System.out.println(e.toString() + "數學發生錯誤");  
+    }
+    catch(Exception e)
+    {
+      System.out.println(e.toString() + "程式發生錯誤");
+    }
+    finally
+    {
+      System.out.println("執行成功");  
+    }
+	
+  }
+}
+</pre> 另外一種方法，是利用 while 然後利用 Character.isDigit 的方法
+<a href=https://blog.wu-boy.com/2008/03/java-%E5%88%A4%E6%96%B7%E5%AD%97%E4%B8%B2%E6%98%AF%E5%90%A6%E6%98%AF%E6%95%B4%E6%95%B8/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/java/>Java</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/03/%E4%B8%AD%E6%AD%A3%E5%A4%A7%E5%AD%B8-%E4%B8%8A%E8%AA%B2%E7%84%A1%E8%81%8A%E6%8B%8D/>
 <h2 class=post-title>[中正大學] 上課無聊拍</h2>
 </a>
@@ -337,23 +386,6 @@ public class runstart{
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E8%BD%89%E9%8C%84/>轉錄</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/02/%E7%94%9F%E6%B4%BB%E6%97%A5%E8%A8%98-%E6%96%B0%E6%89%8B%E6%A9%9F-benq-siemens-s88/>
-<h2 class=post-title>[生活日記] 新手機 BenQ-Siemens S88</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 18, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;9&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="http://pic.wu-boy.com/displayimage.php?pos=-2052"><img src="https://i1.wp.com/pic.wu-boy.com/albums/userpics/10002/normal_0214220233.JPG?w=300" border=0 alt="Click to view full size image" data-recalc-dims=1></a></p>
-<a href=https://blog.wu-boy.com/2008/02/%E7%94%9F%E6%B4%BB%E6%97%A5%E8%A8%98-%E6%96%B0%E6%89%8B%E6%A9%9F-benq-siemens-s88/ class=post-read-more>[Read More]</a>
 </div>
 </article>
 </div>

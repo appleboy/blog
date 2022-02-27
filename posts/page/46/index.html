@@ -103,6 +103,48 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E8%A8%8E-codeigniter-input-class-%E6%A0%B8%E5%BF%83%E7%A8%8B%E5%BC%8F%E6%B5%81%E7%A8%8B/>
+<h2 class=post-title>深入探討 CodeIgniter Input Class 核心程式流程</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on August 3, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;458&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;width:100%;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/4928689646/ title="codeigniter_2 by appleboy46, on Flickr"><img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?resize=137%2C189&ssl=1" alt=codeigniter_2 data-recalc-dims=1></a>
+</div> 為什麼會寫到這篇呢？當然是有網友希望可以幫他解決困難，由於問題的解答需要比較長的文章解釋，就寫出這一篇啦。在我 2009 年開始推廣到現在，相信在台灣已經有不少人開始使用
+<p><a href=http://codeigniter.org.tw/ target=_blank>CodeIgniter</a>，自己覺得非常感動 XD，也非常欣慰，希望把好東西推廣給大家知道。廢話不多說，先來說說問題點，先前發表的一篇 <a href=http://blog.wu-boy.com/2010/08/codeigniter-利用-jquery-簡易驗證使用者帳號email/ target=_blank>[CodeIgniter] 利用 jQuery 簡易驗證使用者帳號/Email</a> 最後有人<a href=http://blog.wu-boy.com/2010/08/codeigniter-%E5%88%A9%E7%94%A8-jquery-%E7%B0%A1%E6%98%93%E9%A9%97%E8%AD%89%E4%BD%BF%E7%94%A8%E8%80%85%E5%B8%B3%E8%99%9Femail/#comment-275946631 target=_blank>留言</a>針對 input->post() 在中文官網上面的 <a href=http://codeigniter.org.tw/user_guide/libraries/input.html target=_blank>Input Class 教學</a>有些疑慮，底下我先來說明網友的問題點。</p>
+<h3 id=input-post-如果為空則塞進去資料庫竟然是-0-該網友引用了-input-class-中文文件的內容>input->post 如果為空，則塞進去資料庫竟然是 0 該網友引用了 Input Class 中文文件的內容</h3>
+<blockquote>
+<p>使用 POST, COOKIE, 或 SERVER 資料CodeIgniter 提供三個讓你取出 POST, COOKIE 或 SERVER 中項目的補助函數。使用這些函數的主要便利性在於, 它們會確認並檢視是否這些項目已被設定並且在未設定時回傳 false (boolean) , 而不是直接取出 ($_POST[&lsquo;something&rsquo;])，官方範例↓這讓你可以方便地使用資料而不必預先測試它們是否存在。不然, 通常你可能會像這樣做：if ( ! isset($_POST[&lsquo;something&rsquo;])) { $something = FALSE; } else { $something = $_POST[&lsquo;something&rsquo;]; } 網友敘述:</p>
+</blockquote>
+<blockquote>
+<p>但是為什麼還是為設定為0呢??這應該是檢查資料有沒有被設定而已，那我如果沒有輸入，又怎麼會出現 0 呢?? 網友希望 $username = <span style=color:green>$this->input-post</span>(&ldquo;username&rdquo;); 能幫他判斷如果 username 沒有資料，就直接回傳 NULL，Insert 到資料庫時，應該是 NULL 而不是 0。</p>
+</blockquote>
+<h3 id=程式範例-網友其實沒有錯根據文件上顯示如果-something->程式範例 網友其實沒有錯，根據文件上顯示，如果 $something =</h3>
+<p><span style=color:green>$this->input->post</span>(&ldquo;something&rdquo;); 取值過後，如果系統沒有 <span style=color:green>$_POST[&lsquo;something&rsquo;]</span>，則會回傳 <span style=color:red>FALSE</span>，我猜網友在跟 model 作搭配的時候使用了底下的寫法來塞值進入資料庫:</p>
+<pre class="brush: php; title: ; notranslate" title>$data = array(
+    "username" => $this->input->post('username'),
+    "passwd" => $this->input->post('passwd'), 
+    "email" => $this->input->post('email'),
+);
+$this->load->model('members'); 
+$this->members->register($data);  
+</pre> 假設如果沒有 $_POST['email'] 的話，該欄位就會被設定為 0，原因很簡單，就是出在要塞值進入資料庫的時候，程式針對資料的型態判斷啦，底下從最開始取得
+<p><span style=color:green>$_POST</span> 資料開始說起。</p>
+<a href=https://blog.wu-boy.com/2011/08/%E6%B7%B1%E5%85%A5%E6%8E%A2%E8%A8%8E-codeigniter-input-class-%E6%A0%B8%E5%BF%83%E7%A8%8B%E5%BC%8F%E6%B5%81%E7%A8%8B/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/07/linux-geany-fuse/>
 <h2 class=post-title>Linux 程式開發編輯器 Geany + Fuse 遠端掛載</h2>
 </a>
@@ -370,31 +412,6 @@ error: Untracked working tree file &lsquo;XXXXXXXX&rsquo; would be overwritten b
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/svn/>svn</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/05/plurk-api-2-0-beta-%E5%87%BA%E4%BE%86%E4%BA%86-oauth-core-1-0a/>
-<h2 class=post-title>Plurk API 2.0 beta 出來了 (OAuth Core 1.0a)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 19, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;62&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>之前 <a href=http://www.plurk.com>Plurk</a> 剛推出 <a href=http://www.plurk.com/API/>API</a> 讓大家可以使用，當時蠻多使用者相繼推出各式語言的支援，像是 <a href=http://code.google.com/p/php-plurk-api/>php-plurk-api</a>: PHP implementation，而我也將此程式改寫到 <a href=https://github.com/appleboy/CodeIgniter-Plurk-API>CodeIgniter-Plurk-API</a>，然而現在官方又推出了 <a href=http://www.plurk.com/API/2/>Plurk API 2.0 beta</a>，不同的是 2.0 用了 <a href=http://zh.wikipedia.org/wiki/OAuth>OAuth</a> 保護個人隱私，它提供了標準讓開發者可以利用 OAuth 實做任何 application，噗浪官網也希望各位開發者可以儘快將 API 轉成 2.0，當然也是要額外<a href=http://www.plurk.com/PlurkApp/register>註冊 Plurk App</a>。 底下幾點是 API 2.0 跟原來 API 的差異處:</p>
-<ul>
-<li>Plurk API 2.0 不需要登入作認證，然而原來的 API 是基於 session base 做開發</li>
-<li>網址改變，用 <strong><span style=color:green><a href=http://www.plurk.com/APP/>http://www.plurk.com/APP/</a></span></strong> 取代原來的 <strong><span style=color:green><a href=http://www.plurk.com/API/>http://www.plurk.com/API/</a></span></strong></li>
-<li>現在每個 Plurk API 2.0 請求都會按照 OAuth Core 1.0a 標準</li>
-<li>所有 input/output 參數跟原來都是一樣，只是現在不需要 api_key 在參數里面 大家註冊之後，可以拿到一組 App Key，就可以開始使用了 ^^</li>
-</ul>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/plurk-api/>Plurk API</a>&nbsp;
 </div>
 </article>
 </div>

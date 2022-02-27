@@ -103,6 +103,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/05/plurk-api-2-0-beta-%E5%87%BA%E4%BE%86%E4%BA%86-oauth-core-1-0a/>
+<h2 class=post-title>Plurk API 2.0 beta 出來了 (OAuth Core 1.0a)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 19, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;62&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>之前 <a href=http://www.plurk.com>Plurk</a> 剛推出 <a href=http://www.plurk.com/API/>API</a> 讓大家可以使用，當時蠻多使用者相繼推出各式語言的支援，像是 <a href=http://code.google.com/p/php-plurk-api/>php-plurk-api</a>: PHP implementation，而我也將此程式改寫到 <a href=https://github.com/appleboy/CodeIgniter-Plurk-API>CodeIgniter-Plurk-API</a>，然而現在官方又推出了 <a href=http://www.plurk.com/API/2/>Plurk API 2.0 beta</a>，不同的是 2.0 用了 <a href=http://zh.wikipedia.org/wiki/OAuth>OAuth</a> 保護個人隱私，它提供了標準讓開發者可以利用 OAuth 實做任何 application，噗浪官網也希望各位開發者可以儘快將 API 轉成 2.0，當然也是要額外<a href=http://www.plurk.com/PlurkApp/register>註冊 Plurk App</a>。 底下幾點是 API 2.0 跟原來 API 的差異處:</p>
+<ul>
+<li>Plurk API 2.0 不需要登入作認證，然而原來的 API 是基於 session base 做開發</li>
+<li>網址改變，用 <strong><span style=color:green><a href=http://www.plurk.com/APP/>http://www.plurk.com/APP/</a></span></strong> 取代原來的 <strong><span style=color:green><a href=http://www.plurk.com/API/>http://www.plurk.com/API/</a></span></strong></li>
+<li>現在每個 Plurk API 2.0 請求都會按照 OAuth Core 1.0a 標準</li>
+<li>所有 input/output 參數跟原來都是一樣，只是現在不需要 api_key 在參數里面 大家註冊之後，可以拿到一組 App Key，就可以開始使用了 ^^</li>
+</ul>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/plurk-api/>Plurk API</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/05/%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%9D-amazon-ec2-lamp-%E7%92%B0%E5%A2%83-ec2-console/>
 <h2 class=post-title>快速安裝 Amazon EC2 LAMP 環境 (EC2 Console)</h2>
 </a>
@@ -349,25 +374,6 @@ export PAGER="most"</pre> 重點就在於 $LESS 必須加上
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/04/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B-ram-disk-%E5%9C%A8-ubuntu-%E4%B8%8A%E9%9D%A2/>
-<h2 class=post-title>如何建立 Ram Disk 在 Ubuntu 上面</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 14, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;52&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><strong>Update: 此篇文章建立 RAM DISK 還是用原來 3G 記憶體，而不是用 4G 裡面的 1G，感謝<a href=http://profiles.google.com/uijin.tw>威阿</a>提醒修正</strong> 之前拜了一台筆電 <a href=http://www.techbang.com.tw/posts/3108-toshiba-portege-r700-evaluation>Toshiba Portege R700</a>，拿到電腦馬上二話不說，灌成 <a href=http://www.ubuntu-tw.org/>Ubuntu 10.10</a> 32 位元，但是筆電有 4G 的記憶體，32位元只能支援到 3G，<del datetime=2011-04-15T01:47:52+00:00>所以剩下 1G 就拿來當作是 Ram Disk，反正不用白不用</del>，可以把臨時要用且關機不需要的檔案或程式丟到 RAM DISK，如果把 FireFox 的 cache 資料放在裡面應該會蠻快的，底下紀錄如何開機就直接掛上 1G 的 Ram Disk。 兩個步驟就可以了：</p>
-<pre class="brush: bash; title: ; notranslate" title>mkdir -p /media/ramdisk
-mount -t tmpfs -o size=1024M tmpfs /media/ramdisk</pre> 把上面寫到
-<p><strong><span style=color:green>/etc/rc.local</span></strong> 檔案，這樣開機就會自動把 RAM Disk 掛上去。</p>
 </div>
 </article>
 </div>

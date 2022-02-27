@@ -103,6 +103,33 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2006/11/linuxfreebsd-scp-%E4%B8%8A%E5%82%B3%E8%B7%9F%E4%B8%8B%E8%BC%89/>
+<h2 class=post-title>[Linux,FreeBSD] scp 上傳跟下載</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 25, 2006
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;23&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>上傳：</p>
+<blockquote>
+<p>scp -r -P 2500 /etc/crontab <a href=mailto:appleboy@hostname.com>appleboy@hostname.com</a>:/home/appleboy/ 下載：</p>
+</blockquote>
+<blockquote>
+<p>scp -r -P 2500 <a href=mailto:appleboy@hostname.com>appleboy@hostname.com</a>:/home/appleboy/crazy.sql . -r 遞迴 下載 -P ssh port 後面的點 . 你可以換成你想下載到你的哪個目錄</p>
+</blockquote>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/ssh/>SSH</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2006/11/test/>
 <h2 class=post-title>幸福專賣 NO.24</h2>
 </a>
@@ -295,32 +322,6 @@ DSCF0070 Hosted on Zooomr processor : 1 vendor_id : AuthenticAMD cpu family : 15
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/nctu/>nctu</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2006/11/freebsd-%E5%AE%89%E8%A3%9D%E5%9F%BA%E6%9C%ACmrtg%E4%B8%BB%E6%A9%9F%E6%B5%81%E9%87%8F%E7%B5%B1%E8%A8%88%E5%9C%96/>
-<h2 class=post-title>[FreeBSD] 安裝基本mrtg主機流量統計圖</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 8, 2006
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;117&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-主機資訊 FreeBSD 6.1-RELEASE 安裝步驟 cd /usr/ports/net-mgmt/net-snmp; make install clean
-cd /usr/ports/net-mgmt/mrtg; make install clean 這2個安裝好，其實基本上就已經可以使用了 在 /etc/rc.conf 加上 snmpd_enable="YES"
-snmpd_flags="-a -p /var/run/snmpd.pid"
-snmptrapd_enable="YES"
-snmptrapd_flags="-a -p /var/run/snmptrapd.pid" 修改 snmpd.conf 檔 目錄在 /usr/local/share/snmp/snmpd.conf com2sec local localhost public com2sec lan 192.168.100.0/24 public group RWGroup v1 local group ROGroup v1 lan view all included .1 80 access RWGroup “” any noauth prefix all all all access ROGroup “” any noauth prefix all none none 紅色部份，盡量不要用 public ，因為這樣別人可以猜到你的mrtg設定 修改好存檔
-<a href=https://blog.wu-boy.com/2006/11/freebsd-%E5%AE%89%E8%A3%9D%E5%9F%BA%E6%9C%ACmrtg%E4%B8%BB%E6%A9%9F%E6%B5%81%E9%87%8F%E7%B5%B1%E8%A8%88%E5%9C%96/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mrtg/>mrtg</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/snmp/>snmp</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,35 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2008/05/freebsdlinux-%E5%A6%82%E4%BD%95%E7%94%A8-mount-%E5%8F%96%E4%BB%A3-ln-%E5%8E%BB%E5%AF%A6%E7%8F%BE%E9%80%A3%E7%B5%90%E6%AA%94symbolic-link/>
+<h2 class=post-title>[FreeBSD&Linux] 如何用 mount 取代 ln 去實現連結檔(Symbolic Link)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on May 28, 2008
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;63&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p>我們在 Linux 或者是 FreeBSD 底下如何建立連結檔(Symbolic Link) ，也就是在 Windows 底下的捷徑啦，這個在鳥哥的網站都有寫的很清楚：<a href=http://linux.vbird.org/linux_basic/0230filesystem.php#ln>連結檔的介紹： ln</a>，最重要搞清楚 hard link 跟 soft link 就可以了，簡單來說，hard link 只可以針對檔案，不可以對目錄，但是 soft link 就是可以對目錄了，因為她就像 Windows 底下的捷徑，那在 Linux 底下，大家常常在玩 FTP，一定會碰到需要利用 Link 的方式，但是如果你利用 ln 的方式的話，連接ftp，會沒辦法回到上一層目錄，就是有 chroot 的問題，那底下是我發現可以解決的方法，其實這算是月經題了，只是我想記錄下來。 在 Linux 底下，就是利用 mount 的指令：</p>
+<pre class="brush: bash; title: ; notranslate" title>#
+# 就是利用 mount --bind
+#
+mount --bind olddir newdir</pre> 在 FreeBSD 底下，利用 mount_nulls 指令
+<pre class="brush: bash; title: ; notranslate" title>#
+#  mount_nullfs olddir newdir
+#
+mount_nullfs olddir newdir</pre> 很簡單吧，大概是這樣，FTP 就不會出現不能回到上一層目錄的問題了
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mount/>mount</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2008/05/linuxfreebsd-%E5%82%99%E4%BB%BD%E7%B3%BB%E7%B5%B1%E8%B3%87%E6%96%99%EF%BC%8Cmysql-%E8%B3%87%E6%96%99%E5%BA%AB%EF%BC%8Cpgsql-%E8%B3%87%E6%96%99%E5%BA%AB-shell-script/>
 <h2 class=post-title>[Linux&FreeBSD] 備份系統資料，MySQL 資料庫，PgSQL 資料庫的自動化 bash shell script 程式</h2>
 </a>
@@ -334,26 +363,6 @@ mount -o remount,rw /
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/%E7%BE%8E%E9%A3%9F/>美食</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2008/05/%E7%B6%B2%E8%B7%AF%E5%BB%A3%E5%91%8A-blogad-%E7%B6%B2%E8%B7%AF%E5%BB%A3%E5%91%8A%E6%B4%BB%E5%8B%95-%E6%9D%B1%E6%96%B9%E5%BF%AB%E7%B7%9A%E6%8B%89%E6%8B%89%E7%8E%8B/>
-<h2 class=post-title>[網路廣告] BlogAD 網路廣告活動 – 東方快線拉拉王</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 5, 2008
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;17&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/2466735184/ title="Default_01 (by appleboy46)"><img src="https://i0.wp.com/farm4.static.flickr.com/3235/2466735184_6a4fe834ec.jpg?resize=427%2C169&ssl=1" title="Default_01 (by appleboy46)" alt="Default_01 (by appleboy46)" data-recalc-dims=1></a> 之前在三月初的時候參加了 <a href=http://www.blogad.com.tw/>BlogAD</a> 舉辦網路廣告活動：東方快線拉拉王，我還為了宣傳這個，寫一篇如何參加廣告活動的教學：<a href=http://blog.wu-boy.com/2008/03/26/163/>[BlogAD活動] 活動報名教學</a>，當然這個活動，我覺得相當不錯，又可以讓自己賺錢，也可以讓網友們的得到一點利益，只要填寫問卷就可以拿到 5-10 的獎金，我覺得這樣你填寫問卷也會比較開心，不會想要去亂填，這樣感覺很不賴，然後在上禮拜收到 <a href=http://www.blogad.com.tw/>BlogAD</a> 發通知信給我，說我可能名列前三名，我以為我不太可能前三名說。</p>
-<a href=https://blog.wu-boy.com/2008/05/%E7%B6%B2%E8%B7%AF%E5%BB%A3%E5%91%8A-blogad-%E7%B6%B2%E8%B7%AF%E5%BB%A3%E5%91%8A%E6%B4%BB%E5%8B%95-%E6%9D%B1%E6%96%B9%E5%BF%AB%E7%B7%9A%E6%8B%89%E6%8B%89%E7%8E%8B/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/blogad/>BlogAD</a>&nbsp;
 </div>
 </article>
 </div>

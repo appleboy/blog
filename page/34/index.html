@@ -116,6 +116,36 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2013/07/nginx-port-redirect-issue-with-haproxy/>
+<h2 class=post-title>HAproxy 搭配 Nginx port redirect issue</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on July 17, 2013
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;43&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/8684224387/ title="nginx-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm9.staticflickr.com/8401/8684224387_19de454ebf.jpg?resize=320%2C120&ssl=1" alt=nginx-logo data-recalc-dims=1></a>
+</div>
+<p><a href=http://haproxy.1wt.eu/ target=_blank>HAproxy</a> 是一套高效能分散式系統軟體，後端可搭配 Web 或 SQL 服務，這次在後端搭配 <a href=http://nginx.org/ target=_blank>Nginx</a> 出現 port redirect 問題，問題很簡單，在 Haproxy 設定 80 port 對應到內部三台 Nginx 機器，但是 Nginx port 設定 8080，這樣當我們在瀏覽網址如下:</p>
+<blockquote>
+<p><a href=http://aaa.bbb.ccc.ddd/test>http://aaa.bbb.ccc.ddd/test</a> (請注意，最後沒有 slash 喔) 你會發現 Nginx 將網址轉成</p>
+</blockquote>
+<blockquote>
+<p><a href=http://aaa.bbb.ccc.ddd:8080/test/>http://aaa.bbb.ccc.ddd:8080/test/</a> 為了避免 Nginx 自動將 port 加入到網址列，我們可以透過設定 <a href=http://wiki.nginx.org/HttpCoreModule#port_in_redirect target=_blank>port_in_redirect</a>，Nginx 預設將此設定為 On，所以將此設定為 off，並且重新啟動 Nginx 即可</p>
+</blockquote>
+<pre class="brush: bash; title: ; notranslate" title>port_in_redirect off;</pre>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2013/07/seeking-new-owner-for-codeigniter/>
 <h2 class=post-title>CodeIgniter 尋找新東家</h2>
 </a>
@@ -401,28 +431,6 @@
 <a href=https://blog.wu-boy.com/tags/compass/>Compass</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/grunt/>Grunt</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gruntjs/>GruntJS</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/05/internet-explorer-6-countdown/>
-<h2 class=post-title>IE 6 瀏覽器用戶全球分佈</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 15, 2013
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;14&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/8739672579/ title="IE_world by appleboy46, on Flickr"><img src="https://i2.wp.com/farm8.staticflickr.com/7291/8739672579_3eff76916f_z.jpg?resize=640%2C357&ssl=1" alt=IE_world data-recalc-dims=1></a>
-</div> 此資料來自
-<p><a href=http://www.ie6countdown.com/ target=_blank>The Internet Explorer 6 Countdown</a>，大家注意上面圖示，沒想到台灣高居第二名，佔了 3.5% 僅次於大陸的 24%，大陸不感到意外，但是台灣的比例還真是高，難怪一堆程式開發者，抱怨連連 XD，這是統計到 2013 年 04 月，在這邊紀錄一下，等到明年這個時候再來看看此統計圖。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/ie/>IE</a>&nbsp;
 </div>
 </article>
 </div>

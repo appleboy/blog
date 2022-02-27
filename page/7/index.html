@@ -116,6 +116,24 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/11/four-tips-with-select-in-golang/>
+<h2 class=post-title>Go 語言使用 Select 四大用法</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on November 23, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;694&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/CXyuE0Z1x4_dEciwiP9HRfXD2kHiola3SI-dAsU_HciuBxb3nA_NyZewO70gGlvA59eLapIRAEO0TZbAAx_z85Uqp-OGWx06-3lZ3HilrhnXvbr3nsilF1TcYIhSOtud_G7-wldkZNo=w1920-h1080" title=photo><img src="https://lh3.googleusercontent.com/CXyuE0Z1x4_dEciwiP9HRfXD2kHiola3SI-dAsU_HciuBxb3nA_NyZewO70gGlvA59eLapIRAEO0TZbAAx_z85Uqp-OGWx06-3lZ3HilrhnXvbr3nsilF1TcYIhSOtud_G7-wldkZNo=w1920-h1080" alt=photo title=photo></a></p>
+<p>本篇教學要帶大家認識 <a href=https://golang.org>Go 語言</a>的 <a href=https://tour.golang.org/concurrency/5>Select</a> 用法，相信大家對於 switch 並不陌生，但是 <code>select</code> 跟 <code>switch</code> 有個共同特性就是都過 case 的方式來處理，但是 select 跟 switch 處理的事情完全不同，也完全不相容。來看看 switch 有什麼特性: 各種類型及型別操作，接口 <code>interface{}</code> 型別判斷 <code>variable.(type)</code>，重點是會依照 case <strong>順序依序執行</strong>。底下看個例子:</p>
+<a href=https://blog.wu-boy.com/2019/11/four-tips-with-select-in-golang/ class=post-read-more>[Read More]</a>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2019/11/how-to-define-the-golang-folder-layout/>
 <h2 class=post-title>初探 Go 語言 Project Layout (新人必看)</h2>
 </a>
@@ -311,29 +329,6 @@
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gitlab/>GitLab</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2019/08/minio-remove-healthcheck-script-for-docker-image/>
-<h2 class=post-title>Minio 從 Docker 容器移除 healthcheck 腳本</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 18, 2019
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;176&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/3lAv9HlhI9mxCfow0jHY5-G6H-tvXJLCv3S2QvzKReV_R-61oywRIXW6sruwPrS69CXpMAuIrccgVH8HY5hIzDGvenyhFhKcGmBk0CmU1c36k6NrjSvYESSmAEAejlxmxdW_gduXZio=w1920-h1080" title="minio golang"><img src="https://lh3.googleusercontent.com/3lAv9HlhI9mxCfow0jHY5-G6H-tvXJLCv3S2QvzKReV_R-61oywRIXW6sruwPrS69CXpMAuIrccgVH8HY5hIzDGvenyhFhKcGmBk0CmU1c36k6NrjSvYESSmAEAejlxmxdW_gduXZio=w1920-h1080" alt="minio golang" title="minio golang"></a></p>
-<p><a href=https://min.io/>Minio</a> 是一套開源專案的 Object 儲存容器，如果你有使用 <a href=https://aws.amazon.com/tw/s3/>AWS S3</a>，相信要找一套代替 S3 的替代品，一定會想到這套用 <a href=https://golang.org>Go 語言</a>開發的 Minio 專案。讓您在公司內部也可以享有 S3 的儲存容器，不需要變動任何程式碼就可以無痛從 AWS S3 搬到公司內部。剛好最近在整合 Traefik 搭配 Minio，由於 Minio 原先已經內建 healthcheck 腳本，所以當運行 Minio 時，使用 <code>docker ps</code> 正常來說可以看到類似 <code>Up 7 weeks (healthy)</code> 字眼，但是 Minio 運行了三分鐘之後，狀態就會從 <code>healthy</code> 變成 <code>unhealthy</code>，造成 Traefik 會自動移除 frontend 的對應設定，這樣 Web 就無法顯示了。我在 Udemy 上面有介紹如<a href=https://www.udemy.com/course/golang-fight/learn/lecture/9962004#overview>何用 Golang 寫 healthcheck</a>，大家有興趣可以參考看看，coupon code 可以輸入 <strong>GOLANG2019</strong> 。</p>
-<a href=https://blog.wu-boy.com/2019/08/minio-remove-healthcheck-script-for-docker-image/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/minio/>minio</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/s3/>s3</a>&nbsp;
 </div>
 </article>
 </div>

@@ -116,6 +116,33 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/>
+<h2 class=post-title>用 Traefik 搭配 Docker 快速架設服務</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on January 8, 2019
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;834&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><strong>更新: 2019.01.10 新增教學影片</strong></p>
+<p><a href="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" title="drone traefik docker deploy"><img src="https://lh3.googleusercontent.com/TAK3Xi-hQKY1RCRGFLWmUGwdhP8UdI5mrWDyV5rQstQaQMDa27Fp0JOX2lezArNrZEdX227TyajH9wmVO3geDSFGQH9QBU4MANFSCBmPnlL2_eEehszF2tPhm1NNv1xYiCgiSM6air8=w1920-h1080" alt="drone traefik docker deploy" title="drone traefik docker deploy"></a></p>
+<p>相信大家在架設服務肯定會選一套像是 <a href=http://www.haproxy.org/>HAProxy</a>, <a href=https://www.nginx.com/ title=Nginx>Nginx</a>, <a href=https://httpd.apache.org/ title=Apache>Apache</a> 或 <a href=https://caddyserver.com/ title=Caddy>Caddy</a>，這四套架設的難度差不多，如果要搭配 <a href=https://letsencrypt.org/ title="Let's Encrypt">Let&rsquo;s Encrypt</a> 前面兩套需要自己串接 (Nginx, Apache)，而 Caddy 是用 <a href=https://golang.org/ title=Golang>Golang</a> 開發裡面已經內建了 Let&rsquo;s Encrypt，，管理者不用擔心憑證過期，相當方便。但是本篇我要介紹另外一套工具叫 <a href=https://traefik.io/ title=Traefik>Traefik</a>，這一套也是用 Go 語言開發，而我推薦這套的原因是，此套可以跟 Docker 很深度的結合，只要服務跑在 Docker 上面，Traefik 都可以自動偵測到，並且套用設定。透過底下的範例讓 Traefik 串接後端兩個服務，分別是 <code>domain1.com</code> 及 <code>domain2.com</code>。來看看如何快速設定 Traefik。</p>
+<p><a href="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" title="traefik + docker + golang"><img src="https://lh3.googleusercontent.com/e4VvNhQLdG0agSrE3EbxYURmbZevK8kVUaBhvHE3FVg_9iCRFeDFdFo9PHEm9EGPkYX2Q-ZmdcwyJhsDRbPi0HdZIN1HRjdkgFI8mWrbVWPLscPKI2WxCDIlSkCzB2zoh6pay-3R2Xg=w1920-h1080" alt="traefik + docker + golang" title="traefik + docker + golang"></a></p>
+<a href=https://blog.wu-boy.com/2019/01/deploy-service-using-traefik-and-docker/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/droneci/>droneci</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/traefik/>traefik</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/12/go-module-integrate-with-travis-or-drone/>
 <h2 class=post-title>Go Module 導入到專案內且搭配 Travis CI 或 Drone 工具</h2>
 </a>
@@ -312,27 +339,6 @@ Flickr 在 2019 年一月會開始將免費會員照片刪除到剩下 1000 張�
 <a href=https://blog.wu-boy.com/tags/aws-lambda/>AWS Lambda</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/deployment/>deployment</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/10/go-1-11-support-go-module/>
-<h2 class=post-title>Go 語言 1.11 版本推出 go module</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 16, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;304&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/40093179410/in/dateposted-public/ title=Go-Logo_Blue><img src="https://i1.wp.com/farm1.staticflickr.com/908/40093179410_53df4bb9e8_z.jpg?w=840&ssl=1" alt=Go-Logo_Blue data-recalc-dims=1></a></p>
-<p>本篇來聊聊 <a href=https://golang.org>Go 語言</a>在 1.11 版本推出的 <a href=https://github.com/golang/go/wiki/Modules>新功能</a>，相信大家也許還不知道此功能是做什麼用的，我們來回顧看看在初學 Go 語言的時候，最令人困擾的就是 <code>GOPATH</code>，所有的專案都必須要在 GOPATH 底下開發，然而在更久前還沒有 Vendor 時候，兩個專案用不同版本的同一個 Package 就必須要使用多個 GOPATH 來解決，但是隨著 Vendor 在 1.5 版的推出，解決了這問題，所以現在只要把專案放在 GOPATH 底下，剩下的 Package 管理都透過 Vendor 目錄來控管，在很多大型開源專案都可以看到把 Vendor 目錄放入版本控制已經是基本的 Best Practice，而 go module 推出最大功能用來解決 GOPATH 問題，也就是未來開發專案，<strong>隨意讓開發者 clone 專案到任何地方都可以</strong>，另外也統一個 Package 套件管理，不再需要 <code>Vendor</code> 目錄，底下舉個實際例子來說明。</p>
-<a href=https://blog.wu-boy.com/2018/10/go-1-11-support-go-module/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>

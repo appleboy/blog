@@ -116,6 +116,38 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2011/12/php-i18n-library/>
+<h2 class=post-title>PHP 多國語系製作 i18n library 筆記 (一)</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on December 16, 2011
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;165&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<div style="margin:0 auto;text-align:center">
+<a href=https://www.flickr.com/photos/appleboy/6034284842/ title="php-logo by appleboy46, on Flickr"><img src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&ssl=1" alt=php-logo data-recalc-dims=1></a>
+</div> 多國語系是目前網站必有的模組，至少都會支援繁體中文及英文，那大家都怎麼設計多國語系的架構呢，底下來一步一步來介紹。
+<h3 id=多國語系目錄架構>多國語系目錄架構</h3>
+<pre class="brush: bash; title: ; notranslate" title>language/
+---> englisg/
+---------> about.php
+---> zh-tw/
+---------> about.php
+---> zh-cn/
+---------> about.php
+</pre> 這是大部分的專案設計模式，也最容易清楚了解，接著我們就寫一個簡單的 Language Class 來動態讀取各國語系。
+<a href=https://blog.wu-boy.com/2011/12/php-i18n-library/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/i18n/>i18n</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2011/12/phpconf-taiwan-2011-codeigniter-framework/>
 <h2 class=post-title>PHPConf Taiwan 2011 快速上手 CodeIgniter Framework</h2>
 </a>
@@ -358,39 +390,6 @@ $this->load->library('nexmo');</pre>
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/live.js/>Live.js</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/livereload/>LiveReload</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2011/11/html5-placeholder-attribute-on-ie/>
-<h2 class=post-title>HTML5 placeholder attribute 在 IE 上顯示</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 1, 2011
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;89&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-程式設計師在網頁表單上通常會設計很多提示的功能，而在 Html5 提供了 placeholder attribute 這功能，目前 FireFox Safari Google Chrome 都沒有顯示上的問題，唯獨 IE8(含以下)都沒辦法顯示這功能，所以必須透過 javascript 來解決這部份問題了，網路上找到這篇解決方式，底下是原始碼
-解決原理其實很簡單，那就先將 placeholder 寫入到 input value 裡面，在 focus event 當下比對 input value 是否等於 placeholder 的值，如果是就清空，反之透過 onblur event 來寫回原先的 placeholder 值，缺點就是如果當 input type = password 的時候會很麻煩。底下提供轉成 CoffeeScript 的程式碼：
-add_placeholder = (id, placeholder) -
-el = document.getElementById(id)
-el.placeholder = placeholder
-el.onfocus = () -
-if(this.value == this.placeholder)
-this.value = ''
-el.style.cssText = ''
-el.onblur = () -
-if(this.value.length == 0)
-this.
-<a href=https://blog.wu-boy.com/2011/11/html5-placeholder-attribute-on-ie/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/html5/>html5</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
 </div>
 </article>
 </div>

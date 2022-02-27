@@ -116,6 +116,31 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2009/09/rhelinstalling-php-52x-or-53x-on-redhat-es5-centos-5/>
+<h2 class=post-title>[RHEL]Installing PHP 5.1.x 5.2.x or 5.3.x on RedHat ES5, CentOS 5</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 8, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;98&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+最近幫公司處理一台 RHEL 機器，把原本的 PHP 版本 5.1.6 升級到 5.3.0，不過因為 5.3.0 把很多支援的函數都拿掉了，造成很 open source 套件都沒辦法支援，phpMyAdmin 也要換成 3 版以上才可以運作，PHP 5.3.0 已經不支援很多函數，可以參考 Deprecated features in PHP 5.3.x，有用到 ereg() 或者是 eregi() 都必須統統換成 preg_match()，最後終究因為 json 的關係，把 PHP 升級到 5.2 以上才有支援，參考了一篇 Installing PHP 5.2.x or 5.3.x on RedHat ES5, CentOS 5, etc，作法其實很容易，不用幾個指令就可以完成了
+wget http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
+wget http://rpms.famillecollet.com/enterprise/remi-release-5.rpm
+rpm -Uvh remi-release-5*.rpm epel-release-5*.rpm 如果是 X86_64 的，請自行更換網址，這裡有些注意的是，你要升級 PHP 請利用下面： yum --enablerepo=remi update php 不過升級的時候，必須把 MySQL 也一併升級，不然會出現錯誤，原本的 MySQL 套件用 yum remove 移除掉，在利用 yum --enablerepo=remi 方式升級 MySQL 跟 PHP 套件，就可以了。 在 RHEL 裡面，PHP 5.
+<a href=https://blog.wu-boy.com/2009/09/rhelinstalling-php-52x-or-53x-on-redhat-es5-centos-5/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/rhel/>RHEL</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2009/09/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F-%E5%A4%A2%E6%99%82%E4%BB%A3%E6%9D%91%E4%B8%8A%E5%B1%8B%E6%97%A5%E5%BC%8F%E6%AD%90%E9%A2%A8%E5%92%96%E5%93%A9-%E9%AB%98%E9%9B%84%E5%B7%A8%E8%9B%8B-cosplay/>
 <h2 class=post-title>[高雄美食] 夢時代村上屋日式歐風咖哩 + 高雄巨蛋 cosplay 照片</h2>
 </a>
@@ -322,31 +347,6 @@ Dynamically Create Menu With PHP DOM
 </div>
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2009/07/sql-mysql-row_number-simulation/>
-<h2 class=post-title>[SQL] MySQL ROW_NUMBER Simulation</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 15, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;193&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>在台大 <a href=http://www.ptt.cc/bbs/Database/index.html>PTT Database</a> 版看到有人問一個問題，我覺得還不錯，問題如下：<a href=http://www.ptt.cc/bbs/Database/M.1247394036.A.A50.html>網頁版</a></p>
-<blockquote>
-<p>小弟在練習做一個系統遇到以下問題 志願 | 系所 | 功能 1 | a | 退選 2 | b | 退選 3 | c | 退選 4 | d | 退選 5 | e | 退選 網頁介面如上(用for迴圈+mysql_fetch_object抓出資料) 報名序號 | 姓名 | 志願1 | 志願2 | 志願3 | 志願4 | 志願5 1001 小王 a b c d e 資料庫欄位內容如上 想請問~若使用者想退選志願3~~照理說用update把志願3欄位清掉 網頁再一次抓資料會變成志願3的系所變空的~(如下表) 志願 | 系所 | 功能 1 | a | 退選 2 | b | 退選 3 | | 退選 4 | d | 退選 5 | e | 退選 有沒有辦法在select的時候排除空的那欄 也就是說抓資料的時候，以上述為例，只抓出4筆，變成下表 志願 | 系所 | 功能 1 | a | 退選 2 | b | 退選 3 | d | 退選 4 | e | 退選</p>
-</blockquote>
-<a href=https://blog.wu-boy.com/2009/07/sql-mysql-row_number-simulation/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/mssql/>MSSQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 </div>
 </article>

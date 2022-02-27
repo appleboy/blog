@@ -103,6 +103,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2017/06/downsize-node_modules-to-improve-deploy-speed/>
+<h2 class=post-title>減少 node_modules 大小來加速部署 Node.js 專案</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 6, 2017
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;123&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href=https://www.flickr.com/photos/appleboy/29998255630/in/dateposted-public/ title=yarn-kitten-full><img src="https://i1.wp.com/c7.staticflickr.com/6/5712/29998255630_b40ff9df74_z.jpg?w=840&ssl=1" alt=yarn-kitten-full data-recalc-dims=1></a></p>
+<p>相信 <a href=https://nodejs.org/en/>Node.js</a> 開發者現在大部分都在使用 <a href=https://yarnpkg.com>Yarn</a> 了吧？如果還不知道或無法體會 Yarn 帶來的好處可以參考之前寫的一篇『<a href=https://yarnpkg.com>用 Yarn 取代 Npm 管理 JavaScript 套件版本</a>』，帶你體會 <code>yarn install</code> vs <code>npm install</code> 的速度差異。本篇最主要會介紹在部署 Node.js 專案都需要把 node_modules 壓縮一起丟到遠端伺服器 (假設你不是用 <a href=https://www.docker.com/>Docker</a> 部署)，這時候來聊聊怎麼減少 <code>node_modules</code> 大小。</p>
+<a href=https://blog.wu-boy.com/2017/06/downsize-node_modules-to-improve-deploy-speed/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/node.js/>Node.js</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/yarn/>yarn</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2017/05/go-struct-method-pointer-or-value/>
 <h2 class=post-title>Go 語言內 struct methods 該使用 pointer 或 value 傳值?</h2>
 </a>
@@ -378,28 +401,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/error/>Error</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/go/>Go</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2017/02/write-command-line-in-golang/>
-<h2 class=post-title>用 Golang 寫 Command line 工具</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 16, 2017
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;451&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
-<p>如果你要寫 Command line 工具，又想在各平台 (像是 MacOS, Windows 或 Linux) 上執行，這時候 <a href=https://golang.org>Golang</a> 就是您最好的選擇。在 <a href=https://www.reddit.com>Reddit</a> 讀到一篇 <a href=https://www.reddit.com/r/golang/comments/5sdvoh/what_is_the_essential_difference_between/>Command line 工具比較介紹</a>，這篇最主要講到兩個 CLI 工具，一個是 <a href=https://github.com/urfave/cli>urfave/cli</a>，另一個是 <a href=https://github.com/spf13/cobra>spf13/cobra</a>，這兩個工具其實都非常好用，後者是<a href=http://spf13.com/post/joining-go-team-at-google/>去年加入 Google Golang 團隊</a>的 <a href=http://spf13.com/>spf13</a> 所開發，該作者加入 Google 後呢，非常的忙，但是強者他同事有幫忙繼續維護 cobra 專案，兩個 CLI 工具各自都有有大型專案使用 urfave/cli 有 <a href=https://github.com/docker/libcompose>docker/libcompose</a>, <a href=https://github.com/docker/machine>docker/machine</a>, <a href=https://github.com/drone/drone>Drone</a>, <a href=https://gitea.io/>Gitea</a>, <a href=https://gogs.io/>Gogs</a> 等，而後者 spf13/cobra 則有 <a href=https://docker.com>docker</a>, <a href=https://github.com/docker/distribution>docker/distribution</a>, <a href=https://github.com/coreos/etcd>etcd</a> 等。本篇筆者會介紹 urfave/cli 該如何使用？</p>
-<a href=https://blog.wu-boy.com/2017/02/write-command-line-in-golang/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>

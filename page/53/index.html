@@ -116,6 +116,32 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2010/06/freebsd-update-apache-2-2-15-php-5-3-2-and-mysql-downgrade-to-5-1-9/>
+<h2 class=post-title>[FreeBSD] update apache -> 2.2.15, PHP -> 5.3.2, and MySQL downgrade to 5.1.9</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on June 23, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;323&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+昨天升級了 FreeBSD 的 Apache, PHP, and MySQL，遇到很多地雷阿，最多的就是 PHP 的部份，因為本來自己使用 5.2.11 版本，但是在 commit port 的時候發生去裝 5.3.2 版本，所以就直接砍掉全部重練，先是遇到 MySQL 問題，原先在 database/mysql60-server 已經被 FreeBSD 移除，任何關於 mysql60 的相關 port 都被 remove 掉了，只好 downgrade 到 mysql 5.1.48 版本，移除同時順手把 apache PHP 相關都拿掉了。
+移除 apache mysql php 相關 ports -rf 依序找尋相關 Mysql ports 移除 pkg_deinstall -rf mysql60-server 接下來安裝 MySQL 5.1.48 Server and Client，可以找到在 databases/mysql51-server and databases/mysql51-client，直接安裝即可
+cd /usr/ports/databases/mysql51-server && make install 安裝 Apache 2.2.15 cd /usr/ports/www/apache22 && make WITH_MPM=worker install 安裝 PHP 5.
+<a href=https://blog.wu-boy.com/2010/06/freebsd-update-apache-2-2-15-php-5-3-2-and-mysql-downgrade-to-5-1-9/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/apache/>apache</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2010/06/linux-kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E5%96%AE-hello-world-module-part-1/>
 <h2 class=post-title>[Linux Kernel] 撰寫簡單 Hello, World module (part 1).</h2>
 </a>
@@ -385,33 +411,6 @@ document.getElementById('ifr').contentWindow.formSubmit();
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/html/>html</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2010/05/jquery-%E8%A7%A3%E6%B1%BA-ie6-png-%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-supersleight-jquery-plugin-for-transparent-pngs-in-ie6/>
-<h2 class=post-title>[jQuery] 解決 IE6 PNG 透明背景 (Supersleight jQuery Plugin for Transparent PNGs in IE6)</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 2, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;407&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-今天無意間看到 Drew McLellan 在 2007 年寫了這篇 Transparent PNGs in Internet Explorer 6，真的是太晚發現這篇了，之前自己寫到一篇：『[CSS] IE 6, 7, 8 FireFox hack 支援透明背景圖 background or img javascript』，雖然 Google 官方網站宣佈完全不支援 IE6 瀏覽器，打算只支援 Microsoft Internet Explorer 7.0+, Mozilla Firefox 3.0+, Google Chrome 4.0+, Safari 3.0+，可是我們這些 Web Developer 還是需要考慮客戶的瀏覽器阿，因為客戶才是最大的，尤其是在一些學術機構，安裝好 XP，預設就是 IE6，從 Google 分析裡面，IE6 也是網站的客戶大群。
-先來介紹 Drew McLellan 寫的一支好用 js 來改善所有 png 透明圖檔，最主要是修正 background-image 跟 img tag 所包含的 png 圖檔
-先下載：Download SuperSleight，解壓縮放到 js 資料夾
-針對 IE6 瀏覽器寫入 html
-<a href=https://blog.wu-boy.com/2010/05/jquery-%E8%A7%A3%E6%B1%BA-ie6-png-%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-supersleight-jquery-plugin-for-transparent-pngs-in-ie6/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ie/>IE</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/png/>png</a>&nbsp;
 </div>
 </article>
 </div>

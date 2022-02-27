@@ -103,6 +103,29 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing/>
+<h2 class=post-title>gofight 支援多個檔案上傳測試</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on September 25, 2018
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;573&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
+<p><a href=https://github.com/appleboy/gofight>gofight</a> 是一套用 <a href=https://golang.org>Go 語言</a>撰寫的 HTTP API 測試套件，之前已經寫過<a href=https://blog.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang/>一篇介紹用法</a>，當時候尚未支援檔案上傳測試，也就是假設寫了一個<a href=https://github.com/gin-gonic/gin/#upload-files>檔案上傳的 http handler</a> 在專案內如何寫測試，底下來看看該如何使用。</p>
+<a href=https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing/ class=post-read-more>[Read More]</a>
+</div>
+<div class=blog-tags>
+<a href=https://blog.wu-boy.com/tags/gofight/>gofight</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2018/09/golang-project-quality/>
 <h2 class=post-title>Go 語言專案程式碼品質</h2>
 </a>
@@ -310,68 +333,6 @@
 <p><a href=https://www.flickr.com/photos/appleboy/40093179410/in/dateposted-public/ title=Go-Logo_Blue><img src="https://i1.wp.com/farm1.staticflickr.com/908/40093179410_53df4bb9e8_z.jpg?w=840&ssl=1" alt=Go-Logo_Blue data-recalc-dims=1></a></p>
 <p>很多朋友剛入門 <a href=https://golang.org>Go 語言時</a>，第一個會遇到的問題是，該如何設定專案配置，讓專案可以正常執行，在個人電腦該如何開發多個專案，這邊就會遇到該如何設定 <code>$GOPATH</code>，我在這邊跟大家講個觀念，開發環境只會有一個 <code>$GOPATH</code>，不管團隊內有多少專案，都是存放在同一個 GOPATH，避免每次開專案都要重新設定 <code>$GOPATH</code>，而專案內用到的相依性套件，請各自維護，透過<a href=https://github.com/golang/go/wiki/PackageManagementTools>官方提供的 wiki</a>，請選一套覺得好用的來使用吧，沒有最好的工具，找一套適合團隊是最重要的。</p>
 <a href=https://blog.wu-boy.com/2018/05/what-is-vendor-in-golang/ class=post-read-more>[Read More]</a>
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2018/04/init-func-in-golang/>
-<h2 class=post-title>Go 語言的 init 函式</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 19, 2018
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;204&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/ title=Go-brown-side.sh><img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&ssl=1" alt=Go-brown-side.sh data-recalc-dims=1></a></p>
-<p>本篇會帶大家認識 <a href=https://golang.org>Go 語言</a>的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看<a href=https://play.golang.org/p/AN-6MK4qVVL>例子</a>，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;fmt&#34;</span>
-)
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>init</span>() {
-    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;init 1&#34;</span>)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>init</span>() {
-    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;init 2&#34;</span>)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Hello, playground&#34;</span>)
-}
-</code></pre></td></tr></table>
-</div>
-</div>
-<a href=https://blog.wu-boy.com/2018/04/init-func-in-golang/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 </div>
 </article>
 </div>

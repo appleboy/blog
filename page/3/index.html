@@ -116,6 +116,69 @@
 <div class="col-md-10 col-md-offset-1">
 <div class=posts-list>
 <article class=post-preview>
+<a href=https://blog.wu-boy.com/2021/03/why-use-buffered-channel-in-signal-notify/>
+<h2 class=post-title>為什麼 signal.Notify 要使用 buffered channel</h2>
+</a>
+<p class=post-meta>
+<span class=post-meta>
+<i class="fas fa-calendar"></i>&nbsp;Posted on March 30, 2021
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;298&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
+</span>
+</p>
+<div class=post-entry>
+<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
+<p>如果不了解什麼是 buffer 或 unbuffer <a href=https://tour.golang.org/concurrency/2>channel</a> 的朋友們，可以參考<a href=https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/>這篇文章</a>先做初步了解，本文要跟大家介紹為什麼 signal.Notify 要使用 buffered channel 才可以，底下先來看看如何使用 signal.Notify，當我們要做 <a href=https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/>graceful shutdown</a> 都會使用到這功能，想要正常關閉服務或連線，透過 signal 可以偵測訊號來源，執行後續相關工作 (關閉 DB 連線，檢查 Job 是否結束 &mldr; 等)。</p>
+<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
+<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
+</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
+</span></code></pre></td>
+<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
+<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
+
+<span style=color:#8b008b;font-weight:700>import</span> (
+    <span style=color:#cd5555>&#34;fmt&#34;</span>
+    <span style=color:#cd5555>&#34;os&#34;</span>
+    <span style=color:#cd5555>&#34;os/signal&#34;</span>
+)
+
+<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+    <span style=color:#228b22>// Set up channel on which to send signal notifications.
+</span><span style=color:#228b22></span>    <span style=color:#228b22>// We must use a buffered channel or risk missing the signal
+</span><span style=color:#228b22></span>    <span style=color:#228b22>// if we&#39;re not ready to receive when the signal is sent.
+</span><span style=color:#228b22></span>    c := <span style=color:#658b00>make</span>(<span style=color:#8b008b;font-weight:700>chan</span> os.Signal, <span style=color:#b452cd>1</span>)
+    signal.<span style=color:#008b45>Notify</span>(c, os.Interrupt)
+
+    <span style=color:#228b22>// Block until a signal is received.
+</span><span style=color:#228b22></span>    s := &lt;-c
+    fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;Got signal:&#34;</span>, s)
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。</p>
+<a href=https://blog.wu-boy.com/2021/03/why-use-buffered-channel-in-signal-notify/ class=post-read-more>[Read More]</a>
+</div>
+</article>
+<article class=post-preview>
 <a href=https://blog.wu-boy.com/2021/03/debug-performance-issues-using-pyroscope/>
 <h2 class=post-title>即時效能分析工具 Pyroscope</h2>
 </a>
@@ -330,29 +393,6 @@
 <div class=blog-tags>
 <a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/>
-<h2 class=post-title>用 Docker 每天自動化備份 MySQL, Postgres 或 MongoDB 並上傳到 AWS S3</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 12, 2020
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;254&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href="https://lh3.googleusercontent.com/2SGJ7LZpgVIVuKfhXSgm8fP90GLk7r1jgc4Sm-vAptUx43d28wjbv3r7x6U5BfDmJmfDfTlkhABWU9q20UA5Neg5-CITdqbN-djIeftrhdy2SZde-J2iHQTVdDNh9Ah7MEAzYiYyjDE=w1920-h1080"><img src="https://lh3.googleusercontent.com/2SGJ7LZpgVIVuKfhXSgm8fP90GLk7r1jgc4Sm-vAptUx43d28wjbv3r7x6U5BfDmJmfDfTlkhABWU9q20UA5Neg5-CITdqbN-djIeftrhdy2SZde-J2iHQTVdDNh9Ah7MEAzYiYyjDE=w1920-h1080" alt></a></p>
-<p>由於備份 <a href=https://www.postgresql.org/>PostgreSQL</a> 的指令 <a href=https://docs.postgresql.tw/reference/client-applications/pg_dump>pg_dump</a> 需要限定特定版本才可以備份，故自己製作用 <a href=https://www.docker.com/>Docker</a> 容器方式來備份，此工具支援 <a href=https://www.mysql.com/>MySQL</a>, PostgreSQL 跟 <a href=https://www.mongodb.com/>MongoDB</a>，只要一個 docker-compose yaml 檔案就可以進行線上的備份，並且上傳到 <a href=https://aws.amazon.com/tw/s3/>AWS S3</a>，另外也可以設定每天晚上固定時間點進行時間備份，也就是平常所設定的 cron job。沒使用 <a href=https://aws.amazon.com/tw/rds/>AWS RDS</a>，或自行管理機房的朋友們，就可以透過這小工具，進行每天半夜線上備份，避免資料被誤砍。底下教學程式碼都可以<a href=https://github.com/appleboy/docker-backup-database>在這邊找到</a>。</p>
-<a href=https://blog.wu-boy.com/2020/12/docker-image-to-periodically-backup-your-database-mysql-postgres-or-mongodb-to-s3/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/backup/>Backup</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/database/>database</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/docker/>Docker</a>&nbsp;
 </div>
 </article>
 </div>
