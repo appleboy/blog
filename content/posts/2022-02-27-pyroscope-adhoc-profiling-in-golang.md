@@ -122,6 +122,15 @@ pyroscope adhoc go run main.go
 
 [11]:https://pyroscope.io/blog/pyroscope-adhoc-profiling/
 
+## 線上 Profiling 服務
+
+如果連本地端都不想安裝任何環境，可以透過底下兩個線上服務來完成。
+
+* [Upload and Share Interactive Flamegraphs](https://flamegraph.com/)
+* [Playground](https://playground.flamegraph.com/playground)
+
+可以將有效能問題的程式碼放到 Playground 上，並分享給團隊其他同仁，直接線上修改測試即可，其實跟 Go 提供的 [Playground](https://go.dev/play) 差不多意思。
+
 ## 心得
 
 有了這個功能幫助挺大的，尤其時想在本機端做一些效能上分析，雖然有 pprof 可以使用，但是沒有好的 UI 介面，還是很難縮短除錯時間，而有了 adhoc 功能，還可以將數據分享給其他同事一起來幫忙。畢竟服務正式上線後，不會將 pyroscope 功能啟動，免得服務受到效能上的影響，而在測試站就會隨時監控，搭配 Prometheus + Grafana 找出特定時間點效能變化。
