@@ -24,6 +24,14 @@ tags:
 
 <!--more-->
 
+## 影片教學
+
+{{< youtube 3WfR46Q_9Kk >}}
+
+影片視頻會同步放到底下課程內
+
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 為什麼要用 adhoc profiling
 
 [Pyroscope][2] 近期內推出 [adhoc profiling 功能][11]，大家想看看為什麼官方要推出此功能。原本 Pyroscope 推出此開源平台可以讓開發者在平台上線時，快速從時間點找到效能瓶頸的地方，但是移動到該時間點時，你會看到很多雜訊，而要持續檢測，開發者需要一直進行測試，而這方式無法在本地端快速驗證出來。
