@@ -1,160 +1,27 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI - 小惡魔 - AppleBOY</title><meta name=description content="
   
  上一篇介紹
-如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2012\/05\/install-nginx-php-fastcgi-on-amazon-linux\/","name":"在 fedora 或 amazon linux ami 架設 nginx php fast cgi"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 Fedora 或 Amazon Linux AMI 架設 Nginx \u002b PHP FastCGI","description":"  上一篇介紹 如何在 Ubuntu 底下安裝 Nginx \u002b PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。\n","inLanguage":"en","wordCount":387,"datePublished":"2012-05-28T11:34:32","dateModified":"2012-05-28T11:34:32","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Amazon, AWS, Fedora, nginx"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2012\/05\/install-nginx-php-fastcgi-on-amazon-linux\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI">
-<meta property="og:description" content="
+如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2012\/05\/install-nginx-php-fastcgi-on-amazon-linux\/","name":"在 fedora 或 amazon linux ami 架設 nginx php fast cgi"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"在 Fedora 或 Amazon Linux AMI 架設 Nginx \u002b PHP FastCGI","description":"  上一篇介紹 如何在 Ubuntu 底下安裝 Nginx \u002b PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。\n","inLanguage":"en","wordCount":387,"datePublished":"2012-05-28T11:34:32","dateModified":"2012-05-28T11:34:32","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Amazon, AWS, Fedora, nginx"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2012\/05\/install-nginx-php-fastcgi-on-amazon-linux\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI"><meta property="og:description" content="
   
  上一篇介紹
-如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI">
-<meta name=twitter:description content="
+如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI"><meta name=twitter:description content="
   
  上一篇介紹
-如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 Amazon Linux AMI，如果有在玩 AWS EC2 或是 Fedora Linux 的話，對這 OS 就不會很陌生了。"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on May 28, 2012
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 28, 2012
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;387&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#安裝-nginx-用-yum-升級系統所有套件再安裝>安裝 Nginx 用 yum 升級系統所有套件，再安裝</a></li>
-<li><a href=#設定-nginx-nginx-設定檔預設放在-etcnginxnginxconf如果看過此設定檔你會發現跟-ubuntu-安裝不同的地方在於這裡沒有>設定 Nginx Nginx 設定檔預設放在 /etc/nginx/nginx.conf，如果看過此設定檔你會發現跟 Ubuntu 安裝不同的地方在於這裡沒有</a></li>
-<li><a href=#建立-php-fast-cgi-環境-我們透過-spawn-fcgi-來管理-cgi-process避免-php5-cgi-突然掛掉首先建立-usrbinphp-fastcgi-檔案內容如下>建立 PHP Fast CGI 環境 我們透過 spawn-fcgi 來管理 CGI process，避免 PHP5-CGI 突然掛掉。首先建立 /usr/bin/php-fastcgi 檔案，內容如下</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/7285947094/ title="799px-Amazon.com-Logo.svg by appleboy46, on Flickr"><img src="https://i0.wp.com/farm8.staticflickr.com/7221/7285947094_9e34eeb903.jpg?resize=500%2C101&ssl=1" alt=799px-Amazon.com-Logo.svg data-recalc-dims=1></a>
-</div> 上一篇介紹
-<p><a href=http://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/ target=_blank>如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI</a>，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 <a href=http://aws.amazon.com/amazon-linux-ami/ target=_blank>Amazon Linux AMI</a>，如果有在玩 <a href=http://aws.amazon.com/ec2/ target=_blank>AWS EC2</a> 或是 <a href=http://fedoraproject.org/ target=_blank>Fedora Linux</a> 的話，對這 OS 就不會很陌生了。</p>
-<h3 id=安裝-nginx-用-yum-升級系統所有套件再安裝>安裝 Nginx 用 yum 升級系統所有套件，再安裝</h3>
-<p><a href=http://nginx.org/ target=_blank>Nginx</a> + <a href=http://php.net target=_blank>PHP</a> 環境</p>
-<pre class="brush: bash; title: ; notranslate" title>$ yum update
-$ yum install nginx php-cli php spawn-fcgi</pre> 將 Nginx 加入開機自動執行，並且啟動它
-<pre class="brush: bash; title: ; notranslate" title>$ chkconfig --level 35 nginx on
-$ service nginx start</pre>
-<h3 id=設定-nginx-nginx-設定檔預設放在-etcnginxnginxconf如果看過此設定檔你會發現跟-ubuntu-安裝不同的地方在於這裡沒有>設定 Nginx Nginx 設定檔預設放在 /etc/nginx/nginx.conf，如果看過此設定檔你會發現跟 Ubuntu 安裝不同的地方在於這裡沒有</h3>
-<p><span style=color:red>sites-available</span> 跟 <span style=color:red>sites-enabled</span> 目錄，當然我們可以自行去設定</p>
-<pre class="brush: bash; title: ; notranslate" title>mkdir /etc/nginx/sites-available
-mkdir /etc/nginx/sites-enabled</pre> 接著修改
-<p><span style=color:green>/etc/nginx/nginx.conf</span> 加入底下設定</p>
-<pre class="brush: bash; title: ; notranslate" title># Load virtual host configuration files.
-include /etc/nginx/sites-enabled/*;</pre> 如果覺得這步驟很麻煩的話，可以直接修改
-<p><span style=color:green><strong>/etc/nginx/conf.d/default.conf</strong></span>，這檔案就是 Nginx 預設的 Virtual Host 設定，如果要增加網站，就可以直接建立新檔案 <span style=color:green>/etc/nginx/conf.d/www.example.com.conf</span>，接下來設定單一網站，設定檔內容如下</p>
-<pre class="brush: bash; title: ; notranslate" title>server {
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#安裝-nginx-用-yum-升級系統所有套件再安裝>安裝 Nginx 用 yum 升級系統所有套件，再安裝</a></li><li><a href=#設定-nginx-nginx-設定檔預設放在-etcnginxnginxconf如果看過此設定檔你會發現跟-ubuntu-安裝不同的地方在於這裡沒有>設定 Nginx Nginx 設定檔預設放在 /etc/nginx/nginx.conf，如果看過此設定檔你會發現跟 Ubuntu 安裝不同的地方在於這裡沒有</a></li><li><a href=#建立-php-fast-cgi-環境-我們透過-spawn-fcgi-來管理-cgi-process避免-php5-cgi-突然掛掉首先建立-usrbinphp-fastcgi-檔案內容如下>建立 PHP Fast CGI 環境 我們透過 spawn-fcgi 來管理 CGI process，避免 PHP5-CGI 突然掛掉。首先建立 /usr/bin/php-fastcgi 檔案，內容如下</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/7285947094/ title="799px-Amazon.com-Logo.svg by appleboy46, on Flickr"><img src="https://i0.wp.com/farm8.staticflickr.com/7221/7285947094_9e34eeb903.jpg?resize=500%2C101&ssl=1" alt=799px-Amazon.com-Logo.svg data-recalc-dims=1></a></div>上一篇介紹<p><a href=http://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/ target=_blank>如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI</a>，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 <a href=http://aws.amazon.com/amazon-linux-ami/ target=_blank>Amazon Linux AMI</a>，如果有在玩 <a href=http://aws.amazon.com/ec2/ target=_blank>AWS EC2</a> 或是 <a href=http://fedoraproject.org/ target=_blank>Fedora Linux</a> 的話，對這 OS 就不會很陌生了。</p><h3 id=安裝-nginx-用-yum-升級系統所有套件再安裝>安裝 Nginx 用 yum 升級系統所有套件，再安裝</h3><p><a href=http://nginx.org/ target=_blank>Nginx</a> + <a href=http://php.net target=_blank>PHP</a> 環境</p><pre class="brush: bash; title: ; notranslate" title>$ yum update
+$ yum install nginx php-cli php spawn-fcgi</pre>將 Nginx 加入開機自動執行，並且啟動它<pre class="brush: bash; title: ; notranslate" title>$ chkconfig --level 35 nginx on
+$ service nginx start</pre><h3 id=設定-nginx-nginx-設定檔預設放在-etcnginxnginxconf如果看過此設定檔你會發現跟-ubuntu-安裝不同的地方在於這裡沒有>設定 Nginx Nginx 設定檔預設放在 /etc/nginx/nginx.conf，如果看過此設定檔你會發現跟 Ubuntu 安裝不同的地方在於這裡沒有</h3><p><span style=color:red>sites-available</span> 跟 <span style=color:red>sites-enabled</span> 目錄，當然我們可以自行去設定</p><pre class="brush: bash; title: ; notranslate" title>mkdir /etc/nginx/sites-available
+mkdir /etc/nginx/sites-enabled</pre>接著修改<p><span style=color:green>/etc/nginx/nginx.conf</span> 加入底下設定</p><pre class="brush: bash; title: ; notranslate" title># Load virtual host configuration files.
+include /etc/nginx/sites-enabled/*;</pre>如果覺得這步驟很麻煩的話，可以直接修改<p><span style=color:green><strong>/etc/nginx/conf.d/default.conf</strong></span>，這檔案就是 Nginx 預設的 Virtual Host 設定，如果要增加網站，就可以直接建立新檔案 <span style=color:green>/etc/nginx/conf.d/www.example.com.conf</span>，接下來設定單一網站，設定檔內容如下</p><pre class="brush: bash; title: ; notranslate" title>server {
     server_name www.example.com;
     listen 8090;
     access_log /var/log/nginx/example/logs/access.log;
@@ -171,14 +38,8 @@ include /etc/nginx/sites-enabled/*;</pre> 如果覺得這步驟很麻煩的話�
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME /home/www/appleboy$fastcgi_script_name;
     }
-}</pre> 存檔後，記得建立 logs 目錄，Nginx 不會自動幫忙建立
-<pre class="brush: bash; title: ; notranslate" title>mkdir -p /var/log/nginx/example/logs/</pre> 如果您想跟 Ubuntu 一樣的建立 Virtual Host，請執行底下步驟
-<pre class="brush: bash; title: ; notranslate" title>ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/example.com </pre> 最後重新啟動 Nginx
-<pre class="brush: bash; title: ; notranslate" title>service nginx restart</pre>
-<h3 id=建立-php-fast-cgi-環境-我們透過-spawn-fcgi-來管理-cgi-process避免-php5-cgi-突然掛掉首先建立-usrbinphp-fastcgi-檔案內容如下>建立 PHP Fast CGI 環境 我們透過 spawn-fcgi 來管理 CGI process，避免 PHP5-CGI 突然掛掉。首先建立 /usr/bin/php-fastcgi 檔案，內容如下</h3>
-<pre class="brush: bash; title: ; notranslate" title>#!/bin/sh
-/usr/bin/spawn-fcgi -P /var/run/php-cgi.pid -a 127.0.0.1 -p 9000 -C 15 -u nginx -g nginx -f /usr/bin/php-cgi</pre> 建立 /etc/rc.d/init.d/php-fastcgi 開機執行 php fastcgi
-<pre class="brush: bash; title: ; notranslate" title>#!/bin/sh
+}</pre>存檔後，記得建立 logs 目錄，Nginx 不會自動幫忙建立<pre class="brush: bash; title: ; notranslate" title>mkdir -p /var/log/nginx/example/logs/</pre>如果您想跟 Ubuntu 一樣的建立 Virtual Host，請執行底下步驟<pre class="brush: bash; title: ; notranslate" title>ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/example.com </pre>最後重新啟動 Nginx<pre class="brush: bash; title: ; notranslate" title>service nginx restart</pre><h3 id=建立-php-fast-cgi-環境-我們透過-spawn-fcgi-來管理-cgi-process避免-php5-cgi-突然掛掉首先建立-usrbinphp-fastcgi-檔案內容如下>建立 PHP Fast CGI 環境 我們透過 spawn-fcgi 來管理 CGI process，避免 PHP5-CGI 突然掛掉。首先建立 /usr/bin/php-fastcgi 檔案，內容如下</h3><pre class="brush: bash; title: ; notranslate" title>#!/bin/sh
+/usr/bin/spawn-fcgi -P /var/run/php-cgi.pid -a 127.0.0.1 -p 9000 -C 15 -u nginx -g nginx -f /usr/bin/php-cgi</pre>建立 /etc/rc.d/init.d/php-fastcgi 開機執行 php fastcgi<pre class="brush: bash; title: ; notranslate" title>#!/bin/sh
 #
 # php-fastcgi - Use PHP as a FastCGI process via nginx.
 #
@@ -264,189 +125,26 @@ case "$1" in
     *)
         echo $"Usage: $0 {start|stop|status|restart|reload|force-reload}"
         exit 2
-esac</pre> 更改
-<p><span style=color:green><strong>/etc/rc.d/init.d/php-fastcgi</strong></span> 檔案權限</p>
-<pre class="brush: bash; title: ; notranslate" title>chmod +x /etc/rc.d/init.d/php-fastcgi</pre> 加入開機自動執行
-<pre class="brush: bash; title: ; notranslate" title>$ chkconfig --add php-fastcgi
+esac</pre>更改<p><span style=color:green><strong>/etc/rc.d/init.d/php-fastcgi</strong></span> 檔案權限</p><pre class="brush: bash; title: ; notranslate" title>chmod +x /etc/rc.d/init.d/php-fastcgi</pre>加入開機自動執行<pre class="brush: bash; title: ; notranslate" title>$ chkconfig --add php-fastcgi
 $ chkconfig php-fastcgi on
 $ /etc/init.d/php-fastcgi start
-</pre> 打開瀏覽器看有沒有正確看到
-<p><span style=color:green><strong>phpinfo();</strong></span></p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/amazon/>Amazon</a>&nbsp;
+</pre>打開瀏覽器看有沒有正確看到<p><span style=color:green><strong>phpinfo();</strong></span></p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/amazon/>Amazon</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/fedora/>Fedora</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&text=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&title=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&title=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&title=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&description=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li>
-<li><a href=/2018/11/drone-ci-cd-platform-in-mopconf/>高雄 Mopcon 濁水溪以南最大研討會 – Drone CI/CD 介紹</a></li>
-<li><a href=/2018/10/deploy-app-to-aws-lambda-using-up-tool-in-ten-minutes/>用 10 分鐘部署專案到 AWS Lambda</a></li>
-<li><a href=/2018/03/nginx-reverse-proxy-image-resizing/>用 Nginx 來架設線上即時縮圖機</a></li>
-<li><a href=/2018/01/write-golang-in-aws-lambda/>在 AWS Lambda 上寫 Go 語言搭配 API Gateway</a></li>
-<li><a href=/2017/11/migrate-nginx-to-caddy/>從 Nginx 換到 Caddy</a></li>
-<li><a href=/2017/04/1-line-letsencrypt-https-servers-in-golang/>在 Go 語言用一行程式碼自動化安裝且更新 Let’s Encrypt 憑證</a></li>
-<li><a href=/2017/02/caddy-setting-with-drone-ci-server/>Caddy 搭配 Drone 伺服器設定</a></li>
-<li><a href=/2016/10/website-support-http2-using-letsencrypt/>申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2</a></li>
-<li><a href=/2016/10/ssh-agent-forwarding-proxycommand-tutorial/>SSH agent forwarding 教學</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/ data-toggle=tooltip data-placement=top title="在 Ubuntu 10.10 (Maverick) 架設 Nginx + PHP FastCGI">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2012/06/what-has-changed-in-php-5-4-x/ data-toggle=tooltip data-placement=top title="程式設計師需要注意的 PHP 5.4 變化">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&text=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&title=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&title=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&title=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2012%2f05%2finstall-nginx-php-fastcgi-on-amazon-linux%2f&description=%e5%9c%a8%20Fedora%20%e6%88%96%20Amazon%20Linux%20AMI%20%e6%9e%b6%e8%a8%ad%20Nginx%20%2b%20PHP%20FastCGI" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li><li><a href=/2018/11/drone-ci-cd-platform-in-mopconf/>高雄 Mopcon 濁水溪以南最大研討會 – Drone CI/CD 介紹</a></li><li><a href=/2018/10/deploy-app-to-aws-lambda-using-up-tool-in-ten-minutes/>用 10 分鐘部署專案到 AWS Lambda</a></li><li><a href=/2018/03/nginx-reverse-proxy-image-resizing/>用 Nginx 來架設線上即時縮圖機</a></li><li><a href=/2018/01/write-golang-in-aws-lambda/>在 AWS Lambda 上寫 Go 語言搭配 API Gateway</a></li><li><a href=/2017/11/migrate-nginx-to-caddy/>從 Nginx 換到 Caddy</a></li><li><a href=/2017/04/1-line-letsencrypt-https-servers-in-golang/>在 Go 語言用一行程式碼自動化安裝且更新 Let’s Encrypt 憑證</a></li><li><a href=/2017/02/caddy-setting-with-drone-ci-server/>Caddy 搭配 Drone 伺服器設定</a></li><li><a href=/2016/10/website-support-http2-using-letsencrypt/>申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2</a></li><li><a href=/2016/10/ssh-agent-forwarding-proxycommand-tutorial/>SSH agent forwarding 教學</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/ data-toggle=tooltip data-placement=top title="在 Ubuntu 10.10 (Maverick) 架設 Nginx + PHP FastCGI">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2012/06/what-has-changed-in-php-5-4-x/ data-toggle=tooltip data-placement=top title="程式設計師需要注意的 PHP 5.4 變化">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

@@ -44,46 +44,49 @@
 &lt;/blockquote>
 &lt;p>本篇所使用的範例程式碼請從&lt;a href="https://github.com/go-training/opa-demo/tree/v0.0.1">這邊下載或觀看&lt;/a>。&lt;/p></description></item><item><title>為什麼 signal.Notify 要使用 buffered channel</title><link>https://blog.wu-boy.com/2021/03/why-use-buffered-channel-in-signal-notify/</link><pubDate>Tue, 30 Mar 2021 03:19:16 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2021/03/why-use-buffered-channel-in-signal-notify/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
 &lt;p>如果不了解什麼是 buffer 或 unbuffer &lt;a href="https://tour.golang.org/concurrency/2">channel&lt;/a> 的朋友們，可以參考&lt;a href="https://blog.wu-boy.com/2019/04/understand-unbuffered-vs-buffered-channel-in-five-minutes/">這篇文章&lt;/a>先做初步了解，本文要跟大家介紹為什麼 signal.Notify 要使用 buffered channel 才可以，底下先來看看如何使用 signal.Notify，當我們要做 &lt;a href="https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/">graceful shutdown&lt;/a> 都會使用到這功能，想要正常關閉服務或連線，透過 signal 可以偵測訊號來源，執行後續相關工作 (關閉 DB 連線，檢查 Job 是否結束 &amp;hellip; 等)。&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#18">18&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#19">19&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1"> 1&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-2"> 2&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-3"> 3&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-4"> 4&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-5"> 5&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-6"> 6&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-7"> 7&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-8"> 8&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-9"> 9&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-10">10&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-11">11&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-12">12&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-13">13&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-14">14&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-15">15&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-16">16&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-17">17&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-18">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-18">18&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-19">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-19">19&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
-&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
-&lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
-&lt;span style="color:#cd5555">&amp;#34;os&amp;#34;&lt;/span>
-&lt;span style="color:#cd5555">&amp;#34;os/signal&amp;#34;&lt;/span>
-)
-&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
-&lt;span style="color:#228b22">// Set up channel on which to send signal notifications.
-&lt;/span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#228b22">// We must use a buffered channel or risk missing the signal
-&lt;/span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#228b22">// if we&amp;#39;re not ready to receive when the signal is sent.
-&lt;/span>&lt;span style="color:#228b22">&lt;/span> c := &lt;span style="color:#658b00">make&lt;/span>(&lt;span style="color:#8b008b;font-weight:bold">chan&lt;/span> os.Signal, &lt;span style="color:#b452cd">1&lt;/span>)
-signal.&lt;span style="color:#008b45">Notify&lt;/span>(c, os.Interrupt)
-&lt;span style="color:#228b22">// Block until a signal is received.
-&lt;/span>&lt;span style="color:#228b22">&lt;/span> s := &amp;lt;-c
-fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;Got signal:&amp;#34;&lt;/span>, s)
-}
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#cd5555">&amp;#34;os&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#cd5555">&amp;#34;os/signal&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#228b22">// Set up channel on which to send signal notifications.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#228b22">// We must use a buffered channel or risk missing the signal
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#228b22">// if we&amp;#39;re not ready to receive when the signal is sent.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22">&lt;/span> c := &lt;span style="color:#658b00">make&lt;/span>(&lt;span style="color:#8b008b;font-weight:bold">chan&lt;/span> os.Signal, &lt;span style="color:#b452cd">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> signal.&lt;span style="color:#008b45">Notify&lt;/span>(c, os.Interrupt)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#228b22">// Block until a signal is received.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22">&lt;/span> s := &amp;lt;-c
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;Got signal:&amp;#34;&lt;/span>, s)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>上面例子可以很清楚看到說明，假如沒有使用 buffered channel 的話，你有一定的風險會沒抓到 Signal。那為什麼會有這段說明呢？底下用其他例子來看看。&lt;/p></description></item><item><title>即時效能分析工具 Pyroscope</title><link>https://blog.wu-boy.com/2021/03/debug-performance-issues-using-pyroscope/</link><pubDate>Mon, 01 Mar 2021 13:20:59 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2021/03/debug-performance-issues-using-pyroscope/</guid><description>&lt;p>&lt;img src="https://lh3.googleusercontent.com/PIRK3Qj4WiToHgB0QDDf6fMHZxDmEswjWJdTIfVJ8xY7UtSau5C0mosjALev5qbJMflIfrIWsC3bPjjxHRRWQNAiFZSCLbVlin-r1-ICV-lOnopbnpRj4BiMKJnTbslpdo-n3CS2zbQ=w1920-h1080" alt="">&lt;/p>
 &lt;p>當網站上線後，流量增加或短暫功能故障，都會造成使用者體驗相當不好，而這時該怎麼快速找到效能的瓶頸呢？通常 CPU 衝到 100% 時，有時候也蠻難複製及找出關鍵問題點。本篇會介紹一套工具叫 &lt;a href="https://pyroscope.io/">pyroscope&lt;/a>，讓開發者可以快速找到效能瓶頸的程式碼。之前也寫了相關的效能瓶頸文章，可以參考看看『&lt;a href="https://blog.wu-boy.com/2020/06/golang-benchmark-pprof/">Go 語言用 pprof 找出程式碼效能瓶頸&lt;/a>』或『&lt;a href="https://blog.wu-boy.com/2020/11/improve-parser-performance-using-go-benchmark-tool/">善用 Go 語言效能測試工具來提升執行效率&lt;/a>』，上述兩篇都是針對 &lt;a href="https://golang.org">Go 語言&lt;/a>的效能分析文章，而 pyroscope 目前可以支援在 &lt;a href="https://www.python.org/">Python&lt;/a>, &lt;a href="https://www.ruby-lang.org/en/">Ruby&lt;/a> 或 &lt;a href="https://golang.org">Go&lt;/a> 的環境。底下筆者會針對 Go 環境做介紹。&lt;/p></description></item><item><title>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</title><link>https://blog.wu-boy.com/2021/02/share-files-between-two-computer-using-croc-tool/</link><pubDate>Tue, 16 Feb 2021 03:46:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2021/02/share-files-between-two-computer-using-croc-tool/</guid><description>&lt;p>&lt;img src="https://lh3.googleusercontent.com/VHlioiLpLfqBnh5PnGjYhU6l7dZ2V3PURxz5RfulFL74xYYr4kL5EgkOa-OfLQyIALLgmRIcKlLHnbIENFe0cyv82XQW5ia0HgeNwm4u2ijNsjSQQjkrY4JJjloB_pHTOT-EtxzxOlw=w1920-h1080" alt="croc">&lt;/p>
@@ -116,13 +119,13 @@ fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd55
 &lt;p>相信大家踏入 &lt;a href="https://golang.org/">Go 語言&lt;/a>的世界，肯定是被強大的 Concurrency 所吸引，Go 語言用最簡單的關鍵字 &lt;code>go&lt;/code> 就可以將任務丟到背景處理，但是怎麼有效率的控制 Concurrency，這是入門 Go 語言必學的項目，本篇會介紹三種方式來帶大家認識 Concurrency，而這三種方式分別對應到三個不同的名詞: &lt;a href="https://gobyexample.com/waitgroups">WaitGroup&lt;/a>, &lt;a href="https://tour.golang.org/concurrency/2">Channel&lt;/a>, 及 &lt;a href="https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/">Context&lt;/a>，底下用簡單的範例帶大家了解。&lt;/p></description></item><item><title>Go 1.15 新增 Module cache 環境變數</title><link>https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/</link><pubDate>Sat, 13 Jun 2020 13:45:47 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
 &lt;p>相信各位開發者在寫 &lt;a href="https://golang.org">Go 語言&lt;/a>專案，現在肯定都是使用 &lt;a href="https://blog.golang.org/using-go-modules">Go module&lt;/a> 了，而 Go Module 檔案預設寫在 &lt;code>/go/pkg/mod&lt;/code> 目錄內，要串 CI/CD 流程時，由於不在專案路徑底下，所以每一個 Container 無法共用 &lt;code>/go/pkg/mod&lt;/code> 路徑，造成重複下載第三方套件，其實跨容器的解決方式可以透過 &lt;a href="https://cloud.drone.io">Drone&lt;/a> 的 &lt;a href="https://docs.drone.io/pipeline/docker/syntax/volumes/temporary/">Temporary Volumes&lt;/a> 方式解決，但是最終希望跑完編譯流程時，可以將最後的 mod 目錄打包留到下次的 CI/CD 部署流程使用，這時候如果可以改變 &lt;code>/go/pkg/mod&lt;/code> 路徑，就可以動態調整目錄結構了。底下是針對 Drone 這套部署工具進行解說。&lt;/p></description></item><item><title>Go 語言用 pprof 找出程式碼效能瓶頸</title><link>https://blog.wu-boy.com/2020/06/golang-benchmark-pprof/</link><pubDate>Sun, 07 Jun 2020 05:11:37 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/06/golang-benchmark-pprof/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://golang.org">Go 語言&lt;/a>除了內建強大的測試工具 (&lt;a href="https://golang.org/pkg/testing/">go test&lt;/a>) 之外，也提供了效能評估的工具 (&lt;a href="https://blog.golang.org/pprof">go tool pprof&lt;/a>)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1">1&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go &lt;span style="color:#658b00">test&lt;/span> -bench=. -benchtime=3s ./lexer/
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>go &lt;span style="color:#658b00">test&lt;/span> -bench=. -benchtime=3s ./lexer/
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>用 10 分鐘了解 Go 語言 context package 使用場景及介紹</title><link>https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</link><pubDate>Sun, 03 May 2020 02:45:07 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://golang.org/pkg/context/">context&lt;/a> 是在 &lt;a href="https://golang.org/">Go 語言&lt;/a> 1.7 版才正式被納入官方標準庫內，為什麼今天要介紹 context 使用方式呢？原因很簡單，在初學 Go 時，寫 API 時，常常不時就會看到在 http handler 的第一個參數就會是 &lt;code>ctx context.Context&lt;/code>，而這個 context 在這邊使用的目的及含義到底是什麼呢，本篇就是帶大家了解什麼是 context，以及使用的場景及方式，內容不會提到 context 的原始碼，而是用幾個實際例子來了解。&lt;/p></description></item><item><title>使用 Docker BuildKit 加速編譯 Image</title><link>https://blog.wu-boy.com/2020/04/speed-up-docker-build-using-docker-buildkit/</link><pubDate>Sun, 26 Apr 2020 05:29:32 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/04/speed-up-docker-build-using-docker-buildkit/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" title="docker buildkit">&lt;img src="https://lh3.googleusercontent.com/fr-DxVaFf3lryJs-FUfDOp-azBpG7_atca4zJGuipRMUshXX-ICZXB9PdrqevF8DHRwUhG8gVrfI8jSv5LjS0Yj4R-dovaucEyCZ8U6hz68iYYU30RTFqdjO-u8ozGaPmPsyD5Ax-4c=w1920-h1080" alt="docker buildkit" title="docker buildkit">&lt;/a>&lt;/p>
@@ -134,33 +137,33 @@ fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd55
 &lt;p>在閱讀本文章之前，作者有寫過一篇『&lt;a href="https://blog.wu-boy.com/2020/02/graceful-shutdown-with-multiple-workers/">graceful shutdown with multiple workers&lt;/a>』介紹了在服務停止前做一些正確的 Shutdown 流程，像是處理 Http Handler 或關閉資料庫連線等等，假設有服務內有實作 Worker 處裡多個 Job，那該如何等到全部的 Job 都執行完畢才正確關閉且刪除服務 (使用 &lt;a href="https://docker.com">Docker&lt;/a>) 呢？底下是整個運作流程:&lt;/p>
 &lt;p>&lt;img src="https://lh3.googleusercontent.com/bsmMhN5bVzpyDy-741CsS8s_wTyPfRpbLeZvJ0u7hOmCkXhBmS0qmVwkky4zveLxtNqQgGTUufWeNi2OVvOyXwx6QrADvt5n_6tAJlSzmRJK27U9C1EgOhzziZmLqNp_FTyqf4NAits=w1920-h1080" alt="">&lt;/p></description></item><item><title>Go Modules 處理私有 GIT Repository 流程</title><link>https://blog.wu-boy.com/2020/03/read-private-module-in-golang/</link><pubDate>Wed, 04 Mar 2020 14:41:21 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/03/read-private-module-in-golang/</guid><description>&lt;p>&lt;img src="https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080" alt="golang">&lt;/p>
 &lt;p>&lt;a href="https://golang.org/">Golang&lt;/a> 在 &lt;a href="https://golang.org/doc/go1.14#introduction">1.14&lt;/a> 正式說明可以將 &lt;a href="https://github.com/golang/go/wiki/Modules">Go Modules&lt;/a> 用在正式環境上了，還沒換上 Go Modules 的團隊，現在可以開始轉換了，轉換方式也相當容易啦，只要在原本的專案底下執行底下指令，就可以無痛轉移&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1">1&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-2">2&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go mod init project_path
-go mod tidy
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>go mod init project_path
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>go mod tidy
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>假設專案內有用到私有 Git Repository 該怎麼解決了？現在 go mod 會預設走 &lt;code>proxy.golang.org&lt;/code> 去抓取最新的資料，但是要抓私有的，就需要透過其他方式:&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-1-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-1-1">1&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">go env -w &lt;span style="color:#00688b">GOPRIVATE&lt;/span>=github.com/appleboy
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>go env -w &lt;span style="color:#00688b">GOPRIVATE&lt;/span>=github.com/appleboy
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>上面代表告訴 go 指令，只要遇到 &lt;code>github.com/appleboy&lt;/code> 就直接讀取，不需要走 Proxy 流程。拿 GitHub 當作範例，在本機端開發該如何使用？首先要先去申請 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>，接著設定 Git&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-2-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-2-1">1&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">git config --global url.&lt;span style="color:#cd5555">&amp;#34;https://&lt;/span>&lt;span style="color:#00688b">$USERNAME&lt;/span>&lt;span style="color:#cd5555">:&lt;/span>&lt;span style="color:#00688b">$ACCESS_TOKEN&lt;/span>&lt;span style="color:#cd5555">@github.com&amp;#34;&lt;/span>.insteadOf &lt;span style="color:#cd5555">&amp;#34;https://github.com&amp;#34;&lt;/span>
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git config --global url.&lt;span style="color:#cd5555">&amp;#34;https://&lt;/span>&lt;span style="color:#00688b">$USERNAME&lt;/span>&lt;span style="color:#cd5555">:&lt;/span>&lt;span style="color:#00688b">$ACCESS_TOKEN&lt;/span>&lt;span style="color:#cd5555">@github.com&amp;#34;&lt;/span>.insteadOf &lt;span style="color:#cd5555">&amp;#34;https://github.com&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>其中 Username 就是 GitHub 帳號，Access token 就是上面的 &lt;a href="https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line">Personal Access Token&lt;/a>。&lt;/p></description></item><item><title>[Go 教學] graceful shutdown 搭配 docker-compose 實現 rolling update</title><link>https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</link><pubDate>Sat, 08 Feb 2020 14:50:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2020/02/graceful-shutdown-using-docker-compose-with-rolling-update/</guid><description>&lt;blockquote>
 &lt;p>線上課程:『&lt;a href="https://www.udemy.com/course/golang-fight/?couponCode=202002" title="Docker 容器實用實戰">Go 語言實戰&lt;/a>』目前特價 &lt;strong>$2100 TWD&lt;/strong>，優惠代碼『&lt;strong>202003&lt;/strong>』，也可以直接匯款（價格再減 &lt;strong>100&lt;/strong>），如果想搭配另外兩門課程合購可以透過 &lt;a href="http://facebook.com/appleboy46">FB 聯絡我&lt;/a>&lt;/p>
@@ -247,41 +250,45 @@ go mod tidy
 &lt;p>第一點非常實用，尤其在專案很忙的時候，同事間只有少許的時間可以幫忙看程式碼或討論，如果大家都有寫測試，在時間的壓力下，只要稍微看一下，CI/CD 驗證過無誤，大致上就可以上線了。第二點在於，團隊其他成員需要修改一個不確定的地方，商業邏輯修正可能會造成很大的錯誤，而測試在這時候就發揮效果。最後一點就是程式碼品質，不管是新功能，或者是 Bug，任何時間點都需要補上測試，就算 code coverage 已經很高了，但是只要有任何 bug 就要補測試，測試寫的越多，專案的品質相對會提高。在 Go 語言專案內該如何寫測試了，為什麼專案要導入 Go 語言的原因之一就是『寫測試太簡單』了，底下來介紹如何寫基本的測試。&lt;/p></description></item><item><title>Go 語言的 vendor 目錄</title><link>https://blog.wu-boy.com/2018/05/what-is-vendor-in-golang/</link><pubDate>Sat, 05 May 2018 07:25:02 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2018/05/what-is-vendor-in-golang/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/40093179410/in/dateposted-public/" title="Go-Logo_Blue">&lt;img src="https://i1.wp.com/farm1.staticflickr.com/908/40093179410_53df4bb9e8_z.jpg?w=840&amp;#038;ssl=1" alt="Go-Logo_Blue" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>很多朋友剛入門 &lt;a href="https://golang.org">Go 語言時&lt;/a>，第一個會遇到的問題是，該如何設定專案配置，讓專案可以正常執行，在個人電腦該如何開發多個專案，這邊就會遇到該如何設定 &lt;code>$GOPATH&lt;/code>，我在這邊跟大家講個觀念，開發環境只會有一個 &lt;code>$GOPATH&lt;/code>，不管團隊內有多少專案，都是存放在同一個 GOPATH，避免每次開專案都要重新設定 &lt;code>$GOPATH&lt;/code>，而專案內用到的相依性套件，請各自維護，透過&lt;a href="https://github.com/golang/go/wiki/PackageManagementTools">官方提供的 wiki&lt;/a>，請選一套覺得好用的來使用吧，沒有最好的工具，找一套適合團隊是最重要的。&lt;/p></description></item><item><title>Go 語言的 init 函式</title><link>https://blog.wu-boy.com/2018/04/init-func-in-golang/</link><pubDate>Thu, 19 Apr 2018 03:17:00 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2018/04/init-func-in-golang/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/" title="Go-brown-side.sh">&lt;img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&amp;#038;ssl=1" alt="Go-brown-side.sh" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>本篇會帶大家認識 &lt;a href="https://golang.org">Go 語言&lt;/a>的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看&lt;a href="https://play.golang.org/p/AN-6MK4qVVL">例子&lt;/a>，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1"> 1&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-2"> 2&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-3"> 3&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-4"> 4&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-5"> 5&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-6"> 6&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-7"> 7&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-8"> 8&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-9"> 9&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-10">10&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-11">11&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-12">12&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-13">13&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-14">14&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-15">15&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-16">16&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-17">17&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
-&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
-&lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
-)
-&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">init&lt;/span>() {
-fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;init 1&amp;#34;&lt;/span>)
-}
-&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">init&lt;/span>() {
-fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;init 2&amp;#34;&lt;/span>)
-}
-&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
-fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;Hello, playground&amp;#34;&lt;/span>)
-}
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">init&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;init 1&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">init&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;init 2&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;Hello, playground&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>如何使用 Go 語言 Flag 套件 (影片教學)</title><link>https://blog.wu-boy.com/2018/04/how-to-use-golang-flag-package/</link><pubDate>Thu, 12 Apr 2018 03:17:25 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2018/04/how-to-use-golang-flag-package/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/" title="Go-brown-side.sh">&lt;img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&amp;#038;ssl=1" alt="Go-brown-side.sh" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>之前寫過一篇『&lt;a href="https://blog.wu-boy.com/2017/02/write-command-line-in-golang/">用 Golang 寫 Command line 工具&lt;/a>』教學，作者我錄了一個教學影片，教大家如何使用 &lt;a href="https://golang.org">Go 語言&lt;/a>的 &lt;a href="https://golang.org/pkg/flag/">Flag&lt;/a> 套件，套件用法很簡單，相信看了底下的影片教學馬上就會了，但是在這邊強調，用 flag 的時機會是在寫 command line tool 給同事或者是自己用，如果是寫大型 Web Application，不推薦使用 flag，原因是 flag 不支援讀取系統環境變數，如果是 web 服務，想要動態改變 port 或者是 DB 連線資訊，就變得比較複雜，也無法搭配 &lt;a href="https://www.docker.com/">Docker&lt;/a> 使用，更不用說想結合 &lt;a href="https://kubernetes.io/">Kubernetes&lt;/a>。如果要寫大專案，請使用 &lt;a href="https://github.com/urfave/cli">urfave/cli&lt;/a> 或 &lt;a href="https://github.com/spf13/cobra">spf13/cobra&lt;/a>。&lt;/p></description></item><item><title>Go 語言基礎實戰教學影片上線了</title><link>https://blog.wu-boy.com/2018/03/golang-introduction-video/</link><pubDate>Thu, 29 Mar 2018 01:45:35 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2018/03/golang-introduction-video/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/39050902230/in/dateposted-public/" title="Screen Shot 2018-03-17 at 11.40.12 PM">&lt;img src="https://i2.wp.com/farm1.staticflickr.com/805/39050902230_b1d91bc120_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2018-03-17 at 11.40.12 PM" data-recalc-dims="1" />&lt;/a>&lt;/p>
@@ -313,27 +320,29 @@ fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd55
 &lt;li>Drone 自訂套件&lt;/li>
 &lt;/ul></description></item><item><title>用 upx 壓縮 Go 語言執行擋</title><link>https://blog.wu-boy.com/2017/09/downsize-go-binary-using-upx/</link><pubDate>Fri, 01 Sep 2017 01:37:27 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/09/downsize-go-binary-using-upx/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>剛開始學 &lt;a href="https://golang.org">Go&lt;/a> 語言的時候，跟學習其他語言一樣，寫了底下一個簡單的 Hello World 檔案&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5">5&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6">6&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7">7&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8">8&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9">9&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1">1&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-2">2&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-3">3&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-4">4&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-5">5&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-6">6&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-7">7&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-8">8&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-9">9&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
-&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
-&lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
-)
-&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
-fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;Hello World!&amp;#34;&lt;/span>)
-}
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> (
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd5555">&amp;#34;Hello World!&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div>&lt;p>這是一個最簡單的程式碼，接著透過 &lt;code>go build&lt;/code> 的方式編譯出執行檔，這時候我們看看檔案大小:&lt;/p></description></item><item><title>用 Go 語言打造微服務架構</title><link>https://blog.wu-boy.com/2017/08/microservice-in-go/</link><pubDate>Fri, 11 Aug 2017 08:17:18 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/08/microservice-in-go/</guid><description>&lt;p>&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/p>
 &lt;p>今年在 &lt;a href="http://modernweb.tw/">ModernWeb&lt;/a> 講『用 Go 語言打造微服務架構』，蠻開心看到底下很多 &lt;a href="https://golang.org">Go&lt;/a> 開發者，希望未來能有更多公司導入 Go 語言，底下是會議大綱:&lt;/p>
@@ -358,41 +367,45 @@ fmt.&lt;span style="color:#008b45">Println&lt;/span>(&lt;span style="color:#cd55
 &lt;/ul></description></item><item><title>Cronjob 搭配 Drone 服務</title><link>https://blog.wu-boy.com/2017/06/how-to-schedule-builds-in-drone/</link><pubDate>Sun, 25 Jun 2017 05:32:08 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/06/how-to-schedule-builds-in-drone/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/34957940160/in/dateposted-public/" title="drone-logo_512">&lt;img src="https://i1.wp.com/c1.staticflickr.com/5/4236/34957940160_435d83114f_z.jpg?w=840&amp;#038;ssl=1" alt="drone-logo_512" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://github.com/drone/drone">Drone&lt;/a> 是一套基於 &lt;a href="https://www.docker.com/">Docker&lt;/a> Container 技術的 CI/CD 服務，它是用 &lt;a href="https://golang.org/">Go&lt;/a> 語言所開發，可以安裝在任何作業系統內，你可以把 Drone 當作是開源版的 &lt;a href="https://travis-ci.org/">Travis&lt;/a> 服務。Drone 本身不支援排程任務，也就是說無法像 Jenkins CI 一樣可以設定每天幾點幾分執行單一 Job 任務。但是可以透過第三方工具像是 &lt;code>cron&lt;/code> 來整合 Drone API 達成自動排程的效果，底下來看看該如何實作。&lt;/p></description></item><item><title>Go 語言內 struct methods 該使用 pointer 或 value 傳值?</title><link>https://blog.wu-boy.com/2017/05/go-struct-method-pointer-or-value/</link><pubDate>Mon, 22 May 2017 02:39:06 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/05/go-struct-method-pointer-or-value/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>上週末在台北講『&lt;a href="http://learning.ithome.com.tw/course/JjojzNh9P1N9H">Go 語言基礎課程&lt;/a>』，其中一段介紹 Struct 的使用，發現有幾個學員對於在 Method 內要放 Pointer 或 Value 感到困惑，而我自己平時在寫 Go 語言也沒有注意到這點。好在強者學員 &lt;a href="https://www.facebook.com/YinChenLiao?fref=nf">Dboy Liao&lt;/a> 找到一篇說明:『&lt;a href="https://nathanleclaire.com/blog/2014/08/09/dont-get-bitten-by-pointer-vs-non-pointer-method-receivers-in-golang/">Don&amp;rsquo;t Get Bitten by Pointer vs Non-Pointer Method Receivers in Golang&lt;/a>』，在 Go 語言如何區分 &lt;code>func (s *MyStruct)&lt;/code> 及 &lt;code>func (s MyStruct)&lt;/code>，底下我們先來看看簡單的 Struct 例子&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#14">14&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#15">15&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#16">16&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#17">17&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1"> 1&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-2"> 2&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-3"> 3&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-4"> 4&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-5"> 5&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-6"> 6&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-7"> 7&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-8"> 8&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-9"> 9&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-10">10&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-11">11&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-12">12&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-13">13&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-14">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-14">14&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-15">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-15">15&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-16">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-16">16&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-17">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-17">17&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-go" data-lang="go">&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
-&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
-&lt;span style="color:#8b008b;font-weight:bold">type&lt;/span> Cart &lt;span style="color:#8b008b;font-weight:bold">struct&lt;/span> {
-Name &lt;span style="color:#00688b;font-weight:bold">string&lt;/span>
-Price &lt;span style="color:#00688b;font-weight:bold">int&lt;/span>
-}
-&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> (c Cart) &lt;span style="color:#008b45">GetPrice&lt;/span>() {
-fmt.&lt;span style="color:#008b45">Println&lt;/span>(c.Price)
-}
-&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
-c := &amp;amp;Cart{&lt;span style="color:#cd5555">&amp;#34;bage&amp;#34;&lt;/span>, &lt;span style="color:#b452cd">100&lt;/span>}
-c.&lt;span style="color:#008b45">GetPrice&lt;/span>()
-}
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-go" data-lang="go">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">package&lt;/span> main
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">import&lt;/span> &lt;span style="color:#cd5555">&amp;#34;fmt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">type&lt;/span> Cart &lt;span style="color:#8b008b;font-weight:bold">struct&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Name &lt;span style="color:#00688b;font-weight:bold">string&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> Price &lt;span style="color:#00688b;font-weight:bold">int&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> (c Cart) &lt;span style="color:#008b45">GetPrice&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fmt.&lt;span style="color:#008b45">Println&lt;/span>(c.Price)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">func&lt;/span> &lt;span style="color:#008b45">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> c := &amp;amp;Cart{&lt;span style="color:#cd5555">&amp;#34;bage&amp;#34;&lt;/span>, &lt;span style="color:#b452cd">100&lt;/span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> c.&lt;span style="color:#008b45">GetPrice&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>用 Docker Multi-Stage 編譯出 Go 語言最小 Image</title><link>https://blog.wu-boy.com/2017/04/build-minimal-docker-container-using-multi-stage-for-go-app/</link><pubDate>Sat, 29 Apr 2017 13:23:55 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/04/build-minimal-docker-container-using-multi-stage-for-go-app/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/25660808075/in/dateposted-public/" title="docker">&lt;img src="https://i2.wp.com/farm2.staticflickr.com/1600/25660808075_c8190290f7_z.jpg?w=840&amp;#038;ssl=1" alt="docker" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>之前應該沒寫過用 &lt;a href="https://www.docker.com/">Docker&lt;/a> 結合 Go 語言編譯出最小 Image 的文章，剛好趁這機會來介紹。其實網路上可以直接找到文章，像是這篇『&lt;a href="https://blog.codeship.com/building-minimal-docker-containers-for-go-applications/">Building Minimal Docker Containers for Go Applications&lt;/a>』，那本文來介紹 Docker 新功能 &lt;a href="https://github.com/moby/moby/pull/32063">multi-stage builds&lt;/a>，此功能只有在 &lt;a href="https://github.com/moby/moby/releases/tag/v17.05.0-ce-rc1">17.05.0-ce&lt;/a> 才支援，看起來是 2017/05/03 號會 release 出來。我們拿 Go 語言的 Hello World 來介紹 Single build 及 Multiple build。&lt;/p></description></item><item><title>用 Go 語言打造 DevOps Bot</title><link>https://blog.wu-boy.com/2017/04/devops-bot-in-golang/</link><pubDate>Sat, 29 Apr 2017 03:33:49 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/04/devops-bot-in-golang/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/34200999131/in/dateposted-public/" title="18190989_10210525473186864_1567687746_n">&lt;img src="https://i0.wp.com/c1.staticflickr.com/5/4173/34200999131_48c1b84dd2_z.jpg?w=840&amp;#038;ssl=1" alt="18190989_10210525473186864_1567687746_n" data-recalc-dims="1" />&lt;/a>&lt;/p>
@@ -412,29 +425,29 @@ c.&lt;span style="color:#008b45">GetPrice&lt;/span>()
 &lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/33499997070/in/dateposted-public/" title="Screen Shot 2017-04-07 at 9.52.40 AM">&lt;img src="https://i2.wp.com/c1.staticflickr.com/3/2820/33499997070_dfa4f1cf7c_z.jpg?w=840&amp;#038;ssl=1" alt="Screen Shot 2017-04-07 at 9.52.40 AM" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>此篇會介紹在 &lt;a href="https://golang.org">Go 語言&lt;/a>如何跟 Let’s Encrypt 串接，底下有兩種方式。&lt;/p></description></item><item><title>Debian/Ubuntu 的 update-rc.d 使用教學</title><link>https://blog.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/</link><pubDate>Thu, 06 Apr 2017 08:34:14 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/04/update-rc-in-debian-or-ubuntu/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/33486150390/in/dateposted-public" title="Debian">&lt;img src="https://i2.wp.com/c1.staticflickr.com/3/2849/33486150390_198a19b880_n.jpg?w=840&amp;#038;ssl=1" alt="Debian" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;p>&lt;a href="http://manpages.ubuntu.com/manpages/precise/man8/update-rc.d.8.html">update-rc.d&lt;/a> 是在 &lt;a href="https://www.debian.org/">Debian&lt;/a> 或 &lt;a href="https://www.ubuntu.com/">Ubuntu&lt;/a> 內用來管理 &lt;code>/etc/init.d&lt;/code> 目錄內的 scripts 工具。不管是 Nginx 或 Mysql 等相關服務，都可以在 &lt;code>/etc/init.d&lt;/code> 目錄內找到相對應的 script 檔案，隨便打開一個 script 檔案就可以看到標頭有固定的格式寫法:&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1">1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2">2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3">3&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4">4&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5">5&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6">6&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7">7&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8">8&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9">9&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1">1&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-2">2&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-3">3&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-4">4&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-5">5&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-6">6&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-7">7&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-8">8&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-9">9&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-bash" data-lang="bash">&lt;span style="color:#228b22">### BEGIN INIT INFO&lt;/span>
-&lt;span style="color:#228b22"># Provides: gorush&lt;/span>
-&lt;span style="color:#228b22"># Required-Start: $syslog $network&lt;/span>
-&lt;span style="color:#228b22"># Required-Stop: $syslog $network&lt;/span>
-&lt;span style="color:#228b22"># Default-Start: 2 3 4 5&lt;/span>
-&lt;span style="color:#228b22"># Default-Stop: 0 1 6&lt;/span>
-&lt;span style="color:#228b22"># Short-Description: starts the gorush web server&lt;/span>
-&lt;span style="color:#228b22"># Description: starts gorush using start-stop-daemon&lt;/span>
-&lt;span style="color:#228b22">### END INIT INFO&lt;/span>
-&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22">### BEGIN INIT INFO&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22"># Provides: gorush&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22"># Required-Start: $syslog $network&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22"># Required-Stop: $syslog $network&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22"># Default-Start: 2 3 4 5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22"># Default-Stop: 0 1 6&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22"># Short-Description: starts the gorush web server&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22"># Description: starts gorush using start-stop-daemon&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22">### END INIT INFO&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>Go 語言官方推出的 dep 使用心得</title><link>https://blog.wu-boy.com/2017/03/golang-dependency-management-tool-dep/</link><pubDate>Fri, 31 Mar 2017 01:58:01 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/03/golang-dependency-management-tool-dep/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>
 &lt;p>&lt;a href="https://golang.org/">Go&lt;/a> 語言團隊在去年開始開發 Dependency Management Tool 稱作 &lt;a href="https://github.com/golang/dep">dep&lt;/a>，並且預計明年 2018 推出 1.10 Go 版本時內建，詳細可以參考官方的 &lt;a href="https://github.com/golang/dep/wiki/Roadmap">roadmap&lt;/a>，強者我朋友寫了一篇&lt;a href="https://github.com/kevingo/dep-example">使用教學&lt;/a>，有興趣的朋友可以參考看看，但是本篇會講幾點我目前不打算用 dep 的原因。&lt;/p></description></item><item><title>Go 語言的錯誤訊息處理</title><link>https://blog.wu-boy.com/2017/03/error-handler-in-golang/</link><pubDate>Thu, 23 Mar 2017 07:25:00 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2017/03/error-handler-in-golang/</guid><description>&lt;p>&lt;a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">&lt;img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="">&lt;/a>&lt;/p>

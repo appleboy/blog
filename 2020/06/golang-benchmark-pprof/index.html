@@ -1,10 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Go 語言用 pprof 找出程式碼效能瓶頸 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Go 語言用 pprof 找出程式碼效能瓶頸 - 小惡魔 - AppleBOY</title><meta name=description content="
 Go 語言除了內建強大的測試工具 (go test) 之外，也提供了效能評估的工具 (go tool pprof)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。
 
 
@@ -14,11 +8,7 @@ Go 語言除了內建強大的測試工具 (go test) 之外，也提供了效能
 go test -bench=. -benchtime=3s ./lexer/
 
 
-">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2020\/06\/golang-benchmark-pprof\/","name":"Go 語言用 pprof 找出程式碼效能瓶頸"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言用 pprof 找出程式碼效能瓶頸","description":"\nGo 語言除了內建強大的測試工具 (go test) 之外，也提供了效能評估的工具 (go tool pprof)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。\n1  go test -bench=. -benchtime=3s .\/lexer\/   ","inLanguage":"en","wordCount":541,"datePublished":"2020-06-07T05:11:37","dateModified":"2020-06-07T05:11:37","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["benchmark, golang, pprof"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2020\/06\/golang-benchmark-pprof\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="Go 語言用 pprof 找出程式碼效能瓶頸">
-<meta property="og:description" content="
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2020\/06\/golang-benchmark-pprof\/","name":"Go 語言用 pprof 找出程式碼效能瓶頸"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言用 pprof 找出程式碼效能瓶頸","description":"\nGo 語言除了內建強大的測試工具 (go test) 之外，也提供了效能評估的工具 (go tool pprof)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。\n1  go test -bench=. -benchtime=3s .\/lexer\/   ","inLanguage":"en","wordCount":541,"datePublished":"2020-06-07T05:11:37","dateModified":"2020-06-07T05:11:37","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["benchmark, golang, pprof"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2020\/06\/golang-benchmark-pprof\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言用 pprof 找出程式碼效能瓶頸"><meta property="og:description" content="
 Go 語言除了內建強大的測試工具 (go test) 之外，也提供了效能評估的工具 (go tool pprof)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。
 
 
@@ -28,525 +18,167 @@ Go 語言除了內建強大的測試工具 (go test) 之外，也提供了效能
 go test -bench=. -benchtime=3s ./lexer/
 
 
-">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2020/06/golang-benchmark-pprof/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="Go 語言用 pprof 找出程式碼效能瓶頸">
-<meta name=twitter:description content="
+"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2020/06/golang-benchmark-pprof/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Go 語言用 pprof 找出程式碼效能瓶頸"><meta name=twitter:description content="
 Go 語言除了內建強大的測試工具 (go test) 之外，也提供了效能評估的工具 (go tool pprof)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。
 
 
-1 …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+1 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>Go 語言用 pprof 找出程式碼效能瓶頸</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2020
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Go 語言用 pprof 找出程式碼效能瓶頸</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 7, 2020
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;541&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li><a href=#教學影片>教學影片</a></li>
-<li><a href=#效能評估>效能評估</a></li>
-<li><a href=#心得>心得</a></li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p>
-<p><a href=https://golang.org>Go 語言</a>除了內建強大的測試工具 (<a href=https://golang.org/pkg/testing/>go test</a>) 之外，也提供了效能評估的工具 (<a href=https://blog.golang.org/pprof>go tool pprof</a>)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s ./lexer/
-</code></pre></td></tr></table>
-</div>
-</div><p>可以看到底下輸出結果</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>BenchmarkCreateKeyString1-8   <span style=color:#b452cd>100000000</span>   35.9 ns/op   <span style=color:#b452cd>8</span> B/op  <span style=color:#b452cd>1</span> allocs/op
-BenchmarkCreateKeyString2-8   <span style=color:#b452cd>85222555</span>    42.4 ns/op   <span style=color:#b452cd>8</span> B/op  <span style=color:#b452cd>1</span> allocs/op
-BenchmarkCreateKeyString3-8   <span style=color:#b452cd>73403774</span>    48.0 ns/op   <span style=color:#b452cd>8</span> B/op  <span style=color:#b452cd>1</span> allocs/op
-</code></pre></td></tr></table>
-</div>
-</div><p>從上面數據可以看到效能結果，開發者可以根據這結果來調教程式碼，改善過後再透過一樣的指令來評估是否有改善成功。我個人通常開一個新的 performance 分支來進行效能調校，調教完成後，再執行上面指令輸出到存文字檔</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s ./lexer/ &gt; new.txt
-</code></pre></td></tr></table>
-</div>
-</div><p>接著切回去 master 分支，用同樣的指令</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s ./lexer/ &gt; old.txt
-</code></pre></td></tr></table>
-</div>
-</div><p>接著用 <a href="https://pkg.go.dev/golang.org/x/perf/cmd/benchstat?tab=doc">benchstat</a> 來看看是否有改善，改善了多少？</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ benchstat -alpha <span style=color:#b452cd>3</span> a.txt b.txt
-name     old time/op    new time/op    delta
-Lexer-8    3.43µs ± 0%    2.22µs ± 0%  -35.23%  (<span style=color:#00688b>p</span>=1.000 <span style=color:#00688b>n</span>=1+1)
-
-name     old speed      new speed      delta
-Lexer-8   242MB/s ± 0%   373MB/s ± 0%  +54.36%  (<span style=color:#00688b>p</span>=1.000 <span style=color:#00688b>n</span>=1+1)
-
-name     old alloc/op   new alloc/op   delta
-Lexer-8      896B ± 0%      896B ± 0%     ~     (all equal)
-
-name     old allocs/op  new allocs/op  delta
-Lexer-8      1.00 ± 0%      1.00 ± 0%     ~     (all equal)
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=教學影片>教學影片</h2>
-<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
-<iframe src=https://www.youtube.com/embed/4A7q99ggyKc style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
-</div>
-<p>如果對於課程內容有興趣，可以參考底下課程。</p>
-<ul>
-<li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202005">Go 語言基礎實戰 (開發, 測試及部署)</a></li>
-<li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=2020205">一天學會 DevOps 自動化測試及部署</a></li>
-<li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202005">DOCKER 容器開發部署實戰</a></li>
-</ul>
-<p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p>
-<h2 id=效能評估>效能評估</h2>
-<p>上面方式來評估效能之外，最主要遇到的問題會是，在一大段程式碼及邏輯中，要找出慢的主因，就不能光是靠上面的方式，因為開發者不會知道整段程式碼到底慢在哪邊，100 行內要找出慢的原因很難，那 1000 行更難，所以需要透過其他方式來處理。這時候就要使用到 <a href=https://blog.golang.org/pprof>pprof</a> 來找出程式碼所有執行的時間，怎麼輸出 CPU 所花的時間，可以透過底下指令:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -cpuprofile cpu.out <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  ./lexer/
-</code></pre></td></tr></table>
-</div>
-</div><p>產生出 <code>cpu.out</code> 後，就可以使用 <code>go</code> 指令來看看哪邊出問題</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go tool pprof cpu.out
-</code></pre></td></tr></table>
-</div>
-</div><p>可以進到 console 畫面:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ go tool pprof cpu.out 
-Type: cpu
-Time: Jun 7, <span style=color:#b452cd>2020</span> at 11:26am (CST)
-Duration: 6.04s, Total <span style=color:#00688b>samples</span> = 5.95s (98.56%)
-Entering interactive mode (<span style=color:#658b00>type</span> <span style=color:#cd5555>&#34;help&#34;</span> <span style=color:#8b008b;font-weight:700>for</span> commands, <span style=color:#cd5555>&#34;o&#34;</span> <span style=color:#8b008b;font-weight:700>for</span> options)
-(pprof)
-</code></pre></td></tr></table>
-</div>
-</div><p>接下來使用方式非常簡單，可以使用 top 功能來看數據</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>(pprof) top10
-Showing nodes accounting <span style=color:#8b008b;font-weight:700>for</span> 4850ms, 81.51% of 5950ms total
-Dropped <span style=color:#b452cd>66</span> nodes (cum &lt;= 29.75ms)
-Showing top <span style=color:#b452cd>10</span> nodes out of <span style=color:#b452cd>81</span>
-      flat  flat%   sum%        cum   cum%
-    1130ms 18.99% 18.99%     3600ms 60.50%  LibertyParser/lexer.(*Lexer).NextToken
-     970ms 16.30% 35.29%      970ms 16.30%  LibertyParser/lexer.(*Lexer).readChar
-     770ms 12.94% 48.24%      770ms 12.94%  runtime.kevent
-     730ms 12.27% 60.50%      730ms 12.27%  LibertyParser/lexer.isLetter (inline)
-     310ms  5.21% 65.71%     1480ms 24.87%  LibertyParser/lexer.(*Lexer).readIdentifier
-     290ms  4.87% 70.59%      290ms  4.87%  runtime.madvise
-     210ms  3.53% 74.12%      210ms  3.53%  runtime.pthread_cond_wait
-     170ms  2.86% 76.97%      170ms  2.86%  runtime.memclrNoHeapPointers
-     140ms  2.35% 79.33%     4200ms 70.59%  LibertyParser/lexer.BenchmarkLexer
-     130ms  2.18% 81.51%      370ms  6.22%  LibertyParser/lexer.(*Lexer).readString
-</code></pre></td></tr></table>
-</div>
-</div><p>注意 <code>flat</code> 代表執行該 func 所需要的時間 (不包含內部其他 func 所需要的時間)，而 <code>cum</code> 則是包含全部函示的執行時間。接下來就可以看到整個列表需要改善的項目，像是要改善 <code>readChar</code> 就可以直接執行 <code>list readChar</code></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>(pprof) list readChar
-Total: 5.95s
-<span style=color:#00688b>ROUTINE</span> ======================== LibertyParser/lexer.(*Lexer).readChar in /Users/appleboy/git/appleboy/LibertyParser/lexer/lexer.go
-     970ms      970ms (flat, cum) 16.30% of Total
-         .          .     22:   l.readChar()
-         .          .     23:   <span style=color:#8b008b;font-weight:700>return</span> l
-         .          .     24:}
-         .          .     25:
-         .          .     26:func (l *Lexer) readChar() {
-     260ms      260ms     27:   <span style=color:#8b008b;font-weight:700>if</span> l.readPosition &gt;= len(l.Data) {
-         .          .     28:           // End of input (haven<span style=color:#a61717;background-color:#e3d2d2>&#39;</span>t <span style=color:#658b00>read</span> anything yet or EOF)
-         .          .     29:           // <span style=color:#b452cd>0</span> is ASCII code <span style=color:#8b008b;font-weight:700>for</span> <span style=color:#cd5555>&#34;NUL&#34;</span> character
-         .          .     30:           l.char = <span style=color:#b452cd>0</span>
-         .          .     31:   } <span style=color:#8b008b;font-weight:700>else</span> {
-     620ms      620ms     32:           l.char = l.Data[l.readPosition]
-         .          .     33:   }
-         .          .     34:
-      50ms       50ms     35:   l.position = l.readPosition
-      40ms       40ms     36:   l.readPosition++
-         .          .     37:}
-         .          .     38:
-</code></pre></td></tr></table>
-</div>
-</div><p>開發者可以清楚看到每一行所需要的執行時間 (flat, cum)，這樣就可以知道時間到底慢在哪邊？哪邊需要進行關鍵性
-優化。沒有這些數據，開發者就只能自己使用傳統方式 <code>log.Println()</code> 方式來進行除錯。除了上述這些之外，pprof 也提供其他方式來觀看，像是輸出 pdf 之類的，只要在 console 內鍵入 <code>pdf</code> 即可，pdf 內容會有更詳細的圖</p>
-<p><a href="https://lh3.googleusercontent.com/Eup1quPsPWy9pUghsNELUwYY25GhO9m0vI_1Ig5x5uKRnfD2LOYXd0lSZYm53pqrnDxDQi2BS559lGWS0ncGeggPx5Uc_Dg3R8sFZhnol4OHXsclJ5Bsf5oF9Ped-1hhzoNDjHhmLCg=w1920-h1080" title=pprof><img src="https://lh3.googleusercontent.com/Eup1quPsPWy9pUghsNELUwYY25GhO9m0vI_1Ig5x5uKRnfD2LOYXd0lSZYm53pqrnDxDQi2BS559lGWS0ncGeggPx5Uc_Dg3R8sFZhnol4OHXsclJ5Bsf5oF9Ped-1hhzoNDjHhmLCg=w1920-h1080" alt=pprof title=pprof></a></p>
-<p>除了透過在 console 端操作之外，開發者也可以透過 web 方式來進行 UI 操作，對比 console 來說，看到完整的 pprof 報表，這樣更方便除錯。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>go tool pprof -http=:8080 cpu.out
-</code></pre></td></tr></table>
-</div>
-</div><p>自動會開啟 web 顯示，個人覺得相當的方便，從 console 操作轉到 UI 操作，體驗上還是有差別的。</p>
-<h2 id=心得>心得</h2>
-<p>善用 pprof 可以改善蠻多效能上的問題，也可以抓到哪邊的邏輯寫錯，造成跑太多次，導致效能變差，除了寫法上差異之外，最主要還有程式上的邏輯，也許換個方式效能就改善很多。本篇算是 pprof 的初探，希望大家會喜歡。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/benchmark/>benchmark</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#教學影片>教學影片</a></li><li><a href=#效能評估>效能評估</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" title="golang logo"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt="golang logo" title="golang logo"></a></p><p><a href=https://golang.org>Go 語言</a>除了內建強大的測試工具 (<a href=https://golang.org/pkg/testing/>go test</a>) 之外，也提供了效能評估的工具 (<a href=https://blog.golang.org/pprof>go tool pprof</a>)，整個生態鏈非常完整，這也是我推薦大家使用 Go 語言的最大原因，這篇會介紹如何使用 pprof 來找出效能瓶頸的地方。假設開發者在寫任何邏輯功能時，發現跑出來的速度不是想像的這麼快，或者是在串接服務流程時，整個回覆時間特別久，這時候可以透過 benchmark 先找出原因。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s ./lexer/
+</span></span></code></pre></td></tr></table></div></div><p>可以看到底下輸出結果</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>BenchmarkCreateKeyString1-8   <span style=color:#b452cd>100000000</span>   35.9 ns/op   <span style=color:#b452cd>8</span> B/op  <span style=color:#b452cd>1</span> allocs/op
+</span></span><span style=display:flex><span>BenchmarkCreateKeyString2-8   <span style=color:#b452cd>85222555</span>    42.4 ns/op   <span style=color:#b452cd>8</span> B/op  <span style=color:#b452cd>1</span> allocs/op
+</span></span><span style=display:flex><span>BenchmarkCreateKeyString3-8   <span style=color:#b452cd>73403774</span>    48.0 ns/op   <span style=color:#b452cd>8</span> B/op  <span style=color:#b452cd>1</span> allocs/op
+</span></span></code></pre></td></tr></table></div></div><p>從上面數據可以看到效能結果，開發者可以根據這結果來調教程式碼，改善過後再透過一樣的指令來評估是否有改善成功。我個人通常開一個新的 performance 分支來進行效能調校，調教完成後，再執行上面指令輸出到存文字檔</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s ./lexer/ &gt; new.txt
+</span></span></code></pre></td></tr></table></div></div><p>接著切回去 master 分支，用同樣的指令</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s ./lexer/ &gt; old.txt
+</span></span></code></pre></td></tr></table></div></div><p>接著用 <a href="https://pkg.go.dev/golang.org/x/perf/cmd/benchstat?tab=doc">benchstat</a> 來看看是否有改善，改善了多少？</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ benchstat -alpha <span style=color:#b452cd>3</span> a.txt b.txt
+</span></span><span style=display:flex><span>name     old time/op    new time/op    delta
+</span></span><span style=display:flex><span>Lexer-8    3.43µs ± 0%    2.22µs ± 0%  -35.23%  (<span style=color:#00688b>p</span>=1.000 <span style=color:#00688b>n</span>=1+1)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>name     old speed      new speed      delta
+</span></span><span style=display:flex><span>Lexer-8   242MB/s ± 0%   373MB/s ± 0%  +54.36%  (<span style=color:#00688b>p</span>=1.000 <span style=color:#00688b>n</span>=1+1)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>name     old alloc/op   new alloc/op   delta
+</span></span><span style=display:flex><span>Lexer-8      896B ± 0%      896B ± 0%     ~     (all equal)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>name     old allocs/op  new allocs/op  delta
+</span></span><span style=display:flex><span>Lexer-8      1.00 ± 0%      1.00 ± 0%     ~     (all equal)
+</span></span></code></pre></td></tr></table></div></div><h2 id=教學影片>教學影片</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/4A7q99ggyKc style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>如果對於課程內容有興趣，可以參考底下課程。</p><ul><li><a href="https://www.udemy.com/course/golang-fight/?couponCode=202005">Go 語言基礎實戰 (開發, 測試及部署)</a></li><li><a href="https://www.udemy.com/course/devops-oneday/?couponCode=2020205">一天學會 DevOps 自動化測試及部署</a></li><li><a href="https://www.udemy.com/course/docker-practice/?couponCode=202005">DOCKER 容器開發部署實戰</a></li></ul><p>如果需要搭配購買請直接透過 <a href=http://facebook.com/appleboy46>FB 聯絡我</a>，直接匯款（價格再減 <strong>100</strong>）</p><h2 id=效能評估>效能評估</h2><p>上面方式來評估效能之外，最主要遇到的問題會是，在一大段程式碼及邏輯中，要找出慢的主因，就不能光是靠上面的方式，因為開發者不會知道整段程式碼到底慢在哪邊，100 行內要找出慢的原因很難，那 1000 行更難，所以需要透過其他方式來處理。這時候就要使用到 <a href=https://blog.golang.org/pprof>pprof</a> 來找出程式碼所有執行的時間，怎麼輸出 CPU 所花的時間，可以透過底下指令:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>go <span style=color:#658b00>test</span> -bench=. -benchtime=3s <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -cpuprofile cpu.out <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  ./lexer/
+</span></span></code></pre></td></tr></table></div></div><p>產生出 <code>cpu.out</code> 後，就可以使用 <code>go</code> 指令來看看哪邊出問題</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>go tool pprof cpu.out
+</span></span></code></pre></td></tr></table></div></div><p>可以進到 console 畫面:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ go tool pprof cpu.out 
+</span></span><span style=display:flex><span>Type: cpu
+</span></span><span style=display:flex><span>Time: Jun 7, <span style=color:#b452cd>2020</span> at 11:26am (CST)
+</span></span><span style=display:flex><span>Duration: 6.04s, Total <span style=color:#00688b>samples</span> = 5.95s (98.56%)
+</span></span><span style=display:flex><span>Entering interactive mode (<span style=color:#658b00>type</span> <span style=color:#cd5555>&#34;help&#34;</span> <span style=color:#8b008b;font-weight:700>for</span> commands, <span style=color:#cd5555>&#34;o&#34;</span> <span style=color:#8b008b;font-weight:700>for</span> options)
+</span></span><span style=display:flex><span>(pprof)
+</span></span></code></pre></td></tr></table></div></div><p>接下來使用方式非常簡單，可以使用 top 功能來看數據</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-15>15</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>(pprof) top10
+</span></span><span style=display:flex><span>Showing nodes accounting <span style=color:#8b008b;font-weight:700>for</span> 4850ms, 81.51% of 5950ms total
+</span></span><span style=display:flex><span>Dropped <span style=color:#b452cd>66</span> nodes (cum &lt;= 29.75ms)
+</span></span><span style=display:flex><span>Showing top <span style=color:#b452cd>10</span> nodes out of <span style=color:#b452cd>81</span>
+</span></span><span style=display:flex><span>      flat  flat%   sum%        cum   cum%
+</span></span><span style=display:flex><span>    1130ms 18.99% 18.99%     3600ms 60.50%  LibertyParser/lexer.(*Lexer).NextToken
+</span></span><span style=display:flex><span>     970ms 16.30% 35.29%      970ms 16.30%  LibertyParser/lexer.(*Lexer).readChar
+</span></span><span style=display:flex><span>     770ms 12.94% 48.24%      770ms 12.94%  runtime.kevent
+</span></span><span style=display:flex><span>     730ms 12.27% 60.50%      730ms 12.27%  LibertyParser/lexer.isLetter (inline)
+</span></span><span style=display:flex><span>     310ms  5.21% 65.71%     1480ms 24.87%  LibertyParser/lexer.(*Lexer).readIdentifier
+</span></span><span style=display:flex><span>     290ms  4.87% 70.59%      290ms  4.87%  runtime.madvise
+</span></span><span style=display:flex><span>     210ms  3.53% 74.12%      210ms  3.53%  runtime.pthread_cond_wait
+</span></span><span style=display:flex><span>     170ms  2.86% 76.97%      170ms  2.86%  runtime.memclrNoHeapPointers
+</span></span><span style=display:flex><span>     140ms  2.35% 79.33%     4200ms 70.59%  LibertyParser/lexer.BenchmarkLexer
+</span></span><span style=display:flex><span>     130ms  2.18% 81.51%      370ms  6.22%  LibertyParser/lexer.(*Lexer).readString
+</span></span></code></pre></td></tr></table></div></div><p>注意 <code>flat</code> 代表執行該 func 所需要的時間 (不包含內部其他 func 所需要的時間)，而 <code>cum</code> 則是包含全部函示的執行時間。接下來就可以看到整個列表需要改善的項目，像是要改善 <code>readChar</code> 就可以直接執行 <code>list readChar</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-21>21</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>(pprof) list readChar
+</span></span><span style=display:flex><span>Total: 5.95s
+</span></span><span style=display:flex><span><span style=color:#00688b>ROUTINE</span> ======================== LibertyParser/lexer.(*Lexer).readChar in /Users/appleboy/git/appleboy/LibertyParser/lexer/lexer.go
+</span></span><span style=display:flex><span>     970ms      970ms (flat, cum) 16.30% of Total
+</span></span><span style=display:flex><span>         .          .     22:   l.readChar()
+</span></span><span style=display:flex><span>         .          .     23:   <span style=color:#8b008b;font-weight:700>return</span> l
+</span></span><span style=display:flex><span>         .          .     24:}
+</span></span><span style=display:flex><span>         .          .     25:
+</span></span><span style=display:flex><span>         .          .     26:func (l *Lexer) readChar() {
+</span></span><span style=display:flex><span>     260ms      260ms     27:   <span style=color:#8b008b;font-weight:700>if</span> l.readPosition &gt;= len(l.Data) {
+</span></span><span style=display:flex><span>         .          .     28:           // End of input (haven<span style=color:#a61717;background-color:#e3d2d2>&#39;</span>t <span style=color:#658b00>read</span> anything yet or EOF)
+</span></span><span style=display:flex><span>         .          .     29:           // <span style=color:#b452cd>0</span> is ASCII code <span style=color:#8b008b;font-weight:700>for</span> <span style=color:#cd5555>&#34;NUL&#34;</span> character
+</span></span><span style=display:flex><span>         .          .     30:           l.char = <span style=color:#b452cd>0</span>
+</span></span><span style=display:flex><span>         .          .     31:   } <span style=color:#8b008b;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>     620ms      620ms     32:           l.char = l.Data[l.readPosition]
+</span></span><span style=display:flex><span>         .          .     33:   }
+</span></span><span style=display:flex><span>         .          .     34:
+</span></span><span style=display:flex><span>      50ms       50ms     35:   l.position = l.readPosition
+</span></span><span style=display:flex><span>      40ms       40ms     36:   l.readPosition++
+</span></span><span style=display:flex><span>         .          .     37:}
+</span></span><span style=display:flex><span>         .          .     38:
+</span></span></code></pre></td></tr></table></div></div><p>開發者可以清楚看到每一行所需要的執行時間 (flat, cum)，這樣就可以知道時間到底慢在哪邊？哪邊需要進行關鍵性
+優化。沒有這些數據，開發者就只能自己使用傳統方式 <code>log.Println()</code> 方式來進行除錯。除了上述這些之外，pprof 也提供其他方式來觀看，像是輸出 pdf 之類的，只要在 console 內鍵入 <code>pdf</code> 即可，pdf 內容會有更詳細的圖</p><p><a href="https://lh3.googleusercontent.com/Eup1quPsPWy9pUghsNELUwYY25GhO9m0vI_1Ig5x5uKRnfD2LOYXd0lSZYm53pqrnDxDQi2BS559lGWS0ncGeggPx5Uc_Dg3R8sFZhnol4OHXsclJ5Bsf5oF9Ped-1hhzoNDjHhmLCg=w1920-h1080" title=pprof><img src="https://lh3.googleusercontent.com/Eup1quPsPWy9pUghsNELUwYY25GhO9m0vI_1Ig5x5uKRnfD2LOYXd0lSZYm53pqrnDxDQi2BS559lGWS0ncGeggPx5Uc_Dg3R8sFZhnol4OHXsclJ5Bsf5oF9Ped-1hhzoNDjHhmLCg=w1920-h1080" alt=pprof title=pprof></a></p><p>除了透過在 console 端操作之外，開發者也可以透過 web 方式來進行 UI 操作，對比 console 來說，看到完整的 pprof 報表，這樣更方便除錯。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>go tool pprof -http=:8080 cpu.out
+</span></span></code></pre></td></tr></table></div></div><p>自動會開啟 web 顯示，個人覺得相當的方便，從 console 操作轉到 UI 操作，體驗上還是有差別的。</p><h2 id=心得>心得</h2><p>善用 pprof 可以改善蠻多效能上的問題，也可以抓到哪邊的邏輯寫錯，造成跑太多次，導致效能變差，除了寫法上差異之外，最主要還有程式上的邏輯，也許換個方式效能就改善很多。本篇算是 pprof 的初探，希望大家會喜歡。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/benchmark/>benchmark</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/pprof/>pprof</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&text=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&description=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li>
-<li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li>
-<li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li>
-<li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li>
-<li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li>
-<li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li>
-<li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li>
-<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
-<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
-<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/ data-toggle=tooltip data-placement=top title="用 10 分鐘了解 Go 語言 context package 使用場景及介紹">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/ data-toggle=tooltip data-placement=top title="Go 1.15 新增 Module cache 環境變數">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2020/06/golang-benchmark-pprof>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2020/06/golang-benchmark-pprof'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/pprof/>pprof</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&text=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&title=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2020%2f06%2fgolang-benchmark-pprof%2f&description=Go%20%e8%aa%9e%e8%a8%80%e7%94%a8%20pprof%20%e6%89%be%e5%87%ba%e7%a8%8b%e5%bc%8f%e7%a2%bc%e6%95%88%e8%83%bd%e7%93%b6%e9%a0%b8" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li><li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li><li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li><li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li><li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li><li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li><li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li><li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2020/05/understant-golang-context-in-10-minutes/ data-toggle=tooltip data-placement=top title="用 10 分鐘了解 Go 語言 context package 使用場景及介紹">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2020/06/go-module-cache-variable-gomodcache/ data-toggle=tooltip data-placement=top title="Go 1.15 新增 Module cache 環境變數">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2020/06/golang-benchmark-pprof>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2020/06/golang-benchmark-pprof"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

@@ -1,10 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>[Linux&FreeBSD] 解决 umount時出現的 “Device is busy” - 小惡魔 - AppleBOY</title>
-<meta name=description content="在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 FreeBSD 那就要在安裝 /usr/ports/sysutils/fuser 這一個 tool 這樣才會有喔 安裝：『FreeBSD』
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[Linux&FreeBSD] 解决 umount時出現的 “Device is busy” - 小惡魔 - AppleBOY</title><meta name=description content="在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 FreeBSD 那就要在安裝 /usr/ports/sysutils/fuser 這一個 tool 這樣才會有喔 安裝：『FreeBSD』
 cd /usr/ports/sysutils/fuser
 make install clean 那使用方法： for FreeBSD 
 # fuser -m /var/log/maillog
@@ -12,11 +6,7 @@ make install clean 那使用方法： for FreeBSD
 # 加上 -u 參數
 # fuser -mu /var/log/maillog
 /var/log/maillog:   513wa(root)
-2008.11.28 update 另外解法： 可以使用 fstat -f /home 來觀看有哪些 process access /home">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2008\/11\/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy\/","name":"[ linux\u0026 free bsd] 解决 umount時出現的 “ device is busy”"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Linux\u0026FreeBSD] 解决 umount時出現的 “Device is busy”","description":"在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 FreeBSD 那就要在安裝 \/usr\/ports\/sysutils\/fuser 這一個 tool 這樣才會有喔 安裝：『FreeBSD』\ncd \/usr\/ports\/sysutils\/fuser\rmake install clean 那使用方法： for FreeBSD # fuser -m \/var\/log\/maillog\r\/var\/log\/maillog: 513wa\r# 加上 -u 參數\r# fuser -mu \/var\/log\/maillog\r\/var\/log\/maillog: 513wa(root) 2008.11.28 update 另外解法： 可以使用 fstat -f \/home 來觀看有哪些 process access \/home\n","inLanguage":"en","wordCount":120,"datePublished":"2008-11-25T08:32:08","dateModified":"2008-11-25T08:32:08","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["FreeBSD, Linux"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2008\/11\/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="[Linux&FreeBSD] 解决 umount時出現的 “Device is busy”">
-<meta property="og:description" content="在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 FreeBSD 那就要在安裝 /usr/ports/sysutils/fuser 這一個 tool 這樣才會有喔 安裝：『FreeBSD』
+2008.11.28 update 另外解法： 可以使用 fstat -f /home 來觀看有哪些 process access /home"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2008\/11\/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy\/","name":"[ linux\u0026 free bsd] 解决 umount時出現的 “ device is busy”"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Linux\u0026FreeBSD] 解决 umount時出現的 “Device is busy”","description":"在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 FreeBSD 那就要在安裝 \/usr\/ports\/sysutils\/fuser 這一個 tool 這樣才會有喔 安裝：『FreeBSD』\ncd \/usr\/ports\/sysutils\/fuser\rmake install clean 那使用方法： for FreeBSD # fuser -m \/var\/log\/maillog\r\/var\/log\/maillog: 513wa\r# 加上 -u 參數\r# fuser -mu \/var\/log\/maillog\r\/var\/log\/maillog: 513wa(root) 2008.11.28 update 另外解法： 可以使用 fstat -f \/home 來觀看有哪些 process access \/home\n","inLanguage":"en","wordCount":120,"datePublished":"2008-11-25T08:32:08","dateModified":"2008-11-25T08:32:08","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["FreeBSD, Linux"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2008\/11\/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Linux&FreeBSD] 解决 umount時出現的 “Device is busy”"><meta property="og:description" content="在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 FreeBSD 那就要在安裝 /usr/ports/sysutils/fuser 這一個 tool 這樣才會有喔 安裝：『FreeBSD』
 cd /usr/ports/sysutils/fuser
 make install clean 那使用方法： for FreeBSD 
 # fuser -m /var/log/maillog
@@ -24,294 +14,36 @@ make install clean 那使用方法： for FreeBSD
 # 加上 -u 參數
 # fuser -mu /var/log/maillog
 /var/log/maillog:   513wa(root)
-2008.11.28 update 另外解法： 可以使用 fstat -f /home 來觀看有哪些 process access /home">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="[Linux&FreeBSD] 解决 umount時出現的 “Device is busy”">
-<meta name=twitter:description content="在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝， …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+2008.11.28 update 另外解法： 可以使用 fstat -f /home 來觀看有哪些 process access /home"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="[Linux&FreeBSD] 解决 umount時出現的 “Device is busy”"><meta name=twitter:description content="在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>[Linux&FreeBSD] 解决 umount時出現的 “Device is busy”</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on November 25, 2008
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[Linux&FreeBSD] 解决 umount時出現的 “Device is busy”</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on November 25, 2008
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;120&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<article role=main class=blog-post>
-<p>在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 <a href=http://www.freebsd.org>FreeBSD</a> 那就要在安裝 <a href=http://www.freshports.org/sysutils/fuser>/usr/ports/sysutils/fuser</a> 這一個 tool 這樣才會有喔 安裝：『FreeBSD』</p>
-<pre class="brush: bash; title: ; notranslate" title>cd /usr/ports/sysutils/fuser
-make install clean</pre> 那使用方法： for FreeBSD
-<pre class="brush: bash; title: ; notranslate" title># fuser -m /var/log/maillog
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>在 Linux 系列 OS 安裝好之後，都會有支援一個 fuser 這一個指令，那有時候在 linux 底下 mount 隨身碟，或者是其他硬體的時候，有時候沒辦法讓您移除，會出現：『Device is busy』，那這個訊息是在保護確保你的資料有儲存到該裝置，有時候如果沒有正確移除，會造成資料遺失，或者是資料不完整，那基本上裝上任何一套 Linux 作業系統，都會有支援了，所以不必在另外安裝，那 <a href=http://www.freebsd.org>FreeBSD</a> 那就要在安裝 <a href=http://www.freshports.org/sysutils/fuser>/usr/ports/sysutils/fuser</a> 這一個 tool 這樣才會有喔 安裝：『FreeBSD』</p><pre class="brush: bash; title: ; notranslate" title>cd /usr/ports/sysutils/fuser
+make install clean</pre>那使用方法： for FreeBSD<pre class="brush: bash; title: ; notranslate" title># fuser -m /var/log/maillog
 /var/log/maillog:   513wa
 # 加上 -u 參數
 # fuser -mu /var/log/maillog
-/var/log/maillog:   513wa(root)</pre>
-<p><strong>2008.11.28 update</strong> 另外解法： 可以使用 fstat -f /home 來觀看有哪些 process access /home</p>
-<p>for Linux</p>
-<blockquote>
-<p>fuser可以顯示出當前哪個程序在使用磁盤上的某個文件、掛載點、甚至網路端口，並給出程序進程的詳細訊息。 假設無法卸載的設備為/media/USB，運行下列命令即可： $ fuser -m -v /media/USB/ 用戶進程號權限命令 /media/BAK/: galeki 335 ..c.. gqview -m 參數顯示所有使用指定文件系統的進程，後面可以跟掛載點，或是dev設備( Thanks lisir :)，-v參數給出詳細的輸出，可以看出，原來是gqview這個程序還在霸占著移動設備，fuser還給出了程序的進程號，知道了進程號，你就可以隨便怎麼處置這個程序了。 另外你也可以添加一個-k參數： fuser -m -k /media/USB/ 這招自動把霸佔著/media/USB/的程序殺死。如果你不是很明確是否要殺死所有霸佔設備的程序，你還可以加一個-i參數，這樣每殺死一個程序前，都會詢問： $ fuser -m -v -i -k /media/BAK/ 用戶進程號權限命令 /media/BAK/: galeki 371 ..c.. gqview 殺死進程371 ? (y/N) 轉貼自：<a href="http://www.ubuntu-tw.org/modules/newbb/viewtopic.php?post_id=40287">[轉貼]解决 umount時出現的 “Device is busy”</a> 相關文章：<a href=http://plog.longwin.com.tw/my_note-unix/2008/11/18/debian-ubuntu-linux-umount-device-busy-2008>Linux: umount 時 出現 “Device is busy” 的解法</a> Linux: umount 時 出現 “Device is busy” 的解法</p>
-</blockquote>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&text=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&title=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&title=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&title=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&description=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</a></li>
-<li><a href=/2012/01/ubuntu-mount-dvd-iso-on-ubuntu/>[筆記] 在 Ubuntu mount DVD ISO 檔案</a></li>
-<li><a href=/2011/12/linux-geany-sshfs-flag/>Geany 編輯器搭配 sshfs 參數注意事項</a></li>
-<li><a href=/2011/10/how-to-remove-duplicated-rpm-package/>AWS 機器上 duplicated RPM 問題</a></li>
-<li><a href=/2011/09/how-to-install-xcache-on-freebsd/>安裝 XCache 加速 PHP 執行速度</a></li>
-<li><a href=/2011/07/linux-geany-fuse/>Linux 程式開發編輯器 Geany + Fuse 遠端掛載</a></li>
-<li><a href=/2011/06/%E5%A5%BD%E7%94%A8-php-debug-extension-xdebug-on-freebsd-%E5%AE%89%E8%A3%9D/>好用 PHP debug extension Xdebug on FreeBSD 安裝</a></li>
-<li><a href=/2011/05/%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%9D-amazon-ec2-lamp-%E7%92%B0%E5%A2%83-ec2-console/>快速安裝 Amazon EC2 LAMP 環境 (EC2 Console)</a></li>
-<li><a href=/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/>切換 Ubuntu apt 的 mirror site</a></li>
-<li><a href=/2011/02/linux-%E5%BB%BA%E6%A7%8B-ubuntu-10-10-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83/>[Linux] 打造 Ubuntu 10.10 嵌入式系統 Embedded System 開發環境</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2008/11/php-%E8%A8%AD%E5%AE%9A-session-%E7%9A%84%E9%81%8E%E6%9C%9F%E6%99%82%E9%96%93-%E6%9A%AB%E5%AD%98%E6%AA%94%E9%81%8E%E5%A4%9A/ data-toggle=tooltip data-placement=top title="[PHP] 設定 session 的過期時間 & 暫存檔過多">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2008/11/%E4%B8%AD%E6%AD%A3%E5%A4%A7%E5%AD%B8%E7%95%A2%E6%A5%AD%E5%9C%98%E6%8B%8D/ data-toggle=tooltip data-placement=top title=[中正大學]畢業團拍>Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+/var/log/maillog:   513wa(root)</pre><p><strong>2008.11.28 update</strong> 另外解法： 可以使用 fstat -f /home 來觀看有哪些 process access /home</p><p>for Linux</p><blockquote><p>fuser可以顯示出當前哪個程序在使用磁盤上的某個文件、掛載點、甚至網路端口，並給出程序進程的詳細訊息。 假設無法卸載的設備為/media/USB，運行下列命令即可： $ fuser -m -v /media/USB/ 用戶進程號權限命令 /media/BAK/: galeki 335 ..c.. gqview -m 參數顯示所有使用指定文件系統的進程，後面可以跟掛載點，或是dev設備( Thanks lisir :)，-v參數給出詳細的輸出，可以看出，原來是gqview這個程序還在霸占著移動設備，fuser還給出了程序的進程號，知道了進程號，你就可以隨便怎麼處置這個程序了。 另外你也可以添加一個-k參數： fuser -m -k /media/USB/ 這招自動把霸佔著/media/USB/的程序殺死。如果你不是很明確是否要殺死所有霸佔設備的程序，你還可以加一個-i參數，這樣每殺死一個程序前，都會詢問： $ fuser -m -v -i -k /media/BAK/ 用戶進程號權限命令 /media/BAK/: galeki 371 ..c.. gqview 殺死進程371 ? (y/N) 轉貼自：<a href="http://www.ubuntu-tw.org/modules/newbb/viewtopic.php?post_id=40287">[轉貼]解决 umount時出現的 “Device is busy”</a> 相關文章：<a href=http://plog.longwin.com.tw/my_note-unix/2008/11/18/debian-ubuntu-linux-umount-device-busy-2008>Linux: umount 時 出現 “Device is busy” 的解法</a> Linux: umount 時 出現 “Device is busy” 的解法</p></blockquote><div class=blog-tags><a href=https://blog.wu-boy.com/tags/freebsd/>FreeBSD</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux/>Linux</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&text=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&title=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&title=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&title=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2008%2f11%2flinuxfreebsd-%25E8%25A7%25A3%25E5%2586%25B3-umount%25E6%2599%2582%25E5%2587%25BA%25E7%258F%25BE%25E7%259A%2584-device-is-busy%2f&description=%5bLinux%26FreeBSD%5d%20%e8%a7%a3%e5%86%b3%20umount%e6%99%82%e5%87%ba%e7%8f%be%e7%9a%84%20%e2%80%9cDevice%20is%20busy%e2%80%9d" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/01/openssh-security-cve-2016-0777-and-cve-2016-0778/>OpenSSH 安全性漏洞 CVE-2016-0777 and CVE-2016-0778</a></li><li><a href=/2012/01/ubuntu-mount-dvd-iso-on-ubuntu/>[筆記] 在 Ubuntu mount DVD ISO 檔案</a></li><li><a href=/2011/12/linux-geany-sshfs-flag/>Geany 編輯器搭配 sshfs 參數注意事項</a></li><li><a href=/2011/10/how-to-remove-duplicated-rpm-package/>AWS 機器上 duplicated RPM 問題</a></li><li><a href=/2011/09/how-to-install-xcache-on-freebsd/>安裝 XCache 加速 PHP 執行速度</a></li><li><a href=/2011/07/linux-geany-fuse/>Linux 程式開發編輯器 Geany + Fuse 遠端掛載</a></li><li><a href=/2011/06/%E5%A5%BD%E7%94%A8-php-debug-extension-xdebug-on-freebsd-%E5%AE%89%E8%A3%9D/>好用 PHP debug extension Xdebug on FreeBSD 安裝</a></li><li><a href=/2011/05/%E5%BF%AB%E9%80%9F%E5%AE%89%E8%A3%9D-amazon-ec2-lamp-%E7%92%B0%E5%A2%83-ec2-console/>快速安裝 Amazon EC2 LAMP 環境 (EC2 Console)</a></li><li><a href=/2011/02/%E5%88%87%E6%8F%9B-ubuntu-apt-%E7%9A%84-mirror-site/>切換 Ubuntu apt 的 mirror site</a></li><li><a href=/2011/02/linux-%E5%BB%BA%E6%A7%8B-ubuntu-10-10-%E5%B5%8C%E5%85%A5%E5%BC%8F%E7%B3%BB%E7%B5%B1%E9%96%8B%E7%99%BC%E7%92%B0%E5%A2%83/>[Linux] 打造 Ubuntu 10.10 嵌入式系統 Embedded System 開發環境</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2008/11/php-%E8%A8%AD%E5%AE%9A-session-%E7%9A%84%E9%81%8E%E6%9C%9F%E6%99%82%E9%96%93-%E6%9A%AB%E5%AD%98%E6%AA%94%E9%81%8E%E5%A4%9A/ data-toggle=tooltip data-placement=top title="[PHP] 設定 session 的過期時間 & 暫存檔過多">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2008/11/%E4%B8%AD%E6%AD%A3%E5%A4%A7%E5%AD%B8%E7%95%A2%E6%A5%AD%E5%9C%98%E6%8B%8D/ data-toggle=tooltip data-placement=top title=[中正大學]畢業團拍>Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2008/11/linuxfreebsd-%E8%A7%A3%E5%86%B3-umount%E6%99%82%E5%87%BA%E7%8F%BE%E7%9A%84-device-is-busy"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

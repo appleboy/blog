@@ -1,10 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Introduction to Open Policy Agent 初探權限控管機制 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Introduction to Open Policy Agent 初探權限控管機制 - 小惡魔 - AppleBOY</title><meta name=description content="
 很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:
 
 Why do we need a Policy Engine?
@@ -19,11 +13,7 @@ Three ways to deploy an Open Policy Agent.
 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管
 使用 RESTful API 串接 Open Policy Agent
 
-如果可以的話，大家可以給我一些回饋，請填寫會後問卷">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","name":"Introduction to open policy agent 初探權限控管機制"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Introduction to Open Policy Agent 初探權限控管機制","description":"很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:\n Why do we need a Policy Engine? Why do we choose Open Policy Agent? Workflow with Open Policy Agent? What is Policy Language (Rego)? RBAC and IAM Role Design Three ways to deploy an Open Policy Agent.  可以參考另外兩篇介紹\n 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管 使用 RESTful API 串接 Open Policy Agent  如果可以的話，大家可以給我一些回饋，請填寫會後問卷\n","inLanguage":"en","wordCount":316,"datePublished":"2021-10-24T11:39:20","dateModified":"2021-10-24T11:39:20","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, open policy agent"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="Introduction to Open Policy Agent 初探權限控管機制">
-<meta property="og:description" content="
+如果可以的話，大家可以給我一些回饋，請填寫會後問卷"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","name":"Introduction to open policy agent 初探權限控管機制"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Introduction to Open Policy Agent 初探權限控管機制","description":"很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:\n Why do we need a Policy Engine? Why do we choose Open Policy Agent? Workflow with Open Policy Agent? What is Policy Language (Rego)? RBAC and IAM Role Design Three ways to deploy an Open Policy Agent.  可以參考另外兩篇介紹\n 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管 使用 RESTful API 串接 Open Policy Agent  如果可以的話，大家可以給我一些回饋，請填寫會後問卷\n","inLanguage":"en","wordCount":316,"datePublished":"2021-10-24T11:39:20","dateModified":"2021-10-24T11:39:20","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, open policy agent"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2021\/10\/introduction-to-open-police-agent-in-mopconf\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Introduction to Open Policy Agent 初探權限控管機制"><meta property="og:description" content="
 很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:
 
 Why do we need a Policy Engine?
@@ -38,401 +28,106 @@ Three ways to deploy an Open Policy Agent.
 初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管
 使用 RESTful API 串接 Open Policy Agent
 
-如果可以的話，大家可以給我一些回饋，請填寫會後問卷">
-<meta property="og:image" content="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2021/10/introduction-to-open-police-agent-in-mopconf/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="Introduction to Open Policy Agent 初探權限控管機制">
-<meta name=twitter:description content="
+如果可以的話，大家可以給我一些回饋，請填寫會後問卷"><meta property="og:image" content="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2021/10/introduction-to-open-police-agent-in-mopconf/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Introduction to Open Policy Agent 初探權限控管機制"><meta name=twitter:description content="
 很高興可以在 Mopconf 分享 Open Policy Agent。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 IAM Role 架構，底下是這次預計會分享的內容:
 
 Why do we need a Policy Engine?
 Why do we choose Open Policy Agent?
-Workflow …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+Workflow …"><meta name=twitter:image content="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>Introduction to Open Policy Agent 初探權限控管機制</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 24, 2021
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Introduction to Open Policy Agent 初探權限控管機制</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 24, 2021
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;316&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li><a href=#投影片>投影片</a></li>
-<li><a href=#現場提問>現場提問</a></li>
-<li><a href=#實作範例>實作範例</a></li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p><img src="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080" alt=logo></p>
-<p>很高興可以在 <a href=https://mopcon.org/2021/>Mopconf</a> 分享 <a href=https://www.openpolicyagent.org/>Open Policy Agent</a>。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 <a href=https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html>IAM Role</a> 架構，底下是這次預計會分享的內容:</p>
-<ol>
-<li>Why do we need a Policy Engine?</li>
-<li>Why do we choose Open Policy Agent?</li>
-<li>Workflow with Open Policy Agent?</li>
-<li>What is Policy Language (Rego)?</li>
-<li>RBAC and IAM Role Design</li>
-<li>Three ways to deploy an Open Policy Agent.</li>
-</ol>
-<p>可以參考另外兩篇介紹</p>
-<ul>
-<li><a href=https://blog.wu-boy.com/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li>
-<li><a href=https://blog.wu-boy.com/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li>
-</ul>
-<p>如果可以的話，大家可以給我一些回饋，請填寫<a href=https://docs.google.com/forms/d/e/1FAIpQLSfRuK40O1j5KIPHt6RQyY3Au77bW91kgGIEGOrNxsjxHUSwgA/viewform>會後問卷</a></p>
-<h2 id=投影片>投影片</h2>
-<script async class=speakerdeck-embed data-id=9cfef3dc602c41ee93215b3c05d4f5a8 data-ratio=1.33333333333 src=//speakerdeck.com/assets/embed.js></script>
-<h2 id=現場提問>現場提問</h2>
-<p>底下是在 Youtube 直播時候，大家的討論，相當熱烈</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>Yu-Ting Lin: ​我第一次知道 Policy Agent ，我之前都自幹Orz
-SiegeLeo: ​自幹+1 但多層級權限繼承不好搞
-Bo-Yi Wu: ​看情境，有些簡易的系統，也沒在用這套，我用這套目的是因為 Group 權限太複雜，加上要串其他系統
-Bo-Yi Wu: ​另外我也推薦 https://github.com/casbin/casbin
-kevin31408: ​權限系統不是應該是
-kevin31408: ​每個都不一樣?
-Bo-Yi Wu: ​每個都不一樣？
-MOPCON: ​有問題歡迎到 Slido 提問：https://app.sli.do/event/8dj78nnl 呦～
-kevin31408: ​就是每個專案不一樣
-kevin31408: ​應該這樣說
-Bo-Yi Wu: ​如果有用了 OPA，幾本上就是透過此 Service
-Bo-Yi Wu: ​用 OPA 掛在整個 RESTful 或 GraphlQL 前面的 Middleware
-kevin31408: ​所以這個service就可以通用?
-Bo-Yi Wu: ​你想像他可以寫成一個簡易的 Restful API Service
-Bo-Yi Wu: ​你可以把 input + data 丟給 OPA API，回傳 Ture 或 False
-J Cyuan: ​感覺 是開個接口 給各個不同需求去實作 驗證和資料面 其他架構 用OPA 不知道這樣理解正確嗎?
-Bo-Yi Wu: ​你可以把 OPA 想成他就是專門做權限驗證的 API Service，其他 service 就是把 Input + Data 丟給 OPA，他會根據你的 input + data 來決定此 input 是否可以通過權限
-李冠廷: ​目前碰到的權限管理都是 <span style=color:#8b008b;font-weight:700>case</span> by <span style=color:#8b008b;font-weight:700>case</span>
-Bo-Yi Wu: ​不一定每一種情境都需要用到 OPA，而是把一些共同的權限，或較複雜的權限控管，交由 OPA 進行 Policy 的設計，可以減少你在服務內撰寫權限的邏輯。
-李冠廷: ​最麻煩的還是在建立權限邏輯的部分，這邊就像是 Policy Rule
-Bo-Yi Wu: ​是的，你用 OPA Policy Rule 可以減少你在跨平台的權限控管
-Bo-Yi Wu: ​就像你的服務有 Node.js 或 Golang，但是需要共同的權限控管判斷機制，那不可能兩邊都開發一次吧？這時候 OPA 這服務就很重要
-李冠廷: ​恩恩，沒錯
-陳少康: ​Testing 應該算獨立對吧
-Bo-Yi Wu: ​包康可看一下 https://github.com/go-training/opa-demo
-kevin31408: ​講的很棒
-SiegeLeo: ​每call一次restful api 就把要一大包{input, user_data} 餵給 OPA 確認嗎?
-陳少康: ​washhands
-SiegeLeo: ​yougotthis
-SiegeLeo: ​謝謝講者分享
-Mick Hsieh: ​謝謝分享
-MOPCON: ​感謝大家的參與，Bo-Yi Wu 的 初探 Open Policy Agent 實作權限控管 議程即將結束。歡迎到 Discord Q&amp;A 區跟講者繼續交流 🙌🏼Discord：https://discord.gg/6ykDqsmBVt頻道名稱：R3 Q&amp;A 區也別忘了幫我們填寫議程問卷，抽小禮物唷！👉 議程問卷：https://forms.gle/qeZE9ir8ByqxrNtu9
-Jessie Cheng: ​謝謝分享
-Bo-Yi Wu: ​input 通常不會很大包，如果是 Data 先過濾，在餵給 OPA 這樣比較適合
-Bo-Yi Wu: ​這樣說好了，平常我們在實作權限，也都是要整理 input + data，而中間的邏輯判斷部分，就是抽出來雪成 police rule。
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=實作範例>實作範例</h2>
-<ul>
-<li><a href=https://github.com/go-training/opa-demo>opa testing demo</a></li>
-<li><a href=https://github.com/go-training/opa-restful>opa RESTful API</a></li>
-<li><a href=https://github.com/go-training/opa-embed>opa embed in Golang</a></li>
-</ul>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/open-policy-agent/>open policy agent</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&text=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&title=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&title=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&title=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&description=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li>
-<li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li>
-<li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li>
-<li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li>
-<li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li>
-<li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li>
-<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
-<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
-<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
-<li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2021/10/how-to-write-high-quality-pull-request/ data-toggle=tooltip data-placement=top title="如何發佈高品質的 Pull Request (簡稱 PR)">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2021/11/introduction-to-infra-structure-as-code-pulumi-vs-terraform/ data-toggle=tooltip data-placement=top title="infrastructure as code 優勢及工具選擇">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2021/10/introduction-to-open-police-agent-in-mopconf>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2021/10/introduction-to-open-police-agent-in-mopconf'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#投影片>投影片</a></li><li><a href=#現場提問>現場提問</a></li><li><a href=#實作範例>實作範例</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src="https://lh3.googleusercontent.com/qLGheyjm3eVL-TRP_MT1X9j2QrNrtIIAlVPmLbvNGWcLkqfUTpH87D2GCzYmce8eU88oMF-82lSqT6DwOByPWEKVZP4nGWT-IZFDvpVwnil2AeXZaYxZN5J33IpfsYfP6mljV3S51R4=w1920-h1080" alt=logo></p><p>很高興可以在 <a href=https://mopcon.org/2021/>Mopconf</a> 分享 <a href=https://www.openpolicyagent.org/>Open Policy Agent</a>。本議程最主要是跟大家初步分享 OPA 的概念，我們團隊如何將 OPA 導入系統架構，及分享如何設計 RBAC 及 <a href=https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html>IAM Role</a> 架構，底下是這次預計會分享的內容:</p><ol><li>Why do we need a Policy Engine?</li><li>Why do we choose Open Policy Agent?</li><li>Workflow with Open Policy Agent?</li><li>What is Policy Language (Rego)?</li><li>RBAC and IAM Role Design</li><li>Three ways to deploy an Open Policy Agent.</li></ol><p>可以參考另外兩篇介紹</p><ul><li><a href=https://blog.wu-boy.com/2021/04/setup-rbac-role-based-access-control-using-open-policy-agent/>初探 Open Policy Agent 實作 RBAC (Role-based access control) 權限控管</a></li><li><a href=https://blog.wu-boy.com/2021/05/comunicate-with-open-policy-agent-using-resful-api/>使用 RESTful API 串接 Open Policy Agent</a></li></ul><p>如果可以的話，大家可以給我一些回饋，請填寫<a href=https://docs.google.com/forms/d/e/1FAIpQLSfRuK40O1j5KIPHt6RQyY3Au77bW91kgGIEGOrNxsjxHUSwgA/viewform>會後問卷</a></p><h2 id=投影片>投影片</h2><script async class=speakerdeck-embed data-id=9cfef3dc602c41ee93215b3c05d4f5a8 data-ratio=1.33333333333 src=//speakerdeck.com/assets/embed.js></script><h2 id=現場提問>現場提問</h2><p>底下是在 Youtube 直播時候，大家的討論，相當熱烈</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-35>35</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span>Yu-Ting Lin: ​我第一次知道 Policy Agent ，我之前都自幹Orz
+</span></span><span style=display:flex><span>SiegeLeo: ​自幹+1 但多層級權限繼承不好搞
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​看情境，有些簡易的系統，也沒在用這套，我用這套目的是因為 Group 權限太複雜，加上要串其他系統
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​另外我也推薦 https://github.com/casbin/casbin
+</span></span><span style=display:flex><span>kevin31408: ​權限系統不是應該是
+</span></span><span style=display:flex><span>kevin31408: ​每個都不一樣?
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​每個都不一樣？
+</span></span><span style=display:flex><span>MOPCON: ​有問題歡迎到 Slido 提問：https://app.sli.do/event/8dj78nnl 呦～
+</span></span><span style=display:flex><span>kevin31408: ​就是每個專案不一樣
+</span></span><span style=display:flex><span>kevin31408: ​應該這樣說
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​如果有用了 OPA，幾本上就是透過此 Service
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​用 OPA 掛在整個 RESTful 或 GraphlQL 前面的 Middleware
+</span></span><span style=display:flex><span>kevin31408: ​所以這個service就可以通用?
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​你想像他可以寫成一個簡易的 Restful API Service
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​你可以把 input + data 丟給 OPA API，回傳 Ture 或 False
+</span></span><span style=display:flex><span>J Cyuan: ​感覺 是開個接口 給各個不同需求去實作 驗證和資料面 其他架構 用OPA 不知道這樣理解正確嗎?
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​你可以把 OPA 想成他就是專門做權限驗證的 API Service，其他 service 就是把 Input + Data 丟給 OPA，他會根據你的 input + data 來決定此 input 是否可以通過權限
+</span></span><span style=display:flex><span>李冠廷: ​目前碰到的權限管理都是 <span style=color:#8b008b;font-weight:700>case</span> by <span style=color:#8b008b;font-weight:700>case</span>
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​不一定每一種情境都需要用到 OPA，而是把一些共同的權限，或較複雜的權限控管，交由 OPA 進行 Policy 的設計，可以減少你在服務內撰寫權限的邏輯。
+</span></span><span style=display:flex><span>李冠廷: ​最麻煩的還是在建立權限邏輯的部分，這邊就像是 Policy Rule
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​是的，你用 OPA Policy Rule 可以減少你在跨平台的權限控管
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​就像你的服務有 Node.js 或 Golang，但是需要共同的權限控管判斷機制，那不可能兩邊都開發一次吧？這時候 OPA 這服務就很重要
+</span></span><span style=display:flex><span>李冠廷: ​恩恩，沒錯
+</span></span><span style=display:flex><span>陳少康: ​Testing 應該算獨立對吧
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​包康可看一下 https://github.com/go-training/opa-demo
+</span></span><span style=display:flex><span>kevin31408: ​講的很棒
+</span></span><span style=display:flex><span>SiegeLeo: ​每call一次restful api 就把要一大包{input, user_data} 餵給 OPA 確認嗎?
+</span></span><span style=display:flex><span>陳少康: ​washhands
+</span></span><span style=display:flex><span>SiegeLeo: ​yougotthis
+</span></span><span style=display:flex><span>SiegeLeo: ​謝謝講者分享
+</span></span><span style=display:flex><span>Mick Hsieh: ​謝謝分享
+</span></span><span style=display:flex><span>MOPCON: ​感謝大家的參與，Bo-Yi Wu 的 初探 Open Policy Agent 實作權限控管 議程即將結束。歡迎到 Discord Q&amp;A 區跟講者繼續交流 🙌🏼Discord：https://discord.gg/6ykDqsmBVt頻道名稱：R3 Q&amp;A 區也別忘了幫我們填寫議程問卷，抽小禮物唷！👉 議程問卷：https://forms.gle/qeZE9ir8ByqxrNtu9
+</span></span><span style=display:flex><span>Jessie Cheng: ​謝謝分享
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​input 通常不會很大包，如果是 Data 先過濾，在餵給 OPA 這樣比較適合
+</span></span><span style=display:flex><span>Bo-Yi Wu: ​這樣說好了，平常我們在實作權限，也都是要整理 input + data，而中間的邏輯判斷部分，就是抽出來雪成 police rule。
+</span></span></code></pre></td></tr></table></div></div><h2 id=實作範例>實作範例</h2><ul><li><a href=https://github.com/go-training/opa-demo>opa testing demo</a></li><li><a href=https://github.com/go-training/opa-restful>opa RESTful API</a></li><li><a href=https://github.com/go-training/opa-embed>opa embed in Golang</a></li></ul><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/open-policy-agent/>open policy agent</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&text=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&title=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&title=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&title=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2021%2f10%2fintroduction-to-open-police-agent-in-mopconf%2f&description=Introduction%20to%20Open%20Policy%20Agent%20%e5%88%9d%e6%8e%a2%e6%ac%8a%e9%99%90%e6%8e%a7%e7%ae%a1%e6%a9%9f%e5%88%b6" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li><li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li><li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li><li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li><li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li><li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li><li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li><li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2021/10/how-to-write-high-quality-pull-request/ data-toggle=tooltip data-placement=top title="如何發佈高品質的 Pull Request (簡稱 PR)">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2021/11/introduction-to-infra-structure-as-code-pulumi-vs-terraform/ data-toggle=tooltip data-placement=top title="infrastructure as code 優勢及工具選擇">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2021/10/introduction-to-open-police-agent-in-mopconf>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2021/10/introduction-to-open-police-agent-in-mopconf"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

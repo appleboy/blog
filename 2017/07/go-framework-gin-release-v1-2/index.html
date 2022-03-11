@@ -1,610 +1,255 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Go 語言框架 Gin 終於發佈 v1.2 版本 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
-上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2017\/07\/go-framework-gin-release-v1-2\/","name":"Go 語言框架 gin 終於發佈 v1.2 版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言框架 Gin 終於發佈 v1.2 版本","description":"\n上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。\n","inLanguage":"en","wordCount":516,"datePublished":"2017-07-06T06:29:33","dateModified":"2017-07-06T06:29:33","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Gin, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2017\/07\/go-framework-gin-release-v1-2\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="Go 語言框架 Gin 終於發佈 v1.2 版本">
-<meta property="og:description" content="
-上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2017/07/go-framework-gin-release-v1-2/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="Go 語言框架 Gin 終於發佈 v1.2 版本">
-<meta name=twitter:description content="
-上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Go 語言框架 Gin 終於發佈 v1.2 版本 - 小惡魔 - AppleBOY</title><meta name=description content="
+上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2017\/07\/go-framework-gin-release-v1-2\/","name":"Go 語言框架 gin 終於發佈 v1.2 版本"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言框架 Gin 終於發佈 v1.2 版本","description":"\n上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。\n","inLanguage":"en","wordCount":516,"datePublished":"2017-07-06T06:29:33","dateModified":"2017-07-06T06:29:33","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Gin, golang"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2017\/07\/go-framework-gin-release-v1-2\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言框架 Gin 終於發佈 v1.2 版本"><meta property="og:description" content="
+上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2017/07/go-framework-gin-release-v1-2/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Go 語言框架 Gin 終於發佈 v1.2 版本"><meta name=twitter:description content="
+上週跟 Gin 作者 @javierprovecho 討論要發佈新版本，很快地經過一兩天，作者終於整理好 v1.2 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>Go 語言框架 Gin 終於發佈 v1.2 版本</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 6, 2017
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Go 語言框架 Gin 終於發佈 v1.2 版本</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 6, 2017
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;516&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li><a href=#如何升級>如何升級</a></li>
-<li><a href=#從-godeps-轉換到-govender>從 godeps 轉換到 govender</a></li>
-<li><a href=#支援-lets-encrypt>支援 Let&rsquo;s Encrypt</a>
-<ul>
-<li><a href=#用一行讓-web-支援-tls>用一行讓 Web 支援 TLS</a></li>
-<li><a href=#自己客製化-auto-tls-manager>自己客製化 Auto TLS Manager</a></li>
-</ul>
-</li>
-<li><a href=#支援-template-func-功能>支援 Template Func 功能</a></li>
-<li><a href=#增加-context-函式功能>增加 Context 函式功能</a></li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p><a href=https://www.flickr.com/photos/appleboy/35582011972/in/dateposted-public/ title=19807878_1634683919888714_743883353_o><img src="https://i2.wp.com/farm5.staticflickr.com/4094/35582011972_dd73f48a9f.jpg?w=840&ssl=1" alt=19807878_1634683919888714_743883353_o data-recalc-dims=1></a></p>
-<p>上週跟 <a href=https://github.com/gin-gonic/gin>Gin</a> 作者 <a href=https://github.com/javierprovecho>@javierprovecho</a> 討論要發佈新版本，很快地經過一兩天，作者終於整理好 <a href=https://github.com/gin-gonic/gin/releases/tag/v1.2>v1.2</a> 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。</p>
-<h2 id=如何升級>如何升級</h2>
-<p>首先來看看如何升級版本，建議還沒有用 vendor 工具的開發者，是時候該導入了。底下可以透過 <a href=https://github.com/kardianos/govendor>govender</a> 來升級 Gin 框架。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ govendor fetch github.com/gin-gonic/gin@v1.2
-$ govendor fetch github.com/gin-gonic/gin/render
-</code></pre></td></tr></table>
-</div>
-</div><p>由於我們新增 <code>Template Func Maps</code>，所以 <code>render</code> 套件也要一併升級喔。</p>
-<h2 id=從-godeps-轉換到-govender>從 godeps 轉換到 govender</h2>
-<p>Gin 專案本來是用 godeps，但是在套件處理上有些問題，所以我們決定換到穩定些的 <a href=https://github.com/kardianos/govendor>govender</a>，看看之後 Go 團隊開發的 <a href=https://github.com/golang/dep>dep</a> 可不可以完全取代掉 govendor。</p>
-<h2 id=支援-lets-encrypt>支援 Let&rsquo;s Encrypt</h2>
-<p>我另外開一個專案 <a href=https://github.com/gin-gonic/autotls>autotls</a> 讓 Gin 也可以支援 <a href=https://letsencrypt.org>Let&rsquo;s Encrypt</a>，這專案可以用在 <a href=https://golang.org/pkg/net/http/>net/http</a> 套件上，所以基本上支援全部框架，除非搭建的 Http Server 不是用 net/http。使用方式很簡單，如下:</p>
-<h3 id=用一行讓-web-支援-tls>用一行讓 Web 支援 TLS</h3>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;log&#34;</span>
-
-    <span style=color:#cd5555>&#34;github.com/gin-gonic/autotls&#34;</span>
-    <span style=color:#cd5555>&#34;github.com/gin-gonic/gin&#34;</span>
-)
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    r := gin.<span style=color:#008b45>Default</span>()
-
-    <span style=color:#228b22>// Ping handler
-</span><span style=color:#228b22></span>    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
-        c.<span style=color:#008b45>String</span>(<span style=color:#b452cd>200</span>, <span style=color:#cd5555>&#34;pong&#34;</span>)
-    })
-
-    log.<span style=color:#008b45>Fatal</span>(autotls.<span style=color:#008b45>Run</span>(r, <span style=color:#cd5555>&#34;example1.com&#34;</span>, <span style=color:#cd5555>&#34;example2.com&#34;</span>))
-}
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=自己客製化-auto-tls-manager>自己客製化 Auto TLS Manager</h3>
-<p>開發者可以將憑證存放在別的目錄，請修改 <code>/var/www/.cache</code></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;log&#34;</span>
-
-    <span style=color:#cd5555>&#34;github.com/gin-gonic/autotls&#34;</span>
-    <span style=color:#cd5555>&#34;github.com/gin-gonic/gin&#34;</span>
-    <span style=color:#cd5555>&#34;golang.org/x/crypto/acme/autocert&#34;</span>
-)
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    r := gin.<span style=color:#008b45>Default</span>()
-
-    <span style=color:#228b22>// Ping handler
-</span><span style=color:#228b22></span>    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
-        c.<span style=color:#008b45>String</span>(<span style=color:#b452cd>200</span>, <span style=color:#cd5555>&#34;pong&#34;</span>)
-    })
-
-    m := autocert.Manager{
-        Prompt:     autocert.AcceptTOS,
-        HostPolicy: autocert.<span style=color:#008b45>HostWhitelist</span>(<span style=color:#cd5555>&#34;example1.com&#34;</span>, <span style=color:#cd5555>&#34;example2.com&#34;</span>),
-        Cache:      autocert.<span style=color:#008b45>DirCache</span>(<span style=color:#cd5555>&#34;/var/www/.cache&#34;</span>),
-    }
-
-    log.<span style=color:#008b45>Fatal</span>(autotls.<span style=color:#008b45>RunWithManager</span>(r, &amp;m))
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=支援-template-func-功能>支援 Template Func 功能</h2>
-<p>首先讓開發者可以調整 template 分隔符號，原本是用 <code>{{</code> 及 <code>}}</code>，現在可以透過 Gin 來設定客製化符號。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    r := gin.<span style=color:#008b45>Default</span>()
-    r.<span style=color:#008b45>Delims</span>(<span style=color:#cd5555>&#34;{[{&#34;</span>, <span style=color:#cd5555>&#34;}]}&#34;</span>)
-    r.<span style=color:#008b45>LoadHTMLGlob</span>(<span style=color:#cd5555>&#34;/path/to/templates&#34;</span>))
-</code></pre></td></tr></table>
-</div>
-</div><p>另外支援 Custom Template Funcs</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    ...
-
-    <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>formatAsDate</span>(t time.Time) <span style=color:#00688b;font-weight:700>string</span> {
-        year, month, day := t.<span style=color:#008b45>Date</span>()
-        <span style=color:#8b008b;font-weight:700>return</span> fmt.<span style=color:#008b45>Sprintf</span>(<span style=color:#cd5555>&#34;%d/%02d/%02d&#34;</span>, year, month, day)
-    }
-
-    ...
-
-    router.<span style=color:#008b45>SetFuncMap</span>(template.FuncMap{
-        <span style=color:#cd5555>&#34;formatAsDate&#34;</span>: formatAsDate,
-    })
-
-    ...
-
-    router.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/raw&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *Context) {
-        c.<span style=color:#008b45>HTML</span>(http.StatusOK, <span style=color:#cd5555>&#34;raw.tmpl&#34;</span>, <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#8b008b;font-weight:700>interface</span>{}{
-            <span style=color:#cd5555>&#34;now&#34;</span>: time.<span style=color:#008b45>Date</span>(<span style=color:#b452cd>2017</span>, <span style=color:#b452cd>07</span>, <span style=color:#b452cd>01</span>, <span style=color:#b452cd>0</span>, <span style=color:#b452cd>0</span>, <span style=color:#b452cd>0</span>, <span style=color:#b452cd>0</span>, time.UTC),
-        })
-    })
-
-    ...
-</code></pre></td></tr></table>
-</div>
-</div><p>打開 <code>raw.tmpl</code> 寫入</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>Date: {[{.now | formatAsDate}]}
-</code></pre></td></tr></table>
-</div>
-</div><p>執行結果:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>Date: 2017/07/01
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=增加-context-函式功能>增加 Context 函式功能</h2>
-<p>在此版發佈前，最令人煩惱的就是 Bind Request Form 或 JSON 驗證，因為 Gin 會直接幫忙回傳 400 Bad Request，很多開發者希望可以自訂錯誤訊息，所以在 v1.2 我們將 <code>BindWith</code> 丟到 <a href=https://github.com/gin-gonic/gin/blob/v1.2/deprecated.go>deprecated 檔案</a>，並且打算在下一版正式移除。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9>9</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#228b22>// BindWith binds the passed struct pointer using the specified binding engine.
-</span><span style=color:#228b22>// See the binding package.
-</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> (c *Context) <span style=color:#008b45>BindWith</span>(obj <span style=color:#8b008b;font-weight:700>interface</span>{}, b binding.Binding) <span style=color:#00688b;font-weight:700>error</span> {
-    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>`BindWith(\&#34;interface{}, binding.Binding\&#34;) error is going to
-</span><span style=color:#cd5555>    be deprecated, please check issue #662 and either use MustBindWith() if you
-</span><span style=color:#cd5555>    want HTTP 400 to be automatically returned if any error occur, of use
-</span><span style=color:#cd5555>    ShouldBindWith() if you need to manage the error.`</span>)
-    <span style=color:#8b008b;font-weight:700>return</span> c.<span style=color:#008b45>MustBindWith</span>(obj, b)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>如果要自訂訊息，請用 <code>ShouldBindWith</code></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> (
-    <span style=color:#cd5555>&#34;github.com/gin-gonic/gin&#34;</span>
-)
-
-<span style=color:#8b008b;font-weight:700>type</span> LoginForm <span style=color:#8b008b;font-weight:700>struct</span> {
-    User     <span style=color:#00688b;font-weight:700>string</span> <span style=color:#cd5555>`form:&#34;user&#34; binding:&#34;required&#34;`</span>
-    Password <span style=color:#00688b;font-weight:700>string</span> <span style=color:#cd5555>`form:&#34;password&#34; binding:&#34;required&#34;`</span>
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-    router := gin.<span style=color:#008b45>Default</span>()
-    router.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/login&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
-        <span style=color:#228b22>// you can bind multipart form with explicit binding declaration:
-</span><span style=color:#228b22></span>        <span style=color:#228b22>// c.MustBindWith(&amp;form, binding.Form)
-</span><span style=color:#228b22></span>        <span style=color:#228b22>// or you can simply use autobinding with Bind method:
-</span><span style=color:#228b22></span>        <span style=color:#8b008b;font-weight:700>var</span> form LoginForm
-        <span style=color:#228b22>// in this case proper binding will be automatically selected
-</span><span style=color:#228b22></span>        <span style=color:#8b008b;font-weight:700>if</span> c.<span style=color:#008b45>ShouldBindWith</span>(&amp;form) == <span style=color:#8b008b;font-weight:700>nil</span> {
-            <span style=color:#8b008b;font-weight:700>if</span> form.User == <span style=color:#cd5555>&#34;user&#34;</span> &amp;&amp; form.Password == <span style=color:#cd5555>&#34;password&#34;</span> {
-                c.<span style=color:#008b45>JSON</span>(<span style=color:#b452cd>200</span>, gin.H{<span style=color:#cd5555>&#34;status&#34;</span>: <span style=color:#cd5555>&#34;you are logged in&#34;</span>})
-            } <span style=color:#8b008b;font-weight:700>else</span> {
-                c.<span style=color:#008b45>JSON</span>(<span style=color:#b452cd>401</span>, gin.H{<span style=color:#cd5555>&#34;status&#34;</span>: <span style=color:#cd5555>&#34;unauthorized&#34;</span>})
-            }
-        }
-    })
-    router.<span style=color:#008b45>Run</span>(<span style=color:#cd5555>&#34;:8080&#34;</span>)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>大致上是這些大修正，剩下的小功能或修正，請直接參考 <a href=https://github.com/gin-gonic/gin/releases/tag/v1.2>v1.2 releases log</a>。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/gin/>Gin</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&text=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&title=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&title=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&title=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&description=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li>
-<li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li>
-<li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li>
-<li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li>
-<li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li>
-<li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li>
-<li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li>
-<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
-<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
-<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2017/07/laravel-conf-in-taipei/ data-toggle=tooltip data-placement=top title="台灣第一屆 Laravel 研討會">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2017/07/lets-encrypt-support-wildcard-certificates-in-2018-01/ data-toggle=tooltip data-placement=top title="Let’s Encrypt 將在 2018 年一月支援 Wildcard Certificates">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2017/07/go-framework-gin-release-v1-2>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2017/07/go-framework-gin-release-v1-2'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#如何升級>如何升級</a></li><li><a href=#從-godeps-轉換到-govender>從 godeps 轉換到 govender</a></li><li><a href=#支援-lets-encrypt>支援 Let&rsquo;s Encrypt</a><ul><li><a href=#用一行讓-web-支援-tls>用一行讓 Web 支援 TLS</a></li><li><a href=#自己客製化-auto-tls-manager>自己客製化 Auto TLS Manager</a></li></ul></li><li><a href=#支援-template-func-功能>支援 Template Func 功能</a></li><li><a href=#增加-context-函式功能>增加 Context 函式功能</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href=https://www.flickr.com/photos/appleboy/35582011972/in/dateposted-public/ title=19807878_1634683919888714_743883353_o><img src="https://i2.wp.com/farm5.staticflickr.com/4094/35582011972_dd73f48a9f.jpg?w=840&ssl=1" alt=19807878_1634683919888714_743883353_o data-recalc-dims=1></a></p><p>上週跟 <a href=https://github.com/gin-gonic/gin>Gin</a> 作者 <a href=https://github.com/javierprovecho>@javierprovecho</a> 討論要發佈新版本，很快地經過一兩天，作者終於整理好 <a href=https://github.com/gin-gonic/gin/releases/tag/v1.2>v1.2</a> 版本，除了釋出新版本外，也換了有顏色的 Logo，真心覺得很好看。大家來看看 v1.2 釋出哪些功能，或修正哪些問題。</p><h2 id=如何升級>如何升級</h2><p>首先來看看如何升級版本，建議還沒有用 vendor 工具的開發者，是時候該導入了。底下可以透過 <a href=https://github.com/kardianos/govendor>govender</a> 來升級 Gin 框架。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ govendor fetch github.com/gin-gonic/gin@v1.2
+</span></span><span style=display:flex><span>$ govendor fetch github.com/gin-gonic/gin/render
+</span></span></code></pre></td></tr></table></div></div><p>由於我們新增 <code>Template Func Maps</code>，所以 <code>render</code> 套件也要一併升級喔。</p><h2 id=從-godeps-轉換到-govender>從 godeps 轉換到 govender</h2><p>Gin 專案本來是用 godeps，但是在套件處理上有些問題，所以我們決定換到穩定些的 <a href=https://github.com/kardianos/govendor>govender</a>，看看之後 Go 團隊開發的 <a href=https://github.com/golang/dep>dep</a> 可不可以完全取代掉 govendor。</p><h2 id=支援-lets-encrypt>支援 Let&rsquo;s Encrypt</h2><p>我另外開一個專案 <a href=https://github.com/gin-gonic/autotls>autotls</a> 讓 Gin 也可以支援 <a href=https://letsencrypt.org>Let&rsquo;s Encrypt</a>，這專案可以用在 <a href=https://golang.org/pkg/net/http/>net/http</a> 套件上，所以基本上支援全部框架，除非搭建的 Http Server 不是用 net/http。使用方式很簡單，如下:</p><h3 id=用一行讓-web-支援-tls>用一行讓 Web 支援 TLS</h3><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-19>19</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;log&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;github.com/gin-gonic/autotls&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;github.com/gin-gonic/gin&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>    r := gin.<span style=color:#008b45>Default</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#228b22>// Ping handler
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+</span></span><span style=display:flex><span>        c.<span style=color:#008b45>String</span>(<span style=color:#b452cd>200</span>, <span style=color:#cd5555>&#34;pong&#34;</span>)
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    log.<span style=color:#008b45>Fatal</span>(autotls.<span style=color:#008b45>Run</span>(r, <span style=color:#cd5555>&#34;example1.com&#34;</span>, <span style=color:#cd5555>&#34;example2.com&#34;</span>))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h3 id=自己客製化-auto-tls-manager>自己客製化 Auto TLS Manager</h3><p>開發者可以將憑證存放在別的目錄，請修改 <code>/var/www/.cache</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-26>26</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;log&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;github.com/gin-gonic/autotls&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;github.com/gin-gonic/gin&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;golang.org/x/crypto/acme/autocert&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>    r := gin.<span style=color:#008b45>Default</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#228b22>// Ping handler
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>    r.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/ping&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+</span></span><span style=display:flex><span>        c.<span style=color:#008b45>String</span>(<span style=color:#b452cd>200</span>, <span style=color:#cd5555>&#34;pong&#34;</span>)
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    m := autocert.Manager{
+</span></span><span style=display:flex><span>        Prompt:     autocert.AcceptTOS,
+</span></span><span style=display:flex><span>        HostPolicy: autocert.<span style=color:#008b45>HostWhitelist</span>(<span style=color:#cd5555>&#34;example1.com&#34;</span>, <span style=color:#cd5555>&#34;example2.com&#34;</span>),
+</span></span><span style=display:flex><span>        Cache:      autocert.<span style=color:#008b45>DirCache</span>(<span style=color:#cd5555>&#34;/var/www/.cache&#34;</span>),
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    log.<span style=color:#008b45>Fatal</span>(autotls.<span style=color:#008b45>RunWithManager</span>(r, &amp;m))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h2 id=支援-template-func-功能>支援 Template Func 功能</h2><p>首先讓開發者可以調整 template 分隔符號，原本是用 <code>{{</code> 及 <code>}}</code>，現在可以透過 Gin 來設定客製化符號。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span>    r := gin.<span style=color:#008b45>Default</span>()
+</span></span><span style=display:flex><span>    r.<span style=color:#008b45>Delims</span>(<span style=color:#cd5555>&#34;{[{&#34;</span>, <span style=color:#cd5555>&#34;}]}&#34;</span>)
+</span></span><span style=display:flex><span>    r.<span style=color:#008b45>LoadHTMLGlob</span>(<span style=color:#cd5555>&#34;/path/to/templates&#34;</span>))
+</span></span></code></pre></td></tr></table></div></div><p>另外支援 Custom Template Funcs</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-22>22</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span>    ...
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>formatAsDate</span>(t time.Time) <span style=color:#00688b;font-weight:700>string</span> {
+</span></span><span style=display:flex><span>        year, month, day := t.<span style=color:#008b45>Date</span>()
+</span></span><span style=display:flex><span>        <span style=color:#8b008b;font-weight:700>return</span> fmt.<span style=color:#008b45>Sprintf</span>(<span style=color:#cd5555>&#34;%d/%02d/%02d&#34;</span>, year, month, day)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    ...
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    router.<span style=color:#008b45>SetFuncMap</span>(template.FuncMap{
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;formatAsDate&#34;</span>: formatAsDate,
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    ...
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    router.<span style=color:#008b45>GET</span>(<span style=color:#cd5555>&#34;/raw&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *Context) {
+</span></span><span style=display:flex><span>        c.<span style=color:#008b45>HTML</span>(http.StatusOK, <span style=color:#cd5555>&#34;raw.tmpl&#34;</span>, <span style=color:#8b008b;font-weight:700>map</span>[<span style=color:#00688b;font-weight:700>string</span>]<span style=color:#8b008b;font-weight:700>interface</span>{}{
+</span></span><span style=display:flex><span>            <span style=color:#cd5555>&#34;now&#34;</span>: time.<span style=color:#008b45>Date</span>(<span style=color:#b452cd>2017</span>, <span style=color:#b452cd>07</span>, <span style=color:#b452cd>01</span>, <span style=color:#b452cd>0</span>, <span style=color:#b452cd>0</span>, <span style=color:#b452cd>0</span>, <span style=color:#b452cd>0</span>, time.UTC),
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    ...
+</span></span></code></pre></td></tr></table></div></div><p>打開 <code>raw.tmpl</code> 寫入</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>Date: {[{.now | formatAsDate}]}
+</span></span></code></pre></td></tr></table></div></div><p>執行結果:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>Date: 2017/07/01
+</span></span></code></pre></td></tr></table></div></div><h2 id=增加-context-函式功能>增加 Context 函式功能</h2><p>在此版發佈前，最令人煩惱的就是 Bind Request Form 或 JSON 驗證，因為 Gin 會直接幫忙回傳 400 Bad Request，很多開發者希望可以自訂錯誤訊息，所以在 v1.2 我們將 <code>BindWith</code> 丟到 <a href=https://github.com/gin-gonic/gin/blob/v1.2/deprecated.go>deprecated 檔案</a>，並且打算在下一版正式移除。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-7>7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-8>8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#228b22>// BindWith binds the passed struct pointer using the specified binding engine.
+</span></span></span><span style=display:flex><span><span style=color:#228b22>// See the binding package.
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> (c *Context) <span style=color:#008b45>BindWith</span>(obj <span style=color:#8b008b;font-weight:700>interface</span>{}, b binding.Binding) <span style=color:#00688b;font-weight:700>error</span> {
+</span></span><span style=display:flex><span>    log.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>`BindWith(\&#34;interface{}, binding.Binding\&#34;) error is going to
+</span></span></span><span style=display:flex><span><span style=color:#cd5555>    be deprecated, please check issue #662 and either use MustBindWith() if you
+</span></span></span><span style=display:flex><span><span style=color:#cd5555>    want HTTP 400 to be automatically returned if any error occur, of use
+</span></span></span><span style=display:flex><span><span style=color:#cd5555>    ShouldBindWith() if you need to manage the error.`</span>)
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span> c.<span style=color:#008b45>MustBindWith</span>(obj, b)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>如果要自訂訊息，請用 <code>ShouldBindWith</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-29>29</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#cd5555>&#34;github.com/gin-gonic/gin&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>type</span> LoginForm <span style=color:#8b008b;font-weight:700>struct</span> {
+</span></span><span style=display:flex><span>    User     <span style=color:#00688b;font-weight:700>string</span> <span style=color:#cd5555>`form:&#34;user&#34; binding:&#34;required&#34;`</span>
+</span></span><span style=display:flex><span>    Password <span style=color:#00688b;font-weight:700>string</span> <span style=color:#cd5555>`form:&#34;password&#34; binding:&#34;required&#34;`</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>    router := gin.<span style=color:#008b45>Default</span>()
+</span></span><span style=display:flex><span>    router.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/login&#34;</span>, <span style=color:#8b008b;font-weight:700>func</span>(c *gin.Context) {
+</span></span><span style=display:flex><span>        <span style=color:#228b22>// you can bind multipart form with explicit binding declaration:
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>        <span style=color:#228b22>// c.MustBindWith(&amp;form, binding.Form)
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>        <span style=color:#228b22>// or you can simply use autobinding with Bind method:
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>        <span style=color:#8b008b;font-weight:700>var</span> form LoginForm
+</span></span><span style=display:flex><span>        <span style=color:#228b22>// in this case proper binding will be automatically selected
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>        <span style=color:#8b008b;font-weight:700>if</span> c.<span style=color:#008b45>ShouldBindWith</span>(&amp;form) == <span style=color:#8b008b;font-weight:700>nil</span> {
+</span></span><span style=display:flex><span>            <span style=color:#8b008b;font-weight:700>if</span> form.User == <span style=color:#cd5555>&#34;user&#34;</span> &amp;&amp; form.Password == <span style=color:#cd5555>&#34;password&#34;</span> {
+</span></span><span style=display:flex><span>                c.<span style=color:#008b45>JSON</span>(<span style=color:#b452cd>200</span>, gin.H{<span style=color:#cd5555>&#34;status&#34;</span>: <span style=color:#cd5555>&#34;you are logged in&#34;</span>})
+</span></span><span style=display:flex><span>            } <span style=color:#8b008b;font-weight:700>else</span> {
+</span></span><span style=display:flex><span>                c.<span style=color:#008b45>JSON</span>(<span style=color:#b452cd>401</span>, gin.H{<span style=color:#cd5555>&#34;status&#34;</span>: <span style=color:#cd5555>&#34;unauthorized&#34;</span>})
+</span></span><span style=display:flex><span>            }
+</span></span><span style=display:flex><span>        }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>    router.<span style=color:#008b45>Run</span>(<span style=color:#cd5555>&#34;:8080&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>大致上是這些大修正，剩下的小功能或修正，請直接參考 <a href=https://github.com/gin-gonic/gin/releases/tag/v1.2>v1.2 releases log</a>。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/gin/>Gin</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&text=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&title=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&title=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&title=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2017%2f07%2fgo-framework-gin-release-v1-2%2f&description=Go%20%e8%aa%9e%e8%a8%80%e6%a1%86%e6%9e%b6%20Gin%20%e7%b5%82%e6%96%bc%e7%99%bc%e4%bd%88%20v1.2%20%e7%89%88%e6%9c%ac" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li><li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li><li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li><li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li><li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li><li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li><li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li><li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2017/07/laravel-conf-in-taipei/ data-toggle=tooltip data-placement=top title="台灣第一屆 Laravel 研討會">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2017/07/lets-encrypt-support-wildcard-certificates-in-2018-01/ data-toggle=tooltip data-placement=top title="Let’s Encrypt 將在 2018 年一月支援 Wildcard Certificates">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2017/07/go-framework-gin-release-v1-2>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2017/07/go-framework-gin-release-v1-2"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

@@ -1,130 +1,21 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄) - 小惡魔 - AppleBOY</title>
-<meta name=description content="今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄) - 小惡魔 - AppleBOY</title><meta name=description content="今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：
  R&ndash;A&ndash;B&ndash;C&ndash;D&ndash;E&ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成
-  R&ndash;A&ndash;D'&ndash;E&ndash;HEAD 有兩種方式可以移除 B & C
- # detach head and move to D commitgit checkout # move HEAD to A, but leave the index and working tree as for Dgit reset --soft # Redo the D commit re-using the commit message, but now on top of Agit commit -C # Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD  master# push itgit push --force 另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick  這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2009\/12\/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84\/","name":"[ git] how to remove file and commit from history(如何移除 commit 歷史紀錄)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)","description":"今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：\n R\u0026ndash;A\u0026ndash;B\u0026ndash;C\u0026ndash;D\u0026ndash;E\u0026ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成\n  R\u0026ndash;A\u0026ndash;D\u0027\u0026ndash;E\u0026ndash;HEAD 有兩種方式可以移除 B \u0026amp; C\n # detach head and move to D commit\rgit checkout \r# move HEAD to A, but leave the index and working tree as for D\rgit reset --soft \r# Redo the D commit re-using the commit message, but now on top of A\rgit commit -C \r# Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD  master\r# push it\rgit push --force\r 另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick  這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !","inLanguage":"en","wordCount":144,"datePublished":"2009-12-29T12:59:40","dateModified":"2009-12-29T12:59:40","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["git, 版本控制"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2009\/12\/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)">
-<meta property="og:description" content="今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：
+  R&ndash;A&ndash;D&rsquo;&ndash;E&ndash;HEAD 有兩種方式可以移除 B & C
+ # detach head and move to D commitgit checkout # move HEAD to A, but leave the index and working tree as for Dgit reset --soft # Redo the D commit re-using the commit message, but now on top of Agit commit -C # Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD  master# push itgit push --force 另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick  這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2009\/12\/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84\/","name":"[ git] how to remove file and commit from history(如何移除 commit 歷史紀錄)"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)","description":"今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：\n R\u0026ndash;A\u0026ndash;B\u0026ndash;C\u0026ndash;D\u0026ndash;E\u0026ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成\n  R\u0026ndash;A\u0026ndash;D\u0026rsquo;\u0026ndash;E\u0026ndash;HEAD 有兩種方式可以移除 B \u0026amp; C\n # detach head and move to D commit\rgit checkout \r# move HEAD to A, but leave the index and working tree as for D\rgit reset --soft \r# Redo the D commit re-using the commit message, but now on top of A\rgit commit -C \r# Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD  master\r# push it\rgit push --force\r 另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick  這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !","inLanguage":"en","wordCount":144,"datePublished":"2009-12-29T12:59:40","dateModified":"2009-12-29T12:59:40","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["git, 版本控制"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2009\/12\/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)"><meta property="og:description" content="今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：
  R&ndash;A&ndash;B&ndash;C&ndash;D&ndash;E&ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成
-  R&ndash;A&ndash;D'&ndash;E&ndash;HEAD 有兩種方式可以移除 B & C
- # detach head and move to D commitgit checkout # move HEAD to A, but leave the index and working tree as for Dgit reset --soft # Redo the D commit re-using the commit message, but now on top of Agit commit -C # Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD  master# push itgit push --force 另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick  這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)">
-<meta name=twitter:description content="今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：
- R&ndash;A&ndash;B&ndash;C&ndash;D&ndash;E&ndash;HEAD 接下來要移除 B 跟 C 的 commit tree， …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+  R&ndash;A&ndash;D&rsquo;&ndash;E&ndash;HEAD 有兩種方式可以移除 B & C
+ # detach head and move to D commitgit checkout # move HEAD to A, but leave the index and working tree as for Dgit reset --soft # Redo the D commit re-using the commit message, but now on top of Agit commit -C # Re-apply everything from the old D onwards onto this new place git rebase --onto HEAD  master# push itgit push --force 另一種方法是利用 cherry-pick 方式 git rebase --hard git cherry-pick git cherry-pick  這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考： Git: removing selected commits from repository Git: how to remove file and commit from history Re: !"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)"><meta name=twitter:description content="今天在 commit 程式碼到 github 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：
+ R&ndash;A&ndash;B&ndash;C&ndash;D&ndash;E&ndash;HEAD 接下來要移除 B 跟 C 的 commit tree， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 29, 2009
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>[Git] how to remove file and commit from history(如何移除 commit 歷史紀錄)</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 29, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;144&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<article role=main class=blog-post>
-<p>今天在 commit 程式碼到 <a href=http://github.com/>github</a> 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：</p>
-<blockquote>
-<p>R&ndash;A&ndash;B&ndash;C&ndash;D&ndash;E&ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成</p>
-</blockquote>
-<blockquote>
-<p>R&ndash;A&ndash;D'&ndash;E&ndash;HEAD 有兩種方式可以移除 B & C</p>
-</blockquote>
-<pre class="brush: bash; title: ; notranslate" title># detach head and move to D commit
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><p>今天在 commit 程式碼到 <a href=http://github.com/>github</a> 網站，不小心把 Plurk 帳號密碼給 commit 上去，發生這種事情，所以趕快上網查了一下如何移除 commit 歷史紀錄： 假設我們的 commit tree 如下：</p><blockquote><p>R&ndash;A&ndash;B&ndash;C&ndash;D&ndash;E&ndash;HEAD 接下來要移除 B 跟 C 的 commit tree，變成</p></blockquote><blockquote><p>R&ndash;A&ndash;D&rsquo;&ndash;E&ndash;HEAD 有兩種方式可以移除 B & C</p></blockquote><pre class="brush: bash; title: ; notranslate" title># detach head and move to D commit
 git checkout <sha1-for-d>
 
 # move HEAD to A, but leave the index and working tree as for D
@@ -138,184 +29,23 @@ git rebase --onto HEAD <sha1-for-d> master
 
 # push it
 git push --force
-</pre> 另一種方法是利用 cherry-pick 方式
-<pre class="brush: bash; title: ; notranslate" title>git rebase --hard <sha1 of a>
+</pre>另一種方法是利用 cherry-pick 方式<pre class="brush: bash; title: ; notranslate" title>git rebase --hard <sha1 of a>
 git cherry-pick <sha1 of d>
-git cherry-pick <sha1 of e></pre> 這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考：
-<p><a href=http://stackoverflow.com/questions/495345/git-removing-selected-commits-from-repository>Git: removing selected commits from repository</a> <a href=http://bogdan.org.ua/2009/02/13/git-how-to-remove-file-commit-from-history.html>Git: how to remove file and commit from history</a> <a href=http://kerneltrap.org/mailarchive/git/2007/11/18/425729>Re: ! [rejected] master -> master (non-fast forward)</a></p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&text=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&title=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&title=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&title=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&description=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
-<li><a href=/2017/12/github-flow-vs-git-flow/>GitHub Flow 及 Git Flow 流程使用時機</a></li>
-<li><a href=/2016/07/docker-team-work/>用 Docker 改善團隊合作模式</a></li>
-<li><a href=/2016/04/git-flow-tips/>Git Flow 與團隊合作</a></li>
-<li><a href=/2016/02/git-tips-blame-someone-else/>Git tips: 更改 commit log 作者</a></li>
-<li><a href=/2015/12/install-gitlab-on-debian-7-8/>在 Debian 7.8 安裝 Gitlab 筆記</a></li>
-<li><a href=/2015/11/git-tips-don-t-commit-commented-out-code/>Git tips 請不要 commit 已經註解的程式碼</a></li>
-<li><a href=/2015/09/how-to-write-git-commit-message/>該如何寫好 git commit message</a></li>
-<li><a href=/2015/07/undo-git-reset-hard/>git tips 找尋遺失的 commit 紀錄</a></li>
-<li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2009/12/php-release-%E5%99%97%E6%B5%AA-php-plurk-api-1-2-beta/ data-toggle=tooltip data-placement=top title="[PHP] Release 噗浪 php-plurk-api 1.2 Beta.">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2009/12/php-framework-how-to-implement-plurk-api-in-codeigniter/ data-toggle=tooltip data-placement=top title="[PHP Framework] How to implement Plurk API in CodeIgniter">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+git cherry-pick <sha1 of e></pre>這會直接忽略 B 跟 C 的 history，詳細資料可以查詢 git help cherry-pick 或者是 git help rebase 參考：<p><a href=http://stackoverflow.com/questions/495345/git-removing-selected-commits-from-repository>Git: removing selected commits from repository</a> <a href=http://bogdan.org.ua/2009/02/13/git-how-to-remove-file-commit-from-history.html>Git: how to remove file and commit from history</a> <a href=http://kerneltrap.org/mailarchive/git/2007/11/18/425729>Re: ! [rejected] master -> master (non-fast forward)</a></p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/>版本控制</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&text=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&title=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&title=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&title=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2009%2f12%2fgit-how-to-remove-file-and-commit-from-history%25E5%25A6%2582%25E4%25BD%2595%25E7%25A7%25BB%25E9%2599%25A4-commit-%25E6%25AD%25B7%25E5%258F%25B2%25E7%25B4%2580%25E9%258C%2584%2f&description=%5bGit%5d%20how%20to%20remove%20file%20and%20commit%20from%20history%28%e5%a6%82%e4%bd%95%e7%a7%bb%e9%99%a4%20commit%20%e6%ad%b7%e5%8f%b2%e7%b4%80%e9%8c%84%29" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li><li><a href=/2017/12/github-flow-vs-git-flow/>GitHub Flow 及 Git Flow 流程使用時機</a></li><li><a href=/2016/07/docker-team-work/>用 Docker 改善團隊合作模式</a></li><li><a href=/2016/04/git-flow-tips/>Git Flow 與團隊合作</a></li><li><a href=/2016/02/git-tips-blame-someone-else/>Git tips: 更改 commit log 作者</a></li><li><a href=/2015/12/install-gitlab-on-debian-7-8/>在 Debian 7.8 安裝 Gitlab 筆記</a></li><li><a href=/2015/11/git-tips-don-t-commit-commented-out-code/>Git tips 請不要 commit 已經註解的程式碼</a></li><li><a href=/2015/09/how-to-write-git-commit-message/>該如何寫好 git commit message</a></li><li><a href=/2015/07/undo-git-reset-hard/>git tips 找尋遺失的 commit 紀錄</a></li><li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2009/12/php-release-%E5%99%97%E6%B5%AA-php-plurk-api-1-2-beta/ data-toggle=tooltip data-placement=top title="[PHP] Release 噗浪 php-plurk-api 1.2 Beta.">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2009/12/php-framework-how-to-implement-plurk-api-in-codeigniter/ data-toggle=tooltip data-placement=top title="[PHP Framework] How to implement Plurk API in CodeIgniter">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2009/12/git-how-to-remove-file-and-commit-from-history%E5%A6%82%E4%BD%95%E7%A7%BB%E9%99%A4-commit-%E6%AD%B7%E5%8F%B2%E7%B4%80%E9%8C%84"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

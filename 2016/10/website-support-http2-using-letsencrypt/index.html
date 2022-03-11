@@ -1,459 +1,129 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
-寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let&rsquo;s Encrypt 開放申請免費 SSL 憑證 推廣 Let&rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 gslin 大為了推廣 HTTPS 也做了一個網站教學，文章寫得相當清楚，支援 Apache 及 Nginx 設定。">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2016\/10\/website-support-http2-using-letsencrypt\/","name":"申請 let’s encrypt 免費憑證讓網站支援 http2"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2","description":"\n寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:\/\/ 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let\u0026rsquo;s Encrypt 開放申請免費 SSL 憑證 推廣 Let\u0026rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 gslin 大為了推廣 HTTPS 也做了一個網站教學，文章寫得相當清楚，支援 Apache 及 Nginx 設定。\n","inLanguage":"en","wordCount":351,"datePublished":"2016-10-09T08:23:00","dateModified":"2016-10-09T08:23:00","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["AWS, devops, http2, https, Letsencrypt, nginx"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2016\/10\/website-support-http2-using-letsencrypt\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2">
-<meta property="og:description" content="
-寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let&rsquo;s Encrypt 開放申請免費 SSL 憑證 推廣 Let&rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 gslin 大為了推廣 HTTPS 也做了一個網站教學，文章寫得相當清楚，支援 Apache 及 Nginx 設定。">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2016/10/website-support-http2-using-letsencrypt/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2">
-<meta name=twitter:description content="
-寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let&rsquo;s Encrypt 開放申請免費 SSL …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2 - 小惡魔 - AppleBOY</title><meta name=description content="
+寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let&rsquo;s Encrypt 開放申請免費 SSL 憑證 推廣 Let&rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 gslin 大為了推廣 HTTPS 也做了一個網站教學，文章寫得相當清楚，支援 Apache 及 Nginx 設定。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2016\/10\/website-support-http2-using-letsencrypt\/","name":"申請 let’s encrypt 免費憑證讓網站支援 http2"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2","description":"\n寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:\/\/ 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let\u0026rsquo;s Encrypt 開放申請免費 SSL 憑證 推廣 Let\u0026rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 gslin 大為了推廣 HTTPS 也做了一個網站教學，文章寫得相當清楚，支援 Apache 及 Nginx 設定。\n","inLanguage":"en","wordCount":351,"datePublished":"2016-10-09T08:23:00","dateModified":"2016-10-09T08:23:00","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["AWS, devops, http2, https, Letsencrypt, nginx"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2016\/10\/website-support-http2-using-letsencrypt\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2"><meta property="og:description" content="
+寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let&rsquo;s Encrypt 開放申請免費 SSL 憑證 推廣 Let&rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 gslin 大為了推廣 HTTPS 也做了一個網站教學，文章寫得相當清楚，支援 Apache 及 Nginx 設定。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2016/10/website-support-http2-using-letsencrypt/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2"><meta name=twitter:description content="
+寫這篇最主要推廣讓網站都支援 HTTPS 加密連線及 HTTP2 協定，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的說明文章，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 Let&rsquo;s Encrypt 開放申請免費 SSL …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 9, 2016
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>申請 Let’s Encrypt 免費憑證讓網站支援 HTTP2</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 9, 2016
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;351&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#安裝方式>安裝方式</a></li>
-<li><a href=#建立設定檔>建立設定檔</a></li>
-<li><a href=#加入-cron-設定>加入 Cron 設定</a></li>
-<li><a href=#後記>後記</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/23840721545/in/dateposted-public/ title=Letsencrypt><img src="https://i1.wp.com/farm6.staticflickr.com/5803/23840721545_e0350b687f.jpg?w=300&ssl=1" alt=Letsencrypt data-recalc-dims=1></a></p>
-<p>寫這篇最主要推廣讓網站都支援 <a href=https://en.wikipedia.org/wiki/HTTPS>HTTPS 加密連線</a>及 <a href=https://en.wikipedia.org/wiki/HTTP/2>HTTP2 協定</a>，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的<a href=https://ihower.tw/blog/archives/8489>說明文章</a>，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 <a href=https://blog.wu-boy.com/2015/12/letsencrypt-entering-public-beta-free-ssl/>Let&rsquo;s Encrypt 開放申請免費 SSL 憑證</a> 推廣 Let&rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 <a href=https://blog.gslin.org/>gslin</a> 大為了推廣 HTTPS 也做了一個<a href=https://letsencrypt.tw/>網站教學</a>，文章寫得相當清楚，支援 <a href=https://httpd.apache.org/>Apache</a> 及 <a href=https://nginx.org/>Nginx</a> 設定。</p>
-<h3 id=安裝方式>安裝方式</h3>
-<p>如果主機是使用 Amazone EC2，可以直接用 <a href=https://aws.amazon.com/tw/certificate-manager/>AWS Certificate Manager</a>，用 AWS 的好處就是只要透過<a href=http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html>後台介面搭配 ELB</a> 就可以直接設定好 HTTPS 對應到 EC2 主機，壞處就是直接被綁死，將來如果不要使用 AWS，要轉移機器會相當痛苦。所以本篇會紀錄如何用 Nginx 搭配 <a href=https://letsencrypt.org/>Let&rsquo;s Encrypt</a>。為了方便部署機器，我們選用 <a href=https://github.com/lukas2511/dehydrated>dehydrated</a> 來設定 Let&rsquo;s Encrypt，好處就是不用安裝 Python 套件，官方網站提供的安裝方式需要安裝 Python 相關環境。透過 wget 將 dehydrated 安裝到 <code>/etc/dehydrated/</code> 底下</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ mkdir -p /etc/dehydrated/
-$ wget https://raw.githubusercontent.com/lukas2511/dehydrated/master/dehydrated -O /etc/dehydrated/dehydrated
-$ chmod <span style=color:#b452cd>755</span> /etc/dehydrated/dehydrated
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=建立設定檔>建立設定檔</h3>
-<p>建立 dehydrated config 設定檔</p>
-<pre><code>$ echo &quot;WELLKNOWN=/var/www/dehydrated&quot; &gt; /etc/dehydrated/config 
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#安裝方式>安裝方式</a></li><li><a href=#建立設定檔>建立設定檔</a></li><li><a href=#加入-cron-設定>加入 Cron 設定</a></li><li><a href=#後記>後記</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/23840721545/in/dateposted-public/ title=Letsencrypt><img src="https://i1.wp.com/farm6.staticflickr.com/5803/23840721545_e0350b687f.jpg?w=300&ssl=1" alt=Letsencrypt data-recalc-dims=1></a></p><p>寫這篇最主要推廣讓網站都支援 <a href=https://en.wikipedia.org/wiki/HTTPS>HTTPS 加密連線</a>及 <a href=https://en.wikipedia.org/wiki/HTTP/2>HTTP2 協定</a>，對於網站為什麼要支援 HTTP2，可以直接參考 ihower 寫的<a href=https://ihower.tw/blog/archives/8489>說明文章</a>，最近在玩 Facebook, Line, Telegram Bot 時，填寫 Webhook URL，都強制要填寫 https:// 開頭，所以更不能忽略 HTTPS 了。，去年底寫了一篇 <a href=https://blog.wu-boy.com/2015/12/letsencrypt-entering-public-beta-free-ssl/>Let&rsquo;s Encrypt 開放申請免費 SSL 憑證</a> 推廣 Let&rsquo;s Encrypt 的貢獻，讓買不起憑證，又想玩看看 HTTP2 的開發者可以用很簡單的方式來安裝及自動更新憑證，而 <a href=https://blog.gslin.org/>gslin</a> 大為了推廣 HTTPS 也做了一個<a href=https://letsencrypt.tw/>網站教學</a>，文章寫得相當清楚，支援 <a href=https://httpd.apache.org/>Apache</a> 及 <a href=https://nginx.org/>Nginx</a> 設定。</p><h3 id=安裝方式>安裝方式</h3><p>如果主機是使用 Amazone EC2，可以直接用 <a href=https://aws.amazon.com/tw/certificate-manager/>AWS Certificate Manager</a>，用 AWS 的好處就是只要透過<a href=http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-create-https-ssl-load-balancer.html>後台介面搭配 ELB</a> 就可以直接設定好 HTTPS 對應到 EC2 主機，壞處就是直接被綁死，將來如果不要使用 AWS，要轉移機器會相當痛苦。所以本篇會紀錄如何用 Nginx 搭配 <a href=https://letsencrypt.org/>Let&rsquo;s Encrypt</a>。為了方便部署機器，我們選用 <a href=https://github.com/lukas2511/dehydrated>dehydrated</a> 來設定 Let&rsquo;s Encrypt，好處就是不用安裝 Python 套件，官方網站提供的安裝方式需要安裝 Python 相關環境。透過 wget 將 dehydrated 安裝到 <code>/etc/dehydrated/</code> 底下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ mkdir -p /etc/dehydrated/
+</span></span><span style=display:flex><span>$ wget https://raw.githubusercontent.com/lukas2511/dehydrated/master/dehydrated -O /etc/dehydrated/dehydrated
+</span></span><span style=display:flex><span>$ chmod <span style=color:#b452cd>755</span> /etc/dehydrated/dehydrated
+</span></span></code></pre></td></tr></table></div></div><h3 id=建立設定檔>建立設定檔</h3><p>建立 dehydrated config 設定檔</p><pre><code>$ echo &quot;WELLKNOWN=/var/www/dehydrated&quot; &gt; /etc/dehydrated/config 
 $ mkdir -p /var/www/dehydrated
-</code></pre>
-<p>Nginx 設定，先在 80 port 的 Server section 內寫入底下設定:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>location /.well-known/acme-challenge/ {
-  <span style=color:#658b00>alias</span> /var/www/dehydrated/;
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>可以先丟個檔案到 <code>/var/www/dehydrated/</code> 確定網站可以正常讀取檔案，接著透過 dehydrated 指令產生 SSL 設定檔</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com
-</code></pre></td></tr></table>
-</div>
-</div><p>執行上述指令會看到底下結果</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#228b22># INFO: Using main config file /etc/dehydrated/config</span>
-Processing fbbot.wu-boy.com
- + Signing domains...
- + Generating private key...
- + Generating signing request...
- + Requesting challenge <span style=color:#8b008b;font-weight:700>for</span> fbbot.wu-boy.com...
- + Responding to challenge <span style=color:#8b008b;font-weight:700>for</span> fbbot.wu-boy.com...
- + Challenge is valid!
- + Requesting certificate...
- + Checking certificate...
- + Done!
- + Creating fullchain.pem...
- + Done!
-</code></pre></td></tr></table>
-</div>
-</div><p>最後在設定一次 nginx</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>server {
-  <span style=color:#228b22># don&#39;t forget to tell on which port this server listens</span>
-  listen 80;
-
-  <span style=color:#228b22># listen on the www host</span>
-  server_name fbbot.wu-boy.com;
-
-  <span style=color:#228b22># and redirect to the non-www host (declared below)</span>
-  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>301</span> https://fbbot.wu-boy.com<span style=color:#00688b>$request_uri</span>;
-}
-
-server {
-  listen 0.0.0.0:443 ssl http2;
-  server_name fbbot.wu-boy.com;
-
-  location /.well-known/acme-challenge/ {
-    <span style=color:#658b00>alias</span> /var/www/dehydrated/;
-  }
-
-  ssl_certificate /etc/dehydrated/certs/fbbot.wu-boy.com//fullchain.pem;
-  ssl_certificate_key /etc/dehydrated/certs/fbbot.wu-boy.com/privkey.pem;
-  location / {
-    proxy_pass http://localhost:8081;
-  }
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>上面是將 80 port 自動轉到 https，如果下次要重新 renew 的時候才不會又要打開 80 port 一次。</p>
-<h3 id=加入-cron-設定>加入 Cron 設定</h3>
-<p>每天半夜可以自動 renew 一次，請參考 <a href=https://letsencrypt.tw/>https://letsencrypt.tw/</a> 最後章節</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=color:#b452cd>0</span> <span style=color:#b452cd>0</span> * * * root sleep <span style=color:#8b008b;font-weight:700>$(</span>expr <span style=color:#8b008b;font-weight:700>$(</span><span style=color:#658b00>printf</span> <span style=color:#cd5555>&#34;\%d&#34;</span> <span style=color:#cd5555>&#34;0x</span><span style=color:#8b008b;font-weight:700>$(</span>hostname | md5sum | cut -c 1-8<span style=color:#8b008b;font-weight:700>)</span><span style=color:#cd5555>&#34;</span><span style=color:#8b008b;font-weight:700>)</span> <span style=color:#cd5555>\%</span> 86400<span style=color:#8b008b;font-weight:700>)</span>; ( /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com; /usr/sbin/service nginx reload ) &gt; /tmp/dehydrated-fbbot.wu-boy.com.log 2&gt;&amp;<span style=color:#b452cd>1</span>
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=後記>後記</h3>
-<p>除了這方法之外，也可以使用 <a href=https://github.com/certbot/certbot>Certbot</a> 來自動更新憑證，但是這方式就是要安裝 Python 環境，不過也不是很難就是了，可以直接參考這篇『<a href=https://blog.gtwang.org/linux/secure-nginx-with-lets-encrypt-ssl-certificate-on-ubuntu-and-debian/>NGINX 使用 Let&rsquo;s Encrypt 免費 SSL 憑證設定 HTTPS 安全加密網頁教學</a>』。結論就是你可以在網路上找到超多種方法來申請 Let&rsquo;s Encrypt 憑證，就找到自己覺得不錯的方法即可，而我是認為不用安裝 Python 環境的方式最適合部署了。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
+</code></pre><p>Nginx 設定，先在 80 port 的 Server section 內寫入底下設定:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>location /.well-known/acme-challenge/ {
+</span></span><span style=display:flex><span>  <span style=color:#658b00>alias</span> /var/www/dehydrated/;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>可以先丟個檔案到 <code>/var/www/dehydrated/</code> 確定網站可以正常讀取檔案，接著透過 dehydrated 指令產生 SSL 設定檔</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com
+</span></span></code></pre></td></tr></table></div></div><p>執行上述指令會看到底下結果</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-13>13</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#228b22># INFO: Using main config file /etc/dehydrated/config</span>
+</span></span><span style=display:flex><span>Processing fbbot.wu-boy.com
+</span></span><span style=display:flex><span> + Signing domains...
+</span></span><span style=display:flex><span> + Generating private key...
+</span></span><span style=display:flex><span> + Generating signing request...
+</span></span><span style=display:flex><span> + Requesting challenge <span style=color:#8b008b;font-weight:700>for</span> fbbot.wu-boy.com...
+</span></span><span style=display:flex><span> + Responding to challenge <span style=color:#8b008b;font-weight:700>for</span> fbbot.wu-boy.com...
+</span></span><span style=display:flex><span> + Challenge is valid!
+</span></span><span style=display:flex><span> + Requesting certificate...
+</span></span><span style=display:flex><span> + Checking certificate...
+</span></span><span style=display:flex><span> + Done!
+</span></span><span style=display:flex><span> + Creating fullchain.pem...
+</span></span><span style=display:flex><span> + Done!
+</span></span></code></pre></td></tr></table></div></div><p>最後在設定一次 nginx</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-25>25</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>server {
+</span></span><span style=display:flex><span>  <span style=color:#228b22># don&#39;t forget to tell on which port this server listens</span>
+</span></span><span style=display:flex><span>  listen 80;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#228b22># listen on the www host</span>
+</span></span><span style=display:flex><span>  server_name fbbot.wu-boy.com;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#228b22># and redirect to the non-www host (declared below)</span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>301</span> https://fbbot.wu-boy.com<span style=color:#00688b>$request_uri</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>server {
+</span></span><span style=display:flex><span>  listen 0.0.0.0:443 ssl http2;
+</span></span><span style=display:flex><span>  server_name fbbot.wu-boy.com;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  location /.well-known/acme-challenge/ {
+</span></span><span style=display:flex><span>    <span style=color:#658b00>alias</span> /var/www/dehydrated/;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  ssl_certificate /etc/dehydrated/certs/fbbot.wu-boy.com//fullchain.pem;
+</span></span><span style=display:flex><span>  ssl_certificate_key /etc/dehydrated/certs/fbbot.wu-boy.com/privkey.pem;
+</span></span><span style=display:flex><span>  location / {
+</span></span><span style=display:flex><span>    proxy_pass http://localhost:8081;
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>上面是將 80 port 自動轉到 https，如果下次要重新 renew 的時候才不會又要打開 80 port 一次。</p><h3 id=加入-cron-設定>加入 Cron 設定</h3><p>每天半夜可以自動 renew 一次，請參考 <a href=https://letsencrypt.tw/>https://letsencrypt.tw/</a> 最後章節</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#b452cd>0</span> <span style=color:#b452cd>0</span> * * * root sleep <span style=color:#8b008b;font-weight:700>$(</span>expr <span style=color:#8b008b;font-weight:700>$(</span><span style=color:#658b00>printf</span> <span style=color:#cd5555>&#34;\%d&#34;</span> <span style=color:#cd5555>&#34;0x</span><span style=color:#8b008b;font-weight:700>$(</span>hostname | md5sum | cut -c 1-8<span style=color:#8b008b;font-weight:700>)</span><span style=color:#cd5555>&#34;</span><span style=color:#8b008b;font-weight:700>)</span> <span style=color:#cd5555>\%</span> 86400<span style=color:#8b008b;font-weight:700>)</span>; ( /etc/dehydrated/dehydrated -c -d fbbot.wu-boy.com; /usr/sbin/service nginx reload ) &gt; /tmp/dehydrated-fbbot.wu-boy.com.log 2&gt;&amp;<span style=color:#b452cd>1</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=後記>後記</h3><p>除了這方法之外，也可以使用 <a href=https://github.com/certbot/certbot>Certbot</a> 來自動更新憑證，但是這方式就是要安裝 Python 環境，不過也不是很難就是了，可以直接參考這篇『<a href=https://blog.gtwang.org/linux/secure-nginx-with-lets-encrypt-ssl-certificate-on-ubuntu-and-debian/>NGINX 使用 Let&rsquo;s Encrypt 免費 SSL 憑證設定 HTTPS 安全加密網頁教學</a>』。結論就是你可以在網路上找到超多種方法來申請 Let&rsquo;s Encrypt 憑證，就找到自己覺得不錯的方法即可，而我是認為不用安裝 Python 環境的方式最適合部署了。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/aws/>AWS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/devops/>devops</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/http2/>http2</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/https/>https</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/letsencrypt/>Letsencrypt</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&text=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&title=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&title=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&title=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&description=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li>
-<li><a href=/2021/02/recovering-terraform-state/>搶救 Terraform State 檔案</a></li>
-<li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li>
-<li><a href=/2019/01/traefik-docker-and-lets-encrypt/>Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證</a></li>
-<li><a href=/2018/11/install-drone-in-single-machine/>Drone 支援單機版安裝 (內附影片)</a></li>
-<li><a href=/2018/11/drone-ci-cd-platform-in-mopconf/>高雄 Mopcon 濁水溪以南最大研討會 – Drone CI/CD 介紹</a></li>
-<li><a href=/2018/10/deploy-app-to-aws-lambda-using-up-tool-in-ten-minutes/>用 10 分鐘部署專案到 AWS Lambda</a></li>
-<li><a href=/2018/07/caddy-lets-encrypt-wildcard-certificate/>用 Caddy 申請 Let’s Encrypt Wildcard 憑證</a></li>
-<li><a href=/2018/04/how-to-use-filter-in-drone/>[影片教學] 使用 Filter 將專案跑在特定 Drone Agent 服務</a></li>
-<li><a href=/2018/03/nginx-reverse-proxy-image-resizing/>用 Nginx 來架設線上即時縮圖機</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2016/10/ssh-agent-forwarding-proxycommand-tutorial/ data-toggle=tooltip data-placement=top title="SSH agent forwarding 教學">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2016/10/replcae-npm-with-yarn-package-management/ data-toggle=tooltip data-placement=top title="用 Yarn 取代 Npm 管理 JavaScript 套件版本">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2016/10/website-support-http2-using-letsencrypt>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2016/10/website-support-http2-using-letsencrypt'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/nginx/>nginx</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&text=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&title=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&title=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&title=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f10%2fwebsite-support-http2-using-letsencrypt%2f&description=%e7%94%b3%e8%ab%8b%20Let%e2%80%99s%20Encrypt%20%e5%85%8d%e8%b2%bb%e6%86%91%e8%ad%89%e8%ae%93%e7%b6%b2%e7%ab%99%e6%94%af%e6%8f%b4%20HTTP2" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2021/02/share-files-between-two-computer-using-croc-tool/>兩台電腦透過 croc 工具來傳送檔案 (簡單, 加密, 快速)</a></li><li><a href=/2021/02/recovering-terraform-state/>搶救 Terraform State 檔案</a></li><li><a href=/2020/04/upload-docker-image-to-aws-ecr-using-github-actions/>用 GitHub Actions 上傳 Docker Image 到 AWS ECR</a></li><li><a href=/2019/01/traefik-docker-and-lets-encrypt/>Traefik 搭配 Docker 自動更新 Let’s Encrypt 憑證</a></li><li><a href=/2018/11/install-drone-in-single-machine/>Drone 支援單機版安裝 (內附影片)</a></li><li><a href=/2018/11/drone-ci-cd-platform-in-mopconf/>高雄 Mopcon 濁水溪以南最大研討會 – Drone CI/CD 介紹</a></li><li><a href=/2018/10/deploy-app-to-aws-lambda-using-up-tool-in-ten-minutes/>用 10 分鐘部署專案到 AWS Lambda</a></li><li><a href=/2018/07/caddy-lets-encrypt-wildcard-certificate/>用 Caddy 申請 Let’s Encrypt Wildcard 憑證</a></li><li><a href=/2018/04/how-to-use-filter-in-drone/>[影片教學] 使用 Filter 將專案跑在特定 Drone Agent 服務</a></li><li><a href=/2018/03/nginx-reverse-proxy-image-resizing/>用 Nginx 來架設線上即時縮圖機</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2016/10/ssh-agent-forwarding-proxycommand-tutorial/ data-toggle=tooltip data-placement=top title="SSH agent forwarding 教學">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2016/10/replcae-npm-with-yarn-package-management/ data-toggle=tooltip data-placement=top title="用 Yarn 取代 Npm 管理 JavaScript 套件版本">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2016/10/website-support-http2-using-letsencrypt>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2016/10/website-support-http2-using-letsencrypt"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

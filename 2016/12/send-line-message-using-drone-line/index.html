@@ -1,449 +1,94 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>用 drone-line 架設 Line webhook 及發送訊息 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
-之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想用 Docker 版本的，可以直接參考 Docker Hub 上的 drone-line repo，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考前一篇教學">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2016\/12\/send-line-message-using-drone-line\/","name":"用 drone line 架設 line webhook 及發送訊息"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 drone-line 架設 Line webhook 及發送訊息","description":"\n之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想用 Docker 版本的，可以直接參考 Docker Hub 上的 drone-line repo，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考前一篇教學\n","inLanguage":"en","wordCount":256,"datePublished":"2016-12-18T07:57:16","dateModified":"2016-12-18T07:57:16","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["bot, drone, golang, Line, Line Bot API"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2016\/12\/send-line-message-using-drone-line\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="用 drone-line 架設 Line webhook 及發送訊息">
-<meta property="og:description" content="
-之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想用 Docker 版本的，可以直接參考 Docker Hub 上的 drone-line repo，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考前一篇教學">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2016/12/send-line-message-using-drone-line/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="用 drone-line 架設 Line webhook 及發送訊息">
-<meta name=twitter:description content="
-之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想 …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>用 drone-line 架設 Line webhook 及發送訊息 - 小惡魔 - AppleBOY</title><meta name=description content="
+之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想用 Docker 版本的，可以直接參考 Docker Hub 上的 drone-line repo，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考前一篇教學"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2016\/12\/send-line-message-using-drone-line\/","name":"用 drone line 架設 line webhook 及發送訊息"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 drone-line 架設 Line webhook 及發送訊息","description":"\n之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想用 Docker 版本的，可以直接參考 Docker Hub 上的 drone-line repo，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考前一篇教學\n","inLanguage":"en","wordCount":256,"datePublished":"2016-12-18T07:57:16","dateModified":"2016-12-18T07:57:16","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["bot, drone, golang, Line, Line Bot API"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2016\/12\/send-line-message-using-drone-line\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 drone-line 架設 Line webhook 及發送訊息"><meta property="og:description" content="
+之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想用 Docker 版本的，可以直接參考 Docker Hub 上的 drone-line repo，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考前一篇教學"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2016/12/send-line-message-using-drone-line/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="用 drone-line 架設 Line webhook 及發送訊息"><meta name=twitter:description content="
+之前寫了一篇教學『用 Docker 發送 Line 訊息』，但是前提是你要先學會 Docker，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 v1.4.0 Release 頁面，如果還是想 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>用 drone-line 架設 Line webhook 及發送訊息</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 18, 2016
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>用 drone-line 架設 Line webhook 及發送訊息</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 18, 2016
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;256&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li><a href=#使用執行檔>使用執行檔</a>
-<ul>
-<li><a href=#下載-drone-line-執行檔>下載 drone-line 執行檔</a></li>
-<li><a href=#架設-webhook-service>架設 Webhook Service</a></li>
-<li><a href=#傳送訊息>傳送訊息</a></li>
-</ul>
-</li>
-<li><a href=#使用-docker>使用 Docker</a>
-<ul>
-<li><a href=#架設-webhook-service-1>架設 Webhook Service</a></li>
-<li><a href=#傳送訊息-1>傳送訊息</a></li>
-</ul>
-</li>
-<li><a href=#後記>後記</a></li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p><a href="https://i2.wp.com/c5.staticflickr.com/1/318/31555289732_f79a194057_c.jpg?ssl=1"><img src="https://i2.wp.com/c5.staticflickr.com/1/318/31555289732_f79a194057_c.jpg?w=840&ssl=1" alt data-recalc-dims=1></a></p>
-<p>之前寫了一篇教學『<a href=https://blog.wu-boy.com/2016/11/send-line-notification-using-docker-written-in-golang/>用 Docker 發送 Line 訊息</a>』，但是前提是你要先學會 <a href=https://www.docker.com/>Docker</a>，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 <a href=https://github.com/appleboy/drone-line/releases/tag/v1.4.0>v1.4.0 Release</a> 頁面，如果還是想用 Docker 版本的，可以直接參考 <a href=https://hub.docker.com>Docker Hub</a> 上的 <a href=https://hub.docker.com/r/appleboy/drone-line/>drone-line repo</a>，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考<a href=https://blog.wu-boy.com/2016/11/send-line-notification-using-docker-written-in-golang/>前一篇教學</a></p>
-<h2 id=使用執行檔>使用執行檔</h2>
-<p>不用學習 Docker 只需要下載執行檔就可以，支援底下環境</p>
-<ul>
-<li>Windows adm64/386</li>
-<li>Linux amd64/386</li>
-<li>Darwin (Mac OS X) amd64/386</li>
-</ul>
-<h3 id=下載-drone-line-執行檔>下載 drone-line 執行檔</h3>
-<p>不管是 Windows 64/32 位元的作業系統，都可以直接在 drone-line <a href=https://github.com/appleboy/drone-line/releases>release 頁面</a> 找到相對應的下載點。下載後，直接在 Windows 執行 cmd 指令，跳出命令提示列視窗，鍵入:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ drone-line-v1.4.0-windows-amd64.exe -h
-</code></pre></td></tr></table>
-</div>
-</div><p>看到底下畫面就代表成功了</p>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/31555161842/in/dateposted-public/ title="Screen Shot 2016-12-17 at 11.58.28 PM"><img src="https://i2.wp.com/c3.staticflickr.com/1/656/31555161842_97d67daf9c_c.jpg?resize=775%2C800&ssl=1" alt="Screen Shot 2016-12-17 at 11.58.28 PM" data-recalc-dims=1></a></p>
-<h3 id=架設-webhook-service>架設 Webhook Service</h3>
-<p>透過 Webhook Service 才可以跟 Line Server 互相溝通，拿到使用者專屬 ID，請直接底下指令就可以架設 Webhook service。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ drone-line-v1.4.0-windows-amd64.exe <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --secret xxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --token xxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  webhook
-</code></pre></td></tr></table>
-</div>
-</div><p>其中 <code>--secret</code> 及 <code>--token</code> 請自行替換，預設會跑在 <code>8088</code> port，如果要換連接埠，請使用 <code>--port</code> 參數</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ drone-line-v1.4.0-windows-amd64.exe <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --port <span style=color:#b452cd>2001</span> <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --secret xxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --token xxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  webhook
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=傳送訊息>傳送訊息</h3>
-<p>拿到使用者 ID 就可以透過指令直接發送訊息</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ drone-line-v1.4.0-windows-amd64.exe <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --secret xxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --token xxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --to xxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  --message <span style=color:#cd5555>&#34;Test Message&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>其中 <code>--to</code> 是代表使用者 ID，如果要傳給多個人，請用 <code>,</code> 符號隔開。</p>
-<h2 id=使用-docker>使用 Docker</h2>
-<p>還是可以用 Docker 完成跟執行檔相同的結果，本篇是透過 <a href=https://hub.docker.com/r/appleboy/drone-line/>appleboy/drone-line</a> 映像檔來完成</p>
-<h3 id=架設-webhook-service-1>架設 Webhook Service</h3>
-<p>一行指令完成 webhook service 架設</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>docker run --rm <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_SECRET</span>=xxxxxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_TOKEN</span>=xxxxxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  appleboy/drone-line webhook
-</code></pre></td></tr></table>
-</div>
-</div><p>如果要換預設連接埠 (8088) 請加上 <code>PLUGIN_PORT</code> 全域變數</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>docker run --rm <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_SECRET</span>=xxxxxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_TOKEN</span>=xxxxxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_PORT</span>=<span style=color:#b452cd>2001</span> <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  appleboy/drone-line webhook
-</code></pre></td></tr></table>
-</div>
-</div><h3 id=傳送訊息-1>傳送訊息</h3>
-<p>一樣很簡單，一行指令搞定</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>docker run --rm <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_SECRET</span>=xxxxxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_TOKEN</span>=xxxxxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_TO</span>=xxxxxxx <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_MESSAGE</span>=<span style=color:#658b00>test</span> <span style=color:#cd5555>\
-</span><span style=color:#cd5555></span>  appleboy/drone-line
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=後記>後記</h2>
-<p>上個月在<a href=https://www.facebook.com/groups/750311598438135/>線上 docker 讀書會</a>，有教大家如何用 Docker 發送 Line 訊息，影片檔如下，不過本篇主要是提供了各 OS 版本的 Binary 檔案，方便大家直接下載使用，連 Docker 都不用安裝了。</p>
-<p>對於執行檔或 Docker 有其他問題，可以直接到 <a href=https://github.com/appleboy/drone-line>drone-line</a> 開 <a href=https://github.com/appleboy/drone-line/issues>Issue</a> 給我吧。如果喜歡的話，也可以直接 Star 追蹤。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/bot/>bot</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#使用執行檔>使用執行檔</a><ul><li><a href=#下載-drone-line-執行檔>下載 drone-line 執行檔</a></li><li><a href=#架設-webhook-service>架設 Webhook Service</a></li><li><a href=#傳送訊息>傳送訊息</a></li></ul></li><li><a href=#使用-docker>使用 Docker</a><ul><li><a href=#架設-webhook-service-1>架設 Webhook Service</a></li><li><a href=#傳送訊息-1>傳送訊息</a></li></ul></li><li><a href=#後記>後記</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://i2.wp.com/c5.staticflickr.com/1/318/31555289732_f79a194057_c.jpg?ssl=1"><img src="https://i2.wp.com/c5.staticflickr.com/1/318/31555289732_f79a194057_c.jpg?w=840&ssl=1" alt data-recalc-dims=1></a></p><p>之前寫了一篇教學『<a href=https://blog.wu-boy.com/2016/11/send-line-notification-using-docker-written-in-golang/>用 Docker 發送 Line 訊息</a>』，但是前提是你要先學會 <a href=https://www.docker.com/>Docker</a>，對於完全沒有 Docker 經驗的初學者來說，學習起來相當不容易，所以我將 drone-line 編譯出 Linux, Mac OS X 或 Windows 都可以執行的 Binary 檔案，方便初學者可以直接下載執行檔，在任何環境都可以運作，請直接參考 <a href=https://github.com/appleboy/drone-line/releases/tag/v1.4.0>v1.4.0 Release</a> 頁面，如果還是想用 Docker 版本的，可以直接參考 <a href=https://hub.docker.com>Docker Hub</a> 上的 <a href=https://hub.docker.com/r/appleboy/drone-line/>drone-line repo</a>，底下會教大家如何執行 Line webhook service 及發送訊息，尚未申請 Line Developer 帳號，請直接參考<a href=https://blog.wu-boy.com/2016/11/send-line-notification-using-docker-written-in-golang/>前一篇教學</a></p><h2 id=使用執行檔>使用執行檔</h2><p>不用學習 Docker 只需要下載執行檔就可以，支援底下環境</p><ul><li>Windows adm64/386</li><li>Linux amd64/386</li><li>Darwin (Mac OS X) amd64/386</li></ul><h3 id=下載-drone-line-執行檔>下載 drone-line 執行檔</h3><p>不管是 Windows 64/32 位元的作業系統，都可以直接在 drone-line <a href=https://github.com/appleboy/drone-line/releases>release 頁面</a> 找到相對應的下載點。下載後，直接在 Windows 執行 cmd 指令，跳出命令提示列視窗，鍵入:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ drone-line-v1.4.0-windows-amd64.exe -h
+</span></span></code></pre></td></tr></table></div></div><p>看到底下畫面就代表成功了</p><p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/31555161842/in/dateposted-public/ title="Screen Shot 2016-12-17 at 11.58.28 PM"><img src="https://i2.wp.com/c3.staticflickr.com/1/656/31555161842_97d67daf9c_c.jpg?resize=775%2C800&ssl=1" alt="Screen Shot 2016-12-17 at 11.58.28 PM" data-recalc-dims=1></a></p><h3 id=架設-webhook-service>架設 Webhook Service</h3><p>透過 Webhook Service 才可以跟 Line Server 互相溝通，拿到使用者專屬 ID，請直接底下指令就可以架設 Webhook service。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ drone-line-v1.4.0-windows-amd64.exe <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --secret xxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --token xxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  webhook
+</span></span></code></pre></td></tr></table></div></div><p>其中 <code>--secret</code> 及 <code>--token</code> 請自行替換，預設會跑在 <code>8088</code> port，如果要換連接埠，請使用 <code>--port</code> 參數</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ drone-line-v1.4.0-windows-amd64.exe <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --port <span style=color:#b452cd>2001</span> <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --secret xxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --token xxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  webhook
+</span></span></code></pre></td></tr></table></div></div><h3 id=傳送訊息>傳送訊息</h3><p>拿到使用者 ID 就可以透過指令直接發送訊息</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ drone-line-v1.4.0-windows-amd64.exe <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --secret xxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --token xxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --to xxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  --message <span style=color:#cd5555>&#34;Test Message&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>其中 <code>--to</code> 是代表使用者 ID，如果要傳給多個人，請用 <code>,</code> 符號隔開。</p><h2 id=使用-docker>使用 Docker</h2><p>還是可以用 Docker 完成跟執行檔相同的結果，本篇是透過 <a href=https://hub.docker.com/r/appleboy/drone-line/>appleboy/drone-line</a> 映像檔來完成</p><h3 id=架設-webhook-service-1>架設 Webhook Service</h3><p>一行指令完成 webhook service 架設</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>docker run --rm <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_SECRET</span>=xxxxxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_TOKEN</span>=xxxxxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  appleboy/drone-line webhook
+</span></span></code></pre></td></tr></table></div></div><p>如果要換預設連接埠 (8088) 請加上 <code>PLUGIN_PORT</code> 全域變數</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>docker run --rm <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_SECRET</span>=xxxxxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_TOKEN</span>=xxxxxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_PORT</span>=<span style=color:#b452cd>2001</span> <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  appleboy/drone-line webhook
+</span></span></code></pre></td></tr></table></div></div><h3 id=傳送訊息-1>傳送訊息</h3><p>一樣很簡單，一行指令搞定</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>docker run --rm <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_SECRET</span>=xxxxxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_CHANNEL_TOKEN</span>=xxxxxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_TO</span>=xxxxxxx <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  -e <span style=color:#00688b>PLUGIN_MESSAGE</span>=<span style=color:#658b00>test</span> <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  appleboy/drone-line
+</span></span></code></pre></td></tr></table></div></div><h2 id=後記>後記</h2><p>上個月在<a href=https://www.facebook.com/groups/750311598438135/>線上 docker 讀書會</a>，有教大家如何用 Docker 發送 Line 訊息，影片檔如下，不過本篇主要是提供了各 OS 版本的 Binary 檔案，方便大家直接下載使用，連 Docker 都不用安裝了。</p><p>對於執行檔或 Docker 有其他問題，可以直接到 <a href=https://github.com/appleboy/drone-line>drone-line</a> 開 <a href=https://github.com/appleboy/drone-line/issues>Issue</a> 給我吧。如果喜歡的話，也可以直接 Star 追蹤。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/bot/>bot</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/drone/>drone</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/line/>Line</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/line-bot-api/>Line Bot API</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&text=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&title=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&title=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&title=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&description=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li>
-<li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li>
-<li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li>
-<li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li>
-<li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li>
-<li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li>
-<li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li>
-<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
-<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
-<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2016/11/new-linode-datacenter-tokyo-2/ data-toggle=tooltip data-placement=top title="Linode 推出新的 Datacenter 據點 Tokyo 2">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2016/12/create-account-and-ssh-permission-on-mac/ data-toggle=tooltip data-placement=top title="在 Mac 建立新帳號，並且開通 ssh 權限">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2016/12/send-line-message-using-drone-line>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2016/12/send-line-message-using-drone-line'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/line-bot-api/>Line Bot API</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&text=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&title=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&title=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&title=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2016%2f12%2fsend-line-message-using-drone-line%2f&description=%e7%94%a8%20drone-line%20%e6%9e%b6%e8%a8%ad%20Line%20webhook%20%e5%8f%8a%e7%99%bc%e9%80%81%e8%a8%8a%e6%81%af" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li><li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li><li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li><li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li><li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li><li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li><li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li><li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2016/11/new-linode-datacenter-tokyo-2/ data-toggle=tooltip data-placement=top title="Linode 推出新的 Datacenter 據點 Tokyo 2">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2016/12/create-account-and-ssh-permission-on-mac/ data-toggle=tooltip data-placement=top title="在 Mac 建立新帳號，並且開通 ssh 權限">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2016/12/send-line-message-using-drone-line>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2016/12/send-line-message-using-drone-line"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

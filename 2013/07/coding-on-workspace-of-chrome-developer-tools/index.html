@@ -1,344 +1,41 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Coding on workspace of Chrome Developer tools - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Coding on workspace of Chrome Developer tools - 小惡魔 - AppleBOY</title><meta name=description content="
   
 
-相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 線上編輯檔案，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 Chrome workspace。">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/07\/coding-on-workspace-of-chrome-developer-tools\/","name":"Coding on workspace of chrome developer tools"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Coding on workspace of Chrome Developer tools","description":" 相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim \u0026hellip;) 工具，直接修改 =\u0026gt; 存檔 =\u0026gt; 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 線上編輯檔案，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 Chrome workspace。\n","inLanguage":"en","wordCount":107,"datePublished":"2013-07-21T10:48:36","dateModified":"2013-07-21T10:48:36","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Backbone.js, Chrome, Chrome Developer Tool, GruntJS, LiveReload, RequireJs"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/07\/coding-on-workspace-of-chrome-developer-tools\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="Coding on workspace of Chrome Developer tools">
-<meta property="og:description" content="
+相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 線上編輯檔案，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 Chrome workspace。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/07\/coding-on-workspace-of-chrome-developer-tools\/","name":"Coding on workspace of chrome developer tools"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Coding on workspace of Chrome Developer tools","description":" 相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim \u0026hellip;) 工具，直接修改 =\u0026gt; 存檔 =\u0026gt; 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 線上編輯檔案，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 Chrome workspace。\n","inLanguage":"en","wordCount":107,"datePublished":"2013-07-21T10:48:36","dateModified":"2013-07-21T10:48:36","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Backbone.js, Chrome, Chrome Developer Tool, GruntJS, LiveReload, RequireJs"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/07\/coding-on-workspace-of-chrome-developer-tools\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Coding on workspace of Chrome Developer tools"><meta property="og:description" content="
   
 
-相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 線上編輯檔案，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 Chrome workspace。">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="Coding on workspace of Chrome Developer tools">
-<meta name=twitter:description content="
+相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 線上編輯檔案，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 Chrome workspace。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Coding on workspace of Chrome Developer tools"><meta name=twitter:description content="
   
 
-相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點 …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+相信網頁設計師並不陌生 Chrome DevTools，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 Chrome 瀏覽器上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>Coding on workspace of Chrome Developer tools</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 21, 2013
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Coding on workspace of Chrome Developer tools</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 21, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;107&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#啟動-workspace>啟動 Workspace</a></li>
-<li><a href=#使-workspace-編輯檔案>使 Workspace 編輯檔案</a></li>
-<li><a href=#心得>心得</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i2.wp.com/farm8.staticflickr.com/7350/9333443162_20e7e5d5f2_m.jpg?w=840&ssl=1" alt="Google Chrome" data-recalc-dims=1>
-</div>
-<p>相信網頁設計師並不陌生 <a href=https://developers.google.com/chrome-developer-tools/ target=_blank>Chrome DevTools</a>，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 <a href=https://www.google.com/intl/zh-TW/chrome/browser/ target=_blank>Chrome 瀏覽器</a>上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 <code>線上編輯檔案</code>，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 <a href="https://developers.google.com/chrome-developer-tools/docs/settings?hl=en#workspace" target=_blank>Chrome workspace</a>。</p>
-<h3 id=啟動-workspace>啟動 Workspace</h3>
-<p>打開 Chrome 瀏覽器，在網址列輸入: <code>chrome://flags/</code>，並且找到 <code>Enable Developer Tools experiments</code>，啟動此選項，最後重新啟動瀏覽器</p>
-<p><a href=https://www.flickr.com/photos/appleboy/9330724801/ title="Selection_004 by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.staticflickr.com/5336/9330724801_a7033d870c.jpg?resize=500%2C147&ssl=1" alt=Selection_004 data-recalc-dims=1></a></p>
-<p>打開 Chrome Console 介面，並且點選右下角 Setting 會看到此畫面</p>
-<p><a href=https://www.flickr.com/photos/appleboy/9330739963/ title="Selection_005 by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.staticflickr.com/5338/9330739963_0963070e6d_o.png?resize=570%2C458&ssl=1" alt=Selection_005 data-recalc-dims=1></a></p>
-<p>點選到 <code>Experiment</code> 後，將 <code>File system folders in Source Panel</code> 勾選，並且重新啟動瀏覽器</p>
-<h3 id=使-workspace-編輯檔案>使 Workspace 編輯檔案</h3>
-<p>完成上述步驟，接著就是將 local 目錄掛到 Chrome Dev Tool 介面，請先打開瀏覽器，打 local 網址，並且將 console 介面打開</p>
-<p><a href=https://www.flickr.com/photos/appleboy/9330772493/ title="Selection_006 by appleboy46, on Flickr"><img src="https://i2.wp.com/farm4.staticflickr.com/3823/9330772493_a3d4de749c_z.jpg?resize=640%2C132&ssl=1" alt=Selection_006 data-recalc-dims=1></a></p>
-<p>指定好 path 後，可以將 setting 頁面關閉，然後切換到 Sources Tab，你會發現如下圖</p>
-<p><a href=https://www.flickr.com/photos/appleboy/9334436126/ title="Selection_007 by appleboy46, on Flickr"><img src="https://i2.wp.com/farm3.staticflickr.com/2860/9334436126_21ff82e482_o.png?resize=465%2C248&ssl=1" alt=Selection_007 data-recalc-dims=1></a></p>
-<p>我們可以開啟 app/index.html，直接在 console 介面編輯並且存檔</p>
-<p><a href=https://www.flickr.com/photos/appleboy/9334446622/ title="Selection_008 by appleboy46, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3807/9334446622_cc553501cb_z.jpg?resize=640%2C307&ssl=1" alt=Selection_008 data-recalc-dims=1></a></p>
-<p>接著直接 refresh 網頁即可。</p>
-<h3 id=心得>心得</h3>
-<p>用 <code>Workspace</code> 其實重點就是你可以直接開 browser 然後旁邊的 console 介面可以直接編輯，而不是切換到系統編輯器修改，當然這還不是很方便，如果搭配了 <a href=http://gruntjs.com/ target=_blank>GruntJS</a> 及 <a href=http://livereload.com/ target=_blank>LiveReload</a>，你會發現，編輯程式碼後，Grunt 也是會自動跑相關設定，LiveReload 也會自動幫忙更新網頁喔。</p>
-<p>可以參考之前的文章: <a href=http://blog.wu-boy.com/2013/05/2013-javascript-conference-front-tool-grunt-js/ target=_blank>2013 Javascript Conference: 你不可不知的前端開發工具</a></p>
-<p>另外可以直接拿下面兩專案來跑 <a href=http://requirejs.org/ target=_blank>RequireJS</a> + <a href=http://backbonejs.org/ target=_blank>Backbone.js</a> + <a href=http://gruntjs.com/ target=_blank>GruntJS</a></p>
-<ul>
-<li>Github: <a href=https://github.com/appleboy/html5-template-engine target=_blank>html5-template-engine</a></li>
-<li>Github: <a href=https://github.com/appleboy/backbone-template-engine target=_blank>backbone-template-engine</a></li>
-</ul>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/backbone.js/>Backbone.js</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#啟動-workspace>啟動 Workspace</a></li><li><a href=#使-workspace-編輯檔案>使 Workspace 編輯檔案</a></li><li><a href=#心得>心得</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><img src="https://i2.wp.com/farm8.staticflickr.com/7350/9333443162_20e7e5d5f2_m.jpg?w=840&ssl=1" alt="Google Chrome" data-recalc-dims=1></div><p>相信網頁設計師並不陌生 <a href=https://developers.google.com/chrome-developer-tools/ target=_blank>Chrome DevTools</a>，善用 DevTools 可以減少很多 Debug 時間，今天來介紹如何在 <a href=https://www.google.com/intl/zh-TW/chrome/browser/ target=_blank>Chrome 瀏覽器</a>上直接編輯程式，並且存檔，重新整理網頁後便可看到結果。聽到這裡大家一定會很好奇，不就開系統編輯器 (sublime, pspad, vim &mldr;) 工具，直接修改 => 存檔 => 重新整理嘛？但是這並不稀奇阿，重點是 Chrome 瀏覽器可以直接支援 <code>線上編輯檔案</code>，而不是透過系統工具做編輯。這就是 Chrome 強大的地方，今天就來介紹 <a href="https://developers.google.com/chrome-developer-tools/docs/settings?hl=en#workspace" target=_blank>Chrome workspace</a>。</p><h3 id=啟動-workspace>啟動 Workspace</h3><p>打開 Chrome 瀏覽器，在網址列輸入: <code>chrome://flags/</code>，並且找到 <code>Enable Developer Tools experiments</code>，啟動此選項，最後重新啟動瀏覽器</p><p><a href=https://www.flickr.com/photos/appleboy/9330724801/ title="Selection_004 by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.staticflickr.com/5336/9330724801_a7033d870c.jpg?resize=500%2C147&ssl=1" alt=Selection_004 data-recalc-dims=1></a></p><p>打開 Chrome Console 介面，並且點選右下角 Setting 會看到此畫面</p><p><a href=https://www.flickr.com/photos/appleboy/9330739963/ title="Selection_005 by appleboy46, on Flickr"><img src="https://i0.wp.com/farm6.staticflickr.com/5338/9330739963_0963070e6d_o.png?resize=570%2C458&ssl=1" alt=Selection_005 data-recalc-dims=1></a></p><p>點選到 <code>Experiment</code> 後，將 <code>File system folders in Source Panel</code> 勾選，並且重新啟動瀏覽器</p><h3 id=使-workspace-編輯檔案>使 Workspace 編輯檔案</h3><p>完成上述步驟，接著就是將 local 目錄掛到 Chrome Dev Tool 介面，請先打開瀏覽器，打 local 網址，並且將 console 介面打開</p><p><a href=https://www.flickr.com/photos/appleboy/9330772493/ title="Selection_006 by appleboy46, on Flickr"><img src="https://i2.wp.com/farm4.staticflickr.com/3823/9330772493_a3d4de749c_z.jpg?resize=640%2C132&ssl=1" alt=Selection_006 data-recalc-dims=1></a></p><p>指定好 path 後，可以將 setting 頁面關閉，然後切換到 Sources Tab，你會發現如下圖</p><p><a href=https://www.flickr.com/photos/appleboy/9334436126/ title="Selection_007 by appleboy46, on Flickr"><img src="https://i2.wp.com/farm3.staticflickr.com/2860/9334436126_21ff82e482_o.png?resize=465%2C248&ssl=1" alt=Selection_007 data-recalc-dims=1></a></p><p>我們可以開啟 app/index.html，直接在 console 介面編輯並且存檔</p><p><a href=https://www.flickr.com/photos/appleboy/9334446622/ title="Selection_008 by appleboy46, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3807/9334446622_cc553501cb_z.jpg?resize=640%2C307&ssl=1" alt=Selection_008 data-recalc-dims=1></a></p><p>接著直接 refresh 網頁即可。</p><h3 id=心得>心得</h3><p>用 <code>Workspace</code> 其實重點就是你可以直接開 browser 然後旁邊的 console 介面可以直接編輯，而不是切換到系統編輯器修改，當然這還不是很方便，如果搭配了 <a href=http://gruntjs.com/ target=_blank>GruntJS</a> 及 <a href=http://livereload.com/ target=_blank>LiveReload</a>，你會發現，編輯程式碼後，Grunt 也是會自動跑相關設定，LiveReload 也會自動幫忙更新網頁喔。</p><p>可以參考之前的文章: <a href=http://blog.wu-boy.com/2013/05/2013-javascript-conference-front-tool-grunt-js/ target=_blank>2013 Javascript Conference: 你不可不知的前端開發工具</a></p><p>另外可以直接拿下面兩專案來跑 <a href=http://requirejs.org/ target=_blank>RequireJS</a> + <a href=http://backbonejs.org/ target=_blank>Backbone.js</a> + <a href=http://gruntjs.com/ target=_blank>GruntJS</a></p><ul><li>Github: <a href=https://github.com/appleboy/html5-template-engine target=_blank>html5-template-engine</a></li><li>Github: <a href=https://github.com/appleboy/backbone-template-engine target=_blank>backbone-template-engine</a></li></ul><div class=blog-tags><a href=https://blog.wu-boy.com/tags/backbone.js/>Backbone.js</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/chrome/>Chrome</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/chrome-developer-tool/>Chrome Developer Tool</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/gruntjs/>GruntJS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/livereload/>LiveReload</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&text=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&title=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&title=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&title=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&description=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2014/12/chrome-unreadable-character-on-ubuntu/>解決在 Ubuntu 系統下 Chrome 瀏覽器亂碼</a></li>
-<li><a href=/2014/05/gui-tool-for-gulp/>Gulp.js 工具包</a></li>
-<li><a href=/2014/02/backbone-js-1-1-1-amd-release/>Backbone.js 1.1.1 Release 釋出 AMD 版本</a></li>
-<li><a href=/2014/01/terminal-in-chrome-devtools/>在 Chrome 瀏覽器使用 Terminal 終端機</a></li>
-<li><a href=/2013/12/streaming-build-system-gulp/>The streaming build system Gulp</a></li>
-<li><a href=/2013/12/happy-18th-birthday-javascript/>Javscript 18 歲生日歷史演進</a></li>
-<li><a href=/2013/11/upgrade-backbone-framework-to-1-1-0-tips/>將 Backbone Framework 升級到 1.1.0 注意事項</a></li>
-<li><a href=/2013/10/drone-io-with-runy-compass-setup/>Drone.io 搭配 Ruby 環境測試</a></li>
-<li><a href=/2013/09/load-ckeditor-using-requirejs/>RequireJS 搭配 CKEditor</a></li>
-<li><a href=/2013/09/codeigniter-rest-server-with-backbone-js-issue/>CodeIgniter REST Server with Backbone.js Issue</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2013/07/nginx-port-redirect-issue-with-haproxy/ data-toggle=tooltip data-placement=top title="HAproxy 搭配 Nginx port redirect issue">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2013/07/linode-storage-space-doubled/ data-toggle=tooltip data-placement=top title="Linode 升級硬碟空間">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/requirejs/>RequireJs</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&text=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&title=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&title=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&title=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f07%2fcoding-on-workspace-of-chrome-developer-tools%2f&description=Coding%20on%20workspace%20of%20Chrome%20Developer%20tools" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2014/12/chrome-unreadable-character-on-ubuntu/>解決在 Ubuntu 系統下 Chrome 瀏覽器亂碼</a></li><li><a href=/2014/05/gui-tool-for-gulp/>Gulp.js 工具包</a></li><li><a href=/2014/02/backbone-js-1-1-1-amd-release/>Backbone.js 1.1.1 Release 釋出 AMD 版本</a></li><li><a href=/2014/01/terminal-in-chrome-devtools/>在 Chrome 瀏覽器使用 Terminal 終端機</a></li><li><a href=/2013/12/streaming-build-system-gulp/>The streaming build system Gulp</a></li><li><a href=/2013/12/happy-18th-birthday-javascript/>Javscript 18 歲生日歷史演進</a></li><li><a href=/2013/11/upgrade-backbone-framework-to-1-1-0-tips/>將 Backbone Framework 升級到 1.1.0 注意事項</a></li><li><a href=/2013/10/drone-io-with-runy-compass-setup/>Drone.io 搭配 Ruby 環境測試</a></li><li><a href=/2013/09/load-ckeditor-using-requirejs/>RequireJS 搭配 CKEditor</a></li><li><a href=/2013/09/codeigniter-rest-server-with-backbone-js-issue/>CodeIgniter REST Server with Backbone.js Issue</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2013/07/nginx-port-redirect-issue-with-haproxy/ data-toggle=tooltip data-placement=top title="HAproxy 搭配 Nginx port redirect issue">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2013/07/linode-storage-space-doubled/ data-toggle=tooltip data-placement=top title="Linode 升級硬碟空間">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2013/07/coding-on-workspace-of-chrome-developer-tools"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

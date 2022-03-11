@@ -1,140 +1,14 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>LiveReload 網頁程式設計師必備工具 - 小惡魔 - AppleBOY</title>
-<meta name=description content="如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 livereload 這套 rubygem 程式，底下先看看 livereload 影片:">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2011\/10\/how-to-install-livereload\/","name":"Live reload 網頁程式設計師必備工具"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"LiveReload 網頁程式設計師必備工具","description":"如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl \u002b R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 livereload 這套 rubygem 程式，底下先看看 livereload 影片:\n","inLanguage":"en","wordCount":334,"datePublished":"2011-10-27T09:55:48","dateModified":"2011-10-27T09:55:48","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CSS, LiveReload, Ruby"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2011\/10\/how-to-install-livereload\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="LiveReload 網頁程式設計師必備工具">
-<meta property="og:description" content="如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 livereload 這套 rubygem 程式，底下先看看 livereload 影片:">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2011/10/how-to-install-livereload/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="LiveReload 網頁程式設計師必備工具">
-<meta name=twitter:description content="如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝 …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>LiveReload 網頁程式設計師必備工具 - 小惡魔 - AppleBOY</title><meta name=description content="如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 livereload 這套 rubygem 程式，底下先看看 livereload 影片:"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2011\/10\/how-to-install-livereload\/","name":"Live reload 網頁程式設計師必備工具"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"LiveReload 網頁程式設計師必備工具","description":"如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl \u002b R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 livereload 這套 rubygem 程式，底下先看看 livereload 影片:\n","inLanguage":"en","wordCount":334,"datePublished":"2011-10-27T09:55:48","dateModified":"2011-10-27T09:55:48","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CSS, LiveReload, Ruby"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2011\/10\/how-to-install-livereload\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="LiveReload 網頁程式設計師必備工具"><meta property="og:description" content="如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 livereload 這套 rubygem 程式，底下先看看 livereload 影片:"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2011/10/how-to-install-livereload/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="LiveReload 網頁程式設計師必備工具"><meta name=twitter:description content="如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>LiveReload 網頁程式設計師必備工具</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on October 27, 2011
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>LiveReload 網頁程式設計師必備工具</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on October 27, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;334&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#linux-安裝方式-用-apt-get-指令安裝>Linux 安裝方式 用 apt-get 指令安裝</a></li>
-<li><a href=#freebsd-安裝方式-原本我也是打算用-gem-方式安裝不過安裝好之後噴出底下錯誤訊息>FreeBSD 安裝方式 原本我也是打算用 gem 方式安裝，不過安裝好之後噴出底下錯誤訊息</a></li>
-<li><a href=#livereload-使用-經過上面步驟安裝-livereload-後接著來介紹如何在-server-端使用-livereload這指令會在-server-端開啟一個-port-好讓-client-端連接上底下是建立方法>LiveReload 使用 經過上面步驟安裝 LiveReload 後，接著來介紹如何在 Server 端使用 LiveReload，這指令會在 Server 端開啟一個 port 好讓 Client 端連接上，底下是建立方法。</a></li>
-<li><a href=#client-端安裝-至於-web-browser-就是安裝-plugin且設定-web-host-及-port-就可以連接上了目前官方提供了-firefox-safari-google-chrome-等三者瀏覽器-plugin>Client 端安裝 至於 Web Browser 就是安裝 Plugin，且設定 Web Host 及 port 就可以連接上了，目前官方提供了 FireFox, Safari, Google Chrome 等三者瀏覽器 plugin</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p>如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 <a href=https://github.com/mockko/livereload target=_blank>livereload</a> 這套 <a href=http://rubygems.org/ target=_blank>rubygem</a> 程式，底下先看看 livereload 影片:</p>
-<p>底下會簡單介紹 Ubuntu 及 FreeBSD 的安裝方法，其實在</p>
-<p><a href=https://github.com/mockko/livereload#readme target=_blank>官網 README</a> 都寫的蠻清楚。</p>
-<h3 id=linux-安裝方式-用-apt-get-指令安裝>Linux 安裝方式 用 apt-get 指令安裝</h3>
-<pre class="brush: bash; title: ; notranslate" title>$ sudo gem install rb-inotify livereload</pre>
-<h3 id=freebsd-安裝方式-原本我也是打算用-gem-方式安裝不過安裝好之後噴出底下錯誤訊息>FreeBSD 安裝方式 原本我也是打算用 gem 方式安裝，不過安裝好之後噴出底下錯誤訊息</h3>
-<pre class="brush: bash; title: ; notranslate" title>/usr/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:36:in `gem_original_require': no such file to load -- em-dir-watcher/platform/nix (LoadError)
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#linux-安裝方式-用-apt-get-指令安裝>Linux 安裝方式 用 apt-get 指令安裝</a></li><li><a href=#freebsd-安裝方式-原本我也是打算用-gem-方式安裝不過安裝好之後噴出底下錯誤訊息>FreeBSD 安裝方式 原本我也是打算用 gem 方式安裝，不過安裝好之後噴出底下錯誤訊息</a></li><li><a href=#livereload-使用-經過上面步驟安裝-livereload-後接著來介紹如何在-server-端使用-livereload這指令會在-server-端開啟一個-port-好讓-client-端連接上底下是建立方法>LiveReload 使用 經過上面步驟安裝 LiveReload 後，接著來介紹如何在 Server 端使用 LiveReload，這指令會在 Server 端開啟一個 port 好讓 Client 端連接上，底下是建立方法。</a></li><li><a href=#client-端安裝-至於-web-browser-就是安裝-plugin且設定-web-host-及-port-就可以連接上了目前官方提供了-firefox-safari-google-chrome-等三者瀏覽器-plugin>Client 端安裝 至於 Web Browser 就是安裝 Plugin，且設定 Web Host 及 port 就可以連接上了，目前官方提供了 FireFox, Safari, Google Chrome 等三者瀏覽器 plugin</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p>如果讀者目前從事的工作跟 Web Develop 相關，相信每天在按 Ctrl + R 的次數至少在上百次吧，也許花在這上面的時間會真的很煩，有沒有想過如果每次修改 html php css s[ca]ss js 檔案後，網頁會自動幫忙 reload 呢，這樣就可以另外買個螢幕把網頁拉過去，修改好檔案，螢幕就會幫忙重新整理，大家省下這些時間就可以專心寫 Code 了啦，解決此問題非常容易，那就是裝上 <a href=https://github.com/mockko/livereload target=_blank>livereload</a> 這套 <a href=http://rubygems.org/ target=_blank>rubygem</a> 程式，底下先看看 livereload 影片:</p><p>底下會簡單介紹 Ubuntu 及 FreeBSD 的安裝方法，其實在</p><p><a href=https://github.com/mockko/livereload#readme target=_blank>官網 README</a> 都寫的蠻清楚。</p><h3 id=linux-安裝方式-用-apt-get-指令安裝>Linux 安裝方式 用 apt-get 指令安裝</h3><pre class="brush: bash; title: ; notranslate" title>$ sudo gem install rb-inotify livereload</pre><h3 id=freebsd-安裝方式-原本我也是打算用-gem-方式安裝不過安裝好之後噴出底下錯誤訊息>FreeBSD 安裝方式 原本我也是打算用 gem 方式安裝，不過安裝好之後噴出底下錯誤訊息</h3><pre class="brush: bash; title: ; notranslate" title>/usr/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:36:in `gem_original_require': no such file to load -- em-dir-watcher/platform/nix (LoadError)
         from /usr/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:36:in `require'
         from /usr/local/lib/ruby/gems/1.8/gems/em-dir-watcher-0.9.4/lib/em-dir-watcher.rb:16
         from /usr/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:36:in `gem_original_require'
@@ -144,8 +18,7 @@
         from /usr/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:55:in `require'
         from /usr/local/lib/ruby/gems/1.8/gems/livereload-1.6/bin/livereload:3
         from /usr/local/bin/livereload:19:in `load'
-        from /usr/local/bin/livereload:19</pre> 會出現這錯誤訊息的原因是在 Ruby 偵測 OS 的時候出現問題
-<pre class="brush: ruby; title: ; notranslate" title>module EMDirWatcher
+        from /usr/local/bin/livereload:19</pre>會出現這錯誤訊息的原因是在 Ruby 偵測 OS 的時候出現問題<pre class="brush: ruby; title: ; notranslate" title>module EMDirWatcher
     PLATFORM = ENV['EM_DIR_WATCHER_PLATFORM'] ||
         case Config::CONFIG['target_os']
             when /mswin|mingw/ then 'Windows'
@@ -153,9 +26,7 @@
             when /linux/       then 'Linux'
             else                    'Nix'
         end
-end</pre> 在
-<p><a href=http://www.freebsd.org target=_blank>FreeBSD</a> 底下 Config::CONFIG[&lsquo;target_os&rsquo;] 會顯示 FreeBSD 字眼，所以此變數就會被設定到 Nix 然後就炸開了，為了解決這個雷，請另外安裝 <strong><span style=color:green>sysutils/rubygem-guard-livereload</span></strong> port，透過底下指令來執行 LiveReload # 初始化設定 guard init livereload 此指令會在目錄底下產生 Guardfile 檔案，內容是</p>
-<pre class="brush: bash; title: ; notranslate" title># A sample Guardfile
+end</pre>在<p><a href=http://www.freebsd.org target=_blank>FreeBSD</a> 底下 Config::CONFIG[&rsquo;target_os&rsquo;] 會顯示 FreeBSD 字眼，所以此變數就會被設定到 Nix 然後就炸開了，為了解決這個雷，請另外安裝 <strong><span style=color:green>sysutils/rubygem-guard-livereload</span></strong> port，透過底下指令來執行 LiveReload # 初始化設定 guard init livereload 此指令會在目錄底下產生 Guardfile 檔案，內容是</p><pre class="brush: bash; title: ; notranslate" title># A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
 guard 'livereload' do
@@ -165,13 +36,8 @@ guard 'livereload' do
   watch(%r{(.+\.css)\.s[ac]ss}) { |m| m[1] }
   watch(%r{(.+\.js)\.coffee}) { |m| m[1] }
   watch(%r{config/locales/.+\.yml})
-end</pre> 可以看到 LiveReload 會偵測 css js html s[ac]ss
-<p><a href=http://jashkenas.github.com/coffee-script/ target=_blank>coffee script</a> 都可以。此步驟是用在 FreeBSD 機器，如果是 Linux 請參考以下步驟</p>
-<h3 id=livereload-使用-經過上面步驟安裝-livereload-後接著來介紹如何在-server-端使用-livereload這指令會在-server-端開啟一個-port-好讓-client-端連接上底下是建立方法>LiveReload 使用 經過上面步驟安裝 LiveReload 後，接著來介紹如何在 Server 端使用 LiveReload，這指令會在 Server 端開啟一個 port 好讓 Client 端連接上，底下是建立方法。</h3>
-<pre class="brush: bash; title: ; notranslate" title># livereload 目錄
-livereload /path</pre> livereload 預設會 listen 0.0.0.0 address 及 tcp port 35729，如果要更改這兩項設定，請更改 option 設定
-<pre class="brush: bash; title: ; notranslate" title>livereload --address [ADDRESS] --port [PORT]</pre> 執行後會吐出下面訊息
-<pre class="brush: bash; title: ; notranslate" title>Version:  1.6  (compatible with browser extension versions 1.6.x)
+end</pre>可以看到 LiveReload 會偵測 css js html s[ac]ss<p><a href=http://jashkenas.github.com/coffee-script/ target=_blank>coffee script</a> 都可以。此步驟是用在 FreeBSD 機器，如果是 Linux 請參考以下步驟</p><h3 id=livereload-使用-經過上面步驟安裝-livereload-後接著來介紹如何在-server-端使用-livereload這指令會在-server-端開啟一個-port-好讓-client-端連接上底下是建立方法>LiveReload 使用 經過上面步驟安裝 LiveReload 後，接著來介紹如何在 Server 端使用 LiveReload，這指令會在 Server 端開啟一個 port 好讓 Client 端連接上，底下是建立方法。</h3><pre class="brush: bash; title: ; notranslate" title># livereload 目錄
+livereload /path</pre>livereload 預設會 listen 0.0.0.0 address 及 tcp port 35729，如果要更改這兩項設定，請更改 option 設定<pre class="brush: bash; title: ; notranslate" title>livereload --address [ADDRESS] --port [PORT]</pre>執行後會吐出下面訊息<pre class="brush: bash; title: ; notranslate" title>Version:  1.6  (compatible with browser extension versions 1.6.x)
 Port:     35729
 Watching: /var/www/html/Client
   - extensions: .html .css .js .png .gif .jpg .php .php5 .py .rb .erb
@@ -179,189 +45,22 @@ Watching: /var/www/html/Client
   - excluding changes in: */.git/* */.svn/* */.hg/*
   - with a grace period of 0.05 sec after each change
 
-LiveReload is waiting for browser to connect.</pre> 以及會在目錄底下產生 .livereload 隱藏檔，檔案內容可以針對不想要偵測哪些檔案或者是目錄分別做設定，相當方便，此原理是偵測 server 端修改檔案，透過 web socket 通知 client browser reload 網頁，解決掉手動 reload 網頁時間，同時也支援 server side language:
-<p><a href=http://www.PHP.net target=_blank>PHP</a> , <a href=http://compass-style.org/ target=_blank>Compass</a> <a href=http://sass-lang.com/ target=_blank>SASS</a> <a href=http://lesscss.org/ target=_blank>Less.js</a> …等。</p>
-<h3 id=client-端安裝-至於-web-browser-就是安裝-plugin且設定-web-host-及-port-就可以連接上了目前官方提供了-firefox-safari-google-chrome-等三者瀏覽器-plugin>Client 端安裝 至於 Web Browser 就是安裝 Plugin，且設定 Web Host 及 port 就可以連接上了，目前官方提供了 FireFox, Safari, Google Chrome 等三者瀏覽器 plugin</h3>
-<ul>
-<li><a href=https://addons.mozilla.org/firefox/addon/livereload/ target=_blank>Firefox 4 extension</a></li>
-<li><a href=https://github.com/downloads/mockko/livereload/LiveReload-1.6.2.safariextz target=_blank>Safari extension</a></li>
-<li><a href=https://chrome.google.com/extensions/detail/jnihajbhpnppcggbcgedagnkighmdlei target=_blank>Google Chrome extension</a> 如果讀者環境是 Windows，請參考</li>
-</ul>
-<p><a href=http://www.jaceju.net/blog/ target=_blank>鐵兄</a>的網誌 <a href=http://www.jaceju.net/blog/archives/1795 target=_blank>在 Windows 下使用 LiveReload</a>，另外也可以參考 <a href=http://blog.xdite.net/ target=_blank>XDite</a> 大大寫的 <a href="http://wp.xdite.net/?p=1791" target=_blank>LiveReload：你的套版好幫手！</a></p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
+LiveReload is waiting for browser to connect.</pre>以及會在目錄底下產生 .livereload 隱藏檔，檔案內容可以針對不想要偵測哪些檔案或者是目錄分別做設定，相當方便，此原理是偵測 server 端修改檔案，透過 web socket 通知 client browser reload 網頁，解決掉手動 reload 網頁時間，同時也支援 server side language:<p><a href=http://www.PHP.net target=_blank>PHP</a> , <a href=http://compass-style.org/ target=_blank>Compass</a> <a href=http://sass-lang.com/ target=_blank>SASS</a> <a href=http://lesscss.org/ target=_blank>Less.js</a> …等。</p><h3 id=client-端安裝-至於-web-browser-就是安裝-plugin且設定-web-host-及-port-就可以連接上了目前官方提供了-firefox-safari-google-chrome-等三者瀏覽器-plugin>Client 端安裝 至於 Web Browser 就是安裝 Plugin，且設定 Web Host 及 port 就可以連接上了，目前官方提供了 FireFox, Safari, Google Chrome 等三者瀏覽器 plugin</h3><ul><li><a href=https://addons.mozilla.org/firefox/addon/livereload/ target=_blank>Firefox 4 extension</a></li><li><a href=https://github.com/downloads/mockko/livereload/LiveReload-1.6.2.safariextz target=_blank>Safari extension</a></li><li><a href=https://chrome.google.com/extensions/detail/jnihajbhpnppcggbcgedagnkighmdlei target=_blank>Google Chrome extension</a> 如果讀者環境是 Windows，請參考</li></ul><p><a href=http://www.jaceju.net/blog/ target=_blank>鐵兄</a>的網誌 <a href=http://www.jaceju.net/blog/archives/1795 target=_blank>在 Windows 下使用 LiveReload</a>，另外也可以參考 <a href=http://blog.xdite.net/ target=_blank>XDite</a> 大大寫的 <a href="http://wp.xdite.net/?p=1791" target=_blank>LiveReload：你的套版好幫手！</a></p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/css/>CSS</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/livereload/>LiveReload</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&text=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&title=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&title=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&title=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&description=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li>
-<li><a href=/2015/03/ruby-deploy-with-capistrano-ssh-connection-closed/>Ruby Deploy With Capistrano 碰到 SSH Connection Closed</a></li>
-<li><a href=/2014/03/using-capistrano-to-deploy-current-branch/>Using Capistrano to deploy current branch</a></li>
-<li><a href=/2014/03/ruby-compass-and-sass-auto-testing-environment/>Ruby Compass and Sass Auto Testing Environment</a></li>
-<li><a href=/2014/02/ruby-debugger-and-no-source-for-ruby-error/>Ruby 安裝 debugger package 發生 No source for ruby 錯誤</a></li>
-<li><a href=/2014/02/ruby-with-nginx-on-ubuntu-debian/>在 Ubuntu 或 Debian 上跑 Ruby on Rails + Nginx</a></li>
-<li><a href=/2014/01/10-great-css-tips-for-every-web-developer/>前端工程師必看: 十大 CSS 技巧</a></li>
-<li><a href=/2013/12/streaming-build-system-gulp/>The streaming build system Gulp</a></li>
-<li><a href=/2013/09/css-clear-fix-tip/>CSS Clear Fix 小技巧</a></li>
-<li><a href=/2013/08/cross-site-request-in-js-web-apps-and-codeigniter-php-framework/>Cross Site Request Forgery in JS Web Apps and CodeIgniter PHP Framework</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2011/10/github-improved-subversion-client-support/ data-toggle=tooltip data-placement=top title="Github 支援 SVN Client">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2011/11/html5-placeholder-attribute-on-ie/ data-toggle=tooltip data-placement=top title="HTML5 placeholder attribute 在 IE 上顯示">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2011/10/how-to-install-livereload>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2011/10/how-to-install-livereload'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&text=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&title=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&title=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&title=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f10%2fhow-to-install-livereload%2f&description=LiveReload%20%e7%b6%b2%e9%a0%81%e7%a8%8b%e5%bc%8f%e8%a8%ad%e8%a8%88%e5%b8%ab%e5%bf%85%e5%82%99%e5%b7%a5%e5%85%b7" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li><li><a href=/2015/03/ruby-deploy-with-capistrano-ssh-connection-closed/>Ruby Deploy With Capistrano 碰到 SSH Connection Closed</a></li><li><a href=/2014/03/using-capistrano-to-deploy-current-branch/>Using Capistrano to deploy current branch</a></li><li><a href=/2014/03/ruby-compass-and-sass-auto-testing-environment/>Ruby Compass and Sass Auto Testing Environment</a></li><li><a href=/2014/02/ruby-debugger-and-no-source-for-ruby-error/>Ruby 安裝 debugger package 發生 No source for ruby 錯誤</a></li><li><a href=/2014/02/ruby-with-nginx-on-ubuntu-debian/>在 Ubuntu 或 Debian 上跑 Ruby on Rails + Nginx</a></li><li><a href=/2014/01/10-great-css-tips-for-every-web-developer/>前端工程師必看: 十大 CSS 技巧</a></li><li><a href=/2013/12/streaming-build-system-gulp/>The streaming build system Gulp</a></li><li><a href=/2013/09/css-clear-fix-tip/>CSS Clear Fix 小技巧</a></li><li><a href=/2013/08/cross-site-request-in-js-web-apps-and-codeigniter-php-framework/>Cross Site Request Forgery in JS Web Apps and CodeIgniter PHP Framework</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2011/10/github-improved-subversion-client-support/ data-toggle=tooltip data-placement=top title="Github 支援 SVN Client">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2011/11/html5-placeholder-attribute-on-ie/ data-toggle=tooltip data-placement=top title="HTML5 placeholder attribute 在 IE 上顯示">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2011/10/how-to-install-livereload>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2011/10/how-to-install-livereload"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

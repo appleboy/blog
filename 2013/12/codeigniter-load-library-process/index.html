@@ -1,172 +1,42 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>CodeIgniter 初始化 Library 流程 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>CodeIgniter 初始化 Library 流程 - 小惡魔 - AppleBOY</title><meta name=description content="
   
 
 好久沒寫 CodeIgniter 相關文章，這次看到在論壇有人發問 application/libraries 優先權，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取
 
   $this->load->library('email');
-">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/12\/codeigniter-load-library-process\/","name":"Code igniter 初始化 library 流程"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"CodeIgniter 初始化 Library 流程","description":" 好久沒寫 CodeIgniter 相關文章，這次看到在論壇有人發問 application\/libraries 優先權，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取\n $this-load-library(\u0027email\u0027); ","inLanguage":"en","wordCount":135,"datePublished":"2013-12-20T15:52:13","dateModified":"2013-12-20T15:52:13","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, php"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/12\/codeigniter-load-library-process\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="CodeIgniter 初始化 Library 流程">
-<meta property="og:description" content="
+"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/12\/codeigniter-load-library-process\/","name":"Code igniter 初始化 library 流程"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"CodeIgniter 初始化 Library 流程","description":" 好久沒寫 CodeIgniter 相關文章，這次看到在論壇有人發問 application\/libraries 優先權，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取\n $this-load-library(\u0027email\u0027); ","inLanguage":"en","wordCount":135,"datePublished":"2013-12-20T15:52:13","dateModified":"2013-12-20T15:52:13","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["CodeIgniter, php"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/12\/codeigniter-load-library-process\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="CodeIgniter 初始化 Library 流程"><meta property="og:description" content="
   
 
 好久沒寫 CodeIgniter 相關文章，這次看到在論壇有人發問 application/libraries 優先權，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取
 
   $this->load->library('email');
-">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2013/12/codeigniter-load-library-process/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="CodeIgniter 初始化 Library 流程">
-<meta name=twitter:description content="
+"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2013/12/codeigniter-load-library-process/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="CodeIgniter 初始化 Library 流程"><meta name=twitter:description content="
   
 
-好久沒寫 CodeIgniter 相關文章，這次看到在論壇有人發問 application/libraries 優先權，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library， …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+好久沒寫 CodeIgniter 相關文章，這次看到在論壇有人發問 application/libraries 優先權，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library， …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>CodeIgniter 初始化 Library 流程</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on December 20, 2013
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>CodeIgniter 初始化 Library 流程</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on December 20, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;135&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<article role=main class=blog-post>
-<div style="margin:0 auto;text-align:center">
-<img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1>
-</div>
-<p>好久沒寫 <a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter</a> 相關文章，這次看到在論壇有人發問 <a href="http://www.codeigniter.org.tw/forum/viewtopic.php?f=6&t=3885" target=_blank>application/libraries 優先權</a>，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取</p>
-<div>
-<pre class="brush: php; title: ; notranslate" title>$this->load->library('email');</pre>
-</div>
-<p>CI 會先將第一個字母大寫 Email 字串，接著小寫 email 字串開始進行搜尋檔案動作，搜尋的優先順序會先從你是否有擴充核心 Library，也就是 config.php 內定義</p>
-<p><strong><span style=color:green>subclass_prefix</span></strong>，那 CI 預設的 Prefix 就是 <strong><span style=color:green>MY_</span></strong>，底下列出 CI 判斷檔案是否存在的列表</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>1. application/libraries/MY_Email.php
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><img src="https://i1.wp.com/farm5.static.flickr.com/4139/4928689646_4309e16e13_o.png?w=840&ssl=1" alt=CodeIgniter data-recalc-dims=1></div><p>好久沒寫 <a href=http://www.codeigniter.org.tw/ target=_blank>CodeIgniter</a> 相關文章，這次看到在論壇有人發問 <a href="http://www.codeigniter.org.tw/forum/viewtopic.php?f=6&t=3885" target=_blank>application/libraries 優先權</a>，想說把整個 CodeIgniter 如何讀取 Library 的流程整個寫下來，其實也不會很難，但是就是要照著 CI 定義的規則來命名檔名以及 Class。假設要讀取 Email Library，我們可以透過底下方式讀取</p><div><pre class="brush: php; title: ; notranslate" title>$this->load->library('email');</pre></div><p>CI 會先將第一個字母大寫 Email 字串，接著小寫 email 字串開始進行搜尋檔案動作，搜尋的優先順序會先從你是否有擴充核心 Library，也就是 config.php 內定義</p><p><strong><span style=color:green>subclass_prefix</span></strong>，那 CI 預設的 Prefix 就是 <strong><span style=color:green>MY_</span></strong>，底下列出 CI 判斷檔案是否存在的列表</p><div><pre class="brush: bash; title: ; notranslate" title>1. application/libraries/MY_Email.php
 2. application/libraries/Email.php
 3. system/libraries/Email.php
 4. application/libraries/MY_email.php
 5. application/libraries/email.php
-6. system/libraries/email.php</pre>
-</div>
-<p>假設 1. application/libraries/MY_Email.php 存在時，系統會認定您有擴充 Library，所以會將 application/libraries/Email.php 同時讀取進來，也就是 include 兩個檔案</p>
-<pre class="brush: php; title: ; notranslate" title>include_once('application/libraries/Email.php');
-include_once('application/libraries/MY_Email.php');</pre>
-<p>這時候你會發現在 application/libraries/MY_Email.php 裡面的宣告會是</p>
-<div>
-<pre class="brush: php; title: ; notranslate" title>class MY_Email extends CI_Email {
-<p>}</pre></p>
-</div>
-<p>所以很自然的可以擴充 Email Library。假如 1. application/libraries/MY_Email.php 不存在，系統很自然接著讀取 2. application/libraries/Email.php 或 3. system/libraries/Email.php。所以讀取檔案的結論就是 MY_ 命名開頭為優先。最後來看看如何 initialize Class。此部份會跟檔案命名有很大的關係，如果以 MY_ 為檔名開頭，那 Class 就要宣告為</p>
-<div>
-<pre class="brush: php; title: ; notranslate" title>class MY_Email {
-<p>}</pre></p>
-</div>
-<p>以擴充 Email 例子來說會變成底下程式碼載入</p>
-<div>
-<pre class="brush: php; title: ; notranslate" title>class CI_Email {
+6. system/libraries/email.php</pre></div><p>假設 1. application/libraries/MY_Email.php 存在時，系統會認定您有擴充 Library，所以會將 application/libraries/Email.php 同時讀取進來，也就是 include 兩個檔案</p><pre class="brush: php; title: ; notranslate" title>include_once('application/libraries/Email.php');
+include_once('application/libraries/MY_Email.php');</pre><p>這時候你會發現在 application/libraries/MY_Email.php 裡面的宣告會是</p><div><pre class="brush: php; title: ; notranslate" title>class MY_Email extends CI_Email {
+<p>}</pre></p></div><p>所以很自然的可以擴充 Email Library。假如 1. application/libraries/MY_Email.php 不存在，系統很自然接著讀取 2. application/libraries/Email.php 或 3. system/libraries/Email.php。所以讀取檔案的結論就是 MY_ 命名開頭為優先。最後來看看如何 initialize Class。此部份會跟檔案命名有很大的關係，如果以 MY_ 為檔名開頭，那 Class 就要宣告為</p><div><pre class="brush: php; title: ; notranslate" title>class MY_Email {
+<p>}</pre></p></div><p>以擴充 Email 例子來說會變成底下程式碼載入</p><div><pre class="brush: php; title: ; notranslate" title>class CI_Email {
     ....
 }
 <p>class MY_Email extends CI_Email {
 &hellip;.
-}</pre></p>
-</div>
-<p>如果是非 MY_ 開頭的 Library，例如自訂 ses.php 的話，裡面的 Class 可以取名為</p>
-<div>
-<pre class="brush: php; title: ; notranslate" title>class CI_Ses {
+}</pre></p></div><p>如果是非 MY_ 開頭的 Library，例如自訂 ses.php 的話，裡面的 Class 可以取名為</p><div><pre class="brush: php; title: ; notranslate" title>class CI_Ses {
     ....
 }
 <p>class MY_Ses {
@@ -174,188 +44,23 @@ include_once('application/libraries/MY_Email.php');</pre>
 }</p>
 <p>class Ses {
 &hellip;.
-}</pre></p>
-</div>
-<p>這三種方式都可以，讀取順序為由上到下，但是一般我們都是以最後一個為主。所以假設你覆蓋系統內建的 Email library，你可以建立 application/libraries/Email.php，並且檔案內容宣告為底下即可</p>
-<div>
-<pre class="brush: php; title: ; notranslate" title>class Email {
+}</pre></p></div><p>這三種方式都可以，讀取順序為由上到下，但是一般我們都是以最後一個為主。所以假設你覆蓋系統內建的 Email library，你可以建立 application/libraries/Email.php，並且檔案內容宣告為底下即可</p><div><pre class="brush: php; title: ; notranslate" title>class Email {
     ....
-}</pre>
-</div>
-<p>最後可以參考<a href=http://www.codeigniter.org.tw/user_guide/general/creating_libraries.html target=_blank>線上文件</a></p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&text=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&title=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&title=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&title=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&description=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li>
-<li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li>
-<li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li>
-<li><a href=/2015/12/force-https-connection-on-wordpress/>將 wordpress 強制使用 SSL 連線</a></li>
-<li><a href=/2015/12/the-definitive-php-7-final-version-hhvm-benchmark/>PHP 7 vs HHVM Benchmark 比較</a></li>
-<li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li>
-<li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li>
-<li><a href=/2015/10/php-fig-new-website/>PHP-FIG 新網站</a></li>
-<li><a href=/2015/10/laravel-homestead-support-php-7/>Laravel Homestead 支援 PHP 7</a></li>
-<li><a href=/2015/06/laravel-5-1-is-released/>Laravel 5.1 is released</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2013/12/jenkins-apache-auth-setting/ data-toggle=tooltip data-placement=top title="Jenkins + Apache User Auth">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2013/12/streaming-build-system-gulp/ data-toggle=tooltip data-placement=top title="The streaming build system Gulp">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/12/codeigniter-load-library-process>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/12/codeigniter-load-library-process'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+}</pre></div><p>最後可以參考<a href=http://www.codeigniter.org.tw/user_guide/general/creating_libraries.html target=_blank>線上文件</a></p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/codeigniter/>CodeIgniter</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&text=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&title=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&title=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&title=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f12%2fcodeigniter-load-library-process%2f&description=CodeIgniter%20%e5%88%9d%e5%a7%8b%e5%8c%96%20Library%20%e6%b5%81%e7%a8%8b" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li><li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li><li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li><li><a href=/2015/12/force-https-connection-on-wordpress/>將 wordpress 強制使用 SSL 連線</a></li><li><a href=/2015/12/the-definitive-php-7-final-version-hhvm-benchmark/>PHP 7 vs HHVM Benchmark 比較</a></li><li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li><li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li><li><a href=/2015/10/php-fig-new-website/>PHP-FIG 新網站</a></li><li><a href=/2015/10/laravel-homestead-support-php-7/>Laravel Homestead 支援 PHP 7</a></li><li><a href=/2015/06/laravel-5-1-is-released/>Laravel 5.1 is released</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2013/12/jenkins-apache-auth-setting/ data-toggle=tooltip data-placement=top title="Jenkins + Apache User Auth">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2013/12/streaming-build-system-gulp/ data-toggle=tooltip data-placement=top title="The streaming build system Gulp">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/12/codeigniter-load-library-process>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2013/12/codeigniter-load-library-process"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

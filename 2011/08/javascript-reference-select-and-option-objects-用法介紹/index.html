@@ -1,355 +1,40 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>JavaScript Reference Select and Option objects 用法介紹 - 小惡魔 - AppleBOY</title>
-<meta name=description content="在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select 裡面，雖然 FireFox 或 Chrome 都可以正常運作，但是遇到 IE 還是沒辦法動。
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>JavaScript Reference Select and Option objects 用法介紹 - 小惡魔 - AppleBOY</title><meta name=description content="在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select 裡面，雖然 FireFox 或 Chrome 都可以正常運作，但是遇到 IE 還是沒辦法動。
 如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name + element name
 document.myform.selectname 2. 透過 form name + element 陣列(注意看 select 是位在 form element index 值多少) 
 document.myform.elements 3. 透過獨一無二的 ID 
-document.getElementById(&#34;selectid&#34;)">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2011\/08\/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9\/","name":"Java script reference select and option objects 用法介紹"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"JavaScript Reference Select and Option objects 用法介紹","description":"在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select 裡面，雖然 FireFox 或 Chrome 都可以正常運作，但是遇到 IE 還是沒辦法動。\n如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name \u002b element name document.myform.selectname 2. 透過 form name \u002b element 陣列(注意看 select 是位在 form element index 值多少) document.myform.elements 3. 透過獨一無二的 ID document.getElementById(\u0022selectid\u0022)","inLanguage":"en","wordCount":269,"datePublished":"2011-08-19T08:18:08","dateModified":"2011-08-19T08:18:08","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["javascript, jQuery"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2011\/08\/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="JavaScript Reference Select and Option objects 用法介紹">
-<meta property="og:description" content="在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select 裡面，雖然 FireFox 或 Chrome 都可以正常運作，但是遇到 IE 還是沒辦法動。
+document.getElementById(&#34;selectid&#34;)"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2011\/08\/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9\/","name":"Java script reference select and option objects 用法介紹"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"JavaScript Reference Select and Option objects 用法介紹","description":"在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select 裡面，雖然 FireFox 或 Chrome 都可以正常運作，但是遇到 IE 還是沒辦法動。\n如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name \u002b element name document.myform.selectname 2. 透過 form name \u002b element 陣列(注意看 select 是位在 form element index 值多少) document.myform.elements 3. 透過獨一無二的 ID document.getElementById(\u0022selectid\u0022)","inLanguage":"en","wordCount":269,"datePublished":"2011-08-19T08:18:08","dateModified":"2011-08-19T08:18:08","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["javascript, jQuery"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2011\/08\/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="JavaScript Reference Select and Option objects 用法介紹"><meta property="og:description" content="在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select 裡面，雖然 FireFox 或 Chrome 都可以正常運作，但是遇到 IE 還是沒辦法動。
 如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name + element name
 document.myform.selectname 2. 透過 form name + element 陣列(注意看 select 是位在 form element index 值多少) 
 document.myform.elements 3. 透過獨一無二的 ID 
-document.getElementById(&#34;selectid&#34;)">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="JavaScript Reference Select and Option objects 用法介紹">
-<meta name=twitter:description content="在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+document.getElementById(&#34;selectid&#34;)"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="JavaScript Reference Select and Option objects 用法介紹"><meta name=twitter:description content="在網頁裡面用 Select 是很常遇到的，之前也寫了一篇如何利用 jQuery 動態增加 option 或取值，jQuery 部份就不介紹了，那是需要搭配 jQuery Plugin: Select box manipulation，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 innerHtml 的方式來把資料塞入到 Select …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>JavaScript Reference Select and Option objects 用法介紹</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 19, 2011
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>JavaScript Reference Select and Option objects 用法介紹</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 19, 2011
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;269&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#如何取得-select-element-底下很多方法可以取得-select-element-1-透過-form-name--element-name>如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name + element name</a></li>
-<li><a href=#如何取得-select-option-選項-透過陣列方式取得-option-選項取第一個選項>如何取得 select option 選項 透過陣列方式取得 option 選項。取第一個選項:</a></li>
-<li><a href=#如何取得-select-option-value-跟-text-直接在-option-後面接上-value-跟-text-即可>如何取得 select option value 跟 text 直接在 option 後面接上 value 跟 text 即可</a></li>
-<li><a href=#select-event-介紹>Select Event 介紹</a></li>
-<li><a href=#select-property-介紹>Select Property 介紹</a></li>
-<li><a href=#select-methods-介紹>Select Methods 介紹</a></li>
-<li><a href=#select-option-object-介紹>Select Option object 介紹</a></li>
-<li><a href=#如何取代既有的-option-只要針對該-option-index-重新指定-new-option-即可底下範例>如何取代既有的 option 只要針對該 option index 重新指定 new Option 即可，底下範例：</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p>在網頁裡面用 <a href=http://www.w3schools.com/jsref/dom_obj_select.asp target=_blank>Select</a> 是很常遇到的，之前也寫了一篇<a href=http://blog.wu-boy.com/2009/03/jquery-%E5%A6%82%E4%BD%95%E5%8F%96%E5%BE%97-select-liset-index-%E5%92%8C-value-%E5%80%BC/ target=_blank>如何利用 jQuery 動態增加 option 或取值</a>，<a href=http://jQuery.com target=_blank>jQuery</a> 部份就不介紹了，那是需要搭配 <a href=http://www.texotela.co.uk/code/jquery/select/ target=_blank>jQuery Plugin: Select box manipulation</a>，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 <a href=http://www.tizag.com/javascriptT/javascript-innerHTML.php target=_blank>innerHtml</a> 的方式來把資料塞入到 Select 裡面，雖然 <a href=http://moztw.org/ target=_blank>FireFox</a> 或 <a href="http://www.google.com/chrome?hl=zh-TW" target=_blank>Chrome</a> 都可以正常運作，但是遇到 IE 還是沒辦法動。</p>
-<h3 id=如何取得-select-element-底下很多方法可以取得-select-element-1-透過-form-name--element-name>如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name + element name</h3>
-<pre class="brush: jscript; title: ; notranslate" title>document.myform.selectname</pre> 2. 透過 form name + element 陣列(注意看 select 是位在 form element index 值多少)
-<pre class="brush: jscript; title: ; notranslate" title>document.myform.elements<em></em></pre> 3. 透過獨一無二的 ID
-<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("selectid")</pre>
-<h3 id=如何取得-select-option-選項-透過陣列方式取得-option-選項取第一個選項>如何取得 select option 選項 透過陣列方式取得 option 選項。取第一個選項:</h3>
-<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("myselect").options[0]</pre> 取第四個選項
-<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("myselect").options[3] </pre>
-<h3 id=如何取得-select-option-value-跟-text-直接在-option-後面接上-value-跟-text-即可>如何取得 select option value 跟 text 直接在 option 後面接上 value 跟 text 即可</h3>
-<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("myselect").options[0].value 
-document.getElementById("myselect").options[3].text </pre>
-<h3 id=select-event-介紹>Select Event 介紹</h3>
-<p><span style=color:red>onBlur</span>: 假設目前 focus 在 select 上時，如果下一步移開到另一個 element 的時候將會觸發 <span style=color:red>onChange</span>: 用於選單選項改變時，會觸發條件，底下看個簡單例子</p>
-<pre class="brush: jscript; title: ; notranslate" title></pre> 首先我們可以看到程式碼
-<p><span style=color:green><strong>selectmenu.onchange</strong></span>，也就是選擇其他選項時候將會觸發，透過 <span style=color:green><strong>this.selectedIndex</strong></span> 你選擇的 index 來取 value 值。 <span style=color:red>onFocus</span>: 如果 focus 在 Select element 時，將會觸發</p>
-<h3 id=select-property-介紹>Select Property 介紹</h3>
-<p><span style=color:red>disabled</span>: 設定 Boolean value 用來控制 select 是否 disabled。 <span style=color:red>length</span>: 計算有多少個 options</p>
-<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("mymenu").length</pre>
-<p><span style=color:red>selectedIndex</span>: 用來取得目前 options 陣列索引值 index，假如沒有選任何選項則回傳 -1，底下範例:</p>
-<pre class="brush: jscript; title: ; notranslate" title></pre>
-<p><span style=color:red>type</span>: select 提供兩種 type: select-one 跟 select-multiple，我們可以針對 form 裡面所有的 element 來找出屬於 select 選單，底下範例：</p>
-<pre class="brush: jscript; title: ; notranslate" title></pre>
-<h3 id=select-methods-介紹>Select Methods 介紹</h3>
-<p><span style=color:red>add(newoption, beforeoption*)</span>: 用來動態增加 option，不多說底下先來看一個範例</p>
-<pre class="brush: jscript; title: ; notranslate" title></pre> 從上面程式，大家可以看到透過 new Option("text", "value") 來動態新增 option，至於 add 的第二個參數是設定要增加到哪個 option 後面，IE 瀏覽器必須用 integer 來帶入，其他瀏覽器都需要 object reference。
-<p><span style=color:red><strong>*Important</strong></span>: beforeoption should be an object reference to an option except in IE, where it must be an integer representing the index of the option instead. <span style=color:red>remove(optionindex)</span>: 移除 option，只要知道 index 即可刪除，看底下範例</p>
-<pre class="brush: jscript; title: ; notranslate" title>var myselect=document.getElementById("sample")
-myselect.remove(myselect.length-1) //removes last option within SELECT</pre> 上面範例是移除最後一個 option
-<h3 id=select-option-object-介紹>Select Option object 介紹</h3>
-<p><span style=color:red>index</span>: 回傳該 option index 值 <span style=color:red>selected</span>: 判斷是否選擇了該 option，直接看範例:</p>
-<pre class="brush: jscript; title: ; notranslate" title></pre>
-<p><span style=color:red>text</span>: option 指定說明 <span style=color:red>value</span>: option 指定值</p>
-<h3 id=如何取代既有的-option-只要針對該-option-index-重新指定-new-option-即可底下範例>如何取代既有的 option 只要針對該 option index 重新指定 new Option 即可，底下範例：</h3>
-<pre class="brush: jscript; title: ; notranslate" title>var myselect=document.getElementById("sample")
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#如何取得-select-element-底下很多方法可以取得-select-element-1-透過-form-name--element-name>如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name + element name</a></li><li><a href=#如何取得-select-option-選項-透過陣列方式取得-option-選項取第一個選項>如何取得 select option 選項 透過陣列方式取得 option 選項。取第一個選項:</a></li><li><a href=#如何取得-select-option-value-跟-text-直接在-option-後面接上-value-跟-text-即可>如何取得 select option value 跟 text 直接在 option 後面接上 value 跟 text 即可</a></li><li><a href=#select-event-介紹>Select Event 介紹</a></li><li><a href=#select-property-介紹>Select Property 介紹</a></li><li><a href=#select-methods-介紹>Select Methods 介紹</a></li><li><a href=#select-option-object-介紹>Select Option object 介紹</a></li><li><a href=#如何取代既有的-option-只要針對該-option-index-重新指定-new-option-即可底下範例>如何取代既有的 option 只要針對該 option index 重新指定 new Option 即可，底下範例：</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><p>在網頁裡面用 <a href=http://www.w3schools.com/jsref/dom_obj_select.asp target=_blank>Select</a> 是很常遇到的，之前也寫了一篇<a href=http://blog.wu-boy.com/2009/03/jquery-%E5%A6%82%E4%BD%95%E5%8F%96%E5%BE%97-select-liset-index-%E5%92%8C-value-%E5%80%BC/ target=_blank>如何利用 jQuery 動態增加 option 或取值</a>，<a href=http://jQuery.com target=_blank>jQuery</a> 部份就不介紹了，那是需要搭配 <a href=http://www.texotela.co.uk/code/jquery/select/ target=_blank>jQuery Plugin: Select box manipulation</a>，今天要介紹的是如何用 javascript 動態取值或者是增加 option 選項。因為我發現有使用者直接利用 <a href=http://www.tizag.com/javascriptT/javascript-innerHTML.php target=_blank>innerHtml</a> 的方式來把資料塞入到 Select 裡面，雖然 <a href=http://moztw.org/ target=_blank>FireFox</a> 或 <a href="http://www.google.com/chrome?hl=zh-TW" target=_blank>Chrome</a> 都可以正常運作，但是遇到 IE 還是沒辦法動。</p><h3 id=如何取得-select-element-底下很多方法可以取得-select-element-1-透過-form-name--element-name>如何取得 select element 底下很多方法可以取得 select element: 1. 透過 form name + element name</h3><pre class="brush: jscript; title: ; notranslate" title>document.myform.selectname</pre>2. 透過 form name + element 陣列(注意看 select 是位在 form element index 值多少)<pre class="brush: jscript; title: ; notranslate" title>document.myform.elements<em></em></pre>3. 透過獨一無二的 ID<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("selectid")</pre><h3 id=如何取得-select-option-選項-透過陣列方式取得-option-選項取第一個選項>如何取得 select option 選項 透過陣列方式取得 option 選項。取第一個選項:</h3><pre class="brush: jscript; title: ; notranslate" title>document.getElementById("myselect").options[0]</pre>取第四個選項<pre class="brush: jscript; title: ; notranslate" title>document.getElementById("myselect").options[3] </pre><h3 id=如何取得-select-option-value-跟-text-直接在-option-後面接上-value-跟-text-即可>如何取得 select option value 跟 text 直接在 option 後面接上 value 跟 text 即可</h3><pre class="brush: jscript; title: ; notranslate" title>document.getElementById("myselect").options[0].value 
+document.getElementById("myselect").options[3].text </pre><h3 id=select-event-介紹>Select Event 介紹</h3><p><span style=color:red>onBlur</span>: 假設目前 focus 在 select 上時，如果下一步移開到另一個 element 的時候將會觸發 <span style=color:red>onChange</span>: 用於選單選項改變時，會觸發條件，底下看個簡單例子</p><pre class="brush: jscript; title: ; notranslate" title></pre>首先我們可以看到程式碼<p><span style=color:green><strong>selectmenu.onchange</strong></span>，也就是選擇其他選項時候將會觸發，透過 <span style=color:green><strong>this.selectedIndex</strong></span> 你選擇的 index 來取 value 值。 <span style=color:red>onFocus</span>: 如果 focus 在 Select element 時，將會觸發</p><h3 id=select-property-介紹>Select Property 介紹</h3><p><span style=color:red>disabled</span>: 設定 Boolean value 用來控制 select 是否 disabled。 <span style=color:red>length</span>: 計算有多少個 options</p><pre class="brush: jscript; title: ; notranslate" title>document.getElementById("mymenu").length</pre><p><span style=color:red>selectedIndex</span>: 用來取得目前 options 陣列索引值 index，假如沒有選任何選項則回傳 -1，底下範例:</p><pre class="brush: jscript; title: ; notranslate" title></pre><p><span style=color:red>type</span>: select 提供兩種 type: select-one 跟 select-multiple，我們可以針對 form 裡面所有的 element 來找出屬於 select 選單，底下範例：</p><pre class="brush: jscript; title: ; notranslate" title></pre><h3 id=select-methods-介紹>Select Methods 介紹</h3><p><span style=color:red>add(newoption, beforeoption*)</span>: 用來動態增加 option，不多說底下先來看一個範例</p><pre class="brush: jscript; title: ; notranslate" title></pre>從上面程式，大家可以看到透過 new Option("text", "value") 來動態新增 option，至於 add 的第二個參數是設定要增加到哪個 option 後面，IE 瀏覽器必須用 integer 來帶入，其他瀏覽器都需要 object reference。<p><span style=color:red><strong>*Important</strong></span>: beforeoption should be an object reference to an option except in IE, where it must be an integer representing the index of the option instead. <span style=color:red>remove(optionindex)</span>: 移除 option，只要知道 index 即可刪除，看底下範例</p><pre class="brush: jscript; title: ; notranslate" title>var myselect=document.getElementById("sample")
+myselect.remove(myselect.length-1) //removes last option within SELECT</pre>上面範例是移除最後一個 option<h3 id=select-option-object-介紹>Select Option object 介紹</h3><p><span style=color:red>index</span>: 回傳該 option index 值 <span style=color:red>selected</span>: 判斷是否選擇了該 option，直接看範例:</p><pre class="brush: jscript; title: ; notranslate" title></pre><p><span style=color:red>text</span>: option 指定說明 <span style=color:red>value</span>: option 指定值</p><h3 id=如何取代既有的-option-只要針對該-option-index-重新指定-new-option-即可底下範例>如何取代既有的 option 只要針對該 option index 重新指定 new Option 即可，底下範例：</h3><pre class="brush: jscript; title: ; notranslate" title>var myselect=document.getElementById("sample")
 myselect.options[0]=new Option("New 1st option", "who") //replace 1st option with a new one
-myselect.options[myselect.length]=new Option("Brand new option", "what") //add a new option to the end of SELECT</pre> 上面全部的範例皆來自
-<p><a href=http://www.javascriptkit.com/jsref/select.shtml target=_blank>JavaScript Reference Select 網站</a></p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&text=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&title=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&title=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&title=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&description=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2016/10/replcae-npm-with-yarn-package-management/>用 Yarn 取代 Npm 管理 JavaScript 套件版本</a></li>
-<li><a href=/2016/07/speed-up-npm-install-command/>用一行指令加速 npm install</a></li>
-<li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li>
-<li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li>
-<li><a href=/2015/09/javascript-in-2015/>JavaScript in 2015</a></li>
-<li><a href=/2015/06/learning-javascript-in-one-pic/>用一張圖學習 JavaScript</a></li>
-<li><a href=/2015/06/getting-started-with-javascript-es6-destructuring/>簡介 JavaScript ES6 物件及陣列</a></li>
-<li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li>
-<li><a href=/2015/02/getting-to-know-io-js/>您不可不知的 io.js</a></li>
-<li><a href=/2015/01/replace-coffeescript-with-es6/>CoffeeScript 轉 ES6</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2011/08/%E6%8E%A8%E8%96%A6%E4%B8%80%E6%9C%AC%E6%9B%B8%E7%B1%8D-master-mobile-web-apps-with-jquery-mobile/ data-toggle=tooltip data-placement=top title="推薦一本書籍 Master Mobile Web Apps with jQuery Mobile">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2011/08/codeigniter-%E8%BD%89%E7%A7%BB%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%88%B0-github-%E9%A0%86%E4%BE%BF-release-2-0-3/ data-toggle=tooltip data-placement=top title="CodeIgniter 轉移版本控制到 Github 順便 Release 2.0.3">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+myselect.options[myselect.length]=new Option("Brand new option", "what") //add a new option to the end of SELECT</pre>上面全部的範例皆來自<p><a href=http://www.javascriptkit.com/jsref/select.shtml target=_blank>JavaScript Reference Select 網站</a></p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/jquery/>jQuery</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&text=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&title=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&title=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&title=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2011%2f08%2fjavascript-reference-select-and-option-objects-%25E7%2594%25A8%25E6%25B3%2595%25E4%25BB%258B%25E7%25B4%25B9%2f&description=JavaScript%20Reference%20Select%20and%20Option%20objects%20%e7%94%a8%e6%b3%95%e4%bb%8b%e7%b4%b9" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2016/10/replcae-npm-with-yarn-package-management/>用 Yarn 取代 Npm 管理 JavaScript 套件版本</a></li><li><a href=/2016/07/speed-up-npm-install-command/>用一行指令加速 npm install</a></li><li><a href=/2016/05/javascript-es6-css-cheat-sheet-pdf/>基礎 JavaScript ES6 和 CSS cheat sheet PDF 下載</a></li><li><a href=/2016/04/php-javascript-css-coding-style/>來聊聊 PHP & JavaScript & CSS 的 Coding Style</a></li><li><a href=/2015/09/javascript-in-2015/>JavaScript in 2015</a></li><li><a href=/2015/06/learning-javascript-in-one-pic/>用一張圖學習 JavaScript</a></li><li><a href=/2015/06/getting-started-with-javascript-es6-destructuring/>簡介 JavaScript ES6 物件及陣列</a></li><li><a href=/2015/04/git-flow-and-javascript-coding-style/>Git Flow and JavaScript Coding Style</a></li><li><a href=/2015/02/getting-to-know-io-js/>您不可不知的 io.js</a></li><li><a href=/2015/01/replace-coffeescript-with-es6/>CoffeeScript 轉 ES6</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2011/08/%E6%8E%A8%E8%96%A6%E4%B8%80%E6%9C%AC%E6%9B%B8%E7%B1%8D-master-mobile-web-apps-with-jquery-mobile/ data-toggle=tooltip data-placement=top title="推薦一本書籍 Master Mobile Web Apps with jQuery Mobile">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2011/08/codeigniter-%E8%BD%89%E7%A7%BB%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E5%88%B0-github-%E9%A0%86%E4%BE%BF-release-2-0-3/ data-toggle=tooltip data-placement=top title="CodeIgniter 轉移版本控制到 Github 順便 Release 2.0.3">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2011/08/javascript-reference-select-and-option-objects-%E7%94%A8%E6%B3%95%E4%BB%8B%E7%B4%B9"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

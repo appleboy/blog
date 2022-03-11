@@ -2,36 +2,37 @@
 &lt;p>&lt;a href="http://www.php.net/" target="_blank">PHP&lt;/a> 5.5.0 在上週 20 號正式 Release，也看到 PHP 官網終於改版了，新的版面看起來比較清爽，想嘗試新版面的朋友們，可以點選官網最上面鎖提示的 Bar，如果覺得新版面不是很好看，也可以切回去舊版。本篇來介紹 PHP 5.5.0 有哪些新 Feature。&lt;/p>
 &lt;h2 id="新增-generators-and-coroutines-功能">新增 generators and coroutines 功能&lt;/h2>
 &lt;p>&lt;a href="http://php.net/generators" target="_blank">Generators&lt;/a> 提供了最簡單的寫法來實做 iterators，而不需要實做 Class 去實做 Iterator 介面，generators function 就跟一般的 PHP function 一樣，只是多了 yield 這 keyword，簡單舉個例子&lt;/p>
-&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">
-&lt;table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#10">10&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#11">11&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#12">12&lt;/a>
-&lt;/span>&lt;span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#13">13&lt;/a>
+&lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
+&lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-1">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-1"> 1&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-2">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-2"> 2&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-3">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-3"> 3&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-4">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-4"> 4&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-5">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-5"> 5&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-6">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-6"> 6&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-7">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-7"> 7&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-8">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-8"> 8&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-9">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-9"> 9&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-10">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-10">10&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-11">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-11">11&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-12">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-12">12&lt;/a>
+&lt;/span>&lt;span style="white-space:pre;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-0-13">&lt;a style="outline: none; text-decoration:none; color:inherit" href="#hl-0-13">13&lt;/a>
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2">&lt;code class="language-php" data-lang="php">&amp;lt;?php
-&lt;span style="color:#8b008b;font-weight:bold">function&lt;/span> &lt;span style="color:#008b45">gen_one_to_three&lt;/span>() {
-&lt;span style="color:#8b008b;font-weight:bold">for&lt;/span> (&lt;span style="color:#00688b">$i&lt;/span> = &lt;span style="color:#b452cd">1&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span> &amp;lt;= &lt;span style="color:#b452cd">3&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span>++) {
-&lt;span style="color:#228b22">// Note that $i is preserved between yields.
-&lt;/span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">yield&lt;/span> &lt;span style="color:#00688b">$i&lt;/span>;
-}
-}
-&lt;span style="color:#00688b">$generator&lt;/span> = gen_one_to_three();
-&lt;span style="color:#8b008b;font-weight:bold">foreach&lt;/span> (&lt;span style="color:#00688b">$generator&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">as&lt;/span> &lt;span style="color:#00688b">$value&lt;/span>) {
-&lt;span style="color:#8b008b;font-weight:bold">echo&lt;/span> &lt;span style="color:#cd5555">&amp;#34;&lt;/span>&lt;span style="color:#cd5555">$value\n&lt;/span>&lt;span style="color:#cd5555">&amp;#34;&lt;/span>;
-}
-&lt;span style="color:#1e889b">?&amp;gt;&lt;/span>&lt;span style="color:#a61717;background-color:#e3d2d2">
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-php" data-lang="php">&lt;span style="display:flex;">&lt;span>&amp;lt;?php
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">function&lt;/span> &lt;span style="color:#008b45">gen_one_to_three&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8b008b;font-weight:bold">for&lt;/span> (&lt;span style="color:#00688b">$i&lt;/span> = &lt;span style="color:#b452cd">1&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span> &amp;lt;= &lt;span style="color:#b452cd">3&lt;/span>; &lt;span style="color:#00688b">$i&lt;/span>++) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#228b22">// Note that $i is preserved between yields.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#228b22">&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">yield&lt;/span> &lt;span style="color:#00688b">$i&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#00688b">$generator&lt;/span> = gen_one_to_three();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#8b008b;font-weight:bold">foreach&lt;/span> (&lt;span style="color:#00688b">$generator&lt;/span> &lt;span style="color:#8b008b;font-weight:bold">as&lt;/span> &lt;span style="color:#00688b">$value&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#8b008b;font-weight:bold">echo&lt;/span> &lt;span style="color:#cd5555">&amp;#34;&lt;/span>&lt;span style="color:#cd5555">$value\n&lt;/span>&lt;span style="color:#cd5555">&amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#1e889b">?&amp;gt;&lt;/span>&lt;span style="color:#a61717;background-color:#e3d2d2">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
 &lt;/div></description></item><item><title>安裝 XCache 加速 PHP 執行速度</title><link>https://blog.wu-boy.com/2011/09/how-to-install-xcache-on-freebsd/</link><pubDate>Tue, 20 Sep 2011 09:56:33 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/09/how-to-install-xcache-on-freebsd/</guid><description>&lt;p>&lt;a href="https://www.flickr.com/photos/appleboy/6034284842/" title="php-logo by appleboy46, on Flickr">&lt;img src="https://i2.wp.com/farm7.static.flickr.com/6186/6034284842_351ff33711_m.jpg?resize=240%2C127&amp;#038;ssl=1" alt="php-logo" data-recalc-dims="1" />&lt;/a>&lt;/p>
 &lt;h2 id="前言">前言&lt;/h2>

@@ -1,10 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Fabric 管理多台 Linux 機器的 command tool - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Fabric 管理多台 Linux 機器的 command tool - 小惡魔 - AppleBOY</title><meta name=description content="
   
  相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是 
 capistrano、Fabric、pssh、dsh…等都，本篇會以 Python 所推的 Fabric 來做介紹。另外 Ruby 所寫的 capistrano tool 也是不錯的選擇，這兩套其實大同小異，可以將 Deploy 的邏輯寫成單一 file 再透過 task 定義來決定執行的工作。當然你也可以透過此 tool 來管理 local 端動作，但是這有點多此一舉，因為基本的 Shell 就可以完成了，如果熟悉 Python 則選 fabric，如果喜歡寫 Ruby 則可以試試看 capistrano。
@@ -17,11 +11,7 @@ pip-python install fabric APT
 aptitude -y install python-pip
 # install fabric command
 pip install fabric 安裝 capistrano 可以透過 Ruby gem。 
-$ gem install capistrano">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/04\/fabric-ssh-for-deploy-or-systems-administration\/","name":"Fabric 管理多台 linux 機器的 command tool"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Fabric 管理多台 Linux 機器的 command tool","description":"  相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是 capistrano、Fabric、pssh、dsh…等都，本篇會以 Python 所推的 Fabric 來做介紹。另外 Ruby 所寫的 capistrano tool 也是不錯的選擇，這兩套其實大同小異，可以將 Deploy 的邏輯寫成單一 file 再透過 task 定義來決定執行的工作。當然你也可以透過此 tool 來管理 local 端動作，但是這有點多此一舉，因為基本的 Shell 就可以完成了，如果熟悉 Python 則選 fabric，如果喜歡寫 Ruby 則可以試試看 capistrano。\n安裝方式(Installation) 如果是 CentOS 系列可以透過 yum 套件管理，Ubuntu 或 Debian 則是透過 aptitude 方式安裝。 Yum\n# install python pip tool and fabric command\ryum -y install python-pip\rpip-python install fabric APT # install python easy_install\raptitude -y install python-pip\r# install fabric command\rpip install fabric 安裝 capistrano 可以透過 Ruby gem。 $ gem install capistrano","inLanguage":"en","wordCount":484,"datePublished":"2013-04-25T16:35:37","dateModified":"2013-04-25T16:35:37","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["capistrano, Fabric, Python, Ruby"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/04\/fabric-ssh-for-deploy-or-systems-administration\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="Fabric 管理多台 Linux 機器的 command tool">
-<meta property="og:description" content="
+$ gem install capistrano"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/04\/fabric-ssh-for-deploy-or-systems-administration\/","name":"Fabric 管理多台 linux 機器的 command tool"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Fabric 管理多台 Linux 機器的 command tool","description":"  相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是 capistrano、Fabric、pssh、dsh…等都，本篇會以 Python 所推的 Fabric 來做介紹。另外 Ruby 所寫的 capistrano tool 也是不錯的選擇，這兩套其實大同小異，可以將 Deploy 的邏輯寫成單一 file 再透過 task 定義來決定執行的工作。當然你也可以透過此 tool 來管理 local 端動作，但是這有點多此一舉，因為基本的 Shell 就可以完成了，如果熟悉 Python 則選 fabric，如果喜歡寫 Ruby 則可以試試看 capistrano。\n安裝方式(Installation) 如果是 CentOS 系列可以透過 yum 套件管理，Ubuntu 或 Debian 則是透過 aptitude 方式安裝。 Yum\n# install python pip tool and fabric command\ryum -y install python-pip\rpip-python install fabric APT # install python easy_install\raptitude -y install python-pip\r# install fabric command\rpip install fabric 安裝 capistrano 可以透過 Ruby gem。 $ gem install capistrano","inLanguage":"en","wordCount":484,"datePublished":"2013-04-25T16:35:37","dateModified":"2013-04-25T16:35:37","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["capistrano, Fabric, Python, Ruby"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/04\/fabric-ssh-for-deploy-or-systems-administration\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Fabric 管理多台 Linux 機器的 command tool"><meta property="og:description" content="
   
  相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是 
 capistrano、Fabric、pssh、dsh…等都，本篇會以 Python 所推的 Fabric 來做介紹。另外 Ruby 所寫的 capistrano tool 也是不錯的選擇，這兩套其實大同小異，可以將 Deploy 的邏輯寫成單一 file 再透過 task 定義來決定執行的工作。當然你也可以透過此 tool 來管理 local 端動作，但是這有點多此一舉，因為基本的 Shell 就可以完成了，如果熟悉 Python 則選 fabric，如果喜歡寫 Ruby 則可以試試看 capistrano。
@@ -34,167 +24,39 @@ pip-python install fabric APT
 aptitude -y install python-pip
 # install fabric command
 pip install fabric 安裝 capistrano 可以透過 Ruby gem。 
-$ gem install capistrano">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="Fabric 管理多台 Linux 機器的 command tool">
-<meta name=twitter:description content="
+$ gem install capistrano"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Fabric 管理多台 Linux 機器的 command tool"><meta name=twitter:description content="
   
  相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是 
-capistrano、Fabric、pssh、dsh…等都，本篇會以 Python 所推的 Fabric 來做介 …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+capistrano、Fabric、pssh、dsh…等都，本篇會以 Python 所推的 Fabric 來做介 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>Fabric 管理多台 Linux 機器的 command tool</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 25, 2013
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Fabric 管理多台 Linux 機器的 command tool</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 25, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;484&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#安裝方式installation-如果是>安裝方式(Installation) 如果是</a></li>
-<li><a href=#基本介紹-fabric-可以透過-command-line-或者是讀取>基本介紹 Fabric 可以透過 command line 或者是讀取</a></li>
-<li><a href=#錯誤處理-看到上面例子可以知道透過-fab-clone-來初始化專案執行後發現多了-minify-tool-目錄但是再執行同樣指令一次呢會發現出現底下錯誤訊息>錯誤處理 看到上面例子，可以知道透過 fab clone 來初始化專案，執行後，發現多了 minify-tool 目錄，但是再執行同樣指令一次呢？會發現出現底下錯誤訊息</a></li>
-<li><a href=#定義-host-最前面有提到可以用--h-方式定義那也可以直些寫在-fabfilepy-設定檔>定義 Host 最前面有提到可以用 -H 方式定義，那也可以直些寫在 fabfile.py 設定檔</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/8679381967/ title="python-logo-master-v3-TM by appleboy46, on Flickr"><img src="https://i0.wp.com/farm9.staticflickr.com/8123/8679381967_75cee4e0e9_n.jpg?resize=320%2C108&ssl=1" alt=python-logo-master-v3-TM data-recalc-dims=1></a>
-</div> 相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是
-<p><a href=https://github.com/capistrano/capistrano target=_blank>capistrano</a>、<a href=http://docs.fabfile.org target=_blank>Fabric</a>、<a href=http://code.google.com/p/parallel-ssh/ target=_blank>pssh</a>、<a href="http://packages.debian.org/search?keywords=dsh" target=_blank>dsh</a>…等都，本篇會以 <a href=http://www.python.org/ target=_blank>Python</a> 所推的 Fabric 來做介紹。另外 Ruby 所寫的 capistrano tool 也是不錯的選擇，這兩套其實大同小異，可以將 Deploy 的邏輯寫成單一 file 再透過 task 定義來決定執行的工作。當然你也可以透過此 tool 來管理 local 端動作，但是這有點多此一舉，因為基本的 Shell 就可以完成了，如果熟悉 Python 則選 fabric，如果喜歡寫 <a href=http://www.ruby-lang.org/en/ target=_blank>Ruby</a> 則可以試試看 capistrano。</p>
-<h3 id=安裝方式installation-如果是>安裝方式(Installation) 如果是</h3>
-<p><a href=http://www.centos.org/ target=_blank>CentOS</a> 系列可以透過 yum 套件管理，<a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.debian.org/ target=_blank>Debian</a> 則是透過 aptitude 方式安裝。 Yum</p>
-<pre class="brush: bash; title: ; notranslate" title># install python pip tool and fabric command
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#安裝方式installation-如果是>安裝方式(Installation) 如果是</a></li><li><a href=#基本介紹-fabric-可以透過-command-line-或者是讀取>基本介紹 Fabric 可以透過 command line 或者是讀取</a></li><li><a href=#錯誤處理-看到上面例子可以知道透過-fab-clone-來初始化專案執行後發現多了-minify-tool-目錄但是再執行同樣指令一次呢會發現出現底下錯誤訊息>錯誤處理 看到上面例子，可以知道透過 fab clone 來初始化專案，執行後，發現多了 minify-tool 目錄，但是再執行同樣指令一次呢？會發現出現底下錯誤訊息</a></li><li><a href=#定義-host-最前面有提到可以用--h-方式定義那也可以直些寫在-fabfilepy-設定檔>定義 Host 最前面有提到可以用 -H 方式定義，那也可以直些寫在 fabfile.py 設定檔</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/8679381967/ title="python-logo-master-v3-TM by appleboy46, on Flickr"><img src="https://i0.wp.com/farm9.staticflickr.com/8123/8679381967_75cee4e0e9_n.jpg?resize=320%2C108&ssl=1" alt=python-logo-master-v3-TM data-recalc-dims=1></a></div>相信 Administrator 管理過兩台以上的 Linux Server 都一定會找 tool 讓多台機器同時執行指令，這也應用在 Deploy 任何 application 到多台機器或者是同時更新系統套件…等，網路上有蠻多套 command line tool 像是<p><a href=https://github.com/capistrano/capistrano target=_blank>capistrano</a>、<a href=http://docs.fabfile.org target=_blank>Fabric</a>、<a href=http://code.google.com/p/parallel-ssh/ target=_blank>pssh</a>、<a href="http://packages.debian.org/search?keywords=dsh" target=_blank>dsh</a>…等都，本篇會以 <a href=http://www.python.org/ target=_blank>Python</a> 所推的 Fabric 來做介紹。另外 Ruby 所寫的 capistrano tool 也是不錯的選擇，這兩套其實大同小異，可以將 Deploy 的邏輯寫成單一 file 再透過 task 定義來決定執行的工作。當然你也可以透過此 tool 來管理 local 端動作，但是這有點多此一舉，因為基本的 Shell 就可以完成了，如果熟悉 Python 則選 fabric，如果喜歡寫 <a href=http://www.ruby-lang.org/en/ target=_blank>Ruby</a> 則可以試試看 capistrano。</p><h3 id=安裝方式installation-如果是>安裝方式(Installation) 如果是</h3><p><a href=http://www.centos.org/ target=_blank>CentOS</a> 系列可以透過 yum 套件管理，<a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.debian.org/ target=_blank>Debian</a> 則是透過 aptitude 方式安裝。 Yum</p><pre class="brush: bash; title: ; notranslate" title># install python pip tool and fabric command
 yum -y install python-pip
-pip-python install fabric</pre> APT
-<pre class="brush: bash; title: ; notranslate" title># install python easy_install
+pip-python install fabric</pre>APT<pre class="brush: bash; title: ; notranslate" title># install python easy_install
 aptitude -y install python-pip
 # install fabric command
-pip install fabric</pre> 安裝 capistrano 可以透過 Ruby gem。
-<pre class="brush: bash; title: ; notranslate" title>$ gem install capistrano</pre>
-<h3 id=基本介紹-fabric-可以透過-command-line-或者是讀取>基本介紹 Fabric 可以透過 command line 或者是讀取</h3>
-<p><span style=color:green><strong>fabfile.py</strong></span> 檔案方式來執行，fabfile.py 務必放在執行 fab command 的目錄底下，也就是的命令列所在位置 。假設目前在 /home/appleboy 目錄下，就必須將 fabfile.py 存放在 /home/appleboy。 簡易設定 /home/appleboy/fabfile.py，內容</p>
-<pre class="brush: python; title: ; notranslate" title>def hello():
-    print("Hello world!")</pre> 該目錄底下執行
-<pre class="brush: bash; title: ; notranslate" title>$ fab hello
+pip install fabric</pre>安裝 capistrano 可以透過 Ruby gem。<pre class="brush: bash; title: ; notranslate" title>$ gem install capistrano</pre><h3 id=基本介紹-fabric-可以透過-command-line-或者是讀取>基本介紹 Fabric 可以透過 command line 或者是讀取</h3><p><span style=color:green><strong>fabfile.py</strong></span> 檔案方式來執行，fabfile.py 務必放在執行 fab command 的目錄底下，也就是的命令列所在位置 。假設目前在 /home/appleboy 目錄下，就必須將 fabfile.py 存放在 /home/appleboy。 簡易設定 /home/appleboy/fabfile.py，內容</p><pre class="brush: python; title: ; notranslate" title>def hello():
+    print("Hello world!")</pre>該目錄底下執行<pre class="brush: bash; title: ; notranslate" title>$ fab hello
 Hello world!
 
 Done.
-</pre> 如果不透過 fabfile.py 檔案的話，你直接打 fab 會得到 Couldn't find any fabfiles!，看到這訊息沒關係，一樣可以用指令方式來達成上面的結果。學習 fabric 前，有一個很必要的條件，就是必需熟悉 Linux command 及 Shell script 用法，個人推薦
-<p><a href=http://linux.vbird.org/ target=_blank>鳥哥的網站</a>，把基礎文件都看過後，就沒有任何 Linux 系統可以難倒你。如何用 fab command 直接得到上述的結果呢？</p>
-<pre class="brush: bash; title: ; notranslate" title>$ fab -p xxxx -H localhost -- 'echo "Hello world!";'</pre> 上述指令會產生下面結果
-<pre class="brush: bash; title: ; notranslate" title>[localhost] Executing task '<remainder>'
+</pre>如果不透過 fabfile.py 檔案的話，你直接打 fab 會得到 Couldn't find any fabfiles!，看到這訊息沒關係，一樣可以用指令方式來達成上面的結果。學習 fabric 前，有一個很必要的條件，就是必需熟悉 Linux command 及 Shell script 用法，個人推薦<p><a href=http://linux.vbird.org/ target=_blank>鳥哥的網站</a>，把基礎文件都看過後，就沒有任何 Linux 系統可以難倒你。如何用 fab command 直接得到上述的結果呢？</p><pre class="brush: bash; title: ; notranslate" title>$ fab -p xxxx -H localhost -- 'echo "Hello world!";'</pre>上述指令會產生下面結果<pre class="brush: bash; title: ; notranslate" title>[localhost] Executing task '<remainder>'
 [localhost] run: echo "Hello world!";
 [localhost] out: Hello world!
 [localhost] out: 
 Done.
-Disconnecting from localhost... done.</pre> 執行 fab 就像是透過 ssh 登入機器，需要帳號及密碼，執行當下就必須提供使用者帳號及密碼，如果沒給參數，預設就是執行該 command 的使用者，-p 則是給密碼，這樣就不會詢問密碼了，-H 是指定要對哪個 host 執行該命令，也許同時 3 台機器，-H 請改寫成 -H web1,web2,web3。要換其他使用者直接加上 -u 參數
-<pre class="brush: bash; title: ; notranslate" title>$ fab -u deploy -p xxxx -H localhost -- 'echo "Hello world!";'</pre> 接下來聊聊該如何寫 fabfile.py，fab 有分 local 端或 Host 端執行，如果只用在 local 端就跟寫 Shell script 沒啥不同，fabric 提供了 local function 執行 local command。對於專案而言，你可以建立 fabfile.py 設定檔，裡面寫入
-<pre class="brush: python; title: ; notranslate" title>from fabric.api import local
+Disconnecting from localhost... done.</pre>執行 fab 就像是透過 ssh 登入機器，需要帳號及密碼，執行當下就必須提供使用者帳號及密碼，如果沒給參數，預設就是執行該 command 的使用者，-p 則是給密碼，這樣就不會詢問密碼了，-H 是指定要對哪個 host 執行該命令，也許同時 3 台機器，-H 請改寫成 -H web1,web2,web3。要換其他使用者直接加上 -u 參數<pre class="brush: bash; title: ; notranslate" title>$ fab -u deploy -p xxxx -H localhost -- 'echo "Hello world!";'</pre>接下來聊聊該如何寫 fabfile.py，fab 有分 local 端或 Host 端執行，如果只用在 local 端就跟寫 Shell script 沒啥不同，fabric 提供了 local function 執行 local command。對於專案而言，你可以建立 fabfile.py 設定檔，裡面寫入<pre class="brush: python; title: ; notranslate" title>from fabric.api import local
 
 def prepare_deploy():
     local("git add -p && git commit")
-    local("git push")</pre> 執行 fab prepare_deploy 會將專案已修改的 commit 到 server，當然你也可以拆開來執行
-<pre class="brush: python; title: ; notranslate" title>from fabric.api import local
+    local("git push")</pre>執行 fab prepare_deploy 會將專案已修改的 commit 到 server，當然你也可以拆開來執行<pre class="brush: python; title: ; notranslate" title>from fabric.api import local
 
 def clone():
     local("git clone git@github.com:appleboy/minify-tool.git")
@@ -207,15 +69,12 @@ def push():
 
 def prepare_deploy():
     commit()
-    push()</pre> 大家可以依照專案需求來定義工作項目，好讓團隊所有的成員都可以使用。
-<h3 id=錯誤處理-看到上面例子可以知道透過-fab-clone-來初始化專案執行後發現多了-minify-tool-目錄但是再執行同樣指令一次呢會發現出現底下錯誤訊息>錯誤處理 看到上面例子，可以知道透過 fab clone 來初始化專案，執行後，發現多了 minify-tool 目錄，但是再執行同樣指令一次呢？會發現出現底下錯誤訊息</h3>
-<pre class="brush: bash; title: ; notranslate" title>[localhost] local: git clone git@github.com:appleboy/minify-tool.git
+    push()</pre>大家可以依照專案需求來定義工作項目，好讓團隊所有的成員都可以使用。<h3 id=錯誤處理-看到上面例子可以知道透過-fab-clone-來初始化專案執行後發現多了-minify-tool-目錄但是再執行同樣指令一次呢會發現出現底下錯誤訊息>錯誤處理 看到上面例子，可以知道透過 fab clone 來初始化專案，執行後，發現多了 minify-tool 目錄，但是再執行同樣指令一次呢？會發現出現底下錯誤訊息</h3><pre class="brush: bash; title: ; notranslate" title>[localhost] local: git clone git@github.com:appleboy/minify-tool.git
 fatal: destination path 'minify-tool' already exists and is not an empty directory.
 
 Fatal error: local() encountered an error (return code 128) while executing 'git clone git@github.com:appleboy/minify-tool.git'
 
-Aborting.</pre> 程式就停止了，但是如果底下有必須執行的工作，該怎麼辦，必須要 import with_statement 模組，將程式碼改成底下
-<pre class="brush: python; title: ; notranslate" title>from __future__ import with_statement
+Aborting.</pre>程式就停止了，但是如果底下有必須執行的工作，該怎麼辦，必須要 import with_statement 模組，將程式碼改成底下<pre class="brush: python; title: ; notranslate" title>from __future__ import with_statement
 from fabric.api import local, settings, abort
 from fabric.contrib.console import confirm
 
@@ -223,24 +82,19 @@ def clone():
     with settings(warn_only=True):
         result = local("git clone git@github.com:appleboy/minify-tool.git")
     if result.failed and not confirm("Tests failed. Continue anyway?"):
-        abort("Aborting at user request.")</pre> 會發現畫面還是會出現錯誤訊息，最後跳出 confirm 視窗鍵入 Y，結果會得到 Done!，鍵入 N 則得到 Aborting 訊息。
-<pre class="brush: bash; title: ; notranslate" title>[localhost] local: git clone git@github.com:appleboy/minify-tool.git
+        abort("Aborting at user request.")</pre>會發現畫面還是會出現錯誤訊息，最後跳出 confirm 視窗鍵入 Y，結果會得到 Done!，鍵入 N 則得到 Aborting 訊息。<pre class="brush: bash; title: ; notranslate" title>[localhost] local: git clone git@github.com:appleboy/minify-tool.git
 fatal: destination path 'minify-tool' already exists and is not an empty directory.
 
 Warning: local() encountered an error (return code 128) while executing 'git clone git@github.com:appleboy/minify-tool.git'
 
 Tests failed. Continue anyway? [Y/n] y
 
-Done.</pre> 接著來定義 deploy 工作內容
-<pre class="brush: python; title: ; notranslate" title>def deploy():
+Done.</pre>接著來定義 deploy 工作內容<pre class="brush: python; title: ; notranslate" title>def deploy():
     code_dir = 'minify-tool'
     with cd(code_dir):
-        run("git pull")</pre> 上面多了二個函式，就是 cd 和 run，cd 很直覺，就跟 Linux command 一樣，run 跟 local 不同的地方就是 run 是用來管理遠端機器。
-<h3 id=定義-host-最前面有提到可以用--h-方式定義那也可以直些寫在-fabfilepy-設定檔>定義 Host 最前面有提到可以用 -H 方式定義，那也可以直些寫在 fabfile.py 設定檔</h3>
-<pre class="brush: python; title: ; notranslate" title>env.hosts = ['127.0.0.1']
+        run("git pull")</pre>上面多了二個函式，就是 cd 和 run，cd 很直覺，就跟 Linux command 一樣，run 跟 local 不同的地方就是 run 是用來管理遠端機器。<h3 id=定義-host-最前面有提到可以用--h-方式定義那也可以直些寫在-fabfilepy-設定檔>定義 Host 最前面有提到可以用 -H 方式定義，那也可以直些寫在 fabfile.py 設定檔</h3><pre class="brush: python; title: ; notranslate" title>env.hosts = ['127.0.0.1']
 env.hosts = ['localhost']
-env.hosts = ['web1']</pre> 上面寫法都正確，host name 可以直接在 /etc/hosts 檔案內定義，將程式碼改為底下
-<pre class="brush: python; title: ; notranslate" title>env.hosts = ['my_server']
+env.hosts = ['web1']</pre>上面寫法都正確，host name 可以直接在 /etc/hosts 檔案內定義，將程式碼改為底下<pre class="brush: python; title: ; notranslate" title>env.hosts = ['my_server']
 
 def deploy():
     code_dir = 'minify-tool'
@@ -248,184 +102,23 @@ def deploy():
         if run("test -d %s" % code_dir).failed:
             run("git clone git@github.com:appleboy/minify-tool.git %s" % code_dir)
     with cd(code_dir):
-        run("git pull")</pre> 如果沒有定義 env.hosts，你也可以執行
-<pre class="brush: bash; title: ; notranslate" title>$ fab -H web1 deploy</pre> 這次先介紹到這裡，或許之後有機會來介紹進階用法，當然可以先參考看看
-<p><a href=http://docs.fabfile.org target=_blank>fabric document</a>。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/capistrano/>capistrano</a>&nbsp;
+        run("git pull")</pre>如果沒有定義 env.hosts，你也可以執行<pre class="brush: bash; title: ; notranslate" title>$ fab -H web1 deploy</pre>這次先介紹到這裡，或許之後有機會來介紹進階用法，當然可以先參考看看<p><a href=http://docs.fabfile.org target=_blank>fabric document</a>。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/capistrano/>capistrano</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/fabric/>Fabric</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/python/>Python</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&text=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&title=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&title=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&title=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&description=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2017/04/5-reasons-why-we-switched-from-python-to-go/>五大理由從 Python 轉到 Go 語言</a></li>
-<li><a href=/2015/03/ruby-deploy-with-capistrano-ssh-connection-closed/>Ruby Deploy With Capistrano 碰到 SSH Connection Closed</a></li>
-<li><a href=/2014/03/using-capistrano-to-deploy-current-branch/>Using Capistrano to deploy current branch</a></li>
-<li><a href=/2014/03/ruby-compass-and-sass-auto-testing-environment/>Ruby Compass and Sass Auto Testing Environment</a></li>
-<li><a href=/2014/02/ruby-debugger-and-no-source-for-ruby-error/>Ruby 安裝 debugger package 發生 No source for ruby 錯誤</a></li>
-<li><a href=/2014/02/ruby-with-nginx-on-ubuntu-debian/>在 Ubuntu 或 Debian 上跑 Ruby on Rails + Nginx</a></li>
-<li><a href=/2013/08/cross-site-request-in-js-web-apps-and-codeigniter-php-framework/>Cross Site Request Forgery in JS Web Apps and CodeIgniter PHP Framework</a></li>
-<li><a href=/2011/10/how-to-install-livereload/>LiveReload 網頁程式設計師必備工具</a></li>
-<li><a href=/2011/10/install-ruby-rubygems-compass-on-centos/>在 CentOS 上面安裝 Ruby 環境</a></li>
-<li><a href=/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/>2011 OSDC Day 1 筆記</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2013/04/linode-nextgen-ram-upgrade/ data-toggle=tooltip data-placement=top title="Linode 最後優惠 升級記憶體">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2013/04/nginx-1-4-0-support-spdy-module/ data-toggle=tooltip data-placement=top title="nginx 1.4.0 釋出並支援 SPDY">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/ruby/>Ruby</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&text=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&title=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&title=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&title=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f04%2ffabric-ssh-for-deploy-or-systems-administration%2f&description=Fabric%20%e7%ae%a1%e7%90%86%e5%a4%9a%e5%8f%b0%20Linux%20%e6%a9%9f%e5%99%a8%e7%9a%84%20command%20tool" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2017/04/5-reasons-why-we-switched-from-python-to-go/>五大理由從 Python 轉到 Go 語言</a></li><li><a href=/2015/03/ruby-deploy-with-capistrano-ssh-connection-closed/>Ruby Deploy With Capistrano 碰到 SSH Connection Closed</a></li><li><a href=/2014/03/using-capistrano-to-deploy-current-branch/>Using Capistrano to deploy current branch</a></li><li><a href=/2014/03/ruby-compass-and-sass-auto-testing-environment/>Ruby Compass and Sass Auto Testing Environment</a></li><li><a href=/2014/02/ruby-debugger-and-no-source-for-ruby-error/>Ruby 安裝 debugger package 發生 No source for ruby 錯誤</a></li><li><a href=/2014/02/ruby-with-nginx-on-ubuntu-debian/>在 Ubuntu 或 Debian 上跑 Ruby on Rails + Nginx</a></li><li><a href=/2013/08/cross-site-request-in-js-web-apps-and-codeigniter-php-framework/>Cross Site Request Forgery in JS Web Apps and CodeIgniter PHP Framework</a></li><li><a href=/2011/10/how-to-install-livereload/>LiveReload 網頁程式設計師必備工具</a></li><li><a href=/2011/10/install-ruby-rubygems-compass-on-centos/>在 CentOS 上面安裝 Ruby 環境</a></li><li><a href=/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/>2011 OSDC Day 1 筆記</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2013/04/linode-nextgen-ram-upgrade/ data-toggle=tooltip data-placement=top title="Linode 最後優惠 升級記憶體">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2013/04/nginx-1-4-0-support-spdy-module/ data-toggle=tooltip data-placement=top title="nginx 1.4.0 釋出並支援 SPDY">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2013/04/fabric-ssh-for-deploy-or-systems-administration"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

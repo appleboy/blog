@@ -1,303 +1,37 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Laravel 4.2 繁體中文文件完整上線 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Laravel 4.2 繁體中文文件完整上線 - 小惡魔 - AppleBOY</title><meta name=description content="
   
 
-Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在這裡，若要參與翻譯，請直接看 Docs Repo，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/09\/laravel-4-2-traditional-chinese-document\/","name":"Laravel 4.2 繁體中文文件完整上線"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Laravel 4.2 繁體中文文件完整上線","description":"  Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在這裡，若要參與翻譯，請直接看 Docs Repo，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔\n","inLanguage":"en","wordCount":29,"datePublished":"2014-09-01T08:11:45","dateModified":"2014-09-01T08:11:45","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Laravel, PHP Framework"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/09\/laravel-4-2-traditional-chinese-document\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="Laravel 4.2 繁體中文文件完整上線">
-<meta property="og:description" content="
+Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在這裡，若要參與翻譯，請直接看 Docs Repo，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2014\/09\/laravel-4-2-traditional-chinese-document\/","name":"Laravel 4.2 繁體中文文件完整上線"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Laravel 4.2 繁體中文文件完整上線","description":"  Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在這裡，若要參與翻譯，請直接看 Docs Repo，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔\n","inLanguage":"en","wordCount":29,"datePublished":"2014-09-01T08:11:45","dateModified":"2014-09-01T08:11:45","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Laravel, PHP Framework"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2014\/09\/laravel-4-2-traditional-chinese-document\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Laravel 4.2 繁體中文文件完整上線"><meta property="og:description" content="
   
 
-Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在這裡，若要參與翻譯，請直接看 Docs Repo，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2014/09/laravel-4-2-traditional-chinese-document/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="Laravel 4.2 繁體中文文件完整上線">
-<meta name=twitter:description content="
+Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在這裡，若要參與翻譯，請直接看 Docs Repo，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2014/09/laravel-4-2-traditional-chinese-document/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Laravel 4.2 繁體中文文件完整上線"><meta name=twitter:description content="
   
 
-Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+Laravel 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 Facebook Laravel Taiwan 群組，透過台北的小聚會來定期 review …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>Laravel 4.2 繁體中文文件完整上線</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 1, 2014
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Laravel 4.2 繁體中文文件完整上線</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 1, 2014
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;29&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<article role=main class=blog-post>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/6248708214/ title="Laravel PHP Framework by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&ssl=1" alt="Laravel PHP Framework" data-recalc-dims=1></a>
-</div>
-<p><a href=http://laravel.com>Laravel</a> 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 <a href=https://www.facebook.com/groups/laravel.tw/>Facebook Laravel Taiwan 群組</a>，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在<a href=https://github.com/laravel-taiwan>這裡</a>，若要參與翻譯，請直接看 <a href=https://github.com/laravel-taiwan/docs>Docs Repo</a>，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔</p>
-<p><a href=https://www.flickr.com/photos/appleboy/15102845132 title="laravel_github by Bo-Yi Wu, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3880/15102845132_ce6a7c6633_z.jpg?resize=640%2C269&ssl=1" alt=laravel_github data-recalc-dims=1></a></p>
-<p>最後附上 <strong><a href=http://laravel.tw>Laravel 台灣官網</a></strong>，還沒嘗試過 Laravel 可以直接先看中文文件。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/php-framework/>PHP Framework</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&text=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&title=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&title=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&title=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&description=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2019/12/setup-laravel-environment-in-15-minutes/>用 15 分鐘快速打造 Laravel 開發環境</a></li>
-<li><a href=/2017/07/laravel-conf-in-taipei/>台灣第一屆 Laravel 研討會</a></li>
-<li><a href=/2016/03/replace-laravel-homestead-with-docker/>用 Docker 取代 Laravel Homestead 開發環境</a></li>
-<li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li>
-<li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li>
-<li><a href=/2016/01/laravel-homestead-and-phpmyadmin-docker/>Laravel Homestead 搭配 phpMyAdmin Docker</a></li>
-<li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li>
-<li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li>
-<li><a href=/2015/10/laravel-homestead-support-php-7/>Laravel Homestead 支援 PHP 7</a></li>
-<li><a href=/2015/09/how-to-use-laravel-presenter-in-controller/>Laravel Presenter 在 Controller 的使用</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2014/08/laravel-application-environments-without-hostnames/ data-toggle=tooltip data-placement=top title="Laravel 不同開發環境設定">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2014/09/get-homestead-vagrant-vm-running/ data-toggle=tooltip data-placement=top title="快速安裝 Laravel Homestead 環境">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2014/09/laravel-4-2-traditional-chinese-document>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2014/09/laravel-4-2-traditional-chinese-document'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/6248708214/ title="Laravel PHP Framework by appleboy46, on Flickr"><img src="https://i0.wp.com/farm7.static.flickr.com/6038/6248708214_ef1133d0e9_o.png?resize=283%2C101&ssl=1" alt="Laravel PHP Framework" data-recalc-dims=1></a></div><p><a href=http://laravel.com>Laravel</a> 是目前最火紅的 PHP Framework，但是對於第一次接觸 Framework 的使用者，安裝或學習方面一定會遇到重重困難，而為了降低學習門檻，網路上集結很多好朋友一起加入翻譯，經過了半年時間，快速的完成 4.2 版本的翻譯文件，雖然 4.3 版本在年底即將推出。這次要好好感謝 <a href=https://www.facebook.com/groups/laravel.tw/>Facebook Laravel Taiwan 群組</a>，透過台北的小聚會來定期 review 及分配翻譯項目，才可以在這麼短的時間完成翻譯內容，果然團結力量大。目前線上內容已經翻譯完成，但是還需要網路上各位大大來潤稿，Laravel TW 的 Github 在<a href=https://github.com/laravel-taiwan>這裡</a>，若要參與翻譯，請直接看 <a href=https://github.com/laravel-taiwan/docs>Docs Repo</a>，有人常常問我，不會 Git 可以幫忙嗎？答案是當然可以阿，可以直接將介面切換到瀏覽模式，找到底下符號，按下編輯，修改完成，拉到底下按下送出就可以了喔</p><p><a href=https://www.flickr.com/photos/appleboy/15102845132 title="laravel_github by Bo-Yi Wu, on Flickr"><img src="https://i1.wp.com/farm4.staticflickr.com/3880/15102845132_ce6a7c6633_z.jpg?resize=640%2C269&ssl=1" alt=laravel_github data-recalc-dims=1></a></p><p>最後附上 <strong><a href=http://laravel.tw>Laravel 台灣官網</a></strong>，還沒嘗試過 Laravel 可以直接先看中文文件。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/laravel/>Laravel</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/php-framework/>PHP Framework</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&text=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&title=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&title=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&title=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2014%2f09%2flaravel-4-2-traditional-chinese-document%2f&description=Laravel%204.2%20%e7%b9%81%e9%ab%94%e4%b8%ad%e6%96%87%e6%96%87%e4%bb%b6%e5%ae%8c%e6%95%b4%e4%b8%8a%e7%b7%9a" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2019/12/setup-laravel-environment-in-15-minutes/>用 15 分鐘快速打造 Laravel 開發環境</a></li><li><a href=/2017/07/laravel-conf-in-taipei/>台灣第一屆 Laravel 研討會</a></li><li><a href=/2016/03/replace-laravel-homestead-with-docker/>用 Docker 取代 Laravel Homestead 開發環境</a></li><li><a href=/2016/03/why-i-choose-laravel-framework/>為什麼我選擇使用 Laravel Framework?</a></li><li><a href=/2016/01/laravel-socialite-with-google-facebook-twitter/>Laravel 搭配 Google, Facebook, Twitter 第三方 OAuth 認證</a></li><li><a href=/2016/01/laravel-homestead-and-phpmyadmin-docker/>Laravel Homestead 搭配 phpMyAdmin Docker</a></li><li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li><li><a href=/2015/11/laravel-homestead-support-mysql-5-7-and-node-5-0/>Laravel Homestead 支援 MySQL 5.7 和 Node 5.0</a></li><li><a href=/2015/10/laravel-homestead-support-php-7/>Laravel Homestead 支援 PHP 7</a></li><li><a href=/2015/09/how-to-use-laravel-presenter-in-controller/>Laravel Presenter 在 Controller 的使用</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2014/08/laravel-application-environments-without-hostnames/ data-toggle=tooltip data-placement=top title="Laravel 不同開發環境設定">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2014/09/get-homestead-vagrant-vm-running/ data-toggle=tooltip data-placement=top title="快速安裝 Laravel Homestead 環境">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2014/09/laravel-4-2-traditional-chinese-document>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2014/09/laravel-4-2-traditional-chinese-document"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

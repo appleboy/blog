@@ -1,365 +1,78 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>git rebase - 小惡魔 - AppleBOY</title>
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<meta property="og:title" content="git rebase">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/tags/git-rebase/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="git rebase">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/git-rebase/feed.xml title="小惡魔 - AppleBOY">
-<link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/git-rebase/feed.xml title="小惡魔 - AppleBOY">
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>git rebase - 小惡魔 - AppleBOY</title><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><meta property="og:title" content="git rebase"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/tags/git-rebase/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="git rebase"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/git-rebase/feed.xml title="小惡魔 - AppleBOY"><link rel=alternate type=application/rss+xml href=https://blog.wu-boy.com/tags/git-rebase/feed.xml title="小惡魔 - AppleBOY"><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=tags-heading>
-<h1>git rebase</h1>
-<hr class=small>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=posts-list>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/04/git-flow-tips/>
-<h2 class=post-title>Git Flow 與團隊合作</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 28, 2016
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=tags-heading><h1>git rebase</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2016/04/git-flow-tips/><h2 class=post-title>Git Flow 與團隊合作</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 28, 2016
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;32&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/26620468361/in/dateposted-public/ title=branching-illustration@2x><img src="https://i2.wp.com/farm2.staticflickr.com/1584/26620468361_7fe972425a_z.jpg?resize=640%2C413&ssl=1" alt=branching-illustration@2x data-recalc-dims=1></a></p>
-<p>本月最後一篇投影片來介紹 <a href=https://git-scm.com/>Git</a> Flow 流程該如何導入團隊，之前寫過一篇 <a href=https://blog.wu-boy.com/2011/03/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-branch-model-%E5%88%86%E6%94%AF%E6%A8%A1%E7%B5%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/>Git branch model</a> 文章，裡面提到該如何正確使用 branch，但是現在回想起來要導入團隊內真的是有點麻煩，也遇到蠻多問題的，後來最後只採用 <a href=https://guides.github.com/introduction/flow/>Github Flow</a>，簡單又容易理解，如果開發者很常在 <a href=https://github.com>Github</a> 活動，相信對於此方法並不會很陌生。</p>
-<a href=https://blog.wu-boy.com/2016/04/git-flow-tips/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a data-flickr-embed=true href=https://www.flickr.com/photos/appleboy/26620468361/in/dateposted-public/ title=branching-illustration@2x><img src="https://i2.wp.com/farm2.staticflickr.com/1584/26620468361_7fe972425a_z.jpg?resize=640%2C413&ssl=1" alt=branching-illustration@2x data-recalc-dims=1></a></p><p>本月最後一篇投影片來介紹 <a href=https://git-scm.com/>Git</a> Flow 流程該如何導入團隊，之前寫過一篇 <a href=https://blog.wu-boy.com/2011/03/git-%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6-branch-model-%E5%88%86%E6%94%AF%E6%A8%A1%E7%B5%84%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/>Git branch model</a> 文章，裡面提到該如何正確使用 branch，但是現在回想起來要導入團隊內真的是有點麻煩，也遇到蠻多問題的，後來最後只採用 <a href=https://guides.github.com/introduction/flow/>Github Flow</a>，簡單又容易理解，如果開發者很常在 <a href=https://github.com>Github</a> 活動，相信對於此方法並不會很陌生。</p><a href=https://blog.wu-boy.com/2016/04/git-flow-tips/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-branch/>git branch</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-merge/>git merge</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2016/02/git-tips-blame-someone-else/>
-<h2 class=post-title>Git tips: 更改 commit log 作者</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2016
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2016/02/git-tips-blame-someone-else/><h2 class=post-title>Git tips: 更改 commit log 作者</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2016
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;126&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-在 Github 上面看到這 git-blame-someone-else 專案，用來隨時修改 commit log 作者，也就是可以任意改 commit id 內的 `Author` 欄位資訊，作者也相當幽默，直接拿此 commit id 改成 Linux 作者 Linus Torvalds。
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在 Github 上面看到這 git-blame-someone-else 專案，用來隨時修改 commit log 作者，也就是可以任意改 commit id 內的 `Author` 欄位資訊，作者也相當幽默，直接拿此 commit id 改成 Linux 作者 Linus Torvalds。
 使用時機 大家會問到什麼時候才會用到需要修改 commit 作者，以我自己的狀況為例，在團隊內開發新功能會直接開新的 Branch 來開發，完成後會進行 code review，此時原開發者目前正在忙其他專案，其他團隊成員就必須幫忙修改原先 commit 內容，通常我是直接建議透過 `git reset &ndash;soft HEAD^` 來更動原本 commit，而不是產生新的 commit，修改後作者就會變成自己，此時後這功能就派上用場了。
 安裝方式 根據源專案是透過 root 權限，將執行檔丟到 `/usr/loca/bin` 目錄底下，但是我個人不建議用這方式，因為還需要 root 權限，要打密碼有點麻煩，我建議透過在家目錄建立 `bin` 目錄，並將此目錄加到 `$PATH` 變數內即可。
 1 2 3 $ mkdir ~/bin $ wget https://raw.githubusercontent.com/jayphelps/git-blame-someone-else/master/git-blame-someone-else -O ~/bin/git-blame-someone-else $ chmod 755 ~/bin/git-blame-someone-else 修改 .bashrc，加入底下程式碼
-<a href=https://blog.wu-boy.com/2016/02/git-tips-blame-someone-else/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+<a href=https://blog.wu-boy.com/2016/02/git-tips-blame-someone-else/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-branch/>git branch</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2015/07/undo-git-reset-hard/>
-<h2 class=post-title>git tips 找尋遺失的 commit 紀錄</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2015
+<a href=https://blog.wu-boy.com/tags/github/>Github</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2015/07/undo-git-reset-hard/><h2 class=post-title>git tips 找尋遺失的 commit 紀錄</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 4, 2015
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;118&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p><a href=https://www.flickr.com/photos/appleboy/13158675193/ title="github-logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm3.staticflickr.com/2238/13158675193_2892abac95_n.jpg?w=840&ssl=1" alt=github-logo data-recalc-dims=1></a></p>
-<p>個人每天常用的常用的三大 Git 指令分別是 <code>git reset</code>, <code>git pull</code>, <code>git rebase</code>，但是呢有時候手殘，常常把 git reset <code>--soft</code> 打成 git reset <code>--hard</code> 造成不可預期的錯誤，朋友圈內也有人常常問我該如何救不見的 commit，其實很容易，git 對於每隔操作後產生的 commit 都會存放在 Local 端，所以基本上不用擔心 commit 記錄會不見，有一種狀況會永遠消失，那就是假設尚未 commit 目前修正過的檔案，然後下 git reset <code>--hard</code> HEAD，這樣的話我想誰都無法幫忙把已修正過的檔案找回來了，原因是連 git 都不知道你改了什麼啊。所以為了避免這情況方生，個人建議開發者，只要開發到一定的階段，務必要下一個 commit 當作記錄，但是你會說，這樣功能開發完後，就會有很多個 commit 非常不好看，這時候可以嘗試 git rebase 將整個功能合併成一個 commit，這樣其他開發者 review 時就會非常清楚。</p>
-<p>現在的問題是如果開發者不小心下了 <code>git reset --hard HEAD^</code>，上一個 commit 就會消失了，這時候該如何救回來呢？答案可以使用 <code>git reflog</code> 指令然觀看開發者全部 git 的操作記錄，裡面詳細記載你曾經下過的 git 指令</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7>7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8>8</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash>$ git reflog
-794be8b HEAD@{0}: reset: moving to HEAD^
-5e2be6f HEAD@{1}: commit (amend): update
-bfa593c HEAD@{2}: cherry-pick: update
-794be8b HEAD@{3}: reset: moving to 649c658
-794be8b HEAD@{4}: reset: moving to HEAD^
-649c658 HEAD@{5}: commit: update
-794be8b HEAD@{6}: commit (initial): addd
-</code></pre></td></tr></table>
-</div>
-</div><p>上面可以看到之前 commit 的記錄，接著可以透過 <code>git reset --hard xxxxx</code>，或者是用 <code>git cherry-pick xxxxx</code> 將上一個 commit ID 記錄抓回來即可。</p>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=https://www.flickr.com/photos/appleboy/13158675193/ title="github-logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm3.staticflickr.com/2238/13158675193_2892abac95_n.jpg?w=840&ssl=1" alt=github-logo data-recalc-dims=1></a></p><p>個人每天常用的常用的三大 Git 指令分別是 <code>git reset</code>, <code>git pull</code>, <code>git rebase</code>，但是呢有時候手殘，常常把 git reset <code>--soft</code> 打成 git reset <code>--hard</code> 造成不可預期的錯誤，朋友圈內也有人常常問我該如何救不見的 commit，其實很容易，git 對於每隔操作後產生的 commit 都會存放在 Local 端，所以基本上不用擔心 commit 記錄會不見，有一種狀況會永遠消失，那就是假設尚未 commit 目前修正過的檔案，然後下 git reset <code>--hard</code> HEAD，這樣的話我想誰都無法幫忙把已修正過的檔案找回來了，原因是連 git 都不知道你改了什麼啊。所以為了避免這情況方生，個人建議開發者，只要開發到一定的階段，務必要下一個 commit 當作記錄，但是你會說，這樣功能開發完後，就會有很多個 commit 非常不好看，這時候可以嘗試 git rebase 將整個功能合併成一個 commit，這樣其他開發者 review 時就會非常清楚。</p><p>現在的問題是如果開發者不小心下了 <code>git reset --hard HEAD^</code>，上一個 commit 就會消失了，這時候該如何救回來呢？答案可以使用 <code>git reflog</code> 指令然觀看開發者全部 git 的操作記錄，裡面詳細記載你曾經下過的 git 指令</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-7>7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-8>8</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>$ git reflog
+</span></span><span style=display:flex><span>794be8b HEAD@{0}: reset: moving to HEAD^
+</span></span><span style=display:flex><span>5e2be6f HEAD@{1}: commit (amend): update
+</span></span><span style=display:flex><span>bfa593c HEAD@{2}: cherry-pick: update
+</span></span><span style=display:flex><span>794be8b HEAD@{3}: reset: moving to 649c658
+</span></span><span style=display:flex><span>794be8b HEAD@{4}: reset: moving to HEAD^
+</span></span><span style=display:flex><span>649c658 HEAD@{5}: commit: update
+</span></span><span style=display:flex><span>794be8b HEAD@{6}: commit (initial): addd
+</span></span></code></pre></td></tr></table></div></div><p>上面可以看到之前 commit 的記錄，接著可以透過 <code>git reset --hard xxxxx</code>，或者是用 <code>git cherry-pick xxxxx</code> 將上一個 commit ID 記錄抓回來即可。</p></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-reflog/>git reflog</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-reset/>git reset</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2015/04/git-flow-and-javascript-coding-style/>
-<h2 class=post-title>Git Flow and JavaScript Coding Style</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on April 11, 2015
+<a href=https://blog.wu-boy.com/tags/git-reset/>git reset</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2015/04/git-flow-and-javascript-coding-style/><h2 class=post-title>Git Flow and JavaScript Coding Style</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on April 11, 2015
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;89&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/13158675193/ title="github-logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm3.staticflickr.com/2238/13158675193_2892abac95_n.jpg?resize=320%2C127&ssl=1" alt=github-logo data-recalc-dims=1></a>
-</div>
-<p><a href=http://git-scm.com/>Git</a> 已經是每日必備使用的指令，在平常工作上常常使用到 <a href=http://git-scm.com/docs/git-rebase>git rebase</a> 或 <a href=http://git-scm.com/docs/git-merge>git merge</a>，發現很多工程師不知道什麼時候該用 rebase 什麼時候該用 merge，所以做了底下投影片來清楚描述 git rebase 及 merge 的優缺點及使用時機。</p>
-<a href=https://blog.wu-boy.com/2015/04/git-flow-and-javascript-coding-style/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/code-style/>Code Style</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/13158675193/ title="github-logo by appleboy46, on Flickr"><img src="https://i0.wp.com/farm3.staticflickr.com/2238/13158675193_2892abac95_n.jpg?resize=320%2C127&ssl=1" alt=github-logo data-recalc-dims=1></a></div><p><a href=http://git-scm.com/>Git</a> 已經是每日必備使用的指令，在平常工作上常常使用到 <a href=http://git-scm.com/docs/git-rebase>git rebase</a> 或 <a href=http://git-scm.com/docs/git-merge>git merge</a>，發現很多工程師不知道什麼時候該用 rebase 什麼時候該用 merge，所以做了底下投影片來清楚描述 git rebase 及 merge 的優缺點及使用時機。</p><a href=https://blog.wu-boy.com/2015/04/git-flow-and-javascript-coding-style/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/code-style/>Code Style</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-merge/>git merge</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;
-</div>
-</article>
-<article class=post-preview>
-<a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/>
-<h2 class=post-title>Git rebase + stash 小技巧</h2>
-</a>
-<p class=post-meta>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on August 18, 2013
+<a href=https://blog.wu-boy.com/tags/javascript/>javascript</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/><h2 class=post-title>Git rebase + stash 小技巧</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on August 18, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;108&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</p>
-<div class=post-entry>
-<p>每天打開電腦，第一件事情就是將專案程式碼更新的最新，以便整合同事新開發的功能，免的跟自己寫的功能衝突，所以最常用用的就是 <code>git pull --rebase origin master</code>，此命令使用 <code>rebase</code> 來取代 <code>merge</code> 程式碼，也可以避免在 log 清單內出現 <code>merge branch master into master</code> 等字樣，但是如果在開發一半進度時，想同時將同事的程式碼先 merge 進來，會發現無法 merge，git 會請你先將 local 修改過的檔案 commit，才可以讓您更新，所以這時候我們可以用 git stash 方式來解決</p>
-<p>如果你在 master 分支上，並且想 pull 最新的 commit，可以透過底下指令步驟</p>
-<div>
-<pre class="brush: bash; title: ; notranslate" title>$ git stash --include-untracked
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>每天打開電腦，第一件事情就是將專案程式碼更新的最新，以便整合同事新開發的功能，免的跟自己寫的功能衝突，所以最常用用的就是 <code>git pull --rebase origin master</code>，此命令使用 <code>rebase</code> 來取代 <code>merge</code> 程式碼，也可以避免在 log 清單內出現 <code>merge branch master into master</code> 等字樣，但是如果在開發一半進度時，想同時將同事的程式碼先 merge 進來，會發現無法 merge，git 會請你先將 local 修改過的檔案 commit，才可以讓您更新，所以這時候我們可以用 git stash 方式來解決</p><p>如果你在 master 分支上，並且想 pull 最新的 commit，可以透過底下指令步驟</p><div><pre class="brush: bash; title: ; notranslate" title>$ git stash --include-untracked
 $ git pull --rebase origin master
 $ git stash pop
-# fix conflict (merge)</pre>
-</div>
-<a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/ class=post-read-more>[Read More]</a>
-</div>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
+# fix conflict (merge)</pre></div><a href=https://blog.wu-boy.com/2013/08/git-rebase-stash-tip/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/git/>git</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/git-rebase/>git rebase</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/git-stash/>git stash</a>&nbsp;
-</div>
-</article>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=/tags/git-rebase/feed.xml title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/git-stash/>git stash</a>&nbsp;</div></article></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href=/tags/git-rebase/feed.xml title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

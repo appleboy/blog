@@ -1,720 +1,341 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>初探 golang 1.18 generics 功能 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
-Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","name":"初探 golang 1.18 generics 功能"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 golang 1.18 generics 功能","description":"Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。\n","inLanguage":"en","wordCount":743,"datePublished":"2022-02-11T08:18:19","dateModified":"2022-02-11T08:18:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, golang generics"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="初探 golang 1.18 generics 功能">
-<meta property="og:description" content="
-Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2022/02/introduction-to-golang-1-18-generics/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="初探 golang 1.18 generics 功能">
-<meta name=twitter:description content="
-Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>初探 golang 1.18 generics 功能 - 小惡魔 - AppleBOY</title><meta name=description content="
+Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","name":"初探 golang 1.18 generics 功能"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"初探 golang 1.18 generics 功能","description":"Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。\n","inLanguage":"en","wordCount":743,"datePublished":"2022-02-11T08:18:19","dateModified":"2022-02-11T08:18:19","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, golang generics"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2022\/02\/introduction-to-golang-1-18-generics\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="初探 golang 1.18 generics 功能"><meta property="og:description" content="
+Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2022/02/introduction-to-golang-1-18-generics/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="初探 golang 1.18 generics 功能"><meta name=twitter:description content="
+Go 語言在近期內會推出 1.18 版本，而 1.18 最重要的功能之一就是 generics，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。"><meta name=twitter:image content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>初探 golang 1.18 generics 功能</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2022
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>初探 golang 1.18 generics 功能</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on February 11, 2022
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;743&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li><a href=#影片教學>影片教學</a></li>
-<li><a href=#安裝-118-及整合-vscode-編輯器>安裝 1.18 及整合 Vscode 編輯器</a></li>
-<li><a href=#使用-generic>使用 generic</a></li>
-<li><a href=#心得>心得</a></li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt=logo></p>
-<p><a href=https://go.dev/>Go 語言</a>在近期內會推出 <a href=https://tip.golang.org/doc/go1.18>1.18</a> 版本，而 1.18 最重要的功能之一就是 <a href=https://go.dev/doc/tutorial/generics>generics</a>，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。</p>
-<h2 id=影片教學>影片教學</h2>
-<div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden>
-<iframe src=https://www.youtube.com/embed/Tnaw9VXF65U style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe>
-</div>
-<p>影片視頻會同步放到底下課程內</p>
-<ul>
-<li><a href=https://blog.wu-boy.com/golang-online-course/>Go 語言課程</a></li>
-</ul>
-<h2 id=安裝-118-及整合-vscode-編輯器>安裝 1.18 及整合 Vscode 編輯器</h2>
-<p>首先要先安裝 <a href=https://go.dev/blog/go1.18beta2>go1.18 beta2</a> 版本，方式很簡單，請參考底下</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>go install golang.org/dl/go1.18beta2@latest
-go1.18beta2 download
-</code></pre></td></tr></table>
-</div>
-</div><p>完成後可以透過底下指令看到 <code>go1.18beta2</code></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh>$ go1.18beta2 env GOROOT
-/Users/mtk10671/sdk/go1.18beta2
-</code></pre></td></tr></table>
-</div>
-</div><p>如果要快速嘗試用 <code>go</code> 指令，可以直接透過 alias 指令</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=color:#658b00>alias</span> <span style=color:#00688b>go</span>=go1.18beta2
-</code></pre></td></tr></table>
-</div>
-</div><p>該如何整合到 Vscode 內呢？請參考<a href=https://github.com/golang/vscode-go/blob/master/docs/advanced.md#using-go118>這篇文章</a>，幾個步驟就可以完成。第一個步驟就是請把 <code>go1.18beta2</code> 變成環境變數預設值 <code>PATH</code>，請改成</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=color:#00688b>PATH</span>=<span style=color:#cd5555>&#34;</span><span style=color:#00688b>$HOME</span><span style=color:#cd5555>/sdk/go1.18beta2/bin:</span><span style=color:#00688b>$PATH</span><span style=color:#cd5555>&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>打開 VSCODE 編輯器，<a href=https://github.com/golang/vscode-go/blob/master/docs/commands.md#go-installupdate-tools>重新安裝全部 tools</a>，直接 <code>cmd + shift + p</code> 選擇 <code>Go: Install/Update Tools</code>，把全部 toll 打勾重新安裝。最後步驟就是打開預設的 config.json 檔案加上</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json><span style=color:#cd5555>&#34;gopls&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> {
-  <span style=color:#8b008b;font-weight:700>&#34;ui.semanticTokens&#34;</span>: <span style=color:#8b008b;font-weight:700>true</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=使用-generic>使用 generic</h2>
-<p>我們來寫一個 func 支援一個參數，此參數可以是 <code>int64</code> 或 <code>float64</code> 型態，<a href="https://go.dev/play/p/Gi9tvCDI5vL?v=gotip">線上執行</a></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
-
-<span style=color:#8b008b;font-weight:700>func</span> show[num <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float64</span>](s num) {
-  fmt.<span style=color:#008b45>Println</span>(s)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;go 1.18 Generics Example&#34;</span>)
-
-  <span style=color:#8b008b;font-weight:700>var</span> sum1 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
-  <span style=color:#8b008b;font-weight:700>var</span> sum2 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
-
-  <span style=color:#008b45>show</span>(sum1)
-  <span style=color:#008b45>show</span>(sum2)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>大家可以看到 <code>[num int64 | float64]</code> 定義一個新的型態，此型態可以為 <code>int64</code> 或 <code>float64</code>，再把這型態放到後面。不過如果支援型態很多的話，可以改寫如下，<a href="https://go.dev/play/p/kzQrHMiiFTl?v=gotip">線上執行</a></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
-
-<span style=color:#8b008b;font-weight:700>type</span> age <span style=color:#8b008b;font-weight:700>interface</span> {
-  <span style=color:#00688b;font-weight:700>int8</span> | <span style=color:#00688b;font-weight:700>int16</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> show[num age](s1 num) {
-  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#b452cd>1</span>
-  fmt.<span style=color:#008b45>Println</span>(val)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;go 1.18 Generics Example&#34;</span>)
-
-  <span style=color:#8b008b;font-weight:700>var</span> sum1 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
-  <span style=color:#8b008b;font-weight:700>var</span> sum2 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
-
-  <span style=color:#008b45>show</span>(sum1)
-  <span style=color:#008b45>show</span>(sum2)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>在程式碼內定義一個新的 interface 將所有型態放入即可</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>type</span> age <span style=color:#8b008b;font-weight:700>interface</span> {
-  <span style=color:#00688b;font-weight:700>int8</span> | <span style=color:#00688b;font-weight:700>int16</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>如果要支援多個參數可以怎麼寫</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> total[num age](s1, s2 num) {
-  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
-  fmt.<span style=color:#008b45>Println</span>(val)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>這樣就可以同時帶入兩個一樣的參數型態。如果要帶入不同的型態，第一個參數是 <code>int64</code>，第二個是 <code>float64</code>，請改成如下</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> summary[num1, num2 age](s1 num1, s2 num2) {
-  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
-  fmt.<span style=color:#008b45>Println</span>(val)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>完整測試程式碼可以參考底下，<a href="https://go.dev/play/p/kYEuXcvKvik?v=gotip">線上執行</a></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
-
-<span style=color:#8b008b;font-weight:700>type</span> age <span style=color:#8b008b;font-weight:700>interface</span> {
-  <span style=color:#00688b;font-weight:700>int8</span> | <span style=color:#00688b;font-weight:700>int16</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> newGenerics[num age](s1 num) {
-  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#b452cd>1</span>
-  fmt.<span style=color:#008b45>Println</span>(val)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> total[num age](s1, s2 num) {
-  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
-  fmt.<span style=color:#008b45>Println</span>(val)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> summary[num1, num2 age](s1 num1, s2 num2) {
-  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
-  fmt.<span style=color:#008b45>Println</span>(val)
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;go 1.18 Generics Example&#34;</span>)
-
-  <span style=color:#8b008b;font-weight:700>var</span> sum1 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
-  <span style=color:#8b008b;font-weight:700>var</span> sum2 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
-
-  <span style=color:#008b45>newGenerics</span>(sum1)
-  <span style=color:#008b45>newGenerics</span>(sum2)
-
-  <span style=color:#8b008b;font-weight:700>var</span> sum3 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>28</span>
-  <span style=color:#8b008b;font-weight:700>var</span> sum4 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
-
-  <span style=color:#008b45>total</span>(sum3, sum4)
-
-  <span style=color:#8b008b;font-weight:700>var</span> sum5 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
-  <span style=color:#8b008b;font-weight:700>var</span> sum6 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
-
-  <span style=color:#008b45>summary</span>(sum5, sum6)
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>最後我們來看一個例子泡沫排序 (<a href=https://en.wikipedia.org/wiki/Bubble_sort>Bubble sort</a>)</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
-
-<span style=color:#228b22>// conver to generics type to support int and float64 types
-</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>bubbleSort</span>(array []<span style=color:#00688b;font-weight:700>int</span>) []<span style=color:#00688b;font-weight:700>int</span> {
-  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#658b00>len</span>(array)-<span style=color:#b452cd>1</span>; i++ {
-    <span style=color:#8b008b;font-weight:700>for</span> j := <span style=color:#b452cd>0</span>; j &lt; <span style=color:#658b00>len</span>(array)-i-<span style=color:#b452cd>1</span>; j++ {
-      <span style=color:#8b008b;font-weight:700>if</span> array[j] &gt; array[j+<span style=color:#b452cd>1</span>] {
-        array[j], array[j+<span style=color:#b452cd>1</span>] = array[j+<span style=color:#b452cd>1</span>], array[j]
-      }
-    }
-  }
-  <span style=color:#8b008b;font-weight:700>return</span> array
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-  array := []<span style=color:#00688b;font-weight:700>int</span>{<span style=color:#b452cd>11</span>, <span style=color:#b452cd>14</span>, <span style=color:#b452cd>3</span>, <span style=color:#b452cd>8</span>, <span style=color:#b452cd>18</span>, <span style=color:#b452cd>17</span>, <span style=color:#b452cd>43</span>}
-  fmt.<span style=color:#008b45>Println</span>(<span style=color:#008b45>bubbleSort</span>(array))
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>除了支援 <code>int</code> 之外，也請支援 <code>float64</code>。請直接看底下解答，<a href="https://go.dev/play/p/e_DGxY3TNNd?v=gotip">線上執行</a></p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>package</span> main
-
-<span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
-
-<span style=color:#228b22>// The Time Complexity of the Bubble Sort is O(n^2) since it takes two nested loops to check the adjacent element.
-</span><span style=color:#228b22>// For example, let’s take the following unsorted array −
-</span><span style=color:#228b22>// 22 15 11 45 13
-</span><span style=color:#228b22>// Bubble Sort Algorithm first traverses the whole array and then in another loop checks if the adjacent elements are in order or not.
-</span><span style=color:#228b22>// Thus, after sorting the elements will be,
-</span><span style=color:#228b22>// 11 13 15 22 45
-</span><span style=color:#228b22></span>
-<span style=color:#228b22>// conver to generics type to support both int and float64 types
-</span><span style=color:#228b22></span>
-<span style=color:#8b008b;font-weight:700>type</span> Number <span style=color:#8b008b;font-weight:700>interface</span> {
-  <span style=color:#00688b;font-weight:700>int</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> bubbleSort[n Number](array []n) []n {
-  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#658b00>len</span>(array)-<span style=color:#b452cd>1</span>; i++ {
-    <span style=color:#8b008b;font-weight:700>for</span> j := <span style=color:#b452cd>0</span>; j &lt; <span style=color:#658b00>len</span>(array)-i-<span style=color:#b452cd>1</span>; j++ {
-      <span style=color:#8b008b;font-weight:700>if</span> array[j] &gt; array[j+<span style=color:#b452cd>1</span>] {
-        array[j], array[j+<span style=color:#b452cd>1</span>] = array[j+<span style=color:#b452cd>1</span>], array[j]
-      }
-    }
-  }
-  <span style=color:#8b008b;font-weight:700>return</span> array
-}
-
-<span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
-  n1 := []<span style=color:#00688b;font-weight:700>int</span>{<span style=color:#b452cd>11</span>, <span style=color:#b452cd>14</span>, <span style=color:#b452cd>3</span>, <span style=color:#b452cd>8</span>, <span style=color:#b452cd>18</span>, <span style=color:#b452cd>17</span>, <span style=color:#b452cd>43</span>}
-  fmt.<span style=color:#008b45>Println</span>(<span style=color:#008b45>bubbleSort</span>(n1))
-  n2 := []<span style=color:#00688b;font-weight:700>float64</span>{<span style=color:#b452cd>11.1</span>, <span style=color:#b452cd>14.2</span>, <span style=color:#b452cd>3.3</span>, <span style=color:#b452cd>8.4</span>, <span style=color:#b452cd>18.5</span>, <span style=color:#b452cd>17.6</span>, <span style=color:#b452cd>43.7</span>}
-  fmt.<span style=color:#008b45>Println</span>(<span style=color:#008b45>bubbleSort</span>(n2))
-}
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=心得>心得</h2>
-<p>終於有機會可以優化一些 Package 的寫法，不過為了向下相容，原本的 go1.17 寫法還是會保留，透過 go build tag 方式來決定不同的使用環境即可。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/golang-generics/>golang generics</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&text=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&title=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&title=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&title=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&description=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li>
-<li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li>
-<li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li>
-<li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li>
-<li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li>
-<li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li>
-<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
-<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
-<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
-<li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2021/11/introduction-to-infra-structure-as-code-pulumi-vs-terraform/ data-toggle=tooltip data-placement=top title="infrastructure as code 優勢及工具選擇">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2022/02/golang-1-18-generics-constraints-slices-maps/ data-toggle=tooltip data-placement=top title="Go 1.18 generics 新套件 constraints, slices 及 maps">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2022/02/introduction-to-golang-1-18-generics>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2022/02/introduction-to-golang-1-18-generics'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#影片教學>影片教學</a></li><li><a href=#安裝-118-及整合-vscode-編輯器>安裝 1.18 及整合 Vscode 編輯器</a></li><li><a href=#使用-generic>使用 generic</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt=logo></p><p><a href=https://go.dev/>Go 語言</a>在近期內會推出 <a href=https://tip.golang.org/doc/go1.18>1.18</a> 版本，而 1.18 最重要的功能之一就是 <a href=https://go.dev/doc/tutorial/generics>generics</a>，在此版本之前，最令人詬病的就是 Go 無法支援多種 Type 當參數，造成在寫 Package 時候多出很多重複性的程式碼，本篇會教大家基礎認識什麼是 generics，及怎麼使用。</p><h2 id=影片教學>影片教學</h2><div style=position:relative;padding-bottom:56.25%;height:0;overflow:hidden><iframe src=https://www.youtube.com/embed/Tnaw9VXF65U style=position:absolute;top:0;left:0;width:100%;height:100%;border:0 allowfullscreen title="YouTube Video"></iframe></div><p>影片視頻會同步放到底下課程內</p><ul><li><a href=https://blog.wu-boy.com/golang-online-course/>Go 語言課程</a></li></ul><h2 id=安裝-118-及整合-vscode-編輯器>安裝 1.18 及整合 Vscode 編輯器</h2><p>首先要先安裝 <a href=https://go.dev/blog/go1.18beta2>go1.18 beta2</a> 版本，方式很簡單，請參考底下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span>go install golang.org/dl/go1.18beta2@latest
+</span></span><span style=display:flex><span>go1.18beta2 download
+</span></span></code></pre></td></tr></table></div></div><p>完成後可以透過底下指令看到 <code>go1.18beta2</code></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span>$ go1.18beta2 env GOROOT
+</span></span><span style=display:flex><span>/Users/mtk10671/sdk/go1.18beta2
+</span></span></code></pre></td></tr></table></div></div><p>如果要快速嘗試用 <code>go</code> 指令，可以直接透過 alias 指令</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span><span style=color:#658b00>alias</span> <span style=color:#00688b>go</span>=go1.18beta2
+</span></span></code></pre></td></tr></table></div></div><p>該如何整合到 Vscode 內呢？請參考<a href=https://github.com/golang/vscode-go/blob/master/docs/advanced.md#using-go118>這篇文章</a>，幾個步驟就可以完成。第一個步驟就是請把 <code>go1.18beta2</code> 變成環境變數預設值 <code>PATH</code>，請改成</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span><span style=color:#00688b>PATH</span>=<span style=color:#cd5555>&#34;</span><span style=color:#00688b>$HOME</span><span style=color:#cd5555>/sdk/go1.18beta2/bin:</span><span style=color:#00688b>$PATH</span><span style=color:#cd5555>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>打開 VSCODE 編輯器，<a href=https://github.com/golang/vscode-go/blob/master/docs/commands.md#go-installupdate-tools>重新安裝全部 tools</a>，直接 <code>cmd + shift + p</code> 選擇 <code>Go: Install/Update Tools</code>，把全部 toll 打勾重新安裝。最後步驟就是打開預設的 config.json 檔案加上</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-json data-lang=json><span style=display:flex><span><span style=color:#cd5555>&#34;gopls&#34;</span><span style=color:#a61717;background-color:#e3d2d2>:</span> {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>&#34;ui.semanticTokens&#34;</span>: <span style=color:#8b008b;font-weight:700>true</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h2 id=使用-generic>使用 generic</h2><p>我們來寫一個 func 支援一個參數，此參數可以是 <code>int64</code> 或 <code>float64</code> 型態，<a href="https://go.dev/play/p/Gi9tvCDI5vL?v=gotip">線上執行</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-17>17</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> show[num <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float64</span>](s num) {
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(s)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;go 1.18 Generics Example&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum1 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum2 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#008b45>show</span>(sum1)
+</span></span><span style=display:flex><span>  <span style=color:#008b45>show</span>(sum2)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>大家可以看到 <code>[num int64 | float64]</code> 定義一個新的型態，此型態可以為 <code>int64</code> 或 <code>float64</code>，再把這型態放到後面。不過如果支援型態很多的話，可以改寫如下，<a href="https://go.dev/play/p/kzQrHMiiFTl?v=gotip">線上執行</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-22>22</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>type</span> age <span style=color:#8b008b;font-weight:700>interface</span> {
+</span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>int8</span> | <span style=color:#00688b;font-weight:700>int16</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> show[num age](s1 num) {
+</span></span><span style=display:flex><span>  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#b452cd>1</span>
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(val)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;go 1.18 Generics Example&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum1 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum2 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#008b45>show</span>(sum1)
+</span></span><span style=display:flex><span>  <span style=color:#008b45>show</span>(sum2)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>在程式碼內定義一個新的 interface 將所有型態放入即可</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>type</span> age <span style=color:#8b008b;font-weight:700>interface</span> {
+</span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>int8</span> | <span style=color:#00688b;font-weight:700>int16</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>如果要支援多個參數可以怎麼寫</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> total[num age](s1, s2 num) {
+</span></span><span style=display:flex><span>  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(val)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>這樣就可以同時帶入兩個一樣的參數型態。如果要帶入不同的型態，第一個參數是 <code>int64</code>，第二個是 <code>float64</code>，請改成如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> summary[num1, num2 age](s1 num1, s2 num2) {
+</span></span><span style=display:flex><span>  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(val)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>完整測試程式碼可以參考底下，<a href="https://go.dev/play/p/kYEuXcvKvik?v=gotip">線上執行</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-35>35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-36><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-36>36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-37><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-37>37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-38><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-38>38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-39><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-39>39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-40><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-40>40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-41><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-41>41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-10-42><a style=outline:none;text-decoration:none;color:inherit href=#hl-10-42>42</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>type</span> age <span style=color:#8b008b;font-weight:700>interface</span> {
+</span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>int8</span> | <span style=color:#00688b;font-weight:700>int16</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> newGenerics[num age](s1 num) {
+</span></span><span style=display:flex><span>  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#b452cd>1</span>
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(val)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> total[num age](s1, s2 num) {
+</span></span><span style=display:flex><span>  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(val)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> summary[num1, num2 age](s1 num1, s2 num2) {
+</span></span><span style=display:flex><span>  val := <span style=color:#658b00>float64</span>(s1) + <span style=color:#658b00>float64</span>(s2)
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(val)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(<span style=color:#cd5555>&#34;go 1.18 Generics Example&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum1 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum2 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#008b45>newGenerics</span>(sum1)
+</span></span><span style=display:flex><span>  <span style=color:#008b45>newGenerics</span>(sum2)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum3 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>28</span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum4 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#008b45>total</span>(sum3, sum4)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum5 <span style=color:#00688b;font-weight:700>int64</span> = <span style=color:#b452cd>28</span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>var</span> sum6 <span style=color:#00688b;font-weight:700>float64</span> = <span style=color:#b452cd>29.5</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#008b45>summary</span>(sum5, sum6)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>最後我們來看一個例子泡沫排序 (<a href=https://en.wikipedia.org/wiki/Bubble_sort>Bubble sort</a>)</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-11-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-11-20>20</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#228b22>// conver to generics type to support int and float64 types
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>bubbleSort</span>(array []<span style=color:#00688b;font-weight:700>int</span>) []<span style=color:#00688b;font-weight:700>int</span> {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#658b00>len</span>(array)-<span style=color:#b452cd>1</span>; i++ {
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>for</span> j := <span style=color:#b452cd>0</span>; j &lt; <span style=color:#658b00>len</span>(array)-i-<span style=color:#b452cd>1</span>; j++ {
+</span></span><span style=display:flex><span>      <span style=color:#8b008b;font-weight:700>if</span> array[j] &gt; array[j+<span style=color:#b452cd>1</span>] {
+</span></span><span style=display:flex><span>        array[j], array[j+<span style=color:#b452cd>1</span>] = array[j+<span style=color:#b452cd>1</span>], array[j]
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> array
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>  array := []<span style=color:#00688b;font-weight:700>int</span>{<span style=color:#b452cd>11</span>, <span style=color:#b452cd>14</span>, <span style=color:#b452cd>3</span>, <span style=color:#b452cd>8</span>, <span style=color:#b452cd>18</span>, <span style=color:#b452cd>17</span>, <span style=color:#b452cd>43</span>}
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(<span style=color:#008b45>bubbleSort</span>(array))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>除了支援 <code>int</code> 之外，也請支援 <code>float64</code>。請直接看底下解答，<a href="https://go.dev/play/p/e_DGxY3TNNd?v=gotip">線上執行</a></p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-12-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-12-34>34</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> main
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#228b22>// The Time Complexity of the Bubble Sort is O(n^2) since it takes two nested loops to check the adjacent element.
+</span></span></span><span style=display:flex><span><span style=color:#228b22>// For example, let’s take the following unsorted array −
+</span></span></span><span style=display:flex><span><span style=color:#228b22>// 22 15 11 45 13
+</span></span></span><span style=display:flex><span><span style=color:#228b22>// Bubble Sort Algorithm first traverses the whole array and then in another loop checks if the adjacent elements are in order or not.
+</span></span></span><span style=display:flex><span><span style=color:#228b22>// Thus, after sorting the elements will be,
+</span></span></span><span style=display:flex><span><span style=color:#228b22>// 11 13 15 22 45
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>
+</span></span><span style=display:flex><span><span style=color:#228b22>// conver to generics type to support both int and float64 types
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>type</span> Number <span style=color:#8b008b;font-weight:700>interface</span> {
+</span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>int</span> | <span style=color:#00688b;font-weight:700>int32</span> | <span style=color:#00688b;font-weight:700>int64</span> | <span style=color:#00688b;font-weight:700>float32</span> | <span style=color:#00688b;font-weight:700>float64</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> bubbleSort[n Number](array []n) []n {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; <span style=color:#658b00>len</span>(array)-<span style=color:#b452cd>1</span>; i++ {
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>for</span> j := <span style=color:#b452cd>0</span>; j &lt; <span style=color:#658b00>len</span>(array)-i-<span style=color:#b452cd>1</span>; j++ {
+</span></span><span style=display:flex><span>      <span style=color:#8b008b;font-weight:700>if</span> array[j] &gt; array[j+<span style=color:#b452cd>1</span>] {
+</span></span><span style=display:flex><span>        array[j], array[j+<span style=color:#b452cd>1</span>] = array[j+<span style=color:#b452cd>1</span>], array[j]
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> array
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>main</span>() {
+</span></span><span style=display:flex><span>  n1 := []<span style=color:#00688b;font-weight:700>int</span>{<span style=color:#b452cd>11</span>, <span style=color:#b452cd>14</span>, <span style=color:#b452cd>3</span>, <span style=color:#b452cd>8</span>, <span style=color:#b452cd>18</span>, <span style=color:#b452cd>17</span>, <span style=color:#b452cd>43</span>}
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(<span style=color:#008b45>bubbleSort</span>(n1))
+</span></span><span style=display:flex><span>  n2 := []<span style=color:#00688b;font-weight:700>float64</span>{<span style=color:#b452cd>11.1</span>, <span style=color:#b452cd>14.2</span>, <span style=color:#b452cd>3.3</span>, <span style=color:#b452cd>8.4</span>, <span style=color:#b452cd>18.5</span>, <span style=color:#b452cd>17.6</span>, <span style=color:#b452cd>43.7</span>}
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Println</span>(<span style=color:#008b45>bubbleSort</span>(n2))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h2 id=心得>心得</h2><p>終於有機會可以優化一些 Package 的寫法，不過為了向下相容，原本的 go1.17 寫法還是會保留，透過 go build tag 方式來決定不同的使用環境即可。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/golang-generics/>golang generics</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&text=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&title=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&title=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&title=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f02%2fintroduction-to-golang-1-18-generics%2f&description=%e5%88%9d%e6%8e%a2%20golang%201.18%20generics%20%e5%8a%9f%e8%83%bd" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li><li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li><li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li><li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li><li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li><li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li><li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li><li><a href=/2021/06/what-is-different-between-new-and-make-in-golang/>Go 語言內 new 跟 make 使用時機</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2021/11/introduction-to-infra-structure-as-code-pulumi-vs-terraform/ data-toggle=tooltip data-placement=top title="infrastructure as code 優勢及工具選擇">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2022/02/golang-1-18-generics-constraints-slices-maps/ data-toggle=tooltip data-placement=top title="Go 1.18 generics 新套件 constraints, slices 及 maps">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2022/02/introduction-to-golang-1-18-generics>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2022/02/introduction-to-golang-1-18-generics"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

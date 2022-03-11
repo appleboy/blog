@@ -1,10 +1,4 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Galera Cluster for MySQL Multi-master Replication - 小惡魔 - AppleBOY</title>
-<meta name=description content="
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Galera Cluster for MySQL Multi-master Replication - 小惡魔 - AppleBOY</title><meta name=description content="
   
  最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的 
 Galera Cluster for MySQL 方案。本篇會介紹在 Ubuntu 或 CentOS 6.x final 版本如何安裝 Galera 伺服器套件及設定。要架設 Galera Cluster Server，有兩種套件選擇，一個是 Percona XtraDB Cluster 另一個是 MariaDB Galera Cluster，這次作者會介紹後者的安裝。
@@ -16,11 +10,7 @@ Galera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優
 可任意擴充節點
 採用 row level 方式來平行複製資料 從上面功能看來，我們可以平行任意擴充節點，動態增加伺服器到叢集系統，要做到上面功能，就是利用
 
-Galera library 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/03\/galera-cluster-for-mysql-multi-master-replication\/","name":"Galera cluster for my SQL multi master replication"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Galera Cluster for MySQL Multi-master Replication","description":"  最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的 Galera Cluster for MySQL 方案。本篇會介紹在 Ubuntu 或 CentOS 6.x final 版本如何安裝 Galera 伺服器套件及設定。要架設 Galera Cluster Server，有兩種套件選擇，一個是 Percona XtraDB Cluster 另一個是 MariaDB Galera Cluster，這次作者會介紹後者的安裝。\nGalera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優點及功能呢？MySQL\/Galera 是一套可以同步多台 MySQL\/InnoDB 機器的叢集系統，底下可以列出功能。  同步複製資料 可讀取和寫入叢集系統內任一節點 自動偵測節點錯誤，如果有節點當機，則叢集系統自動移除該節點 可任意擴充節點 採用 row level 方式來平行複製資料 從上面功能看來，我們可以平行任意擴充節點，動態增加伺服器到叢集系統，要做到上面功能，就是利用  Galera library 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。\n","inLanguage":"en","wordCount":626,"datePublished":"2013-03-31T04:48:55","dateModified":"2013-03-31T04:48:55","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Galera, HAProxy, InnoDB, Mariadb, MySQL, Percona"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/03\/galera-cluster-for-mysql-multi-master-replication\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="Galera Cluster for MySQL Multi-master Replication">
-<meta property="og:description" content="
+Galera library 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2013\/03\/galera-cluster-for-mysql-multi-master-replication\/","name":"Galera cluster for my SQL multi master replication"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Galera Cluster for MySQL Multi-master Replication","description":"  最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的 Galera Cluster for MySQL 方案。本篇會介紹在 Ubuntu 或 CentOS 6.x final 版本如何安裝 Galera 伺服器套件及設定。要架設 Galera Cluster Server，有兩種套件選擇，一個是 Percona XtraDB Cluster 另一個是 MariaDB Galera Cluster，這次作者會介紹後者的安裝。\nGalera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優點及功能呢？MySQL\/Galera 是一套可以同步多台 MySQL\/InnoDB 機器的叢集系統，底下可以列出功能。  同步複製資料 可讀取和寫入叢集系統內任一節點 自動偵測節點錯誤，如果有節點當機，則叢集系統自動移除該節點 可任意擴充節點 採用 row level 方式來平行複製資料 從上面功能看來，我們可以平行任意擴充節點，動態增加伺服器到叢集系統，要做到上面功能，就是利用  Galera library 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。\n","inLanguage":"en","wordCount":626,"datePublished":"2013-03-31T04:48:55","dateModified":"2013-03-31T04:48:55","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["Galera, HAProxy, InnoDB, Mariadb, MySQL, Percona"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2013\/03\/galera-cluster-for-mysql-multi-master-replication\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Galera Cluster for MySQL Multi-master Replication"><meta property="og:description" content="
   
  最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的 
 Galera Cluster for MySQL 方案。本篇會介紹在 Ubuntu 或 CentOS 6.x final 版本如何安裝 Galera 伺服器套件及設定。要架設 Galera Cluster Server，有兩種套件選擇，一個是 Percona XtraDB Cluster 另一個是 MariaDB Galera Cluster，這次作者會介紹後者的安裝。
@@ -32,152 +22,22 @@ Galera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優
 可任意擴充節點
 採用 row level 方式來平行複製資料 從上面功能看來，我們可以平行任意擴充節點，動態增加伺服器到叢集系統，要做到上面功能，就是利用
 
-Galera library 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="Galera Cluster for MySQL Multi-master Replication">
-<meta name=twitter:description content="
+Galera library 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Galera Cluster for MySQL Multi-master Replication"><meta name=twitter:description content="
   
  最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的 
-Galera Cluster for MySQL 方案。本篇會介紹在 Ubuntu 或 CentOS …">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+Galera Cluster for MySQL 方案。本篇會介紹在 Ubuntu 或 CentOS …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>Galera Cluster for MySQL Multi-master Replication</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on March 31, 2013
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Galera Cluster for MySQL Multi-master Replication</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 31, 2013
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;626&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href=#galera-cluster-介紹-為什麼要選擇-galera-cluster-server它有什麼優點及功能呢mysqlgalera-是一套可以同步多台-mysqlinnodb-機器的叢集系統底下可以列出功能>Galera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優點及功能呢？MySQL/Galera 是一套可以同步多台 MySQL/InnoDB 機器的叢集系統，底下可以列出功能。</a></li>
-<li><a href=#安裝-galera-cluster-server-本篇介紹的-mysql-server-是使用>安裝 Galera Cluster Server 本篇介紹的 MySQL Server 是使用</a></li>
-<li><a href=#設定-galera-cluster-server-先講一下環境目前總共兩台-galera-serverip-分別是-node_1-1921681100-node_2-1921681101-建立-node_1-node_2-mysql-user用來認證使用先進入-mysql-console>設定 Galera Cluster Server 先講一下環境，目前總共兩台 Galera Server，IP 分別是: Node_1: 192.168.1.100 Node_2: 192.168.1.101 建立 Node_1, Node_2 MySQL User，用來認證使用，先進入 MySQL Console.</a></li>
-<li><a href=#增加新-node-我們可以任意新增多台-node-到-cluster-叢集系統裡設置過程非常簡易>增加新 Node 我們可以任意新增多台 Node 到 Cluster 叢集系統裡，設置過程非常簡易</a></li>
-<li><a href=#動態設定-gcomm-如果新增一台新的-node我們就必須改動其它-node-的-gcomm-設定並且重新啟動-mysqld-服務這樣會有些微時間影響我們可以透過直接修改-global-wsrep_cluster_address-的值>動態設定 gcomm:// 如果新增一台新的 Node，我們就必須改動其它 Node 的 gcomm:// 設定，並且重新啟動 mysqld 服務，這樣會有些微時間影響，我們可以透過直接修改 GLOBAL wsrep_cluster_address 的值</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<div style="margin:0 auto;text-align:center">
-<a title="galera_mysql_replication by appleboy46, on Flickr" href=https://www.flickr.com/photos/appleboy/8603447002/><img alt=galera_mysql_replication src="https://i0.wp.com/farm9.staticflickr.com/8383/8603447002_050ecd1b53.jpg?resize=500%2C247&ssl=1" data-recalc-dims=1></a>
-</div> 最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的
-<p><a href=http://www.codership.com/content/using-galera-cluster target=_blank>Galera Cluster for MySQL</a> 方案。本篇會介紹在 <a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.centos.org/ target=_blank>CentOS</a> 6.x final 版本如何安裝 Galera 伺服器套件及設定。要架設 Galera Cluster Server，有兩種套件選擇，一個是 <a href=http://www.percona.com/software/percona-xtradb-cluster target=_blank>Percona XtraDB Cluster</a> 另一個是 <a href=https://downloads.mariadb.org/mariadb-galera/ target=_blank>MariaDB Galera Cluster</a>，這次作者會介紹後者的安裝。</p>
-<h3 id=galera-cluster-介紹-為什麼要選擇-galera-cluster-server它有什麼優點及功能呢mysqlgalera-是一套可以同步多台-mysqlinnodb-機器的叢集系統底下可以列出功能>Galera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優點及功能呢？MySQL/Galera 是一套可以同步多台 MySQL/InnoDB 機器的叢集系統，底下可以列出功能。</h3>
-<ul>
-<li>同步複製資料</li>
-<li>可讀取和寫入叢集系統內任一節點</li>
-<li>自動偵測節點錯誤，如果有節點當機，則叢集系統自動移除該節點</li>
-<li>可任意擴充節點</li>
-<li>採用 row level 方式來平行複製資料 從上面功能看來，我們可以平行任意擴充節點，動態增加伺服器到叢集系統，要做到上面功能，就是利用</li>
-</ul>
-<p><a href=http://www.codership.com/products/galera_replication target=_blank>Galera library</a> 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。</p>
-<h3 id=安裝-galera-cluster-server-本篇介紹的-mysql-server-是使用>安裝 Galera Cluster Server 本篇介紹的 MySQL Server 是使用</h3>
-<p><a href=https://mariadb.org/ target=_blank>MariaDB</a> 套件，而不是安裝原始的 MySQL。CentOS 和 Ubuntu 安裝方式雷同，前者是用 yum 後者則是 aptitude，在安裝前請先下載對應的 <a href=https://downloads.mariadb.org/mariadb/repositories/ target=_blank>repository 設定檔</a>。 CentOS</p>
-<pre class="brush: bash; title: ; notranslate" title>$ yum -y update && yum -y upgrade
-$ yum -y install MariaDB-Galera-server MariaDB-client galera</pre> Ubuntu
-<pre class="brush: bash; title: ; notranslate" title>$ aptitude -y update
-$ aptitude -y install mariadb-galera-server-5.5 galera</pre> 啟動 MySQL
-<pre class="brush: bash; title: ; notranslate" title>$ /etc/init.d/mysql start</pre>
-<h3 id=設定-galera-cluster-server-先講一下環境目前總共兩台-galera-serverip-分別是-node_1-1921681100-node_2-1921681101-建立-node_1-node_2-mysql-user用來認證使用先進入-mysql-console>設定 Galera Cluster Server 先講一下環境，目前總共兩台 Galera Server，IP 分別是: Node_1: 192.168.1.100 Node_2: 192.168.1.101 建立 Node_1, Node_2 MySQL User，用來認證使用，先進入 MySQL Console.</h3>
-<pre class="brush: bash; title: ; notranslate" title>$ mysql -u root -p 
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><ul><li><a href=#galera-cluster-介紹-為什麼要選擇-galera-cluster-server它有什麼優點及功能呢mysqlgalera-是一套可以同步多台-mysqlinnodb-機器的叢集系統底下可以列出功能>Galera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優點及功能呢？MySQL/Galera 是一套可以同步多台 MySQL/InnoDB 機器的叢集系統，底下可以列出功能。</a></li><li><a href=#安裝-galera-cluster-server-本篇介紹的-mysql-server-是使用>安裝 Galera Cluster Server 本篇介紹的 MySQL Server 是使用</a></li><li><a href=#設定-galera-cluster-server-先講一下環境目前總共兩台-galera-serverip-分別是-node_1-1921681100-node_2-1921681101-建立-node_1-node_2-mysql-user用來認證使用先進入-mysql-console>設定 Galera Cluster Server 先講一下環境，目前總共兩台 Galera Server，IP 分別是: Node_1: 192.168.1.100 Node_2: 192.168.1.101 建立 Node_1, Node_2 MySQL User，用來認證使用，先進入 MySQL Console.</a></li><li><a href=#增加新-node-我們可以任意新增多台-node-到-cluster-叢集系統裡設置過程非常簡易>增加新 Node 我們可以任意新增多台 Node 到 Cluster 叢集系統裡，設置過程非常簡易</a></li><li><a href=#動態設定-gcomm-如果新增一台新的-node我們就必須改動其它-node-的-gcomm-設定並且重新啟動-mysqld-服務這樣會有些微時間影響我們可以透過直接修改-global-wsrep_cluster_address-的值>動態設定 gcomm:// 如果新增一台新的 Node，我們就必須改動其它 Node 的 gcomm:// 設定，並且重新啟動 mysqld 服務，這樣會有些微時間影響，我們可以透過直接修改 GLOBAL wsrep_cluster_address 的值</a></li></ul></li></ul></li></ul></nav></aside><article role=main class=blog-post><div style="margin:0 auto;text-align:center"><a title="galera_mysql_replication by appleboy46, on Flickr" href=https://www.flickr.com/photos/appleboy/8603447002/><img alt=galera_mysql_replication src="https://i0.wp.com/farm9.staticflickr.com/8383/8603447002_050ecd1b53.jpg?resize=500%2C247&ssl=1" data-recalc-dims=1></a></div>最近公司買了幾台機架伺服器來處理 HTTP 跟 DB Load balancer，要做到 DB 的分散式架構，首先需要同步多台機器資料，也就是寫入或更動任意一台單筆資料，另外平行的機器也會同時進行更新。同步的好處可以用來做備援及分散處理連線，而要做到此功能，可子參考網路上評價不錯的<p><a href=http://www.codership.com/content/using-galera-cluster target=_blank>Galera Cluster for MySQL</a> 方案。本篇會介紹在 <a href=http://www.ubuntu.com/ target=_blank>Ubuntu</a> 或 <a href=http://www.centos.org/ target=_blank>CentOS</a> 6.x final 版本如何安裝 Galera 伺服器套件及設定。要架設 Galera Cluster Server，有兩種套件選擇，一個是 <a href=http://www.percona.com/software/percona-xtradb-cluster target=_blank>Percona XtraDB Cluster</a> 另一個是 <a href=https://downloads.mariadb.org/mariadb-galera/ target=_blank>MariaDB Galera Cluster</a>，這次作者會介紹後者的安裝。</p><h3 id=galera-cluster-介紹-為什麼要選擇-galera-cluster-server它有什麼優點及功能呢mysqlgalera-是一套可以同步多台-mysqlinnodb-機器的叢集系統底下可以列出功能>Galera Cluster 介紹 為什麼要選擇 Galera Cluster Server，它有什麼優點及功能呢？MySQL/Galera 是一套可以同步多台 MySQL/InnoDB 機器的叢集系統，底下可以列出功能。</h3><ul><li>同步複製資料</li><li>可讀取和寫入叢集系統內任一節點</li><li>自動偵測節點錯誤，如果有節點當機，則叢集系統自動移除該節點</li><li>可任意擴充節點</li><li>採用 row level 方式來平行複製資料 從上面功能看來，我們可以平行任意擴充節點，動態增加伺服器到叢集系統，要做到上面功能，就是利用</li></ul><p><a href=http://www.codership.com/products/galera_replication target=_blank>Galera library</a> 來做到同步資料處理，同步的詳細細節，可以參考 Galera library 連結。這邊就不再多描述了。</p><h3 id=安裝-galera-cluster-server-本篇介紹的-mysql-server-是使用>安裝 Galera Cluster Server 本篇介紹的 MySQL Server 是使用</h3><p><a href=https://mariadb.org/ target=_blank>MariaDB</a> 套件，而不是安裝原始的 MySQL。CentOS 和 Ubuntu 安裝方式雷同，前者是用 yum 後者則是 aptitude，在安裝前請先下載對應的 <a href=https://downloads.mariadb.org/mariadb/repositories/ target=_blank>repository 設定檔</a>。 CentOS</p><pre class="brush: bash; title: ; notranslate" title>$ yum -y update && yum -y upgrade
+$ yum -y install MariaDB-Galera-server MariaDB-client galera</pre>Ubuntu<pre class="brush: bash; title: ; notranslate" title>$ aptitude -y update
+$ aptitude -y install mariadb-galera-server-5.5 galera</pre>啟動 MySQL<pre class="brush: bash; title: ; notranslate" title>$ /etc/init.d/mysql start</pre><h3 id=設定-galera-cluster-server-先講一下環境目前總共兩台-galera-serverip-分別是-node_1-1921681100-node_2-1921681101-建立-node_1-node_2-mysql-user用來認證使用先進入-mysql-console>設定 Galera Cluster Server 先講一下環境，目前總共兩台 Galera Server，IP 分別是: Node_1: 192.168.1.100 Node_2: 192.168.1.101 建立 Node_1, Node_2 MySQL User，用來認證使用，先進入 MySQL Console.</h3><pre class="brush: bash; title: ; notranslate" title>$ mysql -u root -p 
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is 154
 Server version: 10.0.1-MariaDB-mariadb1~precise-log mariadb.org binary distribution
@@ -188,26 +48,17 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 MariaDB [(none)]>
 
-</pre> 建立 cluster 使用者，密碼為 1234，針對 % 跟 localhost 同時建立。
-<pre class="brush: bash; title: ; notranslate" title>MariaDB [(none)]> GRANT USAGE ON *.* to cluster@'%' IDENTIFIED BY '1234';
+</pre>建立 cluster 使用者，密碼為 1234，針對 % 跟 localhost 同時建立。<pre class="brush: bash; title: ; notranslate" title>MariaDB [(none)]> GRANT USAGE ON *.* to cluster@'%' IDENTIFIED BY '1234';
 MariaDB [(none)]> GRANT ALL PRIVILEGES on *.* to cluster@'%';
 MariaDB [(none)]> GRANT USAGE ON *.* to cluster@'localhost' IDENTIFIED BY '1234';
-MariaDB [(none)]> GRANT ALL PRIVILEGES on *.* to cluster@'localhost';</pre> 在 192.168.1.100 建立 Galera 設定檔
-<p><strong><span style=color:green>/etc/mysq/conf.d/wsrep.cnf</span></strong></p>
-<pre class="brush: bash; title: ; notranslate" title>[MYSQLD]                                                                                                              
+MariaDB [(none)]> GRANT ALL PRIVILEGES on *.* to cluster@'localhost';</pre>在 192.168.1.100 建立 Galera 設定檔<p><strong><span style=color:green>/etc/mysq/conf.d/wsrep.cnf</span></strong></p><pre class="brush: bash; title: ; notranslate" title>[MYSQLD]                                                                                                              
 wsrep_provider=/usr/lib64/galera/libgalera_smm.so                                                                     
 wsrep_cluster_address="gcomm://"                                               
-wsrep_sst_auth=cluster:1234</pre> 重新啟動 mysqld 會看到多 listen 4567 port
-<pre class="brush: bash; title: ; notranslate" title>tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      1118/mysqld
-tcp        0      0 0.0.0.0:4567            0.0.0.0:*               LISTEN      1118/mysqld</pre> 在 192.168.1.101 建立 Galera 設定檔
-<p><strong><span style=color:green>/etc/mysq/conf.d/wsrep.cnf</span></strong> 並且將 cluster address 設定為 192.168.1.100</p>
-<pre class="brush: bash; title: ; notranslate" title>[MYSQLD]                                                                                                              
+wsrep_sst_auth=cluster:1234</pre>重新啟動 mysqld 會看到多 listen 4567 port<pre class="brush: bash; title: ; notranslate" title>tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      1118/mysqld
+tcp        0      0 0.0.0.0:4567            0.0.0.0:*               LISTEN      1118/mysqld</pre>在 192.168.1.101 建立 Galera 設定檔<p><strong><span style=color:green>/etc/mysq/conf.d/wsrep.cnf</span></strong> 並且將 cluster address 設定為 192.168.1.100</p><pre class="brush: bash; title: ; notranslate" title>[MYSQLD]                                                                                                              
 wsrep_provider=/usr/lib64/galera/libgalera_smm.so                                                                     
 wsrep_cluster_address="gcomm://192.168.1.100:4567"                                               
-wsrep_sst_auth=cluster:1234</pre> 設定完成後，重新啟動 mysql
-<pre class="brush: bash; title: ; notranslate" title>$ /etc/init.d/mysql restart</pre> 要怎麼驗證設定成功呢？可以透過 mysql console 來確認
-<pre class="brush: bash; title: ; notranslate" title>$ mysql -e "SHOW STATUS LIKE 'wsrep%';"</pre> 可以看到結果如下
-<pre class="brush: bash; title: ; notranslate" title>+----------------------------+--------------------------------------------------------------+
+wsrep_sst_auth=cluster:1234</pre>設定完成後，重新啟動 mysql<pre class="brush: bash; title: ; notranslate" title>$ /etc/init.d/mysql restart</pre>要怎麼驗證設定成功呢？可以透過 mysql console 來確認<pre class="brush: bash; title: ; notranslate" title>$ mysql -e "SHOW STATUS LIKE 'wsrep%';"</pre>可以看到結果如下<pre class="brush: bash; title: ; notranslate" title>+----------------------------+--------------------------------------------------------------+
 | wsrep_local_state_uuid     | b4e876e0-8c1e-11e2-0800-8da732edfe2a                         |
 | wsrep_protocol_version     | 4                                                            |
 | wsrep_last_committed       | 516                                                          |
@@ -249,17 +100,10 @@ wsrep_sst_auth=cluster:1234</pre> 設定完成後，重新啟動 mysql
 | wsrep_provider_version     | 23.2.4(r147)                                                 |
 | wsrep_ready                | ON                                                           |
 +----------------------------+--------------------------------------------------------------+
-</pre> 看到上述結果，有一個非常重要的數值，那就是
-<p><strong><span style=color:green>wsrep_ready</span></strong>，正確值是 ON，另外看看 <strong><span style=color:green>wsrep_cluster_size</span></strong> 是否跟您設置 Node 的數量相同，這兩個如果都正確，那就表示設定成功了，由於上面 192.168.1.100 是主 Cluster Server，現在我們必須互相設定雙方 Address 也就是設定如下</p>
-<pre class="brush: bash; title: ; notranslate" title>node 01: gcomm://192.168.1.101
-node 02: gcomm://192.168.1.100</pre> 設定如上述的好處就是，當 Node 01 關機時，資料還是在 Node 2 繼續運作，等到 Node 01 恢復上線後，資料又會從 Node 02 同步複製過來。
-<h3 id=增加新-node-我們可以任意新增多台-node-到-cluster-叢集系統裡設置過程非常簡易>增加新 Node 我們可以任意新增多台 Node 到 Cluster 叢集系統裡，設置過程非常簡易</h3>
-<pre class="brush: bash; title: ; notranslate" title>1. 安裝 MariaDB Server
+</pre>看到上述結果，有一個非常重要的數值，那就是<p><strong><span style=color:green>wsrep_ready</span></strong>，正確值是 ON，另外看看 <strong><span style=color:green>wsrep_cluster_size</span></strong> 是否跟您設置 Node 的數量相同，這兩個如果都正確，那就表示設定成功了，由於上面 192.168.1.100 是主 Cluster Server，現在我們必須互相設定雙方 Address 也就是設定如下</p><pre class="brush: bash; title: ; notranslate" title>node 01: gcomm://192.168.1.101
+node 02: gcomm://192.168.1.100</pre>設定如上述的好處就是，當 Node 01 關機時，資料還是在 Node 2 繼續運作，等到 Node 01 恢復上線後，資料又會從 Node 02 同步複製過來。<h3 id=增加新-node-我們可以任意新增多台-node-到-cluster-叢集系統裡設置過程非常簡易>增加新 Node 我們可以任意新增多台 Node 到 Cluster 叢集系統裡，設置過程非常簡易</h3><pre class="brush: bash; title: ; notranslate" title>1. 安裝 MariaDB Server
 2. 安裝 Galera Library
-3. 設定 wsrep_cluster_address="gcomm://192.168.1.100:4567"</pre> 設定完成，就可以看到資料庫已經同步複製資料到新 Node 上面。如果遇到任何一台 Node 突然關機，不用緊張，系統會保持目前的資料，等到機器上線時，又會從
-<p><strong><span style=color:green>gcomm://another_node_ipaddress</span></strong> 同步後續的資料。</p>
-<h3 id=動態設定-gcomm-如果新增一台新的-node我們就必須改動其它-node-的-gcomm-設定並且重新啟動-mysqld-服務這樣會有些微時間影響我們可以透過直接修改-global-wsrep_cluster_address-的值>動態設定 gcomm:// 如果新增一台新的 Node，我們就必須改動其它 Node 的 gcomm:// 設定，並且重新啟動 mysqld 服務，這樣會有些微時間影響，我們可以透過直接修改 GLOBAL wsrep_cluster_address 的值</h3>
-<pre class="brush: bash; title: ; notranslate" title>$ mysql -e "SHOW VARIABLES LIKE 'wsrep_cluster_address';"                                                             
+3. 設定 wsrep_cluster_address="gcomm://192.168.1.100:4567"</pre>設定完成，就可以看到資料庫已經同步複製資料到新 Node 上面。如果遇到任何一台 Node 突然關機，不用緊張，系統會保持目前的資料，等到機器上線時，又會從<p><strong><span style=color:green>gcomm://another_node_ipaddress</span></strong> 同步後續的資料。</p><h3 id=動態設定-gcomm-如果新增一台新的-node我們就必須改動其它-node-的-gcomm-設定並且重新啟動-mysqld-服務這樣會有些微時間影響我們可以透過直接修改-global-wsrep_cluster_address-的值>動態設定 gcomm:// 如果新增一台新的 Node，我們就必須改動其它 Node 的 gcomm:// 設定，並且重新啟動 mysqld 服務，這樣會有些微時間影響，我們可以透過直接修改 GLOBAL wsrep_cluster_address 的值</h3><pre class="brush: bash; title: ; notranslate" title>$ mysql -e "SHOW VARIABLES LIKE 'wsrep_cluster_address';"                                                             
 +-----------------------+-------------------------------------------------+                                           
 | Variable_name         | Value                                           |                                           
 +-----------------------+-------------------------------------------------+                                           
@@ -275,189 +119,25 @@ mysql> SHOW VARIABLES LIKE 'wsrep_cluster_address';
 +-----------------------+---------------------------+
 | wsrep_cluster_address | gcomm://192.168.1.100:4567|
 +-----------------------+---------------------------+
-</pre> 最後需要注意的地方是，由於我們每一台機器都互相設定，如果要關閉全部 Node 機器,請務必將第一台重新設定
-<p><strong><span style=color:green>gcomm://</span></strong> 為空值，讓後續重新啟動的機器可以先連上此機器進行同步， 這次把 MySQL Replication 安裝設定完成，也就是完成架構圖的最下面部份</p>
-<div style="margin:0 auto;text-align:center">
-<a href=https://www.flickr.com/photos/appleboy/8603231970/ title="Server-load-balancers by appleboy46, on Flickr"><img src="https://i1.wp.com/farm9.staticflickr.com/8402/8603231970_693a6e0de5.jpg?resize=463%2C500&ssl=1" alt=Server-load-balancers data-recalc-dims=1></a>
-</div> 之後會介紹如何透過
-<p><a href=http://haproxy.1wt.eu/ target=_blank>HAproxy</a> 來處理 MySQL Load Balancer。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/galera/>Galera</a>&nbsp;
+</pre>最後需要注意的地方是，由於我們每一台機器都互相設定，如果要關閉全部 Node 機器,請務必將第一台重新設定<p><strong><span style=color:green>gcomm://</span></strong> 為空值，讓後續重新啟動的機器可以先連上此機器進行同步， 這次把 MySQL Replication 安裝設定完成，也就是完成架構圖的最下面部份</p><div style="margin:0 auto;text-align:center"><a href=https://www.flickr.com/photos/appleboy/8603231970/ title="Server-load-balancers by appleboy46, on Flickr"><img src="https://i1.wp.com/farm9.staticflickr.com/8402/8603231970_693a6e0de5.jpg?resize=463%2C500&ssl=1" alt=Server-load-balancers data-recalc-dims=1></a></div>之後會介紹如何透過<p><a href=http://haproxy.1wt.eu/ target=_blank>HAproxy</a> 來處理 MySQL Load Balancer。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/galera/>Galera</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/haproxy/>HAProxy</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/innodb/>InnoDB</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mariadb/>Mariadb</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/mysql/>MySQL</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/percona/>Percona</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&text=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&title=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&title=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&title=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&description=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2020/02/how-to-select-top-n-rows-from-each-key-in-sql/>[SQL] 如何從單一資料表取得每個 key 前 n 筆資料</a></li>
-<li><a href=/2016/06/server-monitoring-mysql-postgres-daemon-in-docker/>在 Docker 偵測 MySQL 或 Postgres 是否啟動</a></li>
-<li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li>
-<li><a href=/2015/06/optimizing-percona-xtradb-cluster-for-write-hotspots/>優化 Percona XtraDB Cluster for write hotspots</a></li>
-<li><a href=/2014/07/install-percona-xtradb-cluster-5-5-34-tips/>在 Debian 安裝 Percona Xtradb Cluster 5.5.34 注意事項</a></li>
-<li><a href=/2014/05/free-download-percona-mysql-ebooks/>免費下載 Percona MySQL eBooks</a></li>
-<li><a href=/2014/04/osdc-2014-talk-introduction-to-percona-xtradb-cluster-and-haproxy/>OSDC 2014 Talk: Introduction to Percona XtraDB Cluster and HAProxy</a></li>
-<li><a href=/2014/03/quick-installation-for-percona-cloud-tools-for-mysql/>Percona Cloud Tools for MySQL 介紹及安裝</a></li>
-<li><a href=/2014/02/percona-xtradb-cluster-5-6-ist-and-sst/>Percona XtraDB Cluster 5.6 找合適 IST Donor</a></li>
-<li><a href=/2014/01/mysql-5-6-uuid-cloning-slave-server/>MySQL 5.6 UUID 複製資料到 Slave Server</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2013/03/coding-style-tool-editorconfig/ data-toggle=tooltip data-placement=top title="統一開發者編輯器 Coding Style">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2013/04/best-mysqldump-innodb-data/ data-toggle=tooltip data-placement=top title="MySQL 用 MySQLDump 備份 InnoDB 注意事項">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/percona/>Percona</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&text=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&title=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&title=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&title=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2013%2f03%2fgalera-cluster-for-mysql-multi-master-replication%2f&description=Galera%20Cluster%20for%20MySQL%20Multi-master%20Replication" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2020/02/how-to-select-top-n-rows-from-each-key-in-sql/>[SQL] 如何從單一資料表取得每個 key 前 n 筆資料</a></li><li><a href=/2016/06/server-monitoring-mysql-postgres-daemon-in-docker/>在 Docker 偵測 MySQL 或 Postgres 是否啟動</a></li><li><a href=/2015/12/50-laravel-tricks-and-5-2-new-feature/>Laravel 50 個小技巧 + Laravel 5.2 新功能</a></li><li><a href=/2015/06/optimizing-percona-xtradb-cluster-for-write-hotspots/>優化 Percona XtraDB Cluster for write hotspots</a></li><li><a href=/2014/07/install-percona-xtradb-cluster-5-5-34-tips/>在 Debian 安裝 Percona Xtradb Cluster 5.5.34 注意事項</a></li><li><a href=/2014/05/free-download-percona-mysql-ebooks/>免費下載 Percona MySQL eBooks</a></li><li><a href=/2014/04/osdc-2014-talk-introduction-to-percona-xtradb-cluster-and-haproxy/>OSDC 2014 Talk: Introduction to Percona XtraDB Cluster and HAProxy</a></li><li><a href=/2014/03/quick-installation-for-percona-cloud-tools-for-mysql/>Percona Cloud Tools for MySQL 介紹及安裝</a></li><li><a href=/2014/02/percona-xtradb-cluster-5-6-ist-and-sst/>Percona XtraDB Cluster 5.6 找合適 IST Donor</a></li><li><a href=/2014/01/mysql-5-6-uuid-cloning-slave-server/>MySQL 5.6 UUID 複製資料到 Slave Server</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2013/03/coding-style-tool-editorconfig/ data-toggle=tooltip data-placement=top title="統一開發者編輯器 Coding Style">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2013/04/best-mysqldump-innodb-data/ data-toggle=tooltip data-placement=top title="MySQL 用 MySQLDump 備份 InnoDB 注意事項">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2013/03/galera-cluster-for-mysql-multi-master-replication"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>

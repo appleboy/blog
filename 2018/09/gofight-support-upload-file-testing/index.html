@@ -1,646 +1,324 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage>
-<head>
-<meta charset=utf-8>
-<meta http-equiv=x-ua-compatible content="IE=edge">
-<meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>gofight 支援多個檔案上傳測試 - 小惡魔 - AppleBOY</title>
-<meta name=description content="
-gofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。">
-<meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script>
-<script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2018\/09\/gofight-support-upload-file-testing\/","name":"Gofight 支援多個檔案上傳測試"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"gofight 支援多個檔案上傳測試","description":"\ngofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。\n","inLanguage":"en","wordCount":573,"datePublished":"2018-09-25T01:20:29","dateModified":"2018-09-25T01:20:29","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["gofight, golang, Testing"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2018\/09\/gofight-support-upload-file-testing\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script>
-<meta property="og:title" content="gofight 支援多個檔案上傳測試">
-<meta property="og:description" content="
-gofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。">
-<meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080">
-<meta property="og:url" content="https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="小惡魔 - AppleBOY">
-<meta name=twitter:title content="gofight 支援多個檔案上傳測試">
-<meta name=twitter:description content="
-gofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。">
-<meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080">
-<meta name=twitter:card content="summary">
-<meta name=twitter:site content="@appleboy">
-<meta name=twitter:creator content="@appleboy">
-<link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon>
-<meta name=generator content="Hugo 0.92.2"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous>
-<link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css>
-<link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
-<link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css>
-<script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga('create','UA-5766319-6','auto'),ga('send','pageview'))</script>
-<script async src=https://www.google-analytics.com/analytics.js></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-<div class=container-fluid>
-<div class=navbar-header>
-<button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>gofight 支援多個檔案上傳測試 - 小惡魔 - AppleBOY</title><meta name=description content="
+gofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2018\/09\/gofight-support-upload-file-testing\/","name":"Gofight 支援多個檔案上傳測試"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"gofight 支援多個檔案上傳測試","description":"\ngofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。\n","inLanguage":"en","wordCount":573,"datePublished":"2018-09-25T01:20:29","dateModified":"2018-09-25T01:20:29","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["gofight, golang, Testing"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2018\/09\/gofight-support-upload-file-testing\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="gofight 支援多個檔案上傳測試"><meta property="og:description" content="
+gofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="gofight 支援多個檔案上傳測試"><meta name=twitter:description content="
+gofight 是一套用 Go 語言撰寫的 HTTP API 測試套件，之前已經寫過一篇介紹用法，當時候尚未支援檔案上傳測試，也就是假設寫了一個檔案上傳的 http handler 在專案內如何寫測試，底下來看看該如何使用。"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.94.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
-<span class=icon-bar></span>
-</button>
-<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</div>
-<div class="collapse navbar-collapse" id=main-navbar>
-<ul class="nav navbar-nav navbar-right">
-<li>
-<a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a>
-</li>
-<li class=navlinks-container>
-<a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a>
-<div class=navlinks-children>
-<a href=/golang-online-course/> Go 語言基礎實戰</a>
-<a href=/docker-course/> Docker 容器開發實戰</a>
-<a href=/drone-devops/> 一天學會 DevOps 自動化流程</a>
-</div>
-</li>
-<li>
-<a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a>
-</li>
-<li>
-<a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none>
-<span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span>
-</a>
-</li>
-</ul>
-</div>
-<div class=avatar-container>
-<div class=avatar-img-border>
-<a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com>
-<img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY">
-</a>
-</div>
-</div>
-</div>
-</nav>
-<div id=modalSearch class="modal fade" role=dialog>
-<div class=modal-dialog>
-<div class=modal-content>
-<div class=modal-header>
-<button type=button class=close data-dismiss=modal>&#215;</button>
-<h4 class=modal-title>Search 小惡魔 - AppleBOY</h4>
-</div>
-<div class=modal-body>
-<gcse:search></gcse:search>
-</div>
-<div class=modal-footer>
-<button type=button class="btn btn-default" data-dismiss=modal>Close</button>
-</div>
-</div>
-</div>
-</div>
-<header class=header-section>
-<div class="intro-header no-img">
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<div class=post-heading>
-<h1>gofight 支援多個檔案上傳測試</h1>
-<span class=post-meta>
-<i class="fas fa-calendar"></i>&nbsp;Posted on September 25, 2018
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>gofight 支援多個檔案上傳測試</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on September 25, 2018
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;3&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;573&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy
-</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</header>
-<div class=container role=main>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<aside class=toc-article>
-<nav id=TableOfContents>
-<ul>
-<li>
-<ul>
-<li><a href=#準備環境>準備環境</a></li>
-<li><a href=#檔案上傳範例>檔案上傳範例</a></li>
-<li><a href=#檔案上傳測試>檔案上傳測試</a></li>
-<li><a href=#心得>心得</a></li>
-</ul>
-</li>
-</ul>
-</nav>
-</aside>
-<article role=main class=blog-post>
-<p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p>
-<p><a href=https://github.com/appleboy/gofight>gofight</a> 是一套用 <a href=https://golang.org>Go 語言</a>撰寫的 HTTP API 測試套件，之前已經寫過<a href=https://blog.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang/>一篇介紹用法</a>，當時候尚未支援檔案上傳測試，也就是假設寫了一個<a href=https://github.com/gin-gonic/gin/#upload-files>檔案上傳的 http handler</a> 在專案內如何寫測試，底下來看看該如何使用。</p>
-<h2 id=準備環境>準備環境</h2>
-<p>首先需要一個測試檔案，通常會在專案底下建立 <code>testdata</code> 目錄，裡面放置一個叫 <code>hello.txt</code> 檔案，內容為 <code>world</code>。接著安裝 <code>gofight</code> 套件，可以用團隊內喜愛的 vendor 工具，我個人偏好 <a href=https://github.com/kardianos/govendor>govendor</a>：</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-shell data-lang=shell>$ govendor fetch github.com/kardianos/govendor
-或
-$ go get -u github.com/kardianos/govendor
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=檔案上傳範例>檔案上傳範例</h2>
-<p>這邊用 <a href=https://github.com/gin-gonic/gin>gin</a> 框架當作範例，如果您用其他框架只要支援 <code>http.HandlerFunc</code> 都可以使用。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>gintFileUploadHandler</span>(c *gin.Context) {
-    ip := c.<span style=color:#008b45>ClientIP</span>()
-    hello, err := c.<span style=color:#008b45>FormFile</span>(<span style=color:#cd5555>&#34;hello&#34;</span>)
-    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-        c.<span style=color:#008b45>JSON</span>(http.StatusBadRequest, gin.H{
-            <span style=color:#cd5555>&#34;error&#34;</span>: err.<span style=color:#008b45>Error</span>(),
-        })
-        <span style=color:#8b008b;font-weight:700>return</span>
-    }
-
-    helloFile, _ := hello.<span style=color:#008b45>Open</span>()
-    helloBytes := <span style=color:#658b00>make</span>([]<span style=color:#00688b;font-weight:700>byte</span>, <span style=color:#b452cd>6</span>)
-    helloFile.<span style=color:#008b45>Read</span>(helloBytes)
-
-    world, err := c.<span style=color:#008b45>FormFile</span>(<span style=color:#cd5555>&#34;world&#34;</span>)
-    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-        c.<span style=color:#008b45>JSON</span>(http.StatusBadRequest, gin.H{
-            <span style=color:#cd5555>&#34;error&#34;</span>: err.<span style=color:#008b45>Error</span>(),
-        })
-        <span style=color:#8b008b;font-weight:700>return</span>
-    }
-
-    worldFile, _ := world.<span style=color:#008b45>Open</span>()
-    worldBytes := <span style=color:#658b00>make</span>([]<span style=color:#00688b;font-weight:700>byte</span>, <span style=color:#b452cd>6</span>)
-    worldFile.<span style=color:#008b45>Read</span>(worldBytes)
-
-    foo := c.<span style=color:#008b45>PostForm</span>(<span style=color:#cd5555>&#34;foo&#34;</span>)
-    bar := c.<span style=color:#008b45>PostForm</span>(<span style=color:#cd5555>&#34;bar&#34;</span>)
-    c.<span style=color:#008b45>JSON</span>(http.StatusOK, gin.H{
-        <span style=color:#cd5555>&#34;hello&#34;</span>:     hello.Filename,
-        <span style=color:#cd5555>&#34;world&#34;</span>:     world.Filename,
-        <span style=color:#cd5555>&#34;foo&#34;</span>:       foo,
-        <span style=color:#cd5555>&#34;bar&#34;</span>:       bar,
-        <span style=color:#cd5555>&#34;ip&#34;</span>:        ip,
-        <span style=color:#cd5555>&#34;helloSize&#34;</span>: <span style=color:#658b00>string</span>(helloBytes),
-        <span style=color:#cd5555>&#34;worldSize&#34;</span>: <span style=color:#658b00>string</span>(worldBytes),
-    })
-}
-
-<span style=color:#228b22>// GinEngine is gin router.
-</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>GinEngine</span>() *gin.Engine {
-    gin.<span style=color:#008b45>SetMode</span>(gin.TestMode)
-    r := gin.<span style=color:#008b45>New</span>()
-    r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/upload&#34;</span>, gintFileUploadHandler)
-
-    <span style=color:#8b008b;font-weight:700>return</span> r
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>上面例子可以發現，測試端需要傳兩個 post 參數，加上一個檔案 (檔名為 test)，底下看看 gofight 怎麼寫測試。</p>
-<h2 id=檔案上傳測試>檔案上傳測試</h2>
-<p>gofight 現在支援一個函式叫 <code>SetFileFromPath</code> 此 func 支援兩個參數。</p>
-<ol>
-<li>上傳檔案格式</li>
-<li>POST 參數</li>
-</ol>
-<p>第一項上傳檔案格式，可以是從實體路徑讀取，或者是透過 <code>[]byte</code> 讀取兩種格式都可以，在 gofight 可以看到 <code>UploadFile</code> struct 如下:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1>1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2>2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3>3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4>4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5>5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6>6</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#228b22>// UploadFile for upload file struct
-</span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>type</span> UploadFile <span style=color:#8b008b;font-weight:700>struct</span> {
-    Path    <span style=color:#00688b;font-weight:700>string</span>
-    Name    <span style=color:#00688b;font-weight:700>string</span>
-    Content []<span style=color:#00688b;font-weight:700>byte</span>
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>假設是透過實體路徑上傳，請在 <code>Path</code> 填上實體路徑名稱，例如: <code>./testdata/hello.txt</code>，而 <code>Name</code> 則是在 Gin 裡面接受的 Upload File 名稱 <code>c.FormFile("hello")</code>，其中的 <code>hello</code> 參數。底下是一個實際例子教大家如何上傳多個檔案測試。</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestUploadFile</span>(t *testing.T) {
-    r := <span style=color:#008b45>New</span>()
-
-    r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/upload&#34;</span>).
-        <span style=color:#008b45>SetDebug</span>(<span style=color:#8b008b;font-weight:700>true</span>).
-        <span style=color:#008b45>SetFileFromPath</span>([]UploadFile{
-            {
-                Path: <span style=color:#cd5555>&#34;./testdata/hello.txt&#34;</span>,
-                Name: <span style=color:#cd5555>&#34;hello&#34;</span>,
-            },
-            {
-                Path: <span style=color:#cd5555>&#34;./testdata/world.txt&#34;</span>,
-                Name: <span style=color:#cd5555>&#34;world&#34;</span>,
-            },
-        }, H{
-            <span style=color:#cd5555>&#34;foo&#34;</span>: <span style=color:#cd5555>&#34;bar&#34;</span>,
-            <span style=color:#cd5555>&#34;bar&#34;</span>: <span style=color:#cd5555>&#34;foo&#34;</span>,
-        }).
-        <span style=color:#008b45>Run</span>(framework.<span style=color:#008b45>GinEngine</span>(), <span style=color:#8b008b;font-weight:700>func</span>(r HTTPResponse, rq HTTPRequest) {
-            data := []<span style=color:#658b00>byte</span>(r.Body.<span style=color:#008b45>String</span>())
-
-            hello := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;hello&#34;</span>)
-            world := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;world&#34;</span>)
-            foo := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;foo&#34;</span>)
-            bar := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;bar&#34;</span>)
-            ip := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;ip&#34;</span>)
-            helloSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;helloSize&#34;</span>)
-            worldSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;worldSize&#34;</span>)
-
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world\n&#34;</span>, helloSize.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello\n&#34;</span>, worldSize.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello.txt&#34;</span>, hello.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world.txt&#34;</span>, world.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;bar&#34;</span>, foo.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;foo&#34;</span>, bar.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;&#34;</span>, ip.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;application/json; charset=utf-8&#34;</span>, r.HeaderMap.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;Content-Type&#34;</span>))
-        })
-}
-</code></pre></td></tr></table>
-</div>
-</div><p>假設專案內有使用 <a href=https://github.com/avelino/awesome-go#resource-embedding>Resource Embedding</a> 像是 <a href=https://github.com/UnnoTed/fileb0x>fileb0x</a>，就可以透過設定 <code>Content</code> 方式來讀取喔，要注意的是，由於不是從實體路徑讀取，所以 <code>Path</code> 請直接放檔案名稱即可。測試程式碼如下:</p>
-<div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2>
-<table style=border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block><tr><td style=vertical-align:top;padding:0;margin:0;border:0>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=1><a style=outline:none;text-decoration:none;color:inherit href=#1> 1</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=2><a style=outline:none;text-decoration:none;color:inherit href=#2> 2</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=3><a style=outline:none;text-decoration:none;color:inherit href=#3> 3</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=4><a style=outline:none;text-decoration:none;color:inherit href=#4> 4</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=5><a style=outline:none;text-decoration:none;color:inherit href=#5> 5</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=6><a style=outline:none;text-decoration:none;color:inherit href=#6> 6</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=7><a style=outline:none;text-decoration:none;color:inherit href=#7> 7</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=8><a style=outline:none;text-decoration:none;color:inherit href=#8> 8</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=9><a style=outline:none;text-decoration:none;color:inherit href=#9> 9</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=10><a style=outline:none;text-decoration:none;color:inherit href=#10>10</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=11><a style=outline:none;text-decoration:none;color:inherit href=#11>11</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=12><a style=outline:none;text-decoration:none;color:inherit href=#12>12</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=13><a style=outline:none;text-decoration:none;color:inherit href=#13>13</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=14><a style=outline:none;text-decoration:none;color:inherit href=#14>14</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=15><a style=outline:none;text-decoration:none;color:inherit href=#15>15</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=16><a style=outline:none;text-decoration:none;color:inherit href=#16>16</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=17><a style=outline:none;text-decoration:none;color:inherit href=#17>17</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=18><a style=outline:none;text-decoration:none;color:inherit href=#18>18</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=19><a style=outline:none;text-decoration:none;color:inherit href=#19>19</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=20><a style=outline:none;text-decoration:none;color:inherit href=#20>20</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=21><a style=outline:none;text-decoration:none;color:inherit href=#21>21</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=22><a style=outline:none;text-decoration:none;color:inherit href=#22>22</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=23><a style=outline:none;text-decoration:none;color:inherit href=#23>23</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=24><a style=outline:none;text-decoration:none;color:inherit href=#24>24</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=25><a style=outline:none;text-decoration:none;color:inherit href=#25>25</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=26><a style=outline:none;text-decoration:none;color:inherit href=#26>26</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=27><a style=outline:none;text-decoration:none;color:inherit href=#27>27</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=28><a style=outline:none;text-decoration:none;color:inherit href=#28>28</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=29><a style=outline:none;text-decoration:none;color:inherit href=#29>29</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=30><a style=outline:none;text-decoration:none;color:inherit href=#30>30</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=31><a style=outline:none;text-decoration:none;color:inherit href=#31>31</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=32><a style=outline:none;text-decoration:none;color:inherit href=#32>32</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=33><a style=outline:none;text-decoration:none;color:inherit href=#33>33</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=34><a style=outline:none;text-decoration:none;color:inherit href=#34>34</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=35><a style=outline:none;text-decoration:none;color:inherit href=#35>35</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=36><a style=outline:none;text-decoration:none;color:inherit href=#36>36</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=37><a style=outline:none;text-decoration:none;color:inherit href=#37>37</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=38><a style=outline:none;text-decoration:none;color:inherit href=#38>38</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=39><a style=outline:none;text-decoration:none;color:inherit href=#39>39</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=40><a style=outline:none;text-decoration:none;color:inherit href=#40>40</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=41><a style=outline:none;text-decoration:none;color:inherit href=#41>41</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=42><a style=outline:none;text-decoration:none;color:inherit href=#42>42</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=43><a style=outline:none;text-decoration:none;color:inherit href=#43>43</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=44><a style=outline:none;text-decoration:none;color:inherit href=#44>44</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=45><a style=outline:none;text-decoration:none;color:inherit href=#45>45</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=46><a style=outline:none;text-decoration:none;color:inherit href=#46>46</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=47><a style=outline:none;text-decoration:none;color:inherit href=#47>47</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=48><a style=outline:none;text-decoration:none;color:inherit href=#48>48</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=49><a style=outline:none;text-decoration:none;color:inherit href=#49>49</a>
-</span><span style="margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=50><a style=outline:none;text-decoration:none;color:inherit href=#50>50</a>
-</span></code></pre></td>
-<td style=vertical-align:top;padding:0;margin:0;border:0;width:100%>
-<pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go>    r := <span style=color:#008b45>New</span>()
-
-    helloContent, err := ioutil.<span style=color:#008b45>ReadFile</span>(<span style=color:#cd5555>&#34;./testdata/hello.txt&#34;</span>)
-    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-        log.<span style=color:#008b45>Fatal</span>(err)
-    }
-
-    worldContent, err := ioutil.<span style=color:#008b45>ReadFile</span>(<span style=color:#cd5555>&#34;./testdata/world.txt&#34;</span>)
-    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
-        log.<span style=color:#008b45>Fatal</span>(err)
-    }
-
-    r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/upload&#34;</span>).
-        <span style=color:#008b45>SetDebug</span>(<span style=color:#8b008b;font-weight:700>true</span>).
-        <span style=color:#008b45>SetFileFromPath</span>([]UploadFile{
-            {
-                Path:    <span style=color:#cd5555>&#34;hello.txt&#34;</span>,
-                Name:    <span style=color:#cd5555>&#34;hello&#34;</span>,
-                Content: helloContent,
-            },
-            {
-                Path:    <span style=color:#cd5555>&#34;world.txt&#34;</span>,
-                Name:    <span style=color:#cd5555>&#34;world&#34;</span>,
-                Content: worldContent,
-            },
-        }, H{
-            <span style=color:#cd5555>&#34;foo&#34;</span>: <span style=color:#cd5555>&#34;bar&#34;</span>,
-            <span style=color:#cd5555>&#34;bar&#34;</span>: <span style=color:#cd5555>&#34;foo&#34;</span>,
-        }).
-        <span style=color:#008b45>Run</span>(framework.<span style=color:#008b45>GinEngine</span>(), <span style=color:#8b008b;font-weight:700>func</span>(r HTTPResponse, rq HTTPRequest) {
-            data := []<span style=color:#658b00>byte</span>(r.Body.<span style=color:#008b45>String</span>())
-
-            hello := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;hello&#34;</span>)
-            world := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;world&#34;</span>)
-            foo := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;foo&#34;</span>)
-            bar := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;bar&#34;</span>)
-            ip := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;ip&#34;</span>)
-            helloSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;helloSize&#34;</span>)
-            worldSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;worldSize&#34;</span>)
-
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world\n&#34;</span>, helloSize.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello\n&#34;</span>, worldSize.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello.txt&#34;</span>, hello.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world.txt&#34;</span>, world.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;bar&#34;</span>, foo.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;foo&#34;</span>, bar.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;&#34;</span>, ip.<span style=color:#008b45>String</span>())
-            assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
-            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;application/json; charset=utf-8&#34;</span>, r.HeaderMap.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;Content-Type&#34;</span>))
-        })
-</code></pre></td></tr></table>
-</div>
-</div><h2 id=心得>心得</h2>
-<p>其實這類測試 HTTP Handler API 的套件相當多，當時就自幹一套當作練習，後來每個 Go 專案，我個人都用自己寫的這套，測試起來相當方便。更多詳細的用法請直接看 <a href=https://github.com/appleboy/gofight>gofight 文件</a>。對於 Go 語言有興趣的朋友們，可以直接參考我的<a href="https://www.udemy.com/golang-fight/?couponCode=GOLANG-TOP">線上課程</a>。</p>
-<div class=blog-tags>
-<a href=https://blog.wu-boy.com/tags/gofight/>gofight</a>&nbsp;
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#準備環境>準備環境</a></li><li><a href=#檔案上傳範例>檔案上傳範例</a></li><li><a href=#檔案上傳測試>檔案上傳測試</a></li><li><a href=#心得>心得</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><a href="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><img src="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080" alt></a></p><p><a href=https://github.com/appleboy/gofight>gofight</a> 是一套用 <a href=https://golang.org>Go 語言</a>撰寫的 HTTP API 測試套件，之前已經寫過<a href=https://blog.wu-boy.com/2016/04/gofight-tool-for-api-handler-testing-in-golang/>一篇介紹用法</a>，當時候尚未支援檔案上傳測試，也就是假設寫了一個<a href=https://github.com/gin-gonic/gin/#upload-files>檔案上傳的 http handler</a> 在專案內如何寫測試，底下來看看該如何使用。</p><h2 id=準備環境>準備環境</h2><p>首先需要一個測試檔案，通常會在專案底下建立 <code>testdata</code> 目錄，裡面放置一個叫 <code>hello.txt</code> 檔案，內容為 <code>world</code>。接著安裝 <code>gofight</code> 套件，可以用團隊內喜愛的 vendor 工具，我個人偏好 <a href=https://github.com/kardianos/govendor>govendor</a>：</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-shell data-lang=shell><span style=display:flex><span>$ govendor fetch github.com/kardianos/govendor
+</span></span><span style=display:flex><span>或
+</span></span><span style=display:flex><span>$ go get -u github.com/kardianos/govendor
+</span></span></code></pre></td></tr></table></div></div><h2 id=檔案上傳範例>檔案上傳範例</h2><p>這邊用 <a href=https://github.com/gin-gonic/gin>gin</a> 框架當作範例，如果您用其他框架只要支援 <code>http.HandlerFunc</code> 都可以使用。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-35>35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-36><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-36>36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-37><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-37>37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-38><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-38>38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-39><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-39>39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-40><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-40>40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-41><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-41>41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-42><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-42>42</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-43><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-43>43</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-44><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-44>44</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-45><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-45>45</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-46><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-46>46</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-47><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-47>47</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>gintFileUploadHandler</span>(c *gin.Context) {
+</span></span><span style=display:flex><span>    ip := c.<span style=color:#008b45>ClientIP</span>()
+</span></span><span style=display:flex><span>    hello, err := c.<span style=color:#008b45>FormFile</span>(<span style=color:#cd5555>&#34;hello&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+</span></span><span style=display:flex><span>        c.<span style=color:#008b45>JSON</span>(http.StatusBadRequest, gin.H{
+</span></span><span style=display:flex><span>            <span style=color:#cd5555>&#34;error&#34;</span>: err.<span style=color:#008b45>Error</span>(),
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>        <span style=color:#8b008b;font-weight:700>return</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    helloFile, _ := hello.<span style=color:#008b45>Open</span>()
+</span></span><span style=display:flex><span>    helloBytes := <span style=color:#658b00>make</span>([]<span style=color:#00688b;font-weight:700>byte</span>, <span style=color:#b452cd>6</span>)
+</span></span><span style=display:flex><span>    helloFile.<span style=color:#008b45>Read</span>(helloBytes)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    world, err := c.<span style=color:#008b45>FormFile</span>(<span style=color:#cd5555>&#34;world&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+</span></span><span style=display:flex><span>        c.<span style=color:#008b45>JSON</span>(http.StatusBadRequest, gin.H{
+</span></span><span style=display:flex><span>            <span style=color:#cd5555>&#34;error&#34;</span>: err.<span style=color:#008b45>Error</span>(),
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>        <span style=color:#8b008b;font-weight:700>return</span>
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    worldFile, _ := world.<span style=color:#008b45>Open</span>()
+</span></span><span style=display:flex><span>    worldBytes := <span style=color:#658b00>make</span>([]<span style=color:#00688b;font-weight:700>byte</span>, <span style=color:#b452cd>6</span>)
+</span></span><span style=display:flex><span>    worldFile.<span style=color:#008b45>Read</span>(worldBytes)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    foo := c.<span style=color:#008b45>PostForm</span>(<span style=color:#cd5555>&#34;foo&#34;</span>)
+</span></span><span style=display:flex><span>    bar := c.<span style=color:#008b45>PostForm</span>(<span style=color:#cd5555>&#34;bar&#34;</span>)
+</span></span><span style=display:flex><span>    c.<span style=color:#008b45>JSON</span>(http.StatusOK, gin.H{
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;hello&#34;</span>:     hello.Filename,
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;world&#34;</span>:     world.Filename,
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;foo&#34;</span>:       foo,
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;bar&#34;</span>:       bar,
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;ip&#34;</span>:        ip,
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;helloSize&#34;</span>: <span style=color:#658b00>string</span>(helloBytes),
+</span></span><span style=display:flex><span>        <span style=color:#cd5555>&#34;worldSize&#34;</span>: <span style=color:#658b00>string</span>(worldBytes),
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#228b22>// GinEngine is gin router.
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>GinEngine</span>() *gin.Engine {
+</span></span><span style=display:flex><span>    gin.<span style=color:#008b45>SetMode</span>(gin.TestMode)
+</span></span><span style=display:flex><span>    r := gin.<span style=color:#008b45>New</span>()
+</span></span><span style=display:flex><span>    r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/upload&#34;</span>, gintFileUploadHandler)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span> r
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>上面例子可以發現，測試端需要傳兩個 post 參數，加上一個檔案 (檔名為 test)，底下看看 gofight 怎麼寫測試。</p><h2 id=檔案上傳測試>檔案上傳測試</h2><p>gofight 現在支援一個函式叫 <code>SetFileFromPath</code> 此 func 支援兩個參數。</p><ol><li>上傳檔案格式</li><li>POST 參數</li></ol><p>第一項上傳檔案格式，可以是從實體路徑讀取，或者是透過 <code>[]byte</code> 讀取兩種格式都可以，在 gofight 可以看到 <code>UploadFile</code> struct 如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-6>6</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#228b22>// UploadFile for upload file struct
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>type</span> UploadFile <span style=color:#8b008b;font-weight:700>struct</span> {
+</span></span><span style=display:flex><span>    Path    <span style=color:#00688b;font-weight:700>string</span>
+</span></span><span style=display:flex><span>    Name    <span style=color:#00688b;font-weight:700>string</span>
+</span></span><span style=display:flex><span>    Content []<span style=color:#00688b;font-weight:700>byte</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>假設是透過實體路徑上傳，請在 <code>Path</code> 填上實體路徑名稱，例如: <code>./testdata/hello.txt</code>，而 <code>Name</code> 則是在 Gin 裡面接受的 Upload File 名稱 <code>c.FormFile("hello")</code>，其中的 <code>hello</code> 參數。底下是一個實際例子教大家如何上傳多個檔案測試。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-35>35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-36><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-36>36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-37><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-37>37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-38><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-38>38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-39><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-39>39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-40><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-40>40</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestUploadFile</span>(t *testing.T) {
+</span></span><span style=display:flex><span>    r := <span style=color:#008b45>New</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/upload&#34;</span>).
+</span></span><span style=display:flex><span>        <span style=color:#008b45>SetDebug</span>(<span style=color:#8b008b;font-weight:700>true</span>).
+</span></span><span style=display:flex><span>        <span style=color:#008b45>SetFileFromPath</span>([]UploadFile{
+</span></span><span style=display:flex><span>            {
+</span></span><span style=display:flex><span>                Path: <span style=color:#cd5555>&#34;./testdata/hello.txt&#34;</span>,
+</span></span><span style=display:flex><span>                Name: <span style=color:#cd5555>&#34;hello&#34;</span>,
+</span></span><span style=display:flex><span>            },
+</span></span><span style=display:flex><span>            {
+</span></span><span style=display:flex><span>                Path: <span style=color:#cd5555>&#34;./testdata/world.txt&#34;</span>,
+</span></span><span style=display:flex><span>                Name: <span style=color:#cd5555>&#34;world&#34;</span>,
+</span></span><span style=display:flex><span>            },
+</span></span><span style=display:flex><span>        }, H{
+</span></span><span style=display:flex><span>            <span style=color:#cd5555>&#34;foo&#34;</span>: <span style=color:#cd5555>&#34;bar&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#cd5555>&#34;bar&#34;</span>: <span style=color:#cd5555>&#34;foo&#34;</span>,
+</span></span><span style=display:flex><span>        }).
+</span></span><span style=display:flex><span>        <span style=color:#008b45>Run</span>(framework.<span style=color:#008b45>GinEngine</span>(), <span style=color:#8b008b;font-weight:700>func</span>(r HTTPResponse, rq HTTPRequest) {
+</span></span><span style=display:flex><span>            data := []<span style=color:#658b00>byte</span>(r.Body.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            hello := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;hello&#34;</span>)
+</span></span><span style=display:flex><span>            world := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;world&#34;</span>)
+</span></span><span style=display:flex><span>            foo := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;foo&#34;</span>)
+</span></span><span style=display:flex><span>            bar := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;bar&#34;</span>)
+</span></span><span style=display:flex><span>            ip := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;ip&#34;</span>)
+</span></span><span style=display:flex><span>            helloSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;helloSize&#34;</span>)
+</span></span><span style=display:flex><span>            worldSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;worldSize&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world\n&#34;</span>, helloSize.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello\n&#34;</span>, worldSize.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello.txt&#34;</span>, hello.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world.txt&#34;</span>, world.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;bar&#34;</span>, foo.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;foo&#34;</span>, bar.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;&#34;</span>, ip.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;application/json; charset=utf-8&#34;</span>, r.HeaderMap.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;Content-Type&#34;</span>))
+</span></span><span style=display:flex><span>        })
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>假設專案內有使用 <a href=https://github.com/avelino/awesome-go#resource-embedding>Resource Embedding</a> 像是 <a href=https://github.com/UnnoTed/fileb0x>fileb0x</a>，就可以透過設定 <code>Content</code> 方式來讀取喔，要注意的是，由於不是從實體路徑讀取，所以 <code>Path</code> 請直接放檔案名稱即可。測試程式碼如下:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-35>35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-36><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-36>36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-37><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-37>37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-38><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-38>38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-39><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-39>39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-40><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-40>40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-41><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-41>41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-42><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-42>42</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-43><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-43>43</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-44><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-44>44</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-45><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-45>45</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-46><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-46>46</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-47><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-47>47</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-48><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-48>48</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-49><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-49>49</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-50><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-50>50</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span>    r := <span style=color:#008b45>New</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    helloContent, err := ioutil.<span style=color:#008b45>ReadFile</span>(<span style=color:#cd5555>&#34;./testdata/hello.txt&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+</span></span><span style=display:flex><span>        log.<span style=color:#008b45>Fatal</span>(err)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    worldContent, err := ioutil.<span style=color:#008b45>ReadFile</span>(<span style=color:#cd5555>&#34;./testdata/world.txt&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+</span></span><span style=display:flex><span>        log.<span style=color:#008b45>Fatal</span>(err)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    r.<span style=color:#008b45>POST</span>(<span style=color:#cd5555>&#34;/upload&#34;</span>).
+</span></span><span style=display:flex><span>        <span style=color:#008b45>SetDebug</span>(<span style=color:#8b008b;font-weight:700>true</span>).
+</span></span><span style=display:flex><span>        <span style=color:#008b45>SetFileFromPath</span>([]UploadFile{
+</span></span><span style=display:flex><span>            {
+</span></span><span style=display:flex><span>                Path:    <span style=color:#cd5555>&#34;hello.txt&#34;</span>,
+</span></span><span style=display:flex><span>                Name:    <span style=color:#cd5555>&#34;hello&#34;</span>,
+</span></span><span style=display:flex><span>                Content: helloContent,
+</span></span><span style=display:flex><span>            },
+</span></span><span style=display:flex><span>            {
+</span></span><span style=display:flex><span>                Path:    <span style=color:#cd5555>&#34;world.txt&#34;</span>,
+</span></span><span style=display:flex><span>                Name:    <span style=color:#cd5555>&#34;world&#34;</span>,
+</span></span><span style=display:flex><span>                Content: worldContent,
+</span></span><span style=display:flex><span>            },
+</span></span><span style=display:flex><span>        }, H{
+</span></span><span style=display:flex><span>            <span style=color:#cd5555>&#34;foo&#34;</span>: <span style=color:#cd5555>&#34;bar&#34;</span>,
+</span></span><span style=display:flex><span>            <span style=color:#cd5555>&#34;bar&#34;</span>: <span style=color:#cd5555>&#34;foo&#34;</span>,
+</span></span><span style=display:flex><span>        }).
+</span></span><span style=display:flex><span>        <span style=color:#008b45>Run</span>(framework.<span style=color:#008b45>GinEngine</span>(), <span style=color:#8b008b;font-weight:700>func</span>(r HTTPResponse, rq HTTPRequest) {
+</span></span><span style=display:flex><span>            data := []<span style=color:#658b00>byte</span>(r.Body.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            hello := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;hello&#34;</span>)
+</span></span><span style=display:flex><span>            world := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;world&#34;</span>)
+</span></span><span style=display:flex><span>            foo := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;foo&#34;</span>)
+</span></span><span style=display:flex><span>            bar := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;bar&#34;</span>)
+</span></span><span style=display:flex><span>            ip := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;ip&#34;</span>)
+</span></span><span style=display:flex><span>            helloSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;helloSize&#34;</span>)
+</span></span><span style=display:flex><span>            worldSize := gjson.<span style=color:#008b45>GetBytes</span>(data, <span style=color:#cd5555>&#34;worldSize&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world\n&#34;</span>, helloSize.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello\n&#34;</span>, worldSize.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;hello.txt&#34;</span>, hello.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;world.txt&#34;</span>, world.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;bar&#34;</span>, foo.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;foo&#34;</span>, bar.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;&#34;</span>, ip.<span style=color:#008b45>String</span>())
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, http.StatusOK, r.Code)
+</span></span><span style=display:flex><span>            assert.<span style=color:#008b45>Equal</span>(t, <span style=color:#cd5555>&#34;application/json; charset=utf-8&#34;</span>, r.HeaderMap.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;Content-Type&#34;</span>))
+</span></span><span style=display:flex><span>        })
+</span></span></code></pre></td></tr></table></div></div><h2 id=心得>心得</h2><p>其實這類測試 HTTP Handler API 的套件相當多，當時就自幹一套當作練習，後來每個 Go 專案，我個人都用自己寫的這套，測試起來相當方便。更多詳細的用法請直接看 <a href=https://github.com/appleboy/gofight>gofight 文件</a>。對於 Go 語言有興趣的朋友們，可以直接參考我的<a href="https://www.udemy.com/golang-fight/?couponCode=GOLANG-TOP">線上課程</a>。</p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/gofight/>gofight</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;
-</div>
-<hr>
-<section id=social-share>
-<div class="list-inline footer-links">
-<div class=share-box aria-hidden=true>
-<ul class=share>
-<li>
-<a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&text=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6&via=appleboy" target=_blank title="Share on Twitter">
-<i class="fab fa-twitter"></i>
-</a>
-</li>
-<li>
-<a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f" target=_blank title="Share on Facebook">
-<i class="fab fa-facebook"></i>
-</a>
-</li>
-<li>
-<a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&title=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on Reddit">
-<i class="fab fa-reddit"></i>
-</a>
-</li>
-<li>
-<a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&title=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on LinkedIn">
-<i class="fab fa-linkedin"></i>
-</a>
-</li>
-<li>
-<a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&title=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on StumbleUpon">
-<i class="fab fa-stumbleupon"></i>
-</a>
-</li>
-<li>
-<a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&description=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on Pinterest">
-<i class="fab fa-pinterest"></i>
-</a>
-</li>
-</ul>
-</div>
-</div>
-</section>
-<h4 class=see-also>See also</h4>
-<ul>
-<li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li>
-<li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li>
-<li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li>
-<li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li>
-<li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li>
-<li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li>
-<li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li>
-<li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li>
-<li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li>
-<li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li>
-</ul>
-</article>
-<ul class="pager blog-pager">
-<li class=previous>
-<a href=https://blog.wu-boy.com/2018/09/golang-project-quality/ data-toggle=tooltip data-placement=top title="Go 語言專案程式碼品質">&larr; Previous Post</a>
-</li>
-<li class=next>
-<a href=https://blog.wu-boy.com/2018/10/go-1-11-support-go-module/ data-toggle=tooltip data-placement=top title="Go 語言 1.11 版本推出 go module">Next Post &rarr;</a>
-</li>
-</ul>
-<div class=disqus-comments>
-<button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing>comments</span></button>
-<div id=disqus_thread></div>
-<script type=text/javascript>var disqus_config=function(){this.page.url='https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing'}</script>
-</div>
-</div>
-</div>
-</div>
-<footer class=post-footer>
-<div class=container>
-<div class=row>
-<div class="col-md-10 col-md-offset-1">
-<ul class="list-inline text-center footer-links">
-<li>
-<a href=mailto:appleboy.tw@gmail.com title="Email me">
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.facebook.com/appleboy46 title=Facebook>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://github.com/appleboy title=GitHub>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-github fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://gitlab.com/appleboy title=GitLab>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://bitbucket.org/appleboy title=Bitbucket>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://twitter.com/appleboy title=Twitter>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://linkedin.com/in/appleboy title=LinkedIn>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-<li>
-<a href title=RSS>
-<span class="fa-stack fa-lg">
-<i class="fas fa-circle fa-stack-2x"></i>
-<i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-</span>
-</a>
-</li>
-</ul>
-<p class="credits copyright text-muted">
-<a href=https://blog.wu-boy.com>Appleboy</a>
+<a href=https://blog.wu-boy.com/tags/testing/>Testing</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&text=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&title=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&title=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&title=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f09%2fgofight-support-upload-file-testing%2f&description=gofight%20%e6%94%af%e6%8f%b4%e5%a4%9a%e5%80%8b%e6%aa%94%e6%a1%88%e4%b8%8a%e5%82%b3%e6%b8%ac%e8%a9%a6" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li><li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li><li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li><li><a href=/2021/10/introduction-to-open-police-agent-in-mopconf/>Introduction to Open Policy Agent 初探權限控管機制</a></li><li><a href=/2021/09/control-system-process-using-supervisor-in-golang/>用 Supervisor 管理系統程式</a></li><li><a href=/2021/09/graceful-shutdown-with-nsq-consumers/>NSQ Consumers 處理 Graceful Shutdown 技巧</a></li><li><a href=/2021/09/speed-up-amazon-sagemaker-training-using-efs-or-fsx-lustre/>用 AWS EFS 或 FSx Lustre 加速 Sagemaker AI 模型訓練</a></li><li><a href=/2021/08/drone-license/>開源專案 Drone CI/CD 平台真的免費嗎？</a></li><li><a href=/2021/06/integratate-sagemaker-workflow-using-golang-api/>AI 團隊整合導入 AWS SageMaker 流程</a></li><li><a href=/2021/06/graceful-stop-service-using-docker-compose-in-golang/>用 docker-compose 優雅關閉服務</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2018/09/golang-project-quality/ data-toggle=tooltip data-placement=top title="Go 語言專案程式碼品質">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2018/10/go-1-11-support-go-module/ data-toggle=tooltip data-placement=top title="Go 語言 1.11 版本推出 go module">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2018/09/gofight-support-upload-file-testing"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-</p>
-<p class="credits theme-by text-muted">
-<a href=https://gohugo.io>Hugo v0.92.2</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-</p>
-</div>
-</div>
-</div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.94.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
-<script>(function(){var c='003841896160749976666:l9i5hqttpqi',a=document.createElement('script'),b;a.type='text/javascript',a.async=!0,a.src='https://cse.google.com/cse.js?cx='+c,b=document.getElementsByTagName('script')[0],b.parentNode.insertBefore(a,b)})()</script>
-<script type=text/javascript>$(function(){$('#show-comments').on('click',function(){var a='appleboy48';(function(){var b=document.createElement('script');b.type='text/javascript',b.async=!0,b.src='//'+a+'.disqus.com/embed.js',(document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(b)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-<div class=back-to-top id=back-to-top>
-<i class="fas fa-angle-double-up"></i>
-</div>
-</body>
-</html>
+<script>(function(){var n="003841896160749976666:l9i5hqttpqi",t,e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
