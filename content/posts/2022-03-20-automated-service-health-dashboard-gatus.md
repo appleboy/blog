@@ -27,6 +27,15 @@ tags:
 
 <!--more-->
 
+## 影片教學
+
+{{< youtube Fdgp3NpsPIs >}}
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 什麼是 Gatus
 
 Gatus 提供一個輕量的監控服務健康網頁，讓開發者透過簡單的 HTTP, ICMP, TCP 等 Protocol 來監控服務狀況，並且根據網頁回應的 Status Code 或 Response time 及 Body 內容來決定網站是否健康，如果發生異常，可以設定不同的 Alert 像是 Slack, Email, Teams, Discord 或 Telegram 等常用的即時軟體。可以參[考此連結][11]看看 Dashboard 實際狀況。
