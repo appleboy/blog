@@ -174,7 +174,11 @@ alerting:
     to: "GSS_Global_AIDE_PA@xxxxxx"
 ```
 
-由於我們有新的服務或者是測試，就需要常常動到此設定檔，而 Gatus 提供了即時偵測檔案設定的變化，動態調整網頁的監控顯示，這點需要注意在 docker-compose 內不要把 `config.yaml` 直接掛上容器內部，我有發 [PR 修正範例][21]，改完後，可以透過 CI/CD 即時將設定檔放到服務內。底下來看看透過 Drone 該如何部署，兩個步驟就完成
+看看 Email 通知訊息，可以很清楚看到所有條件偵測狀況
+
+![email alert](https://i.imgur.com/w8TjRjH.jpg)
+
+由於常有新的服務或者是測試，就需要常常動到設定檔，而 Gatus 提供了即時偵測檔案設定的變化，動態調整網頁的監控顯示，這點需要注意在 docker-compose 內不要把 `config.yaml` 直接掛上容器內部，我有發 [PR 修正範例][21]，改完後，可以透過 CI/CD 即時將設定檔放到服務內。底下來看看透過 Drone 該如何部署，兩個步驟就完成
 
 ```yaml
 kind: pipeline
