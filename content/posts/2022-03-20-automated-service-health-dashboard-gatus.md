@@ -103,7 +103,7 @@ endpoints:
 
 ## Gatus 設定檔案
 
-由於我們團有許多 Project，每個 Project 設計不同的網站，故可以透過 group 設定來區別
+由於我們團隊有許多 Project，每個 Project 設計網站架構及服務，故可以透過 group 設定來區別不同專案設定。
 
 ```yaml
 endpoints:
