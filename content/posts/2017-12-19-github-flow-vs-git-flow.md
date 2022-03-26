@@ -15,10 +15,12 @@ tags:
 ---
 [<img src="https://i2.wp.com/farm5.staticflickr.com/4726/39143290882_877ebfcf8e_z.jpg?w=840&#038;ssl=1" alt="Screen Shot 2017-12-20 at 11.45.04 AM" data-recalc-dims="1" />][1]
 
+**2022.03.26 Updated**: 現在主流分支名稱為 `main`
+
 在 Facebook 上面看到這篇『[git flow 實戰經驗談][2]』，想說來寫一下對於團隊內該導入 [GitHub Flow][3] 還是 [Git Flow][4]，寫下自己的想法給大家參考看看。當你加入團隊，第一件事情就是嘗試了解目前團隊是走哪一種 Git 流程，但是在團隊內可能使用 [GitHub 流程][3]或者是傳統 [Git 流程][4]，在開始進入開發流程時，請務必先了解團隊整個 Release 流程。後者流程在筆者幾年前有發表一篇『[branch model 分支模組基本介紹][5]』，如果大家有興趣可以先看看，而我自己在團隊內使用這兩種流程，嘗試過幾個團隊，得到底下結論:
 
-  * 公司內部請使用 [GitHub 流程][3]
-  * 開源專案請使用 [GitHub 流程][3] + [Git 流程][4]
+ * 公司內部請使用 [GitHub 流程][3]
+ * 開源專案請使用 [GitHub 流程][3] + [Git 流程][4]
 
 底下來探討為什麼我會有這些想法。首先先來看看公司團隊內部如果是走 Git 流程會有哪些缺陷。
 
@@ -38,7 +40,7 @@ tags:
 
 [<img src="https://i1.wp.com/farm5.staticflickr.com/4734/38293804325_af60a2715e_o.png?w=840&#038;ssl=1" alt="Screen Shot 2017-12-20 at 11.40.21 AM" data-recalc-dims="1" />][7]
 
-為了解決上述兩大問題，我建議在公司團隊內使用 GitHub Flow 來減少流程步驟，讓工程師可以更專心在開發上面，而不是花更多時間在 Git 分支操作上面。GitHub Flow 只需要記住主分支 `master` 其他分支都是從主分支在開出來，所以新人很容易理解，不管是解 Issue 還是開發新功能，都是以 `master` 分支為基底來建立新的分支，開發團隊也只需要懂到這邊就可以了。接下來 Deploy 到 Production 則是透過 Tag 方式來解決。由開發團隊主管來下 Tag，這樣可以避免團隊內部成員不小心合併分支造成 Deploy 到正式環境的錯誤狀況。另外大家會遇到上線後，如何緊急上 Patch 並且發佈下一個版本，底下是最簡單的操作步驟。
+為了解決上述兩大問題，我建議在公司團隊內使用 GitHub Flow 來減少流程步驟，讓工程師可以更專心在開發上面，而不是花更多時間在 Git 分支操作上面。GitHub Flow 只需要記住主分支 `main` 其他分支都是從主分支在開出來，所以新人很容易理解，不管是解 Issue 還是開發新功能，都是以 `main` 分支為基底來建立新的分支，開發團隊也只需要懂到這邊就可以了。接下來 Deploy 到 Production 則是透過 Tag 方式來解決。由開發團隊主管來下 Tag，這樣可以避免團隊內部成員不小心合併分支造成 Deploy 到正式環境的錯誤狀況。另外大家會遇到上線後，如何緊急上 Patch 並且發佈下一個版本，底下是最簡單的操作步驟。
 
 ```bash
 # 抓取遠端所有 tag
@@ -54,19 +56,19 @@ $ git cherry-pick commit_id
 $ git tag 0.2.5
 $ git push origin 0.2.5
 
-# 將 patch 也同步到 master 分支
-$ git checkout master
+# 將 patch 也同步到 main 分支
+$ git checkout main
 $ git cherry-pick commit_id
-$ git push origin master
+$ git push origin main
 ```
 
-有沒有覺得跟 Git Flow 流程差異很多，大家只需要記住兩件事情，第一是專案內只會有 `master` 分支需要受到保護。第二是部署流程一律走 Tag 事件，這樣可以避免工程師不小心 Merge commit 造成提前部署，因為平常開發過程，不會有人隨便下 Git Tag，所以只要跟團隊同步好，Git Tag 都由團隊特定人士才可以執行即可。底下附上團隊內的流程:
+有沒有覺得跟 Git Flow 流程差異很多，大家只需要記住兩件事情，第一是專案內只會有 `main` 分支需要受到保護。第二是部署流程一律走 Tag 事件，這樣可以避免工程師不小心 Merge commit 造成提前部署，因為平常開發過程，不會有人隨便下 Git Tag，所以只要跟團隊同步好，Git Tag 都由團隊特定人士才可以執行即可。底下附上團隊內的流程:
 
 [<img src="https://i0.wp.com/farm5.staticflickr.com/4588/38293694275_87406c7438_z.jpg?w=840&#038;ssl=1" alt="Screen Shot 2017-12-20 at 11.36.30 AM" data-recalc-dims="1" />][8]
 
 ## 開源專案
 
-為什麼開源專案需要走 Github Flow + Git Flow 呢？原因其實很簡單，假設現在要釋出 1.0.0 版本，那肯定會從 `master` 上單一節點去下 tag 標記為 `1.0.0`，這沒問題，這版本釋出之後，CI/CD 服務會自動依照 Tag 事件來自動化部署軟體到 GitHub Release 頁面。但是軟體哪有沒 bug 的，一但發現 Bug，這時候想發 Pull Request 回饋給開源專案，會發現只能針對 master 發 Pull Request，該專案團隊這時候就需要在下完 Tag 同時建立 `release/v1.0` 分支，方便其他人在發 PR 時，在 review 完成後合併到 master 內，接著團隊會告知這 PR 需要被放到 `release/v1.0` 內方便釋出下一個版本 `v1.0.1`，所以我才會下這個結論，一個好的開源專案是需要兩個 Flow 同時使用。而在開源專案上的好處是，你不用擔心別人不會 Git 流程或指令。基本上不會用 Git 的開發者，也不會發 Pull Request 了。
+為什麼開源專案需要走 Github Flow + Git Flow 呢？原因其實很簡單，假設現在要釋出 1.0.0 版本，那肯定會從 `main` 上單一節點去下 tag 標記為 `1.0.0`，這沒問題，這版本釋出之後，CI/CD 服務會自動依照 Tag 事件來自動化部署軟體到 GitHub Release 頁面。但是軟體哪有沒 bug 的，一但發現 Bug，這時候想發 Pull Request 回饋給開源專案，會發現只能針對 main 發 Pull Request，該專案團隊這時候就需要在下完 Tag 同時建立 `release/v1.0` 分支，方便其他人在發 PR 時，在 review 完成後合併到 main 內，接著團隊會告知這 PR 需要被放到 `release/v1.0` 內方便釋出下一個版本 `v1.0.1`，所以我才會下這個結論，一個好的開源專案是需要兩個 Flow 同時使用。而在開源專案上的好處是，你不用擔心別人不會 Git 流程或指令。基本上不會用 Git 的開發者，也不會發 Pull Request 了。
 
 ## 結論
 
@@ -76,7 +78,7 @@ $ git push origin master
 
 整理朋友提出來的一些疑問，歡迎大家參考看看。
 
-#### Q1: 選擇 GitHub flow 都是因為怕自動部署造成錯誤。如果在部署到 production 前，都先部署到測試環境，還會有這樣的問題嗎？
+> Q1: 選擇 GitHub flow 都是因為怕自動部署造成錯誤。如果在部署到 production 前，都先部署到測試環境，還會有這樣的問題嗎？
 
 其實我最主要不是怕自動部署造成錯誤，反而是我帶人的時候，不管是不是資深的工程師都有這問題，不熟悉 Git 整個流程，需要依賴 [SourceTree][9] 這工具，然而這工具真的害死一堆剛入門的朋友，不好好學 command，一開始就碰 SourceTree，你根本不知道 SourceTree 在背景做了哪些事情。至於部署流程，這牽扯到跟 CI/CD 相關，我個人覺得只要權限設定對，把可以 release 產品的開發者都設定好，理論上不會出什麼錯誤才是。而我用 Tag 的原因是方便記錄版本差異。當然先部署到 Staging 上面測試，這是必經流程，沒人可以在還沒測試過的狀態下，部署到正式環境。
 
