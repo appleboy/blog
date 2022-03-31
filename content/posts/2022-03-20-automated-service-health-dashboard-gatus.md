@@ -16,7 +16,7 @@ tags:
 
 ![gatus dashboard](https://i.imgur.com/duUxnBC.jpg)
 
-不知道大家在部署網站後，怎麼明確讓大家清楚知道現在網站的運行狀況，就像 GitHub 就是提供[整體運行的網頁][1]，監控常用的操作指令，像是 Git Operations, Webhooks 或 GitHub Actions 等服務狀況。讓開發者遇到問題的時候，可以即時查看現在狀態做出相對應動作。而類似這樣的線上服務很多，像是 Atlassian 的 [Statuspage][2] 或 [PingPong][3] 等，更多免費服務可以直接參考 [awesome-status-pages][4]。而本篇要介紹一套開源軟體 [Gatus][5]，它是用 [Go 語言][6]撰寫出來的，非常輕量。
+部署服務後，怎麼明確讓團隊清楚知道服務的運行狀況，就像 GitHub 就是提供[整體運行的網頁][1]，監控常用的操作指令，像是 Git Operations, Webhooks 或 [GitHub Actions][7] 等服務狀況。讓開發者遇到問題的時候，可以即時查看現在狀態做出相對應動作。而類似這樣的線上服務很多，像是 Atlassian 的 [Statuspage][2] 或 [PingPong][3] 等，更多免費服務可以直接參考 [awesome-status-pages][4]。而本篇要介紹一套開源軟體 [Gatus][5]，它是用 [Go 語言][6]撰寫出來的，非常輕量。
 
 [1]:https://www.githubstatus.com/
 [2]:https://www.atlassian.com/software/statuspage
@@ -24,6 +24,7 @@ tags:
 [4]:https://github.com/ivbeg/awesome-status-pages
 [5]:https://github.com/TwiN/gatus
 [6]:https://go.dev
+[7]:https://github.com/features/actions
 
 <!--more-->
 
