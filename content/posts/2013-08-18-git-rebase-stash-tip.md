@@ -21,9 +21,9 @@ tags:
 如果你在 master 分支上，並且想 pull 最新的 commit，可以透過底下指令步驟
 
 ```bash
-$ git stash --include-untracked
-$ git pull --rebase origin master
-$ git stash pop
+git stash --include-untracked
+git pull --rebase origin master
+git stash pop
 ```
 
 <!--more-->
