@@ -13,7 +13,9 @@ tags:
 
 ![background job 01](https://i.imgur.com/D5FfhY5.png)
 
-目前團隊所有服務皆用 [Go 語言][2]打造，而如何優雅的重新啟動服務，避免正在跑的工作執行到一半就被關閉，是一個很中要的議題。故實作了簡易 Graceful Shutdown 套件，讓每個服務都可以支援此功能，如果不知道什麼是 Graceful Shutdown 的朋友們，可以參考這篇『 [[Go 教學] 什麼是 graceful shutdown?][1]』，本篇跟大家介紹一個好用的套件『[appleboy/graceful][3]』，使用後。不用再擔心背景的服務沒完成就被關閉，不只是背景的工作需要處理，在關閉服務前，開發者也要確保部分工作要在關閉服務前才執行，像是關閉 Database 及 Redis 連線。
+> 歡迎追蹤 [appleboy/graceful][3] 套件
+
+[Go 語言][2]撰寫的服務如何優雅的重新啟動，避免工作執行到一半就被關閉，是一個很中要的議題。故實作了簡易 Graceful Shutdown 套件，讓服務都可以支援此功能，如果不知道什麼是 Graceful Shutdown 的朋友們，可以參考這篇『 [[Go 教學] 什麼是 graceful shutdown?][1]』，本篇跟大家介紹一個好用的套件『[appleboy/graceful][3]』，使用後。不用再擔心背景的服務沒完成就被關閉，不只是背景的工作需要處理，在關閉服務前，開發者也要確保部分工作要在關閉服務前才執行，像是關閉 Database 及 Redis 連線。
 
 [1]:https://blog.wu-boy.com/2020/02/what-is-graceful-shutdown-in-golang/
 [2]:https://go.dev
