@@ -109,9 +109,9 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 
 * 富邦銀行: 012
 * 富邦帳號: 746168268370
-* 匯款金額: 台幣 `$2500` 元 (匯款優惠 300 元，網路優惠價為 `$2800` 元)
+* 匯款金額: 台幣 `$2700` 元 (匯款優惠 300 元，網路優惠價為 `$3000` 元)
 
-[31]: https://www.udemy.com/course/golang-fight/
+[31]: https://www.udemy.com/course/golang-fight/?couponCode={{< coupon >}}
 [32]: https://facebook.com/appleboy46
 
  [1]: https://www.flickr.com/photos/appleboy/40815293371/in/dateposted-public/ "Screen Shot 2018-03-14 at 11.44.48 PM"
