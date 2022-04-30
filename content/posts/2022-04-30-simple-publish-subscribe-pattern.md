@@ -14,7 +14,7 @@ tags:
 
 ![logo](https://i.imgur.com/k7fF6V0.png)
 
-相信大家都知道[發布 / 訂閱模式][1]，開發者可以透過第三方開源工具像是 [Redis][3], [NSQ][4] 或 [Nats][5] 等來實現訂閱機制，本篇則是會教大家如何用 [Go 語言][2]寫出一個單機版本的 Sub/Pub 模式，在單一系統內需要輕量級，且不需要靠第三方服務就可以輕易實現。底下會直接用單一訂閱 Topic 機制來撰寫 Publisher 及 Subscriber。
+相信大家都知道[發布 / 訂閱模式][1]，開發者可以透過第三方開源工具像是 [Redis][3], [NSQ][4] 或 [Nats][5] 等來實現訂閱機制，本篇則是會教大家如何用 [Go 語言][2]寫出一個單機版本的 Pub/Sub 模式，在單一系統內非常輕量級，且不需要靠第三方服務就可以輕易實現。底下會直接用單一訂閱 Topic 機制來撰寫 Publisher 及 Subscriber。
 
 [1]:https://zh.wikipedia.org/wiki/%E5%8F%91%E5%B8%83/%E8%AE%A2%E9%98%85
 [2]:https://go.dev
@@ -28,7 +28,7 @@ tags:
 
 ![pub-sub-02](https://i.imgur.com/T8lAoCm.png)
 
-首先第一步需要建立一個 Hub 用來接受多個 Subscriber，而這個 Hub 的 structure 的成員如下
+首先第一步需要建立一個 Hub 用來接受多個 Subscriber，而這個 Hub structure 結構如下
 
 ```go
 type hub struct {
@@ -43,7 +43,7 @@ func newHub() *hub {
 }
 ```
 
-透過 `newHub` 用 `map` 方式初始化 subcribers，用 map 原因就是之後要實作 unsubscribe 會比較方便。接著建立 subscriber 成員
+透過 `newHub` 用 `map` 方式初始化 subcribers，用 map 原因就是之後要實作 unsubscribe 會比較方便。接著建立 subscriber 結構
 
 ```go
 type message struct {
