@@ -24,6 +24,15 @@ tags:
 
 <!--more-->
 
+## 影片教學
+
+{{< youtube blaYXmmA8zw >}}
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## Subscriber 訂閱訊息
 
 ![pub-sub-02](https://i.imgur.com/T8lAoCm.png)
