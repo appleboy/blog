@@ -34,9 +34,9 @@ tags:
 
 如果對於課程內容有興趣，可以參考底下課程。
 
-  * [Go 語言基礎實戰 (開發, 測試及部署)][3]
-  * [一天學會 DevOps 自動化測試及部署][4]
-  * [DOCKER 容器開發部署實戰][5]
+* [Go 語言基礎實戰 (開發, 測試及部署)][3]
+* [一天學會 DevOps 自動化測試及部署][4]
+* [DOCKER 容器開發部署實戰][5]
 
 如果需要搭配購買請直接透過 [FB 聯絡我][6]，直接匯款（價格再減 **100**）
 
@@ -48,33 +48,33 @@ tags:
 package main
 
 import (
-    "fmt"
-    "time"
+  "fmt"
+  "time"
 )
 
 func main() {
-    ch := make(chan int, 1024)
-    go func(ch chan int) {
-        for {
-            if v, ok := <-ch; ok {
-                fmt.Printf("val:%d\n", v)
-            }
-        }
-    }(ch)
-
-    tick := time.NewTicker(1 * time.Second)
-    for i := 0; i < 30; i++ {
-        select {
-        // how to make sure all number in ch channel?
-        case ch <- i:
-        case <-tick.C:
-            fmt.Printf("%d: case <-tick.C\n", i)
-        }
-
-        time.Sleep(200 * time.Millisecond)
+  ch := make(chan int, 1024)
+  go func(ch chan int) {
+    for {
+      if v, ok := <-ch; ok {
+        fmt.Printf("val:%d\n", v)
+      }
     }
-    close(ch)
-    tick.Stop()
+  }(ch)
+
+  tick := time.NewTicker(1 * time.Second)
+  for i := 0; i < 30; i++ {
+    select {
+    // how to make sure all number in ch channel?
+    case ch <- i:
+    case <-tick.C:
+      fmt.Printf("%d: case <-tick.C\n", i)
+    }
+
+    time.Sleep(200 * time.Millisecond)
+  }
+  close(ch)
+  tick.Stop()
 }
 ```
 
@@ -85,34 +85,37 @@ func main() {
 是會隨機的方式選取一個，所以會發現有機率會少接收到 ch 值，所以底下有幾種方式可以解決此問題。也就是要確保 ch 可以接收到 0 ~ 29 數字。其中第一個做法就是將 ch <- i 加入到 tick.C 內
 
 ```go
-    for i := 0; i < 30; i++ {
-        select {
-        case ch <- i:
-        case <-tick.C:
-            fmt.Printf("%d: case <-tick.C\n", i)
-            ch <- i
-        }
-
-        time.Sleep(200 * time.Millisecond)
+  for i := 0; i < 30; i++ {
+    select {
+    case ch <- i:
+    case <-tick.C:
+      fmt.Printf("%d: case <-tick.C\n", i)
+      ch <- i
     }
+
+    time.Sleep(200 * time.Millisecond)
+  }
 ```
 
 第二種作法就是透過 select default 方式不要讓程式 blocking
 
 ```go
-    for i := 0; i < 30; i++ {
-        ch <- i
-        select {
-        case <-tick.C:
-            fmt.Printf("%d: case <-tick.C\n", i)
-        default:
-        }
-
-        time.Sleep(200 * time.Millisecond)
+  for i := 0; i < 30; i++ {
+    ch <- i
+    select {
+    case <-tick.C:
+      fmt.Printf("%d: case <-tick.C\n", i)
+    default:
     }
+
+    time.Sleep(200 * time.Millisecond)
+  }
 ```
 
 上述這兩種方式都可以，只是真的要依照團隊業務邏輯來決定怎樣修改才是正確的。這概念已經有在去年 (2019) 的 Blog 講過，如果要再多了解 Select 語法，可以參考之前寫的文章『[Go 語言使用 Select 四大用法][10]』
+
+* [go timer 和 ticker 的区别](https://learnku.com/articles/23578/the-difference-between-go-timer-and-ticker)
+* [Golang 定时器（Timer 和 Ticker ），这篇文章就够了](https://juejin.cn/post/6884914839308533774)
 
  [1]: https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080 "golang logo"
  [2]: https://www.facebook.com/groups/616369245163622/permalink/2109443995856132/?comment_id=2109476765852855&reply_comment_id=2110581019075763&__cft__[0]=AZXtO09hHRV6wxtrFSg0C2D1Sx4NY4pysZny7VnnWX3QdECd04_zTBUoFzPmIP8Wo48nKRHbWjy2qh8lbIH5Py6IiMLeS31WMfcxMmGPI0IlYoXXCWf6IzIMbBXoULye766kbpctAUvSdmGzqascYD-qfCh06bIZ51zxwocGcv3KLg&__tn__=R]-R
