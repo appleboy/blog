@@ -1,5 +1,5 @@
 ---
-title: '[Linux&FreeBSD] Find 指令用法教學'
+title: Linux Find 指令用法教學
 author: appleboy
 type: post
 date: 2009-01-13T06:35:59+00:00
