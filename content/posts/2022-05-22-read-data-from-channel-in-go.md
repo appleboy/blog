@@ -82,7 +82,7 @@ goroutine01: a
 goroutine02: r
 ```
 
-先把上面題目複製到 `main.go`，大家可以看一下底下範例後，看看怎麼寫出兩個 goroutine
+先把上面題目複製到 `main.go`，大家可以看一下底下範例後，看看怎麼寫出兩個 goroutine，可以先在[線上練習看看](https://go.dev/play/p/lLwzxL_nm7n)，不要往下看解答
 
 ```go
 package main
