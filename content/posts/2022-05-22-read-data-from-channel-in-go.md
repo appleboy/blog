@@ -17,6 +17,15 @@ Go 語言強大的 [goroutine 特性](https://go.dev/tour/concurrency/1)，讓�
 
 <!--more-->
 
+## 影片教學
+
+{{< youtube mj6wbgFrUa8 >}}
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 讀取 Channel 兩種方式
 
 第一個用的是 `for range` 方式
