@@ -9,7 +9,8 @@ Press any keys - Ctrl-D will terminate this program
 ^[[A 27 0033 0x1b
 91 0133 0x5b
 65 0101 0x41
-然後在 bind 上去，寫到 /etc/bashrc 地下就可以了 bind '"</description></item><item><title>[Ubuntu] bash 記憶指令</title><link>https://blog.wu-boy.com/2007/02/ubuntu-bash-%E8%A8%98%E6%86%B6%E6%8C%87%E4%BB%A4/</link><pubDate>Fri, 02 Feb 2007 03:10:31 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2007/02/ubuntu-bash-%E8%A8%98%E6%86%B6%E6%8C%87%E4%BB%A4/</guid><description>&lt;p>之前 在 linux連線版有問過大家 如果讓bash 有像 freebsd cshrc的記憶功能 可以按上下鍵 就可以顯示出 以前用過的指令 比如說 我輸入 cat 然後按上 就會出現 cat /etc/bash.bashrc 結果我在 將下面寫入到　&lt;strong>&lt;span style="color:green">/etc/bash.bashrc&lt;/span>&lt;/strong>&lt;/p>
+然後在 bind 上去，寫到 /etc/bashrc 地下就可以了 bind '"\x1b\x5b\x41":history-search-backward'
+bind '"\x1b\x5b\x42":history-search-forward' 我之前有寫一篇 [Ubuntu] bash 記憶指令，也可以參考看看</description></item><item><title>[Ubuntu] bash 記憶指令</title><link>https://blog.wu-boy.com/2007/02/ubuntu-bash-%E8%A8%98%E6%86%B6%E6%8C%87%E4%BB%A4/</link><pubDate>Fri, 02 Feb 2007 03:10:31 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2007/02/ubuntu-bash-%E8%A8%98%E6%86%B6%E6%8C%87%E4%BB%A4/</guid><description>&lt;p>之前 在 linux連線版有問過大家 如果讓bash 有像 freebsd cshrc的記憶功能 可以按上下鍵 就可以顯示出 以前用過的指令 比如說 我輸入 cat 然後按上 就會出現 cat /etc/bash.bashrc 結果我在 將下面寫入到　&lt;strong>&lt;span style="color:green">/etc/bash.bashrc&lt;/span>&lt;/strong>&lt;/p>
 &lt;pre class="brush: bash; title: ; notranslate" title="">bind \
 '"\C-n": history-search-forward' \
 '"\M-OB": history-search-forward' \

@@ -3,9 +3,7 @@
 Warning: loading hello-3.o will taint the kernel: no license
 See http://www.tux.org/lkml/#export-tainted for information about tainted modules 很顯然這訊息是要您在 kernel module 裡面加上版權宣告，例如："GPL"，"GPL v2"…等來宣告您的 module 並非 open source，利用 MODULE_LICENSE() 巨集來宣告程式 License，同樣的，可以用 MODULE_DESCRIPTION() 來描述此模組或者是 Driver 的功用跟簡介，以及用 MODULE_AUTHOR() 來定義此模組作者，這些巨集都可以在 linux/module.h 裡找到，但是這些並非用於 Kernel 本身，如果大家想看範例程式，可以到 drivers/ 資料夾底下觀看每一個 Driver 程式，底下是簡單 hello world 範例：
 #include /* pr_info所需 include 檔案*/
-#include
-#include /* 所有 module 巨集需要檔案*/
-#include
-static int __init hello_init(void)
+#include #include /* 所有 module 巨集需要檔案*/
+#include static int __init hello_init(void)
 {
 pr_info("</description></item></channel></rss>

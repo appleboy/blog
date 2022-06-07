@@ -77,7 +77,7 @@
 &lt;p>通常在使用資料表時，都會在每一筆紀錄上面寫入當下時間，而這個時間會根據目前系統所在的時區而有所不同，當然我們都會使用 &lt;code>UTC+0&lt;/code> 作為標準時區，而欄位我們則會是使用 timestamp 或者是 unix time 格式，兩者最大的差異就是在前者 (timestamp) 會根據目前系統的時區來記錄，而後者 (unix time) 則是紀錄秒數差異 (Jan 01 1970) 而不會隨著系統時區改變而變化。如果是發展開源專案，則會使用後者居多，這樣不會因為使用者時區變化，而產生不同的差異，在 &lt;a href="https://gitea.io">Gitea 開源專案&lt;/a>保留了兩者，但是只要計算時間則是用 (unix time) 作轉換。&lt;/p></description></item><item><title>增加 phpMyAdmin 登入時間</title><link>https://blog.wu-boy.com/2013/12/increase-phpmyadmin-login-time/</link><pubDate>Tue, 31 Dec 2013 07:19:47 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/12/increase-phpmyadmin-login-time/</guid><description>phpMyAdmin 是一套管理 MySQL 資料庫的 UI 介面工具，預設登入時間為 1440 秒，這時間是定義在 libraries/config.default.php 內，phpMyAdmin 也是透過 gc-maxlifetime 來決定 Session 存在與否，所以如果要增加登入時間，比如說設定一年 (3600 * 24 * 365) 好了，請按照底下設定
 PHP 設定檔 如果是裝 php-fpm 請修改 /etc/php5/fpm/php.ini 路徑
 1 2 3 ;After this number of seconds, stored data will be seen as \&amp;#39;garbage\&amp;#39; and ; cleaned up by the garbage collection process. ; http://php.net/session.gc-maxlifetime session.gc_maxlifetime = 315360000 重新啟動 php-fpm
-1 $ /etc/init.d/php5-fpm restart phpMyAdmin 設定檔 修改 config.</description></item><item><title>[資料庫] 如何轉換 Mysql varchar type 到 int type</title><link>https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/</link><pubDate>Fri, 17 Dec 2010 06:14:23 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/</guid><description>&lt;p>先來說明為什麼有時候需要用到轉換 varchar 到 int 型態，就是因為 order by 的問題，幫學校修改 Mysql 錯誤排序，前人設計全部都用 varchar 型態去存資料，當然包含了學生入學年度，以前不會遇到這問題，但是到了民國100年，就會發生排序錯誤，底下來講個例子，這樣大家就可以瞭解了。 建立 test 資料表，並且先增兩個欄位分別是 a(&lt;span style="color:red">&lt;strong>varchar&lt;/strong>&lt;/span>) 跟 b(&lt;span style="color:green">&lt;strong>int&lt;/strong>&lt;/span>)，個別輸入 100, 90 兩列資料&lt;/p>
+1 $ /etc/init.d/php5-fpm restart phpMyAdmin 設定檔 修改 config.inc.php 如果找不到此檔案，請複製 config.sample.inc.php 為 config.</description></item><item><title>[資料庫] 如何轉換 Mysql varchar type 到 int type</title><link>https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/</link><pubDate>Fri, 17 Dec 2010 06:14:23 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/12/%E8%B3%87%E6%96%99%E5%BA%AB-%E5%A6%82%E4%BD%95%E8%BD%89%E6%8F%9B-mysql-varchar-type-%E5%88%B0-int-type/</guid><description>&lt;p>先來說明為什麼有時候需要用到轉換 varchar 到 int 型態，就是因為 order by 的問題，幫學校修改 Mysql 錯誤排序，前人設計全部都用 varchar 型態去存資料，當然包含了學生入學年度，以前不會遇到這問題，但是到了民國100年，就會發生排序錯誤，底下來講個例子，這樣大家就可以瞭解了。 建立 test 資料表，並且先增兩個欄位分別是 a(&lt;span style="color:red">&lt;strong>varchar&lt;/strong>&lt;/span>) 跟 b(&lt;span style="color:green">&lt;strong>int&lt;/strong>&lt;/span>)，個別輸入 100, 90 兩列資料&lt;/p>
 &lt;pre class="brush: bash; title: ; notranslate" title="">mysql> select * from test;
 +------+------+
 | a | b |
@@ -169,12 +169,12 @@ SUBSTRING( `test` , 1, 3 ) = '004'
 killall -9 mysqld
 然後進入 MySQL 安全模式 mysqld_safe -u root --skip-grant-tables &amp;#038;
 然後利用文字介面修改 MySQL root 密碼 $ mysql -u root -p
-use mysql;
-UPDATE user SET password=password('這裡輸入你的密碼') where user='root';
-FLUSH PRIVILEGES;
-exit;
+> use mysql;
+> UPDATE user SET password=password('這裡輸入你的密碼') where user='root';
+> FLUSH PRIVILEGES;
+> exit;
 dump database $ mysqladmin -uroot -p flush-logs
-$ mysqldump -B -uroot -p --opt phpbb2 phpbb2_20020601.</description></item><item><title>[SQL] 隨機選取資料 (MSSQL,ACCESS,MYSQL)</title><link>https://blog.wu-boy.com/2007/08/sql-%E9%9A%A8%E6%A9%9F%E9%81%B8%E5%8F%96%E8%B3%87%E6%96%99-mssqlaccessmysql/</link><pubDate>Thu, 16 Aug 2007 03:15:31 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2007/08/sql-%E9%9A%A8%E6%A9%9F%E9%81%B8%E5%8F%96%E8%B3%87%E6%96%99-mssqlaccessmysql/</guid><description>這個功能還蠻需要的，底下就是三個例子 以下方法，可以幫助隨機取得廣告資料、最新消息等，隨機產生資料。 使用 SQL 語法的 TOP n 來指定取得筆數，再用 ORDER BY 的方式，來亂數取得資料，並排序。
+$ mysqldump -B -uroot -p --opt phpbb2 > phpbb2_20020601.</description></item><item><title>[SQL] 隨機選取資料 (MSSQL,ACCESS,MYSQL)</title><link>https://blog.wu-boy.com/2007/08/sql-%E9%9A%A8%E6%A9%9F%E9%81%B8%E5%8F%96%E8%B3%87%E6%96%99-mssqlaccessmysql/</link><pubDate>Thu, 16 Aug 2007 03:15:31 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2007/08/sql-%E9%9A%A8%E6%A9%9F%E9%81%B8%E5%8F%96%E8%B3%87%E6%96%99-mssqlaccessmysql/</guid><description>這個功能還蠻需要的，底下就是三個例子 以下方法，可以幫助隨機取得廣告資料、最新消息等，隨機產生資料。 使用 SQL 語法的 TOP n 來指定取得筆數，再用 ORDER BY 的方式，來亂數取得資料，並排序。
 MS SQL：SELECT TOP 1 * FROM Table WHERE 條件 ORDER BY NEWID()
 ACCESS：SELECT TOP 1 * FROM Table WHERE 條件 ORDER BY RND(數字欄位名稱)
 MYSQL：SELECT * FROM Table ORDER BY RAND() LIMIT 1

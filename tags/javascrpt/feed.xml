@@ -62,4 +62,6 @@ $arg_1 = $arg_1 ?</description></item><item><title>你不可不知的 JSON 基�
 Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.10 我們必須分析上面字串來判斷是否用手機上網，手機網頁跟PC網頁大小一定有所不同，透過底下兩個方法來改變瀏覽器的畫面
 自動導向手機網頁 動態改變 CSS 兩個方法都不錯，如果決定使用前者，建議在 Server side 那邊做判斷，底下先列出 javascript, PHP, .htaccess 判斷檢查 The JavaScript var isiPad = navigator.userAgent.match(/iPad/i) != null; The PHP $isiPad = (bool) strpos($_SERVER['HTTP_USER_AGENT'],'iPad'); The .htaccess RewriteCond %{HTTP_USER_AGENT} ^.*iPad.*$
 RewriteRule ^(.*)$ http://ipad.yourdomain.com [R=301] 如果您在前端做判斷，那就使用 jQuery 方式: if(jQuery){
-jQuery("</description></item></channel></rss>
+jQuery("body").addClass("jq");
+}
+CSS 檔案: .</description></item></channel></rss>

@@ -12,18 +12,18 @@ $replacements = array('!', '*', "'", "(", ")", ";", ":", "</description></item><
 #
 # Find
 #
-'max_sig_img_height' = array('lang' = 'MAX_SIG_IMG_HEIGHT', 'validate' = 'int:0', 'type' = 'text:5:4', 'explain' = true, 'append' = ' ' . $user-lang['PIXEL']), 後面加上 #
+'max_sig_img_height' => array('lang' => 'MAX_SIG_IMG_HEIGHT', 'validate' => 'int:0', 'type' => 'text:5:4', 'explain' => true, 'append' => ' ' . $user->lang['PIXEL']), 後面加上 #
 # after add
 #
-'max_sig_post_count_limit' = array('lang' = 'MAX_SIG_POSTS_LIMIT', 'validate' = 'int:0', 'type' = 'text:5:4', 'explain' = true),
+'max_sig_post_count_limit' => array('lang' => 'MAX_SIG_POSTS_LIMIT', 'validate' => 'int:0', 'type' => 'text:5:4', 'explain' => true),
 打開 viewtopic.php 找尋
 #
 # Find
 #
-if ($row['user_sig'] &amp;&amp; $config['allow_sig'] &amp;&amp; $user-optionget('viewsigs')) 取代 #
+if ($row['user_sig'] &amp;&amp; $config['allow_sig'] &amp;&amp; $user->optionget('viewsigs')) 取代 #
 # Replace
 #
-if (($row['user_sig'] &amp;&amp; $config['allow_sig'] &amp;&amp; $user-optionget('viewsigs') &amp;&amp; $row['user_posts'] = $config['max_sig_post_count_limit']) || (isset($user-data['session_admin']) &amp;&amp; $user-data['session_admin'])) 中文化 打開 language/zh_cmn_hant/acp/board.</description></item><item><title>[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”</title><link>https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/</link><pubDate>Thu, 10 Jun 2010 13:29:02 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/</guid><description>基於 Moztw 討論區 有大陸使用者註冊之後，在簽名檔加入一些廣告連結，為了降低 Google Page Rank，所以我們必須指示搜尋引擎「不要前往此網頁上的連結」或是「不要前往此連結」，可以參考 關於 rel=&amp;ldquo;nofollow&amp;rdquo;，phpBB3 編輯三個檔案就可以了，此修改不影響文章內容，只有針對簽名檔作用，底下是 patch 程式碼，可以參考看看 includes/bbcode.php
+if (($row['user_sig'] &amp;&amp; $config['allow_sig'] &amp;&amp; $user->optionget('viewsigs') &amp;&amp; $row['user_posts'] >= $config['max_sig_post_count_limit']) || (isset($user->data['session_admin']) &amp;&amp; $user->data['session_admin'])) 中文化 打開 language/zh_cmn_hant/acp/board.</description></item><item><title>[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”</title><link>https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/</link><pubDate>Thu, 10 Jun 2010 13:29:02 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/</guid><description>基於 Moztw 討論區 有大陸使用者註冊之後，在簽名檔加入一些廣告連結，為了降低 Google Page Rank，所以我們必須指示搜尋引擎「不要前往此網頁上的連結」或是「不要前往此連結」，可以參考 關於 rel=&amp;ldquo;nofollow&amp;rdquo;，phpBB3 編輯三個檔案就可以了，此修改不影響文章內容，只有針對簽名檔作用，底下是 patch 程式碼，可以參考看看 includes/bbcode.php
 --- phpBB3/includes/bbcode.php 2010-03-06 04:37:23.000000000 +0800
 +++ www/includes/bbcode.php 2010-06-10 20:58:02.000000000 +0800
 @@ -2,7 +2,8 @@

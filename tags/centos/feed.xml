@@ -24,5 +24,5 @@
 先檢查是否有安裝rsync
 yum list installed | grep rsync
 rsync.x86_64 2.6.3-1 installed
-vi /etc/xinetd.d/rsync
-service rsync { disable = yes socket_type = stream wait = no user = root server = /usr/bin/rsync server_args = –daemon log_on_failure += USERID } disable = yes 改成 disable = no 然後重新啟動xinetd /etc/init.d/xinetd restart vi /etc/rsyncd.conf [backup] path = /backup02 auth users = admin uid = root gid = root secrets file = /etc/rsyncd.</description></item></channel></rss>
+vi /etc/xinetd.d/rsync service rsync { disable = yes socket_type = stream wait = no user = root server = /usr/bin/rsync server_args = –daemon log_on_failure += USERID } disable = yes 改成 disable = no 然後重新啟動xinetd /etc/init.d/xinetd restart
+vi /etc/rsyncd.conf [backup] path = /backup02 auth users = admin uid = root gid = root secrets file = /etc/rsyncd.secrets read only = no [主機代號:自訂] path = 備份資料放置的路徑 auth users = 定義援權的帳號 uid = 應是執行時的uid gid = 應是執行時的gid secrets file = 認證密碼檔的位置 read only = 是否唯讀</description></item></channel></rss>

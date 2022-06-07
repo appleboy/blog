@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Excel on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/tags/excel/</link><description>Recent content in Excel on 小惡魔 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Fri, 14 Sep 2012 12:47:15 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/tags/excel/feed.xml" rel="self" type="application/rss+xml"/><item><title>簡易 PHP Excel Generator Library</title><link>https://blog.wu-boy.com/2012/09/a-simple-php-to-excel-conversion-library/</link><pubDate>Fri, 14 Sep 2012 12:47:15 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2012/09/a-simple-php-to-excel-conversion-library/</guid><description>因為專案需求，必須將資料庫資料輸出成簡易 Excel 檔案，如果要用 PHP 取裡 Excel 文件，我想大家首推一定是 PHPExcel，不管你要對 Excel 做任何處理都一定辦的到，但是專案只需要 generate excel 簡易表格出來，有需要這麼強大的 PHPExcel，網路上找到一個非常簡易的 Library 那就是 php-excel 作者似乎現在沒再更新了，不過已經夠專案使用了，PHP 程式碼也非常簡單。
 How to use 程式碼很簡易 $header = array('編號', '姓名', '電話'); $body = array('1', '小惡魔', '0934353289'); $xls = new Excel_XML;
-$xls-addRow($header);
-$xls-addRow($body);
-$xls-generateXML("test"); 或是將資料寫成多為陣列 $body = array(array('編號', '姓名', '電話'), array('1', '小惡魔', '0934353289')); $xls = new Excel_XML;
-$xls-addArray($body);
-$xls-generateXML("test"); 結論就是殺雞焉用牛刀，就這個簡易 Library 就對了。�</description></item></channel></rss>
+$xls->addRow($header);
+$xls->addRow($body);
+$xls->generateXML("test"); 或是將資料寫成多為陣列 $body = array(array('編號', '姓名', '電話'), array('1', '小惡魔', '0934353289')); $xls = new Excel_XML;
+$xls->addArray($body);
+$xls->generateXML("test"); 結論就是殺雞焉用牛刀，就這個簡易 Library 就對了。�</description></item></channel></rss>

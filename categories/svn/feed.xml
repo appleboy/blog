@@ -14,11 +14,11 @@ A svn-ds/branches/develop/changelog.</description></item><item><title>版本控�
 # Changes to be committed:
 # (use "git reset HEAD ..." to unstage)
 #
-# renamed: nav/hacks.txt - Nav/hacks.txt
-# renamed: nav/moo.fx.js - Nav/moo.fx.js
-# renamed: nav/moo.fx.pack.js - Nav/moo.fx.pack.js
-# renamed: nav/nav.js - Nav/nav.js
-# renamed: nav/prototype.lite.js - Nav/prototype.lite.js
+# renamed: nav/hacks.txt -> Nav/hacks.txt
+# renamed: nav/moo.fx.js -> Nav/moo.fx.js
+# renamed: nav/moo.fx.pack.js -> Nav/moo.fx.pack.js
+# renamed: nav/nav.js -> Nav/nav.js
+# renamed: nav/prototype.lite.js -> Nav/prototype.lite.js
 # renamed: nav/user_guide_menu.</description></item><item><title>svn 恢復略過衝突檔案 (conflict file)</title><link>https://blog.wu-boy.com/2011/05/svn-%E6%81%A2%E5%BE%A9%E7%95%A5%E9%81%8E%E8%A1%9D%E7%AA%81%E6%AA%94%E6%A1%88-conflict-file/</link><pubDate>Wed, 04 May 2011 02:27:58 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/05/svn-%E6%81%A2%E5%BE%A9%E7%95%A5%E9%81%8E%E8%A1%9D%E7%AA%81%E6%AA%94%E6%A1%88-conflict-file/</guid><description>當我們利用 svn up 更新程式碼，如果遇到修改相同檔案的相同地方，就會發生衝突 (conflict) 此時就必須修改或者是略過，當選擇略過此檔案就會出現底下訊息
 Skipped &amp;rsquo;lib/logs/logDB.txt&amp;rsquo; Skipped &amp;rsquo;lib/confs/Conf.php&amp;rsquo; At revision 912. Summary of conflicts: Skipped paths: 2 之後怎麼用 svn up 更新檔案，都會因此被略過，那該怎麼恢復被略過檔案的狀態，讓它們可以繼續被更新呢？網路上找到一篇 svn local obstruction, incoming add upon merge 解法，用 svn resolve 來解決問題，只要針對該檔案打入底下指令即可
 svn resolve --accept working lib/confs/Conf.php
