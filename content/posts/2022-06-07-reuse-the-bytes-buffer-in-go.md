@@ -1,6 +1,6 @@
 ---
 title: "在 Go 語言內使用 bytes.Buffer 注意事項"
-date: 2022-06-07T19:42:17+08:00
+date: 2022-06-07T20:42:17+08:00
 type: post
 slug: reuse-the-bytes-buffer-in-go
 share_img: https://i.imgur.com/FD5go1t.png
