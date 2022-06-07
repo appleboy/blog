@@ -54,12 +54,12 @@ func main() {
 
 請直接[線上打開範例跑看看][11]，執行後的結果會是
 
-[11]:https://go.dev/play/p/kla1aGecKus
+[11]:https://go.dev/play/p/h1ENIht6vQi
 
 ```sh
-s1: foobar
-s1: testar
-s2: test
+s1: 11111
+s1: 22211
+s2: 222
 ```
 
 大家有無看到，如果要存取 `s1` 第二次的結果，會發現後者 `s2` 資料蓋掉部分 `s1` 資料。原因是這樣，當第一次 s1 拿到的是有 5 位元空間的記憶體，而當執行第二次 `parseMultipleValue` 後，透過 `bytes.Rest()` 只是將 offset 位置移動到 0 位置，並將新的內容給寫入到同樣記憶體位置前面區段。固本來 `s1` 的內容前 3 個字元被改成新的 `s2` 字串。
