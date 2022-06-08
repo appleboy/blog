@@ -13,7 +13,7 @@ tags:
 
 ![logo](https://i.imgur.com/FD5go1t.png)
 
-在 [Go 語言][3]中，如何高效的處理字串相加，由於字串 (string) 是不可變的，所以將很多字串拼接起來，會如同宣告新的變數來儲存。這邊就可以透過 [strings.Builder][1] 或 [bytes.Buffer][2] 來解決字串相加效能問題。除了效能問題之外，還需要注意在 `bytes.Buffer` 處理 `[]byte` 及 `string` 之間的轉換，底下拿一個實際上在專案上寫出來的錯誤給大家參考看看
+在 [Go 語言][3]中，如何高效的處理字串相加，由於字串 (string) 是不可變的，所以將很多字串拼接起來，會如同宣告新的變數來儲存。這邊就可以透過 [strings.Builder][1] 或 [bytes.Buffer][2] 來解決字串相加效能問題。除了效能問題之外，還需要注意在 `bytes.Buffer` 處理 `[]byte` 及 `string` 之間的轉換，底下拿實際專案上寫出來的錯誤給大家參考看看
 
 [1]:https://pkg.go.dev/strings
 [2]:https://pkg.go.dev/bytes
