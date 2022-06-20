@@ -95,7 +95,7 @@ wg.Add(len(tasks))
 
 ### 問題二
 
-**第二個**問題就是這段代碼會 blocking 在最下面的讀取 Task 塞入 Queue 變數上，大家看到底下代碼，宣告的是根據想要開多少 Goroutine 的 buffer 大小 Channel。舉例假設使用 4 core，然後 100 個 Task，每個 Task 執行需要 10 秒，屆時塞 4 個 Task 進去 Queue 後，整個就會被 blocking。
+**第二個**問題就是這段代碼會 blocking 在最下面的讀取 Task 塞入 Queue 變數上，大家看到底下代碼，宣告的是根據想要開多少 Goroutine 的 buffer 大小 Channel。舉例假設使用 4 core，然後 100 個 Task，每個 Task 執行需要 10 秒，此時塞 4 個 Task 進去 Queue 後，會被順利讀取出來 4 個 task，接著 Queue 又被塞滿 4 個 task 後，就無法再繼續將新的 Task 放入，故程式就會被 blocking。
 
 ```go
  queue := make(chan TaskFunc, numCPU)
