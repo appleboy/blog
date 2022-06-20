@@ -150,7 +150,7 @@ wg := sync.WaitGroup{}
 wg.Add(numCPU)
 ```
 
-## 改寫 buffer channel 大小
+### 改寫 buffer channel 大小
 
 上面有提到 Channel 大小原本使用要同步處理多少工作當作 Buffer 大小，但是只要 Task 數量大於 Buffer 大小，就會出現 blocking，故這邊可以改成底下
 
@@ -166,7 +166,7 @@ close(queue)
 
 將 Buffer 大小改成跟 Task 數量一致，藉此透過 for 迴圈先將 Task 塞到 Channel 內，並關閉 Channel 即可。
 
-## 讀取 Task 流程
+### 讀取 Task 流程
 
 此函式目的就是平行跑多個 Task，遇到任何錯誤，就中斷流程，並返回錯誤訊息，故需要透過 Context Cancel 特性來改寫原本流程
 
