@@ -25,11 +25,16 @@ tags:
 
 ## 程式碼
 
+[線上測試看看][11]
+
+[11]:https://go.dev/play/p/aZFiLXm16lI
+
 ```go
-package executor
+package main
 
 import (
   "context"
+  "errors"
   "fmt"
   "runtime"
   "sync"
@@ -77,6 +82,26 @@ func ExecuteAll(numCPU int, tasks ...TaskFunc) error {
   // wait for all task done
   wg.Wait()
   return err
+}
+
+func main() {
+  tasks := make([]TaskFunc, 0, 100)
+  for i := 0; i < 100; i++ {
+    func(val int) {
+      tasks = append(tasks, func(ctx context.Context) error {
+        fmt.Println(val)
+        if val == 51 {
+          return errors.New("missing")
+        }
+        return nil
+      })
+    }(i)
+  }
+
+  err := ExecuteAll(0, tasks...)
+  if err == nil {
+    fmt.Println("missing error")
+  }
 }
 ```
 
