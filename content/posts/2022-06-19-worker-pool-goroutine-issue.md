@@ -23,6 +23,15 @@ tags:
 
 <!--more-->
 
+## 影片教學
+
+{{< youtube Bxvsrk0NXpA >}}
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 程式碼
 
 [線上測試看看][11]
