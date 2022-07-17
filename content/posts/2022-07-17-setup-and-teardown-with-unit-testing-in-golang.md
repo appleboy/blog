@@ -21,7 +21,7 @@ tags:
 
 ## 整合 TestMain
 
-Go 語言在測試套件內直接提供了 [TestMain][11] 函式，功能就是讓開發者可以再開始測試前準備服務 (setup) 或是測試結束後移除環境 (teardown)。底下看看正常執行的狀況
+Go 語言在測試套件內直接提供了 [TestMain][11] 函式，功能就是讓開發者可以在開始測試前準備環境 (setup) 或是測試結束後移除環境 (teardown)。底下看看正常執行範例
 
 ```go
 func TestMain(m *testing.M) {
@@ -30,7 +30,7 @@ func TestMain(m *testing.M) {
 }
 ```
 
-接著可以新增 setup() 及 teardown() 函式
+接著可以新增 `setup()` 及 `teardown()` 函式
 
 ```go
 func setup() {
@@ -52,7 +52,7 @@ func TestMain(m *testing.M) {
 }
 ```
 
-接著執行 `go test -v .` 可以看到底下結果
+最後執行 `go test -v .` 後可以看到底下結果
 
 ```sh
 > Setup completed
@@ -62,7 +62,7 @@ PASS
 ok      test    0.299s
 ```
 
-這是符合我們的需求，可以在測試前準備服務或資料，結束後可以與服務正常斷線及移除資料
+這是符合我們的需求，可以在任何測試前準備環境，結束後可以移除相關環境，底下就是初始化 Groutine Pool，結束後釋放連線。
 
 ```go
 func setup() {
