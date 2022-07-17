@@ -1,0 +1,481 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>在 Go 語言測試使用 Setup 及 Teardown - 小惡魔 - AppleBOY</title><meta name=description content="
+相信大家在寫測試時，都會需要啟動而外服務，像是 Redis 或 Postgres 等，而開始測試前會需要初始化資料庫連線，或者是準備測試資料，測試結束後就關閉資料庫連線，並且移除不必要的測試資料或檔案。在 Go 語言內開發者不用去依賴第三方的套件，透過內建的 TestMain 就可以非常輕鬆完成此事情。底下看看如何操作及使用。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2022\/07\/setup-and-teardown-with-unit-testing-in-golang\/","name":"在 go 語言測試使用 setup 及 teardown"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"Appleboy"},"headline":"在 Go 語言測試使用 Setup 及 Teardown","description":"\n相信大家在寫測試時，都會需要啟動而外服務，像是 Redis 或 Postgres 等，而開始測試前會需要初始化資料庫連線，或者是準備測試資料，測試結束後就關閉資料庫連線，並且移除不必要的測試資料或檔案。在 Go 語言內開發者不用去依賴第三方的套件，透過內建的 TestMain 就可以非常輕鬆完成此事情。底下看看如何操作及使用。\n","inLanguage":"en","wordCount":847,"datePublished":"2022-07-17T07:44:49","dateModified":"2022-07-17T07:44:49","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":["golang, testing"],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2022\/07\/setup-and-teardown-with-unit-testing-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="在 Go 語言測試使用 Setup 及 Teardown"><meta property="og:description" content="
+相信大家在寫測試時，都會需要啟動而外服務，像是 Redis 或 Postgres 等，而開始測試前會需要初始化資料庫連線，或者是準備測試資料，測試結束後就關閉資料庫連線，並且移除不必要的測試資料或檔案。在 Go 語言內開發者不用去依賴第三方的套件，透過內建的 TestMain 就可以非常輕鬆完成此事情。底下看看如何操作及使用。"><meta property="og:image" content="https://i.imgur.com/mDJolWF.png"><meta property="og:url" content="https://blog.wu-boy.com/2022/07/setup-and-teardown-with-unit-testing-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="在 Go 語言測試使用 Setup 及 Teardown"><meta name=twitter:description content="
+相信大家在寫測試時，都會需要啟動而外服務，像是 Redis 或 Postgres 等，而開始測試前會需要初始化資料庫連線，或者是準備測試資料，測試結束後就關閉資料庫連線，並且移除不必要的測試資料或檔案。在 Go 語言內開發者不用去依賴第三方的套件，透過內建的 TestMain 就可以非常輕鬆完成此事情。底下看看如何操作及使用。"><meta name=twitter:image content="https://i.imgur.com/mDJolWF.png"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.101.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>在 Go 語言測試使用 Setup 及 Teardown</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 17, 2022
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;847&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;Appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#整合-testmain>整合 TestMain</a></li><li><a href=#單獨測試使用-setup-及-teardown>單獨測試使用 Setup 及 Teardown</a></li><li><a href=#整合-testmain--teardown>整合 TestMain + Teardown</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src=https://i.imgur.com/mDJolWF.png alt=logo></p><p>相信大家在寫測試時，都會需要啟動而外服務，像是 <a href=https://redis.io/>Redis</a> 或 <a href=https://www.postgresql.org/>Postgres</a> 等，而開始測試前會需要初始化資料庫連線，或者是準備測試資料，測試結束後就關閉資料庫連線，並且移除不必要的測試資料或檔案。在 <a href=https://go.dev>Go 語言</a>內開發者不用去依賴第三方的套件，透過內建的 <code>TestMain</code> 就可以非常輕鬆完成此事情。底下看看如何操作及使用。</p><h2 id=整合-testmain>整合 TestMain</h2><p>Go 語言在測試套件內直接提供了 <a href=https://pkg.go.dev/testing#hdr-Main>TestMain</a> 函式，功能就是讓開發者可以再開始測試前準備服務 (setup) 或是測試結束後移除環境 (teardown)。底下看看正常執行的狀況</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-4>4</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestMain</span>(m *testing.M) {
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// call flag.Parse() here if TestMain uses flags
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  os.<span style=color:#008b45>Exit</span>(m.<span style=color:#008b45>Run</span>())
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>接著可以新增 setup() 及 teardown() 函式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-17>17</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>setup</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// Do something here.
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Setup completed\n&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>teardown</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// Do something here.
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Teardown completed&#34;</span>)
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\n&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestMain</span>(m *testing.M) {
+</span></span><span style=display:flex><span>  <span style=color:#008b45>setup</span>()
+</span></span><span style=display:flex><span>  code := m.<span style=color:#008b45>Run</span>()
+</span></span><span style=display:flex><span>  <span style=color:#008b45>teardown</span>()
+</span></span><span style=display:flex><span>  os.<span style=color:#008b45>Exit</span>(code)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>接著執行 <code>go test -v .</code> 可以看到底下結果</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-5>5</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span>&gt; Setup completed
+</span></span><span style=display:flex><span>testing: warning: no tests to run
+</span></span><span style=display:flex><span>PASS
+</span></span><span style=display:flex><span>&gt; Teardown completed
+</span></span><span style=display:flex><span>ok      <span style=color:#658b00>test</span>    0.299s
+</span></span></code></pre></td></tr></table></div></div><p>這是符合我們的需求，可以在測試前準備服務或資料，結束後可以與服務正常斷線及移除資料</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>setup</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// initial worker
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  queue.<span style=color:#008b45>New</span>(cfg.Worker.NumProcs, cfg.Worker.MaxQueue).<span style=color:#008b45>Run</span>()
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Setup completed\n&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>teardown</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// initial worker
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  queue.<span style=color:#008b45>Realse</span>()
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Teardown completed&#34;</span>)
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\n&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h2 id=單獨測試使用-setup-及-teardown>單獨測試使用 Setup 及 Teardown</h2><p>除了在整個測試前及測試後需要使用外，開發者也可能有需求在測試子項目 (sub-testing) 上。直接看底下範例，測試使用者是否存在</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-35>35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-36><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-36>36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-37><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-37>37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-38><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-38>38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-39><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-39>39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-40><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-40>40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-41><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-41>41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-42><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-42>42</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-43><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-43>43</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-44><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-44>44</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-45><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-45>45</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-46><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-46>46</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-47><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-47>47</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-48><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-48>48</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-49><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-49>49</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-50><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-50>50</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-51><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-51>51</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestIsUserExist</span>(t *testing.T) {
+</span></span><span style=display:flex><span>  assert.<span style=color:#008b45>NoError</span>(t, <span style=color:#008b45>PrepareTestDatabase</span>())
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>type</span> args <span style=color:#8b008b;font-weight:700>struct</span> {
+</span></span><span style=display:flex><span>    uid   <span style=color:#00688b;font-weight:700>int64</span>
+</span></span><span style=display:flex><span>    email <span style=color:#00688b;font-weight:700>string</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  tests := []<span style=color:#8b008b;font-weight:700>struct</span> {
+</span></span><span style=display:flex><span>    name    <span style=color:#00688b;font-weight:700>string</span>
+</span></span><span style=display:flex><span>    args    args
+</span></span><span style=display:flex><span>    want    <span style=color:#00688b;font-weight:700>bool</span>
+</span></span><span style=display:flex><span>    wantErr <span style=color:#00688b;font-weight:700>bool</span>
+</span></span><span style=display:flex><span>  }{
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name:    <span style=color:#cd5555>&#34;test email exist without login&#34;</span>,
+</span></span><span style=display:flex><span>      args:    args{<span style=color:#b452cd>0</span>, <span style=color:#cd5555>&#34;test01@gmail.com&#34;</span>},
+</span></span><span style=display:flex><span>      want:    <span style=color:#8b008b;font-weight:700>true</span>,
+</span></span><span style=display:flex><span>      wantErr: <span style=color:#8b008b;font-weight:700>false</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name:    <span style=color:#cd5555>&#34;test email not exist without login&#34;</span>,
+</span></span><span style=display:flex><span>      args:    args{<span style=color:#b452cd>0</span>, <span style=color:#cd5555>&#34;test123456@gmail.com&#34;</span>},
+</span></span><span style=display:flex><span>      want:    <span style=color:#8b008b;font-weight:700>false</span>,
+</span></span><span style=display:flex><span>      wantErr: <span style=color:#8b008b;font-weight:700>false</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name:    <span style=color:#cd5555>&#34;test email exist with login&#34;</span>,
+</span></span><span style=display:flex><span>      args:    args{<span style=color:#b452cd>1</span>, <span style=color:#cd5555>&#34;test02@gmail.com&#34;</span>},
+</span></span><span style=display:flex><span>      want:    <span style=color:#8b008b;font-weight:700>true</span>,
+</span></span><span style=display:flex><span>      wantErr: <span style=color:#8b008b;font-weight:700>false</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name:    <span style=color:#cd5555>&#34;test email not exist with login&#34;</span>,
+</span></span><span style=display:flex><span>      args:    args{<span style=color:#b452cd>1</span>, <span style=color:#cd5555>&#34;test123456@gmail.com&#34;</span>},
+</span></span><span style=display:flex><span>      want:    <span style=color:#8b008b;font-weight:700>false</span>,
+</span></span><span style=display:flex><span>      wantErr: <span style=color:#8b008b;font-weight:700>false</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> _, tt := <span style=color:#8b008b;font-weight:700>range</span> tests {
+</span></span><span style=display:flex><span>    tt := tt
+</span></span><span style=display:flex><span>    t.<span style=color:#008b45>Run</span>(tt.name, <span style=color:#8b008b;font-weight:700>func</span>(t *testing.T) {
+</span></span><span style=display:flex><span>      got, err := <span style=color:#008b45>IsUserExist</span>(tt.args.uid, tt.args.email)
+</span></span><span style=display:flex><span>      <span style=color:#8b008b;font-weight:700>if</span> (err != <span style=color:#8b008b;font-weight:700>nil</span>) != tt.wantErr {
+</span></span><span style=display:flex><span>        t.<span style=color:#008b45>Errorf</span>(<span style=color:#cd5555>&#34;isUserExist() error = %v, wantErr %v&#34;</span>, err, tt.wantErr)
+</span></span><span style=display:flex><span>        <span style=color:#8b008b;font-weight:700>return</span>
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#8b008b;font-weight:700>if</span> got != tt.want {
+</span></span><span style=display:flex><span>        t.<span style=color:#008b45>Errorf</span>(<span style=color:#cd5555>&#34;isUserExist() = %v, want %v&#34;</span>, got, tt.want)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>接著新增 setupTest 函式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-7>7</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>setupTest</span>(tb testing.TB) <span style=color:#8b008b;font-weight:700>func</span>(tb testing.TB) {
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Setup Test\n&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>func</span>(tb testing.TB) {
+</span></span><span style=display:flex><span>    fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Teardown Test\n&#34;</span>)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>最後修改 <code>t.Run</code> 內容</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-12>12</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span>t.<span style=color:#008b45>Run</span>(tt.name, <span style=color:#8b008b;font-weight:700>func</span>(t *testing.T) {
+</span></span><span style=display:flex><span>  teardownTest := <span style=color:#008b45>setupTest</span>(t)
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>defer</span> <span style=color:#008b45>teardownTest</span>(t)
+</span></span><span style=display:flex><span>  got, err := <span style=color:#008b45>IsUserExist</span>(tt.args.uid, tt.args.email)
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>if</span> (err != <span style=color:#8b008b;font-weight:700>nil</span>) != tt.wantErr {
+</span></span><span style=display:flex><span>    t.<span style=color:#008b45>Errorf</span>(<span style=color:#cd5555>&#34;isUserExist() error = %v, wantErr %v&#34;</span>, err, tt.wantErr)
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span>
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>if</span> got != tt.want {
+</span></span><span style=display:flex><span>    t.<span style=color:#008b45>Errorf</span>(<span style=color:#cd5555>&#34;isUserExist() = %v, want %v&#34;</span>, got, tt.want)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>})
+</span></span></code></pre></td></tr></table></div></div><h2 id=整合-testmain--teardown>整合 TestMain + Teardown</h2><p>我們來將上述的案例整合一起使用，先寫一個簡單的 ToString 功能</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-11>11</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> foobar
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> <span style=color:#cd5555>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#228b22>// ToString convert any type to string
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>ToString</span>(value <span style=color:#8b008b;font-weight:700>interface</span>{}) <span style=color:#00688b;font-weight:700>string</span> {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>if</span> v, ok := value.(*<span style=color:#00688b;font-weight:700>string</span>); ok {
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span> *v
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> fmt.<span style=color:#008b45>Sprintf</span>(<span style=color:#cd5555>&#34;%v&#34;</span>, value)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>接著寫測試</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-35>35</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-36><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-36>36</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-37><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-37>37</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-38><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-38>38</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-39><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-39>39</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-40><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-40>40</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-41><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-41>41</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-42><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-42>42</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-43><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-43>43</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-44><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-44>44</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-45><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-45>45</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-46><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-46>46</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-47><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-47>47</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-48><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-48>48</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-49><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-49>49</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-50><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-50>50</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-51><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-51>51</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-52><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-52>52</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-53><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-53>53</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-54><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-54>54</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-55><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-55>55</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-56><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-56>56</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-57><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-57>57</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-58><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-58>58</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-59><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-59>59</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-60><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-60>60</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-61><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-61>61</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-62><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-62>62</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-63><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-63>63</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-64><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-64>64</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-65><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-65>65</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-66><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-66>66</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-67><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-67>67</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-68><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-68>68</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-69><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-69>69</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-70><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-70>70</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-71><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-71>71</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-72><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-72>72</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-73><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-73>73</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-74><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-74>74</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-75><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-75>75</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-76><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-76>76</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-77><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-77>77</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-78><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-78>78</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-79><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-79>79</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-80><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-80>80</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-81><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-81>81</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-82><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-82>82</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-83><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-83>83</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>package</span> foobar
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>import</span> (
+</span></span><span style=display:flex><span>  <span style=color:#cd5555>&#34;fmt&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cd5555>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cd5555>&#34;reflect&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#cd5555>&#34;testing&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>setup</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// Do something here.
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Setup completed\n&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>teardown</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// Do something here.
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;33m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt; Teardown completed&#34;</span>)
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\n&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestMain</span>(m *testing.M) {
+</span></span><span style=display:flex><span>  <span style=color:#008b45>setup</span>()
+</span></span><span style=display:flex><span>  code := m.<span style=color:#008b45>Run</span>()
+</span></span><span style=display:flex><span>  <span style=color:#008b45>teardown</span>()
+</span></span><span style=display:flex><span>  os.<span style=color:#008b45>Exit</span>(code)
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>setupTest</span>(tb testing.TB) <span style=color:#8b008b;font-weight:700>func</span>(tb testing.TB) {
+</span></span><span style=display:flex><span>  fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;34m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt;&gt; Setup Test\n&#34;</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>func</span>(tb testing.TB) {
+</span></span><span style=display:flex><span>    fmt.<span style=color:#008b45>Printf</span>(<span style=color:#cd5555>&#34;\033[1;34m%s\033[0m&#34;</span>, <span style=color:#cd5555>&#34;&gt;&gt; Teardown Test\n&#34;</span>)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestToString</span>(t *testing.T) {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>type</span> args <span style=color:#8b008b;font-weight:700>struct</span> {
+</span></span><span style=display:flex><span>    value <span style=color:#8b008b;font-weight:700>interface</span>{}
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  tests := []<span style=color:#8b008b;font-weight:700>struct</span> {
+</span></span><span style=display:flex><span>    name <span style=color:#00688b;font-weight:700>string</span>
+</span></span><span style=display:flex><span>    args args
+</span></span><span style=display:flex><span>    want <span style=color:#8b008b;font-weight:700>interface</span>{}
+</span></span><span style=display:flex><span>  }{
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name: <span style=color:#cd5555>&#34;int&#34;</span>,
+</span></span><span style=display:flex><span>      args: args{
+</span></span><span style=display:flex><span>        value: <span style=color:#b452cd>101</span>,
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      want: <span style=color:#cd5555>&#34;101&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name: <span style=color:#cd5555>&#34;int64&#34;</span>,
+</span></span><span style=display:flex><span>      args: args{
+</span></span><span style=display:flex><span>        value: <span style=color:#658b00>int64</span>(<span style=color:#b452cd>100</span>),
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      want: <span style=color:#cd5555>&#34;100&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name: <span style=color:#cd5555>&#34;boolean&#34;</span>,
+</span></span><span style=display:flex><span>      args: args{
+</span></span><span style=display:flex><span>        value: <span style=color:#8b008b;font-weight:700>true</span>,
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      want: <span style=color:#cd5555>&#34;true&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      name: <span style=color:#cd5555>&#34;float32&#34;</span>,
+</span></span><span style=display:flex><span>      args: args{
+</span></span><span style=display:flex><span>        value: <span style=color:#658b00>float32</span>(<span style=color:#b452cd>23.03</span>),
+</span></span><span style=display:flex><span>      },
+</span></span><span style=display:flex><span>      want: <span style=color:#cd5555>&#34;23.03&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> _, tt := <span style=color:#8b008b;font-weight:700>range</span> tests {
+</span></span><span style=display:flex><span>    t.<span style=color:#008b45>Run</span>(tt.name, <span style=color:#8b008b;font-weight:700>func</span>(t *testing.T) {
+</span></span><span style=display:flex><span>      teardown := <span style=color:#008b45>setupTest</span>(t)
+</span></span><span style=display:flex><span>      <span style=color:#8b008b;font-weight:700>defer</span> <span style=color:#008b45>teardown</span>(t)
+</span></span><span style=display:flex><span>      <span style=color:#8b008b;font-weight:700>if</span> got := <span style=color:#008b45>ToString</span>(tt.args.value); !reflect.<span style=color:#008b45>DeepEqual</span>(got, tt.want) {
+</span></span><span style=display:flex><span>        t.<span style=color:#008b45>Errorf</span>(<span style=color:#cd5555>&#34;ToString() = %v, want %v&#34;</span>, got, tt.want)
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>最後結果如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-23>23</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span>$ go <span style=color:#658b00>test</span> -v .
+</span></span><span style=display:flex><span>&gt; Setup <span style=color:#00688b>completed</span>
+</span></span><span style=display:flex><span>=== RUN   <span style=color:#00688b>TestToString</span>
+</span></span><span style=display:flex><span>=== RUN   TestToString/int
+</span></span><span style=display:flex><span>&gt;&gt; Setup Test
+</span></span><span style=display:flex><span>&gt;&gt; Teardown <span style=color:#00688b>Test</span>
+</span></span><span style=display:flex><span>=== RUN   TestToString/int64
+</span></span><span style=display:flex><span>&gt;&gt; Setup Test
+</span></span><span style=display:flex><span>&gt;&gt; Teardown <span style=color:#00688b>Test</span>
+</span></span><span style=display:flex><span>=== RUN   TestToString/boolean
+</span></span><span style=display:flex><span>&gt;&gt; Setup Test
+</span></span><span style=display:flex><span>&gt;&gt; Teardown <span style=color:#00688b>Test</span>
+</span></span><span style=display:flex><span>=== RUN   TestToString/float32
+</span></span><span style=display:flex><span>&gt;&gt; Setup Test
+</span></span><span style=display:flex><span>&gt;&gt; Teardown Test
+</span></span><span style=display:flex><span>--- PASS: TestToString (0.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestToString/int (0.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestToString/int64 (0.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestToString/boolean (0.00s)
+</span></span><span style=display:flex><span>    --- PASS: TestToString/float32 (0.00s)
+</span></span><span style=display:flex><span>PASS
+</span></span><span style=display:flex><span>&gt; Teardown completed
+</span></span><span style=display:flex><span>ok      <span style=color:#658b00>test</span>    0.293s
+</span></span></code></pre></td></tr></table></div></div><p><img src=https://i.imgur.com/QtV6Z1Y.png alt=Testing></p><div class=blog-tags><a href=https://blog.wu-boy.com/tags/golang/>golang</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/testing/>testing</a>&nbsp;</div><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f07%2fsetup-and-teardown-with-unit-testing-in-golang%2f&text=%e5%9c%a8%20Go%20%e8%aa%9e%e8%a8%80%e6%b8%ac%e8%a9%a6%e4%bd%bf%e7%94%a8%20Setup%20%e5%8f%8a%20Teardown&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2022%2f07%2fsetup-and-teardown-with-unit-testing-in-golang%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f07%2fsetup-and-teardown-with-unit-testing-in-golang%2f&title=%e5%9c%a8%20Go%20%e8%aa%9e%e8%a8%80%e6%b8%ac%e8%a9%a6%e4%bd%bf%e7%94%a8%20Setup%20%e5%8f%8a%20Teardown" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f07%2fsetup-and-teardown-with-unit-testing-in-golang%2f&title=%e5%9c%a8%20Go%20%e8%aa%9e%e8%a8%80%e6%b8%ac%e8%a9%a6%e4%bd%bf%e7%94%a8%20Setup%20%e5%8f%8a%20Teardown" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f07%2fsetup-and-teardown-with-unit-testing-in-golang%2f&title=%e5%9c%a8%20Go%20%e8%aa%9e%e8%a8%80%e6%b8%ac%e8%a9%a6%e4%bd%bf%e7%94%a8%20Setup%20%e5%8f%8a%20Teardown" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2022%2f07%2fsetup-and-teardown-with-unit-testing-in-golang%2f&description=%e5%9c%a8%20Go%20%e8%aa%9e%e8%a8%80%e6%b8%ac%e8%a9%a6%e4%bd%bf%e7%94%a8%20Setup%20%e5%8f%8a%20Teardown" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section><h4 class=see-also>See also</h4><ul><li><a href=/2022/06/refactor-worker-pool-source-code/>優化重構 Worker Pool 程式碼</a></li><li><a href=/2022/06/reuse-the-bytes-buffer-in-go/>在 Go 語言內使用 bytes.Buffer 注意事項</a></li><li><a href=/2022/05/read-data-from-channel-in-go/>用 10 分鐘了解 Go 語言如何從 Channel 讀取資料</a></li><li><a href=/2022/04/simple-publish-subscribe-pattern-in-golang/>用 Go 語言實現 Pub-Sub 模式</a></li><li><a href=/2022/04/new-package-graceful-shutdown-in-golang/>Go 語言實作 Graceful Shutdown 套件</a></li><li><a href=/2022/04/grant-access-to-user-specific-folders-in-amazone-s3-bucket/>使用 AWS IAM Policy 設定 S3 Bucket 底下特定目錄權限</a></li><li><a href=/2022/03/automated-service-health-dashboard-gatus/>推薦自動化監控網站運行服務 - Gatus</a></li><li><a href=/2022/02/pyroscope-adhoc-profiling-in-golang/>使用 pyroscope adhoc 加速找到效能瓶頸</a></li><li><a href=/2022/02/golang-1-18-generics-constraints-slices-maps/>Go 1.18 generics 新套件 constraints, slices 及 maps</a></li><li><a href=/2022/02/introduction-to-golang-1-18-generics/>初探 golang 1.18 generics 功能</a></li></ul></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2022/06/refactor-worker-pool-source-code/ data-toggle=tooltip data-placement=top title="優化重構 Worker Pool 程式碼">&larr; Previous Post</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2022/07/setup-and-teardown-with-unit-testing-in-golang>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2022/07/setup-and-teardown-with-unit-testing-in-golang"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2022
+&nbsp;&bull;&nbsp;
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.101.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var t,n="003841896160749976666:l9i5hqttpqi",e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
