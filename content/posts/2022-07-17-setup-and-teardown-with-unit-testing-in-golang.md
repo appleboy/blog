@@ -3,7 +3,7 @@ title: "在 Go 語言測試使用 Setup 及 Teardown"
 date: 2022-07-17T07:44:49+08:00
 type: post
 slug: setup-and-teardown-with-unit-testing-in-golang
-share_img: https://i.imgur.com/mDJolWF.png
+share_img: https://i.imgur.com/FD5go1t.png
 categories:
   - Golang
 tags:
@@ -11,7 +11,7 @@ tags:
   - testing
 ---
 
-![logo](https://i.imgur.com/mDJolWF.png)
+![logo](https://i.imgur.com/FD5go1t.png)
 
 相信大家在寫測試時，都會需要啟動而外服務，像是 [Redis](https://redis.io/) 或 [Postgres](https://www.postgresql.org/) 等，而開始測試前會需要初始化資料庫連線，或者是準備測試資料，測試結束後就關閉資料庫連線，並且移除不必要的測試資料或檔案。在 [Go 語言][1]內開發者不用去依賴第三方的套件，透過內建的 `TestMain` 就可以非常輕鬆完成此事情。底下看看如何操作及使用。
 
