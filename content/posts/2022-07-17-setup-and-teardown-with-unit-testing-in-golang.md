@@ -83,7 +83,7 @@ func teardown() {
 
 ## 單獨測試使用 Setup 及 Teardown
 
-除了在整個測試前及測試後需要使用外，開發者也可能有需求在測試子項目 (sub-testing) 上。直接看底下範例，測試使用者是否存在
+除了在`整體`測試前及測試後需要使用外，開發者也可能有需求在測試`子項目` (sub-testing) 上。直接看底下範例，測試使用者是否存在
 
 ```go
 func TestIsUserExist(t *testing.T) {
