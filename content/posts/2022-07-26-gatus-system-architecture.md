@@ -29,6 +29,8 @@ tags:
 [3]:https://github.com/TwiN/gatus
 [4]:https://blog.wu-boy.com/2022/03/automated-service-health-dashboard-gatus/
 
+<!--more-->
+
 ## 投影片
 
 {{< speakerdeck id="eeaa918eda4342118d7bb3c56d6d5b0d" >}}
