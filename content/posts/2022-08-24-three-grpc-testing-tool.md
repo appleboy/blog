@@ -29,6 +29,15 @@ tags:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube l1SxNef-vsA >}}
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## gRPC 服務範本
 
 用 Go 語言寫好一個[測試範例版本][31]，gRPC 定義的 proto 檔案可以[從這邊查看][32]
