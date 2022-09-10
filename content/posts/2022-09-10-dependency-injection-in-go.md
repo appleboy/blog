@@ -36,6 +36,8 @@ tags:
 
 ## 模組依賴問題
 
+底下所有程式碼都可以在[這邊找到](https://github.com/go-training/training/tree/master/example49-dependency-injection)。
+
 ![proposal](https://i.imgur.com/j7KDYk4.png)
 
 大家參考上面這張圖，開發者想要在 `main.go` 內宣告 User 的 struct，就會需要一層一層依賴，所以代碼會寫成如下
@@ -242,4 +244,4 @@ func InitializeApplication(cfg config.Config) (*application, error) {
 
 ## 心得
 
-除了使用在 main 函式，還可以用在測試上面，測試也是要把依賴性都處理完畢，這樣才方便測試。相信大家處理依賴性肯定會遇到這問題。好的做法就是不要在 package 內宣告其他 package 的設定，這樣會非常難維護，畢竟一開始把所有的物件都初始化完畢，除錯的時候會相對容易。
+除了使用在 main 函式，還可以用在測試上面，測試也是要把依賴性都處理完畢，這樣才方便測試。相信大家處理依賴性肯定會遇到這問題。好的做法就是不要在 package 內宣告其他 package 的設定，這樣會非常難維護，畢竟一開始把所有的物件都初始化完畢，除錯的時候會相對容易。程式碼可以[這邊觀看](https://github.com/go-training/training/tree/master/example49-dependency-injection)
