@@ -4,7 +4,7 @@ date: 2022-09-10T13:17:01+08:00
 author: appleboy
 type: post
 slug: dependency-injection-in-go
-share_img: https://i.imgur.com/ZfDNgPP.png
+share_img: https://i.imgur.com/j7KDYk4.png
 categories:
   - Golang
 tags:
@@ -14,7 +14,7 @@ tags:
 
 ![proposal](https://i.imgur.com/DZOA6zy.png)
 
-不知道大家在用 Go 語言寫服務的時候，會不會遇到多個 Components 會有相互依賴的關係，A 物件依賴 B 物件，B 物件又依賴 C 物件，所以在初始化 A 物件前，就必須先將 B 跟 C 初始化完成，這就是錯綜復雜的關係。也許大家會想到另一個做法，就是把每個物件都宣告成**全域變數**，我個人不推薦這個使用方式，雖然很方便，但是就會讓整體架構變得很複雜。而本篇要介紹一個救星工具，就是 Google 團隊開發的 [Wire][1] 工具，官方部落格也可以[參考看看][2]。此工具就是為了解決底下兩個問題 ([dependency injection][3])。
+不知道大家在用 [Go 語言][11]寫服務的時候，會不會遇到 Components 會有相互依賴的關係，A 物件依賴 B 物件，B 物件又依賴 C 物件，所以在初始化 A 物件前，就必須先將 B 跟 C 初始化完成，這就是錯綜復雜的關係。也許大家會想到另一個做法，就是把每個物件都宣告成**全域變數**，我個人不推薦這個使用方式，雖然很方便，但是就會讓整體架構變得很複雜。而本篇要介紹一個救星工具，就是 Google 團隊開發的 [Wire][1] 工具，官方部落格也可以[參考看看][2]。此工具就是為了解決底下兩個問題 ([dependency injection][3])。
 
 1. Components 互相依賴錯綜復雜的關係
 2. 不要宣告全域變數
@@ -22,6 +22,7 @@ tags:
 [1]:https://github.com/google/wire
 [2]:https://blog.golang.org/wire
 [3]:https://en.wikipedia.org/wiki/Dependency_injection
+[11]:https://go.dev
 
 <!--more-->
 
@@ -228,7 +229,7 @@ user 依賴了 cache, ldap 跟 crowd 三個物件，完成後就可以透過 wir
 wire gen ./...
 ```
 
-打開 wire_gen.go
+打開 `wire_gen.go`
 
 ```go
 func InitializeApplication(cfg config.Config) (*application, error) {
@@ -258,4 +259,4 @@ func InitializeApplication(cfg config.Config) (*application, error) {
 
 ## 心得
 
-除了使用在 main 函式，還可以用在測試上面，測試也是要把依賴性都處理完畢，這樣才方便測試。相信大家處理依賴性肯定會遇到這問題。好的做法就是不要在 package 內宣告其他 package 的設定，這樣會非常難維護，畢竟一開始把所有的物件都初始化完畢，除錯的時候會相對容易。程式碼可以[這邊觀看](https://github.com/go-training/training/tree/master/example49-dependency-injection)
+除了使用在 main 函式，還可以用在測試上面，測試也是要把依賴性都處理完畢，這樣才方便測試。相信大家處理依賴性肯定會遇到這問題。好的做法就是不要在 package 內宣告其他 package 的設定，這樣會非常難維護，畢竟一開始把所有的物件都初始化完畢，除錯的時候會相對容易。程式碼可以[這邊觀看](https://github.com/go-training/training/tree/master/example49-dependency-injection)。
