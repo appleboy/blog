@@ -1,5 +1,5 @@
 ---
-title: "用 Wire 工具解決 Dependency Injection"
+title: "用 Google 團隊推出的 Wire 工具解決 Dependency Injection"
 date: 2022-09-10T13:17:01+08:00
 author: appleboy
 type: post
