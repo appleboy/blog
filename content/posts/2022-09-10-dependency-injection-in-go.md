@@ -29,6 +29,20 @@ tags:
 
 {{< youtube iYOYOAEVsRw >}}
 
+```sh
+00:00 Dependency Injection 是什麼
+00:23 模組相依性產生的問題
+02:09 用程式碼講解問題出在哪邊
+05:29 撰寫 wire.go 代碼，宣告 application struct
+06:52 撰寫 inject_router.go
+07:49 撰寫 inject_user.go
+09:06 產生 wire_gen.go 代碼
+10:36 安裝 wire 工具
+11:17 wire_gen.go 內容是什麼
+12:23 如何簡化 main.go 內容
+14:04 如何再次修改 dependency
+```
+
 其他線上課程請參考如下
 
 * [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
