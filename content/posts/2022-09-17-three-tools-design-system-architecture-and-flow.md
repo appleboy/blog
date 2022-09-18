@@ -108,6 +108,8 @@ go_cli -> queue: Remove Notification
 
 ![Excalidraw 01](https://i.imgur.com/vy3tzXU.png)
 
+另外可以參考 [Signoz](https://signoz.io) 公開的文件：[Logs Overview](https://signoz.io/docs/userguide/logs/)，裡面大量用到 Excalidraw 畫出來的流程圖。
+
 ## 心得結論
 
 上面有三套好用的畫圖工具，我個人使用的時機不盡相同，如果是簡易的流程圖，我都直接用 [Excalidraw](https://excalidraw.com/) 快速搞定，不想花太多時間進行繪製，尤其是時間很趕的時候。跨團隊或內部開發溝通時，我就會用 [PlantUML](https://plantuml.com/)，將開發流程描述清楚，避免在合作上面出現差錯，讓其他開發同仁產生誤會。到專案中期或後期，整體架構比較確定後，我會在用 [Diagrams](https://www.diagrams.net/) 繪製系統流程，讓團隊或長官可以更加了解專案的全貌。
