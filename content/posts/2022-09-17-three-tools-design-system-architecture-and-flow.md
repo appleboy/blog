@@ -25,6 +25,25 @@ tags:
 
 第二種是專案剛開始，或發展到一定程度，需要將全部系統架構整理下來，團隊可能用了 [AWS](https://aws.amazon.com/) 或 [GCP](https://cloud.google.com/) 等服務，有一個全貌的系統架構圖，可以協助團隊釐清專案到底使用了哪些工具？讓剛加入的同事可以透過此架構圖快速了解並進入狀況。底下來介紹三套我個人蠻推薦的三種繪製工具。
 
+## 教學影片
+
+{{< youtube IgD_XAKwAyk >}}
+
+```sh
+00:00 為什麼需要畫系統架構圖
+00:49 第一種情境
+01:28 第二種情境
+02:07 第一套好用工具 PlantUML
+05:50 第二套 Diagrams
+07:40 第三套 Excalidraw
+09:08 使用時機
+```
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## PlantUML
 
 [PlantUML](https://plantuml.com/) 是可以用純文本語言繪製圖表的[開源軟體](https://github.com/plantuml/plantuml)，由於是純文字語言，所以可以搭配版本控制做紀錄，非常適合團隊或跨團隊合作溝通，尤其是架構初期，會需要常常修改，所以用 PlantUML 非常適合，跟同事進行快速討論迭代修正。
