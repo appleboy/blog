@@ -17,6 +17,26 @@ categories:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube Sh9hN635j50 >}}
+
+```sh
+00:00 問題描述
+02:52 如何用 Go 語言寫出多個 Worker
+04:09 看問題執行結果
+05:00 如何優化多個請求變成單一個
+05:52 新增 Metric struct 用來記錄多少 Worker Node 正在跑
+06:41 設計 ready channel 判斷是否有新的 Worker Node
+09:00 總結流程步驟
+11:25 最終執行成果
+```
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 讀取多個任務問題
 
 先看看底下此服務內部的設計，用 [Go 語言][11]來當範例解釋當下問題，假設有一個 Task 服務負責存放所有的任務，而 Agent 服務內可以開啟多個 Goroutine 來平行消化任務，步驟也很簡單，第一步就去讀取任務，而第二步就是執行任務。想看看在步驟一的時候，如果目前 Task 服務內沒有任何任務需要執行，就設計每 5 秒才去向 Task 服務詢問是否有新任務需要執行，避免太頻繁發請求給 Task 服務。
