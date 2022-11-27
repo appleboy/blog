@@ -5,7 +5,7 @@
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 /* strcat example */ #include <stdio.h> #include <string.h> int main () { char str[80]; strcpy (str,&#34;these &#34;); strcat (str,&#34;strings &#34;); strcat (str,&#34;are &#34;); strcat (str,&#34;concatenated.&#34;); puts (str); return 0; } output:
 1 these strings are concatenated. 看一下 strcat 原始碼：
 1 2 3 4 5 6 7 8 9 char * strcat(char * __restrict s, const char * __restrict append) { char *save = s; for (; *s; ++s); while ((*s++ = *append++)); return(save); } 設定指標 save 成 source，再將 s 指標指向最後，接下來根據 append 字串一個一個往後串接，直到碰到 \0 終止 while 迴圈，最後在將指標 *save 回傳即可。"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2010/08/cc-cstring-string-h-%E5%87%BD%E5%BC%8F%EF%BC%9Astrcat-strncat-strcmp-strncmp/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="[C/C++] cstring (string.h) 函式：strcat, strncat, strcmp, strncmp"><meta name=twitter:description content="串接函式 strcat strcat 此函式用來連接兩字串合併成單一字串，直接看底下範例：
-1 2 3 4 5 6 7 8 9 10 11 12 13 14 /* strcat example */ #include <stdio.h> #include <string.h> int main () { char str[80]; strcpy …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.105.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 /* strcat example */ #include <stdio.h> #include <string.h> int main () { char str[80]; strcpy …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.107.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
@@ -36,11 +36,11 @@
 </span></span><span style=display:flex><span><span style=color:#00688b;font-weight:700>int</span> <span style=color:#008b45>main</span> ()
 </span></span><span style=display:flex><span>{
 </span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>char</span> str[<span style=color:#b452cd>80</span>];
-</span></span><span style=display:flex><span>  strcpy (str,<span style=color:#cd5555>&#34;these &#34;</span>);
-</span></span><span style=display:flex><span>  strcat (str,<span style=color:#cd5555>&#34;strings &#34;</span>);
-</span></span><span style=display:flex><span>  strcat (str,<span style=color:#cd5555>&#34;are &#34;</span>);
-</span></span><span style=display:flex><span>  strcat (str,<span style=color:#cd5555>&#34;concatenated.&#34;</span>);
-</span></span><span style=display:flex><span>  puts (str);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>strcpy</span> (str,<span style=color:#cd5555>&#34;these &#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>strcat</span> (str,<span style=color:#cd5555>&#34;strings &#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>strcat</span> (str,<span style=color:#cd5555>&#34;are &#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>strcat</span> (str,<span style=color:#cd5555>&#34;concatenated.&#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>puts</span> (str);
 </span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>0</span>;
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></td></tr></table></div></div><p>output:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
@@ -87,10 +87,10 @@
 </span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>char</span> szKey[] = <span style=color:#cd5555>&#34;apple&#34;</span>;
 </span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>char</span> szInput[<span style=color:#b452cd>80</span>];
 </span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>do</span> {
-</span></span><span style=display:flex><span>     printf (<span style=color:#cd5555>&#34;Guess my favourite fruit? &#34;</span>);
-</span></span><span style=display:flex><span>     gets (szInput);
-</span></span><span style=display:flex><span>  } <span style=color:#8b008b;font-weight:700>while</span> (strcmp (szKey,szInput) != <span style=color:#b452cd>0</span>);
-</span></span><span style=display:flex><span>  puts (<span style=color:#cd5555>&#34;Correct answer!&#34;</span>);
+</span></span><span style=display:flex><span>     <span style=color:#008b45>printf</span> (<span style=color:#cd5555>&#34;Guess my favourite fruit? &#34;</span>);
+</span></span><span style=display:flex><span>     <span style=color:#008b45>gets</span> (szInput);
+</span></span><span style=display:flex><span>  } <span style=color:#8b008b;font-weight:700>while</span> (<span style=color:#008b45>strcmp</span> (szKey,szInput) != <span style=color:#b452cd>0</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>puts</span> (<span style=color:#cd5555>&#34;Correct answer!&#34;</span>);
 </span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>0</span>;
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></td></tr></table></div></div><p>來看看 strcmp 原始碼</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
@@ -143,10 +143,10 @@
 </span></span><span style=display:flex><span>{
 </span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>char</span> str1[<span style=color:#b452cd>20</span>];
 </span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>char</span> str2[<span style=color:#b452cd>20</span>];
-</span></span><span style=display:flex><span>  strcpy (str1,<span style=color:#cd5555>&#34;To be &#34;</span>);
-</span></span><span style=display:flex><span>  strcpy (str2,<span style=color:#cd5555>&#34;or not to be&#34;</span>);
-</span></span><span style=display:flex><span>  strncat (str1, str2, <span style=color:#b452cd>6</span>);
-</span></span><span style=display:flex><span>  printf(<span style=color:#cd5555>&#34;%s</span><span style=color:#cd5555>\n</span><span style=color:#cd5555>&#34;</span>, str1);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>strcpy</span> (str1,<span style=color:#cd5555>&#34;To be &#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>strcpy</span> (str2,<span style=color:#cd5555>&#34;or not to be&#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>strncat</span> (str1, str2, <span style=color:#b452cd>6</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>printf</span>(<span style=color:#cd5555>&#34;%s</span><span style=color:#cd5555>\n</span><span style=color:#cd5555>&#34;</span>, str1);
 </span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>0</span>;
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></td></tr></table></div></div><p>strncat 原始碼</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1> 1</a>
@@ -180,7 +180,7 @@
 </span></span></span><span style=display:flex><span><span style=color:#228b22> * are written at dst (at most n+1 bytes being appended).  Return dst.
 </span></span></span><span style=display:flex><span><span style=color:#228b22> */</span>
 </span></span><span style=display:flex><span><span style=color:#00688b;font-weight:700>char</span> *
-</span></span><span style=display:flex><span><span style=color:#008b45>strncat</span>(<span style=color:#00688b;font-weight:700>char</span> * __restrict dst, <span style=color:#8b008b;font-weight:700>const</span> <span style=color:#00688b;font-weight:700>char</span> * __restrict src, size_t n)
+</span></span><span style=display:flex><span><span style=color:#008b45>strncat</span>(<span style=color:#00688b;font-weight:700>char</span> * __restrict dst, <span style=color:#8b008b;font-weight:700>const</span> <span style=color:#00688b;font-weight:700>char</span> * __restrict src, <span style=color:#00688b;font-weight:700>size_t</span> n)
 </span></span><span style=display:flex><span>{
 </span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> (n != <span style=color:#b452cd>0</span>) {
 </span></span><span style=display:flex><span>        <span style=color:#00688b;font-weight:700>char</span> *d = dst;
@@ -221,11 +221,11 @@
 </span></span><span style=display:flex><span>{
 </span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>char</span> str[][<span style=color:#b452cd>5</span>] = { <span style=color:#cd5555>&#34;R2D2&#34;</span> , <span style=color:#cd5555>&#34;C3PO&#34;</span> , <span style=color:#cd5555>&#34;R2A6&#34;</span> };
 </span></span><span style=display:flex><span>  <span style=color:#00688b;font-weight:700>int</span> n;
-</span></span><span style=display:flex><span>  puts (<span style=color:#cd5555>&#34;Looking for R2 astromech droids...&#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#008b45>puts</span> (<span style=color:#cd5555>&#34;Looking for R2 astromech droids...&#34;</span>);
 </span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> (n=<span style=color:#b452cd>0</span> ; n&lt;<span style=color:#b452cd>3</span> ; n++)
-</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> (strncmp (str[n],<span style=color:#cd5555>&#34;R2xx&#34;</span>,<span style=color:#b452cd>2</span>) == <span style=color:#b452cd>0</span>)
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> (<span style=color:#008b45>strncmp</span> (str[n],<span style=color:#cd5555>&#34;R2xx&#34;</span>,<span style=color:#b452cd>2</span>) == <span style=color:#b452cd>0</span>)
 </span></span><span style=display:flex><span>    {
-</span></span><span style=display:flex><span>      printf (<span style=color:#cd5555>&#34;found %s</span><span style=color:#cd5555>\n</span><span style=color:#cd5555>&#34;</span>,str[n]);
+</span></span><span style=display:flex><span>      <span style=color:#008b45>printf</span> (<span style=color:#cd5555>&#34;found %s</span><span style=color:#cd5555>\n</span><span style=color:#cd5555>&#34;</span>,str[n]);
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#b452cd>0</span>;
 </span></span><span style=display:flex><span>}
@@ -253,7 +253,7 @@
 </span></span><span style=display:flex><span><span style=color:#00688b;font-weight:700>int</span>
 </span></span><span style=display:flex><span><span style=color:#008b45>strncmp</span>(s1, s2, n)
 </span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>const</span> <span style=color:#00688b;font-weight:700>char</span> *s1, *s2;
-</span></span><span style=display:flex><span>    size_t n;
+</span></span><span style=display:flex><span>    <span style=color:#00688b;font-weight:700>size_t</span> n;
 </span></span><span style=display:flex><span>{
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>if</span> (n == <span style=color:#b452cd>0</span>)
@@ -280,7 +280,7 @@
 &nbsp;&bull;&nbsp;&copy;
 2022
 &nbsp;&bull;&nbsp;
-<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.105.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.107.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
 <script src=https://blog.wu-boy.com/js/main.js></script>
 <script>(function(){var t,n="003841896160749976666:l9i5hqttpqi",e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
