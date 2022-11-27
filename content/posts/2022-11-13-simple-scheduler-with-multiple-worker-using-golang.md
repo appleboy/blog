@@ -23,7 +23,7 @@ categories:
 
 [11]:https://go.dev
 
-先假設有 100 個任務需要等待執行，在 Agent 內開啟 10 個 Worker Node 去消化，這樣每次就會發送 10 個請求，而這 10 個請求有可能對於 Task 服務來說就是 10 個 SQL 指令，如果是 10 台 Agnet 就變成 100 個請求，這樣對於 Task 服務來說會負擔太大。
+先假設有 100 個任務需要等待執行，在 Agent 內開啟 10 個 Worker Node 去消化，這樣每次就會發送 10 個請求，而這 10 個請求有可能對於 Task 服務來說就是 10 個 SQL 指令，如果是 10 台 Agent 就變成 100 個請求，這樣對於 Task 服務來說會負擔太大。
 
 ![system design 01](https://i.imgur.com/4csL9To.png)
 
