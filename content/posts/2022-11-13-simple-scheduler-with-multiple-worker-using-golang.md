@@ -24,9 +24,9 @@ categories:
 ```sh
 00:00 問題描述
 02:52 如何用 Go 語言寫出多個 Worker
-04:09 看問題執行結果
-05:00 如何優化多個請求變成單一個
-05:52 新增 Metric struct 用來記錄多少 Worker Node 正在跑
+04:09 執行結果及問題展示
+05:00 優化多個請求變成單一個
+05:52 新增 Metric struct 用來記錄多少 Worker Node 執行中
 06:41 設計 ready channel 判斷是否有新的 Worker Node
 09:00 總結流程步驟
 11:25 最終執行成果
