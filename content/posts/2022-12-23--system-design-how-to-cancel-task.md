@@ -17,6 +17,8 @@ categories:
 [1]:https://aws.amazon.com/tw/what-is/restful-api/
 [2]:https://grpc.io/
 
+<!--more-->
+
 ## 使用情境
 
 可以看到步驟一是 worker 會先發一個請求到後端服務，詢問說現在正在執行的任務是否需要取消，這邊可以用一個長連接，或許是 30 秒或 1 分鐘才斷線。步驟二是 User 從 Web UI 端按下取消的按鈕。步驟三是後端服務接受到取消任務的請求，拿到請求後，就回覆給 Worker 取消任務。
