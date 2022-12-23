@@ -7,6 +7,7 @@ slug: simple-scheduler-with-multiple-worker-using-golang
 share_img: https://i.imgur.com/lbY6KzL.png
 categories:
   - Golang
+  - System Design
 ---
 
 ![system design 02](https://i.imgur.com/lbY6KzL.png)
