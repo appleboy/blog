@@ -27,7 +27,7 @@ categories:
 
 ## 單機實作方式
 
-用 [Go 語言][3]來處理後端跟 Worker 之間的資料交換機制。可以看下圖，先實作 canceller package，裡面有兩個不同的 Method，一個是 `Cancel` 用來處裡接受使用者取消哪一筆任務，另一個是 `Cancelled` 用來接受 Worker 的請求。
+用 [Go 語言][3]來處理後端跟 Worker 之間的資料交換機制。可以看下圖，先實作 canceller package，裡面有兩個不同的 Method，一個是 `Cancel` 用來處裡使用者取消哪一筆任務，另一個是 `Cancelled` 用來接受 Worker 的連線請求。
 
 [3]: https://go.dev
 
