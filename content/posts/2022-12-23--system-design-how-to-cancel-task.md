@@ -33,7 +33,7 @@ categories:
 
 ![cancel a task](https://i.imgur.com/TuWbShu.png)
 
-這邊先考慮單個後端服務，設計 `canceller` 結構可以用 `map` 方式來紀錄目前有多少 worker 請求，其中 map 內的 string 用來記錄任務唯一 ID 識別。
+這邊先考慮單個後端服務，為什麼先只考慮單個後端呢？原因就是底下的解法只適合在單一後端下才可以，多個後端會造成資料不同步問題。設計 `canceller` 結構可以用 `map` 方式來紀錄目前有多少 worker 請求，其中 map 內的 string 用來記錄任務唯一 ID 識別。
 
 ```go
 type canceler struct {
