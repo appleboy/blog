@@ -248,6 +248,27 @@ func (c *canceler) clear() {
 }
 ```
 
+最後補上測試，先執行 `Cancel` 代表 User 取消執行的任務，接著 Worker 發送請求詢問，由於我們有給 5 分鐘緩衝，所以時間內都可以拿到取消任務的指令。
+
+```go
+func TestUserCancelTaskFirst(t *testing.T) {
+  var canceled bool
+  var err error
+  engine := newCanceler()
+
+  // User cancel task first and
+  _ = engine.Cancel(context.Background(), "test1234")
+  canceled, err = engine.Cancelled(context.Background(), "test1234")
+
+  if !canceled {
+    t.Fatal("can't get cancel event")
+  }
+  if err != nil {
+    t.Fatal("get error")
+  }
+}
+```
+
 ## 心得
 
 本篇最主要是要用 Go 語言的 Channel 特性來處理兩個服務之間的溝通機制，大家可能想到的解法就是用 Message Queue 來處理，但是有時候把架構想的更簡單一點，用 Go 語言的特性來處理，那就減少一個服務的維運，未來要將此架構轉換到其他平台就會更簡單，其他部門有需求會是將整套服務架設在不同團隊內，這時候架構越簡單，除錯時間會越短。
