@@ -60,12 +60,12 @@ categories:
 type canceler struct {
   sync.Mutex
 
-  subsciber map[chan struct{}]string
+  subsciber map[string]chan struct{}
 }
 
 func newCanceler() *canceler {
   return &canceler{
-    subsciber: make(map[chan struct{}]string),
+    subsciber: make(subsciber map[string]chan struct{}),
   }
 }
 ```
@@ -76,12 +76,12 @@ func newCanceler() *canceler {
 func (c *canceler) Cancelled(ctx context.Context, id string) (bool, error) {
   subsciber := make(chan struct{})
   c.Lock()
-  c.subsciber[subsciber] = id
+  c.subsciber[id] = subsciber
   c.Unlock()
 
   defer func() {
     c.Lock()
-    delete(c.subsciber, subsciber)
+    delete(c.subsciber, id)
     c.Unlock()
   }()
 
@@ -99,7 +99,7 @@ func (c *canceler) Cancelled(ctx context.Context, id string) (bool, error) {
 ```go
 subsciber := make(chan struct{})
 c.Lock()
-c.subsciber[subsciber] = id
+c.subsciber[id] = subsciber
 c.Unlock()
 ```
 
@@ -108,7 +108,7 @@ c.Unlock()
 ```go
   defer func() {
     c.Lock()
-    delete(c.subsciber, subsciber)
+    delete(c.subsciber, id)
     c.Unlock()
   }()
 
@@ -126,11 +126,8 @@ c.Unlock()
 func (c *canceler) Cancel(ctx context.Context, id string) error {
   c.Lock()
   defer c.Unlock()
-  for subsciber, target := range c.subsciber {
-    if id == target {
-      close(subsciber)
-      return nil
-    }
+  if sub, ok := c.subsciber[id]; ok {
+    close(sub)
   }
   return nil
 }
@@ -200,7 +197,7 @@ func TestContextCancelTask(t *testing.T) {
 type canceler struct {
   sync.Mutex
 
-  subsciber map[chan struct{}]string
+  subsciber map[string]chan struct{}
 + cancelled map[string]time.Time
 }
 ```
@@ -212,11 +209,8 @@ func (c *canceler) Cancel(ctx context.Context, id string) error {
   c.Lock()
   defer c.Unlock()
 + c.cancelled[id] = time.Now().Add(5 * time.Minute)
-  for subsciber, target := range c.subsciber {
-    if id == target {
-      close(subsciber)
-      return nil
-    }
+  if sub, ok := c.subsciber[id]; ok {
+    close(sub)
   }
 + c.clear()
   return nil
@@ -229,12 +223,12 @@ func (c *canceler) Cancel(ctx context.Context, id string) error {
 func (c *canceler) Cancelled(ctx context.Context, id string) (bool, error) {
   subsciber := make(chan struct{})
   c.Lock()
-  c.subsciber[subsciber] = id
+  c.subsciber[id] = subsciber
   c.Unlock()
 
   defer func() {
     c.Lock()
-    delete(c.subsciber, subsciber)
+    delete(c.subsciber, id)
     c.Unlock()
   }()
 
