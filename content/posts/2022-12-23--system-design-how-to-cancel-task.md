@@ -19,6 +19,27 @@ categories:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube tj95O--us70 >}}
+
+```sh
+00:00 情境介紹
+02:08 設計問題優缺點
+03:44 單機版本實現方式
+06:04 worker 連線請求
+08:44 User 取消任務請求
+12:24 worker 斷線跟如何處理?
+13:26 解決方式 (設計 Timeout 機制)
+15:52 清除 map 不必要資訊
+17:47 實作後心得
+```
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 使用情境
 
 可以看到步驟一是 worker 會先發請求到後端服務，詢問目前正在執行的任務是否取消，這邊可以用一個長連接持續 30 秒或 1 分鐘才斷線。步驟二是 User 從 Web UI 端按下取消的按鈕。步驟三是後端服務接受到取消任務的請求，就回覆 Worker 到請求執行取消任務。
