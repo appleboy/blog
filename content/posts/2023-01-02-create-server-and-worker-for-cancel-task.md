@@ -204,4 +204,4 @@ func main() {
 4. 當 Worker 失去連線或不正常關閉，該如何讓 Task 可以重新執行？
 5. 當有多台 Server + 多台 Worker 時，該如何配送任務及取消任務？
 
-團隊除了需要解決此架構之外，也把上述的機制也實現在 [AWS SageMaker](https://aws.amazon.com/sagemaker/) 上，打造 AWS MLOps 平台。
+團隊除了需要解決此架構之外，也把上述的機制也實現在 [AWS SageMaker](https://aws.amazon.com/sagemaker/) 上，打造 AWS MLOps 平台。本篇程式碼可以在[這邊找到](https://github.com/go-training/training/tree/master/example51-canceler)。
