@@ -1,5 +1,5 @@
 ---
-title: "系統設計: 建立 Web 及 Worker 服務實現取消任務 (二)"
+title: "用 Go 語言建立 Web 及 Worker 服務實現取消任務 (二)"
 date: 2023-01-02T08:32:31+08:00
 author: appleboy
 type: post
