@@ -1,0 +1,348 @@
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>用 Go 語言實現固定大小的 Ring Buffer 資料結構 - 小惡魔 - AppleBOY</title><meta name=description content="
+Ring Buffer Queue 是固定大小記憶體的 FIFO (first in, first out) 資料結構，用來處理不同 Process 之前的資料交換。工作原理就是在一段連續固定大小區間的記憶體用 (head/tail) 兩個指針來決定現在要將資料放在哪個位置。本篇將帶大家用 Go 語言快速實現 Ring Buffer 資料結構。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2023\/01\/ring-buffer-queue-with-fixed-size-in-golang\/","name":"用 go 語言實現固定大小的 ring buffer 資料結構"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"用 Go 語言實現固定大小的 Ring Buffer 資料結構","description":"\nRing Buffer Queue 是固定大小記憶體的 FIFO (first in, first out) 資料結構，用來處理不同 Process 之前的資料交換。工作原理就是在一段連續固定大小區間的記憶體用 (head\/tail) 兩個指針來決定現在要將資料放在哪個位置。本篇將帶大家用 Go 語言快速實現 Ring Buffer 資料結構。\n","inLanguage":"en","wordCount":738,"datePublished":"2023-01-24T08:08:14","dateModified":"2023-01-24T08:08:14","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":[""],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2023\/01\/ring-buffer-queue-with-fixed-size-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="用 Go 語言實現固定大小的 Ring Buffer 資料結構"><meta property="og:description" content="
+Ring Buffer Queue 是固定大小記憶體的 FIFO (first in, first out) 資料結構，用來處理不同 Process 之前的資料交換。工作原理就是在一段連續固定大小區間的記憶體用 (head/tail) 兩個指針來決定現在要將資料放在哪個位置。本篇將帶大家用 Go 語言快速實現 Ring Buffer 資料結構。"><meta property="og:image" content="https://i.imgur.com/mDJolWF.png"><meta property="og:url" content="https://blog.wu-boy.com/2023/01/ring-buffer-queue-with-fixed-size-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="用 Go 語言實現固定大小的 Ring Buffer 資料結構"><meta name=twitter:description content="
+Ring Buffer Queue 是固定大小記憶體的 FIFO (first in, first out) 資料結構，用來處理不同 Process 之前的資料交換。工作原理就是在一段連續固定大小區間的記憶體用 (head/tail) 兩個指針來決定現在要將資料放在哪個位置。本篇將帶大家用 Go 語言快速實現 Ring Buffer 資料結構。"><meta name=twitter:image content="https://i.imgur.com/mDJolWF.png"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.110.0"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<span class=sr-only>Toggle navigation</span>
+<span class=icon-bar></span>
+<span class=icon-bar></span>
+<span class=icon-bar></span></button>
+<a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
+<a href=/docker-course/>Docker 容器開發實戰</a>
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>用 Go 語言實現固定大小的 Ring Buffer 資料結構</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on January 24, 2023
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;4&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;738&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#使用時機>使用時機</a></li><li><a href=#實作原理>實作原理</a></li><li><a href=#如何實作>如何實作</a></li><li><a href=#解決浪費單一空間>解決浪費單一空間</a></li><li><a href=#效能測試>效能測試</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src=https://i.imgur.com/mDJolWF.png alt=logo></p><p>Ring Buffer Queue 是<strong>固定大小記憶體</strong>的 FIFO (first in, first out) 資料結構，用來處理不同 Process 之前的資料交換。工作原理就是在一段連續固定大小區間的記憶體用 (head/tail) 兩個指針來決定現在要將資料放在哪個位置。本篇將帶大家用 <a href=https://go.dev>Go 語言</a>快速實現 Ring Buffer 資料結構。</p><h2 id=使用時機>使用時機</h2><p>由於是固定大小的 Queue，在嵌入式系統領域非常好用，尤其時記憶體非常小的時候，使用上格外小心，因此開發者通常會宣告固定大小來儲存數據，而非使用動態分配，避免系統記憶體被用完。</p><p>必須要知道此資料結構也是有限制的，固定大小的 Queue，最終會遇到資料滿的時候該如何處理，有兩種方式，第一種就是將最新的資料拋棄，另一種就是將最新的資料繼續寫入舊的記憶體區段。</p><h2 id=實作原理>實作原理</h2><p>從 <a href=https://en.wikipedia.org/wiki/Circular_buffer>Wiki</a> 上面看到底下這張動畫圖</p><p><img src=https://i.imgur.com/uGdFrWI.png alt="circular buffer"></p><p>從上圖可以看到在資料結構內需要底下成員</p><ul><li>buf: 內容儲存格式</li><li>capacity: 固定容量大小 (length)</li><li>head: 指向從 Buffer 內取出資料 (start)</li><li>tail: 指向從 Buffer 內儲存資料 (end)</li></ul><p>API 實作細節需要底下四個函示</p><ul><li>Enqueue: 將資料放入 Queue</li><li>Dequeue: 從 Queue 讀取資料</li><li>IsEmpty: 判斷 Queue 內是否有資料</li><li>IsFull: 判斷 Queue 是否已經滿了</li></ul><h2 id=如何實作>如何實作</h2><p>根據上述的資料結構，可以用 Go 語言宣告如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-7>7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-8>8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-9>9</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>type</span> T <span style=color:#8b008b;font-weight:700>interface</span>{}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>type</span> CircularBuffer <span style=color:#8b008b;font-weight:700>struct</span> {
+</span></span><span style=display:flex><span>  sync.Mutex
+</span></span><span style=display:flex><span>  taskQueue []T
+</span></span><span style=display:flex><span>  capacity  <span style=color:#00688b;font-weight:700>int</span>
+</span></span><span style=display:flex><span>  head      <span style=color:#00688b;font-weight:700>int</span>
+</span></span><span style=display:flex><span>  tail      <span style=color:#00688b;font-weight:700>int</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>實作判斷 <code>IsEmpty</code>，是否為空，只要是 <code>head</code> 跟 <code>tail</code> 值相同的話，就是空的。資料結構初始化後，head 跟 tail 就都為零。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> (s *CircularBuffer) <span style=color:#008b45>IsEmpty</span>() <span style=color:#00688b;font-weight:700>bool</span> {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> s.head == s.tail
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>實作判斷 <code>IsFull</code> 是否已經滿了，無法在寫入資料，當有新資料寫入時，tail 就會 +1，而 head 則是維持不動。等到 Queue 寫入到最後一個空間後，<code>tail + 1</code> 就會等於 head 值，而由於是 Ring 結構，所以需要除以 <code>capacity</code> 取餘數。這邊請注意，由於要計算是否已經滿了，故需要浪費掉一個位置來確認。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> (s *CircularBuffer) <span style=color:#008b45>IsFull</span>() <span style=color:#00688b;font-weight:700>bool</span> {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> s.head == (s.tail+<span style=color:#b452cd>1</span>)%s.capacity
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>假設 buffer size 為 4 好了</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-10>10</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span><span style=color:#228b22># 初始化</span>
+</span></span><span style=display:flex><span>head: 0, tail: <span style=color:#b452cd>0</span>
+</span></span><span style=display:flex><span><span style=color:#228b22># 寫入資料</span>
+</span></span><span style=display:flex><span>head: 0, tail: <span style=color:#b452cd>1</span>
+</span></span><span style=display:flex><span><span style=color:#228b22># 寫入資料</span>
+</span></span><span style=display:flex><span>head: 0, tail: <span style=color:#b452cd>2</span>
+</span></span><span style=display:flex><span><span style=color:#228b22># 寫入資料</span>
+</span></span><span style=display:flex><span>head: 0, tail: <span style=color:#b452cd>3</span>
+</span></span><span style=display:flex><span><span style=color:#228b22># Queue 裡面只有三個了</span>
+</span></span><span style=display:flex><span><span style=color:#228b22># IsFull() 已經為 true</span>
+</span></span></code></pre></td></tr></table></div></div><p>接著看看如何實作 Enqueue 及 Dequeue</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-4-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-4-25>25</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> (s *CircularBuffer) <span style=color:#008b45>Enqueue</span>(task T) <span style=color:#00688b;font-weight:700>error</span> {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>if</span> s.<span style=color:#008b45>IsFull</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span> errMaxCapacity
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  s.<span style=color:#008b45>Lock</span>()
+</span></span><span style=display:flex><span>  s.taskQueue[s.tail] = task
+</span></span><span style=display:flex><span>  s.tail = (s.tail + <span style=color:#b452cd>1</span>) % s.capacity
+</span></span><span style=display:flex><span>  s.<span style=color:#008b45>Unlock</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> (s *CircularBuffer) <span style=color:#008b45>Dequeue</span>() (T, <span style=color:#00688b;font-weight:700>error</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>if</span> s.<span style=color:#008b45>IsEmpty</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>, queue.ErrNoTaskInQueue
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  s.<span style=color:#008b45>Lock</span>()
+</span></span><span style=display:flex><span>  data := s.taskQueue[s.head]
+</span></span><span style=display:flex><span>  s.head = (s.head + <span style=color:#b452cd>1</span>) % s.capacity
+</span></span><span style=display:flex><span>  s.<span style=color:#008b45>Unlock</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> data, <span style=color:#8b008b;font-weight:700>nil</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>可以看到上述代碼實作方式相同，Enqueue 就是將 <code>tail+1</code>，而 Dequeue 就是將 <code>head+1</code>。最後補上 New 函式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-1>1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-2>2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-3>3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-4>4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-5>5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-6>6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-7>7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-5-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-5-8>8</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>NewCircularBuffer</span>(size <span style=color:#00688b;font-weight:700>int</span>) *CircularBuffer {
+</span></span><span style=display:flex><span>  w := &amp;CircularBuffer{
+</span></span><span style=display:flex><span>    taskQueue: <span style=color:#658b00>make</span>([]T, size),
+</span></span><span style=display:flex><span>    capacity:  size,
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> w
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>驗證上述程式碼，底下是測試代碼</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-6-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-6-22>22</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>TestQueue</span>(t *testing.T) {
+</span></span><span style=display:flex><span>  size := <span style=color:#b452cd>100</span>
+</span></span><span style=display:flex><span>  q := <span style=color:#008b45>NewCircularBuffer</span>(size)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; (size - <span style=color:#b452cd>1</span>); i++ {
+</span></span><span style=display:flex><span>    assert.<span style=color:#008b45>NoError</span>(t, q.<span style=color:#008b45>Enqueue</span>(i+<span style=color:#b452cd>1</span>))
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// can&#39;t insert new data.
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  assert.<span style=color:#008b45>Error</span>(t, q.<span style=color:#008b45>Enqueue</span>(<span style=color:#b452cd>0</span>))
+</span></span><span style=display:flex><span>  assert.<span style=color:#008b45>Equal</span>(t, errFull, q.<span style=color:#008b45>Enqueue</span>(<span style=color:#b452cd>0</span>))
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; (size - <span style=color:#b452cd>1</span>); i++ {
+</span></span><span style=display:flex><span>    v, err := q.<span style=color:#008b45>Dequeue</span>()
+</span></span><span style=display:flex><span>    assert.<span style=color:#008b45>Equal</span>(t, i+<span style=color:#b452cd>1</span>, v.(<span style=color:#00688b;font-weight:700>int</span>))
+</span></span><span style=display:flex><span>    assert.<span style=color:#008b45>NoError</span>(t, err)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  _, err := q.<span style=color:#008b45>Dequeue</span>()
+</span></span><span style=display:flex><span>  <span style=color:#228b22>// no task
+</span></span></span><span style=display:flex><span><span style=color:#228b22></span>  assert.<span style=color:#008b45>Error</span>(t, err)
+</span></span><span style=display:flex><span>  assert.<span style=color:#008b45>Equal</span>(t, errNoTask, err)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>上面可以看到先宣告 100 size 的 Slice，但是只能使用 99 大小，第 100 個要塞入就會出現錯誤。<a href=https://github.com/go-training/training/blob/fcfcb5490a30f0e36a82d0f72fd59a7bfe5181c7/example52-ring-buffer-queue/queue.go#L1-L64>程式碼請參考</a>，測試程式碼<a href=https://github.com/go-training/training/blob/fcfcb5490a30f0e36a82d0f72fd59a7bfe5181c7/example52-ring-buffer-queue/queue_test.go#L1-L30>請參考這邊</a></p><h2 id=解決浪費單一空間>解決浪費單一空間</h2><p>上面有提到此 Ring buffer 需要浪費一個空間來計算 Empty 或 Full。來看看怎麼解決這問題，其實很簡單，在資料結構內多新增一個 <code>full</code> 變數來確認 Queue 是否為滿。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-7-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-7-34>34</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-diff data-lang=diff><span style=display:flex><span>type CircularBuffer struct {
+</span></span><span style=display:flex><span>  capacity  int
+</span></span><span style=display:flex><span>  head      int
+</span></span><span style=display:flex><span>  tail      int
+</span></span><span style=display:flex><span><span style=color:#0a0>+ full      bool
+</span></span></span><span style=display:flex><span><span style=color:#0a0></span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>func (s *CircularBuffer) IsEmpty() bool {
+</span></span><span style=display:flex><span><span style=color:#a00>- return s.head == s.tail
+</span></span></span><span style=display:flex><span><span style=color:#a00></span><span style=color:#0a0>+ return s.head == s.tail &amp;&amp; !s.full
+</span></span></span><span style=display:flex><span><span style=color:#0a0></span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>func (s *CircularBuffer) IsFull() bool {
+</span></span><span style=display:flex><span><span style=color:#a00>- return s.head == (s.tail+1)%s.capacity
+</span></span></span><span style=display:flex><span><span style=color:#a00></span><span style=color:#0a0>+ return s.full
+</span></span></span><span style=display:flex><span><span style=color:#0a0></span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>func (s *CircularBuffer) Enqueue(task T) error {
+</span></span><span style=display:flex><span>  s.Lock()
+</span></span><span style=display:flex><span>  s.taskQueue[s.tail] = task
+</span></span><span style=display:flex><span>  s.tail = (s.tail + 1) % s.capacity
+</span></span><span style=display:flex><span><span style=color:#0a0>+ s.full = s.head == s.tail
+</span></span></span><span style=display:flex><span><span style=color:#0a0></span>  s.Unlock()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  return nil
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>func (s *CircularBuffer) Dequeue() (T, error) {
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  s.Lock()
+</span></span><span style=display:flex><span>  data := s.taskQueue[s.head]
+</span></span><span style=display:flex><span><span style=color:#0a0>+ s.full = false
+</span></span></span><span style=display:flex><span><span style=color:#0a0></span>  s.head = (s.head + 1) % s.capacity
+</span></span><span style=display:flex><span>  s.Unlock()
+</span></span></code></pre></td></tr></table></div></div><h2 id=效能測試>效能測試</h2><p>測試代碼如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-10>10</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-11>11</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-12><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-12>12</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-13><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-13>13</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-14><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-14>14</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-15><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-15>15</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-16><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-16>16</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-17><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-17>17</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-18><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-18>18</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-19><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-19>19</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-20><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-20>20</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-21><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-21>21</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-22><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-22>22</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-23><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-23>23</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-24><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-24>24</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-25><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-25>25</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-26><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-26>26</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-27><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-27>27</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-28><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-28>28</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-29><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-29>29</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-30><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-30>30</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-31><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-31>31</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-32><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-32>32</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-33><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-33>33</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-34><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-34>34</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-8-35><a style=outline:none;text-decoration:none;color:inherit href=#hl-8-35>35</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>BenchmarkCircularBufferEnqueueDequeue</span>(b *testing.B) {
+</span></span><span style=display:flex><span>  q := <span style=color:#008b45>NewCircularBuffer</span>(b.N)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  b.<span style=color:#008b45>ReportAllocs</span>()
+</span></span><span style=display:flex><span>  b.<span style=color:#008b45>ResetTimer</span>()
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; b.N; i++ {
+</span></span><span style=display:flex><span>    _ = q.<span style=color:#008b45>Enqueue</span>(i)
+</span></span><span style=display:flex><span>    _, _ = q.<span style=color:#008b45>Dequeue</span>()
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>BenchmarkCircularBufferEnqueue</span>(b *testing.B) {
+</span></span><span style=display:flex><span>  q := <span style=color:#008b45>NewCircularBuffer</span>(b.N)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  b.<span style=color:#008b45>ReportAllocs</span>()
+</span></span><span style=display:flex><span>  b.<span style=color:#008b45>ResetTimer</span>()
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; b.N; i++ {
+</span></span><span style=display:flex><span>    _ = q.<span style=color:#008b45>Enqueue</span>(i)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>BenchmarkCircularBufferDequeue</span>(b *testing.B) {
+</span></span><span style=display:flex><span>  q := <span style=color:#008b45>NewCircularBuffer</span>(b.N)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; b.N; i++ {
+</span></span><span style=display:flex><span>    _ = q.<span style=color:#008b45>Enqueue</span>(i)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  b.<span style=color:#008b45>ReportAllocs</span>()
+</span></span><span style=display:flex><span>  b.<span style=color:#008b45>ResetTimer</span>()
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>for</span> i := <span style=color:#b452cd>0</span>; i &lt; b.N; i++ {
+</span></span><span style=display:flex><span>    _, _ = q.<span style=color:#008b45>Dequeue</span>()
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>透過 GitHub Action 測試結果如下</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-1> 1</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-2> 2</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-3> 3</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-4> 4</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-5> 5</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-6> 6</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-7> 7</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-8> 8</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-9> 9</a>
+</span><span style="white-space:pre;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-9-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-9-10>10</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span>goos: linux
+</span></span><span style=display:flex><span>goarch: amd64
+</span></span><span style=display:flex><span>pkg: github.com/go-training/training/example52-ring-buffer-queue
+</span></span><span style=display:flex><span>cpu: Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz
+</span></span><span style=display:flex><span>BenchmarkCircularBufferEnqueueDequeue
+</span></span><span style=display:flex><span>BenchmarkCircularBufferEnqueueDequeue-2     <span style=color:#b452cd>21792045</span>          57.14 ns/op         <span style=color:#b452cd>7</span> B/op         <span style=color:#b452cd>0</span> allocs/op
+</span></span><span style=display:flex><span>BenchmarkCircularBufferEnqueue
+</span></span><span style=display:flex><span>BenchmarkCircularBufferEnqueue-2            <span style=color:#b452cd>34254517</span>          37.20 ns/op         <span style=color:#b452cd>7</span> B/op         <span style=color:#b452cd>0</span> allocs/op
+</span></span><span style=display:flex><span>BenchmarkCircularBufferDequeue
+</span></span><span style=display:flex><span>BenchmarkCircularBufferDequeue-2            <span style=color:#b452cd>54213112</span>          22.14 ns/op         <span style=color:#b452cd>0</span> B/op         <span style=color:#b452cd>0</span> allocs/op
+</span></span></code></pre></td></tr></table></div></div><p>最後程式碼<a href=https://github.com/go-training/training/blob/2375f8bce5c7e0740f23a13e786af22f5f2d2fb6/example52-ring-buffer-queue/queue.go#L1>請參考這邊</a>，測試代碼<a href=https://github.com/go-training/training/blob/2375f8bce5c7e0740f23a13e786af22f5f2d2fb6/example52-ring-buffer-queue/queue_test.go#L9-L30>請參考這裡</a></p><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2023%2f01%2fring-buffer-queue-with-fixed-size-in-golang%2f&text=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%9b%ba%e5%ae%9a%e5%a4%a7%e5%b0%8f%e7%9a%84%20Ring%20Buffer%20%e8%b3%87%e6%96%99%e7%b5%90%e6%a7%8b&via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2023%2f01%2fring-buffer-queue-with-fixed-size-in-golang%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2023%2f01%2fring-buffer-queue-with-fixed-size-in-golang%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%9b%ba%e5%ae%9a%e5%a4%a7%e5%b0%8f%e7%9a%84%20Ring%20Buffer%20%e8%b3%87%e6%96%99%e7%b5%90%e6%a7%8b" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2023%2f01%2fring-buffer-queue-with-fixed-size-in-golang%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%9b%ba%e5%ae%9a%e5%a4%a7%e5%b0%8f%e7%9a%84%20Ring%20Buffer%20%e8%b3%87%e6%96%99%e7%b5%90%e6%a7%8b" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2023%2f01%2fring-buffer-queue-with-fixed-size-in-golang%2f&title=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%9b%ba%e5%ae%9a%e5%a4%a7%e5%b0%8f%e7%9a%84%20Ring%20Buffer%20%e8%b3%87%e6%96%99%e7%b5%90%e6%a7%8b" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2023%2f01%2fring-buffer-queue-with-fixed-size-in-golang%2f&description=%e7%94%a8%20Go%20%e8%aa%9e%e8%a8%80%e5%af%a6%e7%8f%be%e5%9b%ba%e5%ae%9a%e5%a4%a7%e5%b0%8f%e7%9a%84%20Ring%20Buffer%20%e8%b3%87%e6%96%99%e7%b5%90%e6%a7%8b" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2023/01/create-server-and-worker-for-cancel-task-in-golang/ data-toggle=tooltip data-placement=top title="用 Go 語言建立 Web 及 Worker 服務實現取消任務 (二)">&larr; Previous Post</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2023/01/ring-buffer-queue-with-fixed-size-in-golang>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2023/01/ring-buffer-queue-with-fixed-size-in-golang"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2023
+&nbsp;&bull;&nbsp;
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.110.0</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+<script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
+<script src=https://blog.wu-boy.com/js/main.js></script>
+<script>(function(){var t,n="003841896160749976666:l9i5hqttpqi",e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
