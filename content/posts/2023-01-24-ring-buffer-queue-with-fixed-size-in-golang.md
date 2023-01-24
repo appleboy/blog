@@ -1,7 +1,6 @@
 ---
 title: "用 Go 語言實現固定大小的 Ring Buffer 資料結構"
 date: 2023-01-24T08:08:14+08:00
-draft: true
 author: appleboy
 type: post
 slug: ring-buffer-queue-with-fixed-size-in-golang
