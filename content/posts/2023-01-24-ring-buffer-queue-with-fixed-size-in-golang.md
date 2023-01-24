@@ -266,3 +266,5 @@ BenchmarkCircularBufferEnqueue-2            34254517          37.20 ns/op       
 BenchmarkCircularBufferDequeue
 BenchmarkCircularBufferDequeue-2            54213112          22.14 ns/op         0 B/op         0 allocs/op
 ```
+
+最後程式碼[請參考這邊](https://github.com/go-training/training/blob/2375f8bce5c7e0740f23a13e786af22f5f2d2fb6/example52-ring-buffer-queue/queue.go#L1)，測試代碼[請參考這裡](https://github.com/go-training/training/blob/2375f8bce5c7e0740f23a13e786af22f5f2d2fb6/example52-ring-buffer-queue/queue_test.go#L9-L30)
