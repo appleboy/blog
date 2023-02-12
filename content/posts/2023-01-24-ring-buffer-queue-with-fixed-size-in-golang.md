@@ -251,7 +251,7 @@ func BenchmarkCircularBufferDequeue(b *testing.B) {
 }
 ```
 
-透過 GitHub Action 測試結果如下
+透過 [GitHub Action](https://github.com/features/actions) 測試結果如下
 
 ```sh
 goos: linux
