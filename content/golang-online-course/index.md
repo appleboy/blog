@@ -42,21 +42,12 @@ Go 語言 (又稱 Golang) 是 Google 推出新一代的強大語言，2018 年 1
 
 ## 講師資訊
 
-Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師。長期貢獻於 Open Source 專案，熱愛開發程式。
+Appleboy (吳柏毅) 目前服務於聯發科技，擔任後端工程師。長期貢獻於[開源專案](https://github.com/appleboy)，熱愛開發程式。
 
-* Mopcon 研討會講師 ([2021](https://mopcon.org/2021/speaker/136))
-* iTHome Cloud Summit 研討會講師 ([2021](https://cloudsummit.ithome.com.tw/2021/speaker-page/69))
-* Mopcon 研討會講師 ([2020][17])
-* iTHome Cloud Summit 研討會講師 ([2020][17])
-* Mopcon 研討會講師 ([2019][16])
-* iThome Modern Web 研討會講師 ([2019][15])
-* iTHome Cloud Summit 研討會講師 ([2019][14])
-* Mopcon 研討會講師 ([2018][13])
-* iThome Modern Web 研討會講師 ([2018][12])
-* Mopcon 研討會講師 ([2017][11])
-* iThome Modern Web 研討會講師 (2017)
+* iTHome Cloud Summit 研討會講師 ([2022](https://cloudsummit.ithome.com.tw/2022/speaker-page/69), [2021](https://cloudsummit.ithome.com.tw/2021/speaker-page/69), [2020][17], [2019][14], 2017)
+* Mopcon 研討會講師 ([2021](https://mopcon.org/2021/speaker/136), [2020][17], [2019][16], [2018][13], [2017][11])
+* iThome Modern Web 研討會講師 ([2019][15], [2018][12], 2017)
 * iThome Gopher Day 研討會講師 (2017)
-* iTHome Cloud Summit 研討會講師 (2017)
 * iTHome ChatBot 研討會講師 (2017)
 * iTHome DevOps 研討會講師 (2016, 2017)
 * PHPConf 研討會講師 (2012, 2013)
@@ -71,7 +62,7 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任 IoT 物聯網工程師
 [14]: https://cloudsummit.ithome.com.tw/2019/
 [15]: https://modernweb.tw/2019/
 [16]: https://mopcon.org/2019/
-[17]: https://cloudsummit.ithome.com.tw/2020/
+[17]: https://cloudsummit.ithome.com.tw/2020/speaker.html
 [18]: https://mopcon.org/2020/
 
 目前為數個 Go 專案開發及維護者
