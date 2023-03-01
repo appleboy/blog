@@ -47,7 +47,7 @@ Appleboy (吳柏毅) 目前服務於聯發科技，擔任後端工程師。長�
 * iTHome Cloud Summit 研討會講師 ([2022](https://cloudsummit.ithome.com.tw/2022/speaker-page/69), [2021](https://cloudsummit.ithome.com.tw/2021/speaker-page/69), [2020][17], [2019][14], [2017](https://cloudsummit.ithome.com.tw/2017/index.html))
 * Mopcon 研討會講師 ([2021](https://mopcon.org/2021/speaker/136), [2020][17], [2019][16], [2018][13], [2017][11])
 * iThome Modern Web 研討會講師 ([2019][15], [2018][12], [2017](https://modernweb.tw/2017/))
-* iThome Gopher Day 研討會講師 (2017)
+* iThome Gopher Day 研討會講師 ([2017](https://gopher.ithome.com.tw/))
 * iTHome ChatBot 研討會講師 (2017)
 * iTHome DevOps 研討會講師 (2016, 2017)
 * PHPConf 研討會講師 (2012, 2013)
