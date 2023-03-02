@@ -96,8 +96,8 @@ services:
 example53_1   | [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 example53_1   |
 example53_1   | [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
-example53_1   |  - using env:	export GIN_MODE=release
-example53_1   |  - using code:	gin.SetMode(gin.ReleaseMode)
+example53_1   |  - using env: export GIN_MODE=release
+example53_1   |  - using code: gin.SetMode(gin.ReleaseMode)
 example53_1   |
 example53_1   | [GIN-debug] GET    /ping                     --> main.main.func1 (3 handlers)
 example53_1   | [GIN-debug] GET    /                         --> main.main.func2 (3 handlers)
@@ -138,6 +138,18 @@ labels:
 ```sh
 watchtower_1  | time="2023-03-02T01:35:15Z" level=info msg="Found new ghcr.io/go-training/example53:latest image (040d01951ee2)"
 watchtower_1  | time="2023-03-02T01:35:17Z" level=info msg="Stopping /root_example53_1 (57fc95adf8cd) with SIGTERM"
+```
+
+如果要改 Stop Signals 可以透過 Label 方式轉換，請改 `Dockerfile`
+
+```yml
+LABEL com.centurylinklabs.watchtower.stop-signal="SIGHUP"
+```
+
+或者是在啟動容器時加上
+
+```sh
+docker run -d --label=com.centurylinklabs.watchtower.stop-signal=SIGHUP someimage
 ```
 
 ## 使用心得
