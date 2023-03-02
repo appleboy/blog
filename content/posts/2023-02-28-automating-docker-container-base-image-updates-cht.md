@@ -4,7 +4,7 @@ date: 2023-02-28T08:44:19+08:00
 author: appleboy
 type: post
 slug: automating-docker-container-base-image-updates-cht
-share_img: https://i.imgur.com/XbonwAZ.png
+share_img: https://i.imgur.com/sPCVa57.png
 categories:
   - Golang
   - Watchtower
