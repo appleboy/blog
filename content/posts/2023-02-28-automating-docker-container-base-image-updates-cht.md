@@ -1,7 +1,6 @@
 ---
 title: "自動升級更新執行中的 Docker 容器解決方案 - watchtower"
 date: 2023-02-28T08:44:19+08:00
-draft: true
 author: appleboy
 type: post
 slug: automating-docker-container-base-image-updates-cht
