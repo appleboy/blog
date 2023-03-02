@@ -1,5 +1,5 @@
 ---
-title: "2023 02 28 Automating Docker Container Base Image Updates Eng"
+title: "Automated solution for updating running Docker containers - watchtower"
 date: 2023-02-28T14:52:48+08:00
 author: appleboy
 type: post
