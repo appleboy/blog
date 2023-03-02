@@ -133,6 +133,13 @@ labels:
     command: --interval 5 --cleanup
 ```
 
+過程中拉到新的 Image 就可以看到底下錯誤訊息，會先送 SIGTERM 訊號給容器做 Gracefully Shutdown。
+
+```sh
+watchtower_1  | time="2023-03-02T01:35:15Z" level=info msg="Found new ghcr.io/go-training/example53:latest image (040d01951ee2)"
+watchtower_1  | time="2023-03-02T01:35:17Z" level=info msg="Stopping /root_example53_1 (57fc95adf8cd) with SIGTERM"
+```
+
 ## 使用心得
 
 未來團隊在 CI/CD 流程，就可以專注在打包 Image，並且上傳到 Docker Registry 即可，機器上面所有的服務全部透過 Watchtower 來監控，上傳的 Image 也遵循 [semver](https://semver.org/) 原則。減輕不少撰寫 Shell Script 工作流程。
