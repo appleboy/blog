@@ -21,6 +21,23 @@ categories:
 
 ![CI](https://i.imgur.com/sPCVa57.png)
 
+## 教學影片
+
+{{< youtube u-ge5V6CN6w >}}
+
+```sh
+00:00 傳統 CI/CD 流程步驟
+01:30 改善後 CI/CD 流程
+02:45 什麼是 Watchtower
+03:47 使用方式
+10:00 使用心得
+```
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 什麼是 Watchtower
 
 Watchtower 是一個用 [Go 語言](https://go.dev)開發的應用程序，它會監視正在運行的 Docker 容器，並觀察這些容器最初啟動時所使用的映像檔 (Docker Image) 是否有更改。如果 watchtower 檢測到映像檔已更改，它將自動使用新映像檔重新啟動容器。
