@@ -1,5 +1,5 @@
 ---
-title: "用 ChatGTP 自動幫開發者產生 Commit Message"
+title: "用 ChatGPT 自動幫開發者產生 Commit Message"
 date: 2023-03-12T15:53:55+08:00
 author: appleboy
 type: post
