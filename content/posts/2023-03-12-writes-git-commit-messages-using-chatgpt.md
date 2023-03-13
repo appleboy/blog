@@ -12,7 +12,7 @@ categories:
 
 ![Cover](https://i.imgur.com/LPYqF26.png)
 
-相信大家對 [ChatGPT][1] 不會很陌生，這是目前在生成式人工智慧 (AIGC: AI Generated Content) 內的當紅炸子雞，然而 ChatGPT 對於軟體工程師有什麼影響呢？能否透過 ChatGPT 改善團隊流程或協助開發？而我現在想到最直接的就是用 ChatGTP 幫忙寫 Git Commit Message，然而怎麼把 Commit Message 寫好可以參考[這篇文章][2]，為了能達成這目的，我用 [Go 語言][4]寫了一個 CLI 工具 [CodeGPT][3] (請大家幫忙分享)，來解決軟體開發工程師不知道怎麼把 Message 寫好。底下先看看使用 CodeGPT 來產生 Commit Message 的成果
+相信大家對 [ChatGPT][1] 不會很陌生，這是目前在生成式人工智慧 (AIGC: AI Generated Content) 內的當紅炸子雞，然而 ChatGPT 對於軟體工程師有什麼影響呢？能否透過 ChatGPT 改善團隊流程或協助開發？而我現在想到最直接的就是用 ChatGTP 幫忙寫 Git Commit Message，然而怎麼把 Commit Message 寫好可以參考[這篇文章][2]，為了能達成這目的，我用 [Go 語言][4]寫了一個 CLI 工具 [CodeGPT][3] (請大家幫忙分享)，來協助軟體工程師整理開發內容。底下先看看使用 CodeGPT 來產生 Commit Message 的成果:
 
 <!--more-->
 
