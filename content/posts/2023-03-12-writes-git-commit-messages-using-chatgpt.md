@@ -89,7 +89,7 @@ feat: update config command with new flags and default value change
 Write the commit message to .git/COMMIT_EDITMSG file
 ```
 
-如果加上 `--diff_unified` 參數設定為 0，則會更精準 產生底下結果
+加上 `--diff_unified` 參數設定為 0，會更精準 請看底下結果
 
 ```sh
 $ codegpt commit --preview --diff_unified=0
@@ -110,4 +110,4 @@ Write the commit message to .git/COMMIT_EDITMSG file
 
 ## 心得
 
-由於中國跟香港或者是部分公司對於 ChatGPT 有嚴格的封鎖政策，故在此工具多了設定 Proxy 功能，可以讓大家透過 Proxy 方式出去訪問 OpenAI API，公司希望特定的機器才可以出去。下一階段預計整合 Azure OpenAI 服務進來。用了此工具後，省下我不少時間，尤其是需要常常 Commit，又不知道要整裡哪些內容。如果喜歡的話可以按個 Star [CodeGPT](https://github.com/appleboy/CodeGPT).
+由於中國跟香港或者是部分公司對於 ChatGPT 有嚴格的封鎖政策，故在此工具多了設定 Proxy 功能，可以讓大家透過 Proxy 方式出去訪問 OpenAI API，公司希望特定的機器才可以出去。下一階段預計整合 Azure OpenAI 服務進來。用了此工具後，省下開發者不少時間，尤其是需要常常 Commit，又不知道該如何整裡內容。如果喜歡的話可以按個 Star [CodeGPT](https://github.com/appleboy/CodeGPT).
