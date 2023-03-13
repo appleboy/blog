@@ -57,7 +57,7 @@ codegpt commit --preview
 * `--diff_unified`: git diff 指令上下文可以看到的範圍，預設是 3 行
 * `--exclude_list`: 略過指定的檔案 (有些檔案不想讓 AI 去讀)
 
-`--diff_unified` 的使用時機在於特定場景 (在 GitHub 上面[有人提到][31])，所以直接拿底下 diff 資料驗證
+`--diff_unified` 的使用時機在於特定場景 (在 GitHub 上面[有人提到][31])，看看底下 diff 測試資料
 
 ```diff
 @ cmd/config.go:19 @ func init() {
@@ -70,7 +70,7 @@ codegpt commit --preview
     configCmd.PersistentFlags().IntP("diff_unified", "", 3, "generate diffs with <n> lines of context, default is 3")
 ```
 
-如果用預設值，會將上面的 diff 內容丟給 ChatGPT 產生總結
+如果用預設值，將內容丟給 ChatGPT 產生總結
 
 ```sh
 $ codegpt commit --preview
