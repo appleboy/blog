@@ -52,7 +52,7 @@ codegpt commit --preview
 ```
 
 * `--preview`: 代表預覽。
-* `--lang`: 翻譯成不同語言，目前支援 `zh-tw`, `zh-tw`, `ja` 三種語言
+* `--lang`: 翻譯成不同語言，目前支援 `zh-tw`, `zh-cn`, `ja` 三種語言
 * `--model`: 選擇模型 (預設是 `gpt-3.5-turbo`)
 * `--diff_unified`: git diff 指令上下文可以看到的範圍，預設是 3 行
 * `--exclude_list`: 略過指定的檔案 (有些檔案不想讓 AI 去讀)
