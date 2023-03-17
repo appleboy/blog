@@ -12,7 +12,7 @@ tags:
   - golang
 
 ---
-[<img src="https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg?w=840&#038;ssl=1" alt="Go-brown-side.sh" data-recalc-dims="1" />][1]
+![cover](https://i1.wp.com/farm2.staticflickr.com/1622/24407557644_36087ca6de.jpg)
 
 本篇會帶大家認識 [Go 語言][2]的 init 函式，在了解 init func 之前，大家應該都知道在同一個 Package 底下是不可以有重複的變數或者是函式名稱，但是唯獨 init() 可以在同一個 package 內宣告多次都沒問題。底下看[例子][3]，可以發現的是不管宣告多少次，都會依序從最初宣告到最後宣告依序執行下來。
 
@@ -20,19 +20,19 @@ tags:
 package main
 
 import (
-    "fmt"
+  "fmt"
 )
 
 func init() {
-    fmt.Println("init 1")
+  fmt.Println("init 1")
 }
 
 func init() {
-    fmt.Println("init 2")
+  fmt.Println("init 2")
 }
 
 func main() {
-    fmt.Println("Hello, playground")
+  fmt.Println("Hello, playground")
 }
 ```
 
@@ -44,8 +44,8 @@ func main() {
 
 ```go
 import(
-    // Needed for the Postgresql driver
-    _ "github.com/lib/pq
+  // Needed for the Postgresql driver
+  _ "github.com/lib/pq
 )
 ```
 
@@ -59,15 +59,15 @@ import(
 var global = convert()
 
 func convert() int {
-    return 100
+  return 100
 }
 
 func init() {
-    global = 0
+  global = 0
 }
 
 func main() {
-    fmt.Println("global is", global)
+  fmt.Println("global is", global)
 }
 ```
 
@@ -75,17 +75,17 @@ func main() {
 
 ```go
 func init() {
-    global = 0
+  global = 0
 }
 
 var global = convert()
 
 func convert() int {
-    return 100
+  return 100
 }
 
 func main() {
-    fmt.Println("global is", global)
+  fmt.Println("global is", global)
 }
 ```
 
@@ -99,10 +99,9 @@ func main() {
 
 Go 語言線上課程目前特價 $1600，持續錄製中，每週都會有新的影片上架，歡迎大家參考看看，請點選底下[購買連結][7]
 
- [1]: https://www.flickr.com/photos/appleboy/24407557644/in/dateposted-public/ "Go-brown-side.sh"
- [2]: https://golang.org
- [3]: https://play.golang.org/p/AN-6MK4qVVL
- [4]: https://github.com/lib/pq
- [5]: https://github.com/lib/pq/blob/master/conn.go#L48-L50
- [6]: https://github.com/go-training/training/blob/990af0ec6605e1e5f9ce239cc9380d79d80ddbce/example16-init-func/main.go#L10-L22
- [7]: http://bit.ly/intro-golang
+[2]: https://golang.org
+[3]: https://play.golang.org/p/AN-6MK4qVVL
+[4]: https://github.com/lib/pq
+[5]: https://github.com/lib/pq/blob/master/conn.go#L48-L50
+[6]: https://github.com/go-training/training/blob/990af0ec6605e1e5f9ce239cc9380d79d80ddbce/example16-init-func/main.go#L10-L22
+[7]: http://bit.ly/intro-golang
