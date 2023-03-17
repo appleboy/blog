@@ -36,29 +36,29 @@ import "errors"
 
 // Car struct
 type Car struct {
-    Name  string
-    Price float32
+  Name  string
+  Price float32
 }
 
 // SetName set car name
 func (c *Car) SetName(name string) string {
-    if name != "" {
-        c.Name = name
-    }
+  if name != "" {
+    c.Name = name
+  }
 
-    return c.Name
+  return c.Name
 }
 
 // New Object
 func New(name string, price float32) (*Car, error) {
-    if name == "" {
-        return nil, errors.New("missing name")
-    }
+  if name == "" {
+    return nil, errors.New("missing name")
+  }
 
-    return &Car{
-        Name:  name,
-        Price: price,
-    }, nil
+  return &Car{
+    Name:  name,
+    Price: price,
+  }, nil
 }
 ```
 
@@ -67,14 +67,14 @@ func New(name string, price float32) (*Car, error) {
 ```go
 // Simple testing what different between Fatal and Error
 func TestNew(t *testing.T) {
-    c, err := New("", 100)
-    if err != nil {
-        t.Fatal("got errors:", err)
-    }
+  c, err := New("", 100)
+  if err != nil {
+    t.Fatal("got errors:", err)
+  }
 
-    if c == nil {
-        t.Error("car should be nil")
-    }
+  if c == nil {
+    t.Error("car should be nil")
+  }
 }
 ```
 
@@ -86,23 +86,23 @@ func TestNew(t *testing.T) {
 
 ```go
 func TestNewWithAssert(t *testing.T) {
-    c, err := New("", 100)
-    assert.NotNil(t, err)
-    assert.Error(t, err)
-    assert.Nil(t, c)
+  c, err := New("", 100)
+  assert.NotNil(t, err)
+  assert.Error(t, err)
+  assert.Nil(t, c)
 
-    c, err = New("foo", 100)
-    assert.Nil(t, err)
-    assert.NoError(t, err)
-    assert.NotNil(t, c)
-    assert.Equal(t, "foo", c.Name)
+  c, err = New("foo", 100)
+  assert.Nil(t, err)
+  assert.NoError(t, err)
+  assert.NotNil(t, c)
+  assert.Equal(t, "foo", c.Name)
 }
 ```
 
 有沒有看起來比較簡潔。這邊測試用的 command，也可以針對單一函式做測試。
 
 ```bash
-$ go test -v -run=TestNewWithAssert ./example18-write-testing-and-doc/...
+go test -v -run=TestNewWithAssert ./example18-write-testing-and-doc/...
 ```
 
 可以看到 `-run` 讓開發者可以針對單一函式做測試，對於大型專案來說非常方便，假設修正完 bug，並且寫了測試，就可以針對單一函式做測試，這點 Go 做得相當棒。
@@ -117,53 +117,53 @@ $ go test -v -run=TestNewWithAssert ./example18-write-testing-and-doc/...
 
 ```go
 func TestCar_SetName(t *testing.T) {
-    type fields struct {
-        Name  string
-        Price float32
-    }
-    type args struct {
-        name string
-    }
-    tests := []struct {
-        name   string
-        fields fields
-        args   args
-        want   string
-    }{
-        {
-            name: "no input name",
-            fields: fields{
-                Name:  "foo",
-                Price: 100,
-            },
-            args: args{
-                name: "",
-            },
-            want: "foo",
-        },
-        {
-            name: "input name",
-            fields: fields{
-                Name:  "foo",
-                Price: 100,
-            },
-            args: args{
-                name: "bar",
-            },
-            want: "bar",
-        },
-    }
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            c := &Car{
-                Name:  tt.fields.Name,
-                Price: tt.fields.Price,
-            }
-            if got := c.SetName(tt.args.name); got != tt.want {
-                t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
-            }
-        })
-    }
+  type fields struct {
+    Name  string
+    Price float32
+  }
+  type args struct {
+    name string
+  }
+  tests := []struct {
+    name   string
+    fields fields
+    args   args
+    want   string
+  }{
+    {
+      name: "no input name",
+      fields: fields{
+        Name:  "foo",
+        Price: 100,
+      },
+      args: args{
+        name: "",
+      },
+      want: "foo",
+    },
+    {
+      name: "input name",
+      fields: fields{
+        Name:  "foo",
+        Price: 100,
+      },
+      args: args{
+        name: "bar",
+      },
+      want: "bar",
+    },
+  }
+  for _, tt := range tests {
+    t.Run(tt.name, func(t *testing.T) {
+      c := &Car{
+        Name:  tt.fields.Name,
+        Price: tt.fields.Price,
+      }
+      if got := c.SetName(tt.args.name); got != tt.want {
+        t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
+      }
+    })
+  }
 }
 ```
 
@@ -174,36 +174,36 @@ func TestCar_SetName(t *testing.T) {
 上述的程式碼都是 vscode 幫忙產生的，開發者只需要把測試資料補上就可以了。假設有 10 個情境需要測試，那該如何讓 Go 幫忙平行測試呢？請使用 `t.Parallel()`
 
 ```go
-    for _, tt := range tests {
-        t.Run(tt.name, func(t *testing.T) {
-            t.Parallel()
-            c := &Car{
-                Name:  tt.fields.Name,
-                Price: tt.fields.Price,
-            }
-            if got := c.SetName(tt.args.name); got != tt.want {
-                t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
-            }
-        })
-    }
+  for _, tt := range tests {
+    t.Run(tt.name, func(t *testing.T) {
+      t.Parallel()
+      c := &Car{
+        Name:  tt.fields.Name,
+        Price: tt.fields.Price,
+      }
+      if got := c.SetName(tt.args.name); got != tt.want {
+        t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
+      }
+    })
+  }
 ```
 
 在 `t.Run` 的 callback 測試內補上 `t.Parallel()` 就可以了喔。寫到這邊，大家應該可以看出一個問題，就是平行測試的內容怎麼都會是測試同一個情境，也就是本來要測試 10 種情境，但是會發現 Go 把最後一個情境同時跑了 10 次？這邊的問題點出在哪邊，請大家注意 `tt` 變數，由於跑平行測試，那麼 for 迴圈最後一次就會蓋掉之前的所有 tt 變數，要修正此狀況也非常容易，在迴圈內重新宣告一次即可 `tt := tt`
 
 ```go
-    for _, tt := range tests {
-        tt := tt
-        t.Run(tt.name, func(t *testing.T) {
-            t.Parallel()
-            c := &Car{
-                Name:  tt.fields.Name,
-                Price: tt.fields.Price,
-            }
-            if got := c.SetName(tt.args.name); got != tt.want {
-                t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
-            }
-        })
-    }
+  for _, tt := range tests {
+    tt := tt
+    t.Run(tt.name, func(t *testing.T) {
+      t.Parallel()
+      c := &Car{
+        Name:  tt.fields.Name,
+        Price: tt.fields.Price,
+      }
+      if got := c.SetName(tt.args.name); got != tt.want {
+        t.Errorf("Car.SetName() = %v, want %v", got, tt.want)
+      }
+    })
+  }
 ```
 
 ## 感想
