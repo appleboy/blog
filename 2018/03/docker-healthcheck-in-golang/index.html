@@ -1,4 +1,7 @@
-<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Go 語言搭配 Docker Healthy Check 檢查 - 小惡魔 - AppleBOY</title><meta name=description content="[][1] 在 [Docker][2] 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK 指令來確保服務是否正常。而用 [Go 語言][3]開發的 Web 服務該如何來實現呢？"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2018\/03\/docker-healthcheck-in-golang\/","name":"Go 語言搭配 docker healthy check 檢查"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言搭配 Docker Healthy Check 檢查","description":"[][1] 在 [Docker][2] 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK 指令來確保服務是否正常。而用 [Go 語言][3]開發的 Web 服務該如何來實現呢？\n","inLanguage":"en","wordCount":177,"datePublished":"2018-03-19T03:18:47","dateModified":"2018-03-19T03:18:47","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":[""],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2018\/03\/docker-healthcheck-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言搭配 Docker Healthy Check 檢查"><meta property="og:description" content="[][1] 在 [Docker][2] 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK 指令來確保服務是否正常。而用 [Go 語言][3]開發的 Web 服務該如何來實現呢？"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2018/03/docker-healthcheck-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Go 語言搭配 Docker Healthy Check 檢查"><meta name=twitter:description content="[][1] 在 [Docker][2] 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK  …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.111.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
+<!doctype html><html lang=en itemscope itemtype=http://schema.org/WebPage><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"><title>Go 語言搭配 Docker Healthy Check 檢查 - 小惡魔 - AppleBOY</title><meta name=description content="
+在 Docker 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK 指令來確保服務是否正常。而用 Go 語言開發的 Web 服務該如何來實現呢？"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2018\/03\/docker-healthcheck-in-golang\/","name":"Go 語言搭配 docker healthy check 檢查"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"Go 語言搭配 Docker Healthy Check 檢查","description":"\n在 Docker 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK 指令來確保服務是否正常。而用 Go 語言開發的 Web 服務該如何來實現呢？\n","inLanguage":"en","wordCount":149,"datePublished":"2018-03-19T03:18:47","dateModified":"2018-03-19T03:18:47","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":[""],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2018\/03\/docker-healthcheck-in-golang\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="Go 語言搭配 Docker Healthy Check 檢查"><meta property="og:description" content="
+在 Docker 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK 指令來確保服務是否正常。而用 Go 語言開發的 Web 服務該如何來實現呢？"><meta property="og:image" content="https://lh3.googleusercontent.com/jsocHCR9A9yEfDVUTrU0m42_aHhTEVDGW5p5PsQSx7GSlkt3gLjohfXH3S7P7p982332ruU_e-EtW0LwmiuZjvN65VIcyME-zE35C6EM0IV1nqY6KoNw3dwW2djjid3F-T5YgnJothA=w1920-h1080"><meta property="og:url" content="https://blog.wu-boy.com/2018/03/docker-healthcheck-in-golang/"><meta property="og:type" content="website"><meta property="og:site_name" content="小惡魔 - AppleBOY"><meta name=twitter:title content="Go 語言搭配 Docker Healthy Check 檢查"><meta name=twitter:description content="
+在 Docker 1.12 版本後，提供了 HEALTHCHECK 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 Dockerfile 內指定 HEALTHCHECK 指令來確保服務是否正 …"><meta name=twitter:image content="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080"><meta name=twitter:card content="summary"><meta name=twitter:site content="@appleboy"><meta name=twitter:creator content="@appleboy"><link href=https://i.imgur.com/PpOg8Dz.jpg rel=icon type=image/x-icon><meta name=generator content="Hugo 0.111.3"><link rel=stylesheet href=https://use.fontawesome.com/releases/v5.5.0/css/all.css integrity=sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU crossorigin=anonymous><link rel=stylesheet href=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css integrity=sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u crossorigin=anonymous><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css><link rel=stylesheet href=https://blog.wu-boy.com/css/main.css><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic"><link rel=stylesheet href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800"><link rel=stylesheet href=https://blog.wu-boy.com/css/syntax.css><link rel=stylesheet href=https://blog.wu-boy.com/css/codeblock.css><script type=application/javascript>var doNotTrack=!1;doNotTrack||(window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)},ga.l=+new Date,ga("create","UA-5766319-6","auto"),ga("send","pageview"))</script><script async src=https://www.google-analytics.com/analytics.js></script></head><body><nav class="navbar navbar-default navbar-fixed-top navbar-custom"><div class=container-fluid><div class=navbar-header><button type=button class=navbar-toggle data-toggle=collapse data-target=#main-navbar>
 <span class=sr-only>Toggle navigation</span>
 <span class=icon-bar></span>
 <span class=icon-bar></span>
@@ -7,293 +10,55 @@
 <a href=/docker-course/>Docker 容器開發實戰</a>
 <a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=post-heading><h1>Go 語言搭配 Docker Healthy Check 檢查</h1><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on March 19, 2018
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;177&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#建立-healthz-路由-透過簡單的路由>建立 /healthz 路由 透過簡單的路由</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p>[<img src="https://i2.wp.com/farm1.staticflickr.com/805/39050902230_b1d91bc120_z.jpg?w=840&#038;ssl=1" alt="Screen Shot 2018-03-17 at 11.40.12 PM" data-recalc-dims=1>][1] 在 [Docker][2] 1.12 版本後，提供了 <code>HEALTHCHECK</code> 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 <code>Dockerfile</code> 內指定 <code>HEALTHCHECK</code> 指令來確保服務是否正常。而用 [Go 語言][3]開發的 Web 服務該如何來實現呢？</p><h2 id=建立-healthz-路由-透過簡單的路由>建立 /healthz 路由 透過簡單的路由</h2><p><code>/healthz</code> 直接回傳 200 status code 即可 (使用 [Gin][4] 當例子)。</p><pre class="brush: go; title: ; notranslate" title>func heartbeatHandler(c *gin.Context) {
-    c.AbortWithStatus(http.StatusOK)
-}
-``` 透過瀏覽器 
-
-`http://localhost:8080/healthz` 可以得到空白網頁，但是打開 console 可以看到正確回傳值。 [<img src="https://i1.wp.com/farm5.staticflickr.com/4774/26990632808_d800bc3800_z.jpg?w=840&#038;ssl=1" alt=Snip20180317_4 data-recalc-dims=1>][5] 
-
-## 建立 ping 指令 透過 
-
-`net/http` 套件可以快速寫個驗證接口的函式 
-
-<pre class="brush: go; title: ; notranslate" title>func pinger() error {
-    resp, err := http.Get("http://localhost:8080/healthz")
-    if err != nil {
-        return err
-    }
-    defer resp.Body.Close()
-    if resp.StatusCode != 200 {
-        return fmt.Errorf("server returned non-200 status code")
-    }
-    return nil
-}
-```
-
-## 增加 HEALTHCHECK 指令 在 
-
-`Dockerfile` 內增加底下內容: 
-
-```bash
-HEALTHCHECK --start-period=2s --interval=10s --timeout=5s \
-  CMD ["/bin/gorush", "--ping"]
-```
-
-  * **--start-period**: 容器啟動後需要等待幾秒，預設為 0 秒
-  * **--interval**: 偵測間隔時間，預設為 30 秒
-  * **--timeout**: 檢查超時時間 重新編譯容器，並且啟動容器，會看到初始狀態為 
-
-`(health: starting)` [<img src="https://i2.wp.com/farm1.staticflickr.com/788/40861013721_d7327500f9_z.jpg?w=840&#038;ssl=1" alt=Snip20180317_5 data-recalc-dims=1>][6] 經過 10 秒後，就會執行指定的指令，就可以知道容器健康與否，最後狀態為 `(healtyy)`。 [<img src="https://i1.wp.com/farm1.staticflickr.com/783/39051186800_ee9a838403_z.jpg?w=840&#038;ssl=1" alt=Snip20180317_6 data-recalc-dims=1>][7] 最後可以透過 `docker inspect` 指令來知道容器的狀態列表 (JSON 格式) 
-
-```bash
-$ docker inspect --format '{{json .State.Health}}' gorush | jq
-```
-
-[<img src="https://i1.wp.com/farm5.staticflickr.com/4781/40861130401_08ca9e2cce_z.jpg?w=840&#038;ssl=1" alt=Snip20180318_8 data-recalc-dims=1>][8] 從上圖可以知道每隔 10 秒 Docker 就會自動偵測一次。有了上述這些資料，就可以來寫系統報警通知了。如果對 Go 語言有興趣，可以參考[線上課程][9]。
-
- [1]: https://www.flickr.com/photos/appleboy/39050902230/in/dateposted-public/ "Screen Shot 2018-03-17 at 11.40.12 PM"
- [2]: https://www.docker.com
- [3]: https://golang.org
- [4]: https://github.com/gin-gonic/gin
- [5]: https://www.flickr.com/photos/appleboy/26990632808/in/dateposted-public/ "Snip20180317_4"
- [6]: https://www.flickr.com/photos/appleboy/40861013721/in/dateposted-public/ "Snip20180317_5"
- [7]: https://www.flickr.com/photos/appleboy/39051186800/in/dateposted-public/ "Snip20180317_6"
- [8]: https://www.flickr.com/photos/appleboy/40861130401/in/dateposted-public/ "Snip20180318_8"
- [9]: http://bit.ly/intro-golang
-
-        
-
-        
-            <hr>
-            <section id=social-share>
-              <div class="list-inline footer-links">
-                
-
-<div class=share-box aria-hidden=true>
-    <ul class=share>
-      
-      <li>
-        <a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;text=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5&amp;via=appleboy" target=_blank title="Share on Twitter">
-          <i class="fab fa-twitter"></i>
-        </a>
-      </li>
-  
-      
-      <li>
-        <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f" target=_blank title="Share on Facebook">
-          <i class="fab fa-facebook"></i>
-        </a>
-      </li>
-  
-      
-      <li>
-        <a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;title=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on Reddit">
-          <i class="fab fa-reddit"></i>
-        </a>
-      </li>
-  
-      
-      <li>
-        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;title=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on LinkedIn">
-          <i class="fab fa-linkedin"></i>
-        </a>
-      </li>
-  
-      
-      <li>
-        <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;title=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on StumbleUpon">
-          <i class="fab fa-stumbleupon"></i>
-        </a>
-      </li>
-  
-      
-      <li>
-        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;description=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on Pinterest">
-          <i class="fab fa-pinterest"></i>
-        </a>
-      </li>
-    </ul>
-  </div>
-  
-
-              </div>
-            </section>
-        
-
-        
-          
-
-          
-        
-      </article>
-
-      
-        <ul class="pager blog-pager">
-          
-            <li class=previous>
-              <a href=https://blog.wu-boy.com/2018/03/nginx-reverse-proxy-image-resizing/ data-toggle=tooltip data-placement=top title="用 Nginx 來架設線上即時縮圖機">&larr; Previous Post</a>
-            </li>
-          
-          
-            <li class=next>
-              <a href=https://blog.wu-boy.com/2018/03/golang-introduction-video/ data-toggle=tooltip data-placement=top title="Go 語言基礎實戰教學影片上線了">Next Post &rarr;</a>
-            </li>
-          
-        </ul>
-      
-
-
-      
-        
-          
-          <div class=disqus-comments>
-            <button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2018/03/docker-healthcheck-in-golang>comments</span></button>
-            <div id=disqus_thread></div>
-
-            <script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2018/03/docker-healthcheck-in-golang"}</script>
-          </div>
-          
-        
-        
-      
-
-    </div>
-  </div>
-</div>
-
-      
-<footer class=post-footer>
-  <div class=container>
-    <div class=row>
-      <div class="col-md-10 col-md-offset-1">
-        <ul class="list-inline text-center footer-links">
-          
-              <li>
-                <a href=mailto:appleboy.tw@gmail.com title="Email me">
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href=https://www.facebook.com/appleboy46 title=Facebook>
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href=https://github.com/appleboy title=GitHub>
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href=https://gitlab.com/appleboy title=GitLab>
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-gitlab fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href=https://bitbucket.org/appleboy title=Bitbucket>
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href=https://twitter.com/appleboy title=Twitter>
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href=https://linkedin.com/in/appleboy title=LinkedIn>
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube>
-                  <span class="fa-stack fa-lg">
-                    <i class="fas fa-circle fa-stack-2x"></i>
-                    <i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-          
-          <li>
-            <a href title=RSS>
-              <span class="fa-stack fa-lg">
-                <i class="fas fa-circle fa-stack-2x"></i>
-                <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-        <p class="credits copyright text-muted">
-          
-            
-              <a href=https://blog.wu-boy.com>Appleboy</a>
-            
-          
-
-          &nbsp;&bull;&nbsp;&copy;
-          
-            2023
-          
-
-          
-            &nbsp;&bull;&nbsp;
-            <a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a>
-          
-        </p>
-        
-        <p class="credits theme-by text-muted">
-          <a href=https://gohugo.io>Hugo v0.111.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a>
-          
-        </p>
-      </div>
-    </div>
-  </div>
-</footer>
-<script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;149&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><aside class=toc-article><nav id=TableOfContents><ul><li><ul><li><a href=#建立-healthz-路由>建立 /healthz 路由</a></li><li><a href=#建立-ping-指令>建立 ping 指令</a></li><li><a href=#增加-healthcheck-指令>增加 HEALTHCHECK 指令</a></li></ul></li></ul></nav></aside><article role=main class=blog-post><p><img src=https://i2.wp.com/farm1.staticflickr.com/805/39050902230_b1d91bc120_z.jpg alt=cover></p><p>在 <a href=https://www.docker.com>Docker</a> 1.12 版本後，提供了 <code>HEALTHCHECK</code> 指令，通過指定的一行命令來判斷容器內的服務是否正常運作。在此之前大部分都是透過判斷程式是否 Crash 來決定容器是否存活，但是這地方有點風險的是，假設服務並非 crash，而是沒辦法退出容器，造成無法接受新的請求，這就確保容器存活。現在呢我們可以透過在 <code>Dockerfile</code> 內指定 <code>HEALTHCHECK</code> 指令來確保服務是否正常。而用 <a href=https://golang.org>Go 語言</a>開發的 Web 服務該如何來實現呢？</p><h2 id=建立-healthz-路由>建立 /healthz 路由</h2><p>透過簡單的路由 <code>/healthz</code> 直接回傳 200 status code 即可 (使用 <a href=https://github.com/gin-gonic/gin>Gin</a> 當例子)。</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-1>1</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-2>2</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-0-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-0-3>3</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>heartbeatHandler</span>(c *gin.Context) {
+</span></span><span style=display:flex><span>  c.<span style=color:#008b45>AbortWithStatus</span>(http.StatusOK)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><p>透過瀏覽器 <code>http://localhost:8080/healthz</code> 可以得到空白網頁，但是打開 console 可以看到正確回傳值。</p><p><img src=https://i1.wp.com/farm5.staticflickr.com/4774/26990632808_d800bc3800_z.jpg alt=cover2></p><h2 id=建立-ping-指令>建立 ping 指令</h2><p>透過 <code>net/http</code> 套件可以快速寫個驗證接口的函式</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1> 1</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2> 2</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3> 3</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4> 4</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-5> 5</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-6><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-6> 6</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-7><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-7> 7</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-8><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-8> 8</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-9><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-9> 9</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-10><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-10>10</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-11><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-11>11</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#8b008b;font-weight:700>func</span> <span style=color:#008b45>pinger</span>() <span style=color:#00688b;font-weight:700>error</span> {
+</span></span><span style=display:flex><span>  resp, err := http.<span style=color:#008b45>Get</span>(<span style=color:#cd5555>&#34;http://localhost:8080/healthz&#34;</span>)
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>if</span> err != <span style=color:#8b008b;font-weight:700>nil</span> {
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span> err
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>defer</span> resp.Body.<span style=color:#008b45>Close</span>()
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>if</span> resp.StatusCode != <span style=color:#b452cd>200</span> {
+</span></span><span style=display:flex><span>    <span style=color:#8b008b;font-weight:700>return</span> fmt.<span style=color:#008b45>Errorf</span>(<span style=color:#cd5555>&#34;server returned non-200 status code&#34;</span>)
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>  <span style=color:#8b008b;font-weight:700>return</span> <span style=color:#8b008b;font-weight:700>nil</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></td></tr></table></div></div><h2 id=增加-healthcheck-指令>增加 HEALTHCHECK 指令</h2><p>在 <code>Dockerfile</code> 內增加底下內容:</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-1>1</a>
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-2-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-2-2>2</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>HEALTHCHECK --start-period=2s --interval=10s --timeout=5s <span style=color:#cd5555>\
+</span></span></span><span style=display:flex><span><span style=color:#cd5555></span>  CMD [<span style=color:#cd5555>&#34;/bin/gorush&#34;</span>, <span style=color:#cd5555>&#34;--ping&#34;</span>]
+</span></span></code></pre></td></tr></table></div></div><ul><li><strong>&ndash;start-period</strong>: 容器啟動後需要等待幾秒，預設為 0 秒</li><li><strong>&ndash;interval</strong>: 偵測間隔時間，預設為 30 秒</li><li><strong>&ndash;timeout</strong>: 檢查超時時間</li></ul><p>重新編譯容器，並且啟動容器，會看到初始狀態為 <code>(health: starting)</code></p><p><img src=https://i2.wp.com/farm1.staticflickr.com/788/40861013721_d7327500f9_z.jpg alt=cover2></p><p>經過 10 秒後，就會執行指定的指令，就可以知道容器健康與否，最後狀態為 <code>(healtyy)</code>。</p><p><img src=https://i1.wp.com/farm1.staticflickr.com/783/39051186800_ee9a838403_z.jpg alt=cover3></p><p>最後可以透過 <code>docker inspect</code> 指令來知道容器的狀態列表 (JSON 格式)</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-3-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-3-1>1</a>
+</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-bash data-lang=bash><span style=display:flex><span>docker inspect --format <span style=color:#cd5555>&#39;{{json .State.Health}}&#39;</span> gorush | jq
+</span></span></code></pre></td></tr></table></div></div><p><img src=https://i1.wp.com/farm5.staticflickr.com/4781/40861130401_08ca9e2cce_z.jpg alt=cover4></p><p>從上圖可以知道每隔 10 秒 Docker 就會自動偵測一次。有了上述這些資料，就可以來寫系統報警通知了。如果對 Go 語言有興趣，可以參考<a href=https://blog.wu-boy.com/golang-online-course/>線上課程</a>。</p><hr><section id=social-share><div class="list-inline footer-links"><div class=share-box aria-hidden=true><ul class=share><li><a href="//twitter.com/share?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;text=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5&amp;via=appleboy" target=_blank title="Share on Twitter"><i class="fab fa-twitter"></i></a></li><li><a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f" target=_blank title="Share on Facebook"><i class="fab fa-facebook"></i></a></li><li><a href="//reddit.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;title=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on Reddit"><i class="fab fa-reddit"></i></a></li><li><a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;title=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a></li><li><a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;title=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on StumbleUpon"><i class="fab fa-stumbleupon"></i></a></li><li><a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fblog.wu-boy.com%2f2018%2f03%2fdocker-healthcheck-in-golang%2f&amp;description=Go%20%e8%aa%9e%e8%a8%80%e6%90%ad%e9%85%8d%20Docker%20Healthy%20Check%20%e6%aa%a2%e6%9f%a5" target=_blank title="Share on Pinterest"><i class="fab fa-pinterest"></i></a></li></ul></div></div></section></article><ul class="pager blog-pager"><li class=previous><a href=https://blog.wu-boy.com/2018/03/nginx-reverse-proxy-image-resizing/ data-toggle=tooltip data-placement=top title="用 Nginx 來架設線上即時縮圖機">&larr; Previous Post</a></li><li class=next><a href=https://blog.wu-boy.com/2018/03/golang-introduction-video/ data-toggle=tooltip data-placement=top title="Go 語言基礎實戰教學影片上線了">Next Post &rarr;</a></li></ul><div class=disqus-comments><button id=show-comments class="btn btn-default" type=button>Show <span class=disqus-comment-count data-disqus-url=https://blog.wu-boy.com/2018/03/docker-healthcheck-in-golang>comments</span></button><div id=disqus_thread></div><script type=text/javascript>var disqus_config=function(){this.page.url="https://blog.wu-boy.com/2018/03/docker-healthcheck-in-golang"}</script></div></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-gitlab fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://bitbucket.org/appleboy title=Bitbucket><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-bitbucket fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://twitter.com/appleboy title=Twitter><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-twitter fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://linkedin.com/in/appleboy title=LinkedIn><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-linkedin fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.youtube.com/channel/UCLCZJ9d_I7UJP2bpXpge8KA title=Youtube><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fab fa-youtube fa-stack-1x fa-inverse"></i></span></a></li><li><a href title=RSS><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<i class="fas fa-rss fa-stack-1x fa-inverse"></i></span></a></li></ul><p class="credits copyright text-muted"><a href=https://blog.wu-boy.com>Appleboy</a>
+&nbsp;&bull;&nbsp;&copy;
+2023
+&nbsp;&bull;&nbsp;
+<a href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></p><p class="credits theme-by text-muted"><a href=https://gohugo.io>Hugo v0.111.3</a> powered &nbsp;&bull;&nbsp; Theme <a href=https://github.com/halogenica/beautifulhugo>Beautiful Hugo</a> adapted from <a href=https://deanattali.com/beautiful-jekyll/>Beautiful Jekyll</a></p></div></div></div></footer><script src=https://code.jquery.com/jquery-1.12.4.min.js integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin=anonymous></script>
 <script src=https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js integrity=sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa crossorigin=anonymous></script>
-
 <script src=https://blog.wu-boy.com/js/main.js></script>
-
-<script>(function(){var t,n="003841896160749976666:l9i5hqttpqi",e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script>
-
-
-
-
-
-
-<script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script>
-<script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script>
-
-
-
-<div class=back-to-top id=back-to-top>
-  <i class="fas fa-angle-double-up"></i>
-</div>
-
-
-    
-  </body>
-</html>
-
+<script>(function(){var t,n="003841896160749976666:l9i5hqttpqi",e=document.createElement("script");e.type="text/javascript",e.async=!0,e.src="https://cse.google.com/cse.js?cx="+n,t=document.getElementsByTagName("script")[0],t.parentNode.insertBefore(e,t)})()</script><script type=text/javascript>$(function(){$("#show-comments").on("click",function(){var e="appleboy48";(function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="//"+e+".disqus.com/embed.js",(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(t)})(),$(this).hide()})})</script><script id=dsq-count-scr src=//appleboy48.disqus.com/count.js async></script><div class=back-to-top id=back-to-top><i class="fas fa-angle-double-up"></i></div></body></html>
