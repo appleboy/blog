@@ -113,4 +113,6 @@ Suggestions for improvement:
 
 ## 心得感想
 
-透過 [CodeGPT][2] 可以讓開發者可以提前知道優化的項目，這可以省下不少 Review 的時間，但是目前 [CodeGPT][2] 還有很多的功能需要開發，如果大家有什麼建議或是想要的功能，可以在 [CodeGPT][2] 的 Issue 中提出來，我們會盡快開發出來。未來我們會整合 GitHub Action 來讓大家可以在 Pull Request 中進行 Code Review，也會整合 Slack 來讓大家可以在 Slack 中進行 Code Review，如果大家有什麼想法也可以在 [CodeGPT][2] 的 Issue 中提出來。
+透過 [CodeGPT][2] 可以讓開發者可以提前知道優化的項目，這可以省下不少 Review 的時間，但是目前 [CodeGPT][2] 還有很多的功能需要開發，。未來會整合 [GitHub Action][5] 來讓大家可以在 Pull Request 中進行 Code Review，也會整合 Slack 來讓大家可以在 Slack 中進行 Code Review，如果大家有什麼建議或是想要的功能，可以在 [CodeGPT][2] 的 Issue 中提出來，我們會盡快開發出來。
+
+[5]:https://github.com/features/actions
