@@ -26,6 +26,25 @@ categories:
 [4]:https://go.dev
 [5]:https://github.com/appleboy/CodeGPT/commits/main
 
+## 教學影片
+
+{{< youtube 4Yei_t6eMZU >}}
+
+```sh
+00:00 生成式 AI ChatGPT
+02:00 為什麼要寫 CodeGPT
+02:52 如何安裝 CodeGPT 
+04:24 如何使用 CodeGPT 整理 Commit Message
+07:15 如何設定 CodeGPT 環境參數
+13:19 如何用 CodeGPT 審核代碼
+15:56 心得
+```
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 為什麼要寫 CodeGPT
 
 其實在 GitHub 平台上面已經有超多這樣[類似的工具][11]可以使用了，而我為什麼要再重新開發一次呢？第一個原因是跨平台，透過 Go 語言可以快速產生執行檔，避免不同平台還要安裝不同的環境，這樣對於不熟環境的開發者可以更容易安裝。

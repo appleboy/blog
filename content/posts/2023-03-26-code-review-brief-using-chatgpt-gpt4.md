@@ -20,6 +20,25 @@ categories:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube 4Yei_t6eMZU >}}
+
+```sh
+00:00 生成式 AI ChatGPT
+02:00 為什麼要寫 CodeGPT
+02:52 如何安裝 CodeGPT 
+04:24 如何使用 CodeGPT 整理 Commit Message
+07:15 如何設定 CodeGPT 環境參數
+13:19 如何用 CodeGPT 審核代碼
+15:56 心得
+```
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 使用 ChatGPT 來進行 Code Review
 
 在 [CodeGPT][2] 中，我們已經將 [GPT-3.5-Turbo][3] 的 API 包裝成了一個 CLI 工具，所以使用起來非常的簡單，只要執行以下指令即可：
