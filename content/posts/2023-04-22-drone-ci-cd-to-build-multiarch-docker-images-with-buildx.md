@@ -144,6 +144,24 @@ steps:
         - linux/arm64
 ```
 
+通常我們會直接使用 `auto_tag` 參數，這樣就不用每次都手動修改版本號了，例如：
+
+```diff
+steps:
+  - name: docker
+    image: thegeeklab/drone-docker-buildx:23
+    privileged: true
+    settings:
+      username: octocat
+      password: secure
+      repo: octocat/example
+-     tags: latest
++     auto_tag: true
+      platforms:
+        - linux/amd64
+        - linux/arm64
+```
+
 ### 上傳到 ECR
 
 請參考底下 YAML 範例，請注意使用的是 `ghcr.io/bitprocessor/drone-docker-buildx-ecr:1.0.0` Image
@@ -169,6 +187,6 @@ steps:
       - linux/amd64
 ```
 
-編譯過程
+底下是編譯過程參考圖
 
 ![cover2](https://i.imgur.com/wjSSwQy.png)
