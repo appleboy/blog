@@ -13,7 +13,7 @@ categories:
 
 ![cover](https://i.imgur.com/ySw4F8j.png)
 
-在 2020 年就有 [Docker 宣布支援多架構映像檔][1]，後來才有正式的 [Docker BuildKit][2] 支援多架構映像檔，這篇文章來介紹如何使用 [Drone CI/CD][3] 搭配 [Docker BuildKit][2] 編譯多架構映像檔，而且這個功能是免費的，不需要付費的 Docker Hub 帳號。但是在 Drone CI/CD 官方提供的 [Drone Docker Plugin][4] 目前是不支援多架構映像檔，所以需要自己撰寫 Drone Pipeline，來達到我們的目的，官方也有人提出了這樣的 Proposal: 『[Support cross-arch Docker builds within Docker using QEMU][5]』，使用 QEMU 來達成目的，底下來介紹如何使用，關鍵點就是在 Host 支援 [Qemu][6] 的環境下，使用 Docker BuildKit 完成。
+在 2020 年就有 [Docker 宣布支援多架構映像檔][1]，後來才有正式的 [Docker BuildKit][2] 支援[多架構映像檔][22]，這篇文章來介紹如何使用 [Drone CI/CD][3] 搭配 [Docker BuildKit][2] 編譯多架構映像檔，而且這個功能是免費的，不需要付費的 Docker Hub 帳號。但是在 Drone CI/CD 官方提供的 [Drone Docker Plugin][4] 目前是不支援多架構映像檔，所以需要自己撰寫 Drone Pipeline，來達到我們的目的，官方也有人提出了這樣的 Proposal: 『[Support cross-arch Docker builds within Docker using QEMU][5]』，使用 QEMU 來達成目的，底下來介紹如何使用，關鍵點就是在 Host 支援 [Qemu][6] 的環境下，使用 Docker BuildKit 完成。
 
 [1]:https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
 [2]:https://docs.docker.com/develop/develop-images/build_enhancements/
@@ -21,12 +21,13 @@ categories:
 [4]:https://plugins.drone.io/plugins/docker
 [5]:https://github.com/drone/proposal/issues/5
 [6]:https://www.qemu.org/
+[22]:https://docs.docker.com/build/building/multi-platform/
 
 <!--more-->
 
 ## 什麼是 Qemu?
 
-Qemu（Quick Emulator）是一個模擬器，可以模擬不同的 CPU 架構，例如 x86、ARM、MIPS、PowerPC 等等，這樣就可以在 x86 架構的主機上，執行 ARM 架構的映像檔，而且 Qemu 也支援 Docker BuildKit 的多架構映像檔編譯，所以我們可以在 x86 架構的主機上，執行 Docker BuildKit 來編譯多架構映像檔。
+[Qemu][6]（Quick Emulator）是一個模擬器，可以模擬不同的 CPU 架構，例如 x86、ARM、MIPS、PowerPC 等等，這樣就可以在 x86 架構的主機上，執行 ARM 架構的映像檔，而且 Qemu 也支援 Docker BuildKit 的多架構映像檔編譯，所以我們可以在 x86 架構的主機上，執行 Docker BuildKit 來編譯多架構映像檔。
 
 QEMU 的主要用途是在不同的環境之間提供虛擬化，它可以在一個主機上運行多個不同的虛擬機器，每個虛擬機器都可以運行不同的操作系統和應用程式。它也可以用作開發和測試軟件的工具，因為它可以模擬不同的環境，這使得開發人員可以在不同的操作系統和硬件上進行測試。
 
