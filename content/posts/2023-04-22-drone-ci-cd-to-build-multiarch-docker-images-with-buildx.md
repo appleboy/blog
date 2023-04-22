@@ -144,6 +144,31 @@ steps:
         - linux/arm64
 ```
 
+### 上傳到 ECR
+
+請參考底下 YAML 範例，請注意使用的是 `ghcr.io/bitprocessor/drone-docker-buildx-ecr:1.0.0` Image
+
+```yaml
+- name: publish_image_to_aws_registry
+  pull: always
+  image: ghcr.io/bitprocessor/drone-docker-buildx-ecr:1.0.0
+  privileged: true
+  settings:
+    access_key:
+      from_secret: aws_docker_push_id
+    secret_key:
+      from_secret: aws_docker_push_key
+    auto_tag: true
+    region: ap-southeast-1
+    Dockerfile: docker/Dockerfile.aws
+    cache_from: xxxxxxxxxxxx.dkr.ecr.ap-southeast-1.amazonaws.com/user-service
+    registry: xxxxxxxxxxxx.dkr.ecr.ap-southeast-1.amazonaws.com
+    repo: user-service
+    platforms:
+      - linux/arm64
+      - linux/amd64
+```
+
 編譯過程
 
 ![cover2](https://i.imgur.com/wjSSwQy.png)
