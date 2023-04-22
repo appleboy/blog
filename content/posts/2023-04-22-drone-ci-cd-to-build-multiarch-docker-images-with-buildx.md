@@ -13,7 +13,7 @@ categories:
 
 ![cover](https://i.imgur.com/ySw4F8j.png)
 
-在 2020 年就有 [Docker 宣布支援多架構映像檔][1]，後來才有正式的 [Docker BuildKit][2] 支援多架構映像檔，這篇文章來介紹如何使用 [Drone CI/CD][3] 搭配 [Docker BuildKit][2] 編譯多架構映像檔，而且這個功能是免費的，不需要付費的 Docker Hub 帳號。但是在 Drone CI/CD 官方提供的 [Drone Docker Plugin][4] 目前是不支援多架構映像檔，所以需要自己撰寫 Drone Pipeline，來達到我們的目的，官方也有人提出了這樣的 Proposal: 『[Support cross-arch Docker builds within Docker using QEMU][5]』，底下來一一介紹如何使用，關鍵點就是在 Host 支援 [Qemu][6] 的環境下，使用 Docker BuildKit 來編譯多架構映像檔。
+在 2020 年就有 [Docker 宣布支援多架構映像檔][1]，後來才有正式的 [Docker BuildKit][2] 支援多架構映像檔，這篇文章來介紹如何使用 [Drone CI/CD][3] 搭配 [Docker BuildKit][2] 編譯多架構映像檔，而且這個功能是免費的，不需要付費的 Docker Hub 帳號。但是在 Drone CI/CD 官方提供的 [Drone Docker Plugin][4] 目前是不支援多架構映像檔，所以需要自己撰寫 Drone Pipeline，來達到我們的目的，官方也有人提出了這樣的 Proposal: 『[Support cross-arch Docker builds within Docker using QEMU][5]』，使用 QEMU 來達成目的，底下來介紹如何使用，關鍵點就是在 Host 支援 [Qemu][6] 的環境下，使用 Docker BuildKit 完成。
 
 [1]:https://www.docker.com/blog/multi-arch-build-and-images-the-simple-way/
 [2]:https://docs.docker.com/develop/develop-images/build_enhancements/
