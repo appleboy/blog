@@ -20,7 +20,7 @@ categories:
 
 <!--more-->
 
-## 網路服務 SaaS、PaaS 和 IaaS 的差異
+## SaaS、PaaS 和 IaaS 的差異
 
 SaaS、PaaS 和 IaaS 是雲端運算的三種主要模式，它們的主要差異在於使用者需要負責管理的範圍不同。
 
