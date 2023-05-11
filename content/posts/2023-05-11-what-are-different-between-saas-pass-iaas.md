@@ -45,6 +45,6 @@ IaaS (Infrastructure as a Service) 是一種基礎設施即服務的模式，它
 | 成本         | 低           | 中           | 高              |
 | 例子        | Gmail       | Heroku       | Amazon Web Services |
 
-上面很清楚可以看到三者差異，團隊內要自建，或者是用雲服務搭建好的，根據專案時程及狀況來決定。像是我們團隊就利用 AWS 來建置 MLOps 上面的環境，因為我們需要自己控制環境，並且需要高度的可擴展性，所以選擇 IaaS 來建置。可以參考底下架構圖:
+上面很清楚可以看到三者差異，團隊內要自建，或者是用雲服務搭建好的，根據專案時程及狀況來決定。像是我們團隊就利用 AWS 來建置 MLOps 上面的環境，因為需要自己控制環境，並且高度的可擴展性，所以選擇 IaaS 來建置。可以參考底下架構圖:
 
 ![cover](https://lh3.googleusercontent.com/pw/AJFCJaV1Qx4NzYOlp7naWs0kqm5W9NPB7bzADhX6wl5UwUIkQVn5s6s1SdO8WLCDCcoZgiXV9KlBmzg3q_f5UuH8NfyobrWfd_pBUF_G6aJ78ksUlVqgkCW_9CoZ0WiPFqN7cYActi-mIBd7L9A8UnSAGfNvCw=w1910-h696-s-no?authuser=0)
