@@ -4,12 +4,14 @@ date: 2023-05-11T13:30:16+08:00
 author: appleboy
 type: post
 slug: what-are-different-between-saas-pass-iaas
-share_img: https://i.imgur.com/ySw4F8j.png
+share_img: https://lh3.googleusercontent.com/pw/AJFCJaVJO5Fu36CODWwYUc31FV6wfL6NEFO5_RLVnJ3H89TfB8nXDRAjB5Xwau9u6UlOLMnLkTyV0YWv84t1rSj2TMmynxkJS9-qxp6HqCOU1_MkiUERow9MsaYikt-FOtLd0yFVCJ2ZcDYbhw8szvfatZOIVg=w1000-no-tmp.jpg
 categories:
   - SaaS
   - PaaS
   - IaaS
 ---
+
+![cover](https://lh3.googleusercontent.com/pw/AJFCJaVJO5Fu36CODWwYUc31FV6wfL6NEFO5_RLVnJ3H89TfB8nXDRAjB5Xwau9u6UlOLMnLkTyV0YWv84t1rSj2TMmynxkJS9-qxp6HqCOU1_MkiUERow9MsaYikt-FOtLd0yFVCJ2ZcDYbhw8szvfatZOIVg=w1000-no-tmp.jpg)
 
 一般來說，開發的應用程式可以部署在 SaaS、PaaS 或 IaaS 平台上。這些平台都是雲端運算的不同模式，可以根據自己的需求來選擇最適合自己的模式。本文將介紹 SaaS、PaaS 和 IaaS 的差異。根據團隊成員組成來決定要用什麼平台，這對於新創團隊來說是非常重要的議題。像是如果團隊有熟悉 Linux 維護的同仁，可以選擇像是 [Linode][1]、[DigitalOcean][2] 這類的 IaaS 服務，如果團隊有熟悉 Heroku、Google App Engine 這類的 PaaS [Linode][1] 是一個 IaaS (Infrastructure as a Service) 提供商，它提供了虛擬化的硬體環境，使用者可以在這個環境中建立虛擬機器和存儲裝置。使用者需要負責管理這些虛擬機器和存儲裝置，包括安裝和維護作業系統和應用程式。因此，Linode 可以歸類在 IaaS 的範疇。我個人就很常使用 [Linode][1]。
 
