@@ -50,3 +50,67 @@ draft: true
 它們提供了清晰的視覺化表示，使複雜的系統運作和結構更易理解，同時有助於問題的識別和改進。這些圖形工具促進了團隊成員之間的溝通和協作，並支持系統的設計、優化和維護。它們還用於系統文檔、培訓材料和項目管理，以及在預算控制和風險管理方面的應用。最重要的是，系統流程圖和系統架構圖提供了一種統一的表示方式，標準化開發和設計流程，並降低潛在的錯誤和風險。
 
 ## 什麼是 D2 (Declarative Diagramming)?
+
+[D2][2] 是一種將文字轉換為圖形的圖表腳本語言。它代表著「聲明式圖表繪製」（Declarative Diagramming）。聲明式的意思是，您描述想要繪製的內容，它會生成相應的圖像。
+
+例如，下載CLI，創建一個名為 `input.d2` 的文件，複製並粘貼以下內容，執行該命令，您將獲得下面的圖像。
+
+```sh
+d2 --theme=300 --dark-theme=200 -l elk --pad 0 ./input.d2
+```
+
+底下是官網提供的範例：
+
+```sh
+network: {
+  cell tower: {
+    satellites: {
+      shape: stored_data
+      style.multiple: true
+    }
+
+    transmitter
+
+    satellites -> transmitter: send
+    satellites -> transmitter: send
+    satellites -> transmitter: send
+  }
+
+  online portal: {
+    ui: {shape: hexagon}
+  }
+
+  data processor: {
+    storage: {
+      shape: cylinder
+      style.multiple: true
+    }
+  }
+
+  cell tower.transmitter -> data processor.storage: phone logs
+}
+
+user: {
+  shape: person
+  width: 130
+}
+
+user -> network.cell tower: make call
+user -> network.online portal.ui: access {
+  style.stroke-dash: 3
+}
+
+api server -> network.online portal.ui: display
+api server -> logs: persist
+logs: {shape: page; style.multiple: true}
+
+network.data processor -> api server
+```
+
+## D2 設計原則?
+
+D2的設計旨在將圖表繪製變成一種對工程師來說愉快的體驗。許多工具聲稱可以做到對於簡單的圖表，但是一旦涉及稍微複雜的圖表，你就不再感到愉快了。而這些複雜的圖表恰恰是最需要存在的。
+
+為什麼會這樣呢？因為大多數現今的圖表工具都是設計工具，而不是開發工具。它們給你一個空白畫布和類似於 Figma 或 Photoshop 的拖放工具列，並將它們的預期工作流程視為設計過程。工程師不是視覺設計師，缺乏空間建構系統的能力不應該妨礙有價值的文檔的創建。每次拖放都不應該需要計劃，更新也不應該成為一個令人沮喪的任務，需要不斷移動和調整大小以為新元素留出空間。聲明式圖表繪製消除了這種摩擦。
+
+在 Hashicorp 引入 Terraform 讓工程師以文字形式編寫基礎設施之前，我們一直在 AWS 和 Google Cloud 的控制台上點擊配置基礎設施。如今，這已經是不專業的做法。評審過程在哪裡？回滾步驟在哪裡？歷史記錄和版本控制在哪裡？很難相信全球企業在視覺文檔方面的未來主要將使用拖放式設計工具來創建。
