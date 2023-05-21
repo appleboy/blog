@@ -5,7 +5,21 @@
 <span class=icon-bar></span></button>
 <a class=navbar-brand href=https://blog.wu-boy.com>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
 <a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-heading><h1>Posts</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/><h2 class=post-title>[Linux Kernel] 簡單 hello world: License and Module 介紹(part 3)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 25, 2010
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-heading><h1>Posts</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2010/07/kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E6%98%93-timer-%E6%A9%9F%E5%88%B6/><h2 class=post-title>[Kernel Driver] 撰寫簡易 Timer 機制</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 27, 2010
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;205&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在底層 Linux Kernel 提供了時序(timing)機制，方便驅動程式設計者所使用，核心是依據硬體發出的『計時器中斷』來追蹤時間的流動狀況。我們可以依據 HZ 的值來設計 Delay 機制，讓驅動程式可以每隔固定一段時間啟動或者是發出訊號，也可以利用 Timer 來讓 LED 閃爍變化，在介紹 Timer API 之前，可以先參考 Linux Kernel: 簡介HZ, tick and jiffies 這篇文章，瞭解一些相關名詞，舉例：如果想知道一秒後的 jiffies 時間，可以寫成底下：
+#ifdef CONFIG_BMA150_TIMER
+#include #endif
+j = jiffies;
+/* 一秒之後 */
+stamp_1 = j + HZ;
+/* 半秒之後 */
+stamp_1 = j + HZ/2; /* 20秒之後 */
+stamp_1 = j + 20*HZ; Timer API 用法 筆記一下自己在寫 BOSCH Sensortec 三軸加速偵測器(BMA150 Sensor) Driver 的時候，遇到底層要回報 input event X,Y,Z 到 Android HAL(Hardware abstraction layer)，所以利用 Timer 的機制定時 report 給 Android。 首先宣告：
+<a href=https://blog.wu-boy.com/2010/07/kernel-driver-%E6%92%B0%E5%AF%AB%E7%B0%A1%E6%98%93-timer-%E6%A9%9F%E5%88%B6/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/android/>Android</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/driver/>Driver</a>&nbsp;
+<a href=https://blog.wu-boy.com/tags/linux-kernel/>Linux Kernel</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2010/07/linux-kernel-%E7%B0%A1%E5%96%AE-hello-world-license-and-module-%E4%BB%8B%E7%B4%B9part-3/><h2 class=post-title>[Linux Kernel] 簡單 hello world: License and Module 介紹(part 3)</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 25, 2010
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;331&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>在 Kernel 2.4 或以上版本，在編譯模組完成，要進行 load module 之前，你會發現底下訊息：
@@ -122,38 +136,6 @@ if ($row['user_sig'] && $config['allow_sig'] && $user->optionget('viewsigs')) �
 #
 if (($row['user_sig'] && $config['allow_sig'] && $user->optionget('viewsigs') && $row['user_posts'] >= $config['max_sig_post_count_limit']) || (isset($user->data['session_admin']) && $user->data['session_admin'])) 中文化 打開 language/zh_cmn_hant/acp/board.
 <a href=https://blog.wu-boy.com/2010/06/phpbb3-%E5%A4%96%E6%8E%9B-%E6%A0%B9%E6%93%9A%E4%BD%BF%E7%94%A8%E8%80%85%E6%96%87%E7%AB%A0%E6%95%B8%E7%9B%AE%E9%99%90%E5%88%B6%E7%B0%BD%E5%90%8D%E6%AA%94%E9%A1%AF%E7%A4%BA/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
-<a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/><h2 class=post-title>[教學] phpBB3 使用者簽名檔 url 連結加上 rel=”nofollow”</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 10, 2010
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;211&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>基於 Moztw 討論區 有大陸使用者註冊之後，在簽名檔加入一些廣告連結，為了降低 Google Page Rank，所以我們必須指示搜尋引擎「不要前往此網頁上的連結」或是「不要前往此連結」，可以參考 關於 rel=&ldquo;nofollow&rdquo;，phpBB3 編輯三個檔案就可以了，此修改不影響文章內容，只有針對簽名檔作用，底下是 patch 程式碼，可以參考看看 includes/bbcode.php
---- phpBB3/includes/bbcode.php 2010-03-06 04:37:23.000000000 +0800
-+++ www/includes/bbcode.php 2010-06-10 20:58:02.000000000 +0800
-@@ -2,7 +2,8 @@
-/**
-*
-* @package phpBB3
--* @version $Id$
-+* @version $Id: bbcode.php 9461 2009-04-17 15:23:17Z acydburn $
-+* @log 2010-06-10 appleboy $
-* @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-@@ -48,7 +49,7 @@
-/**
-* Second pass bbcodes
-*/
-- function bbcode_second_pass(&$message, $bbcode_uid = '', $bbcode_bitfield = false)
-+ function bbcode_second_pass(&$message, $bbcode_uid = '', $bbcode_bitfield = false, $bbcode_is_sig = false)
-{
-if ($bbcode_uid)
-{
-@@ -110,6 +111,13 @@
-}
-$message = preg_replace($preg['search'], $preg['replace'], $message);
-+
-+ /*
-+ * 2010.
-<a href=https://blog.wu-boy.com/2010/06/%E6%95%99%E5%AD%B8-phpbb3-%E4%BD%BF%E7%94%A8%E8%80%85%E7%B0%BD%E5%90%8D%E6%AA%94-url-%E9%80%A3%E7%B5%90%E5%8A%A0%E4%B8%8A-relnofollow/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com/tags/php/>php</a>&nbsp;
 <a href=https://blog.wu-boy.com/tags/phpbb3/>phpBB3</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://blog.wu-boy.com/posts/page/54/>&larr; Newer Posts</a></li><li class=next><a href=https://blog.wu-boy.com/posts/page/56/>Older Posts &rarr;</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
