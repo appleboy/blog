@@ -1,13 +1,27 @@
 ---
-title: "設計流程及系統架構圖好工具 D2 (Declarative Diagramming)"
+title: "設計流程及系統架構圖好工具 D2"
 date: 2023-05-21T10:09:26+08:00
-draft: true
+author: appleboy
+type: post
+slug: what-is-d2-declarative-diagramming-language
+share_img: https://lh3.googleusercontent.com/pw/AJFCJaXH-MYgMTn3_iMl7FIKNbI1B93sTffzWPn8ZEaC96iTp9ZCpqu2DZY9gNLWrnqUL10qUBD2pwHhdOBOczBiHeaFCC6MhrSBwI-jgNZuaGC50fVhTBl7yQDXem2AhvMpR871jUuvHssv-muKZqfZ8-4chw=w2786-h1152-s-no?authuser=0
+categories:
+  - D2
+  - PlantUML  
+  - VSCode  
+  - diagrams  
+  - draw.io  
+  - excalidraw 
 ---
+
+![cover](https://lh3.googleusercontent.com/pw/AJFCJaXH-MYgMTn3_iMl7FIKNbI1B93sTffzWPn8ZEaC96iTp9ZCpqu2DZY9gNLWrnqUL10qUBD2pwHhdOBOczBiHeaFCC6MhrSBwI-jgNZuaGC50fVhTBl7yQDXem2AhvMpR871jUuvHssv-muKZqfZ8-4chw=w2786-h1152-s-no?authuser=0)
 
 在之前寫過一篇『[三款好用的繪圖工具來解決系統架構或流程圖][1]』，內文介紹了 PlantUML、Diagrams 及 Excalidraw 三套不同的工具，而本篇要來介紹一套用 Go 語言寫的工具 [D2: Declarative Diagramming][2]，這套工具可以讓你使用簡單的語法來繪製系統架構圖或流程圖，並且可以將圖片轉換成 SVG 或 PNG 格式。在介紹之前，我來講講為什麼要用這些流程圖工具，對工作上或團隊內部有什麼優點？
 
 [1]:https://blog.wu-boy.com/2022/09/three-tools-design-system-architecture-and-flow/
 [2]:https://d2lang.com/
+
+<!--more-->
 
 ## 什麼是系統流程圖或系統架構圖?
 
@@ -114,3 +128,59 @@ D2的設計旨在將圖表繪製變成一種對工程師來說愉快的體驗。
 為什麼會這樣呢？因為大多數現今的圖表工具都是設計工具，而不是開發工具。它們給你一個空白畫布和類似於 Figma 或 Photoshop 的拖放工具列，並將它們的預期工作流程視為設計過程。工程師不是視覺設計師，缺乏空間建構系統的能力不應該妨礙有價值的文檔的創建。每次拖放都不應該需要計劃，更新也不應該成為一個令人沮喪的任務，需要不斷移動和調整大小以為新元素留出空間。聲明式圖表繪製消除了這種摩擦。
 
 在 Hashicorp 引入 Terraform 讓工程師以文字形式編寫基礎設施之前，我們一直在 AWS 和 Google Cloud 的控制台上點擊配置基礎設施。如今，這已經是不專業的做法。評審過程在哪裡？回滾步驟在哪裡？歷史記錄和版本控制在哪裡？很難相信全球企業在視覺文檔方面的未來主要將使用拖放式設計工具來創建。
+
+## 安裝方式
+
+### 用 Script 安裝
+
+```sh
+# With --dry-run the install script will print the commands it will use
+# to install without actually installing so you know what it's going to do.
+curl -fsSL https://d2lang.com/install.sh | sh -s -- --dry-run
+# If things look good, install for real.
+curl -fsSL https://d2lang.com/install.sh | sh -s --
+```
+
+移除安裝
+
+```sh
+curl -fsSL https://d2lang.com/install.sh | sh -s -- --uninstall
+```
+
+### 用 Go 語言安裝
+
+```sh
+go install oss.terrastruct.com/d2
+```
+
+## D2 特性及優勢
+
+相對其他工具，底下整理我看到 D2 的優勢及功能
+
+1. 支援轉換成手繪模式 (Sketch Mode)
+2. 支援動畫模式 (Animations Mode)
+3. 支援 LaTeX 或其他語言展示 (Code snippets)
+4. 支援 [Markdown](https://markdown.tw/) 格式
+5. 支援 CLI 搭配瀏覽器即時呈現
+6. 支援輸出格式 PDF, PNG 及 SVG
+7. 支援 Autoformat (Coding Style)
+
+## D2 缺點
+
+個人用 D2 在公司內部畫了一些簡易的流程圖，為什麼說是『簡易』呢？原因是這樣，通常比較複雜的流程或架構圖，像是底下這系統圖:
+
+![cover](https://lh3.googleusercontent.com/pw/AJFCJaXsQHU1rGlmpM2plVHdhtchh3YKWVl3UR9_NyL3ijnoLQKPE6MgIjoIyueLLjBjc_m8cPjUzvLW4DFTI9CBfbh9E0Jxnh4WVIdIBKF2sJnCn6DAnMkDCR953eegub2AIgJgqP7N4YcLRU9hOzXiIGzT6w=w2942-h1072-s-no?authuser=0)
+
+我嘗試用 D2 來呈現這張圖的效果，但是由於是自動產生那些流程，所以有時候畫面呈現會不是我們所預期，這會造成什麼問題？有時候改動好幾版後，你會發現跟第一版的位置都會跑掉，無法固定一些元件在特定的地方，這是我目前遇到最大的問題，所以目前我個人都是拿 D2 來做簡單的流程圖，比較複雜的流程圖我還是拿其他工具來手繪，相對來說會比較好呈現給團隊。
+
+## D2 流程案例
+
+用 D2 實作開源專案 [golang-queue](https://github.com/golang-queue) 流程圖
+
+![cover](https://lh3.googleusercontent.com/pw/AJFCJaWJKaOGGygj66YIsV7ttihdPkRFXrOLKcDaj17o7UQUogacU0jFQmbRacOKVNdoxoG06Rg93p31bARhSYshxFSbaiEbJAMavdku13ktAkGIHVS2fwJ_bEkyt7jLXEUv-utYQ7n8AH0H8SwGPNscRYVaEQ=w2778-h1230-s-no?authuser=0)
+
+如果要畫上面這張有順序性從左到右，其實不難，D2 也可以按照你的思維呈現，但是像是底下這張架構圖，我就花了不少時間在調整每個元件最後呈現的位置。
+
+![cover](https://lh3.googleusercontent.com/pw/AJFCJaXD1UuhMpjEe-LfiWlSQUrUhnsG_3O4JtYtcaZQ7fdkhP3qCkZ-og--j_PjfiKhq2QHMBKL7Bz-4Wd1zAJ9w38bgtppCdowgQBWhbxPye9-zxjD7eXl7AUl-qjEn7aHW0ODBFYr6XLGPpcjwuan4E5U1w=w2710-h1422-s-no?authuser=0)
+
+上面範例都可以在[這邊找到原始碼](https://github.com/golang-queue/queue/tree/master/images)
