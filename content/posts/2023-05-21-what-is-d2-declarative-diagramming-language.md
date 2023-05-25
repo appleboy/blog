@@ -23,6 +23,27 @@ categories:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube Dgjic4BbjGs >}}
+
+```sh
+00:00 好用的架構圖工具
+00:48 什麼是系統流程圖
+01:45 什麼是系統架構圖
+02:59 帶來的優勢及好處
+05:33 什麼是 D2
+06:59 D2 設計原則
+08:13 D2 特性及優勢
+08:53 D2 的缺點
+10:35 D2 流程案例 Demo
+```
+
+其他線上課程請參考如下
+
+* [Docker 容器實戰](https://blog.wu-boy.com/docker-course/)
+* [Go 語言課程](https://blog.wu-boy.com/golang-online-course/)
+
 ## 什麼是系統流程圖或系統架構圖?
 
 **系統流程圖**（System Flowchart）和**系統架構圖**（System Architecture Diagram）是兩種常用於軟體開發和系統設計的圖形表示工具，用於描述系統的結構和流程。
