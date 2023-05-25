@@ -25,7 +25,7 @@ categories:
 
 ## 教學影片
 
-{{< youtube Dgjic4BbjGs >}}
+{{< youtube 0xoxYBlrn2k >}}
 
 ```sh
 00:00 好用的架構圖工具
