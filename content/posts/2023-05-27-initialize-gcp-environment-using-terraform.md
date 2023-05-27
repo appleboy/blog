@@ -281,6 +281,8 @@ terraform destroy
 
 ## 參考資料
 
+完整範例程式碼請參考 [terraform-gcp-demo](https://github.com/go-training/terraform-gcp-example)
+
 * [Terraform GCP Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs)
 * [Terraform GCP Backend](https://www.terraform.io/docs/language/settings/backends/gcs.html)
 * [Terraform GCP Storage Bucket](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket)
