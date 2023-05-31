@@ -4,12 +4,12 @@ date: 2023-05-31T07:56:20+08:00
 author: appleboy
 type: post
 slug: how-to-create-user-kubeconfig-file
-share_img: https://lh3.googleusercontent.com/pw/AJFCJaWyFC1UXBwtZxoLTamoUztI0cikLLTKKf_wugXxkeQxOsXODnMs8fMiO_BcJuC6sF5f9vzfM5s0Q-wMMjuCzvx3OwmEVnnxENYALUhOXaoBxtsu3v5_DomatQM70DpkNqSv5hYdX7NKHqLzK9-E0QLmrA=w678-h677-s-no?authuser=0
+share_img: https://lh3.googleusercontent.com/pw/AJFCJaXtuCuA5R-Xw8ea3rKHuIHwWY5JinU7EXhBsvq6HS1J0vva-4TYFsJY9fT7_gW69Dvf_khWJ1npoFO_yhxnY51WbWIW-OTQQfgxjLHxeEcQuO5JwT8l3Anp9Hku-ij7VU-bgUtygX-l-AwLgvPBZvYljQ=w860-h821-s-no?authuser=0
 categories:
   - kubernetes
 ---
 
-![logo](https://lh3.googleusercontent.com/pw/AJFCJaWyFC1UXBwtZxoLTamoUztI0cikLLTKKf_wugXxkeQxOsXODnMs8fMiO_BcJuC6sF5f9vzfM5s0Q-wMMjuCzvx3OwmEVnnxENYALUhOXaoBxtsu3v5_DomatQM70DpkNqSv5hYdX7NKHqLzK9-E0QLmrA=w678-h677-s-no?authuser=0)
+![logo](https://lh3.googleusercontent.com/pw/AJFCJaXtuCuA5R-Xw8ea3rKHuIHwWY5JinU7EXhBsvq6HS1J0vva-4TYFsJY9fT7_gW69Dvf_khWJ1npoFO_yhxnY51WbWIW-OTQQfgxjLHxeEcQuO5JwT8l3Anp9Hku-ij7VU-bgUtygX-l-AwLgvPBZvYljQ=w860-h821-s-no?authuser=0)
 
 <!--more-->
 
