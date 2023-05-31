@@ -144,3 +144,31 @@ users:
 請將 `<CLUSTER_API_SERVER>` 替換為你的集群的 API 伺服器位址，`<CLUSTER_NAME>` 替換為你的集群名稱，`<CONTEXT_NAME>` 替換為你想要設置的上下文名稱，`<USERNAME>` 替換為你的使用者名稱，`<ACCESS_TOKEN>` 替換為你的身份驗證令牌（Access Token）。
 
 在你的 `kubeconfig.yaml` 檔案中，你可以找到 clusters、contexts 和 users 部分，它們分別包含了集群、上下文和使用者的設定。同時，`current-context` 部分指定了當前使用的上下文。
+
+如果是在 Windows 系統上，你可以使用以下命令將 kubeconfig 設定輸出為一個環境變數：
+
+```bash
+kubectl config view --minify --flatten > $env:USERPROFILE\.kube\config
+```
+
+上述的方式，是從自己的電腦上產生 kubeconfig 檔案，如果你想要從遠端的 Kubernetes 集群上產生 kubeconfig 檔案，你可以使用 [deploy-k8s](https://github.com/appleboy/deploy-k8s) 這套工具。如果你是 k8s 管理者，開完 Service Account，可以透過底下方式，就不用先匯入到自己的 kubeconfiug 後，在用上述方式匯出，直接用 deploy-k8s 工具就可以直接匯出。
+
+可以在目前當下目錄，新增 `.env` 檔案，內容如下
+
+```env
+INPUT_SERVER=https://hostname:port
+INPUT_CA_CERT=base64_encode_data
+INPUT_TOKEN=base64_encode_data
+INPUT_SKIP_TLS_VERIFY=false
+INPUT_OUTPUT=kubeconfig
+```
+
+接著執行 `deploy-k8s` 工具
+
+```bash
+docker run --rm -it -v $(pwd):/app appleboy/deploy-k8s
+```
+
+## 參考資料
+
+* [Kubernetes - 使用者帳戶](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/authentication/)
