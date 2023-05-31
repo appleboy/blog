@@ -169,6 +169,22 @@ INPUT_OUTPUT=kubeconfig
 docker run --rm -it -v $(pwd):/app appleboy/deploy-k8s
 ```
 
+你也可以針對 Context, AuthInfo, Cluster 進行設定，詳細可以參考 [deploy-k8s](https://github.com/appleboy/deploy-k8s#usage) 內的使用方式。
+
+```diff
+INPUT_SERVER=https://hostname:port
+INPUT_CA_CERT=base64_encode_data
+INPUT_TOKEN=base64_encode_data
+INPUT_SKIP_TLS_VERIFY=false
+INPUT_OUTPUT=kubeconfig
++INPUT_CLUSTER_NAME=gcp-k8s-project
++INPUT_AUTHINFO_NAME=project-user
++INPUT_CONTEXT_NAME=project-prod
+```
+
+最後一樣執行上述 `docker` 指令即可。
+
 ## 參考資料
 
 * [Kubernetes - 使用者帳戶](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/authentication/)
+* [deploy-k8s](https://github.com/appleboy/deploy-k8s#usage) Generate a Kubeconfig or creating & updating K8s Deployments.
