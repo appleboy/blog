@@ -184,6 +184,38 @@ INPUT_OUTPUT=kubeconfig
 
 最後一樣執行上述 `docker` 指令即可。
 
+## 如何合併多個 kubeconfig
+
+在操作底下步驟前，請先做備份
+
+```bash
+cp $HOME/.kube/config $HOME/.kube/config-backup
+```
+
+可以在家目錄內的 `.kube` 目錄下，新增新目錄 `others`
+
+```bash
+export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/others/cluster1:$HOME/.kube/others/cluster2
+```
+
+如果你有多個 kubeconfig 檔案，你可以下命令快速設置 `KUBECONFIG` 環境變數
+
+```bash
+export KUBECONFIG=$HOME/.kube/config:$(find $HOME/.kube/others -type f -maxdepth 1 | tr '\n' ':')
+```
+
+最後使用 `kubectl` 命令的 `config view` 子命令來合併多個 kubeconfig 檔案。請按照以下步驟進行操作：打開終端機（命令提示字元或終端）。運行以下命令：
+
+```bash
+kubectl config view --merge --flatten > kubeconfig.yaml
+```
+
+這個命令將會將多個 kubeconfig 檔案的內容合併並輸出到一個名為 kubeconfig.yaml 的檔案中。你可以根據需要自行指定輸出檔案的名稱和路徑。最後請將此檔案複製到你的家目錄下的 .kube 目錄中 (請先備份)。
+
+```bash
+cp kubeconfig.yaml $HOME/.kube/config
+```
+
 ## 參考資料
 
 * [Kubernetes - 使用者帳戶](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/authentication/)
