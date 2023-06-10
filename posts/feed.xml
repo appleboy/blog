@@ -15,11 +15,11 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#658b00">export&lt;/span> &lt;span style="color:#00688b">CLUSTER_NAME&lt;/span>=&amp;lt;cluster-name&amp;gt;
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#658b00">export&lt;/span> &lt;span style="color:#00688b">SERVER_URL&lt;/span>=&amp;lt;server-url&amp;gt;
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#658b00">export&lt;/span> &lt;span style="color:#00688b">CA_CERT&lt;/span>=&amp;lt;path-to-ca-certificate&amp;gt;
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#658b00">export&lt;/span> &lt;span style="color:#00688b">TOKEN&lt;/span>=&amp;lt;path-to-ca-certificate&amp;gt;
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#658b00">export&lt;/span> &lt;span style="color:#00688b">USERNAME&lt;/span>=&amp;lt;ACCESS_TOKEN&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#658b00">export&lt;/span> &lt;span style="color:#00688b">TOKEN&lt;/span>=&amp;lt;token&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#658b00">export&lt;/span> &lt;span style="color:#00688b">USERNAME&lt;/span>=&amp;lt;username&amp;gt;
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
 &lt;/div>
-&lt;/div>&lt;p>將 &lt;code>&amp;lt;path-to-kubeconfig-file&amp;gt;&lt;/code> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 &lt;code>~/mykubeconfig&lt;/code>。將 &lt;code>&amp;lt;cluster-name&amp;gt;&lt;/code> 替換為你的叢集名稱， &lt;code>&amp;lt;server-url&amp;gt;&lt;/code> 替換為你的 Kubernetes API 伺服器的 URL， &lt;code>&amp;lt;path-to-ca-certificate&amp;gt;&lt;/code> 替換為你的 CA 憑證的路徑和名稱， &lt;code>&amp;lt;username&amp;gt;&lt;/code> 替換為你的使用者名稱，&lt;code>&amp;lt;ACCESS_TOKEN&amp;gt;&lt;/code> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了&lt;/p>
+&lt;/div>&lt;p>將 &lt;code>&amp;lt;path-to-kubeconfig-file&amp;gt;&lt;/code> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 &lt;code>~/mykubeconfig&lt;/code>。將 &lt;code>&amp;lt;cluster-name&amp;gt;&lt;/code> 替換為你的叢集名稱， &lt;code>&amp;lt;server-url&amp;gt;&lt;/code> 替換為你的 Kubernetes API 伺服器的 URL， &lt;code>&amp;lt;path-to-ca-certificate&amp;gt;&lt;/code> 替換為你的 CA 憑證的路徑和名稱， &lt;code>&amp;lt;username&amp;gt;&lt;/code> 替換為你的使用者名稱，&lt;code>&amp;lt;token&amp;gt;&lt;/code> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了&lt;/p>
 &lt;div class="highlight">&lt;div style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">
 &lt;table style="border-spacing:0;padding:0;margin:0;border:0;">&lt;tr>&lt;td style="vertical-align:top;padding:0;margin:0;border:0;">
 &lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code>&lt;span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="hl-1-1">&lt;a style="outline:none;text-decoration:none;color:inherit" href="#hl-1-1">1&lt;/a>
@@ -30,7 +30,7 @@
 &lt;/span>&lt;/code>&lt;/pre>&lt;/td>
 &lt;td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
 &lt;pre tabindex="0" style="background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>kubectl config set-cluster &lt;span style="color:#00688b">$CLUSTER_NAME&lt;/span> --server=&lt;span style="color:#00688b">$SERVER_URL&lt;/span> --certificate-authority=&lt;span style="color:#00688b">$CA_CERT&lt;/span> --embed-certs=&lt;span style="color:#658b00">true&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl config set-credentials &lt;span style="color:#00688b">$USERNAME&lt;/span> --token=&amp;lt;token&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl config set-credentials &lt;span style="color:#00688b">$USERNAME&lt;/span> --token=&lt;span style="color:#00688b">$TOKEN&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl config set-context &lt;span style="color:#00688b">$USERNAME&lt;/span>-context --cluster=&lt;span style="color:#00688b">$CLUSTER_NAME&lt;/span> --user=&lt;span style="color:#00688b">$USERNAME&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl config use-context &lt;span style="color:#00688b">$USERNAME&lt;/span>-context
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>kubectl config view --minify --flatten &amp;gt; &lt;span style="color:#00688b">$KUBECONFIG&lt;/span>

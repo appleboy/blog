@@ -14,11 +14,11 @@ export KUBECONFIG=<path-to-kubeconfig-file>
 export CLUSTER_NAME=<cluster-name>
 export SERVER_URL=<server-url>
 export CA_CERT=<path-to-ca-certificate>
-export TOKEN=<path-to-ca-certificate>
-export USERNAME=<ACCESS_TOKEN>
+export TOKEN=<token>
+export USERNAME=<username>
 
 
-將 <path-to-kubeconfig-file> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 ~/mykubeconfig。將 <cluster-name> 替換為你的叢集名稱， <server-url> 替換為你的 Kubernetes API 伺服器的 URL， <path-to-ca-certificate> 替換為你的 CA 憑證的路徑和名稱， <username> 替換為你的使用者名稱，<ACCESS_TOKEN> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了
+將 <path-to-kubeconfig-file> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 ~/mykubeconfig。將 <cluster-name> 替換為你的叢集名稱， <server-url> 替換為你的 Kubernetes API 伺服器的 URL， <path-to-ca-certificate> 替換為你的 CA 憑證的路徑和名稱， <username> 替換為你的使用者名稱，<token> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了
 
 
 1
@@ -29,13 +29,13 @@ export USERNAME=<ACCESS_TOKEN>
 
 
 kubectl config set-cluster $CLUSTER_NAME --server=$SERVER_URL --certificate-authority=$CA_CERT --embed-certs=true
-kubectl config set-credentials $USERNAME --token=<token>
+kubectl config set-credentials $USERNAME --token=$TOKEN
 kubectl config set-context $USERNAME-context --cluster=$CLUSTER_NAME --user=$USERNAME
 kubectl config use-context $USERNAME-context
 kubectl config view --minify --flatten > $KUBECONFIG
 
 
-底下我們來拆解上面的指令，以及如何產生 Service Account Token。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2023\/05\/how-to-create-user-kubeconfig-file\/","name":"如何產生開發者 kubeconfig 設定檔"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何產生開發者 kubeconfig 設定檔","description":"\n產生 kubeconfig 檔案需要準備幾個變數資料，來看看底下\n1 2 3 4 5 6 export KUBECONFIG=\u0026lt;path-to-kubeconfig-file\u0026gt; export CLUSTER_NAME=\u0026lt;cluster-name\u0026gt; export SERVER_URL=\u0026lt;server-url\u0026gt; export CA_CERT=\u0026lt;path-to-ca-certificate\u0026gt; export TOKEN=\u0026lt;path-to-ca-certificate\u0026gt; export USERNAME=\u0026lt;ACCESS_TOKEN\u0026gt; 將 \u0026lt;path-to-kubeconfig-file\u0026gt; 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 ~\/mykubeconfig。將 \u0026lt;cluster-name\u0026gt; 替換為你的叢集名稱， \u0026lt;server-url\u0026gt; 替換為你的 Kubernetes API 伺服器的 URL， \u0026lt;path-to-ca-certificate\u0026gt; 替換為你的 CA 憑證的路徑和名稱， \u0026lt;username\u0026gt; 替換為你的使用者名稱，\u0026lt;ACCESS_TOKEN\u0026gt; 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了\n1 2 3 4 5 kubectl config set-cluster $CLUSTER_NAME --server=$SERVER_URL --certificate-authority=$CA_CERT --embed-certs=true kubectl config set-credentials $USERNAME --token=\u0026lt;token\u0026gt; kubectl config set-context $USERNAME-context --cluster=$CLUSTER_NAME --user=$USERNAME kubectl config use-context $USERNAME-context kubectl config view --minify --flatten \u0026gt; $KUBECONFIG 底下我們來拆解上面的指令，以及如何產生 Service Account Token。\n","inLanguage":"en","wordCount":589,"datePublished":"2023-05-31T07:56:20","dateModified":"2023-05-31T07:56:20","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":[""],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2023\/05\/how-to-create-user-kubeconfig-file\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="如何產生開發者 kubeconfig 設定檔"><meta property="og:description" content="
+底下我們來拆解上面的指令，以及如何產生 Service Account Token。"><meta name=author content="Appleboy"><script type=application/ld+json>{"@context":"http://schema.org","@type":"WebSite","name":"小惡魔 - AppleBOY","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Organization","name":"","url":"https:\/\/blog.wu-boy.com"}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"https:\/\/blog.wu-boy.com","name":"home"}},{"@type":"ListItem","position":3,"item":{"@id":"https:\/\/blog.wu-boy.com\/2023\/05\/how-to-create-user-kubeconfig-file\/","name":"如何產生開發者 kubeconfig 設定檔"}}]}</script><script type=application/ld+json>{"@context":"http://schema.org","@type":"Article","author":{"name":"appleboy"},"headline":"如何產生開發者 kubeconfig 設定檔","description":"\n產生 kubeconfig 檔案需要準備幾個變數資料，來看看底下\n1 2 3 4 5 6 export KUBECONFIG=\u0026lt;path-to-kubeconfig-file\u0026gt; export CLUSTER_NAME=\u0026lt;cluster-name\u0026gt; export SERVER_URL=\u0026lt;server-url\u0026gt; export CA_CERT=\u0026lt;path-to-ca-certificate\u0026gt; export TOKEN=\u0026lt;token\u0026gt; export USERNAME=\u0026lt;username\u0026gt; 將 \u0026lt;path-to-kubeconfig-file\u0026gt; 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 ~\/mykubeconfig。將 \u0026lt;cluster-name\u0026gt; 替換為你的叢集名稱， \u0026lt;server-url\u0026gt; 替換為你的 Kubernetes API 伺服器的 URL， \u0026lt;path-to-ca-certificate\u0026gt; 替換為你的 CA 憑證的路徑和名稱， \u0026lt;username\u0026gt; 替換為你的使用者名稱，\u0026lt;token\u0026gt; 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了\n1 2 3 4 5 kubectl config set-cluster $CLUSTER_NAME --server=$SERVER_URL --certificate-authority=$CA_CERT --embed-certs=true kubectl config set-credentials $USERNAME --token=$TOKEN kubectl config set-context $USERNAME-context --cluster=$CLUSTER_NAME --user=$USERNAME kubectl config use-context $USERNAME-context kubectl config view --minify --flatten \u0026gt; $KUBECONFIG 底下我們來拆解上面的指令，以及如何產生 Service Account Token。\n","inLanguage":"en","wordCount":589,"datePublished":"2023-05-31T07:56:20","dateModified":"2023-05-31T07:56:20","image":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","keywords":[""],"mainEntityOfPage":"https:\/\/blog.wu-boy.com\/2023\/05\/how-to-create-user-kubeconfig-file\/","publisher":{"@type":"Organization","name":"https:\/\/blog.wu-boy.com","logo":{"@type":"ImageObject","url":"https:\/\/lh3.googleusercontent.com\/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080","height":60,"width":60}}}</script><meta property="og:title" content="如何產生開發者 kubeconfig 設定檔"><meta property="og:description" content="
 產生 kubeconfig 檔案需要準備幾個變數資料，來看看底下
 
 
@@ -51,11 +51,11 @@ export KUBECONFIG=<path-to-kubeconfig-file>
 export CLUSTER_NAME=<cluster-name>
 export SERVER_URL=<server-url>
 export CA_CERT=<path-to-ca-certificate>
-export TOKEN=<path-to-ca-certificate>
-export USERNAME=<ACCESS_TOKEN>
+export TOKEN=<token>
+export USERNAME=<username>
 
 
-將 <path-to-kubeconfig-file> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 ~/mykubeconfig。將 <cluster-name> 替換為你的叢集名稱， <server-url> 替換為你的 Kubernetes API 伺服器的 URL， <path-to-ca-certificate> 替換為你的 CA 憑證的路徑和名稱， <username> 替換為你的使用者名稱，<ACCESS_TOKEN> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了
+將 <path-to-kubeconfig-file> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 ~/mykubeconfig。將 <cluster-name> 替換為你的叢集名稱， <server-url> 替換為你的 Kubernetes API 伺服器的 URL， <path-to-ca-certificate> 替換為你的 CA 憑證的路徑和名稱， <username> 替換為你的使用者名稱，<token> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了
 
 
 1
@@ -66,7 +66,7 @@ export USERNAME=<ACCESS_TOKEN>
 
 
 kubectl config set-cluster $CLUSTER_NAME --server=$SERVER_URL --certificate-authority=$CA_CERT --embed-certs=true
-kubectl config set-credentials $USERNAME --token=<token>
+kubectl config set-credentials $USERNAME --token=$TOKEN
 kubectl config set-context $USERNAME-context --cluster=$CLUSTER_NAME --user=$USERNAME
 kubectl config use-context $USERNAME-context
 kubectl config view --minify --flatten > $KUBECONFIG
@@ -107,15 +107,15 @@ export CA_CERT …"><meta name=twitter:image content="https://lh3.googleusercont
 </span></span><span style=display:flex><span><span style=color:#658b00>export</span> <span style=color:#00688b>CLUSTER_NAME</span>=&lt;cluster-name&gt;
 </span></span><span style=display:flex><span><span style=color:#658b00>export</span> <span style=color:#00688b>SERVER_URL</span>=&lt;server-url&gt;
 </span></span><span style=display:flex><span><span style=color:#658b00>export</span> <span style=color:#00688b>CA_CERT</span>=&lt;path-to-ca-certificate&gt;
-</span></span><span style=display:flex><span><span style=color:#658b00>export</span> <span style=color:#00688b>TOKEN</span>=&lt;path-to-ca-certificate&gt;
-</span></span><span style=display:flex><span><span style=color:#658b00>export</span> <span style=color:#00688b>USERNAME</span>=&lt;ACCESS_TOKEN&gt;
-</span></span></code></pre></td></tr></table></div></div><p>將 <code>&lt;path-to-kubeconfig-file></code> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 <code>~/mykubeconfig</code>。將 <code>&lt;cluster-name></code> 替換為你的叢集名稱， <code>&lt;server-url></code> 替換為你的 Kubernetes API 伺服器的 URL， <code>&lt;path-to-ca-certificate></code> 替換為你的 CA 憑證的路徑和名稱， <code>&lt;username></code> 替換為你的使用者名稱，<code>&lt;ACCESS_TOKEN></code> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
+</span></span><span style=display:flex><span><span style=color:#658b00>export</span> <span style=color:#00688b>TOKEN</span>=&lt;token&gt;
+</span></span><span style=display:flex><span><span style=color:#658b00>export</span> <span style=color:#00688b>USERNAME</span>=&lt;username&gt;
+</span></span></code></pre></td></tr></table></div></div><p>將 <code>&lt;path-to-kubeconfig-file></code> 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 <code>~/mykubeconfig</code>。將 <code>&lt;cluster-name></code> 替換為你的叢集名稱， <code>&lt;server-url></code> 替換為你的 Kubernetes API 伺服器的 URL， <code>&lt;path-to-ca-certificate></code> 替換為你的 CA 憑證的路徑和名稱， <code>&lt;username></code> 替換為你的使用者名稱，<code>&lt;token></code> 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了</p><div class=highlight><div style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-1><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-1>1</a>
 </span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-2><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-2>2</a>
 </span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-3><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-3>3</a>
 </span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-4><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-4>4</a>
 </span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f" id=hl-1-5><a style=outline:none;text-decoration:none;color:inherit href=#hl-1-5>5</a>
 </span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=background-color:#eed;-moz-tab-size:2;-o-tab-size:2;tab-size:2><code class=language-sh data-lang=sh><span style=display:flex><span>kubectl config set-cluster <span style=color:#00688b>$CLUSTER_NAME</span> --server=<span style=color:#00688b>$SERVER_URL</span> --certificate-authority=<span style=color:#00688b>$CA_CERT</span> --embed-certs=<span style=color:#658b00>true</span>
-</span></span><span style=display:flex><span>kubectl config set-credentials <span style=color:#00688b>$USERNAME</span> --token=&lt;token&gt;
+</span></span><span style=display:flex><span>kubectl config set-credentials <span style=color:#00688b>$USERNAME</span> --token=<span style=color:#00688b>$TOKEN</span>
 </span></span><span style=display:flex><span>kubectl config set-context <span style=color:#00688b>$USERNAME</span>-context --cluster=<span style=color:#00688b>$CLUSTER_NAME</span> --user=<span style=color:#00688b>$USERNAME</span>
 </span></span><span style=display:flex><span>kubectl config use-context <span style=color:#00688b>$USERNAME</span>-context
 </span></span><span style=display:flex><span>kubectl config view --minify --flatten &gt; <span style=color:#00688b>$KUBECONFIG</span>
