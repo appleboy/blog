@@ -18,15 +18,15 @@ export KUBECONFIG=<path-to-kubeconfig-file>
 export CLUSTER_NAME=<cluster-name>
 export SERVER_URL=<server-url>
 export CA_CERT=<path-to-ca-certificate>
-export TOKEN=<path-to-ca-certificate>
-export USERNAME=<ACCESS_TOKEN>
+export TOKEN=<token>
+export USERNAME=<username>
 ```
 
-將 `<path-to-kubeconfig-file>` 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 `~/mykubeconfig`。將 `<cluster-name>` 替換為你的叢集名稱， `<server-url>` 替換為你的 Kubernetes API 伺服器的 URL， `<path-to-ca-certificate>` 替換為你的 CA 憑證的路徑和名稱， `<username>` 替換為你的使用者名稱，`<ACCESS_TOKEN>` 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了
+將 `<path-to-kubeconfig-file>` 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 `~/mykubeconfig`。將 `<cluster-name>` 替換為你的叢集名稱， `<server-url>` 替換為你的 Kubernetes API 伺服器的 URL， `<path-to-ca-certificate>` 替換為你的 CA 憑證的路徑和名稱， `<username>` 替換為你的使用者名稱，`<token>` 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了
 
 ```sh
 kubectl config set-cluster $CLUSTER_NAME --server=$SERVER_URL --certificate-authority=$CA_CERT --embed-certs=true
-kubectl config set-credentials $USERNAME --token=<token>
+kubectl config set-credentials $USERNAME --token=$TOKEN
 kubectl config set-context $USERNAME-context --cluster=$CLUSTER_NAME --user=$USERNAME
 kubectl config use-context $USERNAME-context
 kubectl config view --minify --flatten > $KUBECONFIG
