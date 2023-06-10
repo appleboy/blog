@@ -11,7 +11,7 @@ categories:
 
 ![logo](https://lh3.googleusercontent.com/pw/AJFCJaXtuCuA5R-Xw8ea3rKHuIHwWY5JinU7EXhBsvq6HS1J0vva-4TYFsJY9fT7_gW69Dvf_khWJ1npoFO_yhxnY51WbWIW-OTQQfgxjLHxeEcQuO5JwT8l3Anp9Hku-ij7VU-bgUtygX-l-AwLgvPBZvYljQ=w860-h821-s-no?authuser=0)
 
-產生 kubeconfig 檔案需要準備幾個變數資料，來看看底下
+產生 `kubeconfig` 檔案需要準備底下資訊
 
 ```sh
 export KUBECONFIG=<path-to-kubeconfig-file>
@@ -131,6 +131,12 @@ kubectl config set-context <CONTEXT_NAME> --cluster=<CLUSTER_NAME> --user=<USERN
 替換 `<CONTEXT_NAME>` 為你想要設置的上下文名稱（例如 development 或 production），`<CLUSTER_NAME>` 為你的集群名稱，`<USERNAME>` 為你的使用者名稱。確認 kubeconfig 檔案的位置。通常，kubeconfig 檔案位於 `~/.kube/config`（Unix/Linux）或 `%USERPROFILE%\.kube\config`（Windows）。
 
 完成上述步驟後，你的 kubeconfig 檔案就已經生成並配置完成了。你可以使用 kubectl 命令來進行 Kubernetes 集群操作，它會使用該 kubeconfig 檔案作為身份驗證和設定。
+
+```bash
+kubectl config use-context <CONTEXT_NAME>
+```
+
+替換 `<CONTEXT_NAME>` 為你想要切換的群集名稱（例如 xxxx-development 或 xxxx-production）。
 
 ## 產生 kubeconfig 檔案
 
