@@ -24,6 +24,8 @@ export USERNAME=<username>
 
 將 `<path-to-kubeconfig-file>` 替換為要生成的 kubeconfig 檔案的路徑和名稱，例如 `~/mykubeconfig`。將 `<cluster-name>` 替換為你的叢集名稱， `<server-url>` 替換為你的 Kubernetes API 伺服器的 URL， `<path-to-ca-certificate>` 替換為你的 CA 憑證的路徑和名稱， `<username>` 替換為你的使用者名稱，`<token>` 替換為你的身份驗證令牌（Access Token），透過底下指令就可以完成了
 
+<!--more-->
+
 ```sh
 kubectl config set-cluster $CLUSTER_NAME --server=$SERVER_URL --certificate-authority=$CA_CERT --embed-certs=true
 kubectl config set-credentials $USERNAME --token=$TOKEN
@@ -33,8 +35,6 @@ kubectl config view --minify --flatten > $KUBECONFIG
 ```
 
 底下我們來拆解上面的指令，以及如何產生 Service Account Token。
-
-<!--more-->
 
 ## 如何產生 Service Account Token
 
