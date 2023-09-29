@@ -60,6 +60,8 @@ services:
 
 接著輸入資料庫資訊，這邊我們使用 SQLite 資料庫，所以不需要輸入任何資料。只需要設定 Administator 帳號密碼即可。
 
+![optional setting](/images/2023-09-29/optional-setting.png)
+
 [6]:https://docs.docker.com/engine/install/ubuntu/
 [7]:https://docs.gitea.com/next/installation/install-with-docker-rootless
 
