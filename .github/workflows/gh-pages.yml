@@ -3,17 +3,17 @@ name: github pages
 on:
   push:
     branches:
-      - master  # Set a branch to deploy
+      - master # Set a branch to deploy
   pull_request:
 
 jobs:
   deploy:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          submodules: true # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 
       - name: Create cname file
         run: echo "blog.wu-boy.com" > static/CNAME
@@ -21,7 +21,7 @@ jobs:
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
-          hugo-version: 'latest'
+          hugo-version: "latest"
           # extended: true
 
       - name: Build
