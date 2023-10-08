@@ -33,11 +33,11 @@ ssh-keygen -t rsa -C "appleboy.tw@gmail.com"
 
 ```bash
 Generating public/private rsa key pair.
-Enter file in which to save the key (/Users/appleboy/.ssh/id_rsa):
+Enter file in which to save the key (/xxx/.ssh/id_rsa):
 Enter passphrase (empty for no passphrase):
 Enter same passphrase again:
-Your identification has been saved in /Users/appleboy/.ssh/id_rsa.
-Your public key has been saved in /Users/appleboy/.ssh/id_rsa.pub.
+Your identification has been saved in /xxx/.ssh/id_rsa.
+Your public key has been saved in /xxx/.ssh/id_rsa.pub.
 The key fingerprint is:
 ```
 
@@ -65,7 +65,8 @@ git config --global commit.gpgsign true
 
 ```bash
 git config --global gpg.format ssh
-git config --global user.signingkey /Users/appleboy/.ssh/id_rsa.pub
+git config --global user.signingkey \
+  /xxx/.ssh/id_rsa.pub
 ```
 
 其中 `/Users/appleboy/.ssh/id_rsa.pub` 請換成你自己的 SSH Key 路徑。完成後之後所有的 Commit 都會自動加上簽章，你可以透過 `git commit -S` 來手動加上簽章。
