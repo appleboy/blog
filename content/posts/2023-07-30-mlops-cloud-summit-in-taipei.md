@@ -19,6 +19,18 @@ categories:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube ufMkjufWskY >}}
+
+```sh
+02:55 議程簡介
+03:36 What's MLOPs?
+08:33 AI Developer's Pain Points
+13:16 AI MLOps Solution
+24:51 CI/CD Solution
+```
+
 ## 會場照片
 
 ![photo](https://lh3.googleusercontent.com/pw/AIL4fc8SbJgDPFw7eCixJZJIbZ8R2VmW-IkrqjRhr1awp3eYL1MNlFId5uBKQj8QJJN1NUBPEe9F_Hbm08vn04nOuHg_WT0lBz05UjDzSQsGMFRMitUJr0Vo9R2F4HbiC7-mm8nGigz3a8kLhulLurbJ63L89A=w689-h918-s-no?authuser=0)
