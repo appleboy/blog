@@ -1,0 +1,30 @@
+---
+title: "生成式 AI CodeGPT 開發經驗談 - 台北 ModernWeb"
+date: 2023-11-19T13:13:30+08:00
+author: appleboy
+type: post
+slug: codegpt-in-modernweb
+share_img: /images/2023-11-08/cover.png
+categories:
+- golang
+
+---
+
+![photo](/images/2023-11-08/cover.png)
+
+很高興可以到台北 ModerWeb 分享『[生成式 AI CodeGPT 開發經驗談][1]』，沒想到這主題這麼多人有興趣，第一次遇到滿場的現象。這場主要講授在今年 3 月由我自己開源的 [CodeGPT][2] 工具，身為軟體工程師，每天都一定會寫 [Commit Message][3]，而此工具會針對修改的 Code Diff 進行閱讀，並給出一次性的 Commit Message，讓軟體工程師不用再煩惱該如何寫 Commit Message。大家可以看看上面的封面圖，就可以知道我每天需要花多少時間在寫有用可閱讀的 Commit。
+
+[2]:https://github.com/appleboy/CodeGPT
+[3]:https://www.conventionalcommits.org/en/v1.0.0/
+
+<!--more-->
+
+![cover01](https://lh3.googleusercontent.com/pw/ADCreHcFxhlMRApzSKxjGMOLEn0EdBmYD3XLtXREkBZLdiuSHOHXDcuMs9zkdna4K-u7bHG_imoypVSccSigs7OTcKxq-7BpFB8wpxWQAstE0lz-mY1940tV1RUY43QBUoS4OHhC4XQGFEtOdPtKpSrf_21nKg87TfAGOfG8rsPBpO0s1c46u49fRPLZ-iYnDCbKBbwNIQog2gWPBhku8wnBaaGXCS9-rTYmID6SxONg08djYHDggSuArdAdJsStaWIq6rjKywAYooH7KeIBFwd65UNYBi1i8XHhle1iHIkxy-6OFL5kseqhC2tZEnOlOwk2TTmskQUQ1ZBYKMn-mHnms7aiETuIEr-v9UwHz0QrAajgBTO2rzIPPJ548ro_fZIvU8Y48FpxyP-NyDWdHM0BWkEzkbMj9bPL91JdPPPxtlNsG2OjIWgnRtDFGnCHTZ0ENNeilDxeH56uQdSe3d1ojUcjlDpT8MGDv2HomcRUCLbtCQRcygyL9vXLKLg6EZml59DSWM2ezkLn-xmcpG-0Cdo9dxbk606SUzk5TiGq49OdAQJl2Vx1mcusSuOheL5DhRgMr51SzR8NlEgpxsoEWV_-4IvqZqZt6gXBR1-uboIVqHcUGLPCTBkYwwye0iFAnxCxaY523YWeA2TtmSj8nBrrfT_RNJcdORYjFdKznp7XIuHyAkx0kVCTF5VWm3PdwT3e5XgdbBmDpCVvq60NjxmoidYZHcMHDr08BCA8kwK9ikEgx3cvY7QTWb6ug9ldA702Skv1-qaX047ILmVahx5AbN_fXsRe3EdxE73wI1vo_XySW6GKeJAGc55h8YdOcVOHWB3acLjIs8nZb8O5rVG2XH3ulULLxt7A_sgjK0Y9U3yznaZZjBnt1_SXd6zQCqEkORIqlZdtZbZ9CMzP6GKA9NI=w1407-h938-s-no-gm?authuser=0)
+
+![cover02](https://lh3.googleusercontent.com/pw/ADCreHcLZO-ESwmPv3RIMBepxGyywj38YTzgEpkNztLo0-t0FuXgPiSwRkP6ZcVo00qLNV6ih9gAf3AOHe3bF3pGLj1q8x4bBrZBPRLpIonyV-QbnZzhepsy32H2gBiEqJxsbf5dFcAhbWKVa8BrtF78ZF-aZIkxEpfVE9ACCzko2js0BNfD3OE7bfxJyNF0S56IMncN1Sts3kqSIgLRhTb6jE0elYBDcQmyi9FGJG8J_SZpkV7wzxNXP1nuIPE4CWaUVliQ6UsodTcu8Tswk4KXOLn2n9XXbDvZvq-PkfVb-3oOyKsX1-9wAZvGbEilXFN72Vamh0F1SGVoaqTCxeTlQVp4fvG23HWrS1CkjHjNS1S9fyWqZL-lFNDwQa-KHCe0v8xu0CabNliIwpavL5LhMB4mvvwHulHtBgwjQr7ktBP3X4QmDFUg14nrQsHtTq2jIzwrNw9m9aHqrbVQsskB1-FUptBn9_HsqHDDUYv_nA3w7p4vMY0jRFBXRq_0Wz4Zhcl7_tjannNXxqxOSNHJIBY7odTbfFZ4ZqZbQdLFCf4fUAvKecHuU8q4xNzHEl1R_QljmFKZtbr-ubMK_I23816a9s2uoJUKsXPuJSq6xEtZWwfnd7oG_iTKounxwOccbWf1ieSn8vT58NeCWedcmI5oJG5liL7XwhLfUMZ1MD79u4Rk2Y8IUNwDIBOvGwAema0kiu0buUa07Ijm48XoQzmQmf2vkanurili_xfFqJzbXEq_4CT-Kyj50FDnzdkRLVQjQWjAGDwgjaGHtkAoCE3P7Ympf54a4VlpXLgiQIS52IGRZ6F6MVJ558b-VijfcLi4FvCrHJ1dA-zwMbDAssI2DWfFEpL_pOEc5tSZDw6zgeoVbErv0vZ33_yQcOmViUoZUuS2O-s14RSxs1BQhVlW3zQ=w1407-h938-s-no-gm?authuser=0)
+
+[1]: https://modernweb.tw/2023/session-page/2428
+
+## 投影片
+
+{{< speakerdeck id="cb24f7c53d09415fadc8fb3c97630b79" >}}
