@@ -221,13 +221,13 @@ INPUT_OUTPUT=kubeconfig
 cp $HOME/.kube/config $HOME/.kube/config-backup
 ```
 
-可以在家目錄內的 `.kube` 目錄下，新增新目錄 `others`
+可以在家目錄內的 `.kube` 目錄下，新增新目錄 `others`，並將所有的 kubeconfig 檔案放到該目錄下。
 
 ```bash
-export KUBECONFIG=$HOME/.kube/config:$HOME/.kube/others/cluster1:$HOME/.kube/others/cluster2
+mkdir -p HOME/.kube/others
 ```
 
-如果你有多個 kubeconfig 檔案，你可以下命令快速設置 `KUBECONFIG` 環境變數
+接下來可以下命令快速設置 `KUBECONFIG` 環境變數
 
 ```bash
 export KUBECONFIG=$HOME/.kube/config:$(find $HOME/.kube/others -type f -maxdepth 1 | tr '\n' ':')
