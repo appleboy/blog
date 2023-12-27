@@ -7,86 +7,103 @@
 #include &lt;linux/proc_fs.h> /* Necessary because we use proc fs */
 #include &lt;linux/seq_file.h> /* for seq_file */
 #include &lt;linux/uaccess.h>
+
 MODULE_LICENSE("GPL");
+
 #define MAX_LINE 1000
 static uint32_t *lines;
+
 /**
-* seq_start() takes a position as an argument and returns an iterator which
-* will start reading at that position.
-*/
+ * seq_start() takes a position as an argument and returns an iterator which
+ * will start reading at that position.
+ */
 static void* seq_start(struct seq_file *s, loff_t *pos)
 {
-uint32_t *lines;
-if (*pos >= MAX_LINE) {
-return NULL; // no more data to read
+ uint32_t *lines;
+
+ if (*pos >= MAX_LINE) {
+ return NULL; // no more data to read
+ }
+
+ lines = kzalloc(sizeof(uint32_t), GFP_KERNEL);
+ if (!lines) {
+ return NULL;
+ }
+
+ *lines = *pos + 1;
+
+ return lines;
 }
-lines = kzalloc(sizeof(uint32_t), GFP_KERNEL);
-if (!lines) {
-return NULL;
-}
-*lines = *pos + 1;
-return lines;
-}
+
 /**
-* move the iterator forward to the next position in the sequence
-*/
+ * move the iterator forward to the next position in the sequence
+ */
 static void* seq_next(struct seq_file *s, void *v, loff_t *pos)
 {
-uint32_t *lines = v;
-*pos = ++(*lines);
-if (*pos >= MAX_LINE) {
-return NULL; // no more data to read
+ uint32_t *lines = v;
+ *pos = ++(*lines);
+ if (*pos >= MAX_LINE) {
+ return NULL; // no more data to read
+ }
+ return lines;
 }
-return lines;
-}
+
 /**
-* stop() is called when iteration is complete (clean up)
-*/
+ * stop() is called when iteration is complete (clean up)
+ */
 static void seq_stop(struct seq_file *s, void *v)
 {
-kfree(v);
+ kfree(v);
 }
+
 /**
-* success return 0, otherwise return error code
-*/
+ * success return 0, otherwise return error code
+ */
 static int seq_show(struct seq_file *s, void *v)
 {
-seq_printf(s, "Line #%d: This is Brook's demo\n", *((uint32_t*)v));
-return 0;
+ seq_printf(s, "Line #%d: This is Brook's demo\n", *((uint32_t*)v));
+ return 0;
 }
+
 static struct seq_operations seq_ops = {
-.start = seq_start,
-.next = seq_next,
-.stop = seq_stop,
-.show = seq_show
+ .start = seq_start,
+ .next = seq_next,
+ .stop = seq_stop,
+ .show = seq_show
 };
+
 static int proc_open(struct inode *inode, struct file *file)
 {
-return seq_open(file, &amp;seq_ops);
+ return seq_open(file, &amp;seq_ops);
 }
+
 static struct file_operations proc_ops = {
-.owner = THIS_MODULE, // system
-.open = proc_open,
-.read = seq_read, // system
-.llseek = seq_lseek, // system
-.release = seq_release // system
+ .owner = THIS_MODULE, // system
+ .open = proc_open,
+ .read = seq_read, // system
+ .llseek = seq_lseek, // system
+ .release = seq_release // system
 };
+
 static int __init init_modules(void)
 {
-struct proc_dir_entry *ent;
-ent = create_proc_entry("brook", 0, NULL);
-if (ent) {
-ent->proc_fops = &amp;proc_ops;
+ struct proc_dir_entry *ent;
+
+ ent = create_proc_entry("brook", 0, NULL);
+ if (ent) {
+ ent->proc_fops = &amp;proc_ops;
+ }
+ return 0;
 }
-return 0;
-}
+
 static void __exit exit_modules(void)
 {
-if (lines) {
-kfree(lines);
+ if (lines) {
+ kfree(lines);
+ }
+ remove_proc_entry("brook", NULL);
 }
-remove_proc_entry("brook", NULL);
-}
+
 module_init(init_modules);
 module_exit(exit_modules);&lt;/pre></description></item><item><title>[C/C++] 判斷檔案是否存在 file_exists</title><link>https://blog.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/</link><pubDate>Wed, 08 Dec 2010 04:36:48 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/12/cc-%E5%88%A4%E6%96%B7%E6%AA%94%E6%A1%88%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8-file_exists/</guid><description>在 PHP 函式裡面，有直接 file_exists 可以使用，相當方便:
 1 2 3 4 5 &amp;lt;?php if(file_exists(&amp;#34;files/appleboy.c&amp;#34;)) { echo &amp;#34;File found!&amp;#34;; } ?&amp;gt; 在 C 裡面該如何實做？有兩種方式如下:

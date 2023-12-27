@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Perl on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/tags/perl/</link><description>Recent content in Perl on 小惡魔 - AppleBOY</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Tue, 05 Apr 2011 06:29:15 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/tags/perl/feed.xml" rel="self" type="application/rss+xml"/><item><title>用 cpanm 安裝 Perl 相依性模組</title><link>https://blog.wu-boy.com/2011/04/%E7%94%A8-cpanm-%E5%AE%89%E8%A3%9D-perl-%E7%9B%B8%E4%BE%9D%E6%80%A7%E6%A8%A1%E7%B5%84/</link><pubDate>Tue, 05 Apr 2011 06:29:15 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/04/%E7%94%A8-cpanm-%E5%AE%89%E8%A3%9D-perl-%E7%9B%B8%E4%BE%9D%E6%80%A7%E6%A8%A1%E7%B5%84/</guid><description>最近在寫 Perl 爬蟲程式，需要用到短網址 Bitly 的 API，所以找了 WWW::Shorten::Bitly，本篇紀錄安裝使用 cpanm 這 Perl 的小工具，此工具不需要任何設定，只要下載到 bin 目錄就可以正成使用了。由於 Ubuntu 沒有包好的 dpkg 可以用，所以才想到用 cpanm。
-安裝 cpanm mkdir ~/bin
-wget --no-check-certificate http://bit.ly/cpanm -O ~/bin/cpanm
-chmod +x ~/bin/cpanm 或者可以直接安裝到 /usr/local/bin/ 底下，這樣不用在重新把 PATH 改寫
-sudo cp ~/bin/cpanm /usr/local/bin/ 使用 cpanm # 安裝 WWW::Shorten::Bitly
-cpanm WWW::Shorten::Bitly
-# 安裝 distribution path
-cpanm MIYAGAWA/Plack-0.99_05.tar.gz
-# 從 URL 安裝
-cpanm http://example.org/LDS/CGI.pm-3.20.tar.gz
-# 安裝本機檔案
-cpanm ~/dists/MyCompany-Enterprise-1.00.tar.gz 另外介紹幾個 option --sudo 直接用 sudo 方式安裝，也就是 root 啦 --verbose 檢查安裝過程 --notest 不需要測試 --force 強制安裝 --reinstall 重新安裝，假如已經有安裝過的軟體，一樣會 reinstall --installdeps 只安裝相依性軟體 非常簡單吧，這是懶人做法，如果在 FreeBSD 直接安裝 ports 就好。</description></item><item><title>2011 OSDC Day 1 筆記</title><link>https://blog.wu-boy.com/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/</link><pubDate>Thu, 31 Mar 2011 12:55:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/</guid><description>Update: 補上 OSDC 紀錄影片 2011.06.26 今年很高興可以北上參加 OSDC 2011 (Open Source Developers Conference)，由於之前都在南部唸書及工作，沒有機會北上參加聚會，現在人在新竹，終於有機會可以參加了，雖然早上六點就要起床趕電車了，不過到現場聽課感覺就是不同，也可以認識很多新朋友，底下來紀錄上課筆記
+安裝 cpanm mkdir ~/binwget --no-check-certificate http://bit.ly/cpanm -O ~/bin/cpanmchmod +x ~/bin/cpanm 或者可以直接安裝到 /usr/local/bin/ 底下，這樣不用在重新把 PATH 改寫
+sudo cp ~/bin/cpanm /usr/local/bin/ 使用 cpanm # 安裝 WWW::Shorten::Bitlycpanm WWW::Shorten::Bitly# 安裝 distribution pathcpanm MIYAGAWA/Plack-0.99_05.tar.gz# 從 URL 安裝cpanm http://example.org/LDS/CGI.pm-3.20.tar.gz# 安裝本機檔案cpanm ~/dists/MyCompany-Enterprise-1.00.tar.gz 另外介紹幾個 option --sudo 直接用 sudo 方式安裝，也就是 root 啦 --verbose 檢查安裝過程 --notest 不需要測試 --force 強制安裝 --reinstall 重新安裝，假如已經有安裝過的軟體，一樣會 reinstall --installdeps 只安裝相依性軟體 非常簡單吧，這是懶人做法，如果在 FreeBSD 直接安裝 ports 就好。</description></item><item><title>2011 OSDC Day 1 筆記</title><link>https://blog.wu-boy.com/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/</link><pubDate>Thu, 31 Mar 2011 12:55:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/03/2011-osdc-day-1-%E7%AD%86%E8%A8%98/</guid><description>Update: 補上 OSDC 紀錄影片 2011.06.26 今年很高興可以北上參加 OSDC 2011 (Open Source Developers Conference)，由於之前都在南部唸書及工作，沒有機會北上參加聚會，現在人在新竹，終於有機會可以參加了，雖然早上六點就要起床趕電車了，不過到現場聽課感覺就是不同，也可以認識很多新朋友，底下來紀錄上課筆記
 微軟與 jQuery 社群的親密接觸 講者: Eric Shangkuan (Microsoft) Slide: 微軟與 jQuery 社群的親密接觸 這是 OSDC 第一場演講，早上九點就開始了，雖然人不多，但是蠻多人還是為了講者而來，首先介紹什麼是 jQuery，以及 jQuery 一些基本用法，像是 CSS selector，如何在 Windows Visual Studio 上面開發 jQuery 及撰寫 plugin 整合進去 ASP.Net，最後介紹三個不錯用的 jQuery Plugin: Templeate, Datalink, Globalzation。
 Templeate: 這搭配 Facebook api 可以直接做個人頁面，請參考這裡 Globalzation: 前端多國語系實做 Datalink: 可以快速處理 form，利用 object 跟 jQuery 搭配 如果要研究上述三個 jQuery Plugin 可以參考底下: jQuery Datalink: https://github.com/jquery/jquery-datalink jQuery Templeate: https://github.com/jquery/jquery-tmpl jQuery Globalzation: https://github.</description></item><item><title>[網站] 好站連結 (七) Android, javascript, Css, PHP, Perl, FreeBSD, Linux</title><link>https://blog.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/</link><pubDate>Fri, 30 Jul 2010 14:53:46 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2010/07/%E7%B6%B2%E7%AB%99-%E5%A5%BD%E7%AB%99%E9%80%A3%E7%B5%90-%E4%B8%83-android-javascript-css-php-perl-freebsd-linux/</guid><description>Windows C#
 C# 比較字串 MSDN 比較字串 Request.Form Collection Request Query String / Form Parametrs ASP.NET QueryString Usage Using include files with ASP.NET html
@@ -22,44 +13,8 @@ jQuery Week Calendar Javascript: reference the parent window from a popup How to
 &lt;pre class="brush: bash; title: ; notranslate" title=""># 安裝必備軟體
 cd /usr/ports/net/p5-Net-Rendezvous/ &amp;&amp; make install clean
 cd /usr/ports/net/cvsup-without-gui &amp;&amp; make install clean&lt;/pre></description></item><item><title>[Perl] 解決 Wide character in print with UTF-8 mode</title><link>https://blog.wu-boy.com/2009/07/perl-with-utf-8-mode/</link><pubDate>Wed, 01 Jul 2009 08:30:03 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2009/07/perl-with-utf-8-mode/</guid><description>最近在寫 Perl 的程式，發現在正規比對的時候，print 出中文資料會出現 &amp;ldquo;Wide character in print at&amp;rdquo; 的 warning 訊息，在 google 找到一篇解決方法：Perl with UTF-8 mode，這篇提出的解決方法有很多種，comment 留言也有提供解法，可以去看一下，還蠻不錯的，那底下是我參考的解法： 只要在表頭加上：
-use utf8;
-binmode(STDIN, ':encoding(utf8)');
-binmode(STDOUT, ':encoding(utf8)');
-binmode(STDERR, ':encoding(utf8)'); 完整的檔案如下： #! /usr/bin/perl -w
-use Carp;
-use File::Basename;
-use LWP::Simple;
-use WWW::Mechanize;
-use LWP::UserAgent;
-use WWW::Shorten '0rz';
-use Getopt::Std;
-use DBI;
-use utf8;
-binmode(STDIN, ':encoding(utf8)');
-binmode(STDOUT, ':encoding(utf8)');
-binmode(STDERR, ':encoding(utf8)');
-if($_ =~ m/\s*(.+)&lt;\/a>&lt;\/div>\s*/)
-{
-$pic_desc = $1;
-print "desc: " . $1 . " \n"</description></item><item><title>[MySQL] 利用 perl 單行印出 my.cnf</title><link>https://blog.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/</link><pubDate>Wed, 17 Jun 2009 13:36:21 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/</guid><description>在 MySQL Performance Blog 裡面發現這篇：How to pretty-print my.cnf with a one-liner，利用一行 perl 指令把 my.cnf 的註解拿掉：
-perl -ne 'm/^([^#][^\s=]+)\s*(=.*|)/ &amp;&amp; printf("%-35s%s\n", $1, $2)' /etc/my.cnf 輸出為： [client]
-port = 3306
-socket = /tmp/mysql.sock
-[mysqld]
-port = 3306
-socket = /tmp/mysql.sock
-skip-locking
-key_buffer = 256M
-max_allowed_packet = 1M
-table_cache = 256
-sort_buffer_size = 1M
-read_buffer_size = 1M
-read_rnd_buffer_size = 4M
-myisam_sort_buffer_size = 64M
-thread_cache_size = 8
-query_cache_size = 16M
-thread_concurrency = 8
-log-slow-queries = /var/log/mysql/mysql-slow.</description></item><item><title>[FreeBSD] 利用 perl and shell script 大量建制帳號及 Quota</title><link>https://blog.wu-boy.com/2008/03/freebsd-%E5%88%A9%E7%94%A8-perl-and-shell-script-%E5%A4%A7%E9%87%8F%E5%BB%BA%E5%88%B6%E5%B8%B3%E8%99%9F%E5%8F%8A-quota/</link><pubDate>Fri, 28 Mar 2008 07:39:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/03/freebsd-%E5%88%A9%E7%94%A8-perl-and-shell-script-%E5%A4%A7%E9%87%8F%E5%BB%BA%E5%88%B6%E5%B8%B3%E8%99%9F%E5%8F%8A-quota/</guid><description>&lt;p>最近幫繫上處理 &lt;a href="http://www.freebsd.org/">FreeBSD&lt;/a> 機器，要碰到大量建制帳號跟 quota，所以上網找了一下教學，網路上就很多教學了，只不過要懂一些 &lt;a href="http://cpan.perl.org/">perl&lt;/a> 跟 &lt;a href="http://linux.vbird.org/linux_basic/0340bashshell-scripts.php">shell script&lt;/a> 的基本觀念，在弄起來會比較方便，時間也會縮短許多。 首先開帳號的話，就是利用 &lt;a href="http://www.freebsd.org/cgi/man.cgi?query=pw&amp;amp;apropos=0&amp;amp;sektion=0&amp;amp;manpath=FreeBSD+7.0-RELEASE&amp;amp;format=html">pw&lt;/a> 這個指令了，這個裡指令非常強大，可以新增使用者，或者是修改使用者的特性，如登入的 shell，comment….等等 先產生一個 passwd.txt 裡面內容格式就是 “帳號,密碼”，這樣的格式&lt;/p>
+use utf8;binmode(STDIN, ':encoding(utf8)');binmode(STDOUT, ':encoding(utf8)');binmode(STDERR, ':encoding(utf8)'); 完整的檔案如下： #! /usr/bin/perl -wuse Carp;use File::Basename;use LWP::Simple;use WWW::Mechanize;use LWP::UserAgent;use WWW::Shorten '0rz';use Getopt::Std;use DBI;use utf8;binmode(STDIN, ':encoding(utf8)');binmode(STDOUT, ':encoding(utf8)');binmode(STDERR, ':encoding(utf8)');if($_ =~ m/\s*(.+)&lt;\/a>&lt;\/div>\s*/){$pic_desc = $1;print "desc: " . $1 . " \n"</description></item><item><title>[MySQL] 利用 perl 單行印出 my.cnf</title><link>https://blog.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/</link><pubDate>Wed, 17 Jun 2009 13:36:21 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2009/06/mysql-%E5%88%A9%E7%94%A8-perl-%E5%96%AE%E8%A1%8C%E5%8D%B0%E5%87%BA-mycnf/</guid><description>在 MySQL Performance Blog 裡面發現這篇：How to pretty-print my.cnf with a one-liner，利用一行 perl 指令把 my.cnf 的註解拿掉：
+perl -ne 'm/^([^#][^\s=]+)\s*(=.*|)/ &amp;&amp; printf("%-35s%s\n", $1, $2)' /etc/my.cnf 輸出為： [client]port = 3306socket = /tmp/mysql.sock[mysqld]port = 3306socket = /tmp/mysql.sockskip-lockingkey_buffer = 256Mmax_allowed_packet = 1Mtable_cache = 256sort_buffer_size = 1Mread_buffer_size = 1Mread_rnd_buffer_size = 4Mmyisam_sort_buffer_size = 64Mthread_cache_size = 8query_cache_size = 16Mthread_concurrency = 8log-slow-queries = /var/log/mysql/mysql-slow.</description></item><item><title>[FreeBSD] 利用 perl and shell script 大量建制帳號及 Quota</title><link>https://blog.wu-boy.com/2008/03/freebsd-%E5%88%A9%E7%94%A8-perl-and-shell-script-%E5%A4%A7%E9%87%8F%E5%BB%BA%E5%88%B6%E5%B8%B3%E8%99%9F%E5%8F%8A-quota/</link><pubDate>Fri, 28 Mar 2008 07:39:56 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/03/freebsd-%E5%88%A9%E7%94%A8-perl-and-shell-script-%E5%A4%A7%E9%87%8F%E5%BB%BA%E5%88%B6%E5%B8%B3%E8%99%9F%E5%8F%8A-quota/</guid><description>&lt;p>最近幫繫上處理 &lt;a href="http://www.freebsd.org/">FreeBSD&lt;/a> 機器，要碰到大量建制帳號跟 quota，所以上網找了一下教學，網路上就很多教學了，只不過要懂一些 &lt;a href="http://cpan.perl.org/">perl&lt;/a> 跟 &lt;a href="http://linux.vbird.org/linux_basic/0340bashshell-scripts.php">shell script&lt;/a> 的基本觀念，在弄起來會比較方便，時間也會縮短許多。 首先開帳號的話，就是利用 &lt;a href="http://www.freebsd.org/cgi/man.cgi?query=pw&amp;amp;apropos=0&amp;amp;sektion=0&amp;amp;manpath=FreeBSD+7.0-RELEASE&amp;amp;format=html">pw&lt;/a> 這個指令了，這個裡指令非常強大，可以新增使用者，或者是修改使用者的特性，如登入的 shell，comment….等等 先產生一個 passwd.txt 裡面內容格式就是 “帳號,密碼”，這樣的格式&lt;/p>
 &lt;pre class="brush: bash; title: ; notranslate" title="">biomat,"xxxx"
 biomed,"xxxx"
 surface,"xxxx"

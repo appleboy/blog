@@ -6,8 +6,8 @@ default-character-set=utf8
 [mysqld]
 default-character-set=utf8&lt;/pre></description></item><item><title>[PHP]解決網站被 SQL injection 攻擊</title><link>https://blog.wu-boy.com/2008/06/php%E8%A7%A3%E6%B1%BA%E7%B6%B2%E7%AB%99%E8%A2%AB-sql-injection-%E6%94%BB%E6%93%8A/</link><pubDate>Thu, 26 Jun 2008 08:26:51 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/06/php%E8%A7%A3%E6%B1%BA%E7%B6%B2%E7%AB%99%E8%A2%AB-sql-injection-%E6%94%BB%E6%93%8A/</guid><description>&lt;p>其實這個安全性的問題，在目前台灣網站都存在這樣的問題，大家平常用 $_POST，$_GET 用得很順利，但是沒有想過帳號密碼被 SQL injection 破解，當網站被破解了，基本上你損失就是相當嚴重，網路上也有很多攻擊方式，不過這方法是最常被拿出來講的，我自己有一套解決方式，除了比較重要的地方，就是輸入帳號密碼的地方要加強防護之外，加上數字驗證碼，還要 check 帳號的特性，我底下是我驗證帳號密碼機制&lt;/p>
 &lt;pre class="brush: php; title: ; notranslate" title="">if($user_name == '' || $user_passwd == ''){
-ErrMsg("帳號或密碼不得空白");
-}
-if (!preg_match('/^\w+$/', $user_name)){
-ErrMsg("請勿攻擊本站台");
-}&lt;/pre></description></item></channel></rss>
+ 	ErrMsg("帳號或密碼不得空白");
+ }
+ if (!preg_match('/^\w+$/', $user_name)){
+ 	ErrMsg("請勿攻擊本站台");
+ }&lt;/pre></description></item></channel></rss>

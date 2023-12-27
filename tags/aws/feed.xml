@@ -11,16 +11,16 @@
 &lt;p>個人電腦 -&amp;mdash;&amp;gt; EC2 跳板機 -&amp;mdash;&amp;gt; EC2 Server&lt;/p>
 &lt;/blockquote>
 &lt;p>大家都會把 Key Pair 存放到跳板機，安全性堪憂，只要這台主機被 Hack，或者是內部員工登入，拿別人的 Key Pair 登入其它主機，不就可以搞破壞？所以此篇教學主要教大家如何設定 SSH agent forwarding，讓憑證只存放在自己電腦，而不需上傳到 &lt;code>EC2 跳板機&lt;/code>。這樣跳板機就真的只是跳板機，不需要存放任何憑證資料，每小時設定清空 Ubuntu User 家目錄，避免內部員工放個人資料或憑證，提升主機安全性。&lt;/p></description></item><item><title>在 Fedora 或 Amazon Linux AMI 架設 Nginx + PHP FastCGI</title><link>https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux/</link><pubDate>Mon, 28 May 2012 11:34:32 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2012/05/install-nginx-php-fastcgi-on-amazon-linux/</guid><description>&lt;div style="margin:0 auto; text-align:center">
-&lt;a href="https://www.flickr.com/photos/appleboy/7285947094/" title="799px-Amazon.com-Logo.svg by appleboy46, on Flickr">&lt;img src="https://i0.wp.com/farm8.staticflickr.com/7221/7285947094_9e34eeb903.jpg?resize=500%2C101&amp;#038;ssl=1" alt="799px-Amazon.com-Logo.svg" data-recalc-dims="1" />&lt;/a>
+ &lt;a href="https://www.flickr.com/photos/appleboy/7285947094/" title="799px-Amazon.com-Logo.svg by appleboy46, on Flickr">&lt;img src="https://i0.wp.com/farm8.staticflickr.com/7221/7285947094_9e34eeb903.jpg?resize=500%2C101&amp;#038;ssl=1" alt="799px-Amazon.com-Logo.svg" data-recalc-dims="1" />&lt;/a>
 &lt;/div> 上一篇介紹
 &lt;p>&lt;a href="http://blog.wu-boy.com/2012/05/php-fastcgi-with-nginx-on-ubuntu-10-10-maverick/" target="_blank">如何在 Ubuntu 底下安裝 Nginx + PHP FastCGI&lt;/a>，這次來紀錄如何安裝在 Fedora 系統，目前環境是使用 &lt;a href="http://aws.amazon.com/amazon-linux-ami/" target="_blank">Amazon Linux AMI&lt;/a>，如果有在玩 &lt;a href="http://aws.amazon.com/ec2/" target="_blank">AWS EC2&lt;/a> 或是 &lt;a href="http://fedoraproject.org/" target="_blank">Fedora Linux&lt;/a> 的話，對這 OS 就不會很陌生了。&lt;/p></description></item><item><title>AWS 機器上 duplicated RPM 問題</title><link>https://blog.wu-boy.com/2011/10/how-to-remove-duplicated-rpm-package/</link><pubDate>Fri, 07 Oct 2011 05:28:45 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2011/10/how-to-remove-duplicated-rpm-package/</guid><description>&lt;div style="margin:0 auto; text-align:center">
-&lt;a href="https://www.flickr.com/photos/appleboy/6219253012/" title="AWS-logo by appleboy46, on Flickr">&lt;img src="https://i2.wp.com/farm7.static.flickr.com/6174/6219253012_f5f9a7ed0c.jpg?resize=270%2C110&amp;#038;ssl=1" alt="AWS-logo" data-recalc-dims="1" />&lt;/a>
-&lt;/div> 昨天幫忙升級全部
+ &lt;a href="https://www.flickr.com/photos/appleboy/6219253012/" title="AWS-logo by appleboy46, on Flickr">&lt;img src="https://i2.wp.com/farm7.static.flickr.com/6174/6219253012_f5f9a7ed0c.jpg?resize=270%2C110&amp;#038;ssl=1" alt="AWS-logo" data-recalc-dims="1" />&lt;/a>
+&lt;/div> 昨天幫忙升級全部 
 &lt;p>&lt;a href="http://aws.amazon.com/" target="_blank">AWS&lt;/a> RPM 套件，升級過程本來很順利，不過不知道哪一個 RPM 造成 SSH 全面斷線，接著我直接到 &lt;a href="http://aws.amazon.com/console/" target="_blank">AWS Management Console&lt;/a> 把機器 restart，登入系統之後下 yum update，直接給我噴出底下錯誤訊息&lt;/p>
 &lt;pre class="brush: plain; title: ; notranslate" title="">---> Package zlib.i686 0:1.2.3-24.7.amzn1 will be updated
 ---> Package zlib.i686 0:1.2.3-25.8.amzn1 will be an update
 --> Finished Dependency Resolution
-You could try using --skip-broken to work around the problem
+ You could try using --skip-broken to work around the problem
 ** Found 155 pre-existing rpmdb problem(s), 'yum check' output follows:
 audit-libs-2.1-5.15.amzn1.x86_64 is a duplicate with audit-libs-2.0.4-1.14.amzn1.x86_64
 authconfig-6.1.12-5.14.amzn1.x86_64 is a duplicate with authconfig-6.1.4-6.13.amzn1.x86_64

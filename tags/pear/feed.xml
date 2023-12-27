@@ -14,11 +14,11 @@
 &lt;p>* Apache 2.2.8 * PHP 5.2.6 * MySQL 5.0.51b * phpMyAdmin-2.10.3 今天要安裝 pear 的套件在 Windows 上面，不過不用緊張，因為 Appserv 已經把 &lt;a href="http://pear.php.net">Pear&lt;/a> 的模組包進來裡面了，只要執行 .bat 檔，按照視窗，就可以完成安裝了，自己平常有用 Pear 的 &lt;a href="http://blog.wu-boy.com/2009/01/03/677/">HTTP_Upload 多重檔案上傳 Multiple files upload&lt;/a>，跟 &lt;a href="http://blog.wu-boy.com/2007/12/18/129/">PEAR - PHP Mail and Mail_Mime 模組&lt;/a>，底下就是 Windows 的安裝方法：&lt;/p>
 &lt;/blockquote></description></item><item><title>[PHP]解決 PEAR::Mail_Mime 標題 UTF-8 亂碼問題(不能顯示)</title><link>https://blog.wu-boy.com/2008/10/php%E8%A7%A3%E6%B1%BA-pearmail_mime-%E6%A8%99%E9%A1%8C-utf-8-%E4%BA%82%E7%A2%BC%E5%95%8F%E9%A1%8C%E4%B8%8D%E8%83%BD%E9%A1%AF%E7%A4%BA/</link><pubDate>Wed, 01 Oct 2008 02:17:30 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2008/10/php%E8%A7%A3%E6%B1%BA-pearmail_mime-%E6%A8%99%E9%A1%8C-utf-8-%E4%BA%82%E7%A2%BC%E5%95%8F%E9%A1%8C%E4%B8%8D%E8%83%BD%E9%A1%AF%E7%A4%BA/</guid><description>&lt;p>話說大家在寫 PHP 的時候，一定會很常用到 mail 這個函式，畢竟一個網站一定會有很多需要用到寄信的地方，我先給大家推薦一下 &lt;a href="http://pear.php.net/package/Mail_Mime">PEAR::Mail_Mime&lt;/a> 跟 &lt;a href="http://pear.php.net/package/Mail">PEAR::Mail&lt;/a> 這兩個 Pear 的套件，用起來相當不錯，支援 html 跟 UTF-8 或者是 Big5 編碼，我之前寫過一篇 &lt;a title="Permanent Link to [PHP] 好用的 PEAR - PHP Mail and Mail_Mime" rel="bookmark" href="http://blog.wu-boy.com/2007/12/18/129/">[PHP] 好用的 PEAR – PHP Mail and Mail_Mime&lt;/a>，裡面寫的還蠻詳細的，不過上次有一個問題還沒解決，就是如果用 UTF-8 編碼的標題，會顯示不出來，&lt;a href="http://mail.google.com">Gmail&lt;/a> 收到的話就會是 no subject，然後昨天用了一個非常笨的解決方法，改成把標題使用 Big5 就可以了，解決方法如下： &lt;strong>Update：感謝 darkhero 提供解決方法：&lt;/strong> 如果要用 UTF-8 的標題：&lt;/p>
 &lt;pre class="brush: php; title: ; notranslate" title="">$param['head_charset'] = 'utf-8';
-$hdrs = array(
-'From' => 'appleboy.tw@gmail.com',
-'Subject' => '=?utf8?B?' . base64_encode($subj) . '?=',
-'Content-type' => 'text/html; charset=utf-8'
-); &lt;/pre> 先讓主機支援 PEAR：
+ $hdrs = array(
+ 'From' => 'appleboy.tw@gmail.com',
+ 'Subject' => '=?utf8?B?' . base64_encode($subj) . '?=', 
+ 'Content-type' => 'text/html; charset=utf-8'
+ ); &lt;/pre> 先讓主機支援 PEAR： 
 &lt;pre class="brush: bash; title: ; notranslate" title="">#
 # FreeBSD ports 安裝
 cd /usr/ports/devel/pear
