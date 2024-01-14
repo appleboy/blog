@@ -76,8 +76,9 @@ dev: air
 
 ## 心得
 
-air 工具非常的好用，可以幫助我們在開發時，自動編譯並且執行，不用每次都手動執行 `go run` 指令，這樣可以節省開發時間，也可以讓我們專注在開發上面，不用花太多時間在編譯上面。另外也有[繁體中文][21]的文件可以參考喔
+air 工具非常的好用，可以幫助我們在開發時，自動編譯並且執行，不用每次都手動執行 `go run` 指令，這樣可以節省開發時間，也可以讓我們專注在開發上面，不用花太多時間在編譯上面。另外也有[繁體中文][21]的文件可以參考喔。最後上面的程式碼可以參考 [example][22] 連結。
 
-[21]:https://github.com/cosmtrek/air/blob/master/README-zh_tw.md
+[21]: https://github.com/cosmtrek/air/blob/master/README-zh_tw.md
+[22]: https://github.com/go-training/training/tree/master/example54-hot-reload-for-development
 
 ![air](/images/2023-10-21/vscode.png)
