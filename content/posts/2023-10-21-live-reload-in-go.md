@@ -18,6 +18,10 @@ categories:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube 0L1P9hs-9ao >}}
+
 ## 安裝 air 工具
 
 由於每個人都有 Go 語言的開發環境，所以我們可以直接使用 `go install` 指令安裝 air 工具。請注意 Go 版本需要在 1.18 以上。
