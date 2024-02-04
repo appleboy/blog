@@ -372,3 +372,10 @@ type Result[V any] struct {
 上述程式碼可以在[這邊取用][20]。這篇文章介紹了如何使用 `singleflight` 來解決快取擊穿的問題，這是 `sync` 套件中的一個功能，可以避免重複的請求同時打到後端資料庫。除了使用 `Do` 之外，我們也介紹了 `DoChan` 的使用方式，這樣可以避免過多的請求持續等待。最後我們也介紹了 `singleflight` 的實作方式，這樣可以讓開發者更容易使用 `singleflight` 套件。相信大家在遇到快取擊穿的問題時，可以使用 `singleflight` 來解決問題。
 
 [20]: https://github.com/go-training/training/tree/master/example55-cache-hotspot-invalid
+
+## 參考資料
+
+* [singleflight - GoDoc](https://pkg.go.dev/golang.org/x/sync/singleflight)
+* [缓存雪崩 Cache Avalanche 缓存穿透 Cache Penetration 缓存击穿 Hotspot Invalid](https://www.cnblogs.com/Leo_wl/p/12294093.html)
+* [redis - 快取雪崩、擊穿、穿透](https://totoroliu.medium.com/redis-%E5%BF%AB%E5%8F%96%E9%9B%AA%E5%B4%A9-%E6%93%8A%E7%A9%BF-%E7%A9%BF%E9%80%8F-8bc02f09fe8f)
+* [Go 語言使用 Select 四大用法][13]
