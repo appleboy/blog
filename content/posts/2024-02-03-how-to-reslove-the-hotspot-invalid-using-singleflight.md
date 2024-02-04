@@ -250,3 +250,93 @@ func (db *DB) GetArticleDoChan(req int, id int, t time.Duration) *Article {
 ```
 
 ## 了解 singleflight 的實作
+
+看完上述使用 `singleflight` 解決快取擊穿的問題，我們來看看 `singleflight` 的實作。底下是 `singleflight` 的程式碼。首先了解 `Do` 的實作。
+
+```go
+func (g *Group) Do(key string, fn func() (interface{}, error)) (v interface{}, err error, shared bool) {
+  g.mu.Lock()
+  if g.m == nil {
+    g.m = make(map[string]*call)
+  }
+  if c, ok := g.m[key]; ok {
+    c.dups++
+    g.mu.Unlock()
+    c.wg.Wait()
+
+    if e, ok := c.err.(*panicError); ok {
+      panic(e)
+    } else if c.err == errGoexit {
+      runtime.Goexit()
+    }
+    return c.val, c.err, true
+  }
+  c := new(call)
+  c.wg.Add(1)
+  g.m[key] = c
+  g.mu.Unlock()
+
+  g.doCall(c, key, fn)
+  return c.val, c.err, c.dups > 0
+}
+```
+
+這段程式碼是來自 singleflight 套件中的 Do 方法。singleflight 是一種用於避免重複執行相同工作的機制，它確保同一個 key 只有一個執行在進行中，並且如果有重複的呼叫進來，則重複的呼叫會等待原始呼叫完成並接收相同的結果。
+
+讓我們來詳細解釋這個 Do 方法的實作方式及其背後的理念：
+
+1. 首先，Do 方法接收兩個參數：key 和 fn。key 是用來識別不同工作的唯一標識，而 fn 則是實際要執行的工作函數，它會返回一個 interface{} 和一個 error。
+2. 在方法開頭，我們可以看到程式碼鎖定了一個 mutex，這是為了確保在進行後續操作時不會有競爭條件發生。
+3. 接著，程式檢查了一個 map g.m 是否為空，如果是的話則初始化它。這個 map 用來存儲每個 key 對應的呼叫狀態。
+4. 接下來，程式檢查了是否已經有相同 key 的呼叫正在進行中。如果是的話，則將重複呼叫的計數加一，然後釋放 mutex，並等待原始呼叫完成。一旦原始呼叫完成，重複呼叫就會返回相同的結果。
+5. 如果沒有相同 key 的呼叫正在進行中，則程式會建立一個新的呼叫狀態，並將其加入到 map 中，然後釋放 mutex。
+6. 最後，程式呼叫了 doCall 方法來執行實際的工作函數 fn。一旦工作函數執行完成，程式就會返回結果和錯誤，同時檢查是否有重複的呼叫。
+
+這個 Do 方法的實作方式確保了同一個 key 只有一個執行在進行中，並且能夠正確地處理重複的呼叫，確保它們能夠獲得相同的結果。這樣可以有效地避免重複執行相同的工作，同時節省系統資源。可以看到底層透過 sync.WaitGroup 讓相同的 key 只會執行一次，其他的都會等待。
+
+接著看看 `DoChan` 的實作方式。
+
+```go
+// DoChan is like Do but returns a channel that will receive the
+// results when they are ready.
+//
+// The returned channel will not be closed.
+func (g *Group) DoChan(key string, fn func() (interface{}, error)) <-chan Result {
+  ch := make(chan Result, 1)
+  g.mu.Lock()
+  if g.m == nil {
+    g.m = make(map[string]*call)
+  }
+  if c, ok := g.m[key]; ok {
+    c.dups++
+    c.chans = append(c.chans, ch)
+    g.mu.Unlock()
+    return ch
+  }
+  c := &call{chans: []chan<- Result{ch}}
+  c.wg.Add(1)
+  g.m[key] = c
+  g.mu.Unlock()
+
+  go g.doCall(c, key, fn)
+
+  return ch
+}
+```
+
+這段程式碼是 singleflight 套件中的 DoChan 方法。DoChan 方法與前面提到的 Do 方法類似，但是它返回一個 channel，當結果準備好時，這個 channel 將接收到結果。
+
+讓我們來詳細解釋這個 DoChan 方法做了什麼事情，以及它與 Do 方法的差異：
+
+1. DoChan 方法也接收兩個參數：key 和 fn。key 用來識別不同工作的唯一標識，而 fn 是實際要執行的工作函數，它會返回一個 interface{} 和一個 error。
+2. 在方法開頭，程式碼鎖定了一個 mutex，這是為了確保在進行後續操作時不會有競爭條件發生。
+3. 接著，程式檢查了一個 map g.m 是否為空，如果是的話則初始化它。這個 map 用來存儲每個 key 對應的呼叫狀態。
+4. 然後，程式檢查是否已經有相同 key 的呼叫正在進行中。如果是的話，則將重複呼叫的計數加一，並將這個新的 channel 加入到呼叫狀態的 chans 切片中，然後釋放 mutex，並返回這個新的 channel。
+5. 如果沒有相同 key 的呼叫正在進行中，則程式會建立一個新的呼叫狀態，並將這個新的 channel 加入到呼叫狀態的 chans 切片中，然後將呼叫狀態加入到 map 中，最後釋放 mutex。
+6. 最後，程式呼叫了 doCall 方法來執行實際的工作函數 fn。這個方法是在一個新的 goroutine 中執行的，這樣可以讓 DoChan 方法立即返回 channel，而不需要等待工作函數執行完成。
+
+總結來說，DoChan 方法與 Do 方法的主要差異在於返回值的類型：Do 方法直接返回結果和錯誤，而 DoChan 方法返回一個 channel，當結果準備好時，這個 channel 將接收到結果。這樣可以讓呼叫者在不阻塞的情況下等待結果，並且可以進行非同步的處理。
+
+所以可以看到我們用 [select][13] 來處理超時的情況，這樣就可以避免過多的請求持續等待。
+
+[13]: https://blog.wu-boy.com/2019/11/four-tips-with-select-in-golang/
