@@ -3,8 +3,8 @@ title: "在 Go 語言用 singleflight 解決快取擊穿 (Cache Hotspot Invalid)
 date: 2024-02-03T14:19:13+08:00
 author: appleboy
 type: post
-slug: codegpt-in-modernweb
-share_img: /images/2023-11-08/cover.png
+slug: how-to-reslove-the-hotspot-invalid-using-singleflight
+share_img: /images/2024-02-03/cache-hotspot-invalid.png
 categories:
 - golang
 ---
