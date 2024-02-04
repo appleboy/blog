@@ -107,24 +107,25 @@ func (db *DB) GetArticle(req int, id int) *Article {
     Content: "FooBar",
   }
   db.cache.Set(id, data)
+  time.Sleep(100 * time.Millisecond)
 
   return data
 }
 ```
 
-底下是執行結果，可以看到同時有 5 個請求同時撈取快取中的資料。可以看到全都是從後端資料庫撈取資料。
+底下是執行結果，可以看到有 3 次 missing cache，這表示有 3 次請求同時打到後端資料庫，剩下的 2 次是 cache hit。這就是快取擊穿的問題，正常來說要避免超過 1 次存取資料庫，這樣可以有效保護後端資料庫。
 
 ```sh
-2024/02/03 20:52:39 INFO missing cache id=1 req=4
-2024/02/03 20:52:39 INFO missing cache id=1 req=2
-2024/02/03 20:52:39 INFO missing cache id=1 req=3
-2024/02/03 20:52:39 INFO data info data="&{ID:1 Content:FooBar}" req=4
-2024/02/03 20:52:39 INFO missing cache id=1 req=0
-2024/02/03 20:52:39 INFO data info data="&{ID:1 Content:FooBar}" req=2
-2024/02/03 20:52:39 INFO missing cache id=1 req=1
-2024/02/03 20:52:39 INFO data info data="&{ID:1 Content:FooBar}" req=0
-2024/02/03 20:52:39 INFO data info data="&{ID:1 Content:FooBar}" req=1
-2024/02/03 20:52:39 INFO data info data="&{ID:1 Content:FooBar}" req=3
+2024/02/04 08:28:48 INFO missing cache id=1 req=4
+2024/02/04 08:28:48 INFO missing cache id=1 req=0
+2024/02/04 08:28:48 INFO cache hit id=1 req=3
+2024/02/04 08:28:48 INFO cache hit id=1 req=2
+2024/02/04 08:28:48 INFO data info data="&{ID:1 Content:FooBar}" req=3
+2024/02/04 08:28:48 INFO missing cache id=1 req=1
+2024/02/04 08:28:48 INFO data info data="&{ID:1 Content:FooBar}" req=2
+2024/02/04 08:28:48 INFO data info data="&{ID:1 Content:FooBar}" req=0
+2024/02/04 08:28:48 INFO data info data="&{ID:1 Content:FooBar}" req=1
+2024/02/04 08:28:48 INFO data info data="&{ID:1 Content:FooBar}" req=4
 ```
 
 ## 使用 singleflight 解決快取擊穿
