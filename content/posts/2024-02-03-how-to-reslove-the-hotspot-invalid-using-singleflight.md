@@ -2,7 +2,7 @@
 title: "在 Go 語言用 singleflight 解決快取擊穿 (Cache Hotspot Invalid)"
 date: 2024-02-03T14:19:13+08:00
 author: appleboy
-type: draft
+type: post
 slug: codegpt-in-modernweb
 share_img: /images/2023-11-08/cover.png
 categories:
@@ -335,8 +335,38 @@ func (g *Group) DoChan(key string, fn func() (interface{}, error)) <-chan Result
 5. 如果沒有相同 key 的呼叫正在進行中，則程式會建立一個新的呼叫狀態，並將這個新的 channel 加入到呼叫狀態的 chans 切片中，然後將呼叫狀態加入到 map 中，最後釋放 mutex。
 6. 最後，程式呼叫了 doCall 方法來執行實際的工作函數 fn。這個方法是在一個新的 goroutine 中執行的，這樣可以讓 DoChan 方法立即返回 channel，而不需要等待工作函數執行完成。
 
-總結來說，DoChan 方法與 Do 方法的主要差異在於返回值的類型：Do 方法直接返回結果和錯誤，而 DoChan 方法返回一個 channel，當結果準備好時，這個 channel 將接收到結果。這樣可以讓呼叫者在不阻塞的情況下等待結果，並且可以進行非同步的處理。
+總結來說，DoChan 方法與 Do 方法的主要差異在於返回值的類型：Do 方法直接返回結果和錯誤，而 DoChan 方法返回一個 channel，當結果準備好時，這個 channel 將接收到結果。這樣可以讓呼叫者在不阻塞的情況下等待結果，並且可以進行非同步的處理。這邊有個地方需要注意，就是 `ch := make(chan Result, 1)`，為什麼要設定為 1 呢？大家可以想想看。
 
 所以可以看到我們用 [select][13] 來處理超時的情況，這樣就可以避免過多的請求持續等待。
 
 [13]: https://blog.wu-boy.com/2019/11/four-tips-with-select-in-golang/
+
+## singleflight 泛型 (Generic)
+
+在 Go 1.18 中，`singleflight` 套件已經被加入泛型支援，這樣可以讓開發者更容易使用 `singleflight` 套件。而原本 Go 團隊的 bradfitz 也有提出[這樣的想法][15]，目前尚未實作，所以 bradfitz 自己弄一個 package 放在 [tailscale][16] 產品內。之後可以拿來套在自己的專案上面。
+
+[15]: https://github.com/golang/go/issues/53427
+[16]: https://github.com/tailscale/tailscale
+
+```go
+// Group represents a class of work and forms a namespace in
+// which units of work can be executed with duplicate suppression.
+type Group[K comparable, V any] struct {
+  mu sync.Mutex     // protects m
+  m  map[K]*call[V] // lazily initialized
+}
+
+// Result holds the results of Do, so they can be passed
+// on a channel.
+type Result[V any] struct {
+  Val    V
+  Err    error
+  Shared bool
+}
+```
+
+## 心得感想
+
+上述程式碼可以在[這邊取用][20]。這篇文章介紹了如何使用 `singleflight` 來解決快取擊穿的問題，這是 `sync` 套件中的一個功能，可以避免重複的請求同時打到後端資料庫。除了使用 `Do` 之外，我們也介紹了 `DoChan` 的使用方式，這樣可以避免過多的請求持續等待。最後我們也介紹了 `singleflight` 的實作方式，這樣可以讓開發者更容易使用 `singleflight` 套件。相信大家在遇到快取擊穿的問題時，可以使用 `singleflight` 來解決問題。
+
+[20]: https://github.com/go-training/training/tree/master/example55-cache-hotspot-invalid
