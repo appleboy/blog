@@ -20,6 +20,8 @@ categories:
 [3]: https://pkg.go.dev/golang.org/x/sync/singleflight
 [4]: https://pkg.go.dev/golang.org/x/sync
 
+<!--more-->
+
 ## 模擬快取擊穿
 
 我們寫個簡單範例來模擬快取擊穿的問題。用 Go 語言 map 函式來簡單實現快取機制，並且將資料放到快取中，這樣下次再次撈取相同的資料時，就可以直接從快取中取得。
