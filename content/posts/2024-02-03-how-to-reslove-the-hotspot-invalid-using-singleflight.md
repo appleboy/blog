@@ -367,9 +367,44 @@ type Result[V any] struct {
 }
 ```
 
+底下是宣告方式跟部分程式碼，可以看到 `singleflight` 套件已經支援泛型。
+
+```go
+type DBG struct {
+  cache  *Cache
+  engine gsingleflight.Group[int, *Article]
+}
+
+func (db *DBG) GetArticleDo(req int, id int) *Article {
+  data := db.cache.Get(id)
+  if data != nil {
+    slog.Info("cache hit", "id", id, "req", req)
+    return data
+  }
+
+  row, err, _ := db.engine.Do(id, func() (*Article, error) {
+    slog.Info("missing cache", "id", id, "req", req)
+    data := &Article{
+      ID:      id,
+      Content: "FooBar",
+    }
+    db.cache.Set(id, data)
+    time.Sleep(100 * time.Millisecond)
+    return data, nil
+  })
+
+  if err != nil {
+    slog.Error("singleflight error", "err", err)
+    return nil
+  }
+
+  return row
+}
+```
+
 ## 心得感想
 
-上述程式碼可以在[這邊取用][20]。這篇文章介紹了如何使用 `singleflight` 來解決快取擊穿的問題，這是 `sync` 套件中的一個功能，可以避免重複的請求同時打到後端資料庫。除了使用 `Do` 之外，我們也介紹了 `DoChan` 的使用方式，這樣可以避免過多的請求持續等待。最後我們也介紹了 `singleflight` 的實作方式，這樣可以讓開發者更容易使用 `singleflight` 套件。相信大家在遇到快取擊穿的問題時，可以使用 `singleflight` 來解決問題。
+上述程式碼可以在[這邊取用][20] (包含 Generic 套件)。這篇文章介紹了如何使用 `singleflight` 來解決快取擊穿的問題，這是 `sync` 套件中的一個功能，可以避免重複的請求同時打到後端資料庫。除了使用 `Do` 之外，我們也介紹了 `DoChan` 的使用方式，這樣可以避免過多的請求持續等待。最後我們也介紹了 `singleflight` 的實作方式，這樣可以讓開發者更容易使用 `singleflight` 套件。相信大家在遇到快取擊穿的問題時，可以使用 `singleflight` 來解決問題。
 
 [20]: https://github.com/go-training/training/tree/master/example55-cache-hotspot-invalid
 
