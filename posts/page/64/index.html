@@ -7,7 +7,31 @@
 </button>
 <a class=navbar-brand href=https://blog.wu-boy.com/>小惡魔 - AppleBOY</a></div><div class="collapse navbar-collapse" id=main-navbar><ul class="nav navbar-nav navbar-right"><li><a title="Youtube 頻道" href=http://bit.ly/youtube-boy><i class="fab fa-youtube"></i> Youtube 頻道</a></li><li class=navlinks-container><a class=navlinks-parent><i class="fas fa-video"></i> 線上課程</a><div class=navlinks-children><a href=/golang-online-course/>Go 語言基礎實戰</a>
 <a href=/docker-course/>Docker 容器開發實戰</a>
-<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com/><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-heading><h1>Posts</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2009/06/php-gallery-30-beta-1-%E4%BD%BF%E7%94%A8-kohana-mvc-framework/><h2 class=post-title>[PHP] Gallery 3.0 Beta 1 使用 Kohana MVC Framework</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 26, 2009
+<a href=/drone-devops/>一天學會 DevOps 自動化流程</a></div></li><li><a title=歷年文章 href=/archives/><i class="fas fa-sitemap fa-lg"></i> 歷年文章</a></li><li><a href=#modalSearch data-toggle=modal data-target=#modalSearch style=outline:none><span class="hidden-sm hidden-md hidden-lg">Search</span> <span id=searchGlyph class="glyphicon glyphicon-search"></span></a></li></ul></div><div class=avatar-container><div class=avatar-img-border><a title="小惡魔 - AppleBOY" href=https://blog.wu-boy.com/><img class=avatar-img src="https://lh3.googleusercontent.com/Kq9CxHZWopKj__EgF_BpzLv8FhwvDkc0iacrl9V5IJjpr-dZ7Y5O-Vc1i9FhGQ8gHTdKeBisG_1ie1IONQXmK0a3myyl_BNouP76CLHGHRzsPPRgRF3RiKYqOkdS86mZOIu7KYFTUio=w1920-h1080" alt="小惡魔 - AppleBOY"></a></div></div></div></nav><div id=modalSearch class="modal fade" role=dialog><div class=modal-dialog><div class=modal-content><div class=modal-header><button type=button class=close data-dismiss=modal>&#215;</button><h4 class=modal-title>Search 小惡魔 - AppleBOY</h4></div><div class=modal-body><gcse:search></gcse:search></div><div class=modal-footer><button type=button class="btn btn-default" data-dismiss=modal>Close</button></div></div></div></div><header class=header-section><div class="intro-header no-img"><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-heading><h1>Posts</h1><hr class=small></div></div></div></div></div></header><div class=container role=main><div class=row><div class="col-md-10 col-md-offset-1"><div class=posts-list><article class=post-preview><a href=https://blog.wu-boy.com/2009/07/perl-with-utf-8-mode/><h2 class=post-title>[Perl] 解決 Wide character in print with UTF-8 mode</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on July 1, 2009
+&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
+&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;74&nbsp;words
+&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry>最近在寫 Perl 的程式，發現在正規比對的時候，print 出中文資料會出現 &ldquo;Wide character in print at&rdquo; 的 warning 訊息，在 google 找到一篇解決方法：Perl with UTF-8 mode，這篇提出的解決方法有很多種，comment 留言也有提供解法，可以去看一下，還蠻不錯的，那底下是我參考的解法： 只要在表頭加上：
+use utf8;
+binmode(STDIN, ':encoding(utf8)');
+binmode(STDOUT, ':encoding(utf8)');
+binmode(STDERR, ':encoding(utf8)'); 完整的檔案如下： #! /usr/bin/perl -w
+use Carp;
+use File::Basename;
+use LWP::Simple;
+use WWW::Mechanize;
+use LWP::UserAgent;
+use WWW::Shorten '0rz';
+use Getopt::Std;
+use DBI;
+use utf8;
+binmode(STDIN, ':encoding(utf8)');
+binmode(STDOUT, ':encoding(utf8)');
+binmode(STDERR, ':encoding(utf8)');
+if($_ =~ m/\s*(.+)<\/a><\/div>\s*/)
+{
+$pic_desc = $1;
+print "desc: " . $1 . " \n"
+<a href=https://blog.wu-boy.com/2009/07/perl-with-utf-8-mode/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com//tags/perl/>Perl</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2009/06/php-gallery-30-beta-1-%E4%BD%BF%E7%94%A8-kohana-mvc-framework/><h2 class=post-title>[PHP] Gallery 3.0 Beta 1 使用 Kohana MVC Framework</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on June 26, 2009
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;90&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><img src="https://i0.wp.com/blog.wu-boy.com/wp-content/uploads/2009/06/logo.png?resize=329%2C131" alt=Gallery title=Gallery class="alignleft size-full wp-image-1487" srcset="https://i0.wp.com/blog.wu-boy.com/wp-content/uploads/2009/06/logo.png?w=329&ssl=1 329w, https://i0.wp.com/blog.wu-boy.com/wp-content/uploads/2009/06/logo.png?resize=300%2C119&ssl=1 300w" sizes="(max-width: 329px) 85vw, 329px" data-recalc-dims=1> <a href=http://gallery.menalto.com/>Gallery</a> 3.0 Beta 1 出來了，在 <a href=http://blog.roga.tw/2009/06/10/2222>roga’s blog</a>，看到這篇訊息，gallery 3 捨去 php smaty template engine，而改用 <a href=http://www.kohanaphp.com/>Kohana MVC Framework</a> 這套 base on <a href=http://codeigniter.com>CodeIgniter</a> 的 Framework，在 <a href=http://codex.gallery2.org/Gallery3:FAQ#Why_did_you_choose_Kohana.3F>Gallery3:FAQ</a> 裡面有提到為什麼會使用 Kohana 這套 MVC，gallery 團隊找尋了許多 MVC 的架構來幫助開發整個相簿系統，包含了 <a href=http://cakephp.org/>CakePHP</a>、<a href=http://framework.zend.com/>Zend Framework</a>、<a href=http://www.xisc.com/>Prado</a>、<a href=http://www.symfony-project.org/>Symfony</a>、<a href=http://codeigniter.com/>CodeIgniter</a>，最後經過許多人的討論，選用了 Kohana 這套 MVC，原本打算考慮 CI 的，雖然 CI 支援 PHP4 跟 PHP5，以及它非常的小，對於效能方面也非常的好，但是並不支援 PHP5 的 exception，畢且有些少數的 Structure 只有支援 PHP4，所以就不被他們採納了，再來 Zend Framework 因為包含了 1705 個檔案，相當龐大，效能比 CI 少了 200-300%，雖然 ZF 文件相當豐富，不過沒有良好的 example 範例，所以導致 gallery 團隊遇到很多挫折，XDD。 最後選擇了 Kohana，雖然 Kohana 效能輸給 CI，不過這之間的差異極小，Kohana 也有 support PHP5 的 exception，Kohana 文件比 CI 還要少了些，不過對 gallery 團隊已經相當足夠了。底下有一篇各大 Framework 的效能比較：<a href=http://www.avnetlabs.com/php/php-framework-comparison-benchmarks>PHP framework comparison benchmarks</a>，還有另一篇：<a href=http://www.beyondcoding.com/2008/03/25/kohana-vs-codeigniter-speed-and-memory-usage-performance-benchmark/>Kohana vs CodeIgniter: Speed and Memory Usage Performance Benchmark</a></p></div><div class=blog-tags><a href=https://blog.wu-boy.com//tags/codeigniter/>CodeIgniter</a>&nbsp;
@@ -71,39 +95,7 @@ define('Document_root',dirname(__FILE__));
 &nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;1&nbsp;minutes
 &nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;11&nbsp;words
 &nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p><a href=https://www.flickr.com/photos/appleboy/3586947717/ title="0524185739 (by appleboy46)"><img src="https://i2.wp.com/farm4.static.flickr.com/3629/3586947717_2dbbf9a093.jpg?resize=500%2C375&#038;ssl=1" title="0524185739 (by appleboy46)" alt="0524185739 (by appleboy46)" data-recalc-dims=1></a> 好久沒來寫篇美食了，最近吃了一家還不錯的焗烤飯，那就是在高雄市文化中心附近的拉斐爾，這間價位真的算可以投資的喔，還蠻便宜的，焗烤飯價位都介於 100~150 元之間，義大利麵也都在100元以下，加上 39 元就可以享用套餐系列喔，有烤麵包，飲料，濃湯。大家可以來這裡吃看看，除了一樓之外還有地下室可以用餐，地下室還蠻適合開同學會的，上面那張圖就是地下室的照片。 <a href=https://www.flickr.com/photos/appleboy/3586952533/ title="0524190141 (by appleboy46)"><img src="https://i2.wp.com/farm4.static.flickr.com/3364/3586952533_007c6c735c.jpg?resize=375%2C500&#038;ssl=1" title="0524190141 (by appleboy46)" alt="0524190141 (by appleboy46)" data-recalc-dims=1></a></p><a href=https://blog.wu-boy.com/2009/06/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F-%E6%8B%89%E6%96%90%E7%88%BE%E5%BB%9A%E6%88%BF%E7%84%97%E7%83%A4%E9%A3%AF/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com//tags/%E6%8B%89%E6%96%90%E7%88%BE%E5%BB%9A%E6%88%BF/>拉斐爾廚房</a>&nbsp;
-<a href=https://blog.wu-boy.com//tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;</div></article><article class=post-preview><a href=https://blog.wu-boy.com/2009/05/codeigniter-text-%E8%A3%9C%E5%8A%A9%E5%87%BD%E6%95%B8-character_limiter-%E4%B8%8D%E9%81%A9%E7%94%A8%E6%96%BC%E4%B8%AD%E6%96%87%E5%AD%97/><h2 class=post-title>[CodeIgniter] Text 補助函數 character_limiter 不適用於中文字</h2></a><p class=post-meta><span class=post-meta><i class="fas fa-calendar"></i>&nbsp;Posted on May 29, 2009
-&nbsp;|&nbsp;<i class="fas fa-clock"></i>&nbsp;2&nbsp;minutes
-&nbsp;|&nbsp;<i class="fas fa-book"></i>&nbsp;228&nbsp;words
-&nbsp;|&nbsp;<i class="fas fa-user"></i>&nbsp;appleboy</span></p><div class=post-entry><p>在 <a href=http://www.codeigniter.com.tw/>CodeIgniter</a> 裡面的 <a href=http://www.codeigniter.com.tw/user_guide/helpers/text_helper.html>Text 補助函數</a>，目前只適用於英文字體，不支援 utf-8 或者是簡體字體，bite 數超過2的都會出問題，當然是因為這是國外的 mvc 所以也沒有考慮到這麼週到就是了，也不是沒有辦法解決，之前就用了PHP官方網站所提供的一個函式來正確切割中文字串，就是要利用 <a href=http://tw.php.net/ord>ord</a> 判斷 ASCII 編碼範圍，或者是可以使用 <a href=http://tw.php.net/mb_substr>mb_substr</a> 函式正確切割，之前寫一篇可以參考看看：<a href=http://blog.wu-boy.com/2007/05/18/104/>[PHP] 如何切割中文標題</a>。 底下是原本 CodeIgniter 所提供的 Text 函數</p><pre class="brush: php; title: ; notranslate" title>if ( ! function_exists('character_limiter'))
-{
-	function character_limiter($str, $n = 500, $end_char = '&#8230;')
-	{
-		if (strlen($str) < $n)
-		{
-			return $str;
-		}
-		
-		$str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
-    
-		if (strlen($str) <= $n)
-		{
-			return $str;
-		}
-    
-		$out = "";
-		foreach (explode(' ', trim($str)) as $val)
-		{
-			$out .= $val.' ';
-			
-			if (strlen($out) >= $n)
-			{
-				$out = trim($out);
-				return (strlen($out) == strlen($str)) ? $out : $out.$end_char;
-			}		
-		}
-	}
-}</pre><a href=https://blog.wu-boy.com/2009/05/codeigniter-text-%E8%A3%9C%E5%8A%A9%E5%87%BD%E6%95%B8-character_limiter-%E4%B8%8D%E9%81%A9%E7%94%A8%E6%96%BC%E4%B8%AD%E6%96%87%E5%AD%97/ class=post-read-more>[Read More]</a></div><div class=blog-tags><a href=https://blog.wu-boy.com//tags/codeigniter/>CodeIgniter</a>&nbsp;
-<a href=https://blog.wu-boy.com//tags/php/>php</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://blog.wu-boy.com/posts/page/63/>&larr; Newer Posts</a></li><li class=next><a href=https://blog.wu-boy.com/posts/page/65/>Older Posts &rarr;</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
+<a href=https://blog.wu-boy.com//tags/%E9%AB%98%E9%9B%84%E7%BE%8E%E9%A3%9F/>高雄美食</a>&nbsp;</div></article></div><ul class="pager main-pager"><li class=previous><a href=https://blog.wu-boy.com/posts/page/63/>&larr; Newer Posts</a></li><li class=next><a href=https://blog.wu-boy.com/posts/page/65/>Older Posts &rarr;</a></li></ul></div></div></div><footer class=post-footer><div class=container><div class=row><div class="col-md-10 col-md-offset-1"><ul class="list-inline text-center footer-links"><li><a href=mailto:appleboy.tw@gmail.com title="Email me"><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fas fa-envelope fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://www.facebook.com/appleboy46 title=Facebook><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-facebook fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://github.com/appleboy title=GitHub><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
 <i class="fab fa-github fa-stack-1x fa-inverse"></i></span></a></li><li><a href=https://gitlab.com/appleboy title=GitLab><span class="fa-stack fa-lg"><i class="fas fa-circle fa-stack-2x"></i>
