@@ -5,9 +5,9 @@ author: appleboy
 type: post
 slug: how-to-design-a-ci-cd-platform-with-containerization-technology
 share_img: https://lh3.googleusercontent.com/pw/AP1GczNeLCXNNS9NuOpeSI5CRTWe_SdtDwueVjvBQU_Wv08mVz8FoWqQ1WYfq1MHWRSXOtFbbK5gwai6D530X3qvL-tmaoR5D717ghr_q5u42lWojcF3Q3tuG0PR2IIWieoJBqg7aZMnmKwoy7dzQnL6VAwu0w=w2212-h1132-s-no-gm?authuser=0
-draft: true
 categories:
 - golang
+- drone
 ---
 
 ![logo](https://lh3.googleusercontent.com/pw/AP1GczNeLCXNNS9NuOpeSI5CRTWe_SdtDwueVjvBQU_Wv08mVz8FoWqQ1WYfq1MHWRSXOtFbbK5gwai6D530X3qvL-tmaoR5D717ghr_q5u42lWojcF3Q3tuG0PR2IIWieoJBqg7aZMnmKwoy7dzQnL6VAwu0w=w2212-h1132-s-no-gm?authuser=0)
