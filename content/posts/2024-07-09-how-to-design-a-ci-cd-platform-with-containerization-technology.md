@@ -19,6 +19,10 @@ categories:
 
 <!--more-->
 
+## 教學影片
+
+{{< youtube joz_w8W2Lcw >}}
+
 ## 演講大綱
 
 1. Drone CI/CD 簡介
