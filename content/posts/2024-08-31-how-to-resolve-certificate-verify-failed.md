@@ -17,6 +17,8 @@ categories:
 [1]: https://azure.microsoft.com/
 [2]: https://learn.microsoft.com/en-us/azure/application-gateway/overview
 
+<!--more-->
+
 ## 程式範例
 
 由於我們在 Application Gateway 上使用的是自簽憑證，所以我們需要在程式中加入忽略 SSL 驗證的設定，這邊以 Python 語言為例，程式碼如下：
