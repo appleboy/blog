@@ -1,5 +1,5 @@
 ---
-title: Go Modules 處理私有 GIT Repository 流程
+title: Go Modules 處理 Private GIT Repository 流程
 author: appleboy
 type: post
 date: 2020-03-04T14:41:21+00:00
@@ -44,9 +44,9 @@ git config --global url."https://$USERNAME:$ACCESS_TOKEN@github.com".insteadOf "
 
 影片只上傳到 Udemy，如果對於課程內容有興趣，可以參考底下課程。
 
-  * [Go 語言基礎實戰 (開發, 測試及部署)][6]
-  * [一天學會 DevOps 自動化測試及部署][7]
-  * [DOCKER 容器開發部署實戰][8] (課程剛啟動，限時特價 $800 TWD)
+* [Go 語言基礎實戰 (開發, 測試及部署)][6]
+* [一天學會 DevOps 自動化測試及部署][7]
+* [DOCKER 容器開發部署實戰][8] (課程剛啟動，限時特價 $800 TWD)
 
 如果需要搭配購買請直接透過 [FB 聯絡我][9]，直接匯款（價格再減 **100**）
 
@@ -58,14 +58,14 @@ git config --global url."https://$USERNAME:$ACCESS_TOKEN@github.com".insteadOf "
 package main
 
 import (
-    "fmt"
+  "fmt"
 
-    hello "github.com/appleboy/golang-private"
+  hello "github.com/appleboy/golang-private"
 )
 
 func main() {
-    fmt.Println("get private module")
-    fmt.Println("foo:", hello.Foo())
+  fmt.Println("get private module")
+  fmt.Println("foo:", hello.Foo())
 }
 ```
 
@@ -190,13 +190,56 @@ CMD ["/main"]
 
 上面簡單的透過 `environment` 傳遞 ACCESS_TOKEN 進到 ARGS 設定。用 Drone 其實就很方便自動編譯並且上傳到 Docker Hub 或是自家的 Private Registry。
 
- [1]: https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080
- [2]: https://golang.org/
- [3]: https://golang.org/doc/go1.14#introduction
- [4]: https://github.com/golang/go/wiki/Modules
- [5]: https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
- [6]: https://www.udemy.com/course/golang-fight/?couponCode=202002
- [7]: https://www.udemy.com/course/devops-oneday/?couponCode=202002
- [8]: https://www.udemy.com/course/docker-practice/?couponCode=20200222
- [9]: http://facebook.com/appleboy46
- [10]: https://drone.io/
+## 整合 Gitea Action
+
+如果你是使用 [Gitea][11] 的話，也可以透過 Gitea Action 來達到相同的效果，只要在 Gitea 的設定檔案底下加入底下設定即可。
+
+```yaml
+jobs:
+  release-image:
+    runs-on: ubuntu-latest
+    container:
+      image: catthehacker/ubuntu:act-20.04
+    env:
+      USERNAME: srv-gaisf
+      TOKEN: latest
+    steps:
+      - name: setup git config
+        run: |
+          git config --global \
+          url."https://${{ env.USERNAME }}:${{ env.TOKEN }}@example.com".insteadOf \
+          "https://example.com"
+```
+
+如果要放在 Docker Build Args 裡面，也可以透過底下方式
+
+```yaml
+- name: Build and Push
+  uses: docker/build-push-action@v4
+  with:
+    context: .
+    file: Dockerfile
+    platforms: |
+      linux/amd64
+    push: ${{ github.event_name != 'pull_request' }}
+    provenance: false
+    sbom: false
+    tags: ${{ steps.meta.outputs.tags }}
+    labels: ${{ steps.meta.outputs.labels }}
+    target: internalimage
+    build-args: |
+      LIC_DVCBOT_NET_KEY=${{ secrets.LIC_DVCBOT_NET_KEY }}
+```
+
+[11]:https://gitea.com
+
+[1]: https://lh3.googleusercontent.com/_swpUXXC6aFQLaC3ooXMAgebOkHkgCl7M3RVH6Yrs2vDF-4T_dlUhHUz3MMmdtsV5H_vi6r5-fu_fpSI0RFtmYtmwVIK_zzRIO_YhrmIa3-PATRnyUtfVPtU4J7sxhkF_aQzXjGDdbU=w1920-h1080
+[2]: https://golang.org/
+[3]: https://golang.org/doc/go1.14#introduction
+[4]: https://github.com/golang/go/wiki/Modules
+[5]: https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
+[6]: https://www.udemy.com/course/golang-fight/?couponCode=202002
+[7]: https://www.udemy.com/course/devops-oneday/?couponCode=202002
+[8]: https://www.udemy.com/course/docker-practice/?couponCode=20200222
+[9]: http://facebook.com/appleboy46
+[10]: https://drone.io/
