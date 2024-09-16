@@ -36,7 +36,11 @@ go env -w GOPRIVATE=github.com/appleboy
 git config --global url."https://$USERNAME:$ACCESS_TOKEN@github.com".insteadOf "https://github.com"
 ```
 
-其中 Username 就是 GitHub 帳號，Access token 就是上面的 [Personal Access Token][5]。
+其中 Username 就是 GitHub 帳號，Access token 就是上面的 [Personal Access Token][5]。如果在本機端執行，本身有 SSH Key 的話，就不需要這個 Access Token，直接用 SSH Key 就可以了。
+
+```bash
+git config --global url.ssh://git@your.private.git/.insteadOf https://your.private.git/
+```
 
 <!--more-->
 
