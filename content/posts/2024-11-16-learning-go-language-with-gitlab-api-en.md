@@ -1,6 +1,7 @@
 ---
 title: Learning Go Language with GitLab API
-date: 2024-11-16T15:32:46+08:00
+date: 2024-11-16T15:15:56+08:00
+draft: false
 author: appleboy
 type: post
 slug: learning-go-language-with-gitlab-api-en
@@ -10,6 +11,7 @@ categories:
 - gitlab-ci
 - gitea
 ---
+
 
 ![logo](/images/2024-11-16/gitlab-flow.png)
 
