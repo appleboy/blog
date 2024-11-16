@@ -128,6 +128,53 @@ for {
 }
 ```
 
+## 畫面
+
+透過 GitHub Action 執行成果，大家可以參考 [GitHub Repo][44]
+
+[44]: https://github.com/appleboy/gitlab-ci-action
+
+![gitlab-ci-action](/images/2024-11-16/screenshot.png)
+
+```sh
+time=2024-10-21T15:17:42.079Z level=INFO msg="pipeline created" project_id=*** 
+pipeline_id=1505619557 pipeline_sha=a36503d3ba12e7832752e17c213efd09000fac03 
+pipeline_ref=main pipeline_status=created 
+pipeline_web_url=https://gitlab.com/appleboy/test/-/pipelines/1505619557 
+pipeline_created_at=2024-10-21T15:17:41.767Z
+time=2024-10-21T15:17:42.079Z level=INFO msg="waiting for pipeline to complete" project_id=*** timeout=1h0m0s
+time=2024-10-21T15:17:47.237Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:17:52.212Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:17:57.209Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:02.219Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:07.217Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:12.222Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:17.210Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:22.235Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:27.219Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:32.241Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:37.395Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:42.219Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:47.229Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:52.211Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:18:57.225Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:02.219Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:07.247Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:12.283Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:17.254Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:22.200Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:27.208Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:32.213Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:37.244Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:42.256Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:47.219Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:52.217Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:19:57.234Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:20:02.226Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:20:07.283Z level=INFO msg="pipeline status" project_id=*** status=success triggered_by="Bo-Yi Wu"
+time=2024-10-21T15:20:07.283Z level=INFO msg="pipeline completed" project_id=*** status=success
+```
+
 ## 結論
 
 透過 GitLab API 來自動化 CI/CD 流程是一個很好的學習方式，這樣可以讓你更了解 CI/CD 流程的運作方式，並且可以透過程式碼來觸發 CI/CD 流程，這樣就可以更容易的整合到你的專案中。而 Go 語言是一個很好的學習語言，透過 Go 語言來實作一個小專案，這樣可以讓你更快的熟悉 Go 語言的特性。本篇重點是讓想學習 Go 語言的朋友了解 [select][21] 及 [context][22] 的整合，並且如何使用 context 來優化程式碼。
