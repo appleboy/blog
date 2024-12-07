@@ -6,9 +6,9 @@ type: post
 slug: learning-go-language-with-gitlab-api-zh-tw
 share_img: /images/2024-11-16/gitlab-flow.png
 categories:
-- golang
-- gitlab-ci
-- gitea
+  - golang
+  - gitlab-ci
+  - gitea
 ---
 
 ![logo](/images/2024-11-16/gitlab-flow.png)
@@ -137,10 +137,10 @@ for {
 ![gitlab-ci-action](/images/2024-11-16/screenshot.png)
 
 ```sh
-time=2024-10-21T15:17:42.079Z level=INFO msg="pipeline created" project_id=*** 
-pipeline_id=1505619557 pipeline_sha=a36503d3ba12e7832752e17c213efd09000fac03 
-pipeline_ref=main pipeline_status=created 
-pipeline_web_url=https://gitlab.com/appleboy/test/-/pipelines/1505619557 
+time=2024-10-21T15:17:42.079Z level=INFO msg="pipeline created" project_id=***
+pipeline_id=1505619557 pipeline_sha=a36503d3ba12e7832752e17c213efd09000fac03
+pipeline_ref=main pipeline_status=created
+pipeline_web_url=https://gitlab.com/appleboy/test/-/pipelines/1505619557
 pipeline_created_at=2024-10-21T15:17:41.767Z
 time=2024-10-21T15:17:42.079Z level=INFO msg="waiting for pipeline to complete" project_id=*** timeout=1h0m0s
 time=2024-10-21T15:17:47.237Z level=INFO msg="pipeline status" project_id=*** status=running triggered_by="Bo-Yi Wu"
@@ -174,6 +174,42 @@ time=2024-10-21T15:20:02.226Z level=INFO msg="pipeline status" project_id=*** st
 time=2024-10-21T15:20:07.283Z level=INFO msg="pipeline status" project_id=*** status=success triggered_by="Bo-Yi Wu"
 time=2024-10-21T15:20:07.283Z level=INFO msg="pipeline completed" project_id=*** status=success
 ```
+
+## 簡單案例
+
+要如何複製上面的問題呢？可以參考底下代碼：
+
+```go
+package main
+
+import (
+  "time"
+)
+
+func main() {
+  output := make(chan int, 1)
+
+  go func() {
+    for i := 0; i < 30; i++ {
+      output <- i
+      time.Sleep(100 * time.Millisecond)
+    }
+  }()
+
+  for {
+    select {
+    case val := <-output:
+      println("output:", val)
+    // how to fix the timeout issue?
+    case <-time.After(1 * time.Second):
+      println("timeout")
+      return
+    }
+  }
+}
+```
+
+這樣就可以複製上面的問題，透過 `time.After` 來設定 Timeout 時間，這樣就可以模擬上面的問題。
 
 ## 結論
 
