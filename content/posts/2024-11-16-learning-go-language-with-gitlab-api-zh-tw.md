@@ -21,10 +21,6 @@ categories:
 
 <!--more-->
 
-## 教學影片
-
-{{< youtube KPtGoqcbRaA >}}
-
 ## GitLab API
 
 這篇文章將會介紹如何使用 [GitLab API][2] 來學習 Go 語言。為什麼會選擇這個主題呢？相信大家都知道 GitLab 是一套免費開源的 Git 版本控制系統，而且提供了一個 [RESTful API][3] 供開發者使用。透過 GitLab API，我們可以取得專案的資訊、建立專案、刪除專案、取得專案的檔案內容等等，或者是可以透過 GitLab API 來自動化一些工作，例如建立專案後自動建立 CI/CD 流程，或者是自動化部署專案到伺服器上。可是今天遇到一個問題，如果團隊 Source Code 放在 [GitHub][4] 或者是 [Gitea][5] 上，讓這樣如何透過 GitHub 或 [Gitea Action][6] 來觸發 GitLab CI/CD 流程呢？這樣就可以跨團隊互相觸發各自的 CI 流程。
