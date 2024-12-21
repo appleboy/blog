@@ -214,6 +214,94 @@ func main() {
 
 這樣就可以複製上面的問題，透過 `time.After` 來設定 Timeout 時間，這樣就可以模擬上面的問題。
 
+### 解決方案 01
+
+將 time.After 移到 for 迴圈外面，這樣就可以避免每次 `ticker.C` 時間到後，會重新再計算整體執行時間。
+
+```go
+package main
+
+import (
+  "time"
+)
+
+func main() {
+  output := make(chan int, 30)
+
+  go func() {
+    for i := 0; i < 30; i++ {
+      output <- i
+      time.Sleep(100 * time.Millisecond)
+    }
+  }()
+
+  timeout := time.After(1 * time.Second)
+  // how to fix the timeout issue?
+  for {
+    select {
+    case val := <-output:
+      select {
+      case <-timeout:
+        println("reached timeout, but still have data to process")
+        return
+      default:
+      }
+      // simulate slow consumer
+      time.Sleep(500 * time.Millisecond)
+      println("output:", val)
+    // how to fix the timeout issue?
+    case <-timeout:
+      println("timeout")
+      return
+    }
+  }
+}
+```
+
+### 解決方案 02
+
+透過 `context` 來優化程式碼，這樣就可以更容易的控制程式的執行時間。
+
+```go
+package main
+
+import (
+  "context"
+  "time"
+)
+
+func main() {
+  output := make(chan int, 30)
+
+  go func() {
+    for i := 0; i < 30; i++ {
+      output <- i
+      time.Sleep(100 * time.Millisecond)
+    }
+  }()
+
+  ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+  defer cancel()
+  // how to fix the timeout issue?
+  for {
+    select {
+    case val := <-output:
+      if ctx.Err() != nil {
+        println("reached timeout, but still have data to process")
+        return
+      }
+      // simulate slow consumer
+      time.Sleep(500 * time.Millisecond)
+      println("output:", val)
+    // how to fix the timeout issue?
+    case <-ctx.Done():
+      println("timeout")
+      return
+    }
+  }
+}
+```
+
 ## 結論
 
 透過 GitLab API 來自動化 CI/CD 流程是一個很好的學習方式，這樣可以讓你更了解 CI/CD 流程的運作方式，並且可以透過程式碼來觸發 CI/CD 流程，這樣就可以更容易的整合到你的專案中。而 Go 語言是一個很好的學習語言，透過 Go 語言來實作一個小專案，這樣可以讓你更快的熟悉 Go 語言的特性。本篇重點是讓想學習 Go 語言的朋友了解 [select][21] 及 [context][22] 的整合，並且如何使用 context 來優化程式碼。

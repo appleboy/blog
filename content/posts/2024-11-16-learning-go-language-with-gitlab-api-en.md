@@ -215,6 +215,94 @@ func main() {
 
 This way you can replicate the issue above. By using `time.After` to set the timeout duration, you can simulate the issue above.
 
+### Solution 01
+
+Move `time.After` outside the for loop to avoid recalculating the overall execution time each time `ticker.C` triggers.
+
+```go
+package main
+
+import (
+  "time"
+)
+
+func main() {
+  output := make(chan int, 30)
+
+  go func() {
+    for i := 0; i < 30; i++ {
+      output <- i
+      time.Sleep(100 * time.Millisecond)
+    }
+  }()
+
+  timeout := time.After(1 * time.Second)
+  // how to fix the timeout issue?
+  for {
+    select {
+    case val := <-output:
+      select {
+      case <-timeout:
+        println("reached timeout, but still have data to process")
+        return
+      default:
+      }
+      // simulate slow consumer
+      time.Sleep(500 * time.Millisecond)
+      println("output:", val)
+    // how to fix the timeout issue?
+    case <-timeout:
+      println("timeout")
+      return
+    }
+  }
+}
+```
+
+### Solution 02
+
+Optimize the code using `context`, which makes it easier to control the execution time of the program.
+
+```go
+package main
+
+import (
+  "context"
+  "time"
+)
+
+func main() {
+  output := make(chan int, 30)
+
+  go func() {
+    for i := 0; i < 30; i++ {
+      output <- i
+      time.Sleep(100 * time.Millisecond)
+    }
+  }()
+
+  ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+  defer cancel()
+  // how to fix the timeout issue?
+  for {
+    select {
+    case val := <-output:
+      if ctx.Err() != nil {
+        println("reached timeout, but still have data to process")
+        return
+      }
+      // simulate slow consumer
+      time.Sleep(500 * time.Millisecond)
+      println("output:", val)
+    // how to fix the timeout issue?
+    case <-ctx.Done():
+      println("timeout")
+      return
+    }
+  }
+}
+```
+
 ## Conclusion
 
 Using the GitLab API to automate CI/CD processes is a great way to learn, as it helps you understand how CI/CD processes work and allows you to trigger CI/CD processes through code, making it easier to integrate into your projects. The Go language is an excellent language to learn, and implementing a small project in Go helps you become familiar with its features more quickly. This article aims to help those who want to learn the Go language understand the integration of [select][21] and [context][22], and how to use context to optimize code.
