@@ -103,9 +103,9 @@ for {
 }
 ```
 
-Looking at the code above, is there any room for optimization? The main problem is that in the Go language, when using select, if multiple case conditions are triggered at the same time, the Go language will randomly select one case to execute, which will cause the program's execution time to be unstable.
+Take a look at the code above. Are there any areas that can be optimized? The main issue is that when using `time.After` with a for loop, the overall execution time is recalculated each time `ticker.C` triggers, which is not our intention.
 
-Here we can optimize the code through `context`, which makes it easier to control the program's execution time.
+We can optimize the code by using `context`, which makes it easier to control the execution time of the program.。
 
 ```go
 // Create a new context with a timeout
