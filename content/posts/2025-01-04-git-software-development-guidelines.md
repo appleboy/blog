@@ -118,12 +118,12 @@ feat(ui): Add `Button` component
 |____________ Type
 ```
 
-引入 [Gitea Action][35] 的 [semantic-pull-request][34] 做自動化檢查
+引入 [Gitea Action][36] 的 [semantic-pull-request][34] 做自動化檢查
 
 ![logo](/images/2025-01-04/gitea-semantic-pull-request.png)
 
 [34]: https://github.com/marketplace/actions/semantic-pull-request
-[35]: https://docs.gitea.com/usage/actions/overview
+[36]: https://docs.gitea.com/usage/actions/overview
 
 ### 3.3. 程式碼審查 (Code Review)
 
