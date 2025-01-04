@@ -84,7 +84,7 @@ user.signingkey=/Users/xxxxxxx/.ssh/id_rsa.pub
 另外公司內部的 Git 服務器存放的 Repository 不只有一個團隊，公司總共 1 萬人，為了避免不必要的爭議，請遵守以下規則：
 
 - 請勿在**個人帳戶**下建立 Repository 來與其他團隊合作。
-- 所有 Repository 請以 **Private** 方式建立，勿公開代碼。如果需要公開，請先與各部門主管討論。論
+- 所有 Repository 請以 **Private** 方式建立，勿公開代碼。如果需要公開，請先與各部門主管討論
 
 ## 03. 軟體開發流程準則
 
