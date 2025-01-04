@@ -3,7 +3,7 @@ title: "Git 軟體開發指南：提高團隊協作的關鍵"
 date: 2025-01-04T09:04:38+08:00
 author: appleboy
 type: post
-slug: git-software-development-guide-key-to-improving-team-collaboration
+slug: git-software-development-guide-key-to-improving-team-collaboration-zh-tw
 share_img: /images/2025-01-04/git-flow.png
 categories:
   - git
