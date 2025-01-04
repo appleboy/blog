@@ -14,7 +14,7 @@ categories:
 
 [Git][1] is a distributed version control system developed by [Linus Torvalds][2] for managing the source code of the Linux kernel. Git is designed for speed, data integrity, support for non-linear development (multiple branches), and strong branch management, making it widely used in software development. To effectively use Git, it is important to not only be familiar with its basic operations but also to master its workflow for better collaborative development. This article introduces some Git software development guidelines to help teams improve collaboration efficiency.
 
-Due to the complexity of team development, using Git can become more challenging. To enhance team collaboration efficiency, we need to establish a set of Git software development guidelines to standardize team members’ operations and ensure the stability and maintainability of the codebase. Adhering to certain principles can accelerate the development process, reduce errors, and improve code quality.
+Due to the complexity of team development, using Git can become more challenging. To enhance team collaboration efficiency, we need to establish a set of Git software development guidelines to standardize team members' operations and ensure the stability and maintainability of the codebase. Adhering to certain principles can accelerate the development process, reduce errors, and improve code quality.
 
 [1]: https://en.wikipedia.org/wiki/Git
 [2]: https://en.wikipedia.org/wiki/Linus_Torvalds
