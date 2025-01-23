@@ -25,22 +25,22 @@ categories:
 
 ![logo](/images/2025-01-04/git-flow.png)
 
-上面流程不一定適用於所有的團隊，但是可以作為參考，根據實際情況進行調整。接下來，我們將介紹一些 Git 軟體開發指南，幫助團隊提高協作效率。
+上述流程不一定適用於所有團隊，但可作為參考，並根據實際情況進行調整。接下來，我們將介紹一些 Git 軟體開發指南，幫助團隊提高協作效率。
 
 <!--more-->
 
 ## 01. Git 前置作業
 
-在開始使用 Git 進行軟體開發之前，我們需要做一些前置作業，確保團隊成員都能夠正確地使用 Git，這些前置作業包括：
+在開始使用 Git 進行軟體開發之前，我們需要做一些前置作業，確保團隊成員都能夠正確地使用 Git。這些前置作業包括：
 
-- 請先設定好自己的 git user name 及 email
+- 請先設定好自己的 Git 使用者名稱及電子郵件
 
 ```bash
 git config --global user.name "Bo-Yi Wu"
 git config --global user.email "bo-yi.wu@example.com"
 ```
 
-- 設定 Git Commit Signature Verification 請參考此文章操作『[快速設定 Git Commit Signature Verification][3]』
+- 設定 Git 提交簽名驗證，請參考此文章操作『[快速設定 Git 提交簽名驗證][3]』
 - 檢查上述兩項是否已經設定完成
 
 ```bash
@@ -61,7 +61,7 @@ user.signingkey=/Users/xxxxxxx/.ssh/id_rsa.pub
 
 ![logo](/images/2025-01-04/gitea-signature-verification.png)
 
-接下來可以測試是否可以正確的簽署 commit，正常需要看到底下畫面 (有看到自己的 Commit 顯示綠色框框)，這樣就是證明此 Commit 是由你本人所發布的。
+接下來可以測試是否可以正確地簽署 commit，正常情況下應該會看到如下畫面（顯示自己的 Commit 並有綠色框框），這樣就證明此 Commit 是由你本人所發布的。
 
 ![logo](/images/2025-01-04/gitea-commit-signature.png)
 
@@ -76,15 +76,15 @@ user.signingkey=/Users/xxxxxxx/.ssh/id_rsa.pub
 - Repository 的 `LICENSE` 文件應該包含專案的授權信息，確保代碼的合法性。
 - Repository 的 `.gitignore` 文件應該包含忽略的文件和目錄，避免將不必要的文件提交到版本庫中。
 
-除了上面的準則外，還可以根據實際情況進行調整，確保 Repository 的統一性和可維護性。底下兩點是不熟悉軟體版本控制會犯的錯誤，請務必避免：
+除了上面的準則外，還可以根據實際情況進行調整，確保 Repository 的統一性和可維護性。以下是一些常見錯誤，請務必避免：
 
 - 不要將大型二進制文件提交到版本庫中，這樣會導致版本庫過大，影響性能。
 - 不要將機密信息提交到版本庫中，這樣會導致信息泄露，造成安全風險。
 
-另外公司內部的 Git 服務器存放的 Repository 不只有一個團隊，公司總共 1 萬人，為了避免不必要的爭議，請遵守以下規則：
+另外，公司內部的 Git 服務器存放的 Repository 不只有一個團隊，公司總共 1 萬人，為了避免不必要的爭議，請遵守以下規則：
 
 - 請勿在**個人帳戶**下建立 Repository 來與其他團隊合作。
-- 所有 Repository 請以 **Private** 方式建立，勿公開代碼。如果需要公開，請先與各部門主管討論
+- 所有 Repository 請以 **Private** 方式建立，勿公開代碼。如果需要公開，請先與各部門主管討論。
 
 ## 03. 軟體開發流程準則
 
