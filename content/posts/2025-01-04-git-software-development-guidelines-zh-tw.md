@@ -90,7 +90,7 @@ user.signingkey=/Users/xxxxxxx/.ssh/id_rsa.pub
 
 ### 3.1. 分支管理
 
-請採用 GitHub Flow 為準則，減少團隊溝通成本，詳細原因可以參考『[GitHub Flow 及 Git Flow 流程使用時機][33]』，開 branch 時，請跟 Jira Issue 連結，例如要解決 Issue GAIS-3210，可以透過底下指令開 branch
+請採用 GitHub Flow 為準則，減少團隊溝通成本，詳細原因可以參考『[GitHub Flow 及 Git Flow 流程使用時機][33]』。開 branch 時，請與 Jira Issue 連結，例如要解決 Issue GAIS-3210，可以透過以下指令開 branch：
 
 ```bash
 git checkout -b GAIS-3210
@@ -137,8 +137,8 @@ feat(ui): Add `Button` component
 
 - 標籤 (Tags): 使用標籤來標記重要的版本點，例如 v1.0.0。
 - 語義化版本控制 ([Semantic Versioning][42]): 遵循語義化版本控制規則，版本號格式為 MAJOR.MINOR.PATCH。
-- Gitea Action 請整合 Push 及 Tag 自動化部署測試站及正式站
-- 透過 [goreleaser][41] 工具可以快速產生 Release Note
+- Gitea Action 請整合 Push 及 Tag 自動化部署測試站及正式站。
+- 透過 [goreleaser][41] 工具可以快速產生 Release Note。
 
 [41]: https://goreleaser.com/
 [42]: https://semver.org/
