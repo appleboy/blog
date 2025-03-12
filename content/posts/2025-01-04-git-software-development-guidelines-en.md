@@ -12,42 +12,42 @@ categories:
 
 ## Introduction
 
-[Git][1] is a powerful distributed version control system engineered by [Linus Torvalds][2] specifically for Linux kernel development. Renowned for its exceptional speed, robust data integrity, and sophisticated branch management capabilities, Git has evolved into the industry standard for software version control. While mastering basic Git operations is fundamental, understanding its collaborative workflow is essential for effective team development. This guide presents comprehensive Git development practices to enhance team productivity.
+[Git][1] is a powerful distributed version control system created by [Linus Torvalds][2], initially designed for managing the Linux kernel source code. Its exceptional features include lightning-fast processing, robust data integrity, seamless support for non-linear development through branching, and sophisticated branch management capabilities. These characteristics make Git an essential tool in modern software development. While mastering basic Git operations is important, understanding its workflow is crucial for achieving optimal team collaboration. This article presents comprehensive Git software development guidelines to enhance team productivity.
 
-The increasing complexity of modern software development makes Git management particularly challenging. To maximize team efficiency, establishing well-defined Git development guidelines becomes crucial. These guidelines serve to standardize team operations, maintain code stability, and ensure long-term maintainability. When properly implemented, these practices significantly streamline development workflows, minimize errors, and enhance overall code quality.
+As development teams expand, Git workflows naturally become more intricate. To maintain smooth collaboration, implementing well-structured Git development guidelines becomes essential. These guidelines help regulate team members' actions, ensuring code repository stability and maintainability. When properly followed, they not only expedite development cycles but also minimize errors and enhance overall code quality.
 
 [1]: https://en.wikipedia.org/wiki/Git
 [2]: https://en.wikipedia.org/wiki/Linus_Torvalds
 
 ## Git Software Development Workflow
 
-Below is a simple Git software development workflow diagram, illustrating how team members collaborate in development:
+The following diagram illustrates a streamlined Git development workflow that demonstrates effective team collaboration:
 
 ![logo](/images/2025-01-04/git-flow.png)
 
-The above workflow may not be suitable for all teams, but it can serve as a reference and be adjusted according to actual situations. Next, we will introduce some Git software development guidelines to help teams improve collaboration efficiency.
+While this workflow may not suit all teams, it serves as a reference that can be adjusted according to specific circumstances. Let's explore some Git software development guidelines that help improve team collaboration efficiency.
 
 <!--more-->
 
-## 01. Git Setup
+## 01. Git Prerequisites
 
-Before diving into Git-based development, team members must complete several essential configuration steps to ensure proper Git functionality:
+Before diving into Git-based development, team members must complete these essential setup steps:
 
-- First, set up your Git user name and email.
+- Set up your Git username and email
 
 ```bash
 git config --global user.name "Bo-Yi Wu"
 git config --global user.email "bo-yi.wu@example.com"
 ```
 
-- Set up Git Commit Signature Verification by following the instructions in this article: [Quick Setup for Git Commit Signature Verification][3].
-- Verify that the above settings are correctly configured.
+- Configure Git commit signature verification by following the guide on "[Quick Setup for Git Commit Signature Verification][3]"
+- Verify both settings are properly configured
 
 ```bash
 git config --global --list
 ```
 
-You should see the following settings:
+You should see settings like:
 
 ```bash
 user.name=Bo-Yi Wu
@@ -57,40 +57,40 @@ user.signingkey=/Users/xxxxxxx/.ssh/id_rsa.pub
 
 [3]: https://blog.wu-boy.com/2023/10/git-commit-signature-verification/
 
-Since our team uses [Gitea][4] as the Git server, you can see a green badge on your personal settings page.
+Since our team uses [Gitea][4] as our Git server, you can see the green badge in your personal settings page:
 
 ![logo](/images/2025-01-04/gitea-signature-verification.png)
 
-Next, you can test whether the commit is correctly signed. Normally, you should see the following screen (with your commit showing a green box), which confirms that the commit was made by you.
+You can then test if commit signing works correctly. You should see something like this (your commit with a green box), confirming that the commit was indeed made by you:
 
 ![logo](/images/2025-01-04/gitea-commit-signature.png)
 
 [4]: https://gitea.com/
 
-## 02. Guidelines for Creating a New Repository
+## 02. Repository Creation Guidelines
 
-When establishing a new repository, follow these essential guidelines to ensure consistency and maintainability:
+When creating a new repository, certain guidelines should be followed to ensure consistency and maintainability. Here are some repository creation guidelines:
 
-- Choose meaningful repository names that accurately reflect the project's purpose
-- Craft comprehensive README.md files containing detailed project documentation
-- Include appropriate LICENSE files to ensure proper legal compliance
-- Maintain a thorough .gitignore configuration to exclude unnecessary files
+- Repository names should be descriptive, clearly expressing the repository's purpose.
+- The repository's `README.md` file should include a project description, installation instructions, usage instructions, etc.
+- The repository's `LICENSE` file should include project licensing information to ensure code legality.
+- The repository's `.gitignore` file should include files and directories to be ignored, preventing unnecessary files from being committed to the repository.
 
-To preserve repository health and security, avoid these common pitfalls:
+In addition to the above guidelines, adjustments can be made based on actual circumstances to ensure repository consistency and maintainability. Here are some common mistakes to avoid:
 
-- Never commit large binary files, as they significantly degrade repository performance
-- Keep sensitive information strictly outside of version control
+- Do not commit large binary files to the repository, as this will make the repository too large and affect performance.
+- Do not commit confidential information to the repository, as this will lead to information leakage and pose security risks.
 
-Given our enterprise-scale Git infrastructure supporting multiple teams (10,000+ employees), strictly observe these organizational policies:
+Additionally, the company's internal Git server hosts repositories for multiple teams, with a total of 10,000 employees. To avoid unnecessary disputes, please follow these rules:
 
-- All team repositories must reside under organizational accounts, not personal ones
-- Maintain repository privacy by default - public visibility requires management approval
+- Do not create repositories under **personal accounts** for collaboration with other teams.
+- All repositories should be created as **Private** to avoid exposing code. If public access is needed, please discuss with department supervisors first.
 
-## 03. Software Development Workflow Guidelines
+## 03. Software Development Process Guidelines
 
 ### 3.1. Branch Management
 
-Embrace GitHub Flow to streamline team communication. For detailed rationale, consult '[When to Use GitHub Flow and Git Flow][33]'. Link all feature branches to corresponding Jira issues for proper tracking:
+We adopt GitHub Flow as our primary development guideline, which effectively reduces team communication costs. For more details, refer to the article "[GitHub Flow and Git Flow: When to Use Each][33]". When creating branches, be sure to associate them with Jira Issues. For example, to handle Issue GAIS-3210, use the following commands:
 
 ```bash
 git checkout -b GAIS-3210
@@ -101,28 +101,32 @@ git push origin GAIS-3210
 
 ### 3.2 Commit Message Guidelines
 
-Maintain clear and structured commit messages following [Conventional Commits][35] standards:
+- Clear and concise: Commit messages should be brief and clear, describing the changes made. Refer to [Conventional Commits][35].
+- Format: Use a standard format, such as: `refactor(GAIS-2892): improve HTTP response handling and concurrency control`
 
 [35]: https://www.conventionalcommits.org/
 
-- Keep messages concise yet descriptive
-- Follow the format: `type(scope): description`
+Types can include:
 
-Example: `refactor(GAIS-2892): optimize response handling and concurrency`
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation update
+- `style`: Code formatting
+- `refactor`: Code refactoring
+- `test`: Testing related
+- `chore`: Maintenance work
 
-The types can be feat (feature), fix (bug fix), docs (documentation), style (formatting), refactor (refactoring), test (testing), chore (maintenance), etc.
-
-The `GAIS-2892` corresponds to the Jira issue number. The Gitea system can integrate with Jira issue numbers.
+The `GAIS-2892` corresponds to the Jira Issue ID. The Gitea system can automatically link to Jira Issues.
 
 ```bash
-feat(ui): Add `Button` component
+feat(ui): Add new Button component
 ^    ^    ^
-|    |    |__ Subject
-|    |_______ Scope
-|____________ Type
+|    |    |__ Subject (Describe the change in present tense)
+|    |_______ Scope (Change scope)
+|____________ Type (Change type)
 ```
 
-Introduce [Gitea Action][36] with [semantic-pull-request][34] for automated checks.
+Introduce [Gitea Action][36] with [semantic-pull-request][34] for automated checks
 
 ![logo](/images/2025-01-04/gitea-semantic-pull-request.png)
 
@@ -131,74 +135,76 @@ Introduce [Gitea Action][36] with [semantic-pull-request][34] for automated chec
 
 ### 3.3. Code Review
 
-- Pull Requests: All changes should be made through PRs and require **at least one team member's review and approval**.
-- Automated Testing: Ensure all automated tests pass before merging. The team uses Gitea Action for automated testing.
-- Use **Squash Commit** for merging: This keeps the history clean and avoids unnecessary merge commits.
+- Pull Request (PR): All code changes must go through PR and require **at least one team member's review and approval**.
+- Automated Testing: Ensure all automated tests pass before merging. The team uses Gitea Actions for automated testing.
+- Squash and Merge: Use Squash Commit to merge, keeping the version history clean and avoiding unnecessary Merge Commits.
 
 ![logo](/images/2025-01-04/gitea-squash-commit.png)
 
 ### 3.4. Version Release
 
-- Tags: Use tags to mark important version points, such as v1.0.0.
-- Semantic Versioning ([Semantic Versioning][42]): Follow semantic versioning rules, with the format MAJOR.MINOR.PATCH.
-- Integrate Gitea Action with push and tag for automated deployment to staging and production environments.
-- Use the [goreleaser][41] tool to quickly generate release notes.
+- Tags: Use semantic tags to mark important versions, such as `v1.0.0`
+- Semantic Versioning: Follow semver guidelines, with version numbers in the format `MAJOR.MINOR.PATCH`
+  - MAJOR: Major updates, possibly including incompatible API changes
+  - MINOR: New features, but backward compatible
+  - PATCH: Bug fixes, backward compatible
+- CI/CD: Integrate Push and Tag events with Gitea Actions for automatic deployment to test and production environments
+- Release Notes: Use the [GoReleaser][55] tool to automatically generate release notes
 
-[41]: https://goreleaser.com/
-[42]: https://semver.org/
+[55]: https://goreleaser.com/
 
 ![logo](/images/2025-01-04/gitea-release-note.png)
 
 ### 3.5. Security
 
-- During software development, do not include personal sensitive information in the git repository.
-  - Use `.env` files to store sensitive information.
-  - Add `.env` files to the `.gitignore` list.
-- For deployment-related sensitive information, configure it directly in Gitea Secrets.
+- During software development, do not include personal sensitive information in the git repo
+  - Use `.env` files to store sensitive information
+  - Add `.env` files to the `.gitignore` list
+- Set deployment-related sensitive information directly in Gitea Secret
 
 ![logo](/images/2025-01-04/gitea-secret.png)
 
-### 3.6 Documentation
+### 3.6 Development Documentation
 
-It is common to encounter difficulties in running services in your own environment. Developers should write detailed `README.md` files to guide future colleagues. The documentation should include:
+Many developers have encountered difficulties running services in local environments. Therefore, the development team must detail the following in the README.md file for future team members' reference:
 
-- Installation instructions
-- Execution instructions
-- Testing instructions
-- Deployment instructions
+- Installation steps
+- Execution methods
+- Testing methods
+- Deployment process
 - Usage instructions
 
 ### 3.7 Code Standards
 
-Consistency: Follow the team's agreed-upon [code style guide][40] to maintain code consistency. Below is the code style guide for developing Go language projects:
+Consistency: Follow the team's agreed [code style guide][40] to maintain code consistency. Below is the code style guide for developing Go language projects:
 
 [40]: https://google.github.io/styleguide/
 
-- Use the [golangci-lint][43] tool to check code standards.
-- Use the [gofmt][44] tool to format code.
-- Use the [go vet][45] tool to check code standards.
+- Use the [golangci-lint][43] tool to check code standards
+- Use the [gofmt][44] tool to format code
+- Use the [go vet][45] tool to check code standards
 
 [43]: https://golangci-lint.run/
 [44]: https://golang.org/cmd/gofmt/
 [45]: https://pkg.go.dev/golang.org/x/tools/cmd/vet
 
-## Summary
+## Conclusion
 
-This document provides some Git software development guidelines aimed at improving team collaboration efficiency. The main points include:
+This article provides some Git software development guidelines aimed at improving team collaboration efficiency. The main content includes:
 
-1. **Preliminary Setup**: Ensure team members correctly set up Git user name, email, and commit signature verification.
-2. **Guidelines for Creating a New Repository**:
-   - Use descriptive names.
-   - Include `README.md`, `LICENSE`, and `.gitignore` files.
-   - Avoid committing large binary files and sensitive information.
-   - Follow internal rules for creating private repositories.
-3. **Software Development Workflow Guidelines**:
-   - **Branch Management**: Adopt GitHub Flow and link branches to Jira issues.
-   - **Commit Message Guidelines**: Use the Conventional Commits format.
-   - **Code Review**: Make changes through PRs and use automated testing.
-   - **Version Release**: Use tags and semantic versioning, and integrate automated deployment.
-   - **Security**: Use `.env` files and Gitea Secrets for sensitive information.
-   - **Documentation**: Write detailed `README.md` files with installation, execution, testing, deployment, and usage instructions.
-   - **Code Standards**: Follow the code style guide and use tools to check and format code.
+1. **Prerequisites**: Ensure team members correctly set up Git usernames, emails, and commit signature verification.
+2. **Repository Creation Guidelines**:
+   - Use descriptive names
+   - Include `README.md`, `LICENSE`, and `.gitignore` files
+   - Avoid committing large binary files and confidential information
+   - Follow rules for creating private repositories within the company
+3. **Software Development Process Guidelines**:
+   - **Branch Management**: Adopt GitHub Flow and link to Jira Issues
+   - **Commit Message Guidelines**: Use Conventional Commits format
+   - **Code Review**: Make changes through PR and use automated testing
+   - **Version Release**: Use tags and semantic versioning, and integrate automated deployment
+   - **Security**: Use `.env` files and Gitea Secret for sensitive information
+   - **Development Documentation**: Detail installation, execution, testing, deployment, and usage instructions in the `README.md` file
+   - **Code Standards**: Follow code style guides and use tools to check and format code
 
-These guidelines aim to help teams improve collaboration efficiency. They are intended as a reference and should be adjusted based on the team's actual situation. We hope these guidelines help you use Git more effectively and improve team collaboration.
+These Git software development guidelines aim to help improve team collaboration efficiency. Of course, these guidelines are just a reference, and specific practices need to be adjusted based on the team's actual situation. We hope these guidelines help you better use Git and improve team collaboration efficiency.
