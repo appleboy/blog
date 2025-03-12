@@ -106,16 +106,24 @@ git push origin GAIS-3210
 
 [35]: https://www.conventionalcommits.org/
 
-類型可以是 feat (新功能), fix (修復), docs (文檔), style (格式), refactor (重構), test (測試), chore (雜務) 等。
+類型可以是：
 
-其中 `GAIS-2892` 是對應到 Jira 單號。Gitea 系統可以跟 Jira 單號連結整合。
+- `feat`: 新功能 (New Feature)
+- `fix`: 修復錯誤 (Bug Fix)
+- `docs`: 文件更新 (Documentation)
+- `style`: 程式碼格式調整 (Code Formatting)
+- `refactor`: 重構程式碼 (Code Refactoring)
+- `test`: 測試相關 (Testing)
+- `chore`: 維護性工作 (Maintenance)
+
+其中 `GAIS-2892` 對應到 Jira Issue ID。Gitea 系統可以與 Jira Issue 進行自動連結整合。
 
 ```bash
-feat(ui): Add `Button` component
+feat(ui): Add new Button component
 ^    ^    ^
-|    |    |__ Subject
-|    |_______ Scope
-|____________ Type
+|    |    |__ Subject (使用現在式描述變更內容)
+|    |_______ Scope (變更範圍)
+|____________ Type (變更類型)
 ```
 
 引入 [Gitea Action][36] 的 [semantic-pull-request][34] 做自動化檢查
@@ -125,23 +133,25 @@ feat(ui): Add `Button` component
 [34]: https://github.com/marketplace/actions/semantic-pull-request
 [36]: https://docs.gitea.com/usage/actions/overview
 
-### 3.3. 程式碼審查 (Code Review)
+### 3.3. Code Review 程式碼審查
 
-- 拉取請求 (Pull Request): 所有的更改應該通過 PR 進行，且需要**至少一個團隊成員的審查和批准**。
-- 自動化測試: 合併之前，確保所有自動化測試都通過。團隊使用 Gitea Action 自動化測試。
-- 合併請使用 **Squash Commit**: 保持歷史紀錄的乾淨，可以避免不必要的 Merge Commit。
+- Pull Request (PR): 所有程式碼變更都必須透過 PR 進行，且需要**至少一位團隊成員的審查與批准**。
+- Automated Testing: 合併前必須確保所有自動化測試都已通過。團隊使用 Gitea Actions 進行自動化測試。
+- Squash and Merge: 使用 Squash Commit 合併，以保持版本歷史的整潔，避免多餘的 Merge Commit。
 
 ![logo](/images/2025-01-04/gitea-squash-commit.png)
 
-### 3.4. 版本發布
+### 3.4. Version Release 版本發布
 
-- 標籤 (Tags): 使用標籤來標記重要的版本點，例如 v1.0.0。
-- 語義化版本控制 ([Semantic Versioning][42]): 遵循語義化版本控制規則，版本號格式為 MAJOR.MINOR.PATCH。
-- Gitea Action 請整合 Push 及 Tag 自動化部署測試站及正式站。
-- 透過 [goreleaser][41] 工具可以快速產生 Release Note。
+- Tags: 使用語意化的標籤來標記重要版本，例如 `v1.0.0`
+- Semantic Versioning: 遵循 semver 規範，版本號格式為 `MAJOR.MINOR.PATCH`
+  - MAJOR: 重大更新，可能包含不相容的 API 變更
+  - MINOR: 新增功能，但保持向下相容
+  - PATCH: 錯誤修復，保持向下相容
+- CI/CD: 透過 Gitea Actions 整合 Push 及 Tag 事件，自動部署至測試環境及正式環境
+- Release Notes: 使用 [GoReleaser][55] 工具自動產生發布說明
 
-[41]: https://goreleaser.com/
-[42]: https://semver.org/
+[55]: https://goreleaser.com/
 
 ![logo](/images/2025-01-04/gitea-release-note.png)
 
