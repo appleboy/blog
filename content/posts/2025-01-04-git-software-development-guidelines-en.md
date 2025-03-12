@@ -12,9 +12,9 @@ categories:
 
 ## Introduction
 
-[Git][1] is a distributed version control system developed by [Linus Torvalds][2] for managing the source code of the Linux kernel. Git is designed for speed, data integrity, support for non-linear development (multiple branches), and strong branch management, making it widely used in software development. To effectively use Git, it is important to not only be familiar with its basic operations but also to master its workflow for better collaborative development. This article introduces some Git software development guidelines to help teams improve collaboration efficiency.
+[Git][1] is a powerful distributed version control system engineered by [Linus Torvalds][2] specifically for Linux kernel development. Renowned for its exceptional speed, robust data integrity, and sophisticated branch management capabilities, Git has evolved into the industry standard for software version control. While mastering basic Git operations is fundamental, understanding its collaborative workflow is essential for effective team development. This guide presents comprehensive Git development practices to enhance team productivity.
 
-Due to the complexity of team development, using Git can become more challenging. To enhance team collaboration efficiency, we need to establish a set of Git software development guidelines to standardize team members' operations and ensure the stability and maintainability of the codebase. Adhering to certain principles can accelerate the development process, reduce errors, and improve code quality.
+The increasing complexity of modern software development makes Git management particularly challenging. To maximize team efficiency, establishing well-defined Git development guidelines becomes crucial. These guidelines serve to standardize team operations, maintain code stability, and ensure long-term maintainability. When properly implemented, these practices significantly streamline development workflows, minimize errors, and enhance overall code quality.
 
 [1]: https://en.wikipedia.org/wiki/Git
 [2]: https://en.wikipedia.org/wiki/Linus_Torvalds
@@ -31,7 +31,7 @@ The above workflow may not be suitable for all teams, but it can serve as a refe
 
 ## 01. Git Setup
 
-Before starting to use Git for software development, we need to perform some preliminary setup to ensure that all team members can use Git correctly. These preliminary tasks include:
+Before diving into Git-based development, team members must complete several essential configuration steps to ensure proper Git functionality:
 
 - First, set up your Git user name and email.
 
@@ -69,28 +69,28 @@ Next, you can test whether the commit is correctly signed. Normally, you should 
 
 ## 02. Guidelines for Creating a New Repository
 
-When creating a new repository, certain guidelines should be followed to ensure consistency and maintainability. Here are some key points:
+When establishing a new repository, follow these essential guidelines to ensure consistency and maintainability:
 
-- The repository name should be descriptive and clearly convey its purpose.
-- The `README.md` file should include a project description, installation instructions, and usage guidelines.
-- The `LICENSE` file should contain the project's licensing information to ensure legal compliance.
-- The `.gitignore` file should list files and directories to be ignored, preventing unnecessary files from being committed to the repository.
+- Choose meaningful repository names that accurately reflect the project's purpose
+- Craft comprehensive README.md files containing detailed project documentation
+- Include appropriate LICENSE files to ensure proper legal compliance
+- Maintain a thorough .gitignore configuration to exclude unnecessary files
 
-In addition to these guidelines, adjustments can be made based on actual needs to maintain consistency and maintainability. Here are two common mistakes to avoid:
+To preserve repository health and security, avoid these common pitfalls:
 
-- Do not commit large binary files to the repository, as this can increase the repository size and affect performance.
-- Do not commit sensitive information to the repository, as this can lead to information leaks and security risks.
+- Never commit large binary files, as they significantly degrade repository performance
+- Keep sensitive information strictly outside of version control
 
-Furthermore, since the company's Git server hosts repositories for multiple teams (with a total of 10,000 employees), please follow these rules to avoid unnecessary disputes:
+Given our enterprise-scale Git infrastructure supporting multiple teams (10,000+ employees), strictly observe these organizational policies:
 
-- Do not create repositories under **personal accounts** for team collaboration.
-- All repositories should be created as **Private**. Do not make the code public. If you need to make it public, please discuss it with the department heads first.
+- All team repositories must reside under organizational accounts, not personal ones
+- Maintain repository privacy by default - public visibility requires management approval
 
 ## 03. Software Development Workflow Guidelines
 
 ### 3.1. Branch Management
 
-Please adopt the GitHub Flow as a guideline to reduce team communication costs. For detailed reasons, you can refer to '[When to Use GitHub Flow and Git Flow][33]'. When creating a branch, please link it to a Jira issue. For example, to address issue GAIS-3210, you can create a branch using the following command:
+Embrace GitHub Flow to streamline team communication. For detailed rationale, consult '[When to Use GitHub Flow and Git Flow][33]'. Link all feature branches to corresponding Jira issues for proper tracking:
 
 ```bash
 git checkout -b GAIS-3210
@@ -101,10 +101,14 @@ git push origin GAIS-3210
 
 ### 3.2 Commit Message Guidelines
 
-- Clear and concise: Commit messages should be brief and clearly describe the changes made. Please refer to [Conventional Commits][35].
-- Format: Use a standard format, for example: `refactor(GAIS-2892): improve HTTP response handling and concurrency control`
+Maintain clear and structured commit messages following [Conventional Commits][35] standards:
 
 [35]: https://www.conventionalcommits.org/
+
+- Keep messages concise yet descriptive
+- Follow the format: `type(scope): description`
+
+Example: `refactor(GAIS-2892): optimize response handling and concurrency`
 
 The types can be feat (feature), fix (bug fix), docs (documentation), style (formatting), refactor (refactoring), test (testing), chore (maintenance), etc.
 
@@ -127,9 +131,9 @@ Introduce [Gitea Action][36] with [semantic-pull-request][34] for automated chec
 
 ### 3.3. Code Review
 
-- Pull Requests: All changes should be made through PRs and require <font color="red">at least one team member's review and approval</font>.
+- Pull Requests: All changes should be made through PRs and require **at least one team member's review and approval**.
 - Automated Testing: Ensure all automated tests pass before merging. The team uses Gitea Action for automated testing.
-- Use <font color="red">Squash Commit</font> for merging: This keeps the history clean and avoids unnecessary merge commits.
+- Use **Squash Commit** for merging: This keeps the history clean and avoids unnecessary merge commits.
 
 ![logo](/images/2025-01-04/gitea-squash-commit.png)
 
