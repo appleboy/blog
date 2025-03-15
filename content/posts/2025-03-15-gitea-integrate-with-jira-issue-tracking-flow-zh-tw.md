@@ -17,9 +17,9 @@ categories:
 
 [0]: https://blog.wu-boy.com/2025/01/git-software-development-guide-key-to-improving-team-collaboration-zh-tw/
 
-[Gitea][2] 是一款由 Go 語言開發的自助式 Git 服務器，提供了一個輕量級、易於安裝和使用的 Git 服務器解決方案。Gitea 支援多種操作系統，包括 Linux、Windows 和 macOS，並提供了豐富的功能，如代碼審查、問題追蹤、Wiki 等，幫助團隊更好地協作開發。
+[Gitea][2] 是一套使用 Go 語言開發的自架式 Git 伺服器，為團隊提供輕量且容易部署的程式碼管理方案。系統支援 Linux、Windows 和 macOS 等多種作業系統，並具備程式碼審查、問題追蹤、Wiki 等豐富功能，能有效提升團隊的協作開發效率。
 
-[Jira][1] 是一款由 Atlassian 開發的專案管理和議題追蹤軟體。它廣泛應用於軟體開發團隊，用於計劃、追蹤和管理軟體專案。Jira 提供了豐富的功能，包括議題管理、敏捷開發支援（如 Scrum 和 Kanban）、報告和分析工具等，幫助團隊提高工作效率和協作能力。
+[Jira][1] 是由 Atlassian 開發的專業專案管理與問題追蹤系統。作為軟體開發團隊廣泛採用的工具，Jira 提供完整的問題管理、敏捷開發流程（如 Scrum 和 Kanban）以及數據分析等功能，協助團隊有效管理專案進度並提升協作品質。
 
 [1]: https://www.atlassian.com/software/jira
 [2]: https://about.gitea.com/
@@ -28,15 +28,15 @@ categories:
 
 ## 問題描述
 
-部門團隊在開發軟體時，通常會使用 Git 作為版本控制系統，並使用 Gitea 作為 Git 服務器。開發人員在進行代碼開發時，會搭配 Jira 進行議題管理，以追蹤和解決問題。然而，由於 Gitea 和 Jira 是兩個獨立的系統，我們需要將開發紀錄的 Commit 與 Jira 的議題進行關聯，以便更好地追蹤和管理代碼開發過程。
+我們部門在進行軟體開發時，主要採用 Git 作為版本控制系統，並使用 Gitea 作為 Git 伺服器。開發團隊在進行程式碼開發時，會搭配 Jira 進行議題追蹤與管理。然而，由於 Gitea 和 Jira 是兩個獨立的系統，我們需要建立開發紀錄的 Commit 與 Jira 議題之間的關聯，以便更有效地追蹤和管理整個開發流程。
 
-可是 Jira 系統在市面上整合 Git 服務器的方案有很多，例如 Bitbucket、GitHub、Gitlab 等，但是對於 Gitea 這類自建 Git 服務器的整合方案就比較少見，所以其實在 Gitea 社群就有人[提出這問題][11]，希望能夠找到一個解決方案。
+目前市面上雖然有許多 Jira 整合 Git 服務的方案，例如整合 Bitbucket、GitHub、GitLab 等，但對於像 Gitea 這類自建的 Git 伺服器，整合方案相對較少。這個問題在 Gitea 社群中也有人[提出討論][11]，希望能找到合適的解決方案。
 
 [11]: https://github.com/go-gitea/gitea/issues/25852
 
 團隊找到一個整合 Git 的 Jira 插件，但是這個插件如果要實現 Gitea 與 Jira 的整合，底層實作方式就是 Jira 會定期掃描 Git 服務器的 Commit 紀錄，並將 Commit 與 Jira 的議題進行關聯。這樣的方式雖然能夠實現 Gitea 與 Jira 的整合，但是效率並不高，且需要 Jira 服務器能夠連線到 Git 服務器，並且下載原始碼才能拿到歷史紀錄，這樣的設定在一些環境下可能會有安全性的疑慮。至少像是我們公司團隊太多，每個部門對於資料的存取權限都有所限制，所以這樣的設定在我們公司是不被允許的。
 
-為了解決這個問題，我們團隊決定自行開發一個整合 Gitea 與 Jira 的解決方案，以提高整合效率和安全性。也就是 Jira 服務不需要去跟 Gitea 服務器溝通，而是由 Gitea 服務器主動將 Commit 與 Jira 的議題進行關聯，這樣的設計不僅能夠提高效率，也能夠保護資料的安全性。使用的方式也很簡單，就是透過 [Gitea Action][22] 搭配 [Jira API][23] 進行整合。底下是整和後的示意圖
+為了解決這個問題，我們團隊決定自行開發一套整合 Gitea 與 Jira 的解決方案，以提升整合效率並確保資料安全。我們採用了讓 Gitea 服務主動將 Commit 與 Jira 議題建立關聯的設計，而不是由 Jira 服務去存取 Gitea 伺服器。這樣的架構不只能提高效率，更能確保資料存取的安全性。實作方式相當簡單，主要是透過 [Gitea Action][22] 搭配 [Jira API][23] 來完成整合。底下是整合後的示意圖：
 
 [22]: https://docs.gitea.com/usage/actions/overview
 [23]: https://developer.atlassian.com/server/jira/platform/rest/v10004/
