@@ -28,9 +28,9 @@ Before diving in, let's familiarize ourselves with [Gitea][2] and [Jira][1]. For
 
 ## Problem Description
 
-In our department's development workflow, while Git serves as our version control system with Gitea as our Git server, and Jira handles our issue tracking, we faced a significant challenge: bridging the gap between code commits and Jira issues effectively.
+In our department's development workflow, while Git serves as our version control system with [Gitea][2] as our Git server, and Jira handles our issue tracking, we faced a significant challenge: bridging the gap between code commits and Jira issues effectively.
 
-While robust integration solutions exist for Jira with services like Bitbucket, GitHub, and GitLab, options for self-hosted Git servers like Gitea are limited. This integration challenge has been a [notable discussion point in the Gitea community][11].
+While robust integration solutions exist for Jira with services like Bitbucket, GitHub, and GitLab, options for self-hosted Git servers like [Gitea][2] are limited. This integration challenge has been a [notable discussion point in the Gitea community][11].
 
 [11]: https://github.com/go-gitea/gitea/issues/25852
 
