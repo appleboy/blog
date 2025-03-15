@@ -61,9 +61,9 @@ Before implementation, we established a clear mapping between our software devel
 
 This framework provides a foundational software development process that teams can customize based on their specific requirements. Each issue progresses through distinct states, allowing developers to take appropriate actions at each stage. This structured approach ensures efficient tracking and management of the development process. We've established the following key state transitions that align with our Git workflows:
 
-1. Backlog → In Progress: Initiated when a new development branch is created
-2. In Progress → Code Review: Triggered when code is submitted for review
-3. Code Review → Resolved: Completed when code review is approved
+1. **Backlog** → **In Progress**: Initiated when a new development branch is created
+2. **In Progress** → **Code Review**: Triggered when code is submitted for review
+3. **Code Review** → **Resolved**: Completed when code review is approved
 
 To maintain workflow efficiency, we require our development team to strictly adhere to these processes. Through automated Git commit integrations, Jira issue states are updated automatically, creating a streamlined and automated development pipeline.
 

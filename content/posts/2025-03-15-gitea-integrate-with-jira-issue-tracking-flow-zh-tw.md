@@ -61,9 +61,9 @@ categories:
 
 這是一個基礎的軟體開發流程框架，團隊可以根據實際需求進行調整。在這個流程中，每個議題都具備特定狀態，開發人員可以依據議題狀態執行相對應的操作，確保開發過程能被有效追蹤和管理。我們將以下幾個關鍵狀態轉換與 Git 流程做了對應：
 
-1. Backlog → In Progress：開啟新分支進行開發
-2. In Progress → Code Review：提交程式碼進行審查
-3. Code Review → Resolved：程式碼審查完成
+1. **Backlog** → **In Progress**：開啟新分支進行開發
+2. **In Progress** → **Code Review**：提交程式碼進行審查
+3. **Code Review** → **Resolved**：程式碼審查完成
 
 我們期望開發團隊能確實遵循上述流程，並透過 Git Commit 自動更新 Jira 議題狀態，讓整個開發過程更加流暢且自動化。
 
