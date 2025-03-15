@@ -49,13 +49,13 @@ By incorporating Jira issue numbers in commit logs, developers can seamlessly tr
 
 Before implementation, we established a clear mapping between our software development workflow and Jira states to ensure comprehensive progress tracking. Our workflow is structured around these essential states:
 
-1. Backlog: Pending issues awaiting prioritization
-2. Open: Issues ready for development
-3. In Progress: Issues actively being worked on
-4. Code Review: Code undergoing peer review
-5. Under Test: Issues in testing phase
-6. Resolved: Successfully completed issues
-7. Closed: Finalized and verified issues
+1. **Backlog**: Pending issues awaiting prioritization
+2. **Open**: Issues ready for development
+3. **In Progress**: Issues actively being worked on
+4. **Code Review**: Code undergoing peer review
+5. **Under Test**: Issues in testing phase
+6. **Resolved**: Successfully completed issues
+7. **Closed**: Finalized and verified issues
 
 ![flow](/images/2025-03-15/jira-software-flow.png)
 

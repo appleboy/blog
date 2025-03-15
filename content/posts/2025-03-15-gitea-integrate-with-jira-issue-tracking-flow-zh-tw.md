@@ -49,13 +49,13 @@ categories:
 
 在專案執行前，團隊需要先將軟體開發流程與 Jira 狀態進行對應，以便更有效地追蹤專案進度。以下是我們設計的基本軟體開發流程狀態：
 
-1. Backlog：待處理的議題
-2. Open：開發中的議題
-3. In Progress：進行中的議題
-4. Code Review：程式碼審查中
-5. Under Test：測試階段
-6. Resolved：已解決
-7. Closed：已結案
+1. **Backlog**：待處理的議題
+2. **Open**：開發中的議題
+3. **In Progress**：進行中的議題
+4. **Code Review**：程式碼審查中
+5. **Under Test**：測試階段
+6. **Resolved**：已解決
+7. **Closed**：已結案
 
 ![flow](/images/2025-03-15/jira-software-flow.png)
 
