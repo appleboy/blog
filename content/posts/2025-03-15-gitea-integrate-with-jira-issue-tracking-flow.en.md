@@ -13,13 +13,13 @@ categories:
 
 ![blog logo](/images/2025-03-15/blog-logo.png)
 
-Before we begin, let's understand what [Gitea][2] and [Jira][1] are. I recommend reading "[Git Software Development Guide: Key to Improving Team Collaboration][0]" first to better understand the following content.
+Before diving in, let's familiarize ourselves with [Gitea][2] and [Jira][1]. For better context, I recommend reading "[Git Software Development Guide: Key to Improving Team Collaboration][0]" first.
 
 [0]: https://blog.wu-boy.com/2025/01/git-software-development-guide-key-to-improving-team-collaboration-en/
 
-[Gitea][2] is a lightweight self-hosted Git server developed in Go language, offering teams an easy-to-deploy code management solution. Besides supporting multiple operating systems like Linux, Windows, and macOS, it features comprehensive code review, issue tracking, and Wiki functionalities that significantly enhance team collaboration efficiency.
+[Gitea][2] is a lightweight self-hosted Git server written in Go, providing teams with an easily deployable code management solution. It supports multiple operating systems including Linux, Windows, and macOS, while offering comprehensive features for code review, issue tracking, and Wiki management—all essential tools for enhancing team collaboration.
 
-[Jira][1] is a professional project management and issue tracking system developed by Atlassian. Widely adopted by software development teams, Jira not only provides complete issue tracking functionality but also supports agile development processes (such as Scrum and Kanban) and rich data analytics features, effectively helping teams manage project progress and improve collaboration quality.
+[Jira][1] is Atlassian's professional project management and issue tracking system. Widely adopted by software development teams worldwide, Jira excels in issue tracking, supports agile methodologies (including Scrum and Kanban), and provides robust data analytics capabilities to optimize project management and team collaboration.
 
 [1]: https://www.atlassian.com/software/jira
 [2]: https://about.gitea.com/
@@ -28,9 +28,9 @@ Before we begin, let's understand what [Gitea][2] and [Jira][1] are. I recommend
 
 ## Problem Description
 
-In our department's software development process, Git serves as the primary version control system, with Gitea functioning as the Git server. Development teams use Jira for issue tracking and management during program development. However, since Gitea and Jira are two separate systems, establishing an effective connection between code commits and Jira issues has become a crucial challenge we need to address.
+In our department's development workflow, while Git serves as our version control system with Gitea as our Git server, and Jira handles our issue tracking, we faced a significant challenge: bridging the gap between code commits and Jira issues effectively.
 
-While there are many solutions available for integrating Jira with Git services like Bitbucket, GitHub, and GitLab, there are relatively few integration options for self-hosted Git servers like Gitea. This issue has been [discussed in the Gitea community][11], with users seeking suitable solutions.
+While robust integration solutions exist for Jira with services like Bitbucket, GitHub, and GitLab, options for self-hosted Git servers like Gitea are limited. This integration challenge has been a [notable discussion point in the Gitea community][11].
 
 [11]: https://github.com/go-gitea/gitea/issues/25852
 
@@ -47,7 +47,7 @@ By recording Jira issue numbers in commit logs, developers can directly view rel
 
 ## Design Process
 
-Before project execution, the team needs to map software development workflows to Jira states for more effective project progress tracking. Here are the basic software development workflow states we designed:
+Prior to implementation, we needed to establish a clear mapping between our software development workflow and Jira states to ensure effective progress tracking. Our workflow encompasses these key states:
 
 1. Backlog: Issues to be processed
 2. Open: Issues under development
@@ -69,9 +69,7 @@ We expect the development team to follow these processes strictly and automatica
 
 ## Integrating Jira with Gitea Action
 
-Gitea Action is one of Gitea platform's core features that can automatically trigger preset tasks when Git operations occur (such as Commit, Push, etc.), like sending email notifications, Slack messages, or executing custom scripts. We can utilize this feature to implement automated integration between Gitea and Jira, establishing real-time associations between commits and Jira issues.
-
-Why did we specifically choose Gitea Action for this integration? Mainly because it's a native Gitea feature that not only fully supports various Git operation events (such as Push, Pull Request, Issue Comment, etc.) but also allows more flexible handling of integration requirements. For more implementation details, you can refer to the [appleboy/jira-action](https://github.com/appleboy/jira-action) open-source project.
+We chose Gitea Action as our integration tool because it's a native feature that provides comprehensive support for Git operation events while offering flexible integration capabilities. For technical implementation details, refer to the [appleboy/jira-action](https://github.com/appleboy/jira-action) project.
 
 ### Creating New Branches
 
@@ -203,8 +201,8 @@ Beyond these state transitions, you can make adjustments based on actual needs, 
 
 ## Conclusion
 
-Through the above integration design process, our team successfully achieved seamless integration between Gitea and Jira. This integration solution not only improves work efficiency but also ensures system security. Developers only need to tag Jira issue numbers in commit messages, and the system automatically establishes associations, greatly simplifying the tracking and management process. Meanwhile, we've also established a complete software development process guide to help team members follow standard operating procedures, effectively improving team collaboration efficiency.
+Through this integration implementation, we've successfully bridged Gitea and Jira, creating a seamless workflow that enhances both efficiency and security. Developers now only need to reference Jira issue numbers in their commit messages, and the system handles all the necessary associations automatically.
 
-Currently, our team is executing a large-scale project involving approximately 20 developers. Over the two years since the project's inception, we've accumulated nearly 5,000 issues, with more than ten new issues being added daily. Without the assistance of such automation tools, effectively managing such a large volume of issues would be a significant challenge.
+Our current project, involving a team of 20 developers, has managed nearly 5,000 issues over two years, with an average of ten new issues daily. Managing this volume of work would be challenging without our automated solution.
 
-Through the Gitea and Jira integration solution, we've not only resolved issue management concerns but also comprehensively optimized the development process. Compared to the previous approach where developers needed to manually update states in Jira, the automated process not only improves efficiency but also significantly reduces the risk of human error. This integration solution has brought significant benefits to the team, fully demonstrating the importance of automation tools in large-scale software development projects.
+This integration has not only streamlined our issue management but has also optimized our entire development process. By eliminating the need for manual Jira status updates, we've significantly improved efficiency while reducing human error. The success of this integration demonstrates the crucial role of automation tools in managing large-scale software development projects effectively.
