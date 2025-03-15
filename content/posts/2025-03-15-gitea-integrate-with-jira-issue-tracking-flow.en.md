@@ -3,7 +3,7 @@ title: "Integrating Gitea with Jira Software Development Workflow"
 date: 2025-03-15T12:22:24+08:00
 author: appleboy
 type: post
-slug: gitea-jira-integration-en
+slug: gitea-integrate-with-jira-issue-tracking-flow-en
 share_img: /images/2025-03-15/blog-logo.png
 categories:
   - git

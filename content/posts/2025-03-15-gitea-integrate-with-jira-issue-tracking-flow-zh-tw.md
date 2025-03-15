@@ -3,7 +3,7 @@ title: "Gitea 與 Jira 軟體開發流程整合"
 date: 2025-03-15T08:42:24+08:00
 author: appleboy
 type: post
-slug: gitea-jira-integration-zh-tw
+slug: gitea-integrate-with-jira-issue-tracking-flow-zh-tw
 share_img: /images/2025-03-15/blog-logo.png
 categories:
   - git
