@@ -59,44 +59,7 @@ The slides for this workshop have been uploaded to Speaker Deck and can be viewe
 
 ![oauth flow](/images/2025-07-03/oauth-flow-02.png)
 
-For the complete OAuth token flow, see the [MCP specification][11]. A simplified flow is as follows:
-
-```mermaid
-sequenceDiagram
-participant B as User Agent (Browser)
-participant C as Client
-participant M as MCP Server (Resource Server)
-participant A as Authorization Server
-
-    C->>M: MCP request (no token)
-    M->>C: HTTP 401 Unauthorized + WWW-Authenticate header
-    Note over C: Parse WWW-Authenticate to get resource_metadata URL
-
-    C->>M: Request protected resource Metadata
-    M->>C: Return Metadata
-
-    Note over C: Parse Metadata to get Authorization Server\nDecide which AS to use
-
-    C->>A: GET /.well-known/oauth-authorization-server
-    A->>C: Return Authorization Server metadata
-
-    alt Dynamic Client Registration
-        C->>A: POST /register
-        A->>C: Return client credentials
-    end
-
-    Note over C: Generate PKCE parameters
-    C->>B: Open browser with authorization URL containing code_challenge
-    B->>A: Authorization request
-    Note over A: User authorizes
-    A->>B: Callback with authorization code
-    B->>C: Callback returns authorization code
-    C->>A: Token request with code_verifier
-    A->>C: Return Access token (refresh token)
-    C->>M: MCP request with access token
-    M-->>C: MCP response
-    Note over C,M: After obtaining token, MCP communication continues
-```
+For the complete OAuth token flow, see the [MCP specification][11].
 
 ## Related Resources
 

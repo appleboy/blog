@@ -51,44 +51,7 @@ categories:
 
 ![oauth flow](/images/2025-07-03/oauth-flow-02.png)
 
-完整 OAuth token 流程詳見 [MCP 規範][11]。簡易流程如下：
-
-```mermaid
-sequenceDiagram
-participant B as 使用者代理（瀏覽器）
-participant C as 客戶端
-participant M as MCP 伺服器（資源伺服器）
-participant A as 授權伺服器
-
-    C->>M: MCP 請求（無 token）
-    M->>C: HTTP 401 Unauthorized + WWW-Authenticate 標頭
-    Note over C: 解析 WWW-Authenticate 取得 resource_metadata URL
-
-    C->>M: 請求受保護資源 Metadata
-    M->>C: 返回 Metadata
-
-    Note over C: 解析 Metadata 取得授權伺服器\n決定使用哪個 AS
-
-    C->>A: GET /.well-known/oauth-authorization-server
-    A->>C: 返回授權伺服器 metadata
-
-    alt 動態客戶端註冊
-        C->>A: POST /register
-        A->>C: 返回用戶端憑證
-    end
-
-    Note over C: 產生 PKCE 參數
-    C->>B: 用含 code_challenge 的授權 URL 開啟瀏覽器
-    B->>A: 授權請求
-    Note over A: 用戶授權
-    A->>B: 回調帶回授權碼
-    B->>C: 回調返回授權碼
-    C->>A: 用 code_verifier 發起 token 請求
-    A->>C: 返回 Access token（refresh token）
-    C->>M: 附帶 access token 的 MCP 請求
-    M-->>C: MCP 回應
-    Note over C,M: 取得 token 後，MCP 通信持續進行
-```
+完整 OAuth token 流程詳見 [MCP 規範][11]。
 
 ## 相關資源
 
