@@ -1,6 +1,6 @@
 ---
 title: "Step-by-Step Guide to Building MCP Server and Client with Golang (Model Context Protocol)"
-date: 2025-07-08T15:30:58+08:00
+date: 2025-07-08T15:42:58+08:00
 author: appleboy
 type: post
 slug: step-by-step-golang-mcp-server-client-en
@@ -59,7 +59,11 @@ The slides for this workshop have been uploaded to Speaker Deck and can be viewe
 
 ![oauth flow](/images/2025-07-03/oauth-flow-02.png)
 
-For the complete OAuth token flow, see the [MCP specification][11].
+For the complete OAuth token flow, see the [MCP specification][11]. The detailed process can be seen in the simplified diagram below:
+
+![oauth flow](/images/2025-07-03/oauth-flow.png)
+
+I will explain in detail how to implement this flow in Golang in a future article.
 
 ## Related Resources
 

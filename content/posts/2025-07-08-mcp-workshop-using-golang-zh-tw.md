@@ -51,7 +51,11 @@ categories:
 
 ![oauth flow](/images/2025-07-03/oauth-flow-02.png)
 
-完整 OAuth token 流程詳見 [MCP 規範][11]。
+完整 OAuth token 流程詳見 [MCP 規範][11]。細部流程可以看底下簡化的流程圖：
+
+![oauth flow](/images/2025-07-03/oauth-flow.png)
+
+之後找機會深入跟大家解釋如何在 Golang 中實作這個流程。
 
 ## 相關資源
 
