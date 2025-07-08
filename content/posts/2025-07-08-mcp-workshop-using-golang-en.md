@@ -1,0 +1,104 @@
+---
+title: "Step-by-Step Guide to Building MCP Server and Client with Golang (Model Context Protocol)"
+date: 2025-07-08T10:42:58+08:00
+author: appleboy
+type: post
+slug: step-by-step-golang-mcp-server-client-en
+share_img: /images/2025-07-03/mcp-golang.png
+categories:
+  - golang
+  - mcp
+---
+
+![blog logo](/images/2025-07-03/mcp-golang.png)
+
+In 2025, I delivered a workshop at the [iThome Taiwan Cloud Summit][2] in Taipei, titled "**Step-by-Step Guide to Building MCP Server and Client with [Golang][4]** ([Model Context Protocol][1])". The goal of this workshop was to help developers understand how to implement the MCP protocol using Golang, providing practical code examples and hands-on guidance. I have organized all workshop materials into a GitHub repository, which you can find at [go-training/mcp-workshop](https://github.com/go-training/mcp-workshop). For detailed workshop content, please [refer to this link][3].
+
+[1]: https://modelcontextprotocol.io/introduction
+[2]: https://cloudsummit.ithome.com.tw/2025/
+[3]: https://cloudsummit.ithome.com.tw/2025/lab-page/3721
+[4]: https://go.dev/
+
+<!--more-->
+
+## Workshop Content
+
+This workshop is composed of a series of practical modules, each demonstrating how to build an MCP (Model Context Protocol) server and its foundational infrastructure in Go.
+
+- **[01. Basic MCP Server](https://github.com/go-training/mcp-workshop/tree/main/01-basic-mcp/):**
+
+  - Provides a minimal MCP server implementation supporting both stdio and HTTP, using Gin. Demonstrates server setup, tool registration, and best practices for logging and error handling.
+  - _Key features:_ Dual stdio/HTTP channels, Gin integration, extensible tool registration
+
+- **[02. Basic Token Passthrough](https://github.com/go-training/mcp-workshop/tree/main/02-basic-token-passthrough/):**
+
+  - Supports transparent authentication token passthrough for HTTP and stdio, explaining context injection and tool development for authenticated requests.
+  - _Key features:_ Token passthrough, context injection, authentication tool examples
+
+- **[03. OAuth MCP Server](https://github.com/go-training/mcp-workshop/tree/main/03-oauth-mcp/):**
+
+  - An MCP server protected by OAuth 2.0, demonstrating authorization, token, and resource metadata endpoints, including context token handling and tools for API authentication.
+  - _Key features:_ OAuth 2.0 flow, protected endpoints, context token propagation, demo tools
+
+- **[04. Observability](https://github.com/go-training/mcp-workshop/tree/main/04-observability/):**
+
+  - Observability and tracing for MCP servers, integrating OpenTelemetry and structured logging, including metrics, detailed tracing, and error reporting.
+  - _Key features:_ Tracing, structured logging, observability middleware, error reporting
+
+- **[05. MCP Proxy](https://github.com/go-training/mcp-workshop/tree/main/05-mcp-proxy/):**
+  - A proxy server that aggregates multiple MCP servers into a single endpoint. Supports real-time streaming, centralized configuration, and enhanced security.
+  - _Key features:_ Unified entry point, SSE/HTTP streaming, flexible configuration, improved security
+
+## Slides
+
+{{< speakerdeck id="b22ffee1bc884cb0a2628781a5668a20" >}}
+
+The slides for this workshop have been uploaded to Speaker Deck and can be viewed on the [Building MCP Model Context Protocol with Golang Speaker Deck page](https://speakerdeck.com/appleboy/building-mcp-model-context-protocol-with-golang). During the 90-minute workshop, there was no time for hands-on practice, mainly because the [OAuth flow in MCP][11] is quite complex and required a significant portion of the session to explain. I will write a separate article to introduce how to implement the OAuth flow in Golang.
+
+[11]: https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
+
+![oauth flow](/images/2025-07-03/oauth-flow-02.png)
+
+For the complete OAuth token flow, see the [MCP specification][11]. A simplified flow is as follows:
+
+```mermaid
+sequenceDiagram
+participant B as User Agent (Browser)
+participant C as Client
+participant M as MCP Server (Resource Server)
+participant A as Authorization Server
+
+    C->>M: MCP request (no token)
+    M->>C: HTTP 401 Unauthorized + WWW-Authenticate header
+    Note over C: Parse WWW-Authenticate to get resource_metadata URL
+
+    C->>M: Request protected resource Metadata
+    M->>C: Return Metadata
+
+    Note over C: Parse Metadata to get Authorization Server\nDecide which AS to use
+
+    C->>A: GET /.well-known/oauth-authorization-server
+    A->>C: Return Authorization Server metadata
+
+    alt Dynamic Client Registration
+        C->>A: POST /register
+        A->>C: Return client credentials
+    end
+
+    Note over C: Generate PKCE parameters
+    C->>B: Open browser with authorization URL containing code_challenge
+    B->>A: Authorization request
+    Note over A: User authorizes
+    A->>B: Callback with authorization code
+    B->>C: Callback returns authorization code
+    C->>A: Token request with code_verifier
+    A->>C: Return Access token (refresh token)
+    C->>M: MCP request with access token
+    M-->>C: MCP response
+    Note over C,M: After obtaining token, MCP communication continues
+```
+
+## Related Resources
+
+- [MCP Official Website](https://modelcontextprotocol.io/)
+- [Let's fix OAuth in MCP](https://aaronparecki.com/2025/04/03/15/oauth-for-model-context-protocol)

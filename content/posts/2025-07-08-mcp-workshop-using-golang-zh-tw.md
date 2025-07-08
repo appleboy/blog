@@ -3,7 +3,7 @@ title: "一步步學會用 Golang 開發 MCP 伺服器與客戶端 (Model Contex
 date: 2025-07-08T10:42:58+08:00
 author: appleboy
 type: post
-slug: step-by-step-golang-mcp-server-client
+slug: step-by-step-golang-mcp-server-client-zh-tw
 share_img: /images/2025-07-03/mcp-golang.png
 categories:
   - golang
