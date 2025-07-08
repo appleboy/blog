@@ -1,6 +1,6 @@
 ---
 title: "Step-by-Step Guide to Building MCP Server and Client with Golang (Model Context Protocol)"
-date: 2025-07-08T10:42:58+08:00
+date: 2025-07-08T15:30:58+08:00
 author: appleboy
 type: post
 slug: step-by-step-golang-mcp-server-client-en
