@@ -94,3 +94,4 @@ participant A as 授權伺服器
 
 - [MCP 官方網站](https://modelcontextprotocol.io/)
 - [Let's fix OAuth in MCP](https://aaronparecki.com/2025/04/03/15/oauth-for-model-context-protocol)
+- [go-training/mcp-workshop](https://github.com/go-training/mcp-workshop)

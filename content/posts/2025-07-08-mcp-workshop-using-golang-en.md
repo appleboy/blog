@@ -102,3 +102,4 @@ participant A as Authorization Server
 
 - [MCP Official Website](https://modelcontextprotocol.io/)
 - [Let's fix OAuth in MCP](https://aaronparecki.com/2025/04/03/15/oauth-for-model-context-protocol)
+- [go-training/mcp-workshop](https://github.com/go-training/mcp-workshop)
