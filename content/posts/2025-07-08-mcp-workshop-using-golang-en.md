@@ -53,7 +53,7 @@ This workshop is composed of a series of practical modules, each demonstrating h
 
 {{< speakerdeck id="b22ffee1bc884cb0a2628781a5668a20" >}}
 
-The slides for this workshop have been uploaded to Speaker Deck and can be viewed on the [Building MCP Model Context Protocol with Golang Speaker Deck page](https://speakerdeck.com/appleboy/building-mcp-model-context-protocol-with-golang). During the 90-minute workshop, there was no time for hands-on practice, mainly because the [OAuth flow in MCP][11] is quite complex and required a significant portion of the session to explain. I will write a separate article to introduce how to implement the OAuth flow in Golang.
+The slides for this workshop have been uploaded to Speaker Deck and can be [viewed here](https://speakerdeck.com/appleboy/building-mcp-model-context-protocol-with-golang). In the 90-minute workshop, there was no time for everyone to practice because the [OAuth flow in MCP][11] is more complex, so a lot of time was spent explaining this part. I will write another article to introduce how to implement the OAuth flow in Golang.
 
 [11]: https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
 
@@ -64,6 +64,14 @@ For the complete OAuth token flow, see the [MCP specification][11]. The detailed
 ![oauth flow](/images/2025-07-03/oauth-flow.png)
 
 I will explain in detail how to implement this flow in Golang in a future article.
+
+## On-site Photos
+
+The event was attended by approximately 40 people. The venue was very spacious and lunch was provided. Thanks to the iThome team for the arrangements.
+
+![workshop01](/images/2025-07-03/workshop01.png)
+
+![workshop02](/images/2025-07-03/workshop02.png)
 
 ## Related Resources
 

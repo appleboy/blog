@@ -57,6 +57,14 @@ categories:
 
 之後找機會深入跟大家解釋如何在 Golang 中實作這個流程。
 
+## 現場照片
+
+現場人數大約在 40 人左右。場地非常寬敞，並且有提供午餐。感謝 iThome 團隊的安排。
+
+![workshop01](/images/2025-07-03/workshop01.png)
+
+![workshop02](/images/2025-07-03/workshop02.png)
+
 ## 相關資源
 
 - [MCP 官方網站](https://modelcontextprotocol.io/)
