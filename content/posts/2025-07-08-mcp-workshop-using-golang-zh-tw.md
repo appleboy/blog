@@ -4,13 +4,13 @@ date: 2025-07-08T10:42:58+08:00
 author: appleboy
 type: post
 slug: step-by-step-golang-mcp-server-client-zh-tw
-share_img: /images/2025-07-03/mcp-golang.png
+share_img: /images/2025-07-03/mcp-golang_1024x592.png
 categories:
   - golang
   - mcp
 ---
 
-![blog logo](/images/2025-07-03/mcp-golang.png)
+![blog logo](/images/2025-07-03/mcp-golang_1024x592.png)
 
 2025 年在台北 [iThome 臺灣雲端大會][2] (CloudSummit) 給一場 Workshop，主題是「**一步步學會用 [Golang][4] 開發 MCP 伺服器與客戶端** ([Model Context Protocol][1])」。這次的工作坊旨在幫助開發者了解如何使用 Golang 實現 MCP 協議，並提供實際的程式碼範例和操作指南。我已經先將 Workshop 的內容整理成一個 GitHub Repo，您可以在 [go-training/mcp-workshop](https://github.com/go-training/mcp-workshop) 找到相關資源。詳細 Workshop 內容，請[參考此連結][3]。
 
@@ -49,11 +49,11 @@ categories:
 
 [11]: https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization
 
-![oauth flow](/images/2025-07-03/oauth-flow-02.png)
+![oauth flow](/images/2025-07-03/oauth-flow-02_1024x824.png)
 
 完整 OAuth token 流程詳見 [MCP 規範][11]。細部流程可以看底下簡化的流程圖：
 
-![oauth flow](/images/2025-07-03/oauth-flow.png)
+![oauth flow](/images/2025-07-03/oauth-flow_1024x872.png)
 
 之後找機會深入跟大家解釋如何在 Golang 中實作這個流程。
 
