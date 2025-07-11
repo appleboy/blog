@@ -69,9 +69,9 @@ I will explain in detail how to implement this flow in Golang in a future articl
 
 The event was attended by approximately 40 people. The venue was very spacious and lunch was provided. Thanks to the iThome team for the arrangements.
 
-![workshop01](/images/2025-07-03/workshop01.png)
+![workshop01](/images/2025-07-03/workshop01_1024x581.png)
 
-![workshop02](/images/2025-07-03/workshop02.png)
+![workshop02](/images/2025-07-03/workshop02_1024x568.png)
 
 ## Related Resources
 

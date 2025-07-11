@@ -61,9 +61,9 @@ categories:
 
 現場人數大約在 40 人左右。場地非常寬敞，並且有提供午餐。感謝 iThome 團隊的安排。
 
-![workshop01](/images/2025-07-03/workshop01.png)
+![workshop01](/images/2025-07-03/workshop01_1024x581.png)
 
-![workshop02](/images/2025-07-03/workshop02.png)
+![workshop02](/images/2025-07-03/workshop02_1024x568.png)
 
 ## 相關資源
 
