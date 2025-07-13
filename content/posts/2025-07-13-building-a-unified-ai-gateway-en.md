@@ -43,6 +43,10 @@ The slides for this talk have been uploaded to Speaker Deck, and you can [view t
 
 In 2022, the emergence of ChatGPT rapidly popularized Generative AI technology. With tech giants like OpenAI, Google, and Microsoft joining the fray, the ecosystem of AI services has become increasingly complex. At that time, there was no available API Gateway to uniformly manage these services. Developers had to deal with different APIs, authentication, and authorization mechanisms, which was a huge challenge for enterprises. Therefore, the team spent a lot of time developing a unified API Gateway. This Gateway not only integrates multiple AI services but also provides a secure and scalable solution. I am also very grateful to the team members at the time, [Rueian](https://github.com/rueian), and other colleagues who assisted.
 
+Behind the scenes, it uses the [rueidis][11] package developed by [Rueian](https://github.com/rueian), which is a high-performance Redis client that supports features like Pub/Sub, Pipeline, and Transaction. This package has been officially recognized by Redis and is widely used.
+
+[11]: https://github.com/redis/rueidis
+
 ![slide02](/images/2025-07-13/slide02.png)
 
 The purpose of this talk is to share our experiences and lessons learned during the development of this API Gateway and to demonstrate how to use Golang to implement an efficient and scalable solution. It includes the following items:
