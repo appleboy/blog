@@ -43,7 +43,7 @@ categories:
 
 2022 年 ChatGPT 橫空出世，讓 Generative AI 技術迅速普及。隨著 OpenAI、Google、Microsoft 等科技巨頭的加入，AI 服務的生態系統變得越來越複雜。而當時沒有一個可用的 API Gateway 來統一管理這些服務，開發者需要面對不同的 API、身份驗證和授權機制，這對企業來說是一個巨大的挑戰。所以團隊花了大量時間來開發一個統一的 API Gateway，這個 Gateway 不僅能夠整合多個 AI 服務，還能提供安全、可擴展的解決方案。也非常感謝當時的團隊成員 [Rueian](https://github.com/rueian) 及其他協助同仁。
 
-背後使用的是 [Rueian](https://github.com/rueian) 所開發的 [rueidis][11] 套件，這是一個高效的 Redis 客戶端，能夠支援 Pub/Sub、Pipeline、Transaction 等功能。此套件已經被 Redis 官方認可並廣泛使用。
+背後使用的是 [Rueian](https://github.com/rueian) 所開發的 [rueidis][11] 套件，這是一個高效的 Redis 客戶端，能夠支援 Pipeline、Transaction 等功能。此套件已經被 Redis 官方認可並廣泛使用。
 
 [11]: https://github.com/redis/rueidis
 
