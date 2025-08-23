@@ -30,6 +30,11 @@ This was my second [public talk][3] at the 2025 [iThome CloudSummit Taiwan][2]. 
 [6]: https://cloud.google.com/products/gemini
 
 <!--more-->
+## Conference Video
+
+{{< youtube bU2THb1SW9Q >}}
+
+The video quality is not very good; sorry for the inconvenience. Please turn up the volume.
 
 ## Slides
 

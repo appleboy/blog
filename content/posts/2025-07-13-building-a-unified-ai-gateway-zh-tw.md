@@ -31,6 +31,12 @@ categories:
 
 <!--more-->
 
+## 會議影片
+
+{{< youtube bU2THb1SW9Q >}}
+
+品質沒有到很好，請見諒，聲音請轉到最大聲
+
 ## 投影片
 
 {{< speakerdeck id="78492040ee3c4be9af4ca76a8b8d7fa9" >}}
