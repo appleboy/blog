@@ -2,7 +2,7 @@
 title: "From Natural Language to K8s Operations: The MCP Architecture and Practice of kubectl-ai"
 date: 2025-10-25T10:54:53+08:00
 slug: from-natural-language-to-k8s-operations-the-mcp-architecture-and-practice-of-kubectl-ai-en
-share_img: /images/2025-10-25/blog-cover.png
+share_img: /images/2025-10-25/blog-cover_1024x983.png
 categories:
   - kubernetes
   - AI
@@ -11,7 +11,7 @@ categories:
   - mcp-client
 ---
 
-![blog cover](/images/2025-10-25/blog-cover.png)
+![blog cover](/images/2025-10-25/blog-cover_1024x983.png)
 
 [kubectl-ai][1] is a revolutionary open-source project that seamlessly integrates Large Language Models (LLMs) with [Kubernetes][2] operations, enabling users to interact intelligently with K8s clusters using natural language. This article explores how this innovative technology addresses the pain points of traditional [kubectl][3] command complexity and significantly lowers the barrier to entry for Kubernetes users.
 
@@ -82,7 +82,7 @@ spec:
 
 As you can see, the Deployment above contains two errors: first, the Nginx image tag is incorrect; second, the memory request value is too high. When we ask kubectl-ai "Why won't Nginx start?", it analyzes these configuration errors and provides specific solutions.
 
-![demo01](/images/2025-10-25/demo01.png)
+![demo01](/images/2025-10-25/demo01_1024x826.png)
 
 In summary, kubectl-ai as a K8s diagnostic assistant significantly improves operational efficiency and reduces troubleshooting time, allowing operations teams to focus more on core business needs. Of course, I know many will say that similar functionality can be achieved through [Claude Code][15], but kubectl-ai is specifically designed for Kubernetes and can understand K8s operational mechanisms more deeply, providing more precise diagnostic recommendations. Beyond this, kubectl-ai offers two additional major features: MCP Server + MCP Client modes. Let's explore these further.
 
@@ -90,7 +90,7 @@ In summary, kubectl-ai as a K8s diagnostic assistant significantly improves oper
 
 ### 2. MCP-Server Mode: Extending LLM Capabilities
 
-![mcp-server](/images/2025-10-25/mcp-server.png)
+![mcp-server](/images/2025-10-25/mcp-server_1024x696.png)
 
 MCP-Server mode allows kubectl-ai to act as a bridge, integrating multiple LLM capabilities into Kubernetes operations. In this mode, kubectl-ai can invoke external LLM services such as Google Gemini, Anthropic Sonnet, or Azure OpenAI to handle complex natural language requests. You can start the MCP-Server with just one command:
 
@@ -141,7 +141,7 @@ kubectl-ai --mcp-server \
 
 ### 3. MCP-Client Mode: Multiple Services with One Command
 
-![mcp-client](/images/2025-10-25/mcp-client.png)
+![mcp-client](/images/2025-10-25/mcp-client_1024x529.png)
 
 Traditionally, when we want to scan RBAC security reports with kubectl, organize them, and send emails to supervisors or notifications via Slack, we typically need to write complex scripts to implement these functions. With kubectl-ai's MCP-Client mode, these tasks can be accomplished with just one command.
 

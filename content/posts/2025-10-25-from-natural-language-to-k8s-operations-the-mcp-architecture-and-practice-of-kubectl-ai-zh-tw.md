@@ -2,7 +2,7 @@
 title: "從自然語言到 K8s 操作：kubectl-ai 的 MCP 架構與實踐"
 date: 2025-10-25T09:53:53+08:00
 slug: from-natural-language-to-k8s-operations-the-mcp-architecture-and-practice-of-kubectl-ai-zh-tw
-share_img: /images/2025-10-25/blog-cover.png
+share_img: /images/2025-10-25/blog-cover_1024x983.png
 categories:
   - kubernetes
   - AI
@@ -11,7 +11,7 @@ categories:
   - mcp-client
 ---
 
-![blog cover](/images/2025-10-25/blog-cover.png)
+![blog cover](/images/2025-10-25/blog-cover_1024x983.png)
 
 [kubectl-ai][1] 是一個革命性的開源專案，將大型語言模型與 [Kubernetes][2] 運維完美結合，讓用戶能夠透過自然語言與 K8s 集群進行智能交互。本文將深入探討這項創新技術如何解決傳統 [kubectl][3] 命令複雜性的痛點，大幅降低 Kubernetes 的使用門檻。
 
@@ -82,7 +82,7 @@ spec:
 
 可以看到上面的 Deployment 有兩個錯誤：一是 Nginx 映像檔標籤錯誤，二是記憶體請求值過高。當我們使用 kubectl-ai 詢問「為什麼 Nginx 不能啟動？」時，它會分析這些配置錯誤並提供具體的解決方案。
 
-![demo01](/images/2025-10-25/demo01.png)
+![demo01](/images/2025-10-25/demo01_1024x826.png)
 
 總結來說，kubectl-ai 作為 k8s 問題診斷助手，大大提升了運維效率，減少了排查時間，讓運維人員能夠更專注於核心業務。當然我知道大家會說，透過 [Claude Code][15] 也可以做到類似的功能，不過 kubectl-ai 是專門針對 Kubernetes 設計，能夠更深入地理解 k8s 的運作機制，提供更精準的診斷建議。除此之外，kubectl-ai 還提供兩大功能：MCP Server + MCP Client 模式，讓我們繼續看下去。
 
@@ -90,7 +90,7 @@ spec:
 
 ### 2. MCP-Server 模式：擴展 LLM 功能
 
-![mcp-server](/images/2025-10-25/mcp-server.png)
+![mcp-server](/images/2025-10-25/mcp-server_1024x696.png)
 
 MCP-Server 模式允許 kubectl-ai 作為一個中介，將多種 LLM 功能整合到 Kubernetes 運維中。這種模式下，kubectl-ai 可以調用外部的 LLM 服務，如 Google Gemini、Anthropic Sonnet 或 Azure OpenAI，來處理複雜的自然語言請求。只用一行指令就能啟動 MCP-Server：
 
@@ -141,7 +141,7 @@ kubectl-ai --mcp-server \
 
 ### 3. MCP-Client 模式：一行指令使用多個服務
 
-![mcp-client](/images/2025-10-25/mcp-client.png)
+![mcp-client](/images/2025-10-25/mcp-client_1024x529.png)
 
 傳統上，我們想將 kubectl 掃描 RBAC 安全性報告進行整理，並且發信給主管，或者是透過 Slack 傳送通知，通常需要撰寫複雜的腳本來實現這些功能。而使用 kubectl-ai 的 MCP-Client 模式，只需一行指令即可完成這些任務。
 
