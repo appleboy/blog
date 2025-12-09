@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>GitHub Actions on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/categories/github-actions/</link><description>Recent content in GitHub Actions on 小惡魔 - AppleBOY</description><generator>Hugo</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Tue, 09 Dec 2025 14:51:47 +0800</lastBuildDate><atom:link href="https://blog.wu-boy.com/categories/github-actions/feed.xml" rel="self" type="application/rss+xml"/><item><title>打造 AI 驅動的 GitHub 工作流程：LLM Action 完整指南</title><link>https://blog.wu-boy.com/2025/12/building-ai-powered-github-workflows-with-llm-action-zh-tw/</link><pubDate>Tue, 09 Dec 2025 14:51:47 +0800</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2025/12/building-ai-powered-github-workflows-with-llm-action-zh-tw/</guid><description>&lt;p>&lt;img src="https://blog.wu-boy.com/images/2025-12-09/blog-cover_800x457.png" alt="blog cover">&lt;/p>
+&lt;p>在 AI 時代，將大型語言模型整合進 CI/CD 流程已成為提升開發效率的關鍵。然而，現有的解決方案往往綁定特定服務商，且 LLM 的輸出通常是非結構化的自由文字，難以在自動化流程中可靠地解析與使用。&lt;a href="https://github.com/appleboy/LLM-action">LLM Action&lt;/a> 的誕生正是為了解決這些痛點。&lt;/p>
+&lt;p>最核心的特色是支援 &lt;a href="https://platform.openai.com/docs/guides/function-calling">Tool Schema&lt;/a> 結構化輸出——你可以預先定義 JSON Schema，讓 LLM 的回應強制符合指定格式。這意味著 AI
+不再只是回傳一段文字，而是產出可預測、可解析的結構化資料，每個欄位都會自動轉換為 GitHub Actions
+的輸出變數，讓後續步驟能直接取用，無需額外的字串解析或正則表達式處理。這徹底解決了 LLM 輸出不穩定、難以整合進自動化流程的問題。&lt;/p>
+&lt;p>此外，LLM Action 提供統一介面串接任何 OpenAI 相容的服務，無論是雲端的 OpenAI、Azure OpenAI，還是本地部署的 Ollama、LocalAI、LM Studio、vLLM
+等自託管方案，都能無縫切換。&lt;/p>
+&lt;p>實際應用場景包括：&lt;/p>
+&lt;ul>
+&lt;li>自動化 Code Review：定義 Schema 輸出 &lt;code>score&lt;/code>、&lt;code>issues&lt;/code>、&lt;code>suggestions&lt;/code> 等欄位，直接用於判斷是否通過審查&lt;/li>
+&lt;li>PR 摘要生成：結構化輸出 &lt;code>title&lt;/code>、&lt;code>summary&lt;/code>、&lt;code>breaking_changes&lt;/code> 供後續自動更新 PR 描述&lt;/li>
+&lt;li>Issue 分類：輸出 &lt;code>category&lt;/code>、&lt;code>priority&lt;/code>、&lt;code>labels&lt;/code> 自動為 Issue 加上標籤&lt;/li>
+&lt;li>Release Notes：產出 &lt;code>features&lt;/code>、&lt;code>bugfixes&lt;/code>、&lt;code>breaking&lt;/code> 陣列，自動組成格式化的發布說明&lt;/li>
+&lt;li>多語言翻譯：批次輸出多個語言欄位，一次 API 呼叫完成多語系翻譯&lt;/li>
+&lt;/ul>
+&lt;p>透過 Schema 定義，LLM Action 讓 AI 輸出從「不可預測的文字」變成「可程式化的資料」，真正實現端到端的 AI 自動化工作流程。&lt;/p></description></item></channel></rss>
