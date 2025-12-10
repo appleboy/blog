@@ -261,6 +261,16 @@ Each field automatically becomes a GitHub Actions output variable:
 - `${{ steps.review.outputs.score }}` → `8`
 - `${{ steps.review.outputs.approved }}` → `no`
 
+Additionally, the complete JSON result is stored in `steps.review.outputs.response`. You can use `${{ fromJSON(steps.review.outputs.response) }}` to access the entire object, which is convenient when you need to process multiple fields at once:
+
+```yaml
+- name: Process full response
+  run: |
+    echo "Full response: ${{ steps.review.outputs.response }}"
+    # Or use fromJSON to access specific fields
+    echo "Score: ${{ fromJSON(steps.review.outputs.response).score }}"
+```
+
 This solves the pain points of traditional approaches:
 
 | Traditional Approach                    | Using Tool Schema                            |

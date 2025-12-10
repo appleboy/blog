@@ -264,6 +264,16 @@ jobs:
 - `${{ steps.review.outputs.score }}` → `8`
 - `${{ steps.review.outputs.approved }}` → `no`
 
+此外，完整的 JSON 結果也會存放在 `steps.review.outputs.response` 中，你可以透過 `${{ fromJSON(steps.review.outputs.response) }}` 取得整個物件，方便在需要一次處理多個欄位時使用：
+
+```yaml
+- name: Process full response
+  run: |
+    echo "完整回應: ${{ steps.review.outputs.response }}"
+    # 或透過 fromJSON 取得特定欄位
+    echo "評分: ${{ fromJSON(steps.review.outputs.response).score }}"
+```
+
 這解決了傳統做法的痛點：
 
 | 傳統做法             | 使用 Tool Schema                      |
