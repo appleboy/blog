@@ -34,6 +34,10 @@ Through Schema definition, LLM Action transforms AI output from "unpredictable t
 
 <!--more-->
 
+## Presentation (From AI)
+
+{{< speakerdeck id="c4d727d03eb442e39f011535226e7239" >}}
+
 ## Basic Usage
 
 The simplest usage only requires providing an API Key, model name, and Prompt:

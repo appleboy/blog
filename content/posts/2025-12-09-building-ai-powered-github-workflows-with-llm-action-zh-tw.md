@@ -37,6 +37,10 @@ categories:
 
 <!--more-->
 
+## 簡報 (由 AI 生成)
+
+{{< speakerdeck id="c4d727d03eb442e39f011535226e7239" >}}
+
 ## 基本使用方式
 
 最簡單的使用方式，只需要提供 API Key、模型名稱和 Prompt：
