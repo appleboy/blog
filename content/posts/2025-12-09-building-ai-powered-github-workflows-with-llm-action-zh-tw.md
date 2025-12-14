@@ -3,7 +3,7 @@ title: "打造 AI 驅動的 GitHub 工作流程：LLM Action 完整指南"
 date: 2025-12-09T14:51:47+08:00
 draft: false
 slug: building-ai-powered-github-workflows-with-llm-action-zh-tw
-share_img: /images/2025-12-09/blog-cover_800x457.png
+share_img: /images/2025-12-09/blog_cover_1024x572_tw.png
 categories:
   - GitHub Actions
   - AI
@@ -11,7 +11,7 @@ categories:
   - DevOps
 ---
 
-![blog cover](/images/2025-12-09/blog-cover_800x457.png)
+![blog cover](/images/2025-12-09/blog_cover_1024x572_tw.png)
 
 在 AI 時代，將大型語言模型整合進 CI/CD 流程已成為提升開發效率的關鍵。然而，現有的解決方案往往綁定特定服務商，且 LLM 的輸出通常是非結構化的自由文字，難以在自動化流程中可靠地解析與使用。[LLM Action][1] 的誕生正是為了解決這些痛點。
 

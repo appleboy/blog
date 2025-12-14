@@ -3,7 +3,7 @@ title: "Building AI-Powered GitHub Workflows: A Complete Guide to LLM Action"
 date: 2025-12-09T14:55:47+08:00
 draft: false
 slug: building-ai-powered-github-workflows-with-llm-action-en
-share_img: /images/2025-12-09/blog-cover_800x457.png
+share_img: /images/2025-12-09/blog_cover_1024x572_en.png
 categories:
   - GitHub Actions
   - AI
@@ -11,7 +11,7 @@ categories:
   - DevOps
 ---
 
-![blog cover](/images/2025-12-09/blog-cover_800x457.png)
+![blog cover](/images/2025-12-09/blog_cover_1024x572_en.png)
 
 In the AI era, integrating Large Language Models into CI/CD pipelines has become crucial for improving development efficiency. However, existing solutions are often tied to specific service providers, and LLM outputs are typically unstructured free-form text that is difficult to parse and use reliably in automated workflows. [LLM Action][1] was created to solve these pain points.
 
