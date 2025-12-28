@@ -4,14 +4,14 @@ date: 2025-03-15T12:22:24+08:00
 author: appleboy
 type: post
 slug: gitea-integrate-with-jira-issue-tracking-flow-en
-share_img: /images/2025-03-15/blog-logo.png
+share_img: /images/2025-03-15/blog-logo_800x793.png
 categories:
   - git
   - gitea
   - jira
 ---
 
-![blog logo](/images/2025-03-15/blog-logo.png)
+![blog logo](/images/2025-03-15/blog-logo_800x793.png)
 
 Before diving in, let's familiarize ourselves with [Gitea][2] and [Jira][1]. For better context, I recommend reading "[Git Software Development Guide: Key to Improving Team Collaboration][0]" first.
 
@@ -41,7 +41,7 @@ To overcome these limitations, our team developed a custom Gitea-Jira integratio
 [22]: https://docs.gitea.com/usage/actions/overview
 [23]: https://developer.atlassian.com/server/jira/platform/rest/v10004/
 
-![comment](/images/2025-03-15/jira-git-comment.png)
+![comment](/images/2025-03-15/jira-git-comment_800x458.png)
 
 By incorporating Jira issue numbers in commit logs, developers can seamlessly track related commit content within Jira issues, significantly enhancing the efficiency of code tracking and management processes.
 
@@ -57,7 +57,7 @@ Before implementation, we established a clear mapping between our software devel
 6. **Resolved**: Successfully completed issues
 7. **Closed**: Finalized and verified issues
 
-![flow](/images/2025-03-15/jira-software-flow.png)
+![flow](/images/2025-03-15/jira-software-flow_800x395.png)
 
 This framework provides a foundational software development process that teams can customize based on their specific requirements. Each issue progresses through distinct states, allowing developers to take appropriate actions at each stage. This structured approach ensures efficient tracking and management of the development process. We've established the following key state transitions that align with our Git workflows:
 
@@ -137,7 +137,7 @@ jobs:
 
 When a Push Event is received, Action automatically extracts the Jira issue number from the commit message, updates the corresponding Jira issue status to `In Progress`, and assigns it to the committing developer. Furthermore, Action adds a detailed comment to the Jira issue containing the commit information.
 
-![push event](/images/2025-03-15/gitea-push-event.png)
+![push event](/images/2025-03-15/gitea-push-event_800x291.png)
 
 ### Submitting Code for Review
 
@@ -164,7 +164,7 @@ jobs:
           transition: "Finish Coding"
 ```
 
-![pull request](/images/2025-03-15/gitea-pull-request-event.png)
+![pull request](/images/2025-03-15/gitea-pull-request-event_800x145.png)
 
 ### Code Review Completion
 
@@ -195,7 +195,7 @@ jobs:
           resolution: "Fixed"
 ```
 
-![pull request](/images/2025-03-15/gitea-merged-pr.png)
+![pull request](/images/2025-03-15/gitea-merged-pr_800x125.png)
 
 Beyond these state transitions, the system can be customized to meet specific needs, such as automatically sending email notifications when code reviews are approved or triggering test environment deployments after code merging. These automated processes enhance tracking and management of the development workflow. Gitea Action's greatest strength lies in its versatility in handling various events, making it an exceptionally flexible integration solution.
 

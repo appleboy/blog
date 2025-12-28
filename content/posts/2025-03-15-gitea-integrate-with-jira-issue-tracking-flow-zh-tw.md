@@ -4,14 +4,14 @@ date: 2025-03-15T08:42:24+08:00
 author: appleboy
 type: post
 slug: gitea-integrate-with-jira-issue-tracking-flow-zh-tw
-share_img: /images/2025-03-15/blog-logo.png
+share_img: /images/2025-03-15/blog-logo_800x793.png
 categories:
   - git
   - gitea
   - jira
 ---
 
-![blog logo](/images/2025-03-15/blog-logo.png)
+![blog logo](/images/2025-03-15/blog-logo_800x793.png)
 
 在開始本文前，讓我們先來了解 [Gitea][2] 和 [Jira][1] 這兩個工具。建議您可以先閱讀『[Git 軟體開發指南：提高團隊協作的關鍵][0]』，以更好地理解後續內容。
 
@@ -41,7 +41,7 @@ categories:
 [22]: https://docs.gitea.com/usage/actions/overview
 [23]: https://developer.atlassian.com/server/jira/platform/rest/v10004/
 
-![comment](/images/2025-03-15/jira-git-comment.png)
+![comment](/images/2025-03-15/jira-git-comment_800x458.png)
 
 透過在 Commit Log 中記錄 Jira 議題編號，開發者可以直接在 Jira 議題中查看相關的 Commit 內容，有效提升程式碼開發過程的追蹤與管理效率。
 
@@ -57,7 +57,7 @@ categories:
 6. **Resolved**：已解決
 7. **Closed**：已結案
 
-![flow](/images/2025-03-15/jira-software-flow.png)
+![flow](/images/2025-03-15/jira-software-flow_800x395.png)
 
 這是一個基礎的軟體開發流程框架，團隊可以根據實際需求進行調整。在這個流程中，每個議題都具備特定狀態，開發人員可以依據議題狀態執行相對應的操作，確保開發過程能被有效追蹤和管理。我們將以下幾個關鍵狀態轉換與 Git 流程做了對應：
 
@@ -139,7 +139,7 @@ jobs:
 
 當 Action 收到 Push Event 後，會自動解析 Commit Log 內容並擷取 Jira 議題編號，接著將對應的 Jira 議題狀態更新為 `In Progress`，同時指派給目前的開發人員。此外，Action 也會在 Jira 議題中新增一則註解，記錄此次 Commit 的詳細資訊。
 
-![push event](/images/2025-03-15/gitea-push-event.png)
+![push event](/images/2025-03-15/gitea-push-event_800x291.png)
 
 ### 提交程式碼進行審查
 
@@ -166,7 +166,7 @@ jobs:
           transition: "Finish Coding"
 ```
 
-![pull request](/images/2025-03-15/gitea-pull-request-event.png)
+![pull request](/images/2025-03-15/gitea-pull-request-event_800x145.png)
 
 ### 程式碼審查完成
 
@@ -197,7 +197,7 @@ jobs:
           resolution: "Fixed"
 ```
 
-![pull request](/images/2025-03-15/gitea-merged-pr.png)
+![pull request](/images/2025-03-15/gitea-merged-pr_800x125.png)
 
 除了上述狀態轉換外，你還可以根據實際需求進行調整，例如在程式碼審查通過後自動發送電子郵件通知相關人員，或是在程式碼合併後自動部署至測試環境。這些自動化流程能夠更有效地追蹤和管理程式碼開發過程。Gitea Action 最大的優勢在於它能處理多種不同的事件，讓整合方案更具彈性。
 
