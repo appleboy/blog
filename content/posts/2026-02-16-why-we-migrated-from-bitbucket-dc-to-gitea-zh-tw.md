@@ -21,6 +21,8 @@ categories:
 
 本篇文章的主軸，就是要和大家分享： 為什麼我們團隊最終選擇從 [Bitbucket Data Center](https://www.atlassian.com/enterprise/data-center/bitbucket) 遷移到 Gitea？又為什麼沒有選擇 GitLab 這類功能更完整、但相對較為沉重的開源方案？
 
+<!--more-->
+
 ## 成本考量 (Cost)
 
 由於公司跨部門協作的需求不斷增加，相關軟體的授權成本也隨之大幅提升。光是 14 天內曾登入的帳號 就接近 500 個，而以 GitHub 為例，其企業授權費用約為 每人每月 20 美金，即使折扣後也仍需 約 17 美金。在如此規模下，僅授權本身就形成一筆相當可觀的開銷。同時，Bitbucket Data Center 的企業級授權費用也不低，使得跨部門想要共同使用平台時，往往因費用考量而受到限制，進而造成合作推動上的阻力。
