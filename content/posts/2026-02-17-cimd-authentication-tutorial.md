@@ -189,3 +189,4 @@ CIMD 這份規範提出了一種全新的方式，允許 OAuth 客戶端直接�
 - [Building MCP with OAuth Client ID Metadata (CIMD)](https://stytch.com/blog/oauth-client-id-metadata-mcp/)
 - [Evolving OAuth Client Registration in the Model Context Protocol](https://blog.modelcontextprotocol.io/posts/client_registration/)
 - [MCP authentication and authorization implementation guide](https://stytch.com/blog/MCP-authentication-and-authorization-guide/)
+- [OAuth Client ID Metadata Document (CIMD) From Authlete](https://www.authlete.com/developers/cimd/)

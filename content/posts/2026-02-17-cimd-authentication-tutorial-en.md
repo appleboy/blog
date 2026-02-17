@@ -98,13 +98,13 @@ This is exactly what the MCP Ecosystem needs most.
 
 ## 📌 Summary: Pain Points vs. Solutions
 
-| Pain Point                                              | Corresponding Solution (SEP-991)                               |
-| ------------------------------------------------------- | -------------------------------------------------------------- |
-| Developer can't pre-register with all Servers           | Client uses URL-based metadata, self-hosted, readable anytime  |
-| User manual registration has poor UX                    | Server doesn't need manual registration, just fetch metadata   |
-| DCR causes Server to maintain unlimited DB              | URL-based metadata → no need for server to store data          |
-| DCR trusts self-asserted metadata                       | Establish truly verifiable trust through HTTPS domain          |
-| MCP's "no pre-existing relationship" scenario unsupported | URL-based registration is designed exactly for this scenario |
+| Pain Point                                                | Corresponding Solution (SEP-991)                              |
+| --------------------------------------------------------- | ------------------------------------------------------------- |
+| Developer can't pre-register with all Servers             | Client uses URL-based metadata, self-hosted, readable anytime |
+| User manual registration has poor UX                      | Server doesn't need manual registration, just fetch metadata  |
+| DCR causes Server to maintain unlimited DB                | URL-based metadata → no need for server to store data         |
+| DCR trusts self-asserted metadata                         | Establish truly verifiable trust through HTTPS domain         |
+| MCP's "no pre-existing relationship" scenario unsupported | URL-based registration is designed exactly for this scenario  |
 
 ## CIMD Flow
 
@@ -127,13 +127,8 @@ The client creates a JSON document containing its metadata and hosts it at an HT
     "refresh_token",
     "urn:ietf:params:oauth:grant-type:device_code"
   ],
-  "response_types": [
-    "code"
-  ],
-  "redirect_uris": [
-    "https://vscode.dev/redirect",
-    "http://127.0.0.1:33418/"
-  ],
+  "response_types": ["code"],
+  "redirect_uris": ["https://vscode.dev/redirect", "http://127.0.0.1:33418/"],
   "token_endpoint_auth_method": "none"
 }
 ```
@@ -189,3 +184,4 @@ In short, Client ID Metadata not only significantly reduces the burden of tradit
 - [Building MCP with OAuth Client ID Metadata (CIMD)](https://stytch.com/blog/oauth-client-id-metadata-mcp/)
 - [Evolving OAuth Client Registration in the Model Context Protocol](https://blog.modelcontextprotocol.io/posts/client_registration/)
 - [MCP authentication and authorization implementation guide](https://stytch.com/blog/MCP-authentication-and-authorization-guide/)
+- [OAuth Client ID Metadata Document (CIMD) From Authlete](https://www.authlete.com/developers/cimd/)
