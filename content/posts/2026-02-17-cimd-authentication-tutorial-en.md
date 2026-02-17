@@ -3,13 +3,13 @@ title: "Introduction to OAuth Client ID Metadata Document"
 date: 2026-02-17T11:52:21+08:00
 draft: false
 slug: oauth-client-id-metadata-document
-share_img: /images/2026-02-17/cover_800x447.png
+share_img: /images/2026-02-17/cover_1000x558.png
 categories:
   - OAuth
   - MCP
 ---
 
-![cover](/images/2026-02-17/cover_800x447.png)
+![cover](/images/2026-02-17/cover_1000x558.png)
 
 In 2025, I introduced MCP ([Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro)) at the iThome [Taiwan Cloud Summit](https://cloudsummit.ithome.com.tw/2025/). At that time, I mentioned that the official team has been continuously revising the authentication protocol to address complex authentication flows. The previous design involved DCR ([Dynamic Client Registration](https://datatracker.ietf.org/doc/html/rfc7591)), so as expected, on 2025/11/25, a new [Authorization mechanism](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization) was released. This authentication mechanism is called "[Client ID Metadata Documents, abbreviated as CIMD](https://datatracker.ietf.org/doc/draft-ietf-oauth-client-id-metadata-document/)".
 

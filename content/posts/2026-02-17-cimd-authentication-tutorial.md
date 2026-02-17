@@ -3,13 +3,13 @@ title: "OAuth Client ID Metadata Document 簡介"
 date: 2026-02-17T09:52:21+08:00
 draft: false
 slug: oauth-client-id-metadata-document-zh-tw
-share_img: /images/2026-02-17/cover_800x447.png
+share_img: /images/2026-02-17/cover_1000x558.png
 categories:
   - OAuth
   - MCP
 ---
 
-![cover](/images/2026-02-17/cover_800x447.png)
+![cover](/images/2026-02-17/cover_1000x558.png)
 
 2025 年在 iThome [臺灣雲端大會](https://cloudsummit.ithome.com.tw/2025/)介紹過 MCP ([Model Context Protocol](https://modelcontextprotocol.io/docs/getting-started/intro))，那時候就有提到在認證協議部分，官方其實一直都在改版解決複雜的認證流程，之前設計的 DCR ([Dynamic Client Registration](https://datatracker.ietf.org/doc/html/rfc7591))，所以沒意外去年 2025/11/25 又推出一版 [Authorization 機制](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)，此認證機制取名叫『[Client ID Metadata Documents 簡稱 CIMD](https://datatracker.ietf.org/doc/draft-ietf-oauth-client-id-metadata-document/)』。
 
