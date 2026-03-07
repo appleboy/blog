@@ -1,5 +1,47 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CSS Clear on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/tags/css-clear/</link><description>Recent content in CSS Clear on 小惡魔 - AppleBOY</description><generator>Hugo</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Sun, 15 Sep 2013 15:19:01 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/tags/css-clear/feed.xml" rel="self" type="application/rss+xml"/><item><title>CSS Clear Fix 小技巧</title><link>https://blog.wu-boy.com/2013/09/css-clear-fix-tip/</link><pubDate>Sun, 15 Sep 2013 15:19:01 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/09/css-clear-fix-tip/</guid><description>記的之前 evenwu 為了找尋外包 CSS 人才，出了一份考題，有提供上機考，真是佛心來的，還給用 Inspector 或上網。其中一題就是
-第二題、如果一個X元素內的子元素通通 float: left 請問X元素本身會有什麼狀況？如果我要在X元素內下背景，卻沒有顯示，請問如何解決？ 解決方式就是實作本身 clearfix，或者是在元素後加上 clear: both 的標籤，大概就是底下的樣子
-如果是要在 container 實作 clearfix，就必須透過 css before 和 after。
-.clearfix { *zoom: 1; } .clearfix:before, .clearfix:after { content: ""; display: table; line-height: 0; } .clearfix:after { clear: both; } SASS 版本
-.clearfix { *zoom: 1; &amp;:before, &amp;:after { display: table; content: ""; line-height: 0; } &amp;:after { clear: both; } } 這樣只要在任何 element 加上 clearfix css 就可以了，支援瀏覽器版版: Firefox 3.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>CSS Clear on 小惡魔 - AppleBOY</title><link>https://blog.wu-boy.com/tags/css-clear/</link><description>Recent content in CSS Clear on 小惡魔 - AppleBOY</description><generator>Hugo</generator><language>en-us</language><managingEditor>appleboy.tw@gmail.com (Appleboy)</managingEditor><webMaster>appleboy.tw@gmail.com (Appleboy)</webMaster><lastBuildDate>Sun, 15 Sep 2013 15:19:01 +0000</lastBuildDate><atom:link href="https://blog.wu-boy.com/tags/css-clear/feed.xml" rel="self" type="application/rss+xml"/><item><title>CSS Clear Fix 小技巧</title><link>https://blog.wu-boy.com/2013/09/css-clear-fix-tip/</link><pubDate>Sun, 15 Sep 2013 15:19:01 +0000</pubDate><author>appleboy.tw@gmail.com (Appleboy)</author><guid>https://blog.wu-boy.com/2013/09/css-clear-fix-tip/</guid><description>&lt;p&gt;記的之前 &lt;a href="http://blog.evendesign.tw" target="_blank"&gt;evenwu&lt;/a&gt; 為了找尋外包 CSS 人才，出了一份&lt;a href="http://blog.evendesign.tw/post/38567423298/web-designer" target="_blank"&gt;考題&lt;/a&gt;，有提供上機考，真是佛心來的，還給用 Inspector 或上網。其中一題就是&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;第二題、如果一個X元素內的子元素通通 float: left 請問X元素本身會有什麼狀況？如果我要在X元素內下背景，卻沒有顯示，請問如何解決？
+解決方式就是實作本身 &lt;code&gt;clearfix&lt;/code&gt;，或者是在元素後加上 &lt;code&gt;clear: both&lt;/code&gt; 的標籤，大概就是底下的樣子&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div&gt;
+ &lt;pre class="brush: xml; title: ; notranslate" title=""&gt;&lt;div class="container"&gt;
+ &lt;div class="floated"&gt;
+ &lt;/div&gt;
+ &lt;div class="floated"&gt;
+ &lt;/div&gt;
+ &lt;div class="floated"&gt;
+ &lt;/div&gt;
+ &lt;p style="clear:both"&gt;
+ &lt;/p&gt;
+&lt;/div&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;如果是要在 container 實作 clearfix，就必須透過 css &lt;code&gt;before&lt;/code&gt; 和 &lt;code&gt;after&lt;/code&gt;。&lt;/p&gt;
+&lt;div&gt;
+ &lt;pre class="brush: css; title: ; notranslate" title=""&gt;.clearfix {
+ *zoom: 1;
+}
+.clearfix:before, .clearfix:after {
+ content: "";
+ display: table;
+ line-height: 0;
+}
+.clearfix:after {
+ clear: both;
+}&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;SASS 版本&lt;/p&gt;
+&lt;div&gt;
+ &lt;pre class="brush: css; title: ; notranslate" title=""&gt;.clearfix {
+ *zoom: 1;
+ &amp;:before,
+ &amp;:after {
+ display: table;
+ content: "";
+ line-height: 0;
+ }
+ &amp;:after {
+ clear: both;
+ }
+}&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;這樣只要在任何 element 加上 clearfix css 就可以了，支援瀏覽器版版: &lt;a href="http://moztw.org/firefox/"&gt;Firefox&lt;/a&gt; 3.5+, &lt;a href="https://www.apple.com/tw/safari/"&gt;Safari&lt;/a&gt; 4+, &lt;a href="http://www.google.com/intl/zh-TW/chrome/browser/"&gt;Chrome&lt;/a&gt;, &lt;a href="http://www.opera.com/"&gt;Opera&lt;/a&gt; 9+, &lt;a href="http://windows.microsoft.com/zh-tw/internet-explorer/download-ie"&gt;IE&lt;/a&gt; 6+&lt;/p&gt;</description></item></channel></rss>
