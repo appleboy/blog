@@ -1,7 +1,7 @@
 ---
 title: "Agent Skill 是什麼？對軟體產業帶來的變化"
-date: 2026-03-14T10:00:00+08:00
-draft: true
+date: 2026-03-14T11:00:00+08:00
+draft: false
 slug: what-is-agent-skill-and-impact-on-software-industry-zh-tw
 share_img: /images/2026-03-14/cover.png
 categories:
