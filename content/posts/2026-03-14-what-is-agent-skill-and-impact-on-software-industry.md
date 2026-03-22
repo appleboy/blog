@@ -163,7 +163,7 @@ feat(cache): migrate API key caching to OS credential store
 
 有了 Agent Skill 之後，同樣的功能可以用**一份 Markdown 檔案**來實現。筆者已經將 CodeGPT 的 commit message 功能轉換為 [Claude Code Skill][5]，整個 Skill 的內容就是一份 `SKILL.md`：
 
-[5]: https://github.com/appleboy/CodeGPT/blob/main/skills/commit-message/SKILL.md
+[5]: https://github.com/appleboy/skills/blob/main/skills/commit-message/SKILL.md
 
 ```markdown
 ---
@@ -207,16 +207,16 @@ Show the message and ask for confirmation before committing.
 
 ### 安裝方式
 
-在 Claude Code 中，Skill 是透過 **Plugin Marketplace** 機制來安裝的。首先需要新增 CodeGPT 的 Marketplace：
+在 Claude Code 中，Skill 是透過 **Plugin Marketplace** 機制來安裝的。首先新增 Skill Marketplace：
 
 ```bash
-/plugin marketplace add appleboy/CodeGPT
+/plugin marketplace add appleboy/skills
 ```
 
 接著透過 `/plugin` 指令開啟互動式的 Plugin 管理介面，切換到 **Discover** 分頁就能瀏覽並安裝 `commit-message` Skill。或者直接用指令安裝：
 
 ```bash
-/plugin install commit-message@appleboy/CodeGPT
+/plugin install commit-message
 ```
 
 安裝完成後，只要在 Claude Code 中輸入 `/commit-message` 或請 Agent 幫你產生 commit message，就會自動觸發這個 Skill。

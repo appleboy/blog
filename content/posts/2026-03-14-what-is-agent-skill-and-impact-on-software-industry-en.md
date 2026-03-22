@@ -163,7 +163,7 @@ To achieve this, CodeGPT involves serious software engineering: CLI argument par
 
 With Agent Skills, the same functionality can be achieved with **a single Markdown file**. I've already converted CodeGPT's commit message feature into a [Claude Code Skill][5], and the entire Skill is just a `SKILL.md` file:
 
-[5]: https://github.com/appleboy/CodeGPT/blob/main/skills/commit-message/SKILL.md
+[5]: https://github.com/appleboy/skills/blob/main/skills/commit-message/SKILL.md
 
 ```markdown
 ---
@@ -207,16 +207,16 @@ This file clearly defines five steps: get the diff → analyze changes → gener
 
 ### Installation
 
-In Claude Code, Skills are installed through the **Plugin Marketplace** mechanism. First, add the CodeGPT Marketplace:
+In Claude Code, Skills are installed through the **Plugin Marketplace** mechanism. First, add the Skill Marketplace:
 
 ```bash
-/plugin marketplace add appleboy/CodeGPT
+/plugin marketplace add appleboy/skills
 ```
 
 Then use the `/plugin` command to open the interactive Plugin management interface, switch to the **Discover** tab to browse and install the `commit-message` Skill. Or install directly with:
 
 ```bash
-/plugin install commit-message@appleboy/CodeGPT
+/plugin install commit-message
 ```
 
 Once installed, simply type `/commit-message` in Claude Code or ask the Agent to generate a commit message, and the Skill will be triggered automatically.
