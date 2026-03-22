@@ -23,7 +23,9 @@ Over the past few months, I've integrated [Claude Code][1] and [GitHub Copilot R
 
 ## Tools Overview
 
-This post focuses on the practical workflow, setting aside the extensible [Skill][3] system for now. By leveraging just the built-in features of these two tools, you can dramatically improve development efficiency. Here are the two core tools I use:
+This post focuses on the practical workflow. Beyond the built-in features of the two core tools, I'll also introduce the [copilot-review][7] custom [Skill][3] I built to make the review automation loop truly seamless. Here's the tool combination I use:
+
+[7]: https://github.com/appleboy/skills
 
 [3]: {{< ref "2026-03-14-what-is-agent-skill-and-impact-on-software-industry-en.md" >}}
 
@@ -54,7 +56,7 @@ flowchart TD
     G --> I[Open PR]
     H --> I
     I --> J[GitHub Copilot Code Review]
-    J --> K["/loop automated cycle"]
+    J --> K["/loop 2m /copilot-review"]
     K --> L[AI reads PR comments]
     L --> M[AI fixes code]
     M --> N[Re-trigger Review]
@@ -67,10 +69,10 @@ flowchart TD
     style P fill:#fed7aa,stroke:#c2410c,color:#7c2d12
     style G fill:#fef3c7,stroke:#b45309,color:#78350f
     style H fill:#fef3c7,stroke:#b45309,color:#78350f
-    style K fill:#fef3c7,stroke:#b45309,color:#78350f
+    style K fill:#d1fae5,stroke:#059669,color:#064e3b
 ```
 
-> **Orange** steps require developer involvement. **Yellow** steps are Claude Code's built-in Slash Commands.
+> **Orange** steps require developer involvement. **Yellow** steps are Claude Code's built-in Slash Commands. **Green** steps are custom Skills.
 
 ### Planning Phase: Align Direction Before Writing Code
 
@@ -101,31 +103,58 @@ Both are built-in [Slash Commands][5] in Claude Code.
 
 These two commands can run in parallel — no need to wait for one to finish before starting the other.
 
-### Review Loop: /loop Automated Iteration
+### Review Loop: /loop + /copilot-review Automated Iteration
 
-This is the biggest time-saver in the entire workflow. After opening a PR:
+This is the biggest time-saver in the entire workflow. To fully automate the review loop, I built the [`/copilot-review`][7] custom Skill, designed to work with Claude Code's built-in `/loop` command.
 
-1. Assign **GitHub Copilot** as a reviewer for the first round of automated code review
-2. Use Claude Code's **`/loop`** command to set up an [automated cycle][6]
-3. AI automatically reads review comments on the PR, fixes the code based on feedback, pushes updates, and re-triggers the review
+#### Installing the copilot-review Skill
 
-[6]: https://code.claude.com/docs/en/slash-commands
-4. This cycle continues until there are no new review comments
+First, add the Skill Marketplace in Claude Code:
 
-The developer **doesn't need to watch the entire process** — just come back when the loop finishes for the final review. Here's an example of AI-summarized [review PR](https://github.com/go-authgate/authgate/issues/118) comments across iterations:
+```bash
+/plugin marketplace add appleboy/skills
+```
+
+Then install the skill:
+
+```bash
+/plugin install copilot-review
+```
+
+Prerequisites: [GitHub CLI][8] v2.88.0 or later, with active authentication (`gh auth status`).
+
+[8]: https://cli.github.com/
+
+#### How the Automated Loop Works
+
+After opening a PR, just run one command:
+
+```bash
+/loop 2m /copilot-review
+```
+
+This executes `/copilot-review` every 2 minutes. Each cycle automatically performs the following steps:
+
+1. **PR Detection** — auto-detects the PR from the current branch
+2. **Review Status Check** — compares Copilot's review timestamp against the latest commit
+3. **Comment Retrieval** — fetches unresolved Copilot review threads via GraphQL
+4. **Code Fixes** — evaluates and applies Copilot's suggestions contextually
+5. **Testing** — runs project tests before committing
+6. **Commit & Push** — uses Conventional Commit format
+7. **Thread Resolution** — marks addressed review threads as resolved
+8. **Review Re-trigger** — adds Copilot as reviewer again for fresh analysis
+
+The cycle continues until there are no new review comments. It's recommended to cap at **10 iterations** — if comments persist beyond that, it usually means the developer needs to step in and reassess the architectural direction.
+
+The developer **doesn't need to watch the entire process** — just come back when the loop finishes for the final review. Here's a real example — [go-authgate/authgate PR #125](https://github.com/go-authgate/authgate/pull/125) (splitting the 1,038-line `token.go` into 8 domain-specific files), showing the automated iteration between Copilot Review and the `/copilot-review` Skill:
 
 | Round | Comments | Key Fixes |
 | ----- | -------- | --------- |
-| 1 | 16 | Wrong `type` claim value (`access_token` → `access`), missing revocation tradeoff warning, imprecise HS256 JWKS description, OIDC discovery example hardcoded RS256 |
-| 2 | 6 | Invalid `//` comments in JSON blocks, misleading zero-downtime wording, broken SECURITY.md anchor, unchecked Go type assertions, unused imports |
-| 3 | 8 | Missing algorithm whitelist in Go/Node.js examples (`WithValidMethods`/`algorithms`), `client_credentials` synthetic subject documentation |
-| 4 | 3 | `user_id` is synthetic (not absent) in client_credentials, Go example switched to `sub` claim, `id_token_signing_alg` may be omitted |
-| 5 | 1 | Second broken SECURITY.md anchor |
-| 6 | 4 | Python `cache_jwk_set` → `cache_keys`, navbar hardcoded OR list → `IsDocsActive()` helper |
-| 7 | 1 | Use `strings.HasPrefix` instead of manual slice, update `ActiveLink` field comment |
-| 8 | 1 | Outdated comment on already-fixed code (no action needed) |
-| 9 | 1 | Remove key rotation zero-downtime promise; clarify single-key JWKS limitation |
-| 10 | **0** | **No new comments — all clear** |
+| 1 | 3 | Comment says "strict subset" but should be "subset"; `GetUserTokens` comment claims "all active tokens" but query doesn't filter by status |
+| 2 | 3 | `AuthenticateClient` doesn't verify client is active; `revokeTokenFamily` comment doesn't match actual behavior; `ValidateToken` masks DB errors as "token not found" |
+| 3 | 2 | `AuthenticateClient` adding inactive check is a behavior change — update PR description; same for `ValidateToken` error handling change |
+| 4 | 2 | PR description still claims "no logic changes" — needs correction; `TokenFamilyID` may be empty in refresh token rotation |
+| 5 | **0** | **No new comments — all clear** |
 
 ### Final Review: Human Eyes on the Code
 
@@ -173,6 +202,6 @@ AI handles plan drafting, code implementation, refactoring, and code review iter
 
 But the prerequisite is — **you must first become a developer capable of making those decisions before AI can truly accelerate your work**.
 
-It's worth noting that every feature discussed in this post — Plan Mode, `/simplify`, `/security-review`, `/loop` — **is built into Claude Code out of the box, requiring no additional packages or plugins**. Just install Claude Code, pair it with GitHub Copilot Review, and you can automate over 90% of your software development workflow. And GitHub Copilot Review is **completely free** for open-source projects — that's zero-cost AI code review.
+It's worth noting that Plan Mode, `/simplify`, `/security-review`, and `/loop` are all **built into Claude Code** out of the box. The [`/copilot-review`][7] command is a custom Skill I built — just run `/plugin marketplace add appleboy/skills` then `/plugin install copilot-review` to use it. Paired with GitHub Copilot Review (which is **completely free** for open-source projects), you can automate over 90% of your software development workflow.
 
-If you're maintaining open-source projects or looking to boost your personal development efficiency, I highly recommend trying this Claude Code + GitHub Copilot Review combination.
+If you're maintaining open-source projects or looking to boost your personal development efficiency, I highly recommend trying this Claude Code + GitHub Copilot Review + `/copilot-review` Skill combination.
