@@ -93,8 +93,12 @@ flowchart LR
 ```bash
 # Agent 嘗試建立 Issue
 $ tea issues create --title "Fix login bug" --description "Login fails on Safari"
-# 成功：exit code 0，stdout 回傳 Issue 編號
-#3 Fix login bug
+# 成功：exit code 0，stdout 回傳 Issue 資訊
+#3 Fix login bug (open)
+@appleboy created 2026-04-06 23:09
+
+Login fails on Safari
+https://gitea.com/appleboy/test2/issues/3
 
 # Agent 嘗試操作不存在的 repo
 $ tea issues --repo nonexistent/repo

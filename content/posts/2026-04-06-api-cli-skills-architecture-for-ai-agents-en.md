@@ -93,8 +93,12 @@ Every CLI invocation is an atomic operation: it has an exit code, stdout, and st
 ```bash
 # Agent attempts to create an Issue
 $ tea issues create --title "Fix login bug" --description "Login fails on Safari"
-# Success: exit code 0, stdout returns Issue number
-#3 Fix login bug
+# Success: exit code 0, stdout returns Issue info
+#3 Fix login bug (open)
+@appleboy created 2026-04-06 23:09
+
+Login fails on Safari
+https://gitea.com/appleboy/test2/issues/3
 
 # Agent attempts to operate on a nonexistent repo
 $ tea issues --repo nonexistent/repo
