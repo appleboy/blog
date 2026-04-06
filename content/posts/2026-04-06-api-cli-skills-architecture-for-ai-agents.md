@@ -99,7 +99,7 @@ $ tea issues create --title "Fix login bug" --description "Login fails on Safari
 # Agent 嘗試操作不存在的 repo
 $ tea issues --repo nonexistent/repo
 # 失敗：exit code 1，stderr 回傳錯誤訊息
-Not found.
+Error: GetUserByName
 $ # Agent 讀取 stderr，理解問題，決定下一步
 ```
 
