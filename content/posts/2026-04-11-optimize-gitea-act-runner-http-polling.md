@@ -216,9 +216,9 @@ func (r *Reporter) RunDaemon() {
 
 | 觸發條件            | 預設值 | 解決什麼            | 沒有它會怎樣                         |
 | ------------------- | ------ | ------------------- | ------------------------------------ |
-| **Batch size**      | 100 行 | 高產出時快速送出    | `npm install` 輸出 500 行要等 3 秒   |
-| **logTicker**       | 3s     | 穩態保底            | channel 通知可能被合併，需定時掃描   |
-| **maxLatencyTimer** | 5s     | 單行 log 不會等太久 | 一行 "Starting..." 後沉默，要等 3 秒 |
+| **Batch size**      | 100 行 | 高產出時快速送出    | `npm install` 輸出 500 行要等 5 秒   |
+| **logTicker**       | 5s     | 穩態保底            | channel 通知可能被合併，需定時掃描   |
+| **maxLatencyTimer** | 3s     | 單行 log 不會等太久 | 一行 "Starting..." 後沉默，要等 5 秒 |
 
 State 報告獨立為 5 秒間隔，搭配 `stateNotify` channel 在 step 轉換時即時 flush。
 
@@ -366,7 +366,7 @@ RunnerServiceClient: runnerv1connect.NewRunnerServiceClient(httpClient, ...)
 
 | 情境                    | Before | After | 為什麼可以接受                        |
 | ----------------------- | ------ | ----- | ------------------------------------- |
-| 持續輸出（npm install） | ~1s    | ~3s   | CI log 不需要 sub-second 更新         |
+| 持續輸出（npm install） | ~1s    | ~5s   | CI log 不需要 sub-second 更新         |
 | 大量爆發（100+ 行）     | ~1s    | <1s   | batch size 觸發即時 flush，比原來更快 |
 | Step 開始/結束          | ~1s    | <1s   | stateNotify 即時 flush                |
 | Job 完成                | ~1s    | ~1s   | Close() retry 機制不變                |
@@ -381,8 +381,8 @@ runner:
   fetch_interval_max: 60s # 閒置時最大退讓間隔
 
   # Log 回報
-  log_report_interval: 3s # 定時 flush 間隔
-  log_report_max_latency: 5s # 單行 log 最大等待時間
+  log_report_interval: 5s # 定時 flush 間隔
+  log_report_max_latency: 3s # 單行 log 最大等待時間
   log_report_batch_size: 100 # 觸發立即 flush 的行數
 
   # State 回報
