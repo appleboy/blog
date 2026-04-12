@@ -60,12 +60,14 @@ Runner → POST /api/actions/runner.v1.RunnerService/UpdateTask → Server (stat
 
 200 個閒置的 Runner 每 2 秒發一次 `FetchTask`，產生 100 req/s 的無效流量。更糟的是，如果 Server 短暫當機後恢復，所有 Runner 會在同一瞬間湧入（thundering herd）。
 
-### 設計：兩個獨立的計數器
+### 設計：兩個獨立的計數器（per-worker）
 
 ```go
-type Poller struct {
-    consecutiveEmpty  atomic.Int64 // Server 正常回應，但沒有 task
-    consecutiveErrors atomic.Int64 // 網路錯誤、超時
+// 每個 worker goroutine 持有自己的 state，避免共用 counter
+// 在 Capacity > 1 時把不同 worker 的 empty 累加成假性 backoff
+type workerState struct {
+    consecutiveEmpty  int64 // Server 正常回應，但沒有 task
+    consecutiveErrors int64 // 網路錯誤、超時
 }
 ```
 
@@ -80,14 +82,16 @@ type Poller struct {
 
 **關鍵場景**：Server 當機 5 分鐘後恢復。如果只用一個計數器，恢復後第一個成功回應會把計數器歸零，所有 Runner 同時回到 2 秒間隔，造成 thundering herd。用兩個計數器，errors 歸零但 empty 繼續維持，backoff 平滑過渡。
 
+**為什麼是 per-worker 而不是共用 atomic？** Act Runner 的架構是「N 個獨立的 worker，每個自己 poll 自己跑」（`Capacity` 控制 N）。若用共用 counter，3 個 worker 各自第一次 empty 會把 counter 推到 3，被誤判為「連續 3 次空」而觸發長 backoff——其實每個 worker 才空一次。把 counter 拆到 `workerState`，每個 goroutine 自己讀寫自己的 `int64`，不需要 atomic，也避免了這個假性 backoff 問題。順帶一個好處：當 Server 恢復、某個 worker 拿到 task 時只重置自己的 backoff，其他 worker 維持目前 interval，thundering herd 的保護更強。
+
 ### 指數退讓的數學
 
 ```go
-func (p *Poller) calculateInterval() time.Duration {
-    base := p.cfg.Runner.FetchInterval          // 預設 2s
+func (p *Poller) calculateInterval(s *workerState) time.Duration {
+    base := p.cfg.Runner.FetchInterval           // 預設 2s
     maxInterval := p.cfg.Runner.FetchIntervalMax // 預設 60s
 
-    n := max(p.consecutiveEmpty.Load(), p.consecutiveErrors.Load())
+    n := max(s.consecutiveEmpty, s.consecutiveErrors)
     if n <= 1 {
         return base
     }
@@ -146,11 +150,11 @@ limiter.Wait(ctx)  // 固定速率
 
 ```go
 // 錯誤：啟動後要等一個完整的 FetchInterval 才能 fetch
-func (p *Poller) pollOnce() {
+func (p *Poller) pollOnce(s *workerState) {
     for {
         timer := time.NewTimer(interval)  // 先等
         <-timer.C
-        task, ok := p.fetchTask(ctx)      // 再 fetch
+        task, ok := p.fetchTask(ctx, s)   // 再 fetch
         ...
     }
 }
@@ -159,11 +163,11 @@ func (p *Poller) pollOnce() {
 正確的做法是 **fetch first, sleep after**——先嘗試領取，沒拿到才 sleep：
 
 ```go
-func (p *Poller) pollOnce() {
+func (p *Poller) pollOnce(s *workerState) {
     for {
-        task, ok := p.fetchTask(p.pollingCtx)  // 先 fetch
+        task, ok := p.fetchTask(p.pollingCtx, s)  // 先 fetch
         if !ok {
-            timer := time.NewTimer(interval)   // 沒拿到才 sleep
+            timer := time.NewTimer(interval)      // 沒拿到才 sleep
             select {
             case <-timer.C:
             case <-p.pollingCtx.Done():
@@ -299,9 +303,9 @@ if !reportResult && !changed && len(outputs) == 0 {
 
 | 情境                         | Before     | After      | 降幅    |
 | ---------------------------- | ---------- | ---------- | ------- |
-| Log 請求（420 active tasks） | 420 req/s  | 140 req/s  | 67%     |
+| Log 請求（420 active tasks） | 420 req/s  | 84 req/s   | 80%     |
 | State 請求                   | 126 req/s  | 25 req/s   | 80%     |
-| 合計                         | ~550 req/s | ~165 req/s | **70%** |
+| 合計                         | ~550 req/s | ~109 req/s | **80%** |
 
 ## 解法三：HTTP Client 調校
 
@@ -351,7 +355,7 @@ RunnerServiceClient: runnerv1connect.NewRunnerServiceClient(httpClient, ...)
 
 有人可能會問：這不就是熔斷器嗎？其實不完全是。
 
-| 維度           | 熔斷器                         | Adaptive Backoff                 |
+| 維度           | 熔斷器                         | 我們的 Adaptive Backoff          |
 | -------------- | ------------------------------ | -------------------------------- |
 | 會停止請求嗎？ | 會（OPEN 狀態完全阻斷）        | 不會，只是變慢（最慢 60 秒一次） |
 | 狀態模型       | 三態 Closed → Open → Half-Open | 無狀態，連續的間隔計算           |
@@ -367,6 +371,7 @@ RunnerServiceClient: runnerv1connect.NewRunnerServiceClient(httpClient, ...)
 | 情境                    | Before | After | 為什麼可以接受                        |
 | ----------------------- | ------ | ----- | ------------------------------------- |
 | 持續輸出（npm install） | ~1s    | ~5s   | CI log 不需要 sub-second 更新         |
+| 單行後沉默              | ~1s    | ≤3s   | maxLatencyTimer 保底                  |
 | 大量爆發（100+ 行）     | ~1s    | <1s   | batch size 觸發即時 flush，比原來更快 |
 | Step 開始/結束          | ~1s    | <1s   | stateNotify 即時 flush                |
 | Job 完成                | ~1s    | ~1s   | Close() retry 機制不變                |
@@ -382,7 +387,7 @@ runner:
 
   # Log 回報
   log_report_interval: 5s # 定時 flush 間隔
-  log_report_max_latency: 3s # 單行 log 最大等待時間
+  log_report_max_latency: 3s # 單行 log 最大等待時間（須小於 log_report_interval）
   log_report_batch_size: 100 # 觸發立即 flush 的行數
 
   # State 回報
@@ -394,7 +399,7 @@ runner:
 | 優化項目   | 手段                                   | 降幅                         |
 | ---------- | -------------------------------------- | ---------------------------- |
 | Polling    | Exponential backoff + jitter           | 97%（閒置 runner）           |
-| Log 回報   | 事件驅動 + 批次 + skip empty           | 67%                          |
+| Log 回報   | 事件驅動 + 批次 + skip empty           | 80%                          |
 | State 回報 | 獨立間隔 + dirty flag + skip unchanged | 80%                          |
 | HTTP 連線  | 調校連線池 + 共用 client               | 減少 TCP/TLS 重建            |
 | **整體**   | **200 runners × 3 tasks**              | **1,300 → 170 req/s（87%）** |
