@@ -21,6 +21,12 @@ categories:
 
 <!--more-->
 
+## 投影片
+
+{{< speakerdeck id="06cec1962eb74072b6b320ceb923cd57" >}}
+
+這份投影片對應本篇文章內容，你也可以在 [Speaker Deck 上查看](https://speakerdeck.com/appleboy/yong-claude-code-plus-github-copilot-review-da-zao-ai-qu-dong-de-kai-fa-liu-cheng)。
+
 ## 工具介紹
 
 本篇著重在實際的開發流程，除了兩套核心工具的內建功能外，也會介紹我開發的 [copilot-review][7] 自訂 [Skill][3]，讓整個 Review 自動化循環更加完整。以下是我目前使用的工具組合：

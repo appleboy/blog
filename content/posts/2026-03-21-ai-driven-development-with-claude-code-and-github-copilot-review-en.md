@@ -21,6 +21,12 @@ Over the past few months, I've integrated [Claude Code][1] and [GitHub Copilot R
 
 <!--more-->
 
+## Slides
+
+{{< speakerdeck id="06cec1962eb74072b6b320ceb923cd57" >}}
+
+These slides accompany this post (in Mandarin). You can also view them on [Speaker Deck](https://speakerdeck.com/appleboy/yong-claude-code-plus-github-copilot-review-da-zao-ai-qu-dong-de-kai-fa-liu-cheng).
+
 ## Tools Overview
 
 This post focuses on the practical workflow. Beyond the built-in features of the two core tools, I'll also introduce the [copilot-review][7] custom [Skill][3] I built to make the review automation loop truly seamless. Here's the tool combination I use:
