@@ -18,6 +18,12 @@ categories:
 
 <!--more-->
 
+## 投影片
+
+{{< speakerdeck id="793a531ff9b04dde8e444802cf4f01d0" >}}
+
+這份投影片對應本篇文章內容，你也可以在 [Speaker Deck 上查看](https://speakerdeck.com/appleboy/agent-skill-shi-shi-mo-dui-ruan-ti-chan-ye-dai-lai-de-bian-hua)。
+
 ## 什麼是 Agent Skill？
 
 Agent Skill 是賦予 AI Agent **特定領域能力**的模組化單元。你可以把它想像成：AI Agent 是一位通才，而 Skill 則是它所學會的「專業技能」。每個 Skill 定義了一組明確的觸發條件、執行流程和輸出格式，讓 Agent 在遇到對應的任務時，能夠以專業且一致的方式處理。

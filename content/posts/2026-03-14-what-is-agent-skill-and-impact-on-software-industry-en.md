@@ -18,6 +18,12 @@ With the rapid evolution of AI Agent technology, a new concept is reshaping how 
 
 <!--more-->
 
+## Slides
+
+{{< speakerdeck id="793a531ff9b04dde8e444802cf4f01d0" >}}
+
+These slides accompany this post (in Mandarin). You can also view them on [Speaker Deck](https://speakerdeck.com/appleboy/agent-skill-shi-shi-mo-dui-ruan-ti-chan-ye-dai-lai-de-bian-hua).
+
 ## What Is Agent Skill?
 
 Agent Skill is a modular unit that gives an AI Agent **domain-specific capabilities**. Think of it this way: the AI Agent is a generalist, while Skills are the "professional expertise" it has learned. Each Skill defines a clear set of trigger conditions, execution steps, and output formats, allowing the Agent to handle matching tasks in a professional and consistent manner.
