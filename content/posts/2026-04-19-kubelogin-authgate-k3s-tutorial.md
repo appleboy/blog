@@ -377,6 +377,31 @@ users:
 current-context: k3s-homelab
 ```
 
+如果不想手刻 YAML，也可以用 `kubectl config set-credentials` 產出等效的 user section：
+
+```bash
+kubectl config set-credentials oidc \
+  --exec-api-version=client.authentication.k8s.io/v1 \
+  --exec-interactive-mode=Never \
+  --exec-command=kubectl \
+  --exec-arg=oidc-login \
+  --exec-arg=get-token \
+  --exec-arg=--oidc-issuer-url=https://authgate.local:8080 \
+  --exec-arg=--oidc-client-id=b6c1a28f-bf94-4442-999d-5e1a51365180 \
+  --exec-arg=--oidc-extra-scope=email \
+  --exec-arg=--oidc-extra-scope=profile \
+  --exec-arg=--grant-type=authcode \
+  --exec-arg=--token-cache-storage=keyring
+```
+
+如果 AuthGate 掛的是自簽或本機 CA（例如 Step 1 用 mkcert 產的），再多塞一個 `--exec-arg` 把 CA 路徑帶進去即可：
+
+```bash
+  --exec-arg=--certificate-authority=$(mkcert -CAROOT)/rootCA.pem
+```
+
+這條指令只建立 user 條目，cluster 與 context 仍用原本的 `kubectl config set-cluster` / `set-context` 綁起來。
+
 幾個小細節：
 
 - **`--token-cache-storage=keyring`**：把 refresh token 放進系統 keyring（macOS Keychain、GNOME Keyring、Windows Credential Manager），比放在 `~/.kube/cache/oidc-login` 的明文檔案更安全。
@@ -385,14 +410,23 @@ current-context: k3s-homelab
 
 ### Step 9：第一次登入
 
-使用者第一次跑任何 kubectl 指令，瀏覽器會自動跳出 AuthGate 的登入頁：
+使用者第一次跑任何 kubectl 指令，瀏覽器會自動跳出 AuthGate 的登入頁。因為前一步只用 `set-credentials oidc` 新增一個 user 條目，並沒有把 current-context 綁到這個 user 身上，所以要顯式帶 `--user=oidc` 才會真的走 OIDC 流程，不然 colima / k3s 預設的 admin 憑證還是會被吃掉：
 
 ```console
-$ kubectl get nodes
+$ kubectl --user=oidc get nodes
 Open http://localhost:8000 for authentication
 # 瀏覽器跳出 AuthGate 登入 → 同意授權 → 回到 terminal
 NAME      STATUS   ROLES                  AGE   VERSION
 k3s-01    Ready    control-plane,master   3d    v1.31.0+k3s1
+```
+
+如果想省略 `--user=oidc`，可以把現有 context 改綁到 oidc user，後續 kubectl 就走 OIDC 不用再帶旗標：
+
+```bash
+# 將 colima 這個 context 的 user 換成 oidc
+kubectl config set-context colima --user=oidc
+# 之後直接用
+kubectl get nodes
 ```
 
 第二次開始因為 refresh token 還在 keyring 裡，kubelogin 會自動用 refresh token 換新的 access token，感覺不出任何延遲。
