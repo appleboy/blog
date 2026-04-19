@@ -15,7 +15,7 @@ categories:
 
 大部分團隊第一次裝 Kubernetes 時，拿到的都是一個「超級使用者」的 kubeconfig，裡面就躺著一組可以幹掉整個叢集的憑證。於是這份檔案開始在 Slack、Email、筆電之間被複製來複製去，沒有人知道目前誰還留著副本、哪個離職員工的 kubeconfig 還能用。
 
-這篇文章要示範如何用 [kubelogin][1] 搭配 [AuthGate][2]，在 [k3s][3] 上建立一條 OIDC 登入流程：使用者打 `kubectl get pods` 的瞬間，瀏覽器自動跳出 AuthGate 的登入頁面，登入完成 token 寫回 kubeconfig，整個叢集不再需要共用那份 `admin.kubeconfig`。
+這篇文章要示範如何用 [kubelogin][1] 搭配 [AuthGate][2]，在 [k3s][3] 上建立一條 [OIDC][oidc] 登入流程：使用者打 `kubectl get pods` 的瞬間，瀏覽器自動跳出 AuthGate 的登入頁面，登入完成 token 寫回 kubeconfig，整個叢集不再需要共用那份 `admin.kubeconfig`。
 
 [1]: https://github.com/int128/kubelogin
 [2]: https://github.com/go-authgate/authgate
@@ -443,7 +443,7 @@ Please visit the following URL in your browser: https://authgate.local:8080/devi
 Please enter the code: XYZB-1234
 ```
 
-使用者在任何一台有瀏覽器的機器打開那個 URL、輸入 code，本機就會拿到 token。AuthGate 原生支援 RFC 8628 Device Authorization Grant，不用額外設定。
+使用者在任何一台有瀏覽器的機器打開那個 URL、輸入 code，本機就會拿到 token。AuthGate 原生支援 [RFC 8628 Device Authorization Grant][rfc8628]，不用額外設定。
 
 ### 強制所有人重新登入
 
@@ -482,6 +482,5 @@ kube-apiserver 那邊也可以開啟 [Kubernetes Audit Log][8]：
 
 三、五人的團隊也完全做得起來，推薦花一個下午導入。
 
-[rfc6749]: https://datatracker.ietf.org/doc/html/rfc6749
-[rfc7636]: https://datatracker.ietf.org/doc/html/rfc7636
+[oidc]: https://openid.net/specs/openid-connect-core-1_0.html
 [rfc8628]: https://datatracker.ietf.org/doc/html/rfc8628
