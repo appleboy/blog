@@ -183,13 +183,13 @@ curl -s https://authgate.local:8080/.well-known/openid-configuration | jq .
 
 登入 `https://authgate.local:8080/admin`，用剛剛的 admin 帳密進入 **Admin → OAuth Clients → Create New Client**，填入：
 
-| 欄位          | 值                                    |
-| ------------- | ------------------------------------- |
-| Name          | `kubelogin`                                        |
-| Client Type   | `Public`（kubelogin 是 CLI，沒辦法保管 secret）    |
-| Grant Types   | `Authorization Code Flow (RFC 6749)`               |
+| 欄位          | 值                                                  |
+| ------------- | --------------------------------------------------- |
+| Name          | `kubelogin`                                         |
+| Client Type   | `Public`（kubelogin 是 CLI，沒辦法保管 secret）     |
+| Grant Types   | `Authorization Code Flow (RFC 6749)`                |
 | Redirect URIs | `http://localhost:8000`<br>`http://localhost:18000` |
-| Scopes        | `openid email profile`                             |
+| Scopes        | `openid email profile`                              |
 
 為什麼選 Public client + PKCE？因為 kubelogin 跑在使用者本機，沒辦法安全保管 `client_secret`。OAuth 2.1 的標準做法是用 PKCE（Proof Key for Code Exchange）取代 secret，kubelogin 預設就會送 `code_challenge`。
 
