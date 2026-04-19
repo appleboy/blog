@@ -37,9 +37,9 @@ categories:
 
 ## 為什麼選 AuthGate 當 IdP？
 
-要跑 OIDC 你總得有一台 IdP。Keycloak 是大家第一個想到的選擇，但對小團隊來說 Keycloak 是一台雲端上的「小怪獸」：需要 PostgreSQL、要調 JVM 記憶體、升級時 realm migration 容易爆炸。[Dex][4] 更輕量但只做 federation，本身沒有 user store。
+要跑 OIDC 你總得有一台 IdP。[Keycloak][4] 是大家第一個想到的選擇，但對小團隊來說 Keycloak 是一台雲端上的「小怪獸」：需要 PostgreSQL、要調 JVM 記憶體、升級時 realm migration 容易爆炸。[Dex][5] 更輕量但只做 federation，本身沒有 user store。
 
-[AuthGate][2] 是最近發現的一個方案，剛好補上這個中間地帶：
+[AuthGate][2] 是 2026 年才在 GitHub 上釋出的新開源專案（MIT License、Go 寫成），剛好補上這個中間地帶。因為是今年才開張、功能還在快速長出來，社群回饋直接影響 roadmap，對想找輕量 IdP 的團隊來說正是參與早期專案的好時機：
 
 - **單一 static binary + SQLite**：不用 PostgreSQL、不用 JVM，`./authgate server` 就跑起來，需要水平擴展時再換 PostgreSQL。
 - **原生支援 OIDC Discovery 與 JWKS**：`/.well-known/openid-configuration`、`/.well-known/jwks.json` 全部齊備，kube-apiserver 可以直接抓公鑰在本地驗證 JWT，不用每次都回呼 IdP。
@@ -50,7 +50,8 @@ categories:
 
 對小團隊而言 AuthGate 最大的價值是「不需要一個專職 IdP 管理員」。部署跟 Grafana、Prometheus 這種等級的東西差不多，而不是 Keycloak 那種等級。
 
-[4]: https://dexidp.io/
+[4]: https://www.keycloak.org/
+[5]: https://dexidp.io/
 
 ## 架構總覽
 
@@ -83,10 +84,10 @@ sequenceDiagram
 
 ## 實戰步驟
 
-以下假設你有一台本機可以跑 k3s，以及 AuthGate 要能被 kube-apiserver 透過 HTTPS 存取。kube-apiserver 對 `oidc-issuer-url` 有強制 HTTPS 要求，這邊用 [mkcert][5] 產地端 CA 憑證，直接掛到 AuthGate 內建的 TLS server 上，省掉額外架反向代理的工。k3s 的部分 macOS 開發者可以用 [colima][6] 啟動、Linux 直接裝原生 k3s，兩種都示範。
+以下假設你有一台本機可以跑 k3s，以及 AuthGate 要能被 kube-apiserver 透過 HTTPS 存取。kube-apiserver 對 `oidc-issuer-url` 有強制 HTTPS 要求，這邊用 [mkcert][6] 產地端 CA 憑證，直接掛到 AuthGate 內建的 TLS server 上，省掉額外架反向代理的工。k3s 的部分 macOS 開發者可以用 [colima][7] 啟動、Linux 直接裝原生 k3s，兩種都示範。
 
-[5]: https://github.com/FiloSottile/mkcert
-[6]: https://github.com/abiosoft/colima
+[6]: https://github.com/FiloSottile/mkcert
+[7]: https://github.com/abiosoft/colima
 
 ### Step 1：用 mkcert 產生 TLS 憑證
 
@@ -244,7 +245,7 @@ kubectl oidc-login setup \
 
 #### 選項 A：macOS 用 colima（推薦，免切 Linux VM）
 
-[colima][6] 底層會起一個輕量 Lima VM 內建 k3s，適合 macOS 開發者。推薦用 YAML 設定檔的方式把 k3s 參數跟 mount 一起宣告式地寫清楚，重開也不會跑掉：
+[colima][7] 底層會起一個輕量 Lima VM 內建 k3s，適合 macOS 開發者。推薦用 YAML 設定檔的方式把 k3s 參數跟 mount 一起宣告式地寫清楚，重開也不會跑掉：
 
 ```bash
 brew install colima
@@ -423,7 +424,7 @@ Please enter the code: XYZB-1234
 
 AuthGate 的 `/admin/audit` 有完整事件流，可以搜尋特定使用者、特定事件類型，並匯出成 CSV。
 
-kube-apiserver 那邊也可以開啟 [Kubernetes Audit Log][7]：
+kube-apiserver 那邊也可以開啟 [Kubernetes Audit Log][8]：
 
 ```bash
 --kube-apiserver-arg=audit-log-path=/var/log/k3s-audit.log
@@ -432,7 +433,7 @@ kube-apiserver 那邊也可以開啟 [Kubernetes Audit Log][7]：
 
 兩邊的 log 透過 `email`（kubelogin 給 k8s 的 username）就可以 join 起來，變成完整的「誰登入 → 誰操作」軌跡。
 
-[7]: https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
+[8]: https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/
 
 ## 小結
 
