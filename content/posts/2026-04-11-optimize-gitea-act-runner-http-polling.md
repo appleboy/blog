@@ -17,6 +17,11 @@ categories:
 
 [1]: https://gitea.com/gitea/act_runner
 
+> **更新（2026-04-20）**：本文原本描述 [PR #819][pr-819] 合併後的設計。後續 [PR #822][pr-822] 在 code review 中揭露 #819 對 `capacity > 1` 的 Runner 引入了一個 concurrency regression，並用「單一 poller + semaphore」架構再次修正。請見文末〈[後續修正：Single Poller with Semaphore（PR #822）](#後續修正single-poller-with-semaphorepr-822)〉章節。
+>
+> [pr-819]: https://gitea.com/gitea/act_runner/pulls/819
+> [pr-822]: https://gitea.com/gitea/act_runner/pulls/822
+
 <!--more-->
 
 ## 架構現狀：一切都是 HTTP Polling
@@ -83,6 +88,8 @@ type workerState struct {
 **關鍵場景**：Server 當機 5 分鐘後恢復。如果只用一個計數器，恢復後第一個成功回應會把計數器歸零，所有 Runner 同時回到 2 秒間隔，造成 thundering herd。用兩個計數器，errors 歸零但 empty 繼續維持，backoff 平滑過渡。
 
 **為什麼是 per-worker 而不是共用 atomic？** Act Runner 的架構是「N 個獨立的 worker，每個自己 poll 自己跑」（`Capacity` 控制 N）。若用共用 counter，3 個 worker 各自第一次 empty 會把 counter 推到 3，被誤判為「連續 3 次空」而觸發長 backoff——其實每個 worker 才空一次。把 counter 拆到 `workerState`，每個 goroutine 自己讀寫自己的 `int64`，不需要 atomic，也避免了這個假性 backoff 問題。順帶一個好處：當 Server 恢復、某個 worker 拿到 task 時只重置自己的 backoff，其他 worker 維持目前 interval，thundering herd 的保護更強。
+
+> **⚠️ 事後修正**：上面「per-worker 更好」的論述只考慮了 backoff 計數器的正確性，沒考慮到跨 worker 的 polling 節奏。舊版 `rate.NewLimiter(rate.Every(FetchInterval), 1)` 的 `burst=1` 其實**共享**給所有 N 個 goroutine，實質序列化了 FetchTask 呼叫——這件事被這次改寫「意外地」消除了。`capacity=60` 的 Runner 因此從「1 FetchTask / interval」變成「60 FetchTask / interval」，對 `capacity > 1` 的使用情境是 regression。修正請見文末〈[後續修正：Single Poller with Semaphore（PR #822）](#後續修正single-poller-with-semaphorepr-822)〉。
 
 ### 指數退讓的數學
 
@@ -351,6 +358,117 @@ RunnerServiceClient: runnerv1connect.NewRunnerServiceClient(httpClient, ...)
 
 為什麼是 10？最大併發 ≈ 1 (polling) + capacity × 2 (每個 task 的 log + state)。預設 capacity=1 時只需 3 個，設 10 可覆蓋 capacity=4 而不浪費。
 
+## 後續修正：Single Poller with Semaphore（PR #822）
+
+上面的 per-worker 設計合併（#819）後，[@ChristopherHX][ch] 在 review 中點出一個被忽略的問題：[#819][pr-819] 把跨 worker 的序列化意外拆掉了。後續 [PR #822][pr-822] 為這個 regression 做了結構性修正。
+
+[ch]: https://gitea.com/ChristopherHX
+
+### 漏看的那件事：`rate.Limiter` 其實是被共享的
+
+舊版程式碼長這樣：
+
+```go
+// 舊版：N 個 polling goroutine 共用同一個 limiter
+limiter := rate.NewLimiter(rate.Every(p.cfg.Runner.FetchInterval), 1)
+for i := 0; i < capacity; i++ {
+    go func() {
+        for {
+            limiter.Wait(ctx)  // 所有 goroutine 在這裡排隊
+            fetchTask(...)
+        }
+    }()
+}
+```
+
+`burst=1` 的 `rate.Limiter` 被**所有 N 個 goroutine 共用**，實務上序列化了 `FetchTask` 呼叫——`capacity=60` 的 Runner 仍然只發「1 FetchTask / FetchInterval」。
+
+[#819][pr-819] 把這個共用 limiter 換成 per-worker 的獨立計數器之後，這個隱性的跨 worker 序列化就消失了。`capacity=60` 瞬間變成「60 個各自獨立 polling 的 goroutine」，每個自己退讓、自己 jitter——從 Server 的角度看，是 60 倍的 FetchTask 流量。
+
+### 實測影響：3 Runners × capacity=60
+
+作者的生產環境是 3 個 Runner，每個 `capacity=60`：
+
+| 指標                            | Pre-#819（舊 rate.Limiter） | Post-#819（本文原版 per-worker） | Post-#822（single poller + semaphore） |
+| ------------------------------- | --------------------------- | -------------------------------- | -------------------------------------- |
+| Polling goroutines（總計）      | 3                           | **180**                          | **3**                                  |
+| 閒置時 FetchTask RPC / 週期     | 3                           | 180                              | 3                                      |
+| **滿載時** FetchTask RPC / 週期 | 180（全部浪費）             | 180（全部浪費）                  | **0（semaphore 阻塞）**                |
+| 到 Server 的並發連線            | 3                           | 180                              | 3                                      |
+
+值得注意的是「滿載時 0 RPC」這個特性：pre-#819 和 post-#819 都做不到——`rate.Limiter` 沒有 capacity 的概念，即使 N 個 slot 全部在跑 task，閒置 goroutine 還是會從 limiter 拿 token 去發 FetchTask，而 Server 回來的 task 也沒地方放。Semaphore 把 polling 和 capacity 綁在一起才解決這件事。
+
+### 為什麼不 revert 回 `rate.Limiter`？
+
+第一直覺是「那就把 shared limiter 加回來」。但 review 討論的結論是這不是好選擇：
+
+- **`rate.Limiter` 沒有 capacity 概念**。滿載時仍然會發 FetchTask，拿回來的 task 無處可放——這是即便 pre-#819 也會浪費的 RPC。Semaphore 在這個情境下直接阻塞 polling，零浪費。
+- **和 #819 的 adaptive backoff 方向相反**。共用 limiter 想把速率壓成固定值，per-worker backoff 想根據實際狀況動態調整——兩者疊在一起行為難以推理。
+- **N 個 goroutine 只為了排隊等 shared limiter** 沒有意義。既然跨 worker 是序列化的，那就用 1 個 poller 直接表達這個語意，而不是讓 N-1 個 goroutine 只負責排隊。
+
+### 新架構：`make(chan struct{}, capacity)` 當 semaphore
+
+核心迴圈只有一個 goroutine：
+
+```go
+func (p *Poller) Poll() {
+    sem := make(chan struct{}, p.cfg.Runner.Capacity)
+    for {
+        select {
+        case sem <- struct{}{}:   // 取得 slot（達到 capacity 時阻塞）
+        case <-p.pollingCtx.Done():
+            return
+        }
+
+        task, ok := p.fetchTask(p.pollingCtx, p.state)
+        if !ok {
+            <-sem                 // 沒 task → 立刻還回 slot
+            p.waitBackoff()       // 仍保留 #819 的 exponential backoff + jitter
+            continue
+        }
+
+        go func(t *runnerv1.Task) {
+            defer func() { <-sem }()   // task 完成 → 還 slot
+            p.runTaskWithRecover(p.jobsCtx, t)
+        }(task)
+    }
+}
+```
+
+前文提的 exponential backoff 與 jitter 邏輯**完全保留**，只是跑在一份 `workerState` 上，不再是 N 份。
+
+`<Capacity>` 在 semaphore 架構下有了明確的結構語意：「slot 數」。從 `acquire slot → fetch → dispatch → release` 這條不變量自動推出「polling 永遠不會比 capacity 快」。
+
+### 順便修掉一個 pre-existing Shutdown bug
+
+`Shutdown()` 原本長這樣：
+
+```go
+// 看起來是「非阻塞 check」，其實是 blocking receive
+_, ok := <-p.done
+if !ok {
+    return nil
+}
+p.shutdownJobs() // timeout 時走到不了這一行
+```
+
+`<-p.done` 會**一直阻塞到 channel 被關閉**，所以 `Shutdown()` 的 timeout 分支真要走到 `shutdownJobs()` 強制取消 job 時，根本走不到那行。改成真正的非阻塞檢查後才正確：
+
+```go
+select {
+case <-p.done:
+    return nil
+default:
+}
+p.shutdownJobs() // timeout 時會被執行
+```
+
+這個 bug 跟 polling 架構無關，但因為改寫 `Poller` 時剛好經過這段，一併修掉。
+
+### 設定不變，使用者無感
+
+`capacity` / `fetch_interval` / `fetch_interval_max` 所有原有設定都沿用，不需要改 config。差別只是底層實作：N 個 polling goroutine → 1 個 + semaphore。
+
 ## 和熔斷器（Circuit Breaker）的差異
 
 有人可能會問：這不就是熔斷器嗎？其實不完全是。
@@ -405,3 +523,7 @@ runner:
 | **整體**   | **200 runners × 3 tasks**              | **1,300 → 170 req/s（87%）** |
 
 這些優化的共同原則是：**不做無效的事**。沒有新 log 就不發 `UpdateLog`，state 沒變就不發 `UpdateTask`，沒有 job 就逐漸降低 `FetchTask` 頻率。在不犧牲前端即時性的前提下，大幅減輕 Server 負擔。
+
+而 [@silverwind][sw] 在 #819 討論串裡也丟了一個更根本的方向：**把 HTTP polling 換成 persistent socket（例如 WebSocket）**。這樣整類「發很多請求只為了問有沒有新東西」的問題就會從架構上消失。這是相對大的改動（Server 和 Runner 雙邊都要動），目前這系列 PR 選擇在 HTTP polling 的前提下先把多餘請求壓乾，但長期來看，socket-based 協定仍然是值得投資的方向。
+
+[sw]: https://gitea.com/silverwind

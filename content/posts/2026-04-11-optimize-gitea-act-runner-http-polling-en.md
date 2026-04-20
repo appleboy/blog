@@ -17,6 +17,11 @@ categories:
 
 [1]: https://gitea.com/gitea/act_runner
 
+> **Update (2026-04-20)**: This article originally described the design after [PR #819][pr-819] merged. A follow-up, [PR #822][pr-822], revealed during code review that #819 had introduced a concurrency regression for Runners with `capacity > 1`, and addressed it with a "single poller + semaphore" architecture. See the new section at the end: [Follow-up: Single Poller with Semaphore (PR #822)](#follow-up-single-poller-with-semaphore-pr-822).
+>
+> [pr-819]: https://gitea.com/gitea/act_runner/pulls/819
+> [pr-822]: https://gitea.com/gitea/act_runner/pulls/822
+
 <!--more-->
 
 ## Current Architecture: Everything is HTTP Polling
@@ -84,6 +89,8 @@ Why not use a single counter? Because "no jobs available" and "Server is down" a
 **Key scenario**: Server goes down for 5 minutes then recovers. With a single counter, the first successful response after recovery would reset the counter to zero, and all Runners would simultaneously return to 2-second intervals, causing a thundering herd. With two counters, errors reset but empty continues, providing a smooth backoff transition.
 
 **Why per-worker instead of a shared atomic?** Act Runner's architecture consists of "N independent workers, each polling and running on its own" (`Capacity` controls N). With a shared counter, 3 workers each experiencing their first empty would push the counter to 3, being misjudged as "3 consecutive empties" and triggering a long backoff — when each worker has only been empty once. By splitting counters into `workerState`, each goroutine reads and writes its own `int64`, eliminating the need for atomics and avoiding this false backoff issue. An added benefit: when the Server recovers and one worker gets a task, only that worker's backoff resets while others maintain their current interval, providing stronger thundering herd protection.
+
+> **⚠️ Correction in hindsight**: The argument above only considers correctness of the backoff counters — it misses the cross-worker polling rate. The old `rate.NewLimiter(rate.Every(FetchInterval), 1)` with `burst=1` was actually **shared** across all N goroutines, which effectively serialized their `FetchTask` calls. That implicit serialization was removed as a side effect of this change: a Runner with `capacity=60` went from "1 FetchTask / interval" to "60 FetchTask / interval", a regression for any deployment with `capacity > 1`. See the new section at the end: [Follow-up: Single Poller with Semaphore (PR #822)](#follow-up-single-poller-with-semaphore-pr-822).
 
 ### The Math Behind Exponential Backoff
 
@@ -352,6 +359,117 @@ RunnerServiceClient: runnerv1connect.NewRunnerServiceClient(httpClient, ...)
 
 Why 10? Maximum concurrency ≈ 1 (polling) + capacity × 2 (log + state per task). With the default capacity=1, only 3 are needed; setting 10 covers capacity=4 without waste.
 
+## Follow-up: Single Poller with Semaphore (PR #822)
+
+Shortly after the per-worker design from [#819][pr-819] merged, [@ChristopherHX][ch] pointed out during review that it had silently removed a cross-worker property of the old code. The follow-up [PR #822][pr-822] fixes that regression structurally.
+
+[ch]: https://gitea.com/ChristopherHX
+
+### The overlooked detail: `rate.Limiter` was actually shared
+
+The old code was:
+
+```go
+// Before: N polling goroutines sharing the same limiter
+limiter := rate.NewLimiter(rate.Every(p.cfg.Runner.FetchInterval), 1)
+for i := 0; i < capacity; i++ {
+    go func() {
+        for {
+            limiter.Wait(ctx)  // every goroutine queues on the same limiter
+            fetchTask(...)
+        }
+    }()
+}
+```
+
+With `burst=1` and **a single limiter shared across all N goroutines**, `FetchTask` calls were effectively serialized — even with `capacity=60`, the Runner still issued "1 FetchTask / FetchInterval" in total.
+
+When [#819][pr-819] replaced the shared limiter with per-worker independent counters, that implicit cross-worker serialization disappeared. A `capacity=60` Runner became "60 independent polling goroutines", each with its own backoff and jitter — from the Server's point of view, 60× the FetchTask traffic.
+
+### Real-world impact: 3 Runners × capacity=60
+
+The author's production environment runs 3 Runners with `capacity=60` each:
+
+| Metric                              | Pre-#819 (shared `rate.Limiter`) | Post-#819 (per-worker, original article) | Post-#822 (single poller + semaphore) |
+| ----------------------------------- | -------------------------------- | ---------------------------------------- | ------------------------------------- |
+| Polling goroutines (total)          | 3                                | **180**                                  | **3**                                 |
+| Idle FetchTask RPC / cycle          | 3                                | 180                                      | 3                                     |
+| **Full-load** FetchTask RPC / cycle | 180 (all wasted)                 | 180 (all wasted)                         | **0 (blocked on semaphore)**          |
+| Concurrent connections to Server    | 3                                | 180                                      | 3                                     |
+
+The "0 RPCs at full load" row is the interesting one: neither pre-#819 nor post-#819 achieves this — `rate.Limiter` has no notion of available capacity, so idle goroutines keep pulling tokens to issue `FetchTask` even when every slot is already running a task. The semaphore ties polling to capacity, eliminating that waste entirely.
+
+### Why not just revert to `rate.Limiter`?
+
+The first instinct is "just put the shared limiter back". The review discussion concluded this is not the right fix:
+
+- **`rate.Limiter` has no capacity notion**. At full load it still hands out tokens and issues `FetchTask` RPCs that can't be acted on — wasted RPCs that even pre-#819 code had. The semaphore blocks polling in that case, zero waste.
+- **It composes poorly with #819's adaptive backoff**. A shared limiter wants to pin the rate to a constant; per-worker backoff wants to adjust dynamically. Layering them makes the behavior hard to reason about.
+- **N goroutines queueing on a shared limiter is pointless**. If the cross-worker behavior is serialized anyway, a single poller expresses that directly, instead of having N-1 goroutines whose only job is to wait in line.
+
+### The new architecture: `make(chan struct{}, capacity)` as a semaphore
+
+The core loop is a single goroutine:
+
+```go
+func (p *Poller) Poll() {
+    sem := make(chan struct{}, p.cfg.Runner.Capacity)
+    for {
+        select {
+        case sem <- struct{}{}:   // acquire slot (blocks at capacity)
+        case <-p.pollingCtx.Done():
+            return
+        }
+
+        task, ok := p.fetchTask(p.pollingCtx, p.state)
+        if !ok {
+            <-sem                 // no task → release slot immediately
+            p.waitBackoff()       // #819's exponential backoff + jitter preserved
+            continue
+        }
+
+        go func(t *runnerv1.Task) {
+            defer func() { <-sem }()   // release slot when task completes
+            p.runTaskWithRecover(p.jobsCtx, t)
+        }(task)
+    }
+}
+```
+
+The exponential backoff and jitter described earlier in this article are **fully preserved** — they just run against a single `workerState` instead of N.
+
+`Capacity` now has a precise structural meaning under this design: "number of slots". The invariant `acquire slot → fetch → dispatch → release` implies, by construction, that polling can never outpace capacity.
+
+### Incidentally fixing a pre-existing Shutdown bug
+
+`Shutdown()` previously looked like this:
+
+```go
+// Looks like a "non-blocking check" — actually a blocking receive
+_, ok := <-p.done
+if !ok {
+    return nil
+}
+p.shutdownJobs() // unreachable on timeout
+```
+
+`<-p.done` **blocks until the channel is closed**, so the timeout path that was supposed to force-cancel running jobs via `shutdownJobs()` was actually dead code. Turning it into a real non-blocking check fixes that:
+
+```go
+select {
+case <-p.done:
+    return nil
+default:
+}
+p.shutdownJobs() // reachable on timeout
+```
+
+This bug is unrelated to the polling architecture, but since the `Poller` was being rewritten anyway, the fix rode along in the same PR.
+
+### No config changes required
+
+`capacity` / `fetch_interval` / `fetch_interval_max` and all the other settings keep their semantics — no config changes required. The only difference is the implementation underneath: N polling goroutines → 1 poller + semaphore.
+
 ## Difference from Circuit Breakers
 
 Some might ask: isn't this just a circuit breaker? Not exactly.
@@ -406,3 +524,7 @@ runner:
 | **Overall**      | **200 runners × 3 tasks**                       | **1,300 → 170 req/s (87%)**      |
 
 The common principle behind all these optimizations: **don't do unnecessary work**. No new logs? Don't send `UpdateLog`. State unchanged? Don't send `UpdateTask`. No jobs? Gradually reduce `FetchTask` frequency. By significantly reducing Server load without sacrificing frontend responsiveness.
+
+One more direction, raised by [@silverwind][sw] in the #819 discussion: **replace HTTP polling with a persistent socket (e.g. WebSocket)**. That would make this entire class of "lots of requests just to ask whether anything new happened" go away at the architectural level. It's a larger change that touches both Server and Runner, so this series of PRs chose to first squeeze wasted requests out of the existing HTTP-polling model — but a socket-based protocol remains a worthwhile longer-term investment.
+
+[sw]: https://gitea.com/silverwind
