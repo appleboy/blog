@@ -31,7 +31,7 @@ categories:
 
 > Vibe coding is where you fully give into the vibes, embrace exponentials, and forget that the code even exists.
 
-關鍵在「**忘記程式碼存在**」這四個字。如果你還在 Claude Code 裡逐行盯著它補完每一個 diff，那不是 vibe coding，那是 AI 輔助寫 code——本質上跟 IDE 自動補全沒兩樣，只是補的範圍變大。
+關鍵在「**忘記程式碼存在**」這七個字。如果你還在 Claude Code 裡逐行盯著它補完每一個 diff，那不是 vibe coding，那是 AI 輔助寫 code——本質上跟 IDE 自動補全沒兩樣，只是補的範圍變大。
 
 真正的 vibe coding 是另一回事：你信任 AI 完成一整塊工作，**只透過抽象層（規格、測試、輸入輸出）驗證**，不讀完每一行。三種狀態的差別整理如下：
 
