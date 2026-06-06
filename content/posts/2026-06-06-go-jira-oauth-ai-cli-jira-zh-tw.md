@@ -231,11 +231,9 @@ flowchart LR
     end
 ```
 
-這也正是本文開頭那張封面架構圖在講的事——**login 走上方那條弧線直連 Jira(broker 完全不參與)**,只有 refresh 才走下方經過 broker 的 ①②③④ 路徑,而 `client_secret` 自始至終只待在 broker 裡。
+這也正是本文開頭那張封面架構圖在講的事——**login 走上方那條弧線直連 Jira（broker 完全不參與）**，只有 refresh 才走下方經過 broker 的 ①②③④ 路徑，而 `client_secret` 自始至終只待在 broker 裡。
 
 只要設定 `JIRA_TOKEN_BROKER_URL`，go-jira 就會把 refresh 那步導去 broker；不設定時行為跟現在完全一樣（直連 refresh），CLI **永遠不會**持有 secret。broker 自己不儲存任何 token，並會把同一顆 refresh token 的並發 refresh 合併成單一一次上游呼叫（因為 Jira DC 每次 refresh 都會作廢舊 token，naïve 的並發呼叫會 race）。實務上建議把它當成同一顆 binary、跑在內網限定、走 TLS 的 ingress 後面，把網路當成主要存取控制，再用選用的 caller bearer token（`JIRA_BROKER_TOKEN`）做縱深防禦。詳細的 k8s + Vault 部署、request coalescing、安全模型，可參考 go-jira 的 [`docs/oauth-usage.md`][oauth-doc]。
-
-[oauth-doc]: https://github.com/appleboy/go-jira/blob/main/docs/oauth-usage.md
 
 ## 小結
 
@@ -247,3 +245,5 @@ flowchart LR
 而 go-jira 把這一切包成幾個對人、對 AI 都友善的指令：開發者只要 `go-jira login` 一次，Claude Code 之後就能透過乾淨的 JSON 介面安全地操作 Jira，全程碰不到那顆代表你身分的祕密。
 
 如果你的團隊正在把 AI CLI 接進日常開發流程，又還在用 PAT 跟 Jira 互動，是時候把 OAuth 這條路認真評估一下了。完整設定（在 Jira 註冊 client、scope、儲存後端、CI/CD 的 refresh token 輪替、broker）都在 [go-jira 的 OAuth 使用指南][oauth-doc]。
+
+[oauth-doc]: https://github.com/appleboy/go-jira/blob/main/docs/oauth-usage.md
