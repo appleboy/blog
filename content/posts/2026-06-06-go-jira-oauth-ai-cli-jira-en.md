@@ -15,9 +15,9 @@ categories:
 
 ![cover](/images/2026-06-06/broker-architecture.png)
 
-A huge number of developers now write code on their *personal work machines*, and they increasingly let AI CLI tools like [Claude Code][claude] run commands, look things up, and tidy up afterwards. Wiring that AI workflow into [Jira][jira] makes it even more powerful: the AI can look up issues, update statuses, leave comments, and map commit messages back to tickets. But there's a security question that keeps getting underrated — **how does the CLI authenticate to Jira?**
+More and more developers let AI CLI tools like [Claude Code][claude] run commands, look things up, and tidy up afterwards right on their own development machines. Wiring that AI workflow into [Jira][jira] makes it even more powerful: the AI can look up issues, update statuses, leave comments, and map commit messages back to tickets. The star of this post, [go-jira][gojira] (<https://github.com/appleboy/go-jira>), is a Jira CLI built for exactly this scenario. But there's a security question that keeps getting underrated — **how does the CLI authenticate to Jira?**
 
-The most common answer historically is a PAT (Personal Access Token). It's simple, but on an AI work machine it carries two very real risks:
+The most common answer historically is a PAT (Personal Access Token). It's simple, but on an AI development machine it carries two very real risks:
 
 1. **The AI can read it by accident.** A PAT usually lives in `.env`, a shell rc file, or some config file. The moment you let an AI agent "freely explore the filesystem" on that machine, this long-lived token — which carries your full account permissions — can get pulled into the context, or even written out into some piece of output.
 2. **A file that lives forever is an exposure surface that lives forever.** A PAT doesn't rotate. Once leaked, it stays valid until you manually revoke it. We've all heard the stories: synced to the cloud, swept into a backup, accidentally committed into a repo.
@@ -32,7 +32,7 @@ That's why "switching CLI auth from a PAT to Jira OAuth" has been pulled back in
 
 <!--more-->
 
-## Why OAuth fits an AI work machine better than a PAT
+## Why OAuth fits an AI development machine better than a PAT
 
 Let's spell out the core differences first — they're the whole motivation for this approach:
 
@@ -50,7 +50,7 @@ The point isn't "OAuth can't leak" — it's that **what leaks is different**:
 - The refresh token lives in the **Keyring**, not a plaintext file, so an AI agent poking around the filesystem can't read it.
 - The refresh token **rotates**: Jira DC invalidates the old one and issues a new one on every refresh, so each one effectively dies after a single use.
 
-In other words, OAuth swaps "one account-equivalent, long-lived secret sitting in a file" for "a short-lived access token plus a rotating refresh token in the keyring" — which directly addresses both of the AI work machine's big risks.
+In other words, OAuth swaps "one account-equivalent, long-lived secret sitting in a file" for "a short-lived access token plus a rotating refresh token in the keyring" — which directly addresses both of the AI development machine's big risks.
 
 ## The two OAuth flows go-jira supports
 
@@ -166,7 +166,7 @@ Put the two flows above together, and Claude Code's interaction with Jira looks 
 ```mermaid
 flowchart LR
     Dev[Developer] -->|one-time go-jira login| KR[(OS Keyring<br/>refresh token)]
-    subgraph Personal work machine
+    subgraph Development machine
         CC[Claude Code / AI CLI] -->|invokes subcommands| GJ[go-jira]
         GJ -->|fetch + refresh automatically| KR
         GJ -->|short-lived Bearer token| API[Jira DC API]
@@ -237,7 +237,7 @@ Set `JIRA_TOKEN_BROKER_URL` and go-jira routes only the refresh step through the
 
 ## Wrapping up
 
-Switching CLI-to-Jira auth from a PAT to OAuth is, at its core, swapping "one account-equivalent, long-lived secret sitting in a plaintext file" for "a short-lived access token plus a rotating refresh token in the Keyring." For the growing number of developers running AI agents on their personal machines, that swap hits two pain points dead-on:
+Switching CLI-to-Jira auth from a PAT to OAuth is, at its core, swapping "one account-equivalent, long-lived secret sitting in a plaintext file" for "a short-lived access token plus a rotating refresh token in the Keyring." For the growing number of developers running AI agents on their own development machines, that swap hits two pain points dead-on:
 
 1. **The AI can't read the token.** The refresh token lives in the Keyring, no longer exposed as a file within the AI's exploration range.
 2. **Leak damage shrinks dramatically.** The access token is short-lived, the refresh token rotates on every use, and scope lets you bound what the AI can touch.

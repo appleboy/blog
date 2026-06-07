@@ -15,9 +15,9 @@ categories:
 
 ![cover](/images/2026-06-06/broker-architecture.png)
 
-現在大量開發者都在「個人工作機」上寫程式，而且越來越習慣讓 [Claude Code][claude] 這類 AI CLI 工具幫忙跑指令、查資料、收尾善後。把這條 AI 工作流接到 [Jira][jira] 之後，威力更大：AI 可以幫你查 issue、更新狀態、補留言、把 commit 訊息對應到工單。但這裡有一個一直被低估的安全議題——**CLI 要怎麼跟 Jira 認證？**
+越來越多開發者習慣在自己的開發機上，讓 [Claude Code][claude] 這類 AI CLI 工具幫忙跑指令、查資料、收尾善後。把這條 AI 工作流接到 [Jira][jira] 之後，威力更大：AI 可以幫你查 issue、更新狀態、補留言、把 commit 訊息對應到工單。本文的主角 [go-jira][gojira]（<https://github.com/appleboy/go-jira>）正是為了這個場景打造的 Jira CLI。但這裡有一個一直被低估的安全議題——**CLI 要怎麼跟 Jira 認證？**
 
-過去最常見的做法是 PAT（Personal Access Token）。它確實簡單，但放在 AI 工作機上有兩個很實際的風險：
+過去最常見的做法是 PAT（Personal Access Token）。它確實簡單，但放在 AI 開發機上有兩個很實際的風險：
 
 1. **AI 可能不小心讀到它**：PAT 通常被塞在 `.env`、shell rc、或某個設定檔裡。當你讓 AI agent 在這台機器上「自由探索檔案」時，這顆等同你帳號權限的長期 token 很可能就被讀進 context、甚至被寫進某段輸出裡。
 2. **以檔案形式長期存在 = 長期暴露面**：PAT 不會自動輪替，一旦外洩，在你手動撤銷之前它都是有效的。檔案被同步到雲端、被備份、被誤 commit 進 repo 的故事，大家都聽過。
@@ -32,7 +32,7 @@ categories:
 
 <!--more-->
 
-## 為什麼 OAuth 比 PAT 更適合 AI 工作機？
+## 為什麼 OAuth 比 PAT 更適合 AI 開發機？
 
 先把核心差異講清楚，這也是整個方案的設計動機：
 
@@ -50,7 +50,7 @@ categories:
 - Refresh token 收在 **Keyring** 而不是純文字檔，AI agent 在檔案系統裡亂逛時讀不到它。
 - Refresh token 採**輪替（rotation）**：Jira DC 每次 refresh 都會作廢舊的、發新的一顆，等於每次使用後舊的就死了。
 
-換句話說，OAuth 把「一顆等同帳號、長期有效、放在檔案裡」的 PAT，換成「短效 access token + 收在 keyring 的輪替 refresh token」，正好對症下藥 AI 工作機的兩大風險。
+換句話說，OAuth 把「一顆等同帳號、長期有效、放在檔案裡」的 PAT，換成「短效 access token + 收在 keyring 的輪替 refresh token」，正好對症下藥 AI 開發機的兩大風險。
 
 ## go-jira 支援的兩種 OAuth 流程
 
@@ -166,7 +166,7 @@ go-jira logout                 # 刪掉此站台的 token
 ```mermaid
 flowchart LR
     Dev[開發者] -->|一次性 go-jira login| KR[(OS Keyring<br/>refresh token)]
-    subgraph 個人工作機
+    subgraph 開發機
         CC[Claude Code / AI CLI] -->|呼叫子指令| GJ[go-jira]
         GJ -->|自動取用 + refresh| KR
         GJ -->|短效 Bearer token| API[Jira DC API]
@@ -237,7 +237,7 @@ flowchart LR
 
 ## 小結
 
-把 CLI 對 Jira 的認證從 PAT 換成 OAuth，本質上是把「一顆等同帳號、長期有效、放在純文字檔裡」的祕密，換成「短效 access token + 收在 Keyring 的輪替 refresh token」。對於越來越多在個人工作機上跑 AI agent 的開發者來說，這個轉換正好命中兩個痛點：
+把 CLI 對 Jira 的認證從 PAT 換成 OAuth，本質上是把「一顆等同帳號、長期有效、放在純文字檔裡」的祕密，換成「短效 access token + 收在 Keyring 的輪替 refresh token」。對於越來越多在自己的開發機上跑 AI agent 的開發者來說，這個轉換正好命中兩個痛點：
 
 1. **AI 讀不到 token**：refresh token 收在 Keyring，不再以檔案形式暴露在 AI 的探索範圍內。
 2. **外洩傷害大幅縮小**：access token 短效、refresh token 每次使用即輪替，還能用 scope 限制 AI 能動的範圍。
