@@ -3,7 +3,7 @@ title: "Stop Letting Every MCP Server Collect Its Own PAT: A Unified OAuth2 Fron
 date: 2026-06-13T20:00:00+08:00
 draft: false
 slug: kong-authgate-mcp-oauth-en
-share_img: /images/2026-06-13/kong-authgate-mcp.svg
+share_img: /images/2026-06-13/kong-authgate-mcp.png
 categories:
   - AI
   - MCP
@@ -172,9 +172,9 @@ One plugin instance per MCP resource; the key fields are below (see the example'
 
 | Field              | Required | Description                                                                                                                    |
 | ------------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `issuer`           | ✅       | AuthGate base URL. Must equal the token's `iss` claim byte-for-byte.                                                           |
-| `gateway_origin`   | ✅       | Externally reachable Kong origin, e.g. `https://gw.example.com`. Used to build the PRM URL.                                    |
-| `resource_path`    | ✅       | This resource's path, e.g. `/mcp/gitea`.                                                                                       |
+| `issuer`           | ✅        | AuthGate base URL. Must equal the token's `iss` claim byte-for-byte.                                                           |
+| `gateway_origin`   | ✅        | Externally reachable Kong origin, e.g. `https://gw.example.com`. Used to build the PRM URL.                                    |
+| `resource_path`    | ✅        | This resource's path, e.g. `/mcp/gitea`.                                                                                       |
 | `jwks_uri`         |          | AuthGate JWKS endpoint. Leave empty to auto-discover it from the issuer's AS metadata (RFC 8414, cached 1h).                   |
 | `required_scopes`  |          | All listed scopes must be present in the token's `scope`, else `403 insufficient_scope`.                                       |
 | `require_audience` |          | Enforce `aud` only when `true`. **All shipped configs enable it** — used to isolate resources and block cross-resource replay. |

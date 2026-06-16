@@ -3,7 +3,7 @@ title: "別再讓 MCP Server 各自收 PAT：用 Kong + AuthGate 做企業統一
 date: 2026-06-13T10:00:00+08:00
 draft: false
 slug: kong-authgate-mcp-oauth-zh-tw
-share_img: /images/2026-06-13/kong-authgate-mcp.svg
+share_img: /images/2026-06-13/kong-authgate-mcp.png
 categories:
   - AI
   - MCP
@@ -172,9 +172,9 @@ KONG_PLUGINSERVER_MCP_OAUTH2_QUERY_CMD=/usr/local/bin/mcp-oauth2 -dump
 
 | 參數               | 必填 | 說明                                                                                          |
 | ------------------ | ---- | --------------------------------------------------------------------------------------------- |
-| `issuer`           | ✅   | AuthGate base URL，必須與 token 的 `iss` claim 逐字元相符。                                   |
-| `gateway_origin`   | ✅   | 對外可達的 Kong origin，例如 `https://gw.example.com`，用來組出 PRM URL。                     |
-| `resource_path`    | ✅   | 此資源的路徑，例如 `/mcp/gitea`。                                                             |
+| `issuer`           | ✅    | AuthGate base URL，必須與 token 的 `iss` claim 逐字元相符。                                   |
+| `gateway_origin`   | ✅    | 對外可達的 Kong origin，例如 `https://gw.example.com`，用來組出 PRM URL。                     |
+| `resource_path`    | ✅    | 此資源的路徑，例如 `/mcp/gitea`。                                                             |
 | `jwks_uri`         |      | AuthGate JWKS endpoint。留空則由 issuer 的 AS metadata 自動發現（RFC 8414，快取 1 小時）。    |
 | `required_scopes`  |      | token 的 `scope` 必須包含全部所列項目，否則 `403 insufficient_scope`。                        |
 | `require_audience` |      | 設 `true` 才強制檢查 `aud`。**所有隨附設定檔都已開啟**，用來區隔不同 MCP 資源、防跨資源重放。 |
