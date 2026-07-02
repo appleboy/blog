@@ -1,6 +1,6 @@
 ---
 title: "From Watching on the Sidelines to Company-Wide Adoption: Two Years of AI Agentic Coding in Practice"
-date: 2026-07-02T10:00:00+08:00
+date: 2026-07-02T11:00:00+08:00
 draft: false
 slug: ai-agentic-coding-adoption-en
 share_img: /images/2026-07-02/cover.png
@@ -24,7 +24,7 @@ This time last year, the question we were asking was "how can AI help us improve
 
 This article documents a road we actually traveled: from a handful of people quietly trying out [Claude Code][claude-code], to everyone in the company using it daily; from AI producing 66% of our output, all the way up to 97%; from engineers' three wait-and-see attitudes — "I don't trust it, I'm afraid of being replaced, I'm worried about security" — to letting results speak for themselves and packaging individual tricks into standardized Agent Skills; from every team writing its own MCP Server and triggering a project explosion, to pulling the security governance of the whole ecosystem back together with a unified authentication gateway and a Marketplace review process.
 
-Three parts, in the order we actually lived through them: **the full picture and the results of this year → from sidelines to everyone on board → workflow integration and security governance**.
+Three parts, in the order we actually lived through them: **the full picture and the results of this year → from the sidelines to everyone on board → workflow integration and security governance**.
 
 [claude-code]: https://www.anthropic.com/claude-code
 
@@ -43,11 +43,11 @@ This inversion is not rhetoric — it set the direction for every decision that 
 - **2025**: We were thinking about how AI could "help us" improve productivity — AI was the tool, we were the protagonists.
 - **2026**: We are thinking about how to "help AI" work faster — we lay the groundwork for AI so that it accelerates our work.
 
-Put in more familiar management terms: **a good manager doesn't bury their head doing the work themselves — they pave the road so the team can run faster**. It's exactly the same with AI. The authentication gateway, token governance, and Marketplace review discussed later in this article are, at their core, all about building infrastructure for AI — not about teaching AI how to write code.
+Put in more familiar management terms: **a good manager doesn't bury their head doing the work themselves — they pave the road so the team can run faster**. It's exactly the same with AI. The authentication gateway, token governance, and Marketplace review discussed later in this article are, at their core, all about building infrastructure for AI, not about teaching AI how to write code.
 
 ### Adoption Timeline: From Tool Launch to Company-Wide Rollout
 
-Laying the timeline out flat, this road took roughly a year:
+Laid out end to end, the journey took about a year:
 
 ```mermaid
 timeline
@@ -103,7 +103,7 @@ graph LR
     gateway --> internal
 ```
 
-The single entry/exit point decision solved four things in one stroke:
+The single entry/exit point decision solved four problems at once:
 
 | Item                     | Description                                                            |
 | ------------------------ | ---------------------------------------------------------------------- |
@@ -127,7 +127,7 @@ Within ten months, AI's share climbed from 66% to 97%, while monthly output grew
 
 ![Slide from the talk: AI output surges while engineers stay flat — the gap keeps widening](/images/2026-07-02/venue-metrics.jpg)
 
-## Part 2: From Sidelines to Everyone On Board
+## Part 2: From the Sidelines to Everyone On Board
 
 ### Why Won't Engineers Use It? Three Real Attitudes
 
@@ -137,7 +137,7 @@ Company-wide adoption sounds smooth, but before we got there we ran head-on into
 2. **Fear of being replaced** — "Am I training my own replacement by learning this?"
 3. **Security concerns** — "Will our code or company data get sent out? How do we authorize access to internal systems?"
 
-The first two are mindset issues that time and results can gradually wear down. **The third one is what actually blocked scaling** — because it isn't a psychological barrier, it's a **technical problem with no answer yet**. Until there's an answer, any encouragement is empty talk.
+The first two are mindset issues that time and results can gradually wear down. **The third one is what actually blocked scaling**, because it isn't a psychological barrier — it's a **technical problem with no answer yet**. Until there's an answer, any encouragement is empty talk.
 
 ![Slide from the talk: why won't engineers use it? Three real attitudes](/images/2026-07-02/venue-mindset.jpg)
 
@@ -183,7 +183,7 @@ Only with a unified workflow in place can PMs and team leads do proper tracking 
 
 ### The Real Barrier to Company-Wide Rollout: Project Explosion
 
-The first side effect of scaling wasn't security — it was volume. With every team using AI to churn out services, the project count exploded in a short time from 5x to 2xx to over 1,xxx. With that many CLIs / MCPs / Agents needing to connect to internal systems, how to manage authentication and authorization became a question we could no longer dodge.
+The first side effect of scaling wasn't security — it was volume. With every team using AI to churn out services, the project count exploded in a short time from roughly 50, to 200+, to over 1,000. With that many CLIs / MCPs / Agents needing to connect to internal systems, how to manage authentication and authorization became a question we could no longer dodge.
 
 ### Clearing Up a Misconception: Does Agent Skill Make MCP Obsolete?
 
@@ -198,7 +198,7 @@ Skill decides "how to do it"; MCP decides "what to connect" — one governs proc
 
 ### The Friction Blocking MCP Adoption: Plaintext Tokens Sitting on the Client
 
-Everyone wanted to one-click connect Skills to every company MCP service, yet MCP adoption stalled — and the friction came down to one thing: **the auth token sits in plaintext right on the developer's client**.
+Everyone wanted to one-click connect Skills to every company MCP service, yet MCP adoption stalled. The friction came down to one thing: **the auth token sits in plaintext right on the developer's client**.
 
 ```json
 // ~/.claude/settings.json
@@ -215,7 +215,7 @@ Everyone wanted to one-click connect Skills to every company MCP service, yet MC
 // it's sitting in plaintext in your shell history too
 ```
 
-Hardcode it in `settings.json` and it gets committed to Git; add it with the CLI `--header` flag and it's still plaintext — with one extra copy lying around; you can even fish it out of shell history. This is the deadliest of the three security risks amplified by AI.
+Hardcode it in `settings.json` and it gets committed to Git; add it with the CLI `--header` flag and it's still plaintext, with one extra copy lying around; you can even fish it out of shell history. This is the deadliest of the three security risks amplified by AI.
 
 ### The Three Security Risks Amplified by AI
 
@@ -223,7 +223,7 @@ Hardcode it in `settings.json` and it gets committed to Git; add it with the CLI
 2. **Hardcoded keys flowing into Git (the deadliest)** — CLIs / MCPs have no browser login flow, so credentials / API keys get hardcoded and pushed to Git along with the code.
 3. **Tokens go out of control once issued** — nobody knows who holds them, when they expire, or whether they can be revoked; no traceability, no way to stop the bleeding.
 
-None of these three risks is a new problem created by AI — they are pre-existing credential management problems, amplified by the AI-era pace of "CLIs / MCPs appearing in droves, every team wiring into internal systems on its own." The fix has to come at the architecture level, not by patching one service at a time.
+None of these three risks is a new problem created by AI. They are pre-existing credential management problems, amplified by the AI-era pace of "CLIs / MCPs appearing in droves, every team wiring into internal systems on its own." The fix has to come at the architecture level, not by patching one service at a time.
 
 ### Solution 1: A Unified Authentication Gateway — Every Tool Walks Through the Same Door
 
@@ -273,7 +273,7 @@ sequenceDiagram
     Note over C: ⑥ Token stored encrypted in the OS keyring — never lands in a config file
 ```
 
-There isn't a single hardcoded key anywhere in this flow — credentials appear only at the user's browser login step, going through the company's existing SSO. The CLI / MCP side only ever receives a short-lived access token, stored encrypted directly in the OS keyring, never written to a plaintext config file. Credentials flowing into Git is eliminated at the source.
+There isn't a single hardcoded key anywhere in this flow: credentials appear only at the user's browser login step, going through the company's existing SSO. The CLI / MCP side only ever receives a short-lived access token, stored encrypted directly in the OS keyring, never written to a plaintext config file. Credentials flowing into Git is eliminated at the source.
 
 For the fuller implementation details of this mechanism — how the MCP Gateway verifies JWTs with the `mcp-oauth2` plugin, the complete handshake sequence from `401` to `200`, and why RS256 + JWKS instead of HS256 — see my earlier article ["Stop Letting Every MCP Server Collect Its Own PAT: A Unified OAuth2 Front Door with Kong + AuthGate"][kong-post]. I won't repeat the code here; instead, let's cover the one piece the slides added this time: **token governance**.
 
@@ -289,7 +289,7 @@ A unified gateway alone isn't enough. If one token works across all MCP services
 | `mcp://gitea` | ✅ Accepted                   | ✗ Rejected (aud mismatch)   |
 
 - **Least privilege, contained blast radius**: a token carries only that MCP's scopes; a leak affects a single MCP.
-- **Local signature verification**: RS256 + JWKS — the Resource Server never has to call back to the gateway per request.
+- **Local signature verification**: RS256 + JWKS, so the Resource Server never has to call back to the gateway per request.
 - **Every token fully controllable end to end**: queryable, expirable, instantly revocable — even a one-click forced re-login for everyone.
 
 This design is exactly the standard defense against confused deputy attacks — even if a token gets misused by one MCP client to call a different MCP, the `aud` check blocks it cold.
