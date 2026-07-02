@@ -14,6 +14,12 @@ categories:
 
 ![cover](/images/2026-07-02/cover.png)
 
+> 日期：2026.07.01
+> 活動：[2026 Cloud Summit 台灣雲端大會][cloud-summit]
+> 講者：appleboy
+
+[cloud-summit]: https://cloudsummit.ithome.com.tw/2026/session/4553
+
 去年這個時候，我們在想的是「AI 怎麼協助我們改善工作效率」；今年，問題反過來了——「我們該怎麼協助 AI，讓它加速我們的工作」。主詞和受詞對調，聽起來像文字遊戲，但這正是這兩年公司內部 AI Agentic Coding 導入路上，最核心的一次心態轉變。
 
 這篇文章記錄的是一段真實走過的路：從少數人偷偷試用 [Claude Code][claude-code]，到全公司日常使用；從 AI 產出佔比 66%，一路衝到 97%；從工程師「不信任、怕被取代、擔心資安」的三種觀望心態，到用成果說話、把個人技巧封裝成標準化的 Agent Skill；從每個團隊各自寫 MCP Server 導致的專案爆炸，到用統一認證閘道與 Marketplace 審查機制把整個生態圈的資安治理收攏起來。
@@ -232,7 +238,7 @@ graph LR
         internal["內部服務"]
     end
 
-    authgate["AuthGate<br/>統一認證閘道<br/>OAuth 2.0 / OIDC Authorization Server"]
+    authgate["IdP (Identity Provider)<br/>統一認證閘道<br/>OAuth 2.0 / OIDC Authorization Server"]
 
     subgraph idp["身分來源"]
         ldap["LDAP · AD"]
@@ -256,7 +262,7 @@ graph LR
 sequenceDiagram
     participant C as CLI / MCP
     participant U as 使用者・瀏覽器
-    participant A as AuthGate 閘道
+    participant A as IdP 閘道
 
     C->>A: ① 要 device code + user code
     A-->>C: 顯示 URL + user code
