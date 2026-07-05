@@ -92,7 +92,7 @@ In other words, when you're writing an OAuth server for the MCP ecosystem, RFC 9
 
 ### The official client already expects this value
 
-This isn't just theory. The official [MCP Go SDK][go-sdk] already carries `iss` into the authorization result on the client side — its `AuthorizationResult` struct now contains three fields: `Code`, `State`, and `Iss`:
+This isn't just theory — it's already on the official MCP roadmap. In the [beta SDK announcement for the 2026-07-28 spec release candidate][mcp-beta], the MCP team states outright that the authorization hardening in this beta (**SEP-2468**) includes **"`iss` validation per [RFC 9207][rfc9207]"**, and that all four official SDKs (Python, TypeScript, Go, C#) implement the release candidate's core protocol changes. Take the official [MCP Go SDK][go-sdk] as an example: its `AuthorizationResult` struct now contains three fields — `Code`, `State`, and `Iss`:
 
 ```go
 type AuthorizationResult struct {
@@ -129,7 +129,7 @@ func validateIssuerResponse(iss, expectedIssuer string, issParameterSupported bo
 }
 ```
 
-And where does that third argument, `issParameterSupported`, come from? The SDK parses it out of your authorization server metadata. The SDK's `AuthServerMeta` (mapping the RFC 8414 / OIDC discovery document) gained the same field:
+And where does that third argument, `issParameterSupported`, come from? The SDK parses it out of your authorization server metadata. The SDK's [`AuthServerMeta`][go-sdk-meta] (mapping the RFC 8414 / OIDC discovery document) gained the same field:
 
 ```go
 // AuthorizationResponseIssParameterSupported indicates whether the authorization server
@@ -144,7 +144,9 @@ This snippet directly confirms two things from earlier. First, `iss != expectedI
 
 For a server-side implementer, this yields a very concrete conclusion: **the `iss` you emit will actually be compared byte-for-byte — it's not decorative.** Any inconsistency in your issuer derivation (the next section shows a live example) and the official MCP client will be the first to bounce you.
 
-[go-sdk]: https://github.com/modelcontextprotocol/go-sdk/blob/main/auth/authorization_code.go
+[go-sdk]: https://github.com/modelcontextprotocol/go-sdk/blob/ede189417480ae3026a2f8821337929618896854/auth/authorization_code.go#L53-L58
+[go-sdk-meta]: https://github.com/modelcontextprotocol/go-sdk/blob/ede189417480ae3026a2f8821337929618896854/oauthex/auth_meta.go#L119-L124
+[mcp-beta]: https://blog.modelcontextprotocol.io/posts/sdk-betas-2026-07-28/
 
 ## 3. The solution: how to implement it
 
