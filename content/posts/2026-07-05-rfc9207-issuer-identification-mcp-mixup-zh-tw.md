@@ -30,7 +30,7 @@ categories:
 
 RFC 9207 之前，Authorization Code Flow 成功後，AS 把使用者導回 client 的回應長這樣：
 
-```
+```txt
 https://client.example/callback?code=abc123&state=xyz
 ```
 

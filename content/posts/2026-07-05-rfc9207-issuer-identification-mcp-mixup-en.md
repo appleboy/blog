@@ -30,7 +30,7 @@ First, the precondition — this attack **only works when a client trusts two or
 
 Before RFC 9207, after a successful Authorization Code Flow the AS redirected the user back to the client like this:
 
-```
+```txt
 https://client.example/callback?code=abc123&state=xyz
 ```
 
