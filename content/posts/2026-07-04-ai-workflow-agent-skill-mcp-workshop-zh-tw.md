@@ -38,9 +38,7 @@ categories:
 
 ## 這場工作坊在做什麼
 
-我們不空談理論。整場工作坊你會以一個真實的專案為練習場——可以是 [AuthGate][authgate]（OAuth 2.0 開源專案），也可以是你手上公司內部的專案——用 Claude Code 搭配 Agent Skill 與 MCP，完整跑過一輪軟體開發生命週期（SDLC）：從規劃、開發，到自動化 Review 與提交。
-
-[authgate]: https://github.com/go-authgate/authgate
+我們不空談理論。整場工作坊你會以一個真實的專案為練習場——可以是一個開源專案，也可以是你手上公司內部的專案——用 Claude Code 搭配 Agent Skill 與 MCP，完整跑過一輪軟體開發生命週期（SDLC）：從規劃、開發，到自動化 Review 與提交。
 
 過程中有兩個你會親身撞見的轉變：
 

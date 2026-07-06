@@ -38,9 +38,7 @@ On the same day I also gave a conference talk about our complete two-year journe
 
 ## What This Workshop Is About
 
-We don't do empty theory. Throughout the workshop you work on a real project as your practice ground — either [AuthGate][authgate] (an OAuth 2.0 open source project) or an internal project from your own company — using Claude Code together with Agent Skills and MCP to run through a full software development lifecycle (SDLC): from planning and development to automated review and submission.
-
-[authgate]: https://github.com/go-authgate/authgate
+We don't do empty theory. Throughout the workshop you work on a real project as your practice ground — either an open source project or an internal project from your own company — using Claude Code together with Agent Skills and MCP to run through a full software development lifecycle (SDLC): from planning and development to automated review and submission.
 
 Along the way, there are two shifts you experience firsthand:
 
