@@ -238,7 +238,7 @@ graph LR
         internal["Internal services"]
     end
 
-    authgate["IdP (Identity Provider)<br/>Unified authentication gateway<br/>OAuth 2.0 / OIDC Authorization Server"]
+    signet["IdP (Identity Provider)<br/>Unified authentication gateway<br/>OAuth 2.0 / OIDC Authorization Server"]
 
     subgraph idp["Identity sources"]
         ldap["LDAP · AD"]
@@ -246,8 +246,8 @@ graph LR
         entra["Microsoft Entra"]
     end
 
-    clients -->|register| authgate
-    authgate --> idp
+    clients -->|register| signet
+    signet --> idp
 ```
 
 Different scenarios map to different OAuth flows:
@@ -275,10 +275,10 @@ sequenceDiagram
 
 There isn't a single hardcoded key anywhere in this flow: credentials appear only at the user's browser login step, going through the company's existing SSO. The CLI / MCP side only ever receives a short-lived access token, stored encrypted directly in the OS keyring, never written to a plaintext config file. Credentials flowing into Git is eliminated at the source.
 
-For the fuller implementation details of this mechanism — how the MCP Gateway verifies JWTs with the `mcp-oauth2` plugin, the complete handshake sequence from `401` to `200`, and why RS256 + JWKS instead of HS256 — see my earlier article ["Stop Letting Every MCP Server Collect Its Own PAT: A Unified OAuth2 Front Door with Kong + AuthGate"][kong-post]. I won't repeat the code here; instead, let's cover the one piece the slides added this time: **token governance**.
+For the fuller implementation details of this mechanism — how the MCP Gateway verifies JWTs with the `mcp-oauth2` plugin, the complete handshake sequence from `401` to `200`, and why RS256 + JWKS instead of HS256 — see my earlier article ["Stop Letting Every MCP Server Collect Its Own PAT: A Unified OAuth2 Front Door with Kong + Signet"][kong-post]. I won't repeat the code here; instead, let's cover the one piece the slides added this time: **token governance**.
 
 [mcp]: https://modelcontextprotocol.io
-[kong-post]: /2026/06/kong-authgate-mcp-oauth-en/
+[kong-post]: /2026/06/kong-signet-mcp-oauth-en/
 
 ### Solution 2: Token Governance — Treat Every MCP as an Independent OAuth Resource
 

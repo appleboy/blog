@@ -152,14 +152,14 @@ This executes `/copilot-review` every 2 minutes. Each cycle automatically perfor
 
 The cycle continues until there are no new review comments. It's recommended to cap at **10 iterations** — if comments persist beyond that, it usually means the developer needs to step in and reassess the architectural direction.
 
-The developer **doesn't need to watch the entire process** — just come back when the loop finishes for the final review. Here's a real example — [go-authgate/authgate PR #125](https://github.com/go-authgate/authgate/pull/125) (splitting the 1,038-line `token.go` into 8 domain-specific files), showing the automated iteration between Copilot Review and the `/copilot-review` Skill:
+The developer **doesn't need to watch the entire process** — just come back when the loop finishes for the final review. Here's a real example — [go-training/mcp-workshop PR #4](https://github.com/go-training/mcp-workshop/pull/4) (adding an RFC 9207 MCP mix-up attack sample: 12 files, +2,238 lines), showing the automated iteration between Copilot Review and the `/copilot-review` Skill:
 
 | Round | Comments | Key Fixes |
 | ----- | -------- | --------- |
-| 1 | 3 | Comment says "strict subset" but should be "subset"; `GetUserTokens` comment claims "all active tokens" but query doesn't filter by status |
-| 2 | 3 | `AuthenticateClient` doesn't verify client is active; `revokeTokenFamily` comment doesn't match actual behavior; `ValidateToken` masks DB errors as "token not found" |
-| 3 | 2 | `AuthenticateClient` adding inactive check is a behavior change — update PR description; same for `ValidateToken` error handling change |
-| 4 | 2 | PR description still claims "no logic changes" — needs correction; `TokenFamilyID` may be empty in refresh token rotation |
+| 1 | 2 | `writeCallbackHTML` interpolates `msg` into HTML without escaping — the authorization response's `error` parameter allows HTML/JS injection; Mermaid diagram is missing a value for `state` |
+| 2 | 1 | README snippet uses ellipses that don't match the real `mcp-client/main.go` — a teaching sample should mirror the actual code |
+| 3 | 0 | No new comments |
+| 4 | 3 | Mermaid diagram shows `iss` as a display name instead of the issuer URL (two spots); README says the sample ships in `client/`, but the actual directory is `mcp-client/` |
 | 5 | **0** | **No new comments — all clear** |
 
 ### Final Review: Human Eyes on the Code

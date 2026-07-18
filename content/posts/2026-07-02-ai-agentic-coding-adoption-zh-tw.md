@@ -238,7 +238,7 @@ graph LR
         internal["內部服務"]
     end
 
-    authgate["IdP (Identity Provider)<br/>統一認證閘道<br/>OAuth 2.0 / OIDC Authorization Server"]
+    signet["IdP (Identity Provider)<br/>統一認證閘道<br/>OAuth 2.0 / OIDC Authorization Server"]
 
     subgraph idp["身分來源"]
         ldap["LDAP · AD"]
@@ -246,8 +246,8 @@ graph LR
         entra["Microsoft Entra"]
     end
 
-    clients -->|註冊| authgate
-    authgate --> idp
+    clients -->|註冊| signet
+    signet --> idp
 ```
 
 不同場景對應不同的 OAuth 流程：
@@ -275,10 +275,10 @@ sequenceDiagram
 
 整個流程沒有任何一個寫死的金鑰——帳密只在使用者瀏覽器登入那一步出現，走公司既有 SSO；CLI / MCP 端全程只拿到短效的 access token，且直接存進 OS keyring 加密，不落地明碼設定檔。從源頭杜絕帳密流入 Git。
 
-關於這套機制更完整的落地細節——包括 MCP Gateway 如何用 `mcp-oauth2` plugin 驗 JWT、`401` 到 `200` 的完整握手序列、為什麼選 RS256 + JWKS 而不是 HS256——我在之前的文章[《別再讓 MCP Server 各自收 PAT：用 Kong + AuthGate 做企業統一 OAuth2 入口》][kong-post]裡有詳細拆解，這裡不重複貼程式碼，只講這次投影片裡多補的一塊：**Token 治理**。
+關於這套機制更完整的落地細節——包括 MCP Gateway 如何用 `mcp-oauth2` plugin 驗 JWT、`401` 到 `200` 的完整握手序列、為什麼選 RS256 + JWKS 而不是 HS256——我在之前的文章[《別再讓 MCP Server 各自收 PAT：用 Kong + Signet 做企業統一 OAuth2 入口》][kong-post]裡有詳細拆解，這裡不重複貼程式碼，只講這次投影片裡多補的一塊：**Token 治理**。
 
 [mcp]: https://modelcontextprotocol.io
-[kong-post]: /2026/06/kong-authgate-mcp-oauth-zh-tw/
+[kong-post]: /2026/06/kong-signet-mcp-oauth-zh-tw/
 
 ### 解法二：Token 治理——把每個 MCP 當成獨立的 OAuth Resource
 
@@ -286,7 +286,7 @@ sequenceDiagram
 
 | Token 的 `aud` | Gitea MCP（`aud=mcp://gitea`） | Jira MCP（`aud=mcp://jira`） |
 | -------------- | ------------------------------ | ---------------------------- |
-| `mcp://gitea`  | ✅ 接受                         | ✗ 拒絕（aud 不符）           |
+| `mcp://gitea`  | ✅ 接受                        | ✗ 拒絕（aud 不符）           |
 
 - **最小權限，收斂爆炸半徑**：token 只帶該 MCP 的 scope，外洩只波及單一 MCP。
 - **驗證在地驗章**：RS256 + JWKS，Resource Server 不用每次回打閘道。
