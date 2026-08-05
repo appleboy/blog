@@ -66,7 +66,7 @@ sequenceDiagram
     M-->>C: identity claims
 ```
 
-[signet]: https://github.com/go-signet/signet
+[signet]: https://github.com/go-signet
 
 ## 2. The crucial premise: the SDK does not do RFC 9207 for you
 

@@ -66,7 +66,7 @@ sequenceDiagram
     M-->>C: 回傳身分 claims
 ```
 
-[signet]: https://github.com/go-signet/signet
+[signet]: https://github.com/go-signet
 
 ## 二、最重要的前提：SDK 不會幫你做 RFC 9207
 

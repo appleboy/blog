@@ -20,7 +20,7 @@ Most teams meet Kubernetes for the first time through a single "superuser" kubec
 This post shows how to use [kubelogin][1] together with [Signet][2] to stand up an [OIDC][oidc] login flow on [k3s][3]: the moment a user runs `kubectl get pods`, the browser pops open Signet's login page, the tokens land back in the kubeconfig, and the entire cluster no longer needs that shared `admin.kubeconfig`.
 
 [1]: https://github.com/int128/kubelogin
-[2]: https://github.com/go-signet/signet
+[2]: https://github.com/go-signet
 [3]: https://k3s.io
 
 <!--more-->

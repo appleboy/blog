@@ -24,7 +24,7 @@ categories:
 
 [mcp]: https://modelcontextprotocol.io
 [kong]: https://github.com/Kong/kong
-[signet]: https://github.com/go-signet/signet
+[signet]: https://github.com/go-signet
 [kong-mcp]: https://github.com/appleboy/kong-mcp-oauth2
 
 <!--more-->

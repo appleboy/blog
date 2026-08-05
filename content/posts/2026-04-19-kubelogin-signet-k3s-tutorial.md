@@ -20,7 +20,7 @@ categories:
 這篇文章要示範如何用 [kubelogin][1] 搭配 [Signet][2]，在 [k3s][3] 上建立一條 [OIDC][oidc] 登入流程：使用者打 `kubectl get pods` 的瞬間，瀏覽器自動跳出 Signet 的登入頁面，登入完成 token 寫回 kubeconfig，整個叢集不再需要共用那份 `admin.kubeconfig`。
 
 [1]: https://github.com/int128/kubelogin
-[2]: https://github.com/go-signet/signet
+[2]: https://github.com/go-signet
 [3]: https://k3s.io
 
 <!--more-->
