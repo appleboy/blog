@@ -1,5 +1,5 @@
 ---
-title: "Introduction to OAuth Client ID Metadata Document"
+title: "Introduction to OAuth Client ID Metadata Document (CIMD)"
 date: 2026-02-17T11:52:21+08:00
 draft: false
 slug: oauth-client-id-metadata-document

@@ -1,5 +1,5 @@
 ---
-title: "OAuth Client ID Metadata Document 簡介"
+title: "OAuth Client ID Metadata Document (CIMD) 簡介"
 date: 2026-02-17T09:52:21+08:00
 draft: false
 slug: oauth-client-id-metadata-document-zh-tw
